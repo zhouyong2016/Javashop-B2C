@@ -1,0 +1,177 @@
+<style>
+	.num{width:190px;display:block;word-wrap: break-word;}
+</style>
+
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>    
+  <div class="division">
+      <script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+      <table cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+          	<tr>
+	            <th style="width: 80px;">收货日期：</th>
+	            <td  style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+		            <span id="ship_day_span">${order.ship_day!'' }</span>
+	            </td>
+          	</tr>
+          <tr>
+            <th style="width: 80px;">姓名：</th>
+            <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+            	<span id="ship_name_span">${order.ship_name!'' }</span>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 80px;">电话：</th>
+            <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+            	<span id="ship_tel_span">${order.ship_tel!''}</span>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 80px;">手机：</th>
+            <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	            <span id="ship_mobile_span">${order.ship_mobile!''}</span>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 80px;">地区：</th>
+            <td><div id="showArea">${order.shipping_area!''}&nbsp;
+            		<#if order.ship_status==SHIP_NO>
+            			<a href="javascript:void(0)" id="changeArea"><img src="${ctx}/shop/admin/images/editattr.png" ></a>
+            		</#if>
+            	</div>
+            	<div style="display: none;" id="editArea">
+                <span id="addressSelected">--请选择--</span>
+                <script type="text/javascript">
+                    $(function () {
+                        <#if order.ship_provinceid??>
+                            $('#addressSelected').addressSelect({
+                                deData: [${order.ship_provinceid!'-1'}, ${order.ship_cityid!'-1'}, ${order.ship_regionid!'-1'}, ${order.ship_townid!'-1'}]
+                            })
+                        <#else/>
+                            $('#addressSelected').addressSelect()
+                        </#if>
+                    })
+                </script>
+                <br/>
+            		<a href="javascript:void(0)" class="easyui-linkbutton" id="saveArea">确定</a>&nbsp;
+            		<a href="javascript:void(0)" class="easyui-linkbutton" id="exitArea">取消</a>
+            	</div>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 80px;">地址：</th>
+            <td  style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	            <span id="order_addrdetail_span" style="overflow-wrap: break-word;width:200px;display:block;">${order.ship_addr!''}</span>
+        	</td>
+          </tr>
+          <tr>
+            <th style="width: 80px;">邮编：</th>
+	            <td  style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+		            <span id="ship_zip_span">${order.ship_zip!''}</span>
+		       </td>
+          </tr>
+      </tbody>
+   </table>
+ </div>
+<script type="text/javascript">
+<#if order.ship_status==SHIP_NO>
+	<@permssion actid="order">
+		$(function(){
+			$("#changeArea").click(function(){
+				$("#showArea").hide();
+				$("#editArea").show();
+			});
+			$("#exitArea").click(function(){
+				$("#showArea").show();
+				$("#editArea").hide();
+			});
+
+			$("#saveArea").click(function(){
+			    var data = {}, inputs = $('#addressSelected').find("input[name]");
+			    for(var i = 0; i < inputs.length; i++){
+			        var _input = inputs.eq(i), _name  = _input.attr('name'), _val   = _input.val();
+			        if(_val){data[_name] = _val}
+                }
+                data.orderId = $('#orderid').val();
+
+                $.ajax({
+                    url     : '${ctx}/shop/admin/order/save-addr.do',
+                    data    : data,
+                    cache   : false,
+                    type    : 'POST',
+                    dateType: 'dateType',
+                    success : function (result) {
+                        if(result.result == 1){
+                            $.Loading.success('保存成功！');
+                            location.reload();
+                        }else {
+                            $.Loading.error(result.message)
+                        }
+                    },
+                    error   : function () {
+                        alert("保存出错，请重试");
+                    }
+                });
+			});
+			$("#ship_name_span").AjaxEditor('${ctx}/shop/admin/order/save-ship-info.do?orderId='+$("#orderid").val(),"ship_name",function(oldvalue,newvalue){
+					if(newvalue==""){
+						$.Loading.error("收货人姓名不能为空");
+						return false;
+					}else if(newvalue.length>30){
+						$.Loading.error("收货人姓名不能超过30字");
+						$(this).val(oldvalue);
+						return false;
+					}else{
+						return true;
+					}
+			});
+			$("#ship_tel_span").AjaxEditor('${ctx}/shop/admin/order/save-ship-info.do?orderId='+$("#orderid").val(),"ship_tel",function(oldvalue,newvalue){
+				if(!/^((\+86)?|\(\+86\)|\+86\s)0?([1-9]\d-?\d{6,8}|[3-9][13579]\d-?\d{6,7}|[3-9][24680]\d{2}-?\d{6})(-\d{3})?$/.test(newvalue)){
+					$.Loading.error("请输入正确电话号码");
+					return false;
+				}else{
+					return true;
+				}
+			});
+			$("#ship_mobile_span").AjaxEditor('${ctx}/shop/admin/order/save-ship-info.do?orderId='+$("#orderid").val(),"ship_mobile",function(oldvalue,newvalue){
+				if(newvalue==""){
+					$.Loading.error("手机号不能为空!");
+					return false;
+				}
+				else if(!/^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9]|17[0-9])[0-9]{8}$/.test(newvalue)){
+					$.Loading.error("请输入正确手机号!");
+					return false;
+				}else{
+					return true;
+				}
+			});
+			$("#order_addrdetail_span").AjaxEditor('${ctx}/shop/admin/order/save-addr-detail.do?orderId='+$("#orderid").val(),"addr",function(oldvalue,newvalue){
+				if(newvalue==""){
+					$.Loading.error("收货地址不能为空");
+					return false;
+				}else if(newvalue.length>40){
+					$.Loading.error("收货地址不能超过40字");
+					$(this).val(oldvalue);
+					return false;
+				}else{
+					return true;
+				}
+			});
+			$("#ship_zip_span").AjaxEditor('${ctx}/shop/admin/order/save-ship-info.do?orderId='+$("#orderid").val(),"ship_zip",function(oldvalue,newvalue){
+				if(!/^[1-9][0-9]{5}$/.test(newvalue)){
+					$.Loading.error("邮编格式不正确");
+					return false;
+				}else if(newvalue==""){
+					$.Loading.error("邮编不能为空");
+				}else{
+					return true;
+				}
+			});
+			var tpl='<div class="edit-panel"><span class="num"><span class="txt"></span><a href="javascript:;">编辑</a></span><span class="set"><select id="tplselectship_day"><option value="任意时间">任意时间</option><option value="仅工作日">仅工作日</option><option value="仅休息日">仅休息日</option><option value="其他时间(请在订单备注中说明)">其他时间(请在订单备注中说明</option></select><a  class="save no-enable" href="javascript:;">保存</a><a  class="cancel" href="javascript:;">保存</a></span></div>';
+			$("#ship_day_span").SelectEditor(tpl,'${ctx}/shop/admin/order/save-ship-info.do?orderId='+$("#orderid").val(),"ship_day",function(oldvalue,newvalue){
+				return true;
+			});
+		});
+	 </@permssion>
+</#if>
+
+</script>

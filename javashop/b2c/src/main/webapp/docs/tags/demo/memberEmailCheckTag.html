@@ -1,0 +1,9 @@
+
+<!--创建"邮箱验证"标签-->
+<#assign memberEmailCheckTag = newTag("memberEmailCheckTag")>
+<!--调用“邮箱验证”标签-->
+<#assign memberEmailCheck= = memberEmailCheckTag()>
+
+	是否通过：${memberEmailCheck.result}</br>
+	提示信息：${memberEmailCheck.message}
+

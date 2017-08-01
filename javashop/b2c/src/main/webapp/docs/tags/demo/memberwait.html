@@ -1,0 +1,32 @@
+
+<!-- 获取会员等待评论商品标签 -->
+<#assign memberWaitCommontListTag = newTag("memberWaitCommontListTag")>
+<!-- 调用会员等待评论商品标签 -->
+<#assign memberWaitCommontList = memberWaitCommontListTag()>
+<table cellspacing="0" cellpadding="0" style="width: 100%">
+	<tr>
+		<th class="checkbox">&nbsp;&nbsp;</th>
+		<th>商品图片</th>
+		<th>商品名称</th>
+		<th>商品编号</th>
+		<th>商品价格</th>
+		<th>操作</th>
+	</tr>
+	<#list memberWaitCommontList.waitcommentsList as goods>
+	<tr class="hovertr">
+		<td class="checkbox">&nbsp;&nbsp;</td>
+		<td class="img"><a href="../goods-${goods.goods_id}.html"
+			title="${goods.name}" class="img"> <img
+				src="${goods.thumbnail!''}" alt="${goods.name}" height="55"
+				width="55" />
+		</a></td>
+		<td class="param"><a href="../goods-${goods.goods_id}.html">${goods.name}</a></td>
+		<td><span>${goods.sn}</span></td>
+		<td><strong>￥${goods.price?string("0.##")}</strong></td>
+		<td class="oper" style="width: 80px;"><a
+			goodsid="${goods.goods_id}" class="favorite" href="javascript:;">加入收藏</a></td>
+	</tr>
+	</#list>
+</table>
+<!-- 分页 -->
+<@pager pageno="${page!'1'}" pagesize="${memberWaitCommontList.pageSize}" totalcount="${memberWaitCommontList.totalCount}" />

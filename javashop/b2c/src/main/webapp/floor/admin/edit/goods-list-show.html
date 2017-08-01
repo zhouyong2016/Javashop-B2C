@@ -1,0 +1,57 @@
+
+<link rel="stylesheet" href="${ctx}/floor/admin/edit/jqpagination.css"/>
+<script src="${ctx}/floor/admin/edit/jquery.jqpagination.min.js"></script>
+
+<#if page?? && page.result?size gt 0>
+	<div id="goodsdata" style="width:100%;height:100%;position:relative;text-align: center;" >
+		<#list page.result  as goods>
+			<li style="float:left;margin:5%" data-goods-id="${goods.goods_id}" >
+				<div class="goods-img">
+					<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html" title="${goods.name!''}">
+						<img class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+					</a>
+				</div>
+				<div class="goods-price">
+					<span>${goods.price?string.currency}</span>
+				</div>
+				<#if batch?? && batch==1>
+					<input type="hidden" name="goods_ids" value="${goods.goods_id}" >
+				<#else>
+					<input type="radio" name="new_goods_id" value="${goods.goods_id}" style="cursor: pointer;">
+				</#if>
+
+			</li>
+		</#list>
+	</div>
+</#if>
+
+<#if batch?? && batch==1>
+<#else>
+<div class="pagination">
+  	<a href="#" class="first" data-action="first">&laquo;</a>
+  	<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+ 	<input type="text" readonly="readonly" data-max-page="40" />
+  	<a href="#" class="next" data-action="next">&rsaquo;</a>
+  	<a href="#" class="last" data-action="last">&raquo;</a>
+</div>
+<script  type="text/javascript">
+
+	$('.pagination').jqPagination({
+		link_string : '/?page={page_number}',
+		 current_page: ${page.currentPageNo}, //设置当前页 默认为1
+		 max_page : ${page.totalPageCount}, //设置最大页 默认为1
+		page_string : '当前第{current_page}页,共{max_page}页',
+	 	paged : function(page) {
+		//回发事件。。。
+			var keyword = $.trim($("#search_name").val());
+			var catid = $("#catid").combo('getValue');
+			var json="{\"keyword\":\""+keyword+"\","
+			+"\"catid\":\""+catid+"\""
+			+"}";
+	 		$('#goodsdata').load("${ctx}/core/admin/templateshow/list-goods.do",{"json":json,"page":page},function(){
+				
+			});
+	 }
+});		
+</script>
+</#if>

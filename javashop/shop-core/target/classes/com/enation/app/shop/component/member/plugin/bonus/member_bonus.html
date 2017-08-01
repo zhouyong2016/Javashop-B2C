@@ -1,0 +1,28 @@
+<div class="detail">
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<thead>
+			<tr>
+				<th>红包类型</th>
+				<th>红包金额(元)</th>
+				<th>最小订单金额(元)</th>
+				<th>到期时间</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list bonusList as mb>
+				<tr>
+					<td>${mb.type_name!''}</td>
+					<td>${mb.type_money!''}</td>
+					<td>${mb.min_goods_amount!''}</td>
+					<#if mb.used==1>
+						<td>已使用</td>
+					<#elseif .now?long/1000 gt mb.use_end_date?long>
+						<td>已过期</td>  
+					<#else> 
+						<td><@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/></td> 
+					</#if>
+				</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,44 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th align="right">类型名称：</th>
+					<td>
+						<input class="easyui-validatebox input_text" type="text" value="${goodsType.name!''}" name="name" maxlength="20" data-options="required:true"></input>
+					</td>
+					
+				</tr>
+				<tr>
+					<th align="right">此类型下商品是否拥有属性</th>
+					<td>
+						<input type="radio" name="have_prop" value="1" <#if goodsType.have_prop==1>checked</#if> /> 是&nbsp;&nbsp; 
+						<input type="radio" name="have_prop" value="0" <#if goodsType.have_prop==0>checked</#if> /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型下商品是否拥有参数</th>
+					<td>
+						<input type="radio" name="have_parm" value="1" <#if goodsType.have_parm==1>checked</#if> /> 是&nbsp;&nbsp; 
+						<input type="radio" name="have_parm" value="0" <#if goodsType.have_parm==0>checked</#if> /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型是否关联品牌</th>
+					<td>
+						<input type="radio" name="join_brand" value="1" <#if goodsType.join_brand==1>checked</#if> /> 是&nbsp;&nbsp; 
+						<input type="radio" name="join_brand" value="0" <#if goodsType.join_brand==0>checked</#if> /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型是否关联规格</th>
+					<td>
+						<input type="radio" name="join_spec" value="1" <#if goodsType.join_spec==1>checked</#if> /> 是&nbsp;&nbsp;
+						<input type="radio" name="join_spec" value="0" <#if goodsType.join_spec==0>checked</#if> /> 否
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="type_id" value="${goodsType.type_id}">
+		</form>
+	</div>
+</div>

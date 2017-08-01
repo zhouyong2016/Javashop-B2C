@@ -1,0 +1,6 @@
+
+<!--创建"用订单id获得此订单商品数"标签-->
+<#assign orderDetailGoodsNumTag = newTag("orderDetailGoodsNumTag")>
+<!--调用“用订单id获得此订单商品数”标签-->
+<#assign orderDetailGoodsNum = orderDetailGoodsNumTag("'orderid':'1'")>
+订单下的商品数： ${orderDetailGoodsNum};

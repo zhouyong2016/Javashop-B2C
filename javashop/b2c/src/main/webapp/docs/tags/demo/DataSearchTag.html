@@ -1,0 +1,19 @@
+
+<!--创建"CMS数据搜索标签"标签-->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<!-- 调用CMS数据搜索标签  -->
+<!-- 说明：当不制定catid时，则默认输出所有模型ID是2的文章列表。当标注catid后，则输出模型是2的catid为制定id下的文章列表。 -->
+<!-- 可在参数中添加例如："modelid":2,"catid":21 -->
+<#assign webPage = dataSearchTag('{"modelid":2}')  />
+
+<form  method="get">
+	标题：<input  type="text" name="title">(控件的name为模型字段英文名，在这里使用的帮助中心模型的title字段)<br>
+	<input type="submit" value="搜索">
+</form>
+<!-- 循环输出文章 -->
+<#list webPage.result as article>
+	${article.title}<br>
+</#list> 
+
+<!-- 下面是输出分页 -->
+<@pager pageno="${page!'0'}" 	pagesize="10" totalcount="${webPage.totalCount}" />

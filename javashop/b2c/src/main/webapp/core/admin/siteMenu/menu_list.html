@@ -1,0 +1,234 @@
+<#include '/admin/header.html' > 
+<div id="menuinfo" style="display: none;"></div>
+<form id="menuForm">
+	<div class="main">
+		<div class="buttonArea">
+			<a href="javascript:void(0)" class="button blueBlue" data-options="iconCls:'icon-add',plain:true" id="add_menu_button">添加</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" id="updateSort" onclick="updateSort()">保存排序</a>
+		</div>
+			<table class="easyui-treegrid" id="menudata"
+				data-options="url:'${ctx}/core/admin/site-menu/list-json.do',fitColumns:'true',idField: 'menuid',treeField: 'name'">
+				<thead>
+					<tr>
+						<th data-options="field:'name',width:80">名称</th>
+						<th data-options="field:'sort',width:100" formatter="formatsort">排序</th>
+						<th data-options="field:'add',width:25" formatter="formatAdd">添加子</th>
+						<th data-options="field:'edit',width:25"	formatter="formatEdit">编辑</th>
+						<th data-options="field:'delete',width:25"	formatter="formatDelete">删除</th>
+					</tr>
+				</thead>
+			</table>	
+	</div>
+</form>
+<script type="text/javascript">
+function formatsort(value,row,index){
+	var val = '<input type="text" class="receiptsInputText" onblur="onlyNumber(this,'+row.sort+')" autocomplete="off" value="'+row.sort+'" style="width:70px" name="sortArray" maxlength="9"><input type="hidden" name="menuidArray" value="'+row.menuid+'" />';
+	return val;
+}
+function formatAdd(value, row, index) {
+	var val = "<a href='javascript:void(0);' onclick='appendChildren(" + row.menuid+ ",1)'><img class='add' src='${ctx}/core/admin/images/transparent.gif'></a>";
+	return val;
+}
+function formatEdit(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+ row.menuid + ")' ></a>";
+	return val;
+}
+function formatDelete(value, row, index) {
+	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.menuid+ ')"><img catid="'+row.menuid+'" src="${ctx}/core/admin/images/transparent.gif"></a>';
+	return val;
+}
+
+//验证排序值是否输入有误 add by DMRain 2016-3-14
+function onlyNumber(obj,sort){
+	var z = /^[0-9]*$/;
+	if(!z.test(obj.value)){
+	   	alert("排序值输入有误！");
+	   	obj.value = "" + sort;
+    }else{
+    	if(obj.value.length > 1){
+    		if(obj.value.charAt(0) == "0"){
+    			var s = "";
+       			for(var i = 0; i < obj.value.length; i++){
+       				if(obj.value.charAt(i) == "0"){
+       					s = obj.value.substring(i+1);
+       				}else{
+       					break;
+       				}
+       			}
+       			if(s == ""){
+       				s = 0;
+       			}
+       			obj.value = "" + s;
+    		}
+    	}
+    }
+}
+
+function appendChildren(menuId){
+	 $("#menuinfo").show();
+		$('#menuinfo').dialog({
+	　　		title: '添加子导航',			
+	　　		width: 750,
+	  		top:100,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/site-menu/add-children.do?menuid='+menuId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　				 	 menuInfoForm(savebtn,0);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#menuinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	});
+}
+function del(val){
+	if(!confirm("确认要删除吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+	var options = {
+			url : "${ctx}/core/admin/site-menu/delete.do?ajax=yes&menuid="+val,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#menudata').treegrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#menuForm').ajaxSubmit(options);	
+}
+$("#add_menu_button").click(function (){
+	 $("#menuinfo").show();
+	　　	$('#menuinfo').dialog({
+	　　		title: '添加导航栏',			
+	　　		width: 750,
+	  		top:100,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/site-menu/add.do', 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　				 	 menuInfoForm(savebtn,0);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#menuinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	});
+});
+function edit(menuid){
+	 $("#menuinfo").show();
+	　　	$('#menuinfo').dialog({
+	　　		title: '修改导航栏',			
+	　　		width: 750,
+	  		top:100,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/site-menu/edit.do?menuid='+menuid, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 menuInfoForm(editbtn,menuid);		
+		　　			 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#menuinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	});
+}
+function menuInfoForm(btn,menuid){
+	var menuurl="${ctx}/core/admin/site-menu/save.do?ajax=yes";
+	if(menuid != 0){
+		menuurl += "&menuid="+menuid;
+	}
+	var formflag= $("#menuinfoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后..");
+		btn.linkbutton("disable");
+		var options = {
+				url : menuurl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#menuinfo").dialog('close');
+						$.Loading.success(result.message);
+						$('#menudata').treegrid('reload');
+					}else{
+						$.Loading.error(result.message);
+						btn.linkbutton("enable");
+					}
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		btn.linkbutton("enable");
+			 	}
+			};
+		$('#menuinfoForm').ajaxSubmit(options);	
+	}
+}
+function updateSort(){
+	
+	 var updatebtn = $("#updateSort");
+	 var disabled=updatebtn.hasClass("l-btn-disabled");
+	 if(!disabled){
+		$.Loading.show('正在保存排序，请稍侯...');
+		updatebtn.linkbutton("disable"); 
+		var options = {
+				url :"${ctx}/core/admin/site-menu/update-sort.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {				
+				 	if(result.result==1){
+				 		$.Loading.success(result.message);
+				 		$('#menudata').treegrid('reload');
+				 		updatebtn.linkbutton("enable");
+				 	}else{
+				 		$.Loading.error(result.message);
+				 		updatebtn.linkbutton("enable");
+				 	}
+				},
+				error : function(e) {
+					$.Loading.error("出错了");
+					updatebtn.linkbutton("enable");
+				}
+			};
+		$("#menuForm").ajaxSubmit(options);		
+	 }
+}
+</script>
+<#include '/admin/footer.html' >

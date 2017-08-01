@@ -1,0 +1,204 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea'>
+		<a href="javascript:void(0)" class="button" onclick="controlSpec()">添加</a>
+		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="specform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/spec/list-json.do',pageList:[10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+				width="width" pagination="true" id="specdata">
+				<thead>
+					<tr>
+						<th data-options="field:'spec_id',checkbox:true,width:100"></th>
+						<th data-options="field:'spec_name',width:100">规格名称</th>
+						<th data-options="field:'spec_type',width:100" formatter="forSpecType">类型</th>
+						<th data-options="field:'action',width:25"
+							formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+</div>
+<div id="divdia" style="display: none;"></div>
+
+
+<script type="text/javascript">
+
+
+
+
+	function controlSpec(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/shop/admin/spec/add.do";
+			map["formId"] = "#specAddForm";
+			map["url"] = "${ctx}/shop/admin/spec/save-add.do";
+			map["title"] = "添加规格";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "${ctx}/shop/admin/spec/edit.do?specId="+id;
+			map["formId"] = "#specEditForm";
+			map["url"] = "${ctx}/shop/admin/spec/save-edit.do";
+			map["title"] = "修改规格";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#specdata";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 600,
+			height : 400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [{
+				text : '保存',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+	　　					var type=1;
+	　　					$("#tb input[name=valueArray]").each(function(i, o){
+	　　						if($(o).val()==""){
+	　　							type=0;
+	　　						}
+	　　					});
+	　　					if(type==1){
+		　　					submitForm(map,savebtn);
+	　　					}else{
+	　　						alert("请填写规格值");
+	　　					};
+					}
+				}
+			}]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在保存请稍候...");
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function formatAction(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlSpec("
+				+ row.spec_id + ")' ></a>";
+		return val;
+	}
+	
+	
+	/*
+	*删除规格操作
+	*/
+	function del() {
+		var rows = $('#specdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			alert("请选择要删除的规格");
+			return false;
+		}
+		if (!confirm("确认要删除这些规格吗？")) {
+			return false;
+		}
+		 $.Loading.show("正在检测规格使用情况"); 
+		//先检测是否有规格被使用
+		var options = {
+				url : "${ctx}/shop/admin/spec/check-used.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					 $.Loading.hide(); 
+					if (result.result == 1) {
+						 if(result.used==1){//有规格被使用
+							 $.Loading.error("规格已经被商品使用，不能删除");
+						 }
+						 
+						 if(result.used==0){//规格没有被使用，删除
+							 doDelSpec();
+						 }
+ 					}
+					if (result.result == 0) {
+						 alert("检测规格使用情况出错");
+					}
+
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#specform').ajaxSubmit(options);	
+		
+		 
+	}
+	
+	/**
+	* 真正删除规格的操作
+	*/
+	function doDelSpec(){
+		var options = {
+				url : "${ctx}/shop/admin/spec/delete.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						$("#specdata").datagrid('reload');
+					}
+					if (result.result == 0) {
+						alert(result.message);
+					}
+
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#specform').ajaxSubmit(options);
+	}
+	
+	function forSpecType(value, row, index){
+		var val="";
+		if(value==0){
+			val="文字";
+		}
+		if(value==1){
+			val="图片";
+		}
+		return val;
+	}
+</script>
+<#include '/admin/footer.html' >

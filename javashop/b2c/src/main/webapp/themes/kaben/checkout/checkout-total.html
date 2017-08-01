@@ -1,0 +1,37 @@
+<#-- 创建结算订单金额标签 -->
+<#assign orderPriceTag = newTag("orderPriceTag") />
+<#assign orderPrice = orderPriceTag() />
+
+<div class="details-ckt-total">
+	<ul class="ul-details-ckt-total">
+		<li>
+			<span class="title-details-ckt-total">商品总金额：</span>
+			<em class="price-details-ckt-total">${orderPrice.goodsPrice?string("currency")}<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>+${(orderPrice.exchange_point)!''}分</#if></em>
+			<div class="clear-details-ckt-total"></div>
+		</li>
+		<li class="li_discount_price">
+			<span class="title-details-ckt-total">优惠折扣金额：</span>
+			<em class="price-details-ckt-total">-${orderPrice.discountPrice?string("currency")}</em>
+			<div class="clear-details-ckt-total"></div>
+		</li>
+		<#if orderPrice.actDiscount != 0>
+			<li>
+				<span class="title-details-ckt-total">促销减价金额：</span>
+				<em class="price-details-ckt-total">-${orderPrice.actDiscount?string("currency")}</em>
+				<div class="clear-details-ckt-total"></div>
+			</li>
+		</#if>
+		<li>
+			<span class="title-details-ckt-total">运费总计：</span>
+			<em class="price-details-ckt-total">${orderPrice.shippingPrice?string("currency")}</em>
+			<div class="clear-details-ckt-total"></div>
+		</li>
+	</ul>
+</div>
+<div class="summary-ckt-total">
+	<div class="amounts-payable-ckt">
+		<span class="title-details-ckt-total amounts">应付金额：</span>
+		<em class="price-details-ckt-total amounts">${orderPrice.needPayMoney?string("currency")}<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>+${(orderPrice.exchange_point)!''}分</#if></em>
+		<div class="clear-details-ckt-total"></div>
+	</div>
+</div>

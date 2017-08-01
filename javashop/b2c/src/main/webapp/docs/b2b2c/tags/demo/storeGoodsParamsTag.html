@@ -1,0 +1,10 @@
+
+<!--创建"商品属性"标签-->
+<#assign StoreGoodsParamsTag= newTag("storeGoodsParamsTag") >  
+<!--调用"商品属性"标签，并传递参数-->            
+<#assign  StoreGoodsParams= StoreGoodsParamsTag("'catid':'1'") >						
+<ul class="gw">
+<#list StoreGoodsParams.attrList as gp>
+        名称：${gp.name}</br>    
+	类型：${gp.type}</br>
+</#list>

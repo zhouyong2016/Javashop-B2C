@@ -1,0 +1,60 @@
+<div class="uploadWrapper${fieldname}">
+	<input type="button" class="button" value="上传" id="uploadBtn_${fieldname}" style="float: left" />
+	<input type="hidden" name="${fieldname}_path" id="${fieldname}_path" value="${path!''}" />
+	<input type="hidden" name="${fieldname}_name" id="${fieldname}_name" value="${name!''}" />
+	<span id="span_${fieldname}"></span>
+</div>
+<script type="text/javascript">
+	$(function(){
+			
+		$("#uploadBtn_${fieldname}").click(function(){
+			$("#photoDiv").dialog({
+				title : "上传附件",
+				top : 130,
+				width : 500,
+				height : 200,
+				closed : false,
+				cache : false,
+				href : "${ctx}/eop/upload/file-ui.do?subFolder=spec",
+				modal : true,
+				buttons : [ { 
+					text : '保存',
+					handler : function() {
+						var path="";
+						var options ={
+								url:"${ctx}/eop/upload/upload-file.do?subFolder=cms&ajax=1",
+								dataType:"json",
+								success:function(data){ 
+									if(data.result == 1){
+										${fieldname}getPath(data);
+									}else{
+										$.Loading.error("上传文件失败：" + data.message);
+									}
+								},
+								error:function(){
+									alert("上传错误，请重试");
+								}
+							};
+							$('#uploadForm').ajaxSubmit(options);
+						$("#photoDiv").dialog('close');
+					}
+				}]
+			});
+		});
+	})
+function ${fieldname}getPath(data){
+	$("#${fieldname}_path").val(data.path);
+	$("#${fieldname}_name").val(data.filename);
+	$("#span_${fieldname}").html('<a target="_blank" href="' + data.path + '">' + data.filename + '</a>');
+}
+
+$(function(){
+	<#if path?exists && path!='' >
+		$("#span_${fieldname}").html('<a target="_blank" href="${path}">${name}</a>');
+	<#else>
+		$("#span_${fieldname}").empty();
+	</#if>
+});
+</script>
+
+

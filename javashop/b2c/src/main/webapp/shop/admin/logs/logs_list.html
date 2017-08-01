@@ -1,0 +1,114 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<form id="logsform">
+		<div id="tb" style="height: auto">
+				<span id="simpleSearch">
+					<table width="98%" border="0" cellspacing="0" cellpadding="7">
+						<tr>
+							<th width="70" align="right">操作者</th>
+							<td width="300px">
+								<select name="userid" class="inputSelect"  id="userid">
+									<option value="0">--请选择操作管理员--</option>
+									<#if adminList??>
+										<#list adminList as adminuser>
+											<option value="${adminuser.userid }">${adminuser.username }</option>
+										</#list>
+									</#if>
+								</select>
+							</td>
+							<th width="70" align="right">类型</th>
+							<td>
+								<select name="type" class="inputSelect"  id="type">
+									<option value="0">--请选择类型--</option>
+									<option value="member">会员</option>
+									<option value="goods">商品</option>
+									<option value="order">订单</option>
+									<option value="adv">广告</option>
+									<option value="setting">设置</option>
+									<option value="floor">楼层</option>
+									<option value="store">店铺</option>
+								</select>
+							</td>
+							<th width="70" align="right">时间</th>
+							<td>
+								<input class="easyui-datebox" style="width: 90px;height: 28px;" id="start_time" />
+		                        <span>&nbsp;~&nbsp;</span>
+		                        <input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time" />
+							</td>
+							<td colspan="7" align="center">
+								<a href="javascript:void(0)" class="easyui-linkbutton"  data-options="plain:true" onclick="searchLogs()">搜索</a>
+							</td>
+						</tr>
+					</table>
+					
+				</span>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/logs/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				sortName="log_id" sortOrder="desc" pagination="true" id="logsdata">
+				<thead>
+					<tr>
+						<th data-options="field:'xx',width:100" formatter="formatSequence">序号</th>
+						<th data-options="field:'type',width:200">类型</th>
+						<th data-options="field:'detail',width:400"  formatter="formatDetail">操作</th>
+						<th data-options="field:'name',width:100">操作者</th>
+						<th data-options="field:'time',width:200" formatter="formatDateline">时间</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	<div id="divdia"></div>
+</div>
+<script type="text/javascript">
+
+	//序号
+	function formatSequence(value, row, index){
+		var options = $("#logsdata" ).datagrid("getPager" ).data("pagination" ).options;
+		var curr = options.pageNumber;
+		var size = options.pageSize;
+		return (Number(curr)-1)*Number(size)+index+1;
+	}
+	
+	//操作内容
+	function formatDetail(value, row, index){
+		return "<div title='"+value+"'>"+value+"</div>";
+	}
+	
+	//时间
+	function formatDateline(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	
+	//搜索
+	function searchLogs(){
+		var formflag= $("#logsform").form().form('validate');
+		if(formflag){
+			var type = $("#type").val();
+			var userid = $("#userid").val();
+			
+			var start_time = $('#start_time').datebox('getValue');
+			var end_time = $('#end_time').datebox('getValue'); 
+			if(start_time != '' && end_time != ''){
+				if(end_time < start_time){
+					$.Loading.error("结束时间不能小于开始时间");
+					return ;
+				}
+			}
+			
+			$('#logsdata').datagrid('load', {
+				 type:type,
+				 userid:userid,
+				 start_time:start_time,
+				 end_time:end_time,
+				 page:1
+		    }); 
+		}
+	}
+	
+</script>
+<#include '/admin/footer.html' >

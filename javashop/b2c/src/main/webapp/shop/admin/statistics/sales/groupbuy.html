@@ -1,0 +1,85 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<form id="orderform">
+		<div class='buttonArea'>
+			 <span style="float: right;height:28px;"> 
+			 	<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+				<input id="keyword" class="input_text b_fr mr5" type="text" value="" size="40" placeholder="请输入团购名称" name="keyword" />
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/groupbuyStatistics!groupbuyStatisticsListJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="groupbuydata" >
+				<thead>
+					<tr>
+						<th data-options="field:'gb_name',width:150">团购名称</th>
+						<th data-options="field:'start_time',width:150" formatter="formatDate" >开始时间</th>
+						<th data-options="field:'end_time',width:150" formatter="formatDate" >结束时间</th>
+						<th data-options="field:'gb_status',width:150" formatter="forStruts">团购状态</th>
+						<th data-options="field:'goods_name',width:150">商品名称</th>
+						<th data-options="field:'original_price',width:150" formatter="forMoney">原价</th>
+						<th data-options="field:'gb_count',width:150" formatter="forDiscount">折扣</th>
+						<th data-options="field:'price',width:150" formatter="forMoney">团购价</th>
+						<th data-options="field:'view_num',width:150">浏览数量</th>
+						<th data-options="field:'buy_num',width:150">购买数量</th>
+						<th data-options="field:'groupbuy_price',width:150" formatter="forGroupBuyPrice">下单总金额</th>
+						<th data-options="field:'groupbuy_rate',width:150" formatter="forGroupBuyRate">下单转换率</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+function forStruts(value,row,index){
+	if(value=="0"){
+		return "未开启";
+	}else if(value=="1"){
+		return "开启";
+	}else{
+		return "结束";
+	}
+}
+function forMoney(value, row, index) {
+	var val = "￥" + value;
+	return val;
+}
+function forDiscount(value,row,index){
+	var count=(row.price/row.original_price)*10+"";
+	return count.substring(0,count.indexOf("."))+"折";
+}
+function searchOrder(){
+	var keyword = $("#keyword").val();
+	$("#groupbuydata").datagrid('load', {
+		keyword:keyword,
+		 page:1
+    });
+}
+function forGroupBuyPrice(value, row, index) {
+	var val = "￥" + (row.buy_num*row.price);
+	return val;
+}
+function forGroupBuyRate(value, row, index) {
+	if(row.buy_num==0){
+		return "0%";
+	}else{
+		var val = (row.buy_num/row.visual_num*100)+"";
+		if(val.indexOf(".")!=-1){
+			val=val.substring(0,val.indexOf("."));
+		}
+		val=val+" % ";
+		return val;
+	}
+}
+</script>

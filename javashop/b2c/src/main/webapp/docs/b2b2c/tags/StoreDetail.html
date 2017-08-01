@@ -1,0 +1,274 @@
+<#assign title= "店铺条目" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+
+	</div>
+	<div class="right_list">
+		<h3>店铺详细条目</h3>
+		<h2>需要简述</h2>
+		<h6>店铺信息</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>store_id</td>
+						<td>int</td>
+						<td class="describe">店铺Id</td>
+					</tr>
+					<tr>
+						<td>store_name</td>
+						<td>String</td>
+						<td class="describe">店铺名称</td>
+					</tr>
+					<tr>
+						<td>store_provinceid</td>
+						<td>int</td>
+						<td class="describe">省</td>
+					</tr>
+					<tr>
+						<td>store_cityid</td>
+						<td>int</td>
+						<td class="describe">市</td>
+					</tr>
+					<tr>
+						<td>store_regionid</td>
+						<td>int</td>
+						<td class="describe">区</td>
+					</tr>
+					<tr>
+						<td>store_province</td>
+						<td>int</td>
+						<td class="describe">省</td>
+					</tr>
+					<tr>
+						<td>store_city</td>
+						<td>int</td>
+						<td class="describe">市</td>
+					</tr>
+					<tr>
+						<td>store_region</td>
+						<td>int</td>
+						<td class="describe">区</td>
+					</tr>
+					<tr>
+						<td>attr</td>
+						<td>String</td>
+						<td class="describe">详细地址</td>
+					</tr>
+					<tr>
+						<td>zip</td>
+						<td>String</td>
+						<td class="describe">邮编</td>
+					</tr>
+					<tr>
+						<td>tel</td>
+						<td>String</td>
+						<td class="describe">联系方式</td>
+					</tr>
+					<tr>
+						<td>member_name</td>
+						<td>String</td>
+						<td class="describe">会员名称</td>
+					</tr>
+					<tr>
+						<td>id_number</td>
+						<td>String</td>
+						<td class="describe">身份证号码</td>
+					</tr>
+					<tr>
+						<td>id_img</td>
+						<td>String</td>
+						<td class="describe">身份证照片</td>
+					</tr>
+					<tr>
+						<td>license_img</td>
+						<td>String</td>
+						<td class="describe">执照照片</td>
+					</tr>
+					<tr>
+						<td>store_logo</td>
+						<td>String</td>
+						<td class="describe">店铺logo</td>
+					</tr>
+					<tr>
+						<td>store_banner</td>
+						<td>String</td>
+						<td class="describe">店铺横幅</td>
+					</tr>
+					<tr>
+						<td>description</td>
+						<td>String</td>
+						<td class="describe">店铺简介</td>
+					</tr>
+					<tr>
+						<td>bank_account_name</td>
+						<td>String</td>
+						<td class="describe">银行开户名</td>
+					</tr>
+					<tr>
+						<td>bank_account_number</td>
+						<td>String</td>
+						<td class="describe">银行公司开户账户</td>
+					</tr>
+					<tr>
+						<td>bank_name</td>
+						<td>String</td>
+						<td class="describe">开户银行支行名称</td>
+					</tr>
+					<tr>
+						<td>bank_code</td>
+						<td>String</td>
+						<td class="describe">支行联行号</td>
+					</tr>
+					<tr>
+						<td>bank_province</td>
+						<td>String</td>
+						<td class="describe">开户银行所在省</td>
+					</tr>
+					<tr>
+						<td>bank_city</td>
+						<td>String</td>
+						<td class="describe">开户银行所在市</td>
+					</tr>
+					<tr>
+						<td>bank_region</td>
+						<td>String</td>
+						<td class="describe">开户银行所在区</td>
+					</tr>
+					<tr>
+						<td>community</td>
+						<td>String</td>
+						<td class="describe">小区</td>
+					</tr>
+					<tr>
+						<td>store_level</td>
+						<td>int</td>
+						<td class="describe">店铺等级</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>int</td>
+						<td class="describe">会员id</td>
+					</tr>
+					<tr>
+						<td>disabled</td>
+						<td>int</td>
+						<td class="describe">店铺状态</td>
+					</tr>
+					<tr>
+						<td>store_recommend</td>
+						<td>int</td>
+						<td class="describe">是否推荐</td>
+					</tr>
+					<tr>
+						<td>store_theme</td>
+						<td>int</td>
+						<td class="describe">店铺主题</td>
+					</tr>
+					<tr>
+						<td>store_credit</td>
+						<td>int</td>
+						<td class="describe">店铺信用</td>
+					</tr>
+					<tr>
+						<td>store_collect</td>
+						<td>int</td>
+						<td class="describe">店铺收藏数量</td>
+					</tr>
+					<tr>
+						<td>store_auth</td>
+						<td>int</td>
+						<td class="describe">店铺认证</td>
+					</tr>
+					<tr>
+						<td>name_auth</td>
+						<td>int</td>
+						<td class="describe">店主认证</td>
+					</tr>
+					<tr>
+						<td>goods_num</td>
+						<td>int</td>
+						<td class="describe">店铺商品数量</td>
+					</tr>
+					<tr>
+						<td>praise_rate</td>
+						<td>Double</td>
+						<td class="describe">店铺好评率</td>
+					</tr>
+					<tr>
+						<td>store_desccredit</td>
+						<td>Double</td>
+						<td class="describe">描述相符度</td>
+					</tr>
+					<tr>
+						<td>store_servicecredit</td>
+						<td>Double</td>
+						<td class="describe">服务态度分数</td>
+					</tr>
+					<tr>
+						<td>store_deliverycredit</td>
+						<td>Double</td>
+						<td class="describe">发货速度分数</td>
+					</tr>
+					<tr>
+						<td>commission</td>
+						<td>Double</td>
+						<td class="describe">店铺佣金比列</td>
+					</tr>
+					<tr>
+						<td>longitude</td>
+						<td>Double</td>
+						<td class="describe">经度</td>
+					</tr>
+					<tr>
+						<td>latitude</td>
+						<td>Double</td>
+						<td class="describe">纬度</td>
+					</tr>
+					<tr>
+						<td>bank_provinceid</td>
+						<td>Integer</td>
+						<td class="describe">开户银行所在省Id</td>
+					</tr>
+					<tr>
+						<td>bank_cityid</td>
+						<td>Integer</td>
+						<td class="describe">开户银行所在市Id</td>
+					</tr>
+					<tr>
+						<td>bank_regionid</td>
+						<td>Integer</td>
+						<td class="describe">开户银行所在区Id</td>
+					</tr>
+					
+					
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,149 @@
+<table class="form-table" width="100%">
+	<tr>
+		<th style="width: 10%;">商品分类：</th>
+		<td style="width: 90%; text-align: left;">
+		
+		<input class="easyui-combotree combo" value="${goods.cat_id}" name="cat_id" data-options="method:'get',required:true,height:28" style="width: 300px;" id="cat_tree">
+ 
+		<input type="hidden" name="type_id" id="typeid" value="${typeid!''}" />
+		<input type="hidden"   id="old_typeid" value="${typeid!''}" />
+		
+		</td>
+	</tr>
+	<tr>
+		<th>商品名称：</th>
+		<td style="text-align: left;"><input type="text"
+			name="name" id="goods_name" maxlength="50"
+			class="easyui-validatebox input_text" dataType="string"
+			isrequired="true" data-options="required:true" validType="notSpecialCode"
+			value="${goodsView.name }" style="width: 300px" /></td>
+	</tr>
+	<tr>
+		<th>商品编号：</th>
+		<td style="text-align: left;"><input type="text" name="sn" maxlength="20"
+			class="easyui-validatebox input_text" value="${goodsView.sn}"
+			data-options="required:true,validType:['englishCheckSub']" /></td>
+	</tr>
+
+ 
+	<tr>
+		<th>是否上架：</th>
+		<td style="text-align: left;">
+		<input type="radio" name="market_enable"<#if goods.market_enable==1>checked="checked"</#if> value="1" class="market_enable" /> 是
+		&nbsp;&nbsp; 
+		<input type="radio" name="market_enable"<#if goods.market_enable==0>checked="checked"</#if> value="0" class="market_enable"/> 否
+		</td>
+	</tr>
+
+ <#if self_store?? >
+	<tr>
+		<th>是否免运费：</th>
+		<td style="text-align: left;">
+		<input type="radio" class="nodiscount" name="goods_transfee_charge" <#if goodsView.goods_transfee_charge?? && goodsView.goods_transfee_charge ==1>checked="checked"</#if>  value="1" /> 是&nbsp;&nbsp; 
+		<input type="radio" class="nodiscount" name="goods_transfee_charge" <#if  !goodsView.goods_transfee_charge?? || goodsView.goods_transfee_charge==0>checked="checked"</#if> value="0" /> 否
+		<input type="hidden" name="storeid" value="${store_id}">
+		<input type="hidden" name="self_store" value="yes">
+		</td>
+	</tr>
+</#if> 
+ 
+	<tr>
+		<th>市场价格：</th>
+		<td style="text-align: left;"><input type="text"
+			name="mktprice" id="mktprice"
+			class="input_text easyui-validatebox" validType="money"
+			data-options="required:true" value="${goodsView.mktprice}" style="width: 100px" maxlength="7" />
+		</td>
+	</tr>
+	<input type="hidden" name="point"  value="0"  />
+	<!-- 
+	<tr>
+		<th>获得积分：</th>
+		<td style="text-align: left;"><input type="text"
+			name="goods.point" class="input_text easyui-numberbox" dataType=float
+			isrequired="true" value="${goodsView.point}" style="width: 100px" />
+		</td>
+	</tr>
+	
+	 -->
+	 
+	<tr>
+		<th>详细描述：</th>
+		<td>
+			<script id="editor" name="intro" type="text/plain" style="height:200px;width: 99%;">${goods.intro!''?html}</script>
+		</td>
+	</tr>
+</table>
+
+<script>
+	var ue = UE.getEditor('editor',{
+		zIndex:0,
+	});
+
+	
+	/**
+	* 新加载属性和参数输入页
+	*/
+	function loadParamsPage(catid,typeid){
+		/**
+		* 商品最原始的类型
+		*/
+		var oldtypeid= $("#old_typeid").val();
+		
+		//如果和商品原模型不一样 加载新模型的输入页
+		if(typeid!=oldtypeid){
+			$(".tab-panel[tabid=9]").load("${ctx}/shop/admin/goods-params/get-add-page-html.do?catid="+catid);
+			$(".tab-panel[tabid=7]").load("${ctx}/shop/admin/goods-props/get-add-page-html.do?catid="+catid);
+			$(".tab-panel[tabid=4]").load("${ctx}/shop/admin/goods-specs/get-add-page-html.do?catid="+catid);
+		}else{ //和商品同模型，则显示此商品的 参数和属性页
+			$(".tab-panel[tabid=9]").load("${ctx}/shop/admin/goods-params/get-edit-page-html.do?goodsid=${goods.goods_id}&type_id="+typeid);
+			$(".tab-panel[tabid=7]").load("${ctx}/shop/admin/goods-props/get-edit-page-html.do?goodsid=${goods.goods_id}&type_id="+typeid);
+			$(".tab-panel[tabid=4]").load("${ctx}/shop/admin/goods-specs/get-edit-page-html.do?goodsid=${goods.goods_id}&type_id="+typeid);
+
+		}
+		
+	}
+	
+	$(function(){
+		
+		
+		//显示分类树，并展开至当前分类节点
+		$('#cat_tree').combotree({
+		 	url:"${ctx}/shop/admin/cat/add-list-json.do",
+		    onLoadSuccess:function(){
+		    	
+		    	var tree =   $('#cat_tree').combotree('tree');
+		    	tree.tree("expandTo", tree.tree("getSelected").target);
+		    	
+		    	
+		    },
+		    
+		    onBeforeSelect:function(node){
+		    	var tree =   $('#cat_tree').combotree('tree');
+		    	
+		    	//当前已经选中的typeid
+		    	var cur_node =tree.tree("getSelected");
+		    	if(cur_node){
+		    		
+		    		//如果选择的分类模型发生了变化，则要提示，并重新加载属性和参数输入页
+		    		if(cur_node.type_id!=node.type_id){
+		    			if( confirm("您要选择的分类的商品模型和之前的模型不同，会导致商品的参数、规格发生变化，您确认要选择该分类吗？") ){
+		    				loadParamsPage(node.id,node.type_id);
+		    				$("#typeid").val(node.type_id);
+		    				return true;
+		    			}else{
+		    				return false;
+		    			}
+		    		}
+		    		
+		    	}else{
+		    		return true;
+		    	}
+		    	
+		    }
+		    
+		});
+		 
+	});
+</script>
+

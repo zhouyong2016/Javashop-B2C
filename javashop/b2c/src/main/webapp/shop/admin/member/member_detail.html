@@ -1,0 +1,76 @@
+<#include '/admin/header.html' >
+
+<script type="text/javascript" src="${staticserver }/js/admin/Tab.js"></script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/MemberDetail.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/shop/admin/css/membermetail.css" />
+<div class="main">
+	<div style="display: block;" class="member_detail">
+		<div class="contentTab">
+			<ul class="tab">
+				<#list pluginTabs as key>
+					<li tabid="${key.order}" <#if key.order==3> class="active"</#if> >${key.tabTitle}</li>
+				</#list>
+			</ul>
+		</div>
+		
+		<div class="shadowBoxWhite wf100 whiteBox">
+			<div class="text">
+				<div class="tab-page">
+					<#list pluginTabs as key>
+						<div tabid="${key.order}" class="tab-panel" <#if key.order!=3> style="display:none"</#if> >${key.tabHtml}</div>
+					</#list>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<script>
+
+$(function(){
+	MemberDetail.init(${member_id!''});
+	var password="";
+	$("input[name='password']").focus(function(){
+		password=$("input[name='password']").val();
+		$("input[name='password']").val("");
+	});
+	$("input[name='password']").blur(function(){
+		if($("input[name='password']").val()==""){
+			$("input[name='password']").val(password);
+		}
+	});
+});
+
+function editForm() {
+	var formflag= $("#editor").form().form('validate');
+	if($("#zip").val().length!=6&&$("#zip").val().length>0){
+		$.Loading.show("请输入正确的邮编！");
+		return;
+	}
+		if(formflag){
+			$.Loading.show("正在修改......");
+			var options = {
+					url :"${ctx}/shop/admin/member/save-edit-member.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+						}
+						if(result.result==0){ 
+							$.Loading.error(result.message);
+						}
+						$.Loading.hide();
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				};
+			$('#editor').ajaxSubmit(options);
+		}		
+}
+
+</script>
+
+<#include '/admin/footer.html' >

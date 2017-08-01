@@ -1,0 +1,28 @@
+<div class="division">
+	<div class="grid">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+			<thead>
+				<tr>
+					<th>订单号</th>
+					<th>订单状态</th>
+					<th>支付状态</th>
+					<th>发货状态</th>
+					<th>总金额</th>
+					<th>下单日期</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list orderList as order>
+				<tr>
+					<td>${order.sn }</td>
+					<td>${order.orderStatus}</td>
+					<td>${order.payStatus}</td>
+					<td>${order.shipStatus }</td>
+					<td>${order.order_amount?string("currency")}</td>
+					<td><@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${order.create_time?c}" /></td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
+</div>

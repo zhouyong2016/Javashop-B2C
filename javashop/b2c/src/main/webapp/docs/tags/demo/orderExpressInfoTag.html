@@ -1,0 +1,6 @@
+
+<!--创建"查询订单快递信息"标签-->
+<#assign orderExpressInfoTag = newTag("orderExpressInfoTag")>
+<!--调用“查询订单快递信息”标签-->
+<#assign orderExpressInfoTag = orderExpressInfoTag("'logino':'1','code':'1'")>
+返回信息： ${orderExpressInfoTag.message};

@@ -1,0 +1,33 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>edit 设置默认地址API</h3>
+		<p>设置会员默认收货地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/member-address/edit.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">addr</span><span class="w100 important">Stirng</span><span class="w100 important">必须</span><span class="w100 important">北京丰台</span><span class="w200">地址</span></p>
+			<p><span class="w100 important">addr_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">7</span><span class="w200">地址id</span></p>
+			<p><span class="w100 important">city</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">丰台区</span><span class="w200">城市</span></p>
+			<p><span class="w100 important">city_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">36</span><span class="w200">城市id</span></p>
+			<p><span class="w100 important">def_addr</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">0</span><span class="w200">默认地址：0：否，1：是</span></p>
+			<p><span class="w100 important">mobile</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">	13999999999</span><span class="w200">手机号</span></p>
+			<p><span class="w100 important">name</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">收货人姓名</span></p>
+			<p><span class="w100 important">province</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">北京</span><span class="w200">省</span></p>
+			<p><span class="w100 important">province_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">省id</span></p>
+			<p><span class="w100 important">region</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">丰台区</span><span class="w200">地区</span></p>
+			<p><span class="w100 important">region_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">454</span><span class="w200">地区id</span></p>
+			<p><span class="w100 important">tel</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">13999999999</span><span class="w200">电话</span></p>
+			<p><span class="w100 important">zip</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">100072</span><span class="w200">邮箱</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"修改成功","data":null}
+		</h5>
+	</div>
+</div>

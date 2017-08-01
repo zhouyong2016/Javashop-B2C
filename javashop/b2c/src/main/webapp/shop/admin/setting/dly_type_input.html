@@ -1,0 +1,402 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<div class="shadowBoxWhite whiteBox">
+		<div class="easyui-panel"
+			style="border-style: none; background-color: white; padding: 10px 10px 10px 10px;">
+			<form id="dlytype">
+				<table width="100%">
+					<tr>
+						<th width="120px;">配送方式名称:</th>
+						<td><input type="text" maxlength="20" id="t" name="type.name"
+							data-options="required:true"
+							class="input_text easyui-validatebox"></td>
+						<th align="right" width="150px">选择默认物流公司:</th>
+						<td><select id="corp_id" name="type.corp_id">
+								<option value="0">请选择物流公司</option> <#list logiList as logi>
+								<option value="${logi.id }">${logi.name }</option> </#list>
+						</select>
+						</td>
+					</tr>
+					<tr>
+						<th>重量设置:</th>
+						<td>首重重量&nbsp;<select id="firstunit" name="firstunit">
+								<option value="500" label="500克">500克</option>
+								<option selected="selected" value="1000" label="1公斤">1公斤</option>
+								<option value="1200" label="1.2公斤">1.2公斤</option>
+								<option value="2000" label="2公斤">2公斤</option>
+								<option value="5000" label="5公斤">5公斤</option>
+								<option value="10000" label="10公斤">10公斤</option>
+								<option value="20000" label="20公斤">20公斤</option>
+								<option value="50000" label="50公斤">50公斤</option>
+						</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;续重单位&nbsp;
+							<select id="continueunit" name="continueunit">
+								<option value="500" label="500克">500克</option>
+								<option selected="selected" value="1000" label="1公斤">1公斤</option>
+								<option value="1200" label="1.2公斤">1.2公斤</option>
+								<option value="2000" label="2公斤">2公斤</option>
+								<option value="5000" label="5公斤">5公斤</option>
+								<option value="10000" label="10公斤">10公斤</option>
+								<option value="20000" label="20公斤">20公斤</option>
+								<option value="50000" label="50公斤">50公斤</option>
+						</select>
+						
+						</td>
+					</tr>
+					<tr>
+						<th>地区费用类型:</th>
+						<td>
+							<div id="deliveryAreaToggle">
+								<label> <input type="radio" value="1" checked="checked"
+									name="type.is_same">统一设置 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<label> <input type="radio" value="0"
+									name="type.is_same">指定配送地区和费用 </label>
+							</div></td>
+					</tr>
+
+					<tr id="def_area_dexp" style="display: none;">
+						<th>&nbsp;</th>
+						<td><input type="checkbox" value="1" id="defAreaFee" 
+							name="defAreaFee">启用默认费用&nbsp;&nbsp;&nbsp;&nbsp;<span
+							style="color: rgb(153, 153, 153);">注意：未启用默认费用时，不在指定配送地区的顾客不能使用本配送方式下订单</span>
+						</td>
+					</tr>
+					
+					<tr id="area_dexp" style="display: none;">
+						<th>&nbsp;</th>
+						<td>
+							<div class="deliveryexpbox" style="line-height: 30px;">
+								<#include 'dlyprice.html' ></div></td>
+					</tr>
+
+					<tr id="def_dexp">
+						<th>配送费用:</th>
+						<td>
+							<div class="deliveryexpbox" style="line-height: 30px;">
+								<#include 'dlyprice.html' ></div></td>
+					</tr>
+					<tr id="deliveryAreabox" style="display: none;">
+						<th>支持的配送地区:</th>
+						<td>
+							<div class="deliveryArea">
+								<ol style="list-style: decimal outside none;">
+									<li class="division"
+										style="display: none; padding-bottom: 10px;">
+										<div class="deliverycity">
+											<span class="delCfgBtn" style="float: right;"> <img
+												border="none" title="删除" alt="删除"
+												style="width: 16px; height: 16px; background-image: url('images/ImageBundle.gif'); background-repeat: no-repeat; background-position: 0pt -91px; cursor: pointer;"
+												src="images/transparent.gif"> </span> 配送地区 
+												
+												<input class="combo" name="areaGroupName" style="width: 300px;">
+
+											<input type="hidden" disabled="true" name="areaGroupId">
+											<img border="none" class="editAreaImg" title="编辑地区"
+												alt="编辑地区"
+												style="width: 16px; height: 16px; background-image: url('images/ImageBundle.gif'); background-repeat: no-repeat; background-position: 0pt -139px; cursor: pointer;"
+												src="images/transparent.gif" class="regionSelect">
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label> 
+											<input type="hidden" name="has_cod" value="0" /> 
+											<input type="checkbox" disabled="true" value="1"
+												name="have_cod_check">支持货到付款</label>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										</div>
+										<div class="deliveryexpbox" style="line-height: 30px;">
+											<#include 'dlyprice.html' ></div>
+									</li>
+								</ol>
+								<input type="hidden" id="nameCount" name="nameCount" value="0"/>
+							</div> <input type="button" id="addCfgBtn" class="sysbtn button"
+							value="为指定的地区设置运费" />
+						</td>
+					</tr>
+					<tr>
+						<th>排序:</th>
+						<td><input type="text" size="5" id="ordernum"
+							name="type.ordernum" dataType="int" isrequired="true"
+							class="input_text"></td>
+					</tr>
+					<tr>
+						<th>状态:</th>
+						<td><input type="radio" value="0" checked=""
+							name="type.disabled">启用<input type="radio" value="1"
+							name="type.disabled">关闭</td>
+					</tr>
+					<tr>
+						<th>详细介绍:</th>
+						<td>
+							<script id="editor" name="type.detail" type="text/plain" style="height:200px;width: 99%;"></script>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td align="center"><a href="javascript:;" id="saveformBtn"
+							class="easyui-linkbutton"> 保存 </a>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="divdia"></div>
+<div id="areadia"></div>
+
+<script type="text/javascript">
+	var ue = UE.getEditor('editor');
+
+	$(function() {
+
+		//启用默认费用
+		$("#defAreaFee").click(function() {
+			if ($(this).attr("checked"))
+				$("#area_dexp").show().find("input").attr("disabled", false);
+			else
+				$("#area_dexp").hide().find("input").attr("disabled", true);
+		});
+
+		//切换统一设置或指定地区和费用
+		$("#deliveryAreaToggle input").click(function() {
+			if ($(this).val() == '1') {
+				$("#def_dexp").show().find("input").attr("disabled", false);
+				$("#deliveryAreabox").hide();
+				$("#def_area_dexp").hide();
+				$("#area_dexp").hide();
+				$("#defAreaFee").attr("checked", false);
+			}
+
+			if ($(this).val() == '0') {
+				$("#def_dexp").hide().find("input").attr("disabled", true);
+				$("#deliveryAreabox").show();
+				$("#def_area_dexp").show();
+			}
+
+		});
+
+		$(".checkexp").unbind("click").bind("click", function() {
+			var btn = $(this);
+			Dlytype.checkExp(btn);
+
+		});
+
+		//添加一项地区-费用配置
+		$("#addCfgBtn").click(
+				function() {
+					var newArea = $(".deliveryArea li:first").clone().appendTo(
+							$(".deliveryArea ol")).show();
+					newArea.find("input").attr("disabled", false);
+					var ncount=$("#nameCount").val();
+					$("#nameCount").val(Number(ncount)+Number(1));
+					newArea.addClass("liclass");
+					newArea.find(".combo").attr("name","aname"+(Number(ncount)+Number(1))).combotree({
+						url : 'area!listChildren.do?ajax=yes&regionid=0',
+						height:'28',
+						multiple:true,
+						required : true,
+						onLoadSuccess:function(node,data){
+							//newArea.find(".combo").combotree('setValues',[52,53,54]);
+						}
+					});
+					newArea.find(".price input").each(function() {
+						$(this).attr("name",$(this).attr("name")+(Number(ncount)+Number(1))).validatebox({
+							required : false
+						});
+					});
+					newArea.find("input[name=expressions]").attr("name","expressions"+(Number(ncount)+Number(1)));
+					newArea.find("input[name=useexp]").attr("name","useexp"+(Number(ncount)+Number(1)));
+					
+					Dlytype.bindAreaBoxEvent();
+				});
+
+		$("#saveformBtn").click(function() {
+			var type = $("input[name='type.is_same']:checked").val();
+			if (type == 0) {
+				//alert($("#defAreaFee").attr("checked"));
+				if ($("#defAreaFee").attr("checked")!=null) {
+					if($("#area_dexp input[name=useexp]").val()==0){
+						$("#area_dexp .price input").each(function() {
+							$(this).validatebox({
+								required : true
+							});
+						});
+					}
+				}
+			}
+			
+			if (type == 1) {
+				if($("#def_dexp input[name=useexp]").val()==0){
+					$("#def_dexp .price input").each(function() {
+						$(this).validatebox({
+							required : true
+						});
+					});
+				}
+			}
+
+			var formflag = $("#dlytype").form('validate');
+			if (formflag) {
+				$.Loading.show("正在保存.......");
+				$("#saveBtn").linkbutton("disable")
+				var options = {
+					url : "dlyType!saveAdd.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(date) {
+						if (date.result == 1) {
+							$.Loading.success(date.message);
+						}
+						if (date.result == 0) {
+							$.Loading.error(date.message);
+						}
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+					}
+				};
+				$("#dlytype").ajaxSubmit(options);
+			}
+			$("#saveBtn").linkbutton("enable");
+		});
+
+	});
+
+	var Dlytype = Dlytype || {};
+
+	Dlytype = {
+		openAreaDlg : function() {
+			$("#areadia").dialog({
+				title : "公式验证",
+				width : 500,
+				height : 300,
+				closed : false,
+				cache : false,
+				href : "setting/check_exp.html",
+				modal : true,
+				onLoad : function() {
+					$("#saveBtn").click(function() {
+						function tint(value) {
+							return value < 0 ? 0 : value;
+						}
+						var w = parseFloat($("#weight").val());
+						var p = parseFloat($("#orderprice").val());
+						var exp = $("#dlg_expressions").val();
+						var result = "";
+						try {
+							result = "计算结果：" + eval(exp);
+						} catch (e) {
+							result = "公式错误";
+						}
+						$("#result").html(result);
+					});
+				},
+				buttons : [ {
+					text : '保存',
+					handler : function() {
+						var val = $("#dlg_expressions").val();
+						$(".deliveryexp input[name=expressions]").val(val);
+						$("#divdia").dialog('close');
+					}
+				} ]
+			});
+		},
+		/**
+		 * 绑定地区费用配置区的事件
+		 * 初始化和新增时都会被调用
+		 */
+		bindAreaBoxEvent : function() {
+			var self = this;
+			//删除配置项
+			$(".delCfgBtn").unbind("click").bind("click", function() {
+				$(this).parents("li").remove();
+			});
+
+			$("input[name=have_cod_check]").unbind("click").bind("click",
+					function() {
+						if (this.checked)
+							$(this).siblings("[name=has_cod]").val(1);
+						else
+							$(this).siblings("[name=has_cod]").val(0);
+					});
+
+			//点击地区编辑icon打开地区选择对话框
+			$(".editAreaImg").unbind("click").bind(
+					"click",
+					function() {
+						self.areaNameInput = $(this).siblings(
+								"input[name=areaGroupName]");
+						self.areaIdInput = self.areaNameInput
+								.siblings("input[name=areaGroupId]");
+						self.openAreaDlg();
+					});
+
+			//点击地区名称input打开地区选择对话框
+			$("input[name=areaGroupName]").unbind("click").bind(
+					"click",
+					function() {
+						self.areaNameInput = $(this);
+						self.areaIdInput = self.areaNameInput
+								.siblings("input[name=areaGroupId]");
+						self.openAreaDlg();
+					});
+
+			//启用公式
+			$(".lnk.showexp").unbind("click").bind("click", function() {
+				var parent = $(this).parent();
+				parent.hide();
+				parent.siblings(".deliveryexp").show();
+				parent.siblings("input").val(1);
+			});
+
+			//关闭公式
+			$(".lnk.hideexp").unbind("click").bind("click", function() {
+				var parent = $(this).parent();
+				parent.hide();
+				parent.siblings(".deliveryexp").show();
+				parent.siblings("input").val(0);
+			});
+
+			$(".checkexp").unbind("click").bind("click", function() {
+				var btn = $(this);
+				Dlytype.checkExp(btn);
+			});
+
+		},
+		checkExp : function(btn) {
+			$("#divdia").dialog(
+					{
+						title : "公式验证",
+						width : 500,
+						height : 300,
+						closed : false,
+						cache : false,
+						href : "setting/check_exp.html",
+						modal : true,
+						onLoad : function() {
+							$("#saveBtn").click(function() {
+								function tint(value) {
+									return value < 0 ? 0 : value;
+								}
+								var w = parseFloat($("#weight").val());
+								var p = parseFloat($("#orderprice").val());
+								var exp = $("#dlg_expressions").val();
+								var result = "";
+								try {
+									result = "计算结果：" + eval(exp);
+								} catch (e) {
+									result = "公式错误";
+								}
+								$("#result").html(result);
+							});
+						},
+						buttons : [ {
+							text : '保存',
+							handler : function() {
+								btn.siblings("input[name=expressions]").val(
+										$("#dlg_expressions").val());
+								$("#divdia").dialog('close');
+							}
+						} ]
+					});
+		}
+	}
+</script>
+<#include '/admin/footer.html' >

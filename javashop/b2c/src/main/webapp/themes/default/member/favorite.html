@@ -1,0 +1,95 @@
+<#assign  title="商品收藏" /><#include 'member_header.html' />
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 将调用的结果赋值给变量 -->
+<#assign collectList = collect.result>
+
+
+<div class="data">
+	<h2>我的收藏夹</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+	<@image src="${ctx}/themes/default/images/gth.jpg" />
+
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、这里将显示您的收藏夹信息。</p>
+			<p>2、您还可以查看您收藏的所有信息、管理您的收藏夹等操作。</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+
+
+<div class="tab">
+	<ul>
+		<li class="selected"><a href="favorite.html"><span>收藏的商品</span></a></li>
+	</ul>
+</div>					
+<div class="box">
+	<div class="top"></div>
+	<div class="body">
+
+		<table cellspacing="0" cellpadding="3" class="liststyle" style="width:100%">								
+		  <#list collectList as favorite>
+			    <tr class="hovertr">
+				<td class="checkbox">&nbsp;&nbsp;</td>
+				<td class="img">
+					<a href="../goods-${favorite.goods_id}.html" title="${favorite.name}" class="img">
+						<@image src="${favorite.thumbnail!''}"  height="55" width="55" />
+					</a>
+				</td>
+				<td class="param">
+					<dl>
+						<dt><a href="../goods-${favorite.goods_id}.html">${favorite.name}</a></dt>
+						<dd>
+							<span>商品编号：${favorite.sn}</span>
+							</dd>
+						<dd>销售价：<strong>￥${favorite.price?string("0.##")}</strong></dd></dl>
+				</td>
+				<td class="oper"> <p rel="${favorite.favorite_id}" style="cursor: pointer" class="del_favorite">删除</p></td></tr>
+			    </#list>
+			    
+			    
+		</table>
+	 	<div class="pager_border">
+		<@pager pageno="${page!'1'}" 	pagesize="${collect.pageSize}" totalcount="${collect.totalCount}" />
+		<div class="clear"></div>
+		</div>
+
+	</div>
+	<div class="bottom"></div>
+</div>
+
+<script>
+$(function(){
+	$(".del_favorite").click(function(){
+		var favoriteid = $(this).attr("rel");
+		$.post("${ctx}"+"/api/shop/favorite!delete.do",{"favorite_id":favoriteid},function(result){
+			if(result.result==1){				
+				alert("删除收藏成功");
+				location.href="favorite.html";
+			}
+			
+			else{				
+				alert(result.message);
+			}			
+		},"json");
+		
+	})
+
+})
+</script>
+
+		<!--会员中心首页右侧结束-->
+		<div class="rr_bottom"></div>
+		</div>
+	</div>
+	</div>
+<#include '../common/footer.html'/>

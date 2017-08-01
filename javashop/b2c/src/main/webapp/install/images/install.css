@@ -1,0 +1,84 @@
+body{font-family:'微软雅黑';font-size:12px;}
+div{margin:0 auto; padding:0;}
+body,h1,h2,h3,h4,h5,h6,ul,li,dl,dt,dd,form,img,p{margin:0; padding:0; border:none; list-style-type:none;}
+
+
+body{background:url(../images/bg_01.png);*text-align:center;}
+
+
+.bg_pic {background:url(../images/bg_pic.png) no-repeat scroll top left;}
+
+.main{width:711px;height:567px;padding-top:10px;margin-left:auto;margin-right:auto;}
+.main .title{height:69px;width:711px;}
+.main .title h1{background:url(../images/titleh1bj.jpg) no-repeat left top;width:711px;height:69px;font-weight:normal;text-align:center;color:#fff;line-height:69px;font-size:24px;}
+.main .title span.title_bg{display:block;background:url(../images/1_07.png) no-repeat scroll top right;height:69px;width:711px;}
+.main .content{background:url(../images/1_10.png) no-repeat left -22px;width:711px;height:475px;_height:489px;*width:711px;}
+.main .content .content_bg{width:703px;background:url(../images/3_03.gif) repeat;*width:703px;*margin-left:4px;*margin-top:-4px;}
+.main .content .content_bg02{background:url(../images/1_13.png) no-repeat scroll right;width:707px;overflow:hidden;}
+.main .content h2{height:50px;line-height:50px;font-size:16px;padding-left:34px;width:640px;clear:both;}
+.main .content h2 span{font-weight:normal;}
+.main .content .content_part{width:600px;padding:10px 20px;height:310px;overflow-y:scroll;border:1px solid #d4d4d4;background-color:#f5f5f5;}
+.main .content .content_part h4{width:580px;height:40px;line-height:40px;text-align:left;color:#333;}
+.main .content .content_part p{width:580px;line-height:25px;color:#555;text-align:justify;}
+.main .content .content_part .agreement{text-align:right;color:#000;}
+.main .content .content_part .blank{margin-right:25px;}
+.main .confirm {background:url(../images/1_11.png) no-repeat scroll bottom;width:711px;height:77px;margin-top:40px;margin-left:-4px;}
+.main .confirm a{background:url(../images/1_19.png) no-repeat;width:158px;height:40px;margin:0px auto;display:block;line-height:40px;color:#fff;text-align:center;font-size:18px;text-decoration:none;}
+.main span.version{margin-left:250px;margin-top:40px;display:block;color:#fff;*margin-left:0px;}
+.main span.version a{color:#fff;}
+
+/*page02*/
+
+.main .content .list{width:700px;height:378px;padding-top:30px;position:relative;}
+.main .content .list li{width:700px;overflow:hidden;margin-bottom:10px;}
+.main .content .list li.notice{width:700px;height:80px;margin-bottom:10px;}
+.main .content span.step03{display:block;height:40px;width:130px;_width:185px;line-height:40px;padding-left:55px;margin-right:20px;font-size:16px;float:left;text-align:right;color:#616161;_margin-right:0px;}
+.main .content input.page02{font-size:14px;height:35px;width:240px;padding-left:20px;line-height:35px;}
+.main .content span.icon{background:url(../images/icon01.png) no-repeat;height:20px;width:140px;padding-left:25px;line-height:20px;font-size:14px;color:#fb911f;}
+.main .content span.wran01{clear:both;width:260px;display:block;padding-left:210px;margin-top:5px;color:#9a9ea1;_padding-left:0px;}
+.main .content .next{width:711px;height:69px;float:left;margin:13px 0px 0px -4px;background:url(../images/1_11.png) no-repeat scroll bottom;}
+.main .content .next input{background:url(../images/bg_05.png) no-repeat;width:108px;height:40px;display:block;line-height:40px;color:#fff;text-align:center;font-size:18px;text-decoration:none;margin-left:300px;border:0px none;}
+.main .content span.connect{background:url(../images/bg_06.png) no-repeat;width:218px;height:42px;position:absolute;opacity:0.8;margin-top:20px;margin-left:-200px;_margin-left:-200px;_margin-top:-240px;*margin-top:30px;color:#fff;line-height:42px;text-align:center;font-size:13px;}
+/*******新增修改样式****/
+.establish{float:left;display:block;height:43px;line-height:43px;margin:0px 0px 0px 5px;}
+
+
+/*page3*/
+
+.main .content ul.page03{width:700px;height:380px;padding-top:30px;}
+.main .content ul.page03 li{width:700px;height:40px;margin-bottom:10px;}
+.main .content span.success{display:block;background:url(../images/bg_07.png) no-repeat scroll left center;height:20px;width:220px;font-size:16px;margin:0px auto;line-height:20px;padding:30px 0px 30px 30px;color:#0db411;font-weight:bold;}
+.main .content span.step07{display:block;height:40px;width:130px;_width:185px;line-height:40px;padding-left:55px;margin-right:20px;font-size:16px;float:left;text-align:right;color:#616161;}
+.main .content span.step08{display:block;height:40px;width:240px;line-height:40px;font-size:16px;float:left;text-align:left;}
+.main .content input.page03{float:left;display:inline;font-size:14px;height:35px;width:240px;padding-left:20px;line-height:35px;}
+.main .content .start_install{width:711px;margin:69px 0px 0px -4px;height:98px;background:url(../images/1_11.png) no-repeat scroll bottom;}
+.main .content .start_install input{background:url(../images/bg_05.png) no-repeat;width:108px;height:40px;display:block;line-height:40px;color:#fff;text-align:center;font-size:18px;text-decoration:none;margin:0px auto;}
+.admin_list li{margin-bottom:10px;}
+
+
+
+/*page4*/
+.main .content .install_success{display:block;background:url(../images/bg_07.png) no-repeat scroll left bottom;height:20px;width:170px;font-size:18px;line-height:20px;padding-top:50px;padding-left:30px;color:#0db411;margin-left:auto;margin-right:auto;}
+.main .content .user_info{width:300px;height:88px;margin-top:60px;margin-left:auto;margin-right:auto;}
+.main .content .content_bg02 .user_info .shop_info{font-size:16px;font-weight:bold;width:300px;display:block;}
+
+.main .content .user_info p{width:127px;height:40px;line-height:40px;background:url(../images/yhmbj.jpg) no-repeat left center;padding-left:23px;float:left;display:inline;color:#616161;font-size:14px;}
+.main .content .user_info p span{color:#000;}
+
+.main .content .check{width:711px;height:261px;float:left;margin-left:-4px;background:url(../images/3_03.png) no-repeat scroll bottom;}
+.main .content .content_bg .content_bg02 .check a{text-decoration: none;display:block;width:267px;height:52px;line-height:52px;text-align:center;color:#fff;font-size:20px;margin:20px auto 0px auto;}
+.main .content .content_bg .content_bg02 .check .long_front{background:#00c538;border:1px solid #0db313;border-radius:6px}
+.main .content .content_bg .content_bg02 .check .long_later{background:#1b9cff;border:1px solid #0074c9;border-radius:6px}
+/*******************************
+需要补充CSS whj
+********************************/
+.database option{width:240px;height:40px;line-height:40px;}
+#loading{top:45%;left:40%;background:url(../images/cbj.gif) no-repeat left top;position:absolute;width:301px;height:42px;opacity:0.8;color:#fff;line-height:42px;text-align:center;font-size:14px;}
+#installBtn{border:0px none;background:url(../images/bg_05.png) no-repeat left top;width:108px;height:40px;display:block;line-height:40px;color:#fff;text-align:center;font-size:18px;margin-left:300px;}
+.same{width:700px;overflow:hidden;}
+.admin_list{margin-top:10px;*margin-top:8px;}
+
+
+
+
+

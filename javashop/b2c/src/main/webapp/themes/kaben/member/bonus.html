@@ -1,0 +1,52 @@
+<#assign title="我的优惠券" /> <#include 'member_header.html' />
+
+<!-- 获得会员优惠券列表标签 -->
+<#assign myBonusListTag= newTag("myBonusListTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign memberBonus = myBonusListTag() >
+
+<#assign bonuslist = memberBonus.bonusList>
+<div class="member-bonus">
+	<h1>我的优惠券<span>童鞋们，优惠券都在这里了。</span></h1>
+	<div class="member-bonus-table">
+		<#if bonuslist?size gt 0 >
+		<table>
+			<tr>
+				<th style="width:300px;">红包类型</th>
+				<th>红包金额</th>
+				<th >最小金额订单</th>
+				<th >到期时间</th>
+				<th >使用状态</th>
+			</tr>
+			<#list bonuslist as mb>
+				<tr>
+					<td style="width:300px;">${mb.type_name}</td>
+					<td>${mb.type_money}</td>
+					<td>${mb.min_goods_amount}</td>
+					<td><@dateformat time="${mb.use_end_date?c}"
+						pattern="yyyy-MM-dd"/></td>
+					<td><#if mb.order_sn??> 已使用 <#else>未使用 </#if></td>
+	
+				</tr>
+			</#list> 
+		</table>
+		<@pager pageno="${memberBonus.page}" pagesize="${memberBonus.pageSize}" totalcount="${memberBonus.totalCount}" />
+		<#else>
+		<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+		</#if>
+	</div>
+	
+<script>
+	$(function(){
+		selectMenu(2);
+	})
+</script>	
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!--尾部-->
+<#include '../common/footer.html'/>

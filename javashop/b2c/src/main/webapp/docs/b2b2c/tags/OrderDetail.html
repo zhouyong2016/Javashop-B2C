@@ -1,0 +1,300 @@
+<#assign title= "购物车条目" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'bill_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>BillDetail 结算单详细条目</h3>
+		<h2>需要简述</h2>
+		<h6>结算单条目</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>order_id</td>
+						<td>Integer</td>
+						<td class="describe">订单ID</td>
+					</tr>
+					<tr>
+						<td>sn</td>
+						<td>String</td>
+						<td class="describe">详细单编号</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>Integer</td>
+						<td class="describe">会员Id</td>
+					</tr>
+					<tr>
+						<td>status</td>
+						<td>int</td>
+						<td class="describe">订单状态</td>
+					</tr>
+					<tr>
+						<td>pay_status</td>
+						<td>int</td>
+						<td class="describe">付款状态</td>
+					</tr>
+					<tr>
+						<td>ship_status</td>
+						<td>int</td>
+						<td class="describe">货运状态</td>
+					</tr>
+					<tr>
+						<td>shipStatus</td>
+						<td>String</td>
+						<td class="describe">货运状态字符串显示</td>
+					</tr>
+					<tr>
+						<td>payStatus</td>
+						<td>String</td>
+						<td class="describe">付款状态字符串显示</td>
+					</tr>
+					<tr>
+						<td>orderStatus</td>
+						<td>String</td>
+						<td class="describe">订单状态字符串显示</td>
+					</tr>
+					<tr>
+						<td>regionid</td>
+						<td>Integer</td>
+						<td class="describe">地区id</td>
+					</tr>
+					<tr>
+						<td>shipping_id</td>
+						<td>Integer</td>
+						<td class="describe">配送方式id</td>
+					</tr>
+					<tr>
+						<td>shipping_type</td>
+						<td>String</td>
+						<td class="describe">配送方式名称</td>
+					</tr>
+					<tr>
+						<td>shipping_area</td>
+						<td>String</td>
+						<td class="describe">配送地址</td>
+					</tr>
+					<tr>
+						<td>create_time</td>
+						<td>Long</td>
+						<td class="describe">创建时间</td>
+					</tr>
+					<tr>
+						<td>ship_name</td>
+						<td>String</td>
+						<td class="describe">收货人</td>
+					</tr>
+					<tr>
+						<td>ship_addr</td>
+						<td>String</td>
+						<td class="describe">收货地址</td>
+					</tr>
+					<tr>
+						<td>ship_zip</td>
+						<td>String</td>
+						<td class="describe">邮政编码</td>
+					</tr>
+					<tr>
+						<td>ship_email</td>
+						<td>String</td>
+						<td class="describe">收货人邮箱</td>
+					</tr>
+					<tr>
+						<td>ship_mobile</td>
+						<td>String</td>
+						<td class="describe">收货人手机号码</td>
+					</tr>
+					<tr>
+						<td>ship_tel</td>
+						<td>String</td>
+						<td class="describe">收货人电话</td>
+					</tr>
+					<tr>
+						<td>ship_day</td>
+						<td>String</td>
+						<td class="describe">收货时间（工作日／周六日）</td>
+					</tr>
+					<tr>
+						<td>ship_time</td>
+						<td>String</td>
+						<td class="describe">发货时间</td>
+					</tr>
+					<tr>
+						<td>goods</td>
+						<td>String</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>is_protect</td>
+						<td>Integer</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>protect_price</td>
+						<td>Double</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>goods_amount</td>
+						<td>Double</td>
+						<td class="describe">商品价格</td>
+					</tr>
+					<tr>
+						<td>shipping_amount</td>
+						<td>Double</td>
+						<td class="describe">配送费用</td>
+					</tr>
+					<tr>
+						<td>discount</td>
+						<td>Double</td>
+						<td class="describe">优惠金额</td>
+					</tr>
+					
+					<tr>
+						<td>order_amount</td>
+						<td>Double</td>
+						<td class="describe">订单价格</td>
+					</tr>
+					<tr>
+						<td>weight</td>
+						<td>Double</td>
+						<td class="describe">订单重量</td>
+					</tr>
+					<tr>
+						<td>paymoney</td>
+						<td>Double </td>
+						<td class="describe">付款金额</td>
+					</tr>
+
+					<tr>
+						<td>remark</td>
+						<td>String </td>
+						<td class="describe">订单备注</td>
+					</tr>
+					<tr>
+						<td>disabled</td>
+						<td>Integer </td>
+						<td class="describe">关闭</td>
+					</tr>
+					<tr>
+						<td>payment_id</td>
+						<td>Integer </td>
+						<td class="describe">付款方式id</td>
+					</tr>
+					<tr>
+						<td>payment_name</td>
+						<td>String</td>
+						<td class="describe">付款方式名称</td>
+					</tr>
+					<tr>
+						<td>payment_type</td>
+						<td>String</td>
+						<td class="describe">付款方式</td>
+					</tr>
+					<tr>
+						<td>goods_num</td>
+						<td>Integer </td>
+						<td class="describe">商品数量</td>
+					</tr>
+					<tr>
+						<td>gainedpoint</td>
+						<td>Integer </td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>consumepoint</td>
+						<td>Integer </td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>depotid</td>
+						<td>Integer </td>
+						<td class="describe">发货仓库id</td>
+					</tr>
+					<tr>
+						<td>cancel_reason</td>
+						<td>String</td>
+						<td class="describe">取消订单原因</td>
+					</tr>
+					<tr>
+						<td>sale_cmpl</td>
+						<td>int</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>sale_cmpl_time</td>
+						<td>Long</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>ship_provinceid</td>
+						<td>Integer </td>
+						<td class="describe">收货地址省id</td>
+					</tr>
+					<tr>
+						<td>ship_cityid</td>
+						<td>Integer </td>
+						<td class="describe">收货地址市id</td>
+					</tr>
+					<tr>
+						<td>ship_regionid</td>
+						<td>Integer </td>
+						<td class="describe">收货地址区id</td>
+					</tr>
+					<tr>
+						<td>signing_time</td>
+						<td>Long</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>the_sign</td>
+						<td>String</td>
+						<td class="describe">签收人姓名</td>
+					</tr>
+					<tr>
+						<td>allocation_time</td>
+						<td>Long</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>admin_remark</td>
+						<td>String</td>
+						<td class="describe"></td>
+					</tr>
+					<tr>
+						<td>address_id</td>
+						<td>Integer </td>
+						<td class="describe">地址id</td>
+					</tr>
+					
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

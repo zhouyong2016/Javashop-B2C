@@ -1,0 +1,8 @@
+
+<!-- 获取购物车数据标签 -->
+<#assign cartDataTag = newTag("cartDataTag")>
+<!-- 调用购物车数据标签 -->
+<#assign cartData = cartDataTag() >	
+
+购物车数量：${cartData.count}</br>
+购物车总价：${cartData.total?string("currency")}

@@ -1,0 +1,39 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>确认收货</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/order/rog-confirm.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">orderid</span><span class="w100">订单id</span><span class="w380">此api需要登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/order/rog-confirm.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {orderid : 4},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+			{"result":1,"message":"确认收货成功","data":null}
+			</h5>
+		</span>	
+	</div>
+
+</div>

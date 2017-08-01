@@ -1,0 +1,54 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea'>
+		<a href="javascript:void(0)" class="button" onclick="newTab('发送消息','${ctx}/shop/admin/message/add.do')">发送消息</a>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="messageform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/message/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="messagedata">
+				<thead>
+					<tr>
+						<th data-options="field:'title',width:150" formatter="formatTitle">标题</th>
+						<th data-options="field:'content',width:200" formatter="formatContent">消息内容</th>
+						<th data-options="field:'sendtype',width:200" formatter="formatSendType">发送类型</th>
+						<th data-options="field:'sendtime',width:300" formatter="formatDateline">发送时间</th>
+<!-- 						<th data-options="field:'adminid',width:300" >发送人</th> -->
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	<div id="divdia"></div>
+</div>
+<script type="text/javascript">
+	function formatSendType(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "全站";
+		} else {
+			val = "指定会员";
+		}
+		return val;
+	}
+
+	function formatContent(value, row, index) {
+		var val=value;
+		if(value.length>20){
+			val=value.substring(0,20)+"......";
+		}
+		return "<div title='"+value+"'>"+val+"</div>";
+	}
+	
+	function formatTitle(value, row, index) {
+		return value;
+	}
+	
+	function formatDateline(value, row, index) {
+		return getFormatDateByLong(row.sendtime, "yyyy-MM-dd hh:mm:ss");
+	}
+</script>
+<#include '/admin/footer.html' >

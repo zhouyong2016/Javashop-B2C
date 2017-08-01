@@ -1,0 +1,83 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>判断会员是否登录</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/member!isLogin.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">如果已经登录，返回会员信息json，如果未登录，提示尚未登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/member!isLogin.do');</b>
+			<b>		var options = {</b>
+			<b><i></i>		url : url,</b>
+			<b>	<i></i>		success : function(data) {</b>
+			<b>	<i></i>	<i></i>		if(isBind == 'yes') {</b>
+			<b>	<i></i><i></i>	<i></i>			initTpl(data, $("#member_html_templet"), $("#member_html_view"),bindEvent);</b>
+			<b>	<i></i>	<i></i>		} else {</b>
+			<b>	<i></i><i></i><i></i>				initTpl(data, $("#member_html_templet"), $("#member_html_view"));</b>
+			<b>	<i></i>	<i></i>		}</b>
+			<b>	<i></i>		}</b>
+			<b>		};</b>
+			<b>		e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "data": {
+        "address": "",
+        "advance": 0,
+        "agentid": 0,
+        "birthday": 0,
+        "city": "",
+        "city_id": 0,
+        "email": "",
+        "face": "",
+        "find_code": "",
+        "info_full": 0,
+        "is_cheked": 0,
+        "last_send_email": 0,
+        "lastlogin": 1461469660,
+        "logincount": 1,
+        "lv_id": 1,
+        "lvname": "普通会员",
+        "member_id": 24,
+        "midentity": 0,
+        "mobile": "",
+        "mp": 50,
+        "msn": "",
+        "name": "",
+        "nickname": "demo_whj",
+        "parentid": 0,
+        "password": "96e79218965eb72c92a549dd5a330112",
+        "point": 50,
+        "province": "",
+        "province_id": 0,
+        "pw_answer": "",
+        "pw_question": "",
+        "qq": "",
+        "recommend_point_state": 0,
+        "region": "",
+        "region_id": 0,
+        "registerip": "0:0:0:0:0:0:0:1",
+        "regtime": 1461469660,
+        "remark": "",
+        "sex": -1,
+        "tel": "",
+        "uname": "demo_whj",
+        "zip": ""
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

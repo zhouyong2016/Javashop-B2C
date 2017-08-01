@@ -1,0 +1,45 @@
+<script type="text/javascript" src="${ctx}/core/admin/js/Auth.js"></script>
+<script type="text/javascript" src="${ctx}/core/admin/js/jquery.checktree.js"></script>
+<div class="easyui-panel" style="border-style:none;" >
+			<form method="post"  class="validate" id="addroleForm" >
+				<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		     		<tr>
+		       			<th><label class="text">角色名称：</label></th>
+		       			<td><input class="easyui-validatebox input_text" type="text" maxlength="12" name="rolename" id="rolename" maxlength="60" data-options="required:true"  dataType="string" isrequired="true" /></td>
+		      		</tr>
+		     		<tr>
+		      			<th><label class="text">描述：</label></th>
+		       			<td> 
+		    	  			<textarea name="rolememo" style="width:300px;height:150px;" id="rolememo" class="input_text" onblur="checkLength()" onkeydown="checkLength()"></textarea>
+		       			</td>
+		      		</tr>
+				</table>
+		   		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		   			<tr>
+		      			<th><label class="text">权限选择：</label></th>
+		      			<td>
+							<div id="actbox">
+									<ul>
+										<#list authList as act>
+											<li id="li_${act.actid }"><input type="checkbox" name="acts" value="${act.actid }" /><span>${act.name }</span>
+											</li>
+										</#list>
+									</ul>
+							</div>
+			  			</td>
+		     		</tr>
+				</table>
+			
+		</form>
+</div>
+<script>
+ 
+
+function checkLength(){
+	if($("#rolememo").val().length>100){
+		$("#rolememo").val($("#rolememo").val().substring(0,100));
+	}
+}
+
+
+</script>

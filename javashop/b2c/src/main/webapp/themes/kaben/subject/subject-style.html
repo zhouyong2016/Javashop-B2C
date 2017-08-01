@@ -1,0 +1,98 @@
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />
+<#assign subjectTag=newTag("subjectTag") >
+<#assign subjectcontent= subjectTag("'subjectid':${subjectid!0}")>
+<style type="text/css">
+	.btn-default{
+		position: absolute;
+		z-index: 999;
+		display: none;
+		width: 40px;
+		left: 0;
+		margin-right: 10px;
+		border: 1px solid #2e6da4;
+		background-color: #337ab7;
+		text-align: center;
+		line-height: 20px;
+		border-radius: 5px;
+		font-size: 12px;
+		cursor: pointer;
+		color: #ffffff;
+	}
+	.btn-default:hover {
+		background-color: #286090;
+		border-color: #204d74;
+	}
+</style>
+<div class="index-main index-subject-main">
+	<div class="subjectGoods">
+		<#if subjectcontent??&& subjectcontent?size gt 0 >
+			<#assign key="goodsList">
+			<#if subjectcontent[key]??>
+			<#assign goodsList=subjectcontent[key]>
+			<#if goodsList?? && goodsList?size gt 0 >
+			<#list goodsList as childrenList>
+			<ul>
+				<#if childrenList?? && childrenList?size gt 0 >
+				<input type="button" style="display:none; left: -45px;" value="编辑" class="subject_edit subject_goods_edit btn-default "
+				data-operation-url="${ctx}/core/admin/subject/edit-goods.do" 
+				data-save-url="${ctx}/core/admin/subject/save-edit-goods.do?ajax=yes"
+				data-title="编辑专题商品" 
+				data-formId="editSubjectGoodsForm"
+				data-subjectId="${subjectid!0}"
+				data-index="${childrenList_index}" >
+				<input type="button" style="display:none; left: -45px; top: 25px;" value="删除" class="subject_edit subject_goods_delete btn-default"
+				data-subjectId="${subjectid!0}"
+				data-index="${childrenList_index}" >
+				<#list childrenList as goods>
+				<#if goods_index<5>
+				<li class="subject_goods">
+					<div class="subject_goods_img">
+						<a href="${ctx}/goods-${goods.goods_id}.html" target="_blank">
+							<@image class="scrollLoading" alt="${goods.name!''}" style="width:100%;height:100%" src="${goods.thumbnail!''}" />
+						</a>
+					</div>
+					<div class="subject_goods_name">
+						<a href="${ctx}/goods-${goods.goods_id}.html" target="_blank">${goods.name}</a>
+					</div>
+					<div class="subject_goods_price">
+						商城价：<span>${goods.price?string.currency}</span>
+					</div>
+				</li>
+				</#if>
+				</#list>
+				</#if>
+			</ul>
+			</#list>
+			</#if>
+			</#if>
+		</#if>
+	</div>
+	<div class="subjectImage">
+		<#if subjectcontent??&&subjectcontent?size gt 0 >
+			<#assign key="pictureList">
+			<#if subjectcontent[key]??>
+			<#assign imageList=subjectcontent[key]>
+			
+			<#if imageList?? && imageList?size gt 0>
+			<#list imageList as picture>
+				<div class="subjectImage_img" style="overflow: visible;">
+					<span style="position: relative; margin-top: 10px;">
+						<input type="button" style="display:none; left: -45px;" value="编辑" class="subject_edit subject_image_edit btn-default"
+							   data-operation-url="${ctx}/core/admin/subject/edit-image.do"
+							   data-save-url="${ctx}/core/admin/template/save-edit-image.do?ajax=yes"
+							   data-title="编辑专题图片"
+							   data-formId="editSubjectPicture"
+							   data-subjectId="${subjectid!0}"
+							   data-index="${picture_index}" >
+						<input type="button" style="display:none; left: -45px; top: 25px;" value="删除" class="subject_edit subject_image_delete btn-default"
+							   data-subjectId="${subjectid!0}"
+							   data-index="${picture_index}" >
+						<@image class="scrollLoading" alt=""  src="${picture!''}" />
+					</span>
+				</div>
+			</#list>
+			</#if>
+			</#if>
+		</#if>
+	</div>
+</div>

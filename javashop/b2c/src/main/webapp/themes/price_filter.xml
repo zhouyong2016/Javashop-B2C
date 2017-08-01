@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pricefilter>
+	<cat id="0">
+		<price  max="5">5元以下</price>
+		<price min="5" max="10">5-10元</price>
+		<price min="10" max="20">10-20元</price>
+		<price min="20" max="50">20-50元</price>
+		<price min="50" max="100">50-100元</price>
+		<price min="100" max="200">100-200元</price>
+		<price min="200" max="500">200-500元</price>
+		<price min="500" max="1000">500-1000元</price>
+		<price min="1000">1000元以上</price>
+	</cat>
+	<cat id="9">
+		<price  max="5">5元以下</price>
+		<price min="5" max="10">5-10元</price>
+		<price min="10" max="20">10-20元</price>
+		<price min="20" max="50">20-50元</price>
+		<price min="50" max="100">50-100元</price>
+		<price min="100" max="200">100-200元</price>
+		<price min="200" max="500">200-500元</price>
+		<price min="500" max="1000">500-1000元</price>
+		<price min="1000">1000元以上</price>
+	</cat>
+	<cat id="4">
+		<price  max="5">5元以下</price>
+		<price min="5" max="10">5-10元</price>
+		<price min="10" max="20">10-20元</price>
+		<price min="20" max="50">20-50元</price>
+		<price min="50" max="100">50-100元</price>
+		<price min="100">100元以上</price>
+	</cat>
+	<cat id="38">
+		<price max="10">10元以下</price>
+		<price min="10" max="50">10-50元</price>
+		<price min="50" max="100">50-100元</price>
+		<price min="100" max="200">100-200元</price>
+		<price min="200">200元以上</price>
+	</cat>
+	
+	<cat id="56">
+		<price max="10">10元以下</price>
+		<price min="10" max="50">10-50元</price>
+		<price min="50" max="100">50-100元</price>
+		<price min="100" max="200">100-200元</price>
+		<price min="200" max="300">200-300元</price>
+		<price min="300" max="500">300-500元</price>
+		<price min="500">500元以上</price>
+	</cat>
+	
+	<cat id="79">
+		<price max="100">100元以下</price>
+		<price min="100" max="200">100-200元</price>
+		<price min="200" max="500">200-500元</price>
+		<price min="500" max="1000">500-1000元</price>
+		<price min="1000">1000元以上</price>
+	</cat>
+	
+</pricefilter>

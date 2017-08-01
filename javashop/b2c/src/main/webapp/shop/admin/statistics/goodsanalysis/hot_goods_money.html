@@ -1,0 +1,353 @@
+<#include '/admin/header.html' >
+
+</style>
+<div class="main">
+	<form id="hotgoodsForm">
+		<div style="display: block;" class="searchAdvanced">
+			<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="80px" align="right">商品分类:</td>
+					<td width="200px">
+						<select id="catId" class="easyui-combotree combo" name="cat_id" data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28" style="width: 200px;">
+						</select>
+					</td>
+					<td width="80">按订单周期：</td>
+					<td width="70">
+						<select id="cycle_type" name="cycle_type">
+							<option value="1"<#if cycle_type==1
+								>selected="selected" </#if> >按照月统计</option>
+							<option value="0"<#if cycle_type==0
+								>selected="selected" </#if> >按照年统计</option>
+						</select>
+					</td>
+					<td width="70">
+						<select id="year"> </select>
+					</td>
+					<td width="70">
+						<select id="month" 
+							<#if cycle_type==0 > style="display: none;" </#if> >
+						</select>
+					</td>
+					<td width="200" style="text-align: center;">
+						<a id="submit_form" class="button blueButton" href="javascript:void(0);">开始搜索</a>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+	<div class="clear height10"></div>
+
+	<!-- 主体 -->
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+			<!--  用户记录当前的tabId -->
+			<input type="hidden" id="now_tab_hid" value="1" />
+
+			<!-- tab页标题 -->
+			<div class="contentTab">
+				<ul class="tab">
+					<li tabid="1" class="contentTabS">下单金额</li>
+					<li tabid="2">下单量</li>
+				</ul>
+			</div>
+
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<!-- 注意  div中不能有数据  这个用来判断是否加载了数据！！！！！！！！！ -->
+						<div class="tab-panel"
+							h_url="${ctx}/shop/admin/goodsStatis/get-hot-goods-money.do"
+							tabid="1"></div>
+						<div class="tab-panel" style="display: none;"
+							h_url="${ctx}/shop/admin/goodsStatis/get-hot-goods-num.do"
+							tabid="2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear height10"></div>
+</div>
+
+<div id="grid1" class="shadowBoxWhite tableDiv" width='100%'>
+	<table id="moneydata"
+		data-options="pageList: [50],pageSize:50,fitColumns:'true',queryParams:{'complete':'${complete!''}'}">
+	</table>
+</div>
+
+
+</div>
+
+<input type="hidden" id="this_type" value="1">
+
+<script type="text/javascript">
+
+var money_chart;
+var num_chart;
+
+var money_data = ${money_json}; 
+var count;
+$(function() {
+	count=0;
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	currentYear = ${year};
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	currentmonth = ${month};
+	
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	//默认加载第一个tab页
+	loadTab(1)
+	
+	$(".goods_input .contentTab>ul>li").click(function() {
+		var tabId = $(this).attr("tabid");
+		$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+		$(this).addClass("contentTabS");
+		$(".tab-page .tab-panel").hide();
+		$("#now_tab_hid").val(tabId);	//记录当前tabId
+		loadTab(tabId);
+	});
+	
+	
+	$("#submit_form").click(function(){
+		// 1.获取时间条件
+		var dateWhere = getDateWhere();
+		count=0;
+		//如果没有时间条件 就不用刷新
+		if(!dateWhere) {
+			return;
+		}
+		
+		// 2.记录这个页需要刷新
+		$(".now_tab_data_hid").val("1");
+		var tabId = $("#now_tab_hid").val();
+		
+		// 3.刷新数据页面
+		refreshTab(tabId, dateWhere[0], dateWhere[1]);
+		
+		// 4.记录这个页不用刷新
+		$(".now_tab_data_hid[tab_id='" + tabId + "']").val("0");
+	});	
+	$("#cycle_type").change(function(){
+		if($(this).val()=="1"){
+			$("#month").attr("disabled", false);
+		}else{
+			$("#month").attr("disabled", true);
+		}
+	});
+});
+
+/**
+ * 获取日期条件
+ * @return dateWhere[] 下标0=开始时间  下标1=结束时间
+ */
+function getDateWhere(){
+	
+	var c_type = $("#cycle_type").val();
+	var startDate, endDate; //开始时间和结束时间
+	
+	//如果是按照年来筛选订单的
+	if(c_type == 2) {
+		
+		var year = $("#year").val();
+		
+		if(year == 0) {
+			var dateWhere = [];
+			dateWhere[0] = "";
+			dateWhere[1] = "";
+			return dateWhere;
+		}
+		
+		startDate = year + "-01-01 0:0:00";
+		endDate = year + "-12-31 23:59:59";
+		
+	} else {
+		
+		var year = parseInt($("#year").val());
+		var month = parseInt($("#month").val());
+
+		if(year == 0) {
+			alert("请选择年份");
+			return;
+		}
+		if(month == 0) {
+			alert("请选择月份");
+			return;
+		}
+		
+		//得到一个月最后一天
+		var lastDate = new Date(year, month, 0);
+		var lastDay = lastDate.getDate();
+		
+		startDate = year + "-" + month + "-01 0:0:00";
+		endDate = year + "-" + month + "-" + lastDay + " 23:59:59";
+	}
+	var dateWhere = [];
+	dateWhere[0] = startDate;
+	dateWhere[1] = endDate;
+	return dateWhere;
+}
+
+function getParam(){
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	if(year==null){
+		year=2015;
+		month=4;
+	}
+	var cat_id= $("input[name='cat_id']").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	var param=[];
+	param[0]=year;
+	param[1]=month;
+	param[2]=cat_id;
+	param[3]=cycle_type;
+	return param;
+}
+
+/**
+ * 根据tabId刷新页面数据
+ * @param tabId	tab页的id
+ * @param startDate	条件：开始时间
+ * @param endDate	条件：结束时间
+ */
+function refreshTab(tabId, startDate, endDate){
+	
+	tabId = parseInt(tabId);
+	//暂时tabId与函数方式定死  也许还有更好的方法
+	switch(tabId) {
+	
+		case 1:
+			getGoodsMoney(startDate, endDate);
+			break;
+		case 2:
+			getGoodsNum(startDate, endDate);
+			break;
+		default:
+			getGoodsMoney(startDate, endDate);
+				
+	}
+	
+}
+
+
+
+/**
+ * 根据tabId加载tab页数据 或者 刷新数据
+ * @param tabId	tab页的id
+ */
+function loadTab(tabId){
+	
+	var $tab = $(".tab-panel[tabid=" + tabId + "]");
+	if($tab.html() == '') {
+		$.ajax({
+			url : $tab.attr("h_url"),
+			type:'get',
+			success:function(data){
+				$tab.html(data);
+			}
+		});
+	} else {
+		var isRefresh = $(".now_tab_data_hid[tab_id='" + tabId + "']").val();
+		
+		if(count<1){
+			var dateWhere = getDateWhere();
+			//如果没有时间条件 就不用刷新
+			if(!dateWhere) {
+				return;
+			}
+			// 2.刷新数据页面
+			refreshTab(tabId, dateWhere[0], dateWhere[1]);
+			// 3.记录这个页不用刷新
+			$(".now_tab_data_hid[tab_id='" + tabId + "']").val("0");
+			count++;
+		}
+		
+		if (isRefresh == "1") {
+			// 1.获取时间条件
+			var dateWhere = getDateWhere();
+			
+			//如果没有时间条件 就不用刷新
+			if(!dateWhere) {
+				return;
+			}
+			
+			// 2.刷新数据页面
+			refreshTab(tabId, dateWhere[0], dateWhere[1]);
+			
+			// 3.记录这个页不用刷新
+			$(".now_tab_data_hid[tab_id='" + tabId + "']").val("0");
+		}
+	}
+	$tab.show();
+}
+
+
+function statistics_mode(mode_value){
+	if(mode_value==1){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+}
+/**
+ * 初始化柱状图
+ */
+ function moneyHighcharts(obj,chart,text,data){
+		chart = new Highcharts.Chart({
+	        chart: {
+	            type: 'column',
+	            renderTo: obj
+	        },
+	        title: {
+	            text: '热卖商品top50'
+	        },
+	        xAxis: {
+	        	tickInterval: 1
+	        },
+	        yAxis: {
+	            title: {
+	                text: text
+	            }
+	        },
+	        plotOptions: {
+	            line: {
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: false
+	            }
+	        },
+	        credits: {  
+	            enabled: false 	// remove high chart logo hyper-link  
+	        },
+	        series: [{
+	        	name: text,
+	        	data: data,
+	        	pointStart: 1
+	        }]
+	        // data: [{'color':'#F6BD0F','y':11}, {'color':'#333','y':6.9}]
+	    });
+}
+</script>
+<#include '/admin/footer.html' >
+

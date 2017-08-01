@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Javashop模板制作手册 - JavaShop API文档</title>
+<meta name="keywords" content="Javashop API文档">
+<meta name="description" content="Javashop API文档">
+<link href="stylecss.css" rel="stylesheet" type="text/css" />
+<link href="help.css" rel="stylesheet" type="text/css" />
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+</head>
+<body>
+<!--头部-->
+<div id="header">
+	<div class="header_top">
+		<h1><em>JavsShop</em>文档</h1>
+		<div class="title_line">
+			<a href="${ctx}/docs/template_help.html">模板制作手册</a>
+			<a href="${ctx}/docs/api/index.html">API文档</a>
+			<a href="${ctx}/docs/tags/index.html">标签文档</a>
+		</div>
+	</div>
+</div>
+	<div id="help_title">
+		Javashop模板制作手册V2
+	</div>
+	<div class="content">
+		<h1>1、概述</h1>
+		<p>　　Javashop模板制作需要用到标签、api调用，在一些复杂的模板中还可能会用到url映射。</p>
+		<p>　　我们以购物车页面为例介绍，购物车页面的样子可能如下所示：</p>
+		<div class="picone"><img src="images/image1.png"/></div>
+		<p>　　我们首先会用标签输出上述列表的数据，而对于删除和更改数量的功能性操作，我们通过异步调用核心的api来完成，我们使用删除购物车api操作为例，</br>如删除购物车一项的api地址为：<span class="selected">/api/shop/cart!delete.do?cartid=1</span></p>
+		<p>调用上述地址会返回一个json串{“result”:1,”message”:”删除成功”}对于这些API详细请参见<a href="${ctx}/docs/index.html">《Javashop API文档》</a></p>
+		<div class="pictwo"><img src="images/image2.png" /></div>
+	</div>
+	<div class="content">
+		<h1>2、标签使用详解</h1>
+		<p>　　我们以输出上述购物车列表为例来调用标签输出数据：</p>
+		<p>　　首先我们在<b>当前模板文件夹</b>中建立一个模板文件，如名为："<b>cart.html</b>"，然后在此页面中输入如下代码：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p>
+				&lt;#-- 创建购物车标签--&gt;
+			</p>
+			<p>
+				&lt;#assign&nbsp;&nbsp;cartTag= newTag("cartTag")&gt;
+			</p>
+			<p>
+				&lt;#--通过购物车标签获取购物项列表 --&gt;
+			</p>
+			<p>
+				&lt;#assign&nbsp;&nbsp;itemList = cartTag()&gt;
+			</p>
+			<p class="black">
+				&lt;div　class=<span class="blue">"cart-wrap"</span>&gt;
+			</p>
+			<p>
+				　　&lt;#if (itemList?size>0)&gt;
+			</p>
+			<p class="light_blue">
+				　　&lt;!--循环输出商品列表--&gt;
+			</p>
+			<p>
+				　　　　<span class="grey">&lt;li&gt;</span>
+			</p>
+			<p>
+				　　　　　　<span class="grey">&lt;h6&gt;</span><span>$</span>{item.name}<span class="grey">&lt;/h6&gt;
+			</p>
+			<p>
+				　　　　　　<span class="grey">&lt;h6&gt;</span><span>$</span>{item.num}<span class="grey"><</span><span class="grey">/h6</span><label class="grey">></label>
+			</p>
+			<p>
+				　　　　　　<span class="grey">&lt;h6&gt;</span<span class="light_blue">&lt;a <span></span>href=</span><span class="blue">"javascript"</span><span class="light_blue">　itemid="</span>  <span class="blue"><span>$</span>{item.id}"</span>　class=<span class="blue">"del"</span>>删除</a><span class="grey">&lt;/a&gt;&lt;/h6&gt;</span>
+			</p>
+			<p>
+				　　　　<span class="grey">&lt;/li&gt;</span>
+			</p>
+			<p>
+				　　&lt;/#list&gt;
+			</p>
+			<p>
+				　　&lt;#else&gt;
+			</p>
+			<p>
+				　　　　<span class="grey">&lt;h6&gt;</span>购物车没有商品！<span class="grey">&lt;/h6&gt;</span>
+			</p>
+			<p>
+				　　&lt;/#if&gt;
+			</p>
+			<p class="black">
+				&lt;/div&gt;
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>　　然后打开浏览器在地址栏中输入：<b>/cart.html</b>就可以看到效果了。<i>（和v3.2不同的是去掉了uri的建立，不用再关心widget.xml，新建模板文件直接就访问就可以）</i></p>
+		<p>　　我们来解释一下标签的使用，首先是标签的创建：</p>
+		<p>
+			&lt;#assign&nbsp;&nbsp;cartTag= newTag("cartTag")&gt;
+		</p>
+		<p><span class="selected">assign</span>这个关键字是Freemarker定义的，用来在模板中声明一个变量，</p>
+		<p><span class="selected">cartTag</span>是声明的变量名，</p>
+		<p><span class="selected">newTag("cartTag")</span>创建了一个购物车标签，并将引用赋值给了cartTag变量，</p>
+		<p>而下面这行代码是调用了刚刚创建的cartTag标签：</p>
+		<p>&lt;#assign&nbsp;&nbsp;itemList = cartTag()&gt;</p>
+		<p>调用这个标标签会得到购物车的列表，上述代码把他赋值给itemList变量。这样我们就可以通过#list 指令来循环这个列表了。</p>
+		<p>Javashop标签的返回值请参见：<a href="${ctx}/docs/index.html">《Javashop标签文档》</a></p>
+		<p class="red"><span class="selected">小提示</span></p>
+		<p class="red">　　<i>在页面中可以直接获取在地址栏和form中传递的参数哦，如：/test.html?name=wf</i></p>
+		<p class="red">　　<i>那么在页面中直接通过<span>$</span>{name}就可以输出地址栏中定义的name参数。同样的地，form表单中的参数通过上述方法可以一直获取、输出。</i></p>
+	</div>
+	<div class="content">
+		<h1>3、API的调用</h1>
+		<p>　　我们还以上述购物车的删除操作为例，调用购物车删除api代码如下：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p><span>$</span>(".cart-wrap&nbsp;&nbsp;.del").click(function(){</p>
+			<p>　　<span class="grey">//得到cart id</span></p>
+			<p>　　var&nbsp;&nbsp;itemid = $(this).attr("itemid");</p>
+			<p>　　<span>$</span>.ajax({</p>
+			<p>　　　　url:"/api/shop/cart!delete.do",</p>
+			<p>　　　　data:"cartid="+itemid,</p>
+			<p>　　　　dataType:"json",</p>
+			<p>　　　　success:function(result){</p>
+			<p>　　　　　　if(result.result==1){</p>
+			<p>　　　　　　　　alert("删除成功");</p>
+			<p>　　　　　　}else{</p>
+			<p>　　　　　　　　<span>$</span>.alert(result.message);</p>
+			<p>　　　　　　}</p>
+			<p>　　　　　　$.Loading.hide();</p>
+			<p>　　　　},</p>
+			<p>　　　　error:function(){</p>
+			<p>　　　　　　<span>$</span>.alert("出错了:(");</p>
+			<p>　　　　}</p>
+			<p>　　});</p>
+			<p>});</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>　　上述的api是通过访问一个url:<span class="grey">/api/shop/cart!delete.do</span>来调用的，调用结果是json格式，如：{“result”:1,”message”:”删除成功”}。对于这些API详细请参见<a href="${ctx}/docs/index.html">《Javashop核心API详解》</a></p>
+	</div>
+	<div class="content">
+		<h1>4、模板制作高级篇</h1>
+		<h2>4-1、定义url-模板映射</h2>
+		<p>　　可能会有一些特殊的模板，如商品详细页，他的访问地址一般为：goods-1.html其中的1表示这个商品的标识id,通过这个id我们的商品详细标签才能由数据库中查询出此商品的数据，但我们有很多商品，不可能建立goods-1.html,goods-2.html...goods-1000.html，这么多模板，此时我们就要用到uri-模板映射，是通过正则表达式来完成的，如：我们建立如下的映射：</p>
+		<p>/goods-(\d+).html -> /goods.html那么访问所有的/goods-{数字}.html 这样的地址都会解析goods.html这个模板了。</p>
+	</div>
+	<div class="content">
+		<h1>5、标签开发指南篇</h1>
+		<h2>5-1、基本知识</h2>
+		<p>　　首先要继承于<span class="red">com.enation.framework.taglib.BaseFreeMarkerTag</span>然后实现这个类的exec方法，如：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p><span class="grey">@Component</span></p>
+			<p>public&nbsp;&nbsp;class&nbsp;&nbsp;TestTag&nbsp;&nbsp;extends&nbsp;&nbsp;BaseFreeMarkerTag {</p>
+			<p>　　<span class="grey">@Override</span></p>
+			<p>　　protected &nbsp;&nbsp;Object&nbsp;&nbsp; exec(Mapparams) throws&nbsp;&nbsp;TemplateModelException{</p>
+			<p>　　　　return"这是一个测试";</p>
+			<p>　　}</p>
+			<p>}</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>　　其中<span class="selected">@Component</span>是spring的注解，这样此类就会自动被spring扫描,并在spring容器中创建此类的实例，此实例的beanid为testTag，就是类名首字母小写。</p>	
+		<p>　　当然也可以通过如下方式指定beanid：</p>
+		<p>@Component("myTestTag")</p>
+		<p>　　这个beanid就是标签的标识，也就是在模板页中如下红色的部分：</p>
+		<p>　&lt;#assign&nbsp;&nbsp;cartTag= newTag("<span class="red">cartTag</span>")&gt;</p>
+		<p>　　标签的exec方法会在标签调用的时候被调用，也是就在模板中：</p>
+		<p><#assign&nbsp;&nbsp;itemList = cartTag() ></p>
+		<p>　　这段代码会执行标签的exec方法。这个方法的返回值就是返回给页面的变量，如上述的itemList，可以反回任何值，字串、数字，List。。。都可以。</p>
+		<p>　　在我们示例中返回了字串，现在可以在页面中输入如下代码：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p>&lt;#assign&nbsp;&nbsp;testTag= newTag("<span class="red">testTag</span>")&gt;</p>
+			<p>&lt;#assign&nbsp;&nbsp;myValue = testTag()&gt;</p>
+			<p>返回值是:<span>$</span>{myValue}</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>那么页面会输出exec方法返回的变量。</p>
+		<h2>5-2、参数的传递</h2>
+		<p>exec方法中的Map&nbsp;&nbsp;params参数存储了由页面中传递过来的变量，如：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p>&lt;#assign&nbsp;&nbsp;testTag= newTag("testTag")&gt;</p>
+			<p>&lt;#assign&nbsp;&nbsp;myValue = testTag ("<span class="red">{'catid':1}</span>") &gt;</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>像上面标红的示例一样，参数是通过json的格式传递的，那么在标签类中获取参数值如下:</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p>protected&nbsp;&nbsp;Object&nbsp;&nbsp;exec(Mapparams) throws&nbsp;&nbsp;TemplateModelException {</p>
+			<p>　　Integer&nbsp;&nbsp;catid = (Integer)params.get("<span class="blue">catid</span>");</p>
+			<p>　　return<span class="blue">"这是一个测试,catid是"</span>+catid;</p>
+			<p>}</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>　　参数的名字<span class="red">(catid)</span>,就是map参数的key,值得注意的是参数值的数据类型，上述例子的json串：<span class="red">{'catid':1},catid值就是Integer型</span>，所以没有加引号，第二个例子就是<span class="red">String型：{'catid': '1'}</span>，所以要加引号。</p>
+		<p class="red"><span class="selected">小提示</span></p>
+		<p class="red"><i>  1、javashop中的标签都已自动纳入spring的容器管理，所以在标签类中可以正常的注入使用spring的其它bean。</i></p>
+		<p class="red"><i>  2、javashop为以下包名设置了spring的注解扫描：</br>　　com.enation.app.base</br>　　com.enation.app.shop</br>　　com.enation.app.cms</i></p>
+		<p class="red"><i>3、如果在你的项目中需要扫描其它包名，请在spring配置文件中通过如下代码配置：</i></p>
+		<!-- 代码演示部分结束 -->
+		<div class="code">
+			<p>&lt;!-- 定义此应用的组件扫描包 --&gt;</p>
+			<p>&lt;context:component-scanbase-package="<span class="blue">com.enation.app.shop</span>"/&gt;</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+	</div>
+	<div class="content">
+		<h1>6、API开发指南</h1>
+		<p>　　首先值得说明的是，上述所说的API和正常的struts2 Action没有丝毫区别。只不过访问路径必须是在/api/下，这个目径下不会被模板机制拦截，可以正常的由struts2响应。</p>
+		<h2>6-1、示例</h2>
+		<p>　　同样是要继承com.enation.framework.action.WWAction如：</p>
+		<!-- 代码演示部分 -->
+		<div class="code">
+			<p>@Component</p>
+			<p>@Scope("prototype")</p>
+			<p>@ParentPackage("eop_default")</p>
+			<p>@Namespace("/api/wine")</p>
+			<p>@Action("test")</p>
+			<p>public&nbsp;&nbsp;class&nbsp;&nbsp;TestApiAction&nbsp;&nbsp;extends&nbsp;&nbsp;WWAction {</p>
+			<p>  public&nbsp;&nbsp;String&nbsp;&nbsp;delete(){</p>
+			<p>　　　　this.showSuccessJson("成功啦");</p>
+			<p>　　　　returnthis.JSON_MESSAGE;</p>
+			<p>　　}</p>
+			<p>}</p>
+		</div>
+		<!-- 代码演示部分结束 -->
+		<p>其中的注解：</p>
+		<p><span class="grey">@Component</span>同样是让<span class="grey">spring</span>自动扫描为<span class="grey"> spring&nbsp;&nbsp;bean</span>。</p>
+		<p><span class="grey">@Scope</span>("<span class="blue">prototype</span>")生命bean的生命周期为prototype,这是为了多线程时的数据安全。</p>
+		<p><span class="grey">@Namespace</span>("<span class="blue">/api/wine</span>")是这个是根据你的项目需要定义的namespace，这个决定了你的api访问路径</p>
+		<p><span class="grey">@Action</span>("<span class="blue">test</span>")定义这个action的访问路径。</p>
+		<p>像上述示例的api，需要通过如下地址访问：/api/wine/test!delete.do这样就会调用delete方法，这个api的返回结果会是：</p>
+		<p>{"result":1,"message":"成功啦"}</p>
+		<p>返回的json串的规范对于我们意义重大，我们规定：</p>
+		<p>　1、json串中必须含有结果值，我们规定用result来表示，1表示成功，0表示失败</p>
+		<p>　2、json串的名称部分必须用双引号，字串值也必须用双引号（否则jquery1.4以后的版本不支持）</p>
+		<p>javashop提供了常用方法帮助大家生成json串，这些方法有：</p>
+		<h2>基类WWAction中的方法：</h2>
+		<p>1、showSuccessJson返回成功结果的字串，如：</p>
+		<p>　　this.showSuccessJson("成功啦");</p>
+		<p>　　返回：</p>
+		<p>　　{"result":1,"message":"成功啦"}</p>
+		
+		<p>2、showErrorJson返回失败的字串，如：</p>
+		<p>　　this.showErrorJson("出错啦");</p>
+		<p>　　返回：</p>
+		<p>　　{"result":0,"message":"出错啦"}</p>
+		<p>　　如果我们需要返回更复杂的json串时该怎么办呢？</p>
+		<p>　　实际上我们是通过为WWAction基类的json属性赋值来实现向客户端返回字串的，比如调用this.showSuccessJson("成功啦")；</br>实际是做了如下操作this.json=”{\"result\":1,\"message\":\"成功啦\"}”</p>
+		<p>　　如果需要返回更复杂的json串，那么构造好字串并赋值给json属性就可以了。</p>
+		<p>　　Javashop提供了com.enation.framework.util.JsonMessageUtil工具类来帮助生成json串，具体请参考此类。</p>
+		<p class="red"><span class="selected">小提示</span></p>
+		<p class="red"><i>1.	javashop为以下包名设置了struts的注解扫描：</br>　　com.enation.app.base.core.action</br>　　com.enation.app.shop.core.action</br>　　com.enation.app.cms.core.action</br>　　如果在你的项目中需要扫描其它包名，请在struts配置文件中通过如下代码配置：</i></p>
+		<p class="red">　　&lt;constantname="struts.convention.action.packages"value="<span class="blue">com.enation.app.shop.core.action</span>"/&gt;</p>
+	</div>
+</body>
+</html>

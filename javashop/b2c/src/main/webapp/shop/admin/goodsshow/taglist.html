@@ -1,0 +1,22 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/goods-show/tag-list-json.do',fitColumns:'true'" width="width">
+			<thead>
+			    <tr>
+			   	 	<th  data-options="field:'tag_name',width:100">标签</th>
+			   	 	<th  data-options="field:'action',width:100" formatter="formatAction">商品设置</th>
+			   	 	
+			   	 </tr>
+			</thead>
+		 </table>
+	</div>
+</div>
+<script type="text/javascript">
+ function formatAction(value,row,index){
+	var val="<a href='javascript:void(0);' onclick=\"newTab('设置','${ctx}/shop/admin/goods-show/list.do?tagid="+row.tag_id+"')\">设置</a>";
+	return val;
+}
+</script>

@@ -1,0 +1,13 @@
+
+<!--创建"订单结算时查询店铺优惠劵"标签-->
+<#assign StoreCommentTag= newTag("storeCommentTag") >  
+<!--调用"订单结算时查询店铺优惠劵"标签，并传递参数-->            
+<#assign  StoreComment= StoreCommentTag() >						
+<ul class="gw">
+
+
+<#list StoreComment as dly>
+	  商品id：${dly.goods_id}</br>
+            会员id: ${dly.member_id}</br>
+</#list>
+

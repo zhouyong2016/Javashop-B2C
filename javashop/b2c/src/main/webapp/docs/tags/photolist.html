@@ -1,0 +1,83 @@
+<#assign title= "商品相册实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>GoodsGallery  商品相册</h3>
+		<h2>需要简述</h2>
+		<h6>返回所有的商品相册列表参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>img_id</td>
+						<td>int</td>
+						<td>图片id</td>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>int</td>
+						<td>商品id</td>
+					</tr>
+					<tr>
+						<td>thumbnail</td>
+						<td>String</td>
+						<td>列表尺寸，用于各商品列表中</td>
+					</tr>
+					<tr>
+						<td>small</td>
+						<td>String</td>
+						<td>小尺寸，用于商品详细中preview</td>
+					</tr>
+					<tr>
+						<td>big</td>
+						<td>String</td>
+						<td>大尺寸</td>
+					</tr>
+					<tr>
+						<td>original</td>
+						<td>String</td>
+						<td>原尺寸</td>
+					</tr>
+					<tr>
+						<td>tiny</td>
+						<td>String</td>
+						<td>极小的，用于商品详细页中主图下的小列表图</td>
+					</tr>
+					<tr>
+						<td>isdefault</td>
+						<td>int</td>
+						<td>是否是默认(0否1是)</td>
+					</tr>
+
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

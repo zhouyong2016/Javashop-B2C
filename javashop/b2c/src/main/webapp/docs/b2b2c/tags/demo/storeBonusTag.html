@@ -1,0 +1,13 @@
+
+<!--创建"订单结算时查询店铺优惠劵"标签-->
+<#assign storeBonusTag= newTag("storeBonusTag") >  
+<!--调用"订单结算时查询店铺优惠劵"标签，并传递参数-->            
+<#assign  storeBonus= storeBonusTag("'store_id':'15','storeprice':'1'") >						
+<ul class="gw">
+
+
+<#list storeBonus as dly>
+	  优惠id：${dly.bonus_id}</br>
+            会员名称: ${dly.member_name}</br>
+</#list>
+

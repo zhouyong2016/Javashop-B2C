@@ -1,0 +1,12 @@
+
+<!--创建"店铺模板"标签-->
+<#assign StoreTransportListTag= newTag("storeTransportListTag") >  
+<!--调用"店铺模板"标签-->            
+<#assign  StoreTransportList= StoreTransportListTag() >						
+<ul class="gw">
+<#list StoreTransportList as li>
+
+	店铺id：${li.store_id}</br>
+	名称：${li.name}</br>
+           默认模板id：${li.def_temp}</br>
+</#list>

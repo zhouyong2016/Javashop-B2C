@@ -1,0 +1,26 @@
+<div class="rer_para">
+	<table cellspacing="0" cellpadding="0" width="100%" class="liststyle data">
+		<tbody>
+			<#list attrList as goodsattr>
+				<tr>
+					<th>${goodsattr.attrName!''}：</th>
+					<td>${goodsattr.attrValue!''}</td>
+				</tr>
+			</#list>
+			<#if goodsPara.hasParam==true>
+			<#list para as parameters>
+				<!-- 获得 paramList下的json数组，使用第二层list循环-->
+				<#list parameters.paramList as gparam>
+					<tr>
+						<th>${gparam.name!'' }:</th>
+						<td>${gparam.value!'' }</td>
+					</tr>
+				</#list>
+			</#list>
+			</#if>
+		</tbody>
+	</table>
+</div>
+
+
+				

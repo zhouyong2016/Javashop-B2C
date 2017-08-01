@@ -1,0 +1,10 @@
+
+<!--创建"会员地址"标签-->
+<#assign SessionConsigneeTag= newTag("sessionConsigneeTag") >  
+<!--调用"会员地址"标签，并传递参数-->            
+<#assign  sessionConsignee= SessionConsigneeTag() >						
+<ul class="gw">
+
+	详细地址：${sessionConsignee.addr}</br>
+	会员名称：${sessionConsignee.name}</br>
+	

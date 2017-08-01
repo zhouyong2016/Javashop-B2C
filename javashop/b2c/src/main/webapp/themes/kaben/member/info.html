@@ -1,0 +1,212 @@
+<#assign title="基本资料" /> 
+<#include 'member_header.html'/>
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+  <style>
+	#fileUp{border:0px none;background:none;margin:0 0 0 -25px;}
+</style>
+<div class="member-intro">
+	<h1>会员信息</h1>
+<form id="form_saveMember" method="post" enctype="multipart/form-data" class="validate" action="#">	
+	<div class="member-intro-box">
+		<div class="member-intro-img">
+			<div class="userico">
+				<#if member.face?exists && member.face != ''>
+					<img src="<@imgurl pic='${member.face}'/>" width="100" />
+					<#else>
+					<@image src="${ctx}/themes/default/images/default_face.jpg" width="100" height="100" />
+					</#if>
+			</div>
+			<div class="uploadIco">
+				<label class="member_img_box" style="cursor: pointer;" for="fileUp">
+					<div class="file clearfix" style="display:none;">
+						<div class="ifUpfile">
+                            <input type="file" name="file" id="fileUp">
+						</div>
+						<span id="imgS"></span>
+					</div>
+					<span class="memeber_load_img">上传头像</span>
+				</label>
+				<!--file end-->
+			</div>
+		</div>
+		<div class="member-intro-list">
+			<ul>
+				<li>商城账号：${member.uname!''}</li>
+				<li>会员编号：${90000000+member.member_id}</li>
+				<li>会员等级：${member.lvname!''}</li>
+			</ul>
+		</div>
+	</div>
+		<div class="pre_alter_info clearfix">
+				<div class="pre_wp">
+					<span><i>*</i>真实姓名：</span>
+					<div class="pre_row" colspan="3">
+						<input class="pre_name" type="text" isrequired="true" name="truename" value="${member.name!''}" maxlength="15" />
+					</div>
+				</div>
+				<div class="pre_sexy">
+					<span><i>*</i>性别：</span>
+					<div class="pre_row" colspan="3">
+						<label class="gender icon_ra personradio">
+							<input type="radio" name="sex"<#if member.sex!=0>checked</#if> value="1" /> <em>男</em></label> 
+							<label class="gender icon_ra personradio" id="lgender"> 
+							<input type="radio" value="0" name="sex"<#if member.sex==0>checked</#if> /><em>女</em></label>
+					</div>
+				</div>
+				<div class="pre_leave" colspan="3">
+					<!--  mybirthday   -->
+					<span><i>*</i>生日：</span>
+					<div class="pre_row">
+						<input class="Wdate" type="text" name="mybirthday" readonly style="background-color: #ffffff; cursor: pointer;" onClick="WdatePicker()"<#if member.birthday??> value="<@dateformat time="${(member.birthday)?c}" pattern="yyyy-MM-dd"/>"</#if> >
+					</div>
+				</div> 
+				
+				<div class="pre_add" colspan="3">
+					<span><i>*</i>所在地：</span>
+					<div class="pre_row">
+                        <dd id="selectAddress">
+                        </dd>
+                        <script type="text/javascript">
+                            $(function () {
+                                <#if member.province_id?? >
+                                    $('#selectAddress').addressSelect({
+                                        deData: [${member.province_id!''}, ${member.city_id!''}, ${member.region_id!''}, ${member.town_id!''}]
+                                    });
+                                <#else/>
+                                    $('#selectAddress').addressSelect();
+                                </#if>
+                            })
+                        </script>
+				</div>
+				
+				</div>
+				<div class="pre_add" colspan="3">
+					<span><i>*</i>联系地址：</span>
+					<div class="pre_row">
+						<input name="address" isrequired="true" type="text" value="${member.address!''}" class="input_add gray_unable" maxlength="60" style="float:left;">
+					</div>
+				</div>
+				<div class="pre_add" colspan="3">
+					<span><i>*</i>用户邮箱：</span>
+					<div class="pre_row">
+						<input name="email" class="input_add gray_unable" id="email" isrequired="true"  data-options="required:true,validType:'email'" type="text" value="${member.email!''}" maxlength="25" dataType="email" style="float:left;">
+					</div>
+				</div>
+				<!--<div class="pre_add" colspan="3">
+					<span><i>*</i>邮编：</span>
+					<div class="pre_row">
+						<input name="zip" type="text" value="${member.zip!''}"
+							id="zipcode" class="easyui-number input_add" isrequired="true" maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6" style="width:150px;float:left;">
+					</div>
+				</div>-->
+				<!-- 手机一项暂时先注释掉，将修改手机号转移至账户安全中 add_by DMRain -->
+				<!--  
+				<div class="pre_add" colspan="3">
+					<span><i>*</i>手机：</span>
+					<div class="pre_row">
+						<input name="mobile" type="text" value="${member.mobile!''}"
+							id="cellphone"  class="input_add gray_unable" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
+					</div>
+				</div>
+				-->
+				<div class="pre_add" colspan="3">
+					<span><i></i>固定电话：</span>
+					<div class="pre_row">
+						<input name="tel" type="text" value="${member.tel!''}" id="tel"
+							class="input_add gray_unable" onkeyup="this.value=this.value.replace(/[^\d-]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="13">
+					</div>
+				</div>
+			<div class="btn-div">
+				<input type="button" name="btnSubmit" value="保存资料" id="btnSubmit" class="green-btn" />
+				<#if member.info_full == 0>
+					<span>即可获得20奖励积分</span>
+				</#if>
+			</div>
+		</div>
+	</form>	
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	otherMenu(0);
+
+    if(Sys.ie < 9){
+        $('.uploadIco').html('<input type="file" name="file" id="fileUp">')
+        $('#fileUp').css('width', 110);
+        $('.uploadIco').css('marginLeft', 0);
+    }
+	 
+	//保存会员信息
+	$("#btnSubmit").click(function(){
+		if(!$("input[name='mybirthday']").val()){
+			alert('生日日期不能为空！');
+			return false;
+		}else if($('#region_id').val() == 0){
+			alert('所在地不完整，请核对！');
+			return false;
+		}
+		if(!$("#form_saveMember").checkall()){
+			return false;
+		}
+		//检测邮箱是否重复
+		var flag = true ;
+		$.ajax({
+			url:"${ctx}/api/shop/member/checkemailInEdit.do",
+			type:"POST",
+			data:"email="+$("#email").val(),
+			dataType:"json",
+			async: false,
+			success:function(json){
+				if(json.result==0){
+					alert("邮箱重复");
+					flag = false;
+				}
+			}		
+		});	
+		if(!flag){
+			return false;
+		}
+		var fileInput=$("input[name='file']")[0];
+		if(typeof(fileInput)=="undefined"){
+			var fileSize=fileInput.files[0].size/1024;
+			if(fileSize>4096){
+				alert("上传的图片最大不能超过4m!")
+				return false;
+			}
+		}
+		
+		$("#form_saveMember").ajaxSubmit({
+			url:"${ctx}/api/shop/member/save-info.do",
+			//type: "post",
+			success:function(data){
+			    if(data && typeof data == 'string'){
+			        data = JSON.parse(data)
+                }
+				if(data.result==1){
+					alert("保存成功");
+					location.href="member.html"
+				} else{
+                    alert(data.message);
+				}
+			}
+		})
+
+		function check(){
+			var a = /^(\d{4})-(\d{2})-(\d{2})$/
+			if (!a.test(document.getElementById("birthdaysss").value)) {
+				alert("日期格式不正确!")
+				return false
+			}
+			else
+				return true
+		}
+	});
+});
+</script>
+
+<!--尾部-->
+<#include '../common/footer.html'/>

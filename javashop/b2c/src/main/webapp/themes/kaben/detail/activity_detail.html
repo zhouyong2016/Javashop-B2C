@@ -1,0 +1,54 @@
+<#-- 获取促销活动详细 -->
+<#assign activityDetailTag = newTag("activityDetailTag")>
+<#assign detail = activityDetailTag("'activity_id':${activityId}")!'' >
+<div class="form_wrap">
+	<div class="addr_hide_wp">
+		<span style="font-weight: bolder; font-size: large; margin-left: 40%;">促销活动详细</span>
+		<div style="margin-top: 15px;">
+			<span style="font-weight: bolder; font-size: small;">促销活动名称：</span>
+			<span>${detail.activity_name!''}</span>
+		</div>
+		<div style="margin-top: 15px;">
+			<span style="font-weight: bolder; font-size: small;">促销活动日期：</span>
+			<span><@dateformat time="${detail.start_time?c}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+			--
+			<span><@dateformat time="${detail.end_time?c}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+		</div>
+		<div style="margin-top: 15px;">
+			<span style="font-weight: bolder; font-size: small;">基础订单金额：</span>
+			<span>${detail.full_money?string("currency")} （单笔订单购满此金额即可享受优惠）</span>
+		</div>
+		<div style="margin-top: 15px;">
+			<span style="font-weight: bolder; font-size: small;">活动优惠条件：</span>
+			<#if detail.is_full_minus == 1>
+				<span>满减现金</span>
+			</#if>
+			<#if detail.is_free_ship == 1>
+				<span>满免邮费</span>
+			</#if>
+			<#if detail.is_send_point == 1>
+				<span>满送积分</span>
+			</#if>
+			<#if detail.is_send_bonus == 1>
+				<span>满送优惠券</span>
+			</#if>
+			<#if detail.is_send_gift == 1>
+				<#-- 获取赠品详细 -->
+				<#assign giftDetailTag = newTag("giftDetailTag")>
+				<#assign gift = giftDetailTag("'gift_id':${detail.gift_id}")!'' >
+				<span>满送赠品(<#if gift.enable_store == 0><span style="color: red;font-weight: bolder;">已赠完</span><#else>剩余<span style="color: red;font-weight: bolder;">${gift.enable_store}</span>份</#if>)</span>
+			</#if>
+		</div>
+		<div style="margin-top: 20px;">
+			<span style="font-weight: bolder; font-size: small;">促销活动描述：</span>
+			<div>
+				${detail.description!''}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("p img").css('max-width','500px');
+});
+</script>

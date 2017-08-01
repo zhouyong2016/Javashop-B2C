@@ -1,0 +1,28 @@
+<#assign cartTag= newTag("cartTag")> 
+<#assign itemList = cartTag() >
+<#if (itemList?size>0) >
+	<#list itemList as item>
+		<div class="item" itemid="${item.id}">
+			<dl>
+				<dt class="img">
+					<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}" >
+						<@image height="50" width="36" src="${item.image_default}" style="cursor: pointer;" />
+					</a>
+				</dt>
+				<dd class="name">
+					<a href="${ctx}/goods-${item.goods_id}.html">${item.name}</a>
+				</dd>
+				<dd class="extra">
+					<strong>￥${item.price}×${item.num}</strong><br>
+					<a href="javascript:;" itemid="${item.id}" class="delete">删除</a>
+				</dd>
+			</dl>
+		</div>
+		<#if item_has_next>
+			<div class="dashed_line"></div>
+		</#if>
+	</#list>
+	<div class="index_gocart"><a href="${ctx}/cart.html">去结算</a></div>
+<#else>
+	<p style="text-align:center;border:0px!important;">您的购物车中还没有任何商品</p>
+</#if>

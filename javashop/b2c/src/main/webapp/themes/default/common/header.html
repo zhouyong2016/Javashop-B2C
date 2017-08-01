@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<#assign headerTag = newTag("headerTag") />
+<#assign header = headerTag() />
+<#if title??>
+	<title>${title}-${header.title}</title>
+	<#else>
+	<title>${header.title}</title>
+</#if>
+<#if keywords??>
+	<meta name="keywords" content="${keywords!''}">
+	<#else>
+	<meta name="keywords" content="${header.keywords!''}">
+</#if>
+<#if description??>
+	<meta name="description" content="${description!''}">
+	<#else>
+	<meta name="description" content="${header.description!''}">
+</#if>
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/> 
+	
+	ie11 不能正常传递 值 的bug解决
+	
+	--> 
+<link href="${ctx}/favicon.ico" rel="shortcut icon" >
+
+
+<script>
+	var ctx="${ctx}";
+</script>
+
+<link rel="stylesheet" href="${ctx}/themes/default/css/common.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/button.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/dialog.css" type="text/css" />
+
+<script src="${ctx}/themes/default/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.validate.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.form.3.51.0.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/lhgdialog.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.validate.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/Utils.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/shop.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DropDownMenu.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/ui.datepicker.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DatePicker.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/LoginDialog.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.bigautocomplete.js" type="text/javascript"></script>
+<script >
+var isLogin= false;
+$(function(){
+	$('#nav_menu>ul>li').dropDownMenu({child:'.child'});
+	
+	//加载头部会员信息
+	$(".login_bar>ul").load("${ctx}/common/member_bar.html",function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"${ctx}/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。           
+				success:function(result){
+					if(result.result==1){
+						$.alert(result.message);
+						location.href="${ctx}/index.html";
+						
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		})	
+	});
+});
+</script>
+</head>
+<body>
+<div id="hreder">
+	<div class="login_bar">
+		<ul></ul>	
+	</div>	
+	<div class="util_bar">
+		<ul>
+			<!--购物车下拉菜单-->
+			<li id="cart_bar_wrapper" class="first">
+				<a href="cart.html">购物车(<span class="num">0</span>)件</a>
+				<div class="content" style="display:none" >
+					<div class="border"></div>
+					<div class="cart_list" >
+						<@image class="loading" src='${ctx}/themes/default/images/ajax-loader.gif'/>						
+					</div>					
+				</div>
+			</li>
+			<!--购物车下拉菜单结束-->
+			<li><a href="searchorder.html">游客订单查询</a></li>
+			<li ><a href="help-21-7.html">帮助中心</a></li>
+			<li class="phone">400-400-4000</li>
+		</ul>
+	</div>
+	<div class="clear"></div>	
+</div>
+<!--页面logo、信息-->
+<div id="banner">
+	<!--logo-->
+	<div class="logo">
+		<@image src="${site.logofile!''}" title="logo"/>
+	</div>
+	<!--logo结束-->
+	<!--承诺、优惠-->
+	<div class="promise">
+		<@image src="${ctx}/themes/default/images/sycn.jpg" alt="承诺图片"/>
+	</div>
+	<!--承诺、优惠结束-->
+</div>
+<!--页面logo、信息结束-->
+<!--导航-->
+<div id="nav_menu">
+	<#include 'nav_menu.html'/>
+</div>
+<!--导航结束-->
+<!--搜索-->
+<div id="search_bar">
+	<#include 'search.html' />		 
+</div>
+	

@@ -1,0 +1,443 @@
+<#include '/admin/header.html' >
+<script language="javascript" src="${ctx}/adminthemes/new/js/CLodopFuncs.js"></script>
+<style>
+.express{
+	width: 120px; 
+	float: left;
+}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(document).ready(function(){
+		$(".window-mask").css("z-index","-1");
+	})
+})
+function openImgeDlg(fun) {
+	$("#photoDiv").dialog({
+		title : "上传图片",
+		top : 130,
+		width : 350,
+		left:0,
+		height : 160,
+		closed : false,
+		cache : false,
+		href : "${ctx}/eop/upload/file.do?subFolder=spec",
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			handler : function() {
+				imgSubmit(fun);
+				$("#photoDiv").dialog('close');
+			}
+		}]
+	});
+	
+};
+	var LODOP; //声明为全局变量
+	
+	function createPage(){
+		LODOP=getLodop(document.getElementById('orderDesign'),document.getElementById('LODOP_EM'));
+		LODOP.PRINT_INITA(0,0,2300,1250,"Lodop page");
+		eval($("#xmldata").val());
+	};
+	function displayDesign() {
+		createPage();
+		LODOP.SET_SHOW_MODE("DESIGN_IN_BROWSE",1);
+		LODOP.SET_SHOW_MODE("SETUP_ENABLESS","11111111000000");//隐藏关闭(叉)按钮
+		LODOP.SET_SHOW_MODE("HIDE_GROUND_LOCK",true);//隐藏纸钉按钮
+		LODOP.SET_SHOW_MODE("HIDE_TOOLS_DESIGN",1); 
+		LODOP.SET_SHOW_MODE("HIDE_GROUND_LOCK",1); 
+		LODOP.PRINT_DESIGN();
+	};
+	
+	function getPath(path){
+		
+			document.getElementById('imagefile').value=path; 
+			LODOP=getLodop(document.getElementById('orderDesign'),document.getElementById('LODOP_EM'));
+			LODOP.ADD_PRINT_SETUP_BKIMG("<img border='0' src='"+path+"'>");
+
+
+	}
+	function createItem(obj) {
+		var val=$(obj).attr('name');
+		if(obj.checked==true){
+			LODOP.ADD_PRINT_TEXTA(val,83,78,75,20,obj.value);
+		}else{
+			LODOP.SET_PRINT_STYLEA(val,'Deleted',true);
+		}
+	}
+
+	function delItem() {
+		var i=LODOP.GET_VALUE('ItemName','selected');
+		$("[name = "+i+"]:checkbox").attr("checked", false);
+		LODOP.SET_PRINT_STYLEA("Selected",'Deleted',true);
+	}
+
+	function setFontSize(obj) {
+		if (obj.value != "--") {
+			LODOP.SET_PRINT_STYLEA("Selected","FontSize",obj.value);
+		}
+	}
+
+	function setFont(obj) {
+		if (obj.value != "--") {
+			LODOP.SET_PRINT_STYLEA("Selected","FontName",obj.value);
+		}
+	}
+
+	function setFontBold(obj) {
+		LODOP.SET_PRINT_STYLEA("Selected","Bold",((LODOP.GET_VALUE ("Itembold", "selected")==1)?0:1));
+	}
+
+	function setFontItalic(obj) {
+		LODOP.SET_PRINT_STYLEA("Selected","Italic",((LODOP.GET_VALUE ("ItemItalic", "selected")==1)?0:1));
+	}
+	function resizeDesign(type, obj) {
+		if (type == "width") {
+			document.getElementById("flashwrap").style.width = obj.value * 10;
+			SET_PRINT_PAGESIZE(1,obj.value,document.getElementById('hight').value,$("#page_title").val(),"");
+		} else if (type == "height") {
+			document.getElementById("flashwrap").style.height = obj.value * 10;
+			SET_PRINT_PAGESIZE(1,document.getElementById('width').value,obj.value,$("#page_title").val(),"");
+		}
+	}
+
+	function saveDesign() {
+		LODOP=getLodop(document.getElementById('orderDesign'),document.getElementById('LODOP_EM'));
+		 return LODOP.GET_VALUE("ProgramCodes",0);
+	}
+	function edittmp(){
+		var disabled=$("#printTmplinput").hasClass("l-btn-disabled");
+		if(!disabled){
+			if($("#corp_id").val()==0){
+				$.Loading.error("请选择物流公司");
+				return ;
+			}
+			$.Loading.show("正在保存请稍候..");
+			$("#printTmplinput").button("disable");
+			$("#xmldata").val(saveDesign());
+			var options = {
+					url : "${ctx}/shop/admin/print-tmpl/save-edit.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+							location.href="${ctx}/shop/admin/print-tmpl/list.do";
+						}
+						if(result.result==0){ 
+							$.Loading.error(result.message);
+							$("#printTmplinput").button("enable");
+						}
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						$("#printTmplinput").button("enable");
+					}
+				};
+			$('#theForm').ajaxSubmit(options);	
+		}
+	}
+	function selectText(){
+		var data=$("#xmldata").val();
+		if (data.indexOf("订单编号") != -1) {
+			$("#sn").attr("checked",'true');
+		}
+		if (data.indexOf("发件人姓名") != -1) {
+			$("#dly_name").attr("checked",'true');
+		}
+		if (data.indexOf("发件人电话") != -1) {
+			$("#dly_tel").attr("checked",'true');
+		}
+		if (data.indexOf("发件人手机号") != -1) {
+			$("#dly_mobile").attr("checked",'true');
+		}
+		if (data.indexOf("发件人公司") != -1) {
+			$("#shop_name").attr("checked",'true');
+		}
+		if (data.indexOf("发件人-省") != -1) {
+			$("#d_dly_province").attr("checked",'true');
+		}
+		if (data.indexOf("发件人-市") != -1) {
+			$("#d_dly_city").attr("checked",'true');
+		}
+		if (data.indexOf("发件人-区") != -1) {
+			$("#d_dly_region").attr("checked",'true');
+		}
+		if (data.indexOf("发件人地址") != -1) {
+			$("#dly_address").attr("checked",'true');
+		}
+		if (data.indexOf("发件人-地区") != -1) {
+			$("#dly_area").attr("checked",'true');
+		}
+		if (data.indexOf("发件人邮编") != -1) {
+			$("#zip").attr("checked",'true');
+		}
+		if (data.indexOf("收件人姓名") != -1) {
+			$("#ship_name").attr("checked",'true');
+		}
+		if (data.indexOf("收件人电话") != -1) {
+			$("#ship_tel").attr("checked",'true');
+		}
+		if (data.indexOf("收件人手机号") != -1) {
+			$("#ship_mobile").attr("checked",'true');
+		}
+		if (data.indexOf("收件人-省") != -1) {
+			$("#o_ship_province").attr("checked",'true');
+		}
+		if (data.indexOf("收件人-市") != -1) {
+			$("#o_ship_city").attr("checked",'true');
+		}
+		if (data.indexOf("收件人-区") != -1) {
+			$("#o_ship_region").attr("checked",'true');
+		}
+		if (data.indexOf("收件人地址") != -1) {
+			$("#ship_addr").attr("checked",'true');
+		}
+		if (data.indexOf("收件人-地区") != -1) {
+			$("#ship_area").attr("checked",'true');
+		}
+		if (data.indexOf("收件人邮编") != -1) {
+			$("#ship_zip").attr("checked",'true');
+		}
+		if (data.indexOf("当日日期-年") != -1) {
+			$("#date_y").attr("checked",'true');
+		}
+		if (data.indexOf("当日日期-月") != -1) {
+			$("#date_m").attr("checked",'true');
+		}
+		if (data.indexOf("当日日期-日") != -1) {
+			$("#date_d").attr("checked",'true');
+		}
+		if (data.indexOf("订单总金额") != -1) {
+			$("#order_price").attr("checked",'true');
+		}
+		if (data.indexOf("订单费用金额") != -1) {
+			$("#ship_price").attr("checked",'true');
+		}
+		if (data.indexOf("订单物品总重量") != -1) {
+			$("#order_weight").attr("checked",'true');
+		}
+		if (data.indexOf("订单-物品数量") != -1) {
+			$("#order_count").attr("checked",'true');
+		}
+		if (data.indexOf("订单-备注") != -1) {
+			$("#remark").attr("checked",'true');
+		}
+		if (data.indexOf("订单-送件时间") != -1) {
+			$("#ship_time").attr("checked",'true');
+		}
+		if (data.indexOf("√") != -1) {
+			$("#rick").attr("checked",'true');
+		}
+		if (data.indexOf("自定义内容") != -1) {
+			$("#text").attr("checked",'true');
+		}
+	}
+	function previewshow(){
+		LODOP=getLodop(document.getElementById('orderDesign'),document.getElementById('LODOP_EM'));
+		LODOP.ADD_PRINT_SETUP_BKIMG("<img border='0' src='"+$("#imagefile").val()+"'>");
+		LODOP.SET_SHOW_MODE("BKIMG_PRINT",1);
+		LODOP.PREVIEW();
+	}
+</script>
+<script type="text/javascript">
+$(function(){
+	if((navigator.platform == "Win32") || (navigator.platform == "Windows")){
+		if (window.navigator.userAgent.indexOf("Chrome") !== -1){
+			alert("chrome 不能设计，请使用其他浏览器。");		
+			$("#printTmplinput").linkbutton("disable");
+			$('#uploadBtn').attr('disabled',true);
+			$('#printBtn').removeAttr('onclick');
+			$('#delBtn').removeAttr('onclick');
+		}else{
+			displayDesign();
+			selectText();
+		}
+	}else{
+		$("#printTmplinput").linkbutton("disable");
+		$('#uploadBtn').attr('disabled',true);
+		$('#printBtn').removeAttr('onclick');
+		$('#delBtn').removeAttr('onclick');
+	}
+	
+});
+
+</script>
+<form method="post"  name="theForm" id="theForm">
+	<div class="main">
+			<input type="hidden" name="prt_tmpl_id" value="${prt_tmplId}"/>
+			<textarea id="xmldata" rows="" cols="" name="prt_tmpl_data" style="display: none;">${printTmpl.prt_tmpl_data }</textarea>
+			<div class="shadowBoxWhite  whiteBox" style="width: 100%">
+				<table style="width: 100%;">
+					<tr><th class="title">设计</th> </tr>
+				</table>
+			</div>
+			<br/>
+			<div style="width: 100%;">
+					
+					<div style="width: 28%; float: left;margin-top: 20px; ">
+						<div class="shadowBoxWhite  whiteBox">
+							<table style="width: 100%;">
+								<tr>
+									<th class="title">基本信息</th>
+									<th class="title"></th>
+								</tr>
+								<tr>
+									<td>物流公司名称：</td>
+									<td><select id="corp_id" name="prt_tmpl_title" >
+											<option value="0">请选择物流公司</option>
+											<#list logiList as logi>
+												<option value="${logi.name }" 
+												<#if logi.name=printTmpl.prt_tmpl_title>selected="selected"</#if>
+												 >${logi.name }</option>
+											</#list>
+										</select>
+										
+										<input type="radio" name="shortcut" value="true"	
+											<#if printTmpl.shortcut=="true"> checked </#if>  />启用&nbsp;
+										<input type="radio" name="shortcut" value="false" 
+											<#if printTmpl.shortcut=="false"> checked</#if>/>停用
+									</td>
+								</tr>
+								<tr>
+									<td>单据尺寸：</td>
+									<td>宽<input type="text" id="width" class="input_text" style="width: 50px;" name="prt_tmpl_width" value="${printTmpl.prt_tmpl_width}" onchange="resizeDesign('width',this)" />
+										*高<input type="text" class="input_text" id="hight" style="width: 50px;" name="prt_tmpl_heigth" value="${printTmpl.prt_tmpl_height}"  onchange="resizeDesign('height',this)" />mm</td>
+								</tr>
+								<tr>
+									<td>单据背景:</td>
+									<td><input type="checkbox" id="lockbgel"  />锁定
+									<input type="button" id="uploadBtn" onclick="openImgeDlg(getPath)" value="上传背景图" class="button"/>
+									<input type="hidden" id="imagefile"  name="bgimage"  value="${printTmpl.bgimage}"  size="40" ></td>
+									</td>
+								 
+								</tr>
+							</table>
+						</div>
+						<br/>
+						<div class="shadowBoxWhite  whiteBox">
+							<table style="width: 100%;">
+								<tr>
+									<th class="title">单据打印项</th>
+									<th class="title"></th>
+									<th class="title"></th>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="sn" id="sn"	 value="订单编号" onclick="createItem(this)"  />订单编号</td>
+									<td><input type="checkbox" name="dly_name" id="dly_name"	 value="发件人姓名" onclick="createItem(this)"  />发件人姓名 </td>
+									<td><input type="checkbox" name="dly_tel" id="dly_tel"	 value="发件人电话" onclick="createItem(this)"/>发件人电话 </td>
+									
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="dly_mobile" id="dly_mobile" value="发件人手机号" onclick="createItem(this)"/>发件人手机号 </td>
+									<td><input type="checkbox" name="shop_name"  id="shop_name" value="发件人公司" onclick="createItem(this)"/>发件人公司 </td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="d_dly_province" id="d_dly_province"	value="发件人-省" onclick="createItem(this)"/>发件人-省</td>
+									<td><input type="checkbox" name="d_dly_city" id="d_dly_city"    	value="发件人-市 " onclick="createItem(this)"/>发件人-市</td>
+									<td><input type="checkbox" name="d_dly_region" id="d_dly_region"	value="发件人-区" onclick="createItem(this)"/>发件人-区</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="dly_address" id="dly_address"	value="发件人地址 " onclick="createItem(this)"/>发件人地址</td>
+									<td><input type="checkbox" name="dly_area" id="dly_area"	 	value="发件人-地区" onclick="createItem(this)"/>发件人-地区</td>
+									<td><input type="checkbox" name="dly_zip" id="dly_zip" 	 	value="发件人邮编" onclick="createItem(this)"/>发件人邮编</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="ship_name" id="ship_name"   value="收件人姓名" onclick="createItem(this)"/>收件人姓名</td>
+									<td><input type="checkbox" name="ship_tel" id="ship_tel"   value="收件人电话" onclick="createItem(this)"/>收件人电话</td>
+									<td><input type="checkbox" name="ship_mobile" id="ship_mobile" value="收件人手机号" onclick="createItem(this)"/>收件人手机号</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="o_ship_province" id="o_ship_province" value="收件人-省 " onclick="createItem(this)"/>收件人-省</td>
+									<td><input type="checkbox" name="o_ship_city" id="o_ship_city" 	value="收件人-市" onclick="createItem(this)"/>收件人-市</td>
+									<td><input type="checkbox" name="o_ship_region" id="o_ship_region"	value="收件人-区" onclick="createItem(this)"/>收件人-区</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="ship_addr" id="ship_addr" 	value="收件人地址" onclick="createItem(this)"/>收件人地址</td>
+									<td><input type="checkbox" name="ship_area" id="ship_area" 	value="收件人-地区" onclick="createItem(this)"/>收件人-地区</td>
+									<td><input type="checkbox" name="ship_zip" id="ship_zip"		value="收件人邮编" onclick="createItem(this)"/>收件人邮编</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="year" id="year" value="当日日期-年" onclick="createItem(this)"/>当日日期-年</td>
+									<td><input type="checkbox" name="month" id="month" value="当日日期-月" onclick="createItem(this)"/>当日日期-月</td>
+									<td><input type="checkbox" name="day" id="day" value="当日日期-日" onclick="createItem(this)"/>当日日期-日</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="order_price" id="order_price" value="订单总金额" onclick="createItem(this)"/>订单总金额</td>
+									<td><input type="checkbox" name="shipping_amount" id="shipping_amount"   value="订单运费用金额" onclick="createItem(this)"/>订单运费用金额</td>
+									<td><input type="checkbox" name="order_weight" id="order_weight" value="订单物品总重量" onclick="createItem(this)"/>订单物品总重量</td>
+									
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="order_count" id="order_count"  value="订单-物品数量" onclick="createItem(this)"/>订单-物品数量</td>
+									<td><input type="checkbox" name="remark" id="remark" value="备注" onclick="createItem(this)"/>备注</td>
+									<td><input type="checkbox" name="ship_time" id="ship_time" value="订单-送件时间" onclick="createItem(this)"/>订单-送件时间</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" name="rick" value="√" id="rick" onclick="createItem(this)"/>√</td>
+									<td><input type="checkbox" name="text"value="自定义内容" id="text" onclick="createItem(this)"/>自定义内容</td>
+								</tr>
+								</table>
+								<table>
+									<tr>
+										<td>设置打印项目:
+											<select onchange="setFontSize(this);" >
+												<option value="--">大小</option>
+												<option value="10">10</option>
+												<option value="12">12</option>
+												<option value="14">14</option>
+												<option value="18">18</option>
+							
+												<option value="20">20</option>
+												<option value="24">24</option>
+												<option value="27">27</option>
+												<option value="30">30</option>
+												<option value="36">36</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>字体:
+											<select onchange="setFont(this);" >
+												<option value="--">字体</option>
+												<option value="宋体">宋体</option>
+												<option value="黑体">黑体</option>
+												<option value="Arial">Arial</option>
+												<option value="Verdana">Verdana</option>
+												<option value="Serif">Serif</option>
+												<option value="Cursive">Cursive</option>
+												<option value="Fantasy">Fantasy</option>
+												<option value="Sans-Serif">Sans-Serif</option>
+											</select>
+										</td>
+										<td>
+											字体样式:
+											<a href="javascript:;"  onclick="setFontBold()"  class="easyui-linkbutton"  >B</a>
+											<a href="javascript:;"  onclick="setFontItalic()"  class="easyui-linkbutton"  >I </a>
+										</td>
+									</tr>
+									<tr>
+										<td>&nbsp;</td>
+									</tr>
+							</table>
+						</div>
+					</div>
+					<div style="width: 68% ;float: left; margin-left: 20px; margin-top: 20px;">
+						<object id="orderDesign" width="100%" height="450" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA">
+							<param value="内嵌显示区域" name="Caption">
+							<param value="1" name="Border">
+							<param value="#C0C0C0" name="Color">
+							<embed id="LODOP_EM" width="100%" height="450" pluginspage="install_lodop.exe" type="application/x-print-lodop">
+						</object>
+					</div>
+				</div>
+		<div id="upload" style="clear: both;"></div>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="printTmplinput" onclick="edittmp()" class="button blueButton">保 存</a>
+			<a href="javascript:;" id="printBtn" onclick="previewshow()" class="button blueButton">打印预览</a>
+			<a href="javascript:;" id="delBtn" onclick="delItem()" class="button blueButton">删除</a>
+		</div>	
+	</div>
+</form>
+<#include '/admin/footer.html' >

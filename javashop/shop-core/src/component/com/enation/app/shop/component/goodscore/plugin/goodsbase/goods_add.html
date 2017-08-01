@@ -1,0 +1,84 @@
+<table class="form-table" width="100%">
+	<tr>
+		<th style="width: 10%;">商品分类：</th>
+		<td style="width: 90%; text-align: left;">
+			<#list parentList as parent> 
+				<#if parent_index != 0> 
+					<span>&nbsp;&gt;&nbsp;</span> 
+				</#if>
+				<span>${parent.name}</span> 
+			</#list> 
+			<input type="hidden" name="cat_id" value="${catid}" /> 
+			<input type="hidden" name="type_id" value="${typeid!''}" /></td>
+	</tr>
+	<tr>
+		<th>商品名称：</th>
+		<td style="text-align: left;"><input
+			class="easyui-validatebox input_text " type="text" name="name"
+			data-options="required:true" validType="notSpecialCode" dataType="string" isrequired="true" maxlength="50"/>
+		</td>
+	</tr>
+	<tr>
+		<th>商品编号：</th>
+		<td style="text-align: left;"><input type="text" name="sn" 
+			class="easyui-validatebox input_text" data-options="required:true,validType:['englishCheckSub']" maxlength="20" />
+		</td>
+	</tr>
+
+	
+
+	<tr>
+		<th>是否上架：</th>
+		<td style="text-align: left;"><input type="radio"
+			name="market_enable" checked="checked" value="1"
+			class="market_enable" /> 是&nbsp;&nbsp; <input type="radio"
+			name="market_enable" value="0" class="market_enable" /> 否</td>
+	</tr>
+
+ <#if self_store?? >	
+	<tr  >
+		<th>是否免运费：</th>
+		<td style="text-align: left;">
+		<input type="radio" class="nodiscount" name="goods_transfee_charge"  value="1" /> 是&nbsp;&nbsp; 
+		<input type="radio" class="nodiscount" name="goods_transfee_charge" checked="checked" value="0" /> 否
+		<input type="hidden" name="storeid" value="${store_id}">
+		<input type="hidden" name="self_store" value="yes">
+		</td>
+	</tr>
+	
+ </#if>
+
+	<tr>
+		<th>市场价格：</th>
+		<td style="text-align: left;"><input type="text"
+			name="mktprice" id="mktprice"
+			class="input_text easyui-validatebox" validType="money"
+			data-options="required:true" value="0" style="width: 100px" maxlength="7" />
+		</td>
+	</tr>
+	<input type="hidden" name="point"  value="0"  />
+	<!-- 
+	<tr>
+		<th>获得积分：</th>
+		<td style="text-align: left;"><input type="text"
+			name="goods.point" class="input_text easyui-numberbox"
+			dataType="float" data-options="required:true" value="0"
+			style="width: 100px" />
+		</td>
+	</tr>
+	 -->
+	 
+	<tr>
+		<th>详细描述：</th>
+		<td>
+		<script id="editor" name="intro" type="text/plain" style="height:200px;width: 99%;"></script>
+	</tr>
+
+</table>
+
+<script>
+var ue = UE.getEditor('editor',{
+	autoHeightEnabled:false,
+	zIndex:0,
+});
+</script>

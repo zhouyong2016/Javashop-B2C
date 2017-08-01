@@ -1,0 +1,10 @@
+
+<!--创建"获得该会员订单在各个状体下的个数"标签-->
+<#assign storeMemberOrderNumTag= newTag("storeMemberOrderNumTag") >  
+<!--调用"获得该会员订单在各个状体下的个数"标签，并传递参数-->            
+<#assign  storeMemberOrderNum= storeMemberOrderNumTag("'status':'99'") >						
+<ul class="gw">
+
+	个数：${storeMemberOrderNum}</br>
+
+

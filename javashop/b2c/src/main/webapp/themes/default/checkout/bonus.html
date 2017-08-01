@@ -1,0 +1,63 @@
+<#assign memberBonusListTag=newTag("memberBonusListTag")/> 
+<#assign bonusList = memberBonusListTag("'type':0") /> 
+<#assign memberUsedBonusListTag = newTag("memberUsedBonusListTag") /> 
+<#assign memberUsedBonusList = memberUsedBonusListTag() /> 
+<#macro bonusTypeName type> 
+	<#if type=="0"> 会员发放
+		<#elseif type=="1"> 商品发放 
+		<#elseif type=="2"> 订单发放 
+		<#elseif type=="3"> 线下发放的红包 
+	</#if> 
+</#macro>
+
+<style>
+.bonusC01{
+	margin: 5px 0;
+}
+</style>
+
+<div class="cartPop">
+	<div class="popDemo">
+		<div style="width: 260px;">
+			<b style="font-size:17px;">实体券：</b> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="bonusADD" href="javascript:;">再用一张</a>
+		</div>
+		<table width="99%" cellspacing="0">
+			<tbody>
+				<tr>
+					<td align="left" class="bonusSPAN">
+						<#list memberUsedBonusList as bonus>
+	                	 <div >
+	                        <input type="text" value="${bonus.bonus_sn}" disabled="disabled" >
+	                        <a class="userY" href="javascript:;" style="display:none">使用</a>
+	                        <a class="userQ" href="javascript:;">取消</a>
+	                    </div>
+	                	 </#list>
+						<div class="bonusC01">
+							<input type="text" value="" class="bonus_sn01"> 
+							<a class="userY" href="javascript:;">使用</a> 
+							<a class="userQ" href="javascript:;">取消</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<hr>
+		<table width="99%" cellspacing="0">
+			<tbody>
+				<tr>
+					<th width="100px;" style="font-size:17px;text-align: left;">电子券：</th>
+					<td style="text-align: left;">
+					<select id="ECS_BONUS" onchange="CheckOut.changeBonus(this.value)" name="bonus">
+							<option value="0">不使用优惠券</option>
+							<#list bonusList.bonusList as bonus>
+								<option value="${bonus.bonus_id}"
+									<#if bonus.used?exists&& bonus.used==1>selected="selected"</#if> >
+									${bonus.type_name}（<@bonusTypeName type="${bonus.send_type}"/>）[${bonus.type_money}]</option> 
+							</#list>
+					</select></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

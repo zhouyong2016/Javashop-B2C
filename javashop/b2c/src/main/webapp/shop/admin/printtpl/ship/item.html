@@ -1,0 +1,39 @@
+<style>
+ tr{height:25px}
+ table.item td{border:1px solid #000;}  table{font-size:12px;}  
+</style>
+
+<table style="border-collapse: collapse;" class="item"  width="100%">
+	<thead>
+		<tr> 
+			<td > 序号 </td>
+			<td > 编号 </td>
+			<td  >品名</td>
+			<td  >规格</td>
+			<td  >数量</td>
+			<td  >价格</td>
+		</tr>
+	</thead>
+<tbody>
+
+<#list itemList as item>
+ 
+<tr>
+<td >${item_index+1+start}</td>        
+<td >${item.sn}</td>
+<td >${item.name}</td>
+<td >
+	<#if item.specList??>
+		<#list item.specList as spec>
+			${spec.name}:${spec.value}
+		</#list>
+	</#if>
+</td>
+<td >${item.num}</td>
+<td >${item.price}</td>
+</tr>
+</#list>
+
+</tbody>
+
+</table>

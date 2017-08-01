@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店优惠组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+	
+<!-- 		<plugin name="赠送某些赠品插件" id="enoughPriceGiveGiftPlugin">
+			<bundle id="promotionPluginBundle"></bundle>
+		</plugin> -->
+		
+		
+		<plugin name="商品直接打折插件" id="goodsDiscountPlugin">
+			<bundle id="promotionPluginBundle"></bundle>
+		</plugin>
+		<plugin name="满就减金额插件" id="enoughPriceReducePrice">
+			<bundle id="promotionPluginBundle"></bundle>
+		</plugin>
+		
+<!-- 		<plugin name="某商品翻倍积分" id="goodsTimesPointPlugin">
+			<bundle id="promotionPluginBundle"></bundle>
+		</plugin> -->
+		
+		<plugin name="满就免运费插件" id="enoughPriceFreeDeliveryPlugin">
+			<bundle id="promotionPluginBundle"></bundle>
+		</plugin>						
+		<plugin name="购物车优惠价格计算插件" id="discountCartPricePlugin">
+			<bundle id="cartPluginBundle"></bundle>
+		</plugin>							
+	</plugins>
+	
+	
+</component>

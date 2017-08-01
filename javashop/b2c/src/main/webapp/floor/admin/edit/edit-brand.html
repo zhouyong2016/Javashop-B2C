@@ -1,0 +1,75 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<div class="clear height10"></div>
+	<div style="display: block;"
+		class="input shadowBoxWhite wf100 whiteBox">
+		<div class="floor_brand"></div>
+	</div>
+	<div class="buttonWrap">
+			<a href="javascript:;" id="brand" class="easyui-linkbutton">确定</a>
+	</div>
+</div>
+<script type="text/javascript" src="${ctx}/floor/admin/edit/jquery.brandSelector.js" > </script>
+<script type="text/javascript">
+	
+		$(function(){
+			//创建商品选择器
+			var container=$(".floor_brand");
+			var options={
+					brandid_name:'brand_ids',
+					selected_data_url:'${ctx}/core/admin/templateshow/get-selected-brand.do?floor_id='+${floor_id}
+			
+			};
+			container.brandSelector(options);
+			
+			$("#brand").click(function() {
+				
+				//判断linkbutton是否已禁用，如果禁用则跳过
+			 	var disabled=  $(this).hasClass("l-btn-disabled");
+				if( !disabled ){
+						var brand_ids = [];
+						$("input[name='brand_ids']").each(function(i, o){
+							brand_ids[i] = $(o).val();
+						});
+						if(brand_ids.length==0){
+							$.Loading.error("请添加品牌");
+							return;
+						}
+						
+						$("#brand").linkbutton("disable");
+						$.Loading.show("正在保存请稍候..");
+						
+						$.ajax({
+							url : "${ctx}/core/admin/template/save-brand.do?ajax=yes" ,
+							type : "POST",
+							dataType : "json",
+							data:{
+								"floor_id":${floor_id},
+								"brand_ids":brand_ids,
+								"keyword":container.find(".keyword").val(),
+							},
+							success : function(result) {
+								
+								if (result.result == 1) {
+									$.Loading.success(result.message);
+									parent.SelectTable("模板编辑");
+									parent.refreshCurrentTab();
+									parent.CloseTabByTitle("修改品牌列表");
+									//刷新tab
+									
+								}else{
+									$("#brand").linkbutton("enable");
+									$.Loading.error(result.message);
+								}
+							},
+							error : function(e) {
+								$.Loading.error("出错了,请重试");
+								$("#brand").linkbutton("enable");
+							}
+						});
+					}
+				});
+		});
+</script>
+<#include '/admin/footer.html' >

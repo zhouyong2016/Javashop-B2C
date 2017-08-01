@@ -1,0 +1,230 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+ 
+<style>
+.input_text{
+	width: 150px;
+}
+</style>
+<div id="pay_detail" style="display: none; overflow:hidden""></div>
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea' style="height: auto">
+		<span style="float: right;"> 
+		 	<span id="simpleSearch"> 
+			 	<input id="searchKeyword" class="input_text" type="text" maxlength="50" value="" size="30" style="width: 300px;" placeholder="请输入流水号" name="searchKeyWord">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span> 
+			<a href="javascript:void(0)" class="button" data-options="plain:true" id="aAdvanced">高级搜索</a> 
+		</span>
+	</div>
+	<div style="display: block;" class="searchAdvanced" >
+			<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">流水号</td>
+					<td><input type="text" value="" id="sn" class="input_text">
+					</td>
+
+					<td width="70" align="right">下单时间</td>
+					<td><input class="easyui-datebox" style="width: 90px;height: 28px;"
+						id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+						<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+						data-options="buttons:e_buttons" /></td>
+					<td width="70" align="right">付款状态</td>
+					<td><select id="paystatus" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option> 
+							<#list payStatusList as status>
+								<option value="${status.key}">${status.value}</option> 
+							</#list>
+					</select></td>
+					<td width="70" align="right">支付方式</td>
+					<td>
+						<select id="payment_id" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option> 
+							<#if payTypeList??>
+								<#list payTypeList as plist>
+									<option value="${plist.id}">${plist.name}</option>
+								</#list>
+							</#if>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" align="right"></td>
+					<td colspan="7" align="center"><a id="searchAdvance"
+						class="button blueButton" onclick="searchOrder()"
+						href="javascript:;">开始搜索</a></td>
+				</tr>
+			</table>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table  id="dgs" class="easyui-datagrid" data-options="url:'${ctx}/shop/admin/order-report/payment-list-json.do',remoteSort:false,pageList: [10,15,18],pageSize:${pageSize},fitColumns:'true'" 
+			pagination="true" width="width">
+			    <thead>
+				    <tr>
+				   	 	<th  data-options="field:'order_sn',width:100">流水号</th>
+				    	<th  data-options="field:'pay_method',width:100" >支付方式</th>
+				    	<th  data-options="field:'pay_date',width:100" formatter="formatTime" >付款日期</th>
+				    	<th  data-options="field:'money',width:100" formatter="formatMoney">付款金额</th>
+				    	<th  data-options="field:'paymoney',width:100" formatter="formatMoney">已结算金额</th>
+				    	<th  data-options="field:'pay_user',width:100" >付款人</th>
+				    	<th  data-options="field:'status',width:30"  formatter="formatStatus">状态</th>
+				    	<th  data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+				    </tr>	
+			    </thead>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+
+function formatType(value,row,index){
+	var val;
+	if(value==1){val="在线支付";}else if(value==2){val="线下支付";}
+	return val;
+}
+
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+
+function formatStatus(value,row,index){
+	var val;
+	if(value==2){val="已付款";}else{val="未付款";}
+	return val;
+}
+
+function formatOperation(value,row,index){
+	var val="<a href='#' onclick='paydetail("+row.order_id+")'>查看详细</a>";
+	return val;
+}
+function paydetail(orderId){
+	$("#pay_detail").show();
+　　	$('#pay_detail').dialog({
+　　		title: '付款单',	
+　　		width: 750,
+  		top: 100,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/shop/admin/payment/show-dialog.do?orderId='+ orderId, 	
+　　		modal: true
+　　	});
+}
+function pay(){
+	var disabled=  $("#saveBtn").hasClass("l-btn-disabled");
+	if(!disabled ){
+		var paidmoney = $("#paymoney").val();
+		if (parseFloat(paidmoney) == paidmoney) {
+			$("#saveBtn").linkbutton("disable"); 
+			var options = {
+					url :'${ctx}/payment/pay.do',
+					type : "post",
+					dataType : "json",
+					success : function(responseText) {
+						if (responseText.result == 1) {
+							$.Loading.success(responseText.message);
+							$("#pay_detail").dialog('close');
+						}
+						if (responseText.result == 0) {
+							$.Loading.error(responseText.message);
+							$("#saveBtn").linkbutton("enable"); 
+						}
+					},
+					error : function() {
+						$.Loading.error("出错了:(");
+						$("#saveBtn").linkbutton("enable"); 
+					}
+				};
+			$('#order_form').ajaxSubmit(options);
+		} 
+		else {
+			$.Loading.error("您输入的不是数字");
+		}
+	}
+}
+var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#start_time').datebox('setValue',"");
+}
+});
+
+var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	e_buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+	 $('#end_time').datebox('setValue',"");
+	}
+	});
+function searchOrder(){
+	var searchtype = $("#Advanced").val();
+	var keyword = $("#searchKeyword").val();
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	var sn = $("#sn").val();
+	var paystatus =	$("#paystatus").val();
+	var	payment_id = $("#payment_id").val();
+	if(typeof(end_time)=="undefined"){
+		end_time=start_time;
+	}
+
+	if(end_time!="" && end_time<start_time){
+		$.Loading.error("结束时间不能小于开始时间");
+		return false;
+	}
+	$("#dgs").datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 start_time:start_time,
+		 end_time:end_time,
+		 sn:sn,
+		 paystatus:paystatus,
+		 payment_id:payment_id,
+		 page:1
+    });
+}
+
+$(function(){
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            //$("#aAdvanced").text("简单搜索")
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            //$("#aAdvanced").text("高级搜索");
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+    $("#searchBtn").click(function(){
+		$("#searchcbox").show();
+	});
+	
+	$("#closeBtn").click(function(){
+		$("#searchcbox").hide();
+	});
+	
+});
+</script>
+
+<div id="log"></div>
+
+<#include '/admin/footer.html' >
+

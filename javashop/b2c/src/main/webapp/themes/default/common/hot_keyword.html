@@ -1,0 +1,3 @@
+<#list dataList as data>
+	<li <#if !data_has_next>class="last"</#if>><a href="search-keyword-${data.keyword}.html" >${data.keyword}</a></li>
+</#list>

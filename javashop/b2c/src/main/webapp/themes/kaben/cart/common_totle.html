@@ -1,0 +1,6 @@
+<#-- 创建订单价格标签 -->
+<#assign orderPiceTag= newTag("orderPriceTag") >
+<#--通过订单价标签获取订单价格 -->
+<#assign orderPrice = orderPiceTag("{'is_bonded':0}") >	
+		<span class="color03">${orderPrice.goodsPrice?string("currency")}</span>
+		<a  class="btn-cart" href="${ctx}/cart.html" style="color:#fff;">查看我的购物车</a>

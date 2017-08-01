@@ -1,0 +1,8 @@
+
+<!--创建"根据品牌ID获得品牌详细"标签-->
+<#assign BrandDetailTag = newTag("brandDetailTag")>
+<!--调用"根据品牌ID获得品牌详细"标签-->
+<#assign BrandDetail = BrandDetailTag("'brand_id':'1'")>
+
+品牌名称： ${BrandDetail.name}
+描述 ：           ${BrandDetail.brief}

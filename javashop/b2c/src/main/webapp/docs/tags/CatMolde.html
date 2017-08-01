@@ -1,0 +1,88 @@
+<#assign title= "CAT商品分类实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>Cat  商品分类</h3>
+		<h2>需要简述</h2>
+		<h6>返回商品列表中的字段</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>cat_id</td>
+						<td>Integer</td>
+						<td>商品分类一级ID</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td>商品名称</td>
+					</tr>
+					<tr>
+						<td>parent_id</td>
+						<td>Integer</td>
+						<td></td>
+					</tr>
+					
+					<tr>
+						<td>cat_path</td>
+						<td>String</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>goods_count</td>
+						<td>Integer</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>cat_order</td>
+						<td>int</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>type_id</td>
+						<td>Integer</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>list_show</td>
+						<td>String</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>image</td>
+						<td>String</td>
+						<td>分类图片</td>
+					</tr>
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

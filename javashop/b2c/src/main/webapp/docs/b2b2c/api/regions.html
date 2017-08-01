@@ -1,0 +1,69 @@
+<#assign title= "行政区划实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'address_menu.html' />
+	<div class="right_list">
+		<h3>regions  行政区划实体</h3>
+		<h2>需要简述</h2>
+		<h6>行政区划实体</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>region_id</td>
+						<td>Integer</td>
+						<td>所在地区ID</td>
+					</tr>
+					<tr>
+						<td>p_region_id</td>
+						<td>Integer</td>
+						<td>区域id</td>
+					</tr>
+					<tr>
+						<td>region_grade</td>
+						<td>Integer</td>
+						<td>区域级数，如省为1，市为2，区为3</td>
+					</tr>
+					<tr>
+						<td>local_name</td>
+						<td>String</td>
+						<td>区域名称</td>
+					</tr>
+					<tr>
+						<td>zipcode</td>
+						<td>String</td>
+						<td>邮编</td>
+					</tr>
+					<tr>
+						<td>cod</td>
+						<td>Integer</td>
+						<td>是否支持货到付款(0为不支持，1为支持)</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

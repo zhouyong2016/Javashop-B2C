@@ -1,0 +1,17 @@
+<div class="shop_cargo">
+	<div class="sc_left"><a href="#"></a></div>
+	<div class="sc_middle">
+		<ul>
+			<#list goodsList as goods>
+			<li>
+				<a href="goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+				<h1>${goods.name}</h1>
+				<p>美晶价：<span>${goods.price?string.currency}</span></p>
+				<div class="btn"><input type="button" class="addtocart_btn" value="加入购物车"></div>
+				
+			</li>
+			</#list>
+		</ul>
+	</div>
+	<div class="sc_right"><a href="#"></a></div>
+</div>

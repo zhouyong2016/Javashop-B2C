@@ -1,0 +1,9 @@
+
+<!--创建"品牌列表"标签-->
+<#assign RecordListTag = newTag("recordListTag")>
+<!--调用"品牌列表"标签-->
+<#assign RecordList = RecordListTag("'tagid':'1'")>
+<!--循环输出-->
+<#list RecordList.result as list>
+		${list}
+</#list>

@@ -1,0 +1,176 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div id="depotinfo" style="display: none;"></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlDept()">添加</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="depotForm">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/depot/list-json.do',fitColumns:'true'" width="width" id="depotdata">
+				<thead>
+				    <tr>
+				   	 	<th  data-options="field:'name',width:100">仓库名称</th>
+				   	 	<th  data-options="field:'choose',width:100" formatter="formatChoose">是否为默认发货仓库</th> 
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+		</form>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id +")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.id +")'></a>";
+	return val;
+}
+function formatChoose(value,row,index){
+	var val="";
+	if(row.choose==0){val="否";}
+	if(row.choose==1){val="是";}
+	return val;
+}
+function del(depotId){
+	if(!confirm("确认要删除仓库吗？")){	
+		return ;
+	}
+	var options = {
+			url : "${ctx}/shop/admin/depot/delete.do?id="+depotId,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#depotdata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+				
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#depotForm').ajaxSubmit(options);	
+}
+function controlDept(){
+	$("#depotinfo").show();
+　　	$('#depotinfo').dialog({
+　　		title: '添加仓库',			
+　　		width: 550,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/shop/admin/depot/add.do', 
+　　		modal: true,
+　　		buttons: [{					
+　　			 text:'保存',
+　　			 handler:function(){
+　　				  var savebtn = $(this);
+	　　			  var disabled=savebtn.hasClass("l-btn-disabled");
+	　　			  if(!disabled){
+　　					 addDepotForm(savebtn);
+　　				  }
+　　			 }
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				 $('#addDepotForm')[0].reset() ;
+　　			 }
+　　		}]
+　　	});
+}
+function addDepotForm(savebtn){
+	var formflag= $("#addDepotForm").form().form('validate');
+	
+	if($("#is_default").is(":checked")){
+		$("#choose").val("1");}
+	else{
+		$("#choose").val("0");}
+	
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		 var options = {
+			url : "${ctx}/shop/admin/depot/save-add.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				$("#depotinfo").dialog('close');
+				$('#depotdata').datagrid('reload');
+				savebtn.linkbutton("enable");
+		 	},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+			     savebtn.linkbutton("enable");
+			}
+		};
+		$('#addDepotForm').ajaxSubmit(options);	
+	}
+}
+function edit(depotId){
+	
+	if($("#is_default").is(":checked")){
+		$("#choose").val("1");}
+	else{
+		$("#choose").val("0");}
+	
+	 $("#depotinfo").show();
+	　　	$('#depotinfo').dialog({
+	　　		title: '修改仓库',			
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/depot/edit.do?id='+depotId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				  var editbtn = $(this);
+		　　			  var disabled=editbtn.hasClass("l-btn-disabled");
+		　　			  if(!disabled){
+	　　				   		 editDepotForm(editbtn);		
+	　　					}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editDepotForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function editDepotForm(editbtn){
+	if($("#is_default").is(":checked")){
+		$("#choose").val("1");}
+	else{
+		$("#choose").val("0");}
+	
+	var formflag= $("#editDepotForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");	
+		var options = {
+			url : "${ctx}/shop/admin/depot/save-edit.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				$("#depotinfo").dialog('close');
+				$('#depotdata').datagrid('reload');
+				editbtn.linkbutton("enable");
+		 	},
+		 	error : function(e) {
+		 		$.Loading.error("出现错误 ，请重试");
+		 		editbtn.linkbutton("enable");
+			}
+		};
+		$('#editDepotForm').ajaxSubmit(options);
+	}
+}
+</script>
+<#include '/admin/footer.html' >
+	   	 

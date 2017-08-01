@@ -1,0 +1,248 @@
+<#include '/admin/header.html' >
+<div class="main" >
+	<div class="buttonArea">
+		<span style="float: right;"> <span id="simpleSearch"> <input
+				id="searchKeyword" class="input_text" type="text" maxlength="100" value="" size="30"
+				placeholder="请输入商品名称，编号" name="searchKeyWord"> <a
+				href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="searchGoodsStore()">搜索</a>
+	</div>
+	<div style="background-color: white;" class="searchAdvanced">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<input id="depotid" name="depotid" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="70" align="right">商品编号</td>
+				<td><input type="text" value="" id="sn"
+					class="input_text">
+				</td>
+
+				<td width="70" align="right">商品名称</td>
+				<td><input type="text" value="" id="name"
+					class="input_text">
+				</td>
+				<td width="70" align="right"></td>
+				<td><a id="searchAdvance" class="button blueButton"
+					onclick="searchGoodsStore()" href="javascript:;">开始搜索</a></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="clear height10"></div>
+	<div class="tableDiv">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="17%" valign="top">
+					<div class="shadowBoxYellow classify" style="margin-right: 10px;">
+						<div class="title">
+							<span class="fl">仓库</span>
+						</div>
+						<div class="text">
+							<ul id="depots" class="easyui-tree"
+								url="${ctx}/shop/admin/goods-store/list-store-json.do"></ul>
+						</div>
+					</div>
+					<div class="height10"></div></td>
+				<td>
+					<div class="shadowBoxWhite">
+						<form id="advform">
+							<table class="easyui-datagrid"
+								data-options="url:'${ctx}/shop/admin/goods-store/list-goods-store-json.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true'"
+								pagination="true" id="goodsstoredata" sortName="goods_id"
+								sortOrder="desc">
+								<thead>
+									<tr>
+										<th data-options="field:'sn',width:200,sortable:'true'">商品编号</th>
+										<th data-options="field:'name',width:300,sortable:'true'">商品名称</th>
+										<th data-options="field:'cname',width:150,sortable:'true'">分类</th>
+										<th data-options="field:'store',width:100,sortable:'true'" formatter="forStore">库存</th>
+										<th data-options="field:'enable_store',width:100,sortable:'true'"  formatter="forStore">可用库存</th>
+										<th data-options="field:'action',width:100,align:'center'"
+											formatter="formatOperation">操作</th>
+									</tr>
+								</thead>
+							</table>
+						</form>
+					</div></td>
+			</tr>
+		</table>
+	</div>
+	<div id="goodsStoreInfo" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+	
+	function formatOperation(value, row, index) {
+		var val = "<#if optype=='purchase'><a class='edit' title='进货' href='#' onclick=\"goodsStock("+row.goods_id+")\"></a><#else><a class='edit' title='维护' href='#' onclick=\"view("+row.goods_id+")\"></a></#if>";
+		return val;
+	}
+	function goodsStock(goodsid){
+		$("#goodsStoreInfo").show();
+	　　	$('#goodsStoreInfo').dialog({
+	　　		title: '进货',	
+	　　		top:10,
+	　　		width: 550,
+	　　		height: 350,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/goods-store/get-stock-dialog-html.do?goodsid=' +goodsid, 	
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+　　				  var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 $.Loading.show("正在保存请稍候...");
+		　　				 savebtn.linkbutton("disable");	
+		　　				var options = {
+			　　				url : "${ctx}/shop/admin/goods-store/save-stock.do?ajax=yes",
+			  				type : "POST",
+			  				dataType : 'json',
+			  				success : function(result) {
+			  					if(result.result==1){
+			  						$.Loading.success(result.message);
+			  						$("#goodsStoreInfo").dialog('close');
+			  			 			$('#goodsstoredata').datagrid("reload");  
+			  					}
+			  					if(result.result==0){
+			  						$.Loading.success(result.message);
+			  					}
+			  					savebtn.linkbutton("enable");
+			  				},
+			  				error : function(e) {
+			  					$.Loading.error("出现错误 ，请重试");
+			  					savebtn.linkbutton("enable");
+			  				}
+						}
+	  				$('#storeform').ajaxSubmit(options);	
+				}
+	　　			}
+	　　		}]
+	　　	});
+	}
+	function view(goodsid){
+		$("#goodsStoreInfo").show();
+	　　	$('#goodsStoreInfo').dialog({
+	　　		title: '库存维护',	
+	  		top:10,
+	　　		width: 550,
+	　　		height: 350,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/goods-store/get-store-dialog-html.do?ajax=yes&goodsid=' +goodsid, 	
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				  var savebtn = $(this);
+		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+			　　				 $.Loading.show("正在保存请稍候...");
+			　　				 savebtn.linkbutton("disable");	
+			　　				var options = {
+				　　				url : "${ctx}/shop/admin/goods-store/save-store.do?ajax=yes",
+				  				type : "POST",
+				  				dataType : 'json',
+				  				success : function(result) {
+				  					if(result.result==1){
+				  						$.Loading.success(result.message);
+				  						$("#goodsStoreInfo").dialog('close');
+				  			 			$('#goodsstoredata').datagrid("reload");      
+				  					}
+				  					if(result.result==0){
+				  						$.Loading.success(result.message);
+				  					}
+				  					savebtn.linkbutton("enable");
+				  				},
+				  				error : function(e) {
+				  					$.Loading.error("出现错误 ，请重试");
+				  					savebtn.linkbutton("enable");
+				  				}
+							}
+			  				$('#storeform').ajaxSubmit(options);	
+						}
+		　　			}
+	　　		}]
+	　　	});
+	}
+	
+
+	function forHDStore(value, row, index) {
+		var val = 0;
+		if (value != null) {
+			val = value;
+		}
+		return val;
+	}
+
+	function forCYStore(value, row, index) {
+		var val = 0;
+		if (value != null) {
+			val = value;
+		}
+		return val;
+	}
+
+	function forCPStore(value, row, index) {
+		var val = 0;
+		if (value != null) {
+			val = value;
+		}
+		return val;
+	}
+	
+	function forStore(value, row, index){
+		var val=0;
+		if(value!=null){
+			val=value;
+		}
+		return val;
+	}
+
+	$(function() {
+		$(".searchAdvanced").hide();
+		//高级查询按钮
+		$("#aAdvanced").click(function() {
+			if ($("#Advanced").val() == "0") {
+				$("#Advanced").val(1);
+				$("#simpleSearch").hide();
+				//$("#aAdvanced").text("简单搜索")
+				$("#aAdvanced").addClass("searchAdvancedS");
+			} else {
+				$("#Advanced").val(0);
+				$("#simpleSearch").show();
+				//$("#aAdvanced").text("高级搜索");
+				$("#aAdvanced").removeClass("searchAdvancedS");
+			}
+			$(".searchAdvanced").slideToggle("slow");
+		});
+	});
+	
+	function searchGoodsStore(){
+		var searchtype = $("#Advanced").val();
+		var keyword = $("#searchKeyword").val();
+		var name = $('#name').val();
+		var sn = $('#sn').val();
+		var depotid=$("#depotid").val();
+
+		$("#goodsstoredata").datagrid('load', {
+			 stype:searchtype,
+			 keyword:keyword,
+			 name:name,
+			 sn:sn,
+			 depot_id:depotid,
+			 page:1
+	    });
+	}
+	
+	$('#depots').tree({
+		onClick: function(node){
+			var did=node.id;
+			$("#goodsstoredata").datagrid('load', {
+				 depot_id:did
+		    });
+			$("#depotid").val(did);
+		}
+	});
+</script>
+<#include '/admin/footer.html' >

@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+ <!-- <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/> 
+	
+	ie11 不能正常传递 值 的bug解决
+	
+	--> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" > </meta>
+<title>${(site.sitename)!''}-后台管理</title>
+<style type="text/css">
+body{
+	margin:0px;
+	font-family:Arial,"宋体",Verdana,sans-serif;
+	font-size:12px;
+}
+html,body {padding: 0;margin: 0; overflow-x:hidden; overflow-y:auto;}
+dl,dd{margin:0px}
+ul{
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
+</style>
+
+<script>
+var ctx='${ctx}';
+</script>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/>  
+
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/dialog.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.form-3.51.js"></script>
+
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.ui.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.loading.js"></script>
+
+<#-- 加载百度富文本ueditor -->
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<#-- 加载highcharts -->
+<script src="${ctx}/adminthemes/new/js/highcharts/highcharts.js"></script>
+<script src="${ctx}/adminthemes/new/js/highcharts/modules/exporting.js"></script>
+<script src="${ctx}/adminthemes/new/js/highcharts/map.js"></script>
+
+</head>
+<body>
+ 
+<script language="javascript"> 
+
+UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+UE.Editor.prototype.getActionUrl = function(action) {
+    if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+        return ctx+"/core/admin/ueditor/upload-img.do";
+    } else {
+        return this._bkGetActionUrl.call(this, action);
+    }
+}
+
+$.fn.dialog.defaults.top=100;
+//$.fn.combo.defaults.height=308;
+/* $.fn.combo.defaults=$.extend({},$.fn.combo.defaults,{heihgt:28} } */
+
+
+//时间公共getFormatDateByLong(value, "yyyy-MM-dd")
+    Date.prototype.format = function (format) {  
+        var o = {  
+            "M+": this.getMonth() + 1,  
+            "d+": this.getDate(),  
+            "h+": this.getHours(),  
+            "m+": this.getMinutes(),  
+            "s+": this.getSeconds(),  
+            "q+": Math.floor((this.getMonth() + 3) / 3),  
+            "S": this.getMilliseconds()  
+        };  
+        if (/(y+)/.test(format)) {  
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+        }  
+        for (var k in o) {  
+            if (new RegExp("(" + k + ")").test(format)) {  
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));  
+            }  
+        }  
+        return format;  
+    };  
+    function getFormatDateByLong(l, pattern) {  
+        return getFormatDate(new Date(l*1000), pattern);  
+    }     
+    
+    function getFormatDate(date, pattern) {  
+        if (date == undefined) {  
+            date = new Date();  
+        }  
+        if (pattern == undefined) {  
+            pattern = "yyyy-MM-dd hh:mm:ss";  
+        }  
+        return date.format(pattern);  
+    }
+    
+    function newTab(title,url){
+    	parent.addTab1(title,url);
+    }
+    
+    $.extend($.fn.validatebox.defaults.rules, {
+        mobile: {
+            validator: function (value, param) {
+            	if(value==""){
+            		return false;
+            	}
+                return /^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9]|17[0-9])[0-9]{8}$/.test(value);
+            },
+            message: '手机号码不正确'
+        },
+        tel: {
+            validator: function (value, param) {
+                return /^((\+86)?|\(\+86\)|\+86\s)0?([0-9]\d-?\d{6,8}|[3-9][134579]\d-?\d{6,7}|[3-9][24680]\d{2}-?\d{6})(-\d{3})?$/.test(value);
+            },
+            message: '固定电话号码不正确'
+        },
+        money:{
+        	validator: function (value, param) {
+                return /^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(value);
+            },
+            message: '货币格式不正确'
+        },
+        string: {
+    		validator: function(value, param){
+    			  var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]") ; return !pattern.test(value); 
+    		},
+    		message: '不能含有特殊字符和空格'
+        },
+        minLength: {
+            validator: function(value, param){
+                return value.length >= 6;
+            },
+            message: '最少6位'
+        },
+        englishCheckSub:{
+        	validator:function(value){
+        		return /^[a-zA-Z0-9-]+$/.test(value);
+        	},
+        	message:"只能包括英文字母、数字、'-'."
+        },
+        selectValueRequired: {   
+            validator: function(value,param){             
+                 if (value == "" || value.indexOf('请选择') >= 0) {   
+                    return false;  
+                 }else {  
+                    return true;  
+                 }    
+            },   
+            message: '该下拉框为必选项'   
+        },
+        integ:{
+            validator:function(value,param){
+              return /^[+]?[0-9]\d*$/.test(value);
+            },
+            message: '请输入整数'
+        },
+        mone:{
+           validator: function (value, param) {
+            	return (/^(([1-9]\d*)|\d)(\.\d{1,2})?$/).test(value);
+            },
+            message:'请输入整数或两位小数'
+
+         }
+    });
+    
+ 
+    
+    
+    function openGoodsSearchDlg(fun,mulit){
+    	$("#goodsSelectDiv").dialog({
+    		title: "商品选择",
+    		width: 700,
+    		height: 400,
+    		closed: false,
+    		cache: false,
+    		href: "${ctx}/shop/admin/goods-select/list.do?sing="+mulit,
+    		modal: true,
+    		buttons: [{
+   				text:'保存',
+   				iconCls:'icon-ok',
+   				handler:function(){
+   				fun(getGoodsData(mulit));
+   				$("#goodsSelectDiv").dialog('close');
+    		}}]
+    	});
+    }
+    
+    function openImgDlg(fun) {
+		$("#photoDiv").dialog({
+			title : "上传图片",
+			top : 130,
+			width : 350,
+			height : 160,
+			closed : false,
+			cache : false,
+			href : "${ctx}/eop/upload/file.do?subFolder=spec",
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				handler : function() {
+					if($("#img").val()!=""){
+						imgSubmit(fun);
+						$("#photoDiv").dialog('close');
+					}else{
+						$.Loading.error("请选择图片");
+					}
+				}
+			}]
+		});
+		
+	};
+
+	function imgSubmit(fun) {
+		var path="";
+		var options ={
+				url:"${ctx}/eop/upload/upload-file.do?ajax=1",
+				dataType:"json",
+				success:function(data){
+					if(data.result==1){
+						path=data.path;
+						fun(path);
+					}else{
+						$.Loading.error(data.message);
+					}
+				},
+				error:function(){
+					alert("上传错误，请重试");
+				}
+			};
+			$('#uploadForm').ajaxSubmit(options);
+	}
+	var isScroll = function (el) {  
+	    // test targets  
+	    var elems = el ? [el] : [document.documentElement, document.body];  
+	    var scrollX = false, scrollY = false;  
+	    for (var i = 0; i < elems.length; i++) {  
+	        var o = elems[i];  
+	        // test horizontal  
+	        var sl = o.scrollLeft;  
+	        o.scrollLeft += (sl > 0) ? -1 : 1;  
+	        o.scrollLeft !== sl && (scrollX = scrollX || true);  
+	        o.scrollLeft = sl;  
+	        // test vertical  
+	        var st = o.scrollTop;  
+	        o.scrollTop += (st > 0) ? -1 : 1;  
+	        o.scrollTop !== st && (scrollY = scrollY || true);  
+	        o.scrollTop = st;  
+	    }  
+	    // ret  
+	    return {  
+	        scrollX: scrollX,   
+	        scrollY: scrollY  
+	    };  
+	};  
+	$(function(){
+		$(".datebox :text").attr("readonly","readonly");
+		resetBtn();
+	}); 
+	
+	$(window).resize(function() {
+		resetBtn();
+	})
+	
+	function resetBtn(){
+		if(isScroll().scrollY){
+		 	$(".buttonWrap").addClass("fixed");
+		}else{
+		 	$(".buttonWrap").removeClass("fixed");
+		}
+	}
+	
+	//必须放在页面之前
+	// 统计图汉化
+	$(function(){
+		Highcharts.setOptions({
+			lang : {
+				printChart : "打印图表",
+				downloadJPEG : "下载JPEG 图片",
+				downloadPDF : "下载PDF文档",
+				downloadPNG : "下载PNG 图片",
+				downloadSVG : "下载SVG 矢量图",
+				exportButtonTitle : "导出图片"
+			}
+		});
+	});
+	
+</script> 
+
+<div id="goodsSelectDiv"></div>
+<div id="photoDiv"></div>

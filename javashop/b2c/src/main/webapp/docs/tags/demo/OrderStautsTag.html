@@ -1,0 +1,7 @@
+
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>   
+
+${orderState.ORDER_SHIP}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店仓库组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		 <plugin name="管理员-库管员插件" id="depotManagerPlugin">
+			<bundle id="adminUserPluginBundle"></bundle>
+		</plugin> 
+ 		<plugin name="生成商品仓库库存插件" id="goodsDepotCreatePlugin">
+ 			<bundle id="goodsPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="商品搜索仓库过滤器" id="depotGoodsSearchFilter">
+ 			<bundle id="goodsPluginBundle"></bundle>
+ 		</plugin> 		
+	</plugins>
+
+</component>

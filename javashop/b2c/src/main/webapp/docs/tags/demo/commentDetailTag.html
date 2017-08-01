@@ -1,0 +1,9 @@
+
+<!-- 获取会员评论详细标签 -->
+<#assign commentDetailTag = newTag("commentDetailTag")>
+<!-- 调用会员评论详细标签 -->
+<#assign commentDetail = commentDetailTag("'comment_id':'1'")>
+商品id:${commentDetail.goods_id}
+会员id:${commentDetail.member_id}
+	
+	      

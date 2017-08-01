@@ -1,0 +1,379 @@
+<#include '/admin/header.html' > 
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion="com.enation.app.base.core.directive.PermssionDirective"?new()>
+
+<div class="main">
+	<!-- 退货申请信息 -->
+	<form  method="post" id="theForm">
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0"  style="width: 99%">
+				<tr>
+					<th class="title" colspan="4">退货入库</th>
+				</tr>
+				<tr>
+					<td>退货单号：</td>
+					<td>${sellBackList.tradeno}</td>
+					<td>状态：</th>
+					<td>
+						<#if sellBackList.tradestatus==0>新建
+							<#elseif sellBackList.tradestatus==1>审核通过待入库
+							<#elseif sellBackList.tradestatus==2>已取消
+							<#elseif sellBackList.tradestatus==3>待退款
+							<#elseif sellBackList.tradestatus==4>全部入库
+							<#elseif sellBackList.tradestatus==5>部分入库
+							<#elseif sellBackList.tradestatus==6>已退款
+						</#if>
+					</td>
+				</tr>
+				<tr>
+					<td width="80">关联订单号：</td>
+					<td>${sellBackList.ordersn}</td>
+					<td >退货人：</td>
+					<td>${sellBackList.sndto!''}</td>
+				</tr>
+				<tr>
+					<td >订单使用：</td>
+					<td >已支付：￥${orderinfo.paymoney}</td>
+					<td >退货仓库：</td>
+					<#if depot_name??>
+					<td >
+						${depot_name!''}
+						<input type="hidden" name="depotid" value="${sellBackList.depotid!'1'}"> 
+					</td>
+					<#else>
+					<td>
+						<#if sellBackList.tradestatus!=2>
+						<select id="depotid" name="depotid" class="input_text" >
+							<option value="0">请选择退货仓库</option>
+							<#list dopotList as dl >
+								<#if depotid?? && depotid == dl.id >
+									<option value="${dl.id }" selected="selected" >${dl.name }</option>
+								<#else>
+									<option value="${dl.id }" >${dl.name }</option>
+								</#if>
+							</#list>
+						</select>
+						</#if>
+					</td>
+					</#if>
+				</tr>
+					
+				<tr>
+					<td width="80">退货原因：</td>
+					<td colspan="3">${sellBackList.reason!'' }</td>
+				</tr>
+				<tr>
+					<td width="80">退货描述：</td>
+					<td colspan="3">${sellBackList.remark!'' }</td>
+				</tr>
+				<tr>
+					<td width="100">客服操作备注：</td>
+					<td colspan="3">${sellBackList.seller_remark!'' }</td>
+				</tr>
+				<tr>
+					<td width="80">操作备注：</td>
+					<td colspan="3">
+						<#if sellBackList.tradestatus==1 || sellBackList.tradestatus==5>
+							<textarea rows="3" id="seller_remark" onKeyDown="checkLength()"  onKeyUp="checkLength()" onPaste="checkLength()"  name="warehouse_remark">${sellBackList.warehouse_remark!'' }</textarea>
+							还可以输入<span id="validNum">180</span>字</td>
+						<#else>
+							${sellBackList.warehouse_remark!'' }
+						</#if>
+						
+					</td>
+				</tr>
+				
+					<#if sellBackList.tradestatus!=1 || sellBackList.tradestatus!=5>
+					<tr>
+						<td colspan="4">
+						
+							<#if refund?exists>
+								<a onclick="newTab('退款单','${ctx}/shop/admin/order-report/refund-detail.do?id=${refund.id!''}');" href="javascript:void(0);">查看退款单</a>
+							</#if>
+							
+						</td>
+					</tr>
+					</#if>
+						
+						
+					
+			</table>
+			</div>
+		</div>
+
+		<br>
+		<!-- 退货申请商品 -->
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table class="goodsList" fitColumns="true" id="goodsin" cellspacing="0" cellpadding="0" border="0">
+					<thead>
+						<tr>
+							<th class="title" colspan="8">请选择入库的商品</th>
+						</tr>
+						<tr> 
+							<th data-options="field:'names',width:300">商品名称</th>
+							<th data-options="field:'prices',width:100">金额</th>
+							<th data-options="field:'payNums',width:100">购买数量</th>
+							<th data-options="field:'returnNums',width:100">退货数量</th> 
+							
+							<#if sellBackList.tradestatus==1 || sellBackList.tradestatus==5>
+							<th data-options="field:'oldStorageNums',width:100">已入库数量</th>
+							<th data-options="field:'storageNums',width:100">本次入库</th>
+							</#if>
+						</tr>
+					</thead>
+					<tbody>
+						<input type="hidden" name="storageDetail" />
+						
+							<#assign gindex=0>
+						<#list goodsList as data> 
+						
+							<input type="hidden" name ="goodsId" value="${data.goods_id}">
+							<input type="hidden" name = "productId" value="${data.product_id}"> 
+							<!-- add by jianghongyan 2016-6-20 增加itemid用以区分 -->
+							<input type="hidden" name = "itemId" value="${data.item_id}"> 
+							<#if data.return_num??>
+								<#assign gindex=gindex+1>
+								<tr> 
+									<td>${data.goods_name  } 
+										<#if data.other??>
+								         (${data.other!''}) 
+								          </#if>
+									</td>
+									<td>${data.price?string.currency}
+									</td> 
+									<td>
+									${data.ship_num } 
+									</td>
+									<td>${data.return_num}
+									<input type="hidden" id="returnNum_${gindex}" value="${data.return_num}" />
+								
+									</td>
+									<#if sellBackList.tradestatus==1 || sellBackList.tradestatus==5>
+										<td>${data.storage_num!0 }</td>
+										<td><input type="text" 
+												<#-- 如果退货数量与已入库数量相等则禁用-->
+												<#if data.storage_num==data.return_num>
+													disabled="disabled"
+												</#if>
+										  			data-storage-num="${data.storage_num!0 }"  data-return-num="${data.return_num!0 }" class="input_text easyui-numberbox storage-input" name="storageNum" id="childStorageNum_${gindex}" value="0" style="width: 80px;" maxlength="9"/></td>
+									</#if>
+								</tr> 
+							</#if>
+						</#list>
+						<#if (gift.gift_id)??>
+						<tr>
+							<td>${gift.gift_name}<span style="color: red;">(赠品)</span></td>
+							<td>${gift.gift_price?string.currency}</td>
+							<td>1</td>
+							<td>1</td>
+							<#if gift.gift_status == 2>
+							<td>0</td>
+							<td>1</td>
+							</#if>
+						</tr>
+						</#if>
+						<#if sellBackList.tradestatus==1 || sellBackList.tradestatus==5>
+							<tr>
+								<td colspan="8" align="center">
+									<input type="hidden" value="${sellBackList.id }" name="id" /> 
+									<@permssion actid='depot_admin'> 
+										<a href="javascript:void(0)" class="easyui-linkbutton saveBtn" id="submit">确认入库</a>
+									</@permssion> 
+									<@permssion actid='depot_admin'> 
+										<!-- <a href="javascript:void(0)" class="easyui-linkbutton cancelBtn"  status="${sellBackList.tradestatus }">取消退货</a>  -->
+									</@permssion>
+								</td>
+							</tr>
+						</#if>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<br>
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table cellspacing="0" cellpadding="0" border="0" id="log">
+					<thead>	
+						<tr>
+							<th class="title" colspan="8">操作日志</th>
+						</tr>
+						<tr>
+							<th data-options="field:'operator',width:200">操作人员</th>
+							<th data-options="field:'logdetail',width:200">操作详情</th>
+							<th data-options="field:'time',width:200">操作时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list logList as log>
+						<tr>
+							<td>${log.operator }</td>
+							<td>${log.logdetail }</td>
+							<td><@dateformat time='${log.logtime}'pattern='yyyy-MM-dd'/></td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
+	<div id="canceldiv" style="padding: 10px 10px 10px 10px;"></div>
+</div>
+
+<script type="text/javascript">
+
+/**
+ * 检查备注是否超出限制，如果超出限制截取字符串
+ */
+function checkLength(){
+    var val = $("#seller_remark").val();
+	if(val.length>180){
+		$("#validNum").css("color","red");
+        $("#seller_remark").val($("#seller_remark").val().substr(0, 180));
+    }else{
+    	$("#validNum").css("color","black");
+     	$("#validNum").html(180 - val.length)
+    }
+}
+
+	$(".storage-input").unbind().bind("blur",function(){
+		$(".saveBtn").attr('rel',"0");
+		$(".storage-input").each(function(){
+			var _storage_input=$(this);
+			var storage_num=_storage_input.attr("data-storage-num");
+			var ret_num=_storage_input.attr("data-return-num");
+			var num=_storage_input.val();
+			var n= parseInt(storage_num) + parseInt(num);
+			if(ret_num<n){
+				alert("入库数量不能大于退货数量");
+				$(".saveBtn").attr('rel',"1");
+				return;
+			}
+		});
+	});
+
+
+	$(function() {
+		$('.saveBtn').click(function() {
+				//判断标识
+			 if($(".saveBtn").attr("rel")!=1){
+				 var formflag= $("#theForm").form('validate');
+					var index = 0;
+					var d_num=0;
+					//验证
+					$("input[name='storageNum']").each(function() {
+						index = index+1; 
+						var returnNum = parseInt($("#returnNum_" + index).val());
+						var num = parseInt($("#childStorageNum_" + index).val());
+						var sto_num=parseInt($("#storageNum_" + index).val());
+						if( num==null || isNaN(num)){
+							$.Loading.error("入库数量不能为空");
+							formflag = false;
+							return false;
+						}
+						
+						if(num<0){
+							$.Loading.error("入库数量不能为负数");
+							formflag = false;
+							return false;
+						}
+						
+						if(num > returnNum){
+							$.Loading.error("入库数量不能大于退货数量");
+							formflag = false;
+							return false;
+						}
+						d_num=d_num+num;
+					}); 
+
+					if(formflag){
+						if( $("#depotid").val()==0 ){
+							alert("请选择退货仓库");
+							return false;
+						}
+					}
+					
+					if(formflag){
+						
+						if(d_num==0){
+							$.Loading.error("入库数量不能0");
+							formflag = false;
+							return false;
+						}
+						$.Loading.success("正在提交......");
+						$(this).hide();
+						var options = {
+							url : "${ctx}/shop/admin/sell-back/update.do",
+							type : "POST",
+						
+							dataType : 'json',
+							success : function(result) {
+								if (result.result == 1) {
+									$.Loading.success(result.message);
+									location.reload();
+								}
+								if (result.result == 0) {
+									$.Loading.error(result.message);
+									$(this).show();
+								}
+							},
+							error : function(e) {
+								alert("出现错误 ，请重试");
+								$(this).show();
+							}
+						};
+						$('#theForm').ajaxSubmit(options);
+					}
+			} 
+			
+		});
+		
+		$(".cancelBtn").click(function(){
+			var status = $(this).attr("status");
+			$("#canceldiv").dialog({
+				 title: '取消原因',
+				 width: 300,
+				 height: 200,
+				 closed: false,
+				 cache: false,
+				 content: '<textarea id="ctext" rows="3" style="width: 280px;height:80px;"></textarea>',
+				 modal: true,
+				 buttons:[{
+						text:'提交',
+						handler:function(){
+							var status = $(".cancelBtn").attr("status");
+							$("#cancelRemark").val($("#ctext").val());
+							cancel(status);
+						}
+					}]
+			})
+		});
+	})
+	
+	function cancel(status){
+		$("#savebtn").linkbutton("disable");
+		var options = {
+			url : "${ctx}/shop/admin/sell-back/cancel.do?ajax=yes&ctype="+status,
+			dataType : 'json',
+			success : function(result) {
+				
+				if(result.result == 1){
+					$.Loading.success(result.message);
+					parent.reloadTabGrid("退货单");
+					parent.CloseTabByTitle("退货入库");
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.hide();
+				alert("出现错误 ，请重试");
+				$("#savebtn").linkbutton("enable");
+			}
+		};
+		$('#theForm').ajaxSubmit(options);
+	}
+</script>
+
+<#include '/admin/footer.html' >

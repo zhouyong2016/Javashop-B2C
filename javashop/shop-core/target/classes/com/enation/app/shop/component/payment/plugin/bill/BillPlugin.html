@@ -1,0 +1,45 @@
+<tr>
+	 <th>快钱帐号 ：</th>
+	 <td>
+ 	 <input type="text" name="partner" value="${partner!''}" class="input_text easyui-validatebox"  id="partner" />
+	</td>
+</tr>
+<tr>
+	 <th>支付提交URL：</th>
+	 <td>
+ 	 <input type="text" name="url"  value="${url!''}" class="input_text easyui-validatebox"  id="url" />
+	</td>
+</tr>
+ 
+<tr>
+	 <th> 私钥地址：</th>
+	 <td>
+ 	 <input type="text" name="privateKey"  value="${privateKey!''}" class="input_text easyui-validatebox"  id="privateKey" /><br>
+ 	 如:d:/key/private.pfx
+	</td>
+</tr>
+<tr>
+	 <th> 私钥密码：</th>
+	 <td>
+ 	 <input type="text" name="keyPwd"  value="${keyPwd!''}" class="input_text easyui-validatebox"  id="keyPwd" />
+	</td>
+</tr>
+<tr>
+	 <th>公钥地址：</th>
+	 <td>
+ 	 <input type="text" name="publicKey"  value="${publicKey!''}" class="input_text easyui-validatebox"  id="publicKey" /><br>
+ 	  如:d:/key/private.pfx
+	</td>
+</tr>
+
+<script type="text/javascript">
+$(function(){
+	$('#partner').validatebox({ 
+		required:true 
+		}); 
+	$('#url').validatebox({ 
+		required:true 
+		}); 
+})
+</script>
+

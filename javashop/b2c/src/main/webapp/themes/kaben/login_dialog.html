@@ -1,0 +1,50 @@
+<script>
+	var ctx="${ctx}";
+</script>
+<div class="dialog_content" style="margin: 0px; padding: 0px;">
+	<div class="quick-login">
+		<form  method="post" class="validate" id="login_form">
+			<input type="hidden" value="${forward!''}" name="forward" >
+			<dl >
+				<dt>用户名：</dt>
+				<dd>
+					<input type="text" id="username" name="username" autocomplete="off" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>密&nbsp;&nbsp;&nbsp;码：</dt>
+				<dd>
+					<input type="password" id="password" autocomplete="off"
+						name="password" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>验证码：</dt>
+				<dd class="m_account">
+					<input type="text" tabindex="3" name="validcode" isrequired="true" size="8" autocomplete="off" class="text w60" id="validcode" style="width:100px;float:left;"/>
+					<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" style="width:60px;height:30px;float:left;margin-left:10px;">
+					<span class="m_forget">
+						<a href="javascript:;">换个图片</a>
+					</span>
+				</dd>
+			</dl>
+			<ul>
+				<li>›&nbsp;如果您没有登录帐号，请先<a class="register" href="${ctx}/register.html">注册会员</a>然后登录
+				</li>
+				<li>›&nbsp;如果您<a class="forget" href="${ctx}/findpasswordByEmail.html">忘记密码</a>？，申请找回密码
+				</li>
+			</ul>
+			<div class="enter">
+				<input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录" class="submit regis_ent" style="background:#33a600;">
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(".m_forget a").click(function(){
+	$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+});
+$(".m_account img").click(function(){
+	$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+});
+</script>

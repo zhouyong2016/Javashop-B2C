@@ -1,0 +1,122 @@
+<#assign title= "订单货物列表实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>OrderItem  订单货物列表</h3>
+		<h2>需要简述</h2>
+		<h6>返回订单货物列表参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>item_id</td>
+						<td>Integer</td>
+						<td>货物id</td>
+					</tr>
+					<tr>
+						<td>order_id</td>
+						<td>Integer</td>
+						<td>订单ID</td>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>Integer</td>
+						<td>商品ID</td>
+					</tr>
+					<tr>
+						<td>product_id</td>
+						<td>Integer</td>
+						<td>货品id</td>
+					</tr>
+					<tr>
+						<td>num</td>
+						<td>Integer</td>
+						<td>数量</td>
+					</tr>
+					<tr>
+						<td>ship_num</td>
+						<td>Integer</td>
+						<td>发货数</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td>名称</td>
+					</tr>
+					<tr>
+						<td>sn</td>
+						<td>String</td>
+						<td>货品货号/td>
+					</tr>
+					<tr>
+						<td>image</td>
+						<td>String</td>
+						<td>商品图片</td>
+					</tr>
+					<tr>
+						<td>store</td>
+						<td>Integer</td>
+						<td>对应商品的库存</td>
+					</tr>
+					<tr>
+						<td>cat_id</td>
+						<td>int</td>
+						<td>此商品的分类</td>
+					</tr>
+					<tr>
+						<td>price</td>
+						<td>Double</td>
+						<td>价格</td>
+					</tr>
+					<tr>
+						<td>gainedpoint</td>
+						<td>int</td>
+						<td>赠送积分</td>
+					</tr>
+					<tr>
+						<td>state</td>
+						<td>int</td>
+						<td>订单货物状态</td>
+					</tr>
+					<tr>
+						<td>change_goods_name</td>
+						<td>String</td>
+						<td>换到的货物名称</td>
+					</tr>
+					<tr>
+						<td>change_goods_id</td>
+						<td>Integer</td>
+						<td>换到的货物ID</td>
+					</tr>
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

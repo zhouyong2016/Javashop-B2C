@@ -1,0 +1,111 @@
+.header{
+	height: 75px;
+    transition: all 0.2s ease 0s;
+    width: 100%;
+    z-index: 1001;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background:#fff;
+}
+.header .title-box{
+	max-width:1200px;height:75px;margin:0px auto;
+}
+.header .title-box .header-logo{
+	float:left;
+}
+.header .title-box .header-logo h1{height:75px;line-height:75px;font-size:20px;color:#666;font-weight:200;}
+.header .title-box .header-logo h1 em{font-size:26px;padding:0px 1px;font-weight:600;}
+.header .title-box .header-logo h1 i{font-size:16px;font-weight:200;}
+.header .header-right{
+	float:right;margin:0px 20px 0px 0px;
+}
+.header .header-right ul{
+	padding:0px 20px;
+}
+.header .header-right ul li{float:left;display:inline;height:75px;line-height:75px;font-size:14px;}
+.header .header-right ul li a{border-right:1px solid #ddd;padding:0px 20px;font-weight:300;}
+.header .header-right ul .last a{border:0px none;}
+
+.main{
+	width:1200px;margin:0px auto;clear:both;overflow:hidden;padding:40px 0px 50px 0px;
+}
+.main .main-left{
+	width:260px;float:left;padding:0px 15px;
+}
+.main .main-left ul{
+	width:260px;overflow:hidden;
+}
+.main .main-left ul .left-parent h2{
+	color: #4d4d4d;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 25px 0px 10px 0px;
+    text-transform: uppercase;
+}
+.main .main-left ul .left-parent ul{
+	width:240px;margin:0px 0px 0px 20px;
+}
+.main .main-left ul .left-parent ul li{
+	line-height:30px;font-size:14px;font-weight:200;
+}
+.main .main-left ul .left-parent ul li .selected{color:#609be3}
+
+.main-right{
+	background-color: #fff;
+    border: 1px solid #e9e9e9;
+    box-shadow: 0 1px 50px rgba(0, 0, 0, 0.1);
+    color: #808080;
+    padding: 40px 30px;
+	width:800px;
+	float:left;
+	min-height:500px;
+}
+
+.same-floor{
+	width:760px;overflow:hidden;
+}
+.same-floor h3{
+	  border-bottom: 1px solid #dadada;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 30px 0px 20px 0px;
+    min-width: 50%;
+    padding-bottom: 10px;
+    color:#1f4e7c;
+}
+.same-floor p{
+	line-height: 25px;
+	margin-bottom: 15px;
+	font-size:14px;
+	color:#666;
+	display:block;
+	overflow:hidden;
+}
+.same-floor span{display:block;float:left;height:25px;line-height:25px;text-align:center;}
+
+.same-floor .need-parameter{border:1px dashed #dedede;padding:10px;border-radius:5px;display:block;line-height:20px;margin-bottom:10px;font-style:italic;color:#808080;}
+.same-floor .need-parameter span{border:0px none;float:left;text-align:center;padding:0px;margin:0px;font-style: normal;}
+.same-floor .need-parameter h4{width:100%;height:25px;line-height:25px;margin:0px 0px 5px 0px;}
+.same-floor .need-parameter p{width:100%;height:25px;line-height:25px;margin:5px 0px 0px 0px;}
+.same-floor .need-parameter .important{color:#008000;font-weight:600;}
+.same-floor i{margin:0px 5px;display:inline-block;width:1px;line-height:20px;height:20px;}
+.same-floor .sample-code{background:#eaeaea;padding:10px;margin:0px 0px 10px 0px;}
+.same-floor .sample-code b{display:block;line-height:20px;font-weight:300;}
+
+
+.footer{
+	width:100%;height:100px;clear:both;background:#fff;box-shadow: 0px -1px 15px rgba(0, 0, 0, 0.1);
+}
+.footer .footer-top{width:600px;height:100px;margin:0px auto;text-align:center;}
+.footer .footer-top .footer-phone{display:inline-block;margin:0px 20px 0px 0px;font-size:18px;height:100px;line-height:100px;}
+.footer .footer-top .footer-phone span{margin:0px 5px 0px 0px;width:25px;height:100px;background:url(littlepic.png) no-repeat -45px center;;display:block;float:left;}
+.footer .footer-top  p{display:inline-block;margin:0px 20px 0px 0px;}
+.footer .footer-top .weixin{position:relative;float:right;margin:40px 100px 0px 0px;width:25px;height:25px;background:url(littlepic.png) no-repeat -75px -7px;}
+.footer .footer-top .weixin .show-weixin{position:absolute;top:-200px;left:16px;}
+.result-intro{overflow:hidden;}
+.result-intro em{float:left;height:20px;line-height:20px;width:70px;}
+.result-intro h5{float:left;width:650px;line-height:20px;font-weight:300;text-align:left;}
+
+
+
+

@@ -1,0 +1,14 @@
+
+<!--创建"店铺商品信息"标签-->
+<#assign storeGoodsInfoTag= newTag("storeGoodsInfoTag") >  
+<!--调用"店铺商品信息"标签-->            
+<#assign  storeGoodsInfo= storeGoodsInfoTag("'goods_id':'1'") >						
+<ul class="gw">
+
+
+<#list storeGoodsInfo.goods as dly>
+	  名称：${dly.name}</br>
+	  品牌：${dly.brand_id}</br>
+	  货号：${dly.sn}</br>
+</#list>
+

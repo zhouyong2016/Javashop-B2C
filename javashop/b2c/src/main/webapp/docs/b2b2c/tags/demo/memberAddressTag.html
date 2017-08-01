@@ -1,0 +1,11 @@
+
+<!--创建"读取当前会员收货地址"标签-->
+<#assign memberAddressTag= newTag("memberAddressTag") >  
+<!--调用"读取当前会员收货地址"标签，并传递参数-->            
+<#assign  memberAddress= memberAddressTag() >						
+<ul class="gw">
+<#list memberAddress as stl>
+	详细地址：${stl.addr}</br>
+	会员名称：${stl.name}</br>
+	
+</#list>

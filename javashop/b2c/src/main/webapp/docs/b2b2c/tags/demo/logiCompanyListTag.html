@@ -1,0 +1,10 @@
+
+<!--创建"快递公司列表"标签-->
+<#assign LogiCompanyListTag= newTag("logiCompanyListTag") >  
+<!--调用"快递公司列表"标签，并传递参数-->            
+<#assign  LogiCompanyList= LogiCompanyListTag() >						
+<ul class="gw">
+<#list LogiCompanyList as stl>
+   快递公司id：${stl.id}</br>
+   快递公司名称：${stl.name}</br>
+</#list>

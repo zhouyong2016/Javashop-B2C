@@ -1,0 +1,70 @@
+<#assign title= "购物车api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu">
+<#include '../menu_api.html' />
+	</div>
+	<div class="right_list">
+		<h1>购物车API</h1>
+		<p class="api_intro">提供了购物车的添加商品（货品）、添加数量、统计价格、删除商品（货品）的功能</p>
+		<h2>API列表</h2>
+		<ul class="list">
+		
+			<li>
+				<div class="api_func"><a href="addProduct.html">addProduct</a></div>
+				<span>将一个货品添加到购物车</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="addGoods.html">addGoods</a></div>
+				<span>将一个商品添加到购物车</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="getCartData.html">getCartData</a></div>
+				<span>获取购物车数据</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="delete.html">delete</a></div>
+				<span>删除购物车一项</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="updateNum.html">updateNum</a></div>
+				<span>更新购物车数量</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="getTotal.html">getTotal</a></div>
+				<span>统计购物车总价信息</span>
+			</li>
+		</ul>
+		<h2>数据结构列表</h2>
+		<ul class="list">
+			<li>
+				<div class="api_func"><a href="CartItem.html">CartItem</a></div>
+				<span>购物车条目</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="OrderPrice.html">OrderPrice</a></div>
+				<span>订单价格信息</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<#include '../fooder.html' />
+
+<script>
+setMenu(0);
+</script>
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+

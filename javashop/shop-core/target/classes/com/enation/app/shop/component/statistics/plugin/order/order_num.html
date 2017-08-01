@@ -1,0 +1,101 @@
+<table class="form-tablessss" style="width: 100%;">
+	<tr>
+		<td style="text-align: left;">
+			<div id="saleNum" style="min-width: 310px; width:95%; height: 300px; margin: 0 auto;"></div>
+		</td>
+	</tr>
+</table>
+
+
+<script>
+
+var sale_num=null;
+
+$(function(){
+   var cycle_type = $("#cycle_type :selected").val();
+   numHighcharts("月");
+   saleNum(0,cycle_type,2015,4)
+});
+
+
+// 生成图表
+function numHighcharts(obj){
+	sale_num = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: 'saleNum'
+        },
+        title: {
+            text: '订单销售量统计（'+obj+")"
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            title: {
+                text: '数量 (件)'
+            },
+            labels:{
+            	formatter: function () {
+                    return this.value + '(件)';
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        credits: {  
+            enabled: false // remove high chart logo hyper-link  
+        }, 
+        series: [{
+            name: "本"+obj,
+            pointStart: 1
+        }, {
+            name: "去"+obj,
+            pointStart: 1
+        }]
+    });
+}
+
+
+function saleNum(status,cycle_type,year,month){
+	
+	var this_type = $("#this_type").val();
+
+	//alert("订单量"+this_type+"__"+cycle_type);
+	if(cycle_type!=this_type){
+		if(cycle_type==1){					//判断按哪个周期显示数据
+			numHighcharts('月');					
+			$("#this_type").val(cycle_type);
+		}else{
+			numHighcharts('年');
+			$("#this_type").val(cycle_type);
+		}
+	}
+	
+	jQuery.getJSON("salesStatis!getSaleNumJson.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {
+		sale_num.series[0].setData(data.message); 
+	});
+	
+	if(cycle_type==1){	
+		if(month==1){
+			year = year-1;
+			month = 12;
+		}else{
+			month = month-1;
+		}
+	}else{
+		year = year-1;
+	}
+	
+	jQuery.getJSON("salesStatis!getSaleNumJson.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {  
+		sale_num.series[1].setData(data.message); 
+	});
+}
+
+</script>

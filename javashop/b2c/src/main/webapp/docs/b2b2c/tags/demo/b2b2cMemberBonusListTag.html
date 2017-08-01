@@ -1,0 +1,11 @@
+
+<!--创建"多用户版查询会员优惠劵集合"标签-->
+<#assign B2b2cMemberBonusListTag= newTag("b2b2cMemberBonusListTag") >  
+<!--调用"多用户版查询会员优惠劵集合"标签，并传递参数-->            
+<#assign  b2b2cMemberBonusList= B2b2cMemberBonusListTag("'page':'1','pageSize':'10'") >						
+<ul class="gw">
+<#list b2b2cMemberBonusList.bonusList as stl>
+	标签id：${stl.type_id}</br>
+	标签名：${stl.type_money}</br>
+	
+</#list>

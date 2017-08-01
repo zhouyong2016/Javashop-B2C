@@ -1,0 +1,47 @@
+
+	<!-- 创建游客订单查询标签 -->
+	<#assign searchOrderTag= newTag("searchOrderTag")>
+	<!-- 调用商品分类信息 -->
+	<#assign orders = searchOrderTag()!'' >
+	<#if orders.ordersPage??>
+		<!-- 获取订单分页列表 -->
+		<#assign ordersPage = orders.ordersPage />
+	</#if>
+	<ul class="rim_list">
+		<ol class="visitor_list">
+			<li class="visitor_number">订单号</li>
+			<li>下单时间</li>
+			<li>收货人</li>
+			<li>总价</li>
+			<li>状态</li>
+			<li>付款方式</li>
+			<li>配送方式</li>
+			<li>操作</li>
+		</ol>
+		<#if ordersPage?exists>
+			<#list ordersPage.result as order>
+		        <ol class="visitor_good_list">
+		        	<li class="visitor_number">
+		        		<a href="orderdetail_${order.sn}.html">${order.sn}</a>
+		        	</li>
+		        	<li><@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+		        	<li>${order.ship_name}</li>
+		        	<li>￥${order.order_amount?string("0.##")}</li>
+		        	<li><@orderstatus status="${order.status}" type="order" /></li>
+		        	<li>${order.payment_name}</li>
+		        	<li>${order.shipping_type}</li>
+		        	<li>
+		        		<a href="orderdetail.html?orderid=${order.order_id}">详情</a>&nbsp;
+		        	</li>
+		        </ol>
+			</#list>
+        </#if>
+        <ol class="bottom">
+        	<#if ordersPage?exists>
+        		<@pager pageno="${orders.page}" pagesize="${orders.pageSize}" totalcount="${orders.totalCount}" />
+        	</#if>
+        	  <div class="clear"></div>
+        </ol>
+    </ul>
+    
+    

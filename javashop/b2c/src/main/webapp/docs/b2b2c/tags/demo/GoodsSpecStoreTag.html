@@ -1,0 +1,11 @@
+
+<!--创建"店铺结算列表"标签-->
+<#assign goodsSpecStoreTag= newTag("goodsSpecStoreTag") >  
+<!--调用"店铺结算列表"标签，并传递参数-->            
+<#assign  GoodsSpecStore= goodsSpecStoreTag("'goods_id':'1'") >						
+<ul class="gw">
+<#list GoodsSpecStore as cart>
+	货品id：${cart.product_id}</br>
+	货品名：${cart.name}</br>
+	库存：${cart.store}</br>
+</#list> 

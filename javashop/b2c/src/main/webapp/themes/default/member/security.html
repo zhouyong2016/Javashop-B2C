@@ -1,0 +1,114 @@
+<#assign  title="修改密码" /><#include 'member_header.html' />
+<div class="data">
+	<h2>我的收获地址</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg" />
+	
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、密码只能为6--16个英文字母或数字</p>
+			<p>2、为了您的账号安全，必须正确输入旧密码才能修改。</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="form_wrap white_box" style="margin-top:20px">
+	<div class="box" >
+		<div class="top"></div>
+		<div class="body">
+			<form class="validate" action="" method="post">
+				<table cellspacing="0" cellpadding="0" border="0" >
+					<tr>
+						<th>旧的密码：</th>
+						<td><input type="password" maxlength="16" name="oldpassword" dataType="string"	 isrequired="true" class="input_text"  fun="isPasswd" id="useroldpwd" style="float:left;display:inline;"/>
+				                    </td></tr>
+					<tr>
+						<th>新的密码：</th>
+						<td><input type="password" maxlength="16"  name="newpassword" dataType="string" id="password" isrequired="true" class="input_text" fun="isPasswd" style="float:left;display:inline;"/>
+				                     </td></tr>
+					<tr>
+						<th>确认新密码：</th>
+						<td><input class="input_text" maxlength="16" type="password" name="re_passwd" dataType="string" id="passwd_re"	isrequired="true" fun='checkpwd'style="float:left;display:inline;"/>
+				                    </td></tr>
+					<tr>
+						<td colspan="2" style="padding-left:100px">										
+							 <div class="btn"><input type="button" name="btnReg" value="确定修改" class="yellow_btn" /></div> 
+						</td></tr>
+				</table>
+ 			</form>
+		</div>
+		<div class="bottom"></div>
+	</div>
+	<div class="rr_bottom"></div>
+</div>
+</div>	
+<script>
+	$(function(){
+		$(".yellow_btn").click(function(){
+			var useroldpwd = $("#useroldpwd").val();
+			var usernewpwd = $("#password").val();
+			var useraffirmpwd = $("#passwd_re").val();
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/shop/member!changePassword.do?ajax=yes",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("修改成功，请谨记密码");
+						location.reload();
+						//退回到首页，重新登录
+						/* $.ajax({
+							url:"../api/shop/member!logout.do?ajax=yes",
+							dataType:"json",
+							cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+							success:function(result){
+								if(result.result==1){
+									location.href="${ctx}/index.html";
+									
+								}else{
+									$.alert(result.message);
+								}	
+								$.Loading.hide();
+							},
+							error:function(){
+								$.Loading.hide();
+								$.alert("出错了:(");
+							}
+						}); */
+					}
+					else{
+						alert("原始密码错误");
+					}
+				}
+			})
+
+
+		})
+	})
+</script>
+<script>
+function isPasswd(s){  
+	//var patrn=/^(\w){6,20}$/;
+	var patrn=/^(\w){6,16}$/;
+	if (!patrn.exec(s)) return "密码格式不正确"  
+	return true  
+}
+function checkpwd(){    
+	if( $("#passwd_re").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+</script>
+
+<div class="rr_bottom"></div></div>
+		<!--会员中心首页右侧结束-->
+	</div>
+	</div>
+		<#include '../common/footer.html'/>

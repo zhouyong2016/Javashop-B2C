@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="支付组件" version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="支付宝担保交易接口" id="alipayEscowPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="支付宝即时到账接口" id="alipayDirectPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+	 	<plugin name="支付宝WAP即时到账接口" id="alipayWapPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="财付通即时到账接口 " id="tenpayDirectPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="财富通担保交易接口" id="tenpayMedPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="paypal支付插件" id="paypalPaymentPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="快钱支付接口" id="billPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="农行支付接口" id="abcpayPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="银联支付接口" id="chinaPay">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="中国银联支付接口" id="unPay">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="线下支付插件" id="offline">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		<plugin name="货到付款插件" id="cod">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+
+
+</component>

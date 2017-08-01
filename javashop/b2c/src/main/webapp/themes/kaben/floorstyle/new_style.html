@@ -1,0 +1,251 @@
+<!-- 获取楼层标签-->
+<#assign floorTag=newTag("floorTag")>
+<#assign floorMap=floorTag("'floor_id':'${floor_id}','limit':4")>
+<!-- 获取楼层和子楼层列表 -->
+<#if floorMap?exists && floorMap?size gt 0>
+	<#assign floor=floorMap.floor >
+	<#assign guid_cat_id=floor.guid_cat_id!'' >
+	<#assign brand_ids=floor.brand_ids!'' >
+	<#assign cat_id=floor.cat_id!'' >
+	<#assign adv_ids=floor.adv_ids!'' >
+	<#assign goods_tag_id=floor.goods_tag_id!'' >
+	<#assign goodsnum=floor.goodsnum!'6' >
+	<#assign childFloorList=floorMap.childFloors >
+</#if>
+<#assign floorAdvListTag= newTag("floorAdvListTag")>
+<#assign floorGoodsTag=newTag("floorGoodsTag") >
+<#assign goodsListTag=newTag("goodsListTag")>
+<style type="text/css">
+	.items-box {
+		position: relative;
+	}
+	.btn-default-styles {
+		position: absolute;
+		z-index: 999;
+		display: none;
+		width: 40px;
+		left: 0;
+		border: 1px solid #2e6da4;
+		background-color: #337ab7;
+		text-align: center;
+		line-height: 20px;
+		border-radius: 5px;
+		font-size: 12px;
+		cursor: pointer;
+		color: #ffffff;
+	}
+	.btn-default-styles:hover {
+		background-color: #286090;
+		border-color: #204d74;
+	}
+	.goods-title-top
+</style>
+<div class="index-same-fool">
+	<div class="box-css"></div>
+		<div class="index-same-tile index-food">
+			<h1 id="title_id" >
+			<#if floor?exists >
+				${floor.title}
+			</#if>
+			<span></span>
+			</h1>
+			
+			<ul class="items-box" style="min-width: 40px;float:left;margin:0 0 0 520px">
+			
+			<!-- 创建商品分类标签 -->
+			<#if guid_cat_id??&& guid_cat_id!='' >
+			<#assign goodsCatTag= newTag("goodsCatTag")>
+			<#assign goodsCat = goodsCatTag("'parentid':${guid_cat_id},'catimage':'on'")!'' >
+				<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+				data-operation-url="${ctx}/core/admin/template/edit-guid-cat.do" 
+				data-operation-id="${guid_cat_id}" 
+				data-save-url="${ctx}/core/admin/template/save-guid-cat.do?ajax=yes"
+				data-title="修改分类列表" 
+				data-formId="editGuidForm"  
+				data-floorId="${floor.id}" >
+				<#list goodsCat.cat_tree as cat>
+					<#if cat_index lt 5>
+						<li <#if !cat_has_next>class="last"</#if>><a href="${ctx}/goods_list.html?cat=${cat.cat_id}" title="${cat.name }">${cat.name }</a></li>
+					</#if>
+				</#list>
+			<#else>
+				<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
+				data-operation-url="${ctx}/core/admin/template/edit-guid-cat.do" 
+				data-operation-id="" 
+				data-save-url="${ctx}/core/admin/template/save-guid-cat.do?ajax=yes"
+				data-title="新增分类列表" 
+				data-formId="editGuidForm"  
+				data-floorId="${floor.id}" >
+			</#if>
+			</ul>
+		</div>
+		<div class="same-box ">
+			<div class="same-box-left ">
+				<div class="index-beand-list ">
+					<ul class="items-box">
+						<#if brand_ids??&& brand_ids!='' >
+						<!-- 品牌 -->
+						<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
+								data-operation-url="${ctx}/core/admin/template/edit-brand.do"
+								data-operation-id=""
+								data-save-url="${ctx}/core/admin/template/save-brand.do?ajax=yes"
+								data-title="修改品牌列表"
+								data-formId="editBrandForm"
+								data-floorId="${floor.id}" >
+						<#assign floorBrandListByCatidTag= newTag("floorBrandListByCatidTag")>
+						<!-- 调用商品品牌信息 -->
+						<#assign brandListByCatid = floorBrandListByCatidTag("'brand_ids':${brand_ids}")!'' >
+						<#list brandListByCatid as brandList>
+							<li>
+								<a href="goods_list.html?brand=${brandList.brand_id!''}">
+									<@image border="0" src="${brandList.logo!''}"  alt="${brandList.name!''}" />
+								</a>
+							</li>
+						</#list>
+						<#else>
+							<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles"
+								data-operation-url="${ctx}/core/admin/template/edit-brand.do"
+								data-operation-id=""
+								data-save-url="${ctx}/core/admin/template/save-brand.do?ajax=yes"
+								data-title="修改品牌列表"
+								data-formId="editBrandForm"
+								data-floorId="${floor.id}" >
+						</#if>
+					</ul>
+				</div>
+				<div class="same-cat items-box">
+					<#if cat_id??&& cat_id!='' >
+					<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+							data-operation-url="${ctx}/core/admin/template/edit-cat.do" 
+							data-operation-id="${cat_id}" 
+							data-save-url="${ctx}/core/admin/template/save-cat.do?ajax=yes"
+							data-title="修改分类列表" 
+							data-formId="editCatForm"  
+							data-floorId="${floor.id}" >
+					<!-- 创建商品分类标签 -->
+					<#assign goodsCatTag= newTag("goodsCatTag")>
+					<!-- 调用商品分类信息 -->
+					<#assign goodsCat = goodsCatTag("'parentid':${cat_id},'catimage':'on'")!'' >
+					<#list goodsCat.cat_tree as cat>
+							<#if cat.hasChildren>
+								<#assign children2=cat.children /> 
+								<#list children2 as cat2>
+									<#if cat2_index lt 3>
+										<a href="${ctx}/goods_list.html?cat=${cat2.cat_id}" title="${cat2.name }">${cat2.name }</a>
+									</#if>
+								</#list>
+							</#if>
+								<!--  <a href="search-cat-${cat.cat_id}.html" class="menu">${cat.name }</a><br/>-->
+					</#list>
+					<#else>
+						<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
+							data-operation-url="${ctx}/core/admin/template/edit-cat.do" 
+							data-operation-id="" 
+							data-save-url="${ctx}/core/admin/template/save-cat.do?ajax=yes"
+							data-title="新增分类列表" 
+							data-formId="editCatForm"  
+							data-floorId="${floor.id}" >
+					</#if>
+				</div>
+				
+			</div>
+			<div class="same-box-middel items-box">
+				<#if adv_ids??&& adv_ids!='' >
+				<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
+						data-operation-url="${ctx}/core/admin/template/edit-adv.do" 
+						data-operation-id="" 
+						data-save-url="${ctx}/core/admin/template/save-adv.do?ajax=yes"
+						data-title="修改广告图片" 
+						data-formId="editAdvForm"  
+						data-floorId="${floor.id}" 
+						data-goods-index="only" >
+				<!-- 调用广告信息,传递参数acid:1 -->
+				<#assign advList = floorAdvListTag("'aid':'${adv_ids}','position':'only'")!'' >
+				 <#list advList as adv3>
+			             	<a target="_blank" title="${adv3.aname!''}" href="${ctx}/${adv3.url!''}">
+			                	<@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}" style="height:${100/advList?size}%" />
+			                </a>
+	               </#list>
+	             <#else>
+	             	<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles"
+						data-operation-url="${ctx}/core/admin/template/edit-adv.do" 
+						data-operation-id="" 
+						data-save-url="${ctx}/core/admin/template/save-adv.do?ajax=yes"
+						data-title="修改广告图片" 
+						data-formId="editAdvForm"  
+						data-floorId="${floor.id}" 
+						data-goods-index="only" >
+	             </#if>
+			</div>
+			<div class="same-box-right">
+				<#if childFloorList?exists &&childFloorList?size gt 0 >
+					<#assign size=childFloorList?size >
+					<div class="child_floor_tab">
+						<ul class="floor_tab_ul">
+							<#list childFloorList as childs>
+								<li  id="${childs.id}" class="show_this tab_item items-box" style="cursor: pointer; opacity: 1; margin-right: 10px; width: 70px; " >
+								 <input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
+										data-operation-url="${ctx}/core/admin/template/edit-batch-goods.do" 
+										data-operation-id="" 
+										data-save-url="${ctx}/core/admin/template/save-batch-goods.do?ajax=yes"
+										data-title="批量添加商品" 
+										data-formId="editBatchGoodsForm"  
+										data-floorId="${childs.id}" >
+
+									<a href="javascript:void(0);">${childs.title}</a>
+								</li>
+							</#list>
+						</ul>
+						<div class="curBg"></div>
+					</div>
+					<#list childFloorList as childs>
+					<#if childs.path??>
+					<#include '${childs.path}' >
+					</#if>
+						
+					</#list>
+				</#if>
+			</div>
+		</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('.floor_tab_ul').each(function(){
+			$(this).find('li').eq(0).addClass('curBg')
+		});
+		if(location.href.indexOf('admin') > -1){
+			$('.box-css').html('<link rel="stylesheet" href="${ctx}/themes/kaben/css/common.css" type="text/css" /> <link rel="stylesheet" href="${ctx}/themes/kaben/css/dialog.css" type="text/css" /> <link rel="stylesheet" href="${ctx}/themes/kaben/css/index.css" type="text/css" /> <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />')
+		}
+		$(".show_this").mousemove(function(){
+			//  逻辑优化  bug修复 _by: Andste 2016-9-28 13:11:49
+			var tab=$(this);
+			tab.addClass("curBg");
+			tab.siblings('li').removeClass("curBg");
+			var id=tab.attr("id");
+			var parent=tab.closest(".same-box-right")
+			parent.find(".child_floor_show").hide();
+			$("#child_floor_show_"+id).show();
+		});
+		$(".show_this").mouseout(function(){
+			var id=$(this).attr("id");
+		});
+
+		//  如果没有条目，默认显示按钮
+		(function(){
+			var box = $('.items-box');
+			for(var i = 0; i < box.length; i++){
+				var _box = box.eq(i);
+				if(_box.find('div, li, a').length == 0 || (_box.find('.pagination').length > 0) && _box.find('ul').length == 0){
+					_box.find("input[type='button']").show();
+				}else {
+					_box.hover(function(){
+						$(this).find("input[type='button']").show();
+					}, function(){
+						$(this).find("input[type='button']").hide();
+					});
+				}
+			};
+		})();
+	})
+</script>

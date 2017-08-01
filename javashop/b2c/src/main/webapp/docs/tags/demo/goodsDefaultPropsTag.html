@@ -1,0 +1,8 @@
+
+<!--创建"查询默认的属性信息"标签-->
+<#assign GoodsDefaultPropsTag = newTag("goodsDefaultPropsTag")>
+<!--调用“查询默认的属性信息”标签-->
+<#assign GoodsDefaultProps= GoodsDefaultPropsTag("'type':'1'")>
+<#list GoodsDefaultProps as list>
+${list.id}
+</#list>

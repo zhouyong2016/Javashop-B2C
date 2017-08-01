@@ -1,0 +1,9 @@
+
+<!--创建"搜索商品"标签-->
+<#assign b2b2cGoodsSearchTag= newTag("b2b2cGoodsSearchTag") >  
+<!--调用"搜索商品"标签，并传递参数-->            
+<#assign  B2b2cGoodsSearch= b2b2cGoodsSearchTag("'goodsid':'1'") >						
+<ul class="gw">
+<#list B2b2cGoodsSearch as goods>
+	商品名称：${goods.name}</br>
+</#list>

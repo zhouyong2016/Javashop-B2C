@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="新相册组件"  version="1.0" javashop_version="3.0.0" author="Javashop">
+	<plugins>
+		<plugin id="goodsGalleryAdminPlugin" name="新相册管理插件">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+<!-- 		<plugin id="goodsGalleryDataFilter" name="新相册数据字段补充插件">
+			<bundle id="goodsDataFilterBundle"></bundle>
+		</plugin> -->
+		<plugin name="图片设置插件" id="imageSettingPlugin">
+			<bundle id="settingPluginBundle"></bundle>
+		</plugin>
+		<plugin name="相册数据导出插件" id="galleryDataExportPlugin">
+			<bundle id="dataExportPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+</component>

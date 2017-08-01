@@ -1,0 +1,7 @@
+
+<!--创建"该会员订单在各状态下的个数"标签-->
+<#assign MemberOrderNumTag = newTag("memberOrderNumTag")>
+<!--调用"该会员订单在各状态下的个数"标签-->
+<#assign MemberOrderNum = MemberOrderNumTag("'status':'1'")>
+
+品牌名称： ${MemberOrderNum}

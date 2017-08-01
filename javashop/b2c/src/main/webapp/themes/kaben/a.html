@@ -1,0 +1,24 @@
+<#include 'common/header.html'>
+number:<input type="text"   class="is_number max_1" />
+<br/>
+chinese:<input type="text"  class="is_chinese"/>
+<script type="text/javascript">
+
+$(function(){
+	//输入数字 不包含小数点
+	$(".is_number").attr("value","1111");
+	$(".is_number").css("ime-mode","disabled");
+	$(".is_number").attr("onkeydown","if(event.keyCode==13)event.keyCode=9");
+	$(".is_number").attr("onkeypress","if ((event.keyCode<48 || event.keyCode>57)) event.returnValue=false");
+	
+	//输入中文
+	$(".is_chinese").attr("value","我的");
+	$(".is_chinese").attr("onkeyup","value=value.replace(/[ -~]/g,'')");
+	$(".is_chinese").attr("onkeydown","if(event.keyCode==13)event.keyCode=9");
+	
+	//输入长度
+	$(".max_1").attr("maxlength","1");
+	$(".max_10").attr("maxlength","10")
+
+})
+</script>

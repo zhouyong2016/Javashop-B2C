@@ -1,0 +1,120 @@
+<#assign title="账户安全" />
+<#include 'member_header.html'/>
+<#assign memberSecurityCenterTag = newTag("memberSecurityCenterTag") >
+<#assign security = memberSecurityCenterTag()>
+<div class="pore_re">
+	<h1>修改登录密码</h1>
+	<div class="security">
+		<p>请重设您的帐号密码</p>
+		<form class="validate" action="" method="post">
+				<div class="vefy_input_05">
+					<span class="input_span">新的登录密码：</span>
+					<input class="input_text" type="password"  name="newpassword" dataType="string"	 fun="isPasswd" id="isPasswd" placeholder="请输入新密码" isrequired="true"/>
+				</div>
+				<div class="vefy_input_05">
+					<span  class="input_span">请再输入一次密码：</span>
+					<input class="input_text" type="password" name="re_passwd" dataType="string" id="password"  fun="checkpwd" placeholder="请确认新密码" isrequired="true"/>
+				</div>
+				<div class="vefy_input_05">
+					<span  class="input_span">验证码：</span>
+					<input id="authCode" class="itxt" type="text" name="authCode" tabindex="2" placeholder="请输入验证码" style="width: 100px;">
+					<label>
+						<img src="${ctx}/validcode.do?vtype=membervalid" alt="验证码" id="code-img" class="ml10" style="cursor: pointer;height: 34px;width: 100px;border: 0 none;vertical-align: middle;">
+						看不清？
+						<a class="ftx-05" href="javascript:;" id="change-code" style="color: #005ea7;">换一张</a>
+					</label>
+				</div>
+				<div class="btn-div">
+					<input class="yellow-btn" type="button" name="btnReg" value="确定修改"/>
+				</div>
+		</form>
+	</div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+<script>
+	$(function(){
+		
+		$("#change-code").click(function(){
+			$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+		});
+		$("#code-img").click(function(){
+			$(this).attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+		});
+		
+		$(".yellow-btn").click(function(){
+			var useroldpwd = $("#useroldpwd").val();
+			var usernewpwd = $("#password").val();
+			var useraffirmpwd = $("#passwd_re").val();
+			
+			if(!$(".validate").checkall()){
+				return false;
+			}
+			
+			if($("#authCode").val() == ""){
+				alert("请输入验证码");
+				return false;
+			}
+			
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/shop/member/update-password.do",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("修改成功，请谨记密码");
+						location.href = "verification_success.html?type=1";
+						//退回到首页，重新登录
+						/* $.ajax({
+							url:"../api/shop/member!logout.do?ajax=yes",
+							dataType:"json",
+							cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+							success:function(result){
+								if(result.result==1){
+									location.href="${ctx}/index.html";
+									
+								}else{
+									$.alert(result.message);
+								}	
+								$.Loading.hide();
+							},
+							error:function(){
+								$.Loading.hide();
+								$.alert("出错了:(");
+							}
+						}); */
+					}
+					else{
+						alert(result.message);
+						$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+					}
+				}
+			})
+
+
+		})
+	})
+</script>
+<script>
+function isPasswd(s){  
+	//var patrn=/^(\w){6,20}$/;
+	var patrn=/^(\w){6,16}$/;
+	if (!patrn.exec(s)) return "密码格式不正确"  
+	return true  
+}
+function checkpwd(){    
+	if( $("#passwd_re").val()==$("#newpassword").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+</script>
+<script>
+otherMenu(4);
+</script>
+<#include '../common/footer.html'/>

@@ -1,0 +1,296 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="clear height10"></div>
+	<div style="display: block;"
+		class="input shadowBoxWhite wf100 whiteBox">
+		<div id="editSubject" style="height:auto"></div>
+		<div>
+			<a href="javascript:void(0)" id="addGoods">
+				<img alt="添加商品" src="${ctx}/floor/admin/subject/addGoods.png" style="width:50%;height:200px;float:left" title="一次最多添加一行">
+			</a>
+			<a href="javascript:void(0)" id="addPicture">
+				<img alt="添加图片" src="${ctx}/floor/admin/subject/addPicture.png" style="width:50%;height:200px;float:right">
+			</a>
+		</div>
+	</div>
+	<form id="addPictureForm" method="post" enctype="multipart/form-data">
+	<input type="file" name="file" id="fileToUpload" onchange="fileChange();" style="display:none;">
+	</form>
+	<form id="editPictureForm" method="post" enctype="multipart/form-data">
+	<input type="file" name="file" id="fileToEdit" onchange="editFileChange();" style="display:none;">
+	<input type="hidden" name="index" id="edit_picture_index" value="" >
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var id="${subject.id}";
+		$("#editSubject").load("${ctx}/subject/subject-style.html?subjectid="+id,function(){
+			$(".subject_edit").show();
+			
+			
+			$(".subject_goods_edit").unbind("click").click(function(){
+				var button=$(this);
+				var id=button.attr("data-subjectId");
+				var operation_url=button.attr("data-operation-url");
+				var save_url=button.attr("data-save-url");
+				var title=button.attr("data-title");
+				var formId=button.attr("data-formId");
+				var index=button.attr("data-index");
+				var subject_id=button.attr("data-subjectId");
+					append(id,operation_url,save_url,title,formId,subject_id,index);
+			});
+			
+			$(".subject_goods_delete").unbind("click").click(function(){
+				var button=$(this);
+				var subject_id=button.attr("data-subjectId");
+				var index=button.attr("data-index");
+				del(subject_id,index);
+			});
+			
+		 	$(".subject_image_edit").unbind("click").click(function(){
+				/* 
+				var id=button.attr("data-subjectId");
+				var operation_url=button.attr("data-operation-url");
+				var save_url=button.attr("data-save-url");
+				var title=button.attr("data-title");
+				var formId=button.attr("data-formId");
+				
+				var subject_id=button.attr("data-subjectId");
+					append(id,operation_url,save_url,title,formId,subject_id,index); */
+				var button=$(this);
+				var index=button.attr("data-index");
+				$("#edit_picture_index").val(index);
+		 		$("#fileToEdit").click();
+			}); 
+			
+			$(".subject_image_delete").unbind("click").click(function(){
+				var button=$(this);
+				var subject_id=button.attr("data-subjectId");
+				var index=button.attr("data-index");
+				delImage(subject_id,index);
+			});
+			
+		});
+		
+		$("#addGoods").click(function(){
+			var id='';
+			var operation_url="${ctx}/core/admin/subject/add-goods.do";
+			var save_url="${ctx}/core/admin/subject/save-add-goods.do?";
+			var title="添加商品";
+			var formId="addGoodsForm";
+			var subject_id=${subject.id};
+			var index='';
+			append(id,operation_url,save_url,title,formId,subject_id,index) ;
+		});
+		$("#addPicture").click(function(){
+			/* var id='';
+			var operation_url="${ctx}/core/admin/subject/add-image.do";
+			var save_url="${ctx}/core/admin/subject/save-add-image.do";
+			var title="添加图片";
+			var formId="addImageForm";
+			var subject_id=${subject.id};
+			var index='';
+			append(id,operation_url,save_url,title,formId,subject_id,index) ; */
+			$("#fileToUpload").click();
+			
+		});
+		
+		
+		
+		
+	});
+	function append(id,operation_url,save_url,title,formId,subject_id,index) {
+		var id2;
+		if(typeof(id)=="undefined"){
+			id2='';
+		}else{
+			id2=id;
+		}
+		var map = {}; // Map map = new HashMap();
+			
+				map["href"] = operation_url+"?data_id=" +id2+"&subject_id="+subject_id+"&index="+index;
+				map["formId"] = "#"+formId;
+				map["url"] = save_url;
+				map["title"] = title;
+				map["loadshow"] = "正在修改......";
+			
+			
+		map["divDialog"] = "#divdia";
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 900,
+			height : 600,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						 submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在保存请稍候...");
+			savebtn.linkbutton("disable");	
+			var goods_ids = [];
+			$("input[name='goods_ids']").each(function(i, o){
+				goods_ids[i] = $(o).val();
+			});
+			if(goods_ids.length==0){
+				$.Loading.error("请添加商品");
+				savebtn.linkbutton("enable");
+				return;
+			}
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				data:{
+					"subject_id":${subject.id},
+					"keyword":$(".subject_goods").find(".keyword").val(),
+				},
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			savebtn.linkbutton("enable");
+			$.Loading.hide();
+		}
+	}
+	function del(id,index) {
+		if (!confirm("确定删除吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		$.ajax({
+			url : "${ctx}/core/admin/subject/delete-goods.do?subject_id=" + id+"&index="+index,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+					$.Loading.success(result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		});
+	}
+	
+	
+	function delImage(id,index) {
+		if (!confirm("确定删除吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		$.ajax({
+			url : "${ctx}/core/admin/subject/delete-image.do?subject_id=" + id+"&index="+index,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+					$.Loading.success(result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		});
+	}
+	
+	function fileChange(){
+		var options = {
+				url : "${ctx}/core/admin/subject/save-add-image.do",
+				type : "POST",
+				dataType : 'json',
+				data:{
+					"id":${subject.id}
+				},
+				success : function(result) {
+					if (result.result == 1) {
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+		$("#addPictureForm").ajaxSubmit(options);
+	}
+	
+	function editFileChange(){
+		var options = {
+				url : "${ctx}/core/admin/subject/save-edit-image.do",
+				type : "POST",
+				dataType : 'json',
+				data:{
+					"id":${subject.id}
+				},
+				success : function(result) {
+					if (result.result == 1) {
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+		$("#editPictureForm").ajaxSubmit(options);
+	}
+</script>
+
+<#include '/admin/footer.html' >

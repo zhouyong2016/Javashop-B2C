@@ -1,0 +1,96 @@
+<div class="division">
+    <table cellspacing="0" cellpadding="0" border="0">
+      <tbody>
+      
+      <#list deliveryList as delivery>
+      
+      		<#if delivery.type ==1 && delivery.logi_no?exists >
+				<tr>
+				<th style="width: 80px;">货运状态：</th>
+	        	<td>发货</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">物流公司：</th>
+	        	<td>${delivery.logi_name!''}</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">运单号：</th>
+	        	<td>${delivery.logi_no!''}</td>
+	        	</tr>
+	        	<tr>
+	        	<td colspan="2">
+	        	<a href="javascript:;" onclick="javascript:showRogInfo('${delivery.logi_no}','${delivery.logi_code}');">查询货运状态</a>
+	        	</td>
+	        	</tr>
+			</#if>
+			
+			<#if delivery.type ==2 && delivery.logi_no?exists >
+			 
+				<tr>
+				<th style="width: 80px;">货运状态：</th>
+	        	<td>退货</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">物流公司：</th>
+	        	<td>${delivery.logi_name!''}</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">运单号：</th>
+	        	<td>${delivery.logi_no}</td>
+	        	</tr>
+	        	<tr>
+	        	<td colspan="2">
+	        	<a href="javascript:;" onclick="javascript:showRogInfo('${delivery.logi_no}','${delivery.logi_code}');return false;">查询货运状态</a>
+	        	</td>
+	        	</tr>
+			</#if>
+			
+			<#if delivery.type ==3 && delivery.logi_no?exists >
+			 
+				<tr>
+				<th style="width: 80px;">货运状态：</th>
+	        	<td>换货</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">物流公司：</th>
+	        	<td>${delivery.logi_name!''}</td>
+	        	</tr>
+	        	<tr>
+				<th style="width: 80px;">运单号：</th>
+	        	<td>${delivery.logi_no!''}</td>
+	        	</tr>
+	        	<tr>
+	        	<td colspan="2" align="center">
+	        	<a href="javascript:;" onclick="javascript:showRogInfo('${delivery.logi_no}','${delivery.logi_code}');return false;">查询货运状态</a>
+	        	</td>
+	        	</tr>
+				 
+			</#if>
+			
+		</#list>
+    </tbody>
+    </table><div id="store_content" style="height:350px" ><div>
+    
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#store_content").hide();
+})
+function showRogInfo(logino,logicode){
+	 $("#store_content").show();
+	　　	$('#store_content').dialog({
+	　　		title: '货运状态',			//对话框的标题
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/api/shop/order/order-kuaidi.do?ajax=yes&logino='+logino+'&code='+logicode,function(){}, 	 //对话框所引用的html页面
+	　　		modal: true
+	　　	}); 
+	　　	//弹出窗dialog居中展示
+		$("#store_content").dialog("move",{top:$(document).scrollTop() + ($(window).height()-250) * 0.5}); 
+		$(".window-shadow").css('display','none');
+}
+
+</script>

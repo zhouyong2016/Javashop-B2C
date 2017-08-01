@@ -1,0 +1,8 @@
+
+<!--获取“我的收藏”标签-->
+<#assign mine = newTag("collectTag")>
+<!--调用“我的收藏”标签-->
+<#assign my = mine()>
+<#list my as list>
+${list.name!''}
+</#list>

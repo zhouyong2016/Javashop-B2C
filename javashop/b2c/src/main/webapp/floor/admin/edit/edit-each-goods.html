@@ -1,0 +1,80 @@
+<style type="text/css">
+	.easyui-panel li {
+		list-style: none;
+		overflow: hidden;
+	}
+	.easyui-panel li img {
+	border: 1px solid #ccc;
+    display: block;
+    height: 60px;
+    overflow: hidden;
+    padding: 2px;
+    width: 60px;
+	}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editEachGoodsForm" method="post" class="validate"
+			enctype="multipart/form-data">
+			<input type="hidden" id="floor_id" name="floor_id" value="${floor_id}" />
+			<input type="hidden" id="goods_index" name="index" value="${index}" />
+			<table>
+				<tr>
+					<th>商品名称</th>
+					<td>
+						<input type="text" value="" name="search_name" id="search_name" class="input_text" style="width:80%" maxlength="20">
+					</td>
+					<th>商品类别</th>
+					<td>
+						<input class="easyui-combotree" name="cat_id" id="catid"
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get'" style="width: 200px;height: 28px;" />
+					</td>
+					<td>
+						<a href="javascript:;" onclick="searchGoods()" class="button blueButton" id="searchAdvance">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+			<span>商品列表</span>
+					<div id="goodsdata" style="width:100%;height:100%;position:relative;text-align: center;" >
+					<#if goods?? >
+						<li style="float:left;margin:5%" data-goods-id="${goods.goods_id}" >
+						<div class="goods-img">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html" title="${goods.name!''}">
+								<img class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+							</a>
+						</div>
+						<div class="goods-price">
+							<span>${goods.price?string.currency}</span>
+						</div>
+						<input type="radio" id="old_goods_id" name="old_goods_id" value="${goods.goods_id}" checked="true">
+						</li>
+					</#if>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+		//搜索
+		function searchGoods(){
+			    var formflag= $("#editEachGoodsForm").form().form('validate');
+			    if(formflag){
+					var keyword = $.trim($("#search_name").val());
+					
+					var catid = $("#catid").combo('getValue');
+					
+					var old_goods_id=$("#old_goods_id").val();
+					if(typeof(old_goods)=='undefined'){
+						old_goods_id="";
+					}
+					
+					var json="{\"keyword\":\""+keyword+"\","
+					+"\"catid\":\""+catid+"\""
+					+"}";
+					
+					$('#goodsdata').load("${ctx}/core/admin/templateshow/list-goods.do",{"json":json,"pageid":1},function(){
+						
+					});
+			}
+		}
+	
+</script>

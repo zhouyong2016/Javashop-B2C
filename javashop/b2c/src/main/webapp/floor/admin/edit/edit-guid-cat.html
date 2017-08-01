@@ -1,0 +1,89 @@
+<style type="text/css">
+.tag-box {
+	width: 400px;
+	height: 80px;
+	border-radius: 3px;
+	position: relative;
+	margin: 20px auto;
+	border:1px solid #dddddd;
+}
+
+</style>
+
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editGuidForm" method="post" class="validate"
+			enctype="multipart/form-data">
+			<input type="hidden" id="floor_id" name="floor_id" value="${floor_id}" />
+			<table>
+				<tr>
+					<th>右侧分类</th>
+					<td>
+						<div class="tag-box" id="guid_text">
+							<#if guid_cat?? && guid_cat?size gt 0>
+								<#list guid_cat as cat>
+									<span class="tag-close">${cat.name} </span>
+								</#list>
+							</#if>
+						</div>
+						<p>添加商品分类最多显示5个</p></td>
+				</tr>
+				<tr>
+					<th>分类选择</th>
+					<td width="200px"><select id="catId" onchange="changeSelect()"
+						name="cat_id" " 
+						style="width: 200px;">
+					</select></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+		$(function(){
+			var guid_cat_id=${guid_cat_id!'0'};
+			if(guid_cat_id!=0){
+			$("#catId").combotree({
+				url:"${ctx}/shop/admin/cat/add-list-json.do",
+				required:false,
+				height:28,
+				value:guid_cat_id,
+				onChange: function () {
+					var tree=$("#catId").combotree("tree");
+					//var node = $("#catId").combotree("options");
+					var node=tree.tree("getSelected");
+					var childNode=tree.tree("getChildren",node.target);
+					$("#guid_text").html('');
+					$("#guid_text").val('');
+					for(var i= 0;i<childNode.length;i++){
+						 var parent=tree.tree("getParent",childNode[i].target);
+						 if(parent.text==node.text){
+							 $("#guid_text").html($("#guid_text").html()+"<span class='cat-tag' value='"+childNode[i].id+"' >"+childNode[i].text+"</span>");
+						 }
+		            }
+				}
+			});
+		}else{
+			$("#catId").combotree({
+				url:"${ctx}/shop/admin/cat/add-list-json.do",
+				required:false,
+				height:28,
+				onChange: function () {
+					var tree=$("#catId").combotree("tree");
+					//var node = $("#catId").combotree("options");
+					var node=tree.tree("getSelected");
+					var childNode=tree.tree("getChildren",node.target);
+					$("#guid_text").html('');
+					$("#guid_text").val('');
+					for(var i= 0;i<childNode.length;i++){
+						 var parent=tree.tree("getParent",childNode[i].target);
+						 if(parent.text==node.text){
+							 $("#guid_text").html($("#guid_text").html()+"<span class='cat-tag' value='"+childNode[i].id+"' >"+childNode[i].text+"</span>");
+						 }
+		            }
+				}
+			});
+		}
+		});
+	
+</script>

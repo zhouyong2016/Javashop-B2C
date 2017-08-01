@@ -1,0 +1,99 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	
+	<div class="shadowBoxWhite wf100 whiteBox">
+		<div class="text">
+			<div class="tab-page">
+				<div tabid="2"  class="tab-panel">
+					<table class="form-table" style="width: 100%;">
+						<tr>
+							<td>
+								<div id="collect_container" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" 
+			data-options="url:'${ctx}/shop/admin/goodsStatis/get-collect-json.do',pageList: [50],pageSize:50,fitColumns:'true'"
+			pagination="true" width="width" id="data" sortName="goods_id" sortOrder="desc">
+			<thead>
+				<tr>
+					<th data-options="field:'goods_id',checkbox:true,width:100"></th>
+					<th data-options="field:'name',width:150" formatter="formatName" >商品名称</th>
+					<th data-options="field:'price',width:150" >商品价格</th>
+					<th data-options="field:'y',width:100" >收藏量</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+		
+</div>
+
+
+<script>
+
+var collect_data = ${collectJosn}; 
+
+$(function(){
+	//加载甘特图
+	loadHighcharts(collect_container,"",collect_data);
+});
+
+//格式化商品名称
+function formatName(value,row,index){
+	var val = "<a target='_blank' title='"+value+"' href='${ctx}/goods-"+row.goods_id+".html' >"+value+"</a>";
+	return val;
+}
+
+
+//生成图表
+function loadHighcharts(obj,text,data){
+	var chart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: obj
+        },
+        title: {
+            text: '收藏商品排行Top50'
+        },
+        xAxis: {
+        	tickInterval: 1
+        },
+        yAxis: {
+            title: {
+                text: "收藏数"
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        credits: {  
+            enabled: false 	// remove high chart logo hyper-link  
+        },
+        series: [{
+        	name: "收藏数",
+        	colorByPoint: true,
+            data: data,
+            showInLegend: false,
+        	pointStart: 1
+        }]
+        // data: [{'color':'#F6BD0F','y':11}, {'color':'#333','y':6.9}]
+    });
+}
+
+</script>
+
+
+<#include '/admin/footer.html' >

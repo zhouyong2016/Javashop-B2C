@@ -1,0 +1,11 @@
+	<tr>
+		<th><label class="text">所属库房：</label></th>
+		<td>
+		 	<select name="depotid">
+		 		<option value="">请选择库房</option>
+		 		<#list roomList as room>
+		 			<option value="${room.id}" <#if depotid?exists && depotid == room.id >selected="true"</#if>>${room.name}</option>
+		 		</#list>
+		 	</select>
+		</td>
+	</tr>

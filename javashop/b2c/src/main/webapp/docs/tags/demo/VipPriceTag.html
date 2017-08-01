@@ -1,0 +1,18 @@
+<!--创建"商品详细"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!--调用"商品详细"标签，并传递参数-->
+<#assign goodsBaseData = goodsBaseDataTag("{'goodsid':30}")>	
+
+<!--获取VIP价格标签-->
+<#assign vipPriceTag = newTag("goodsVipPriceTag")>
+<!--调用VIP价格标签-->
+<#assign vipPrice =vipPriceTag()!''>
+<#if member??>
+	<#list vipPrice.memberLvList as vipPrice>
+		<#if member.lv_id==vipPrice.lv_id>
+			VIP价格：${vipPrice.lvPrice?string("currency")}
+		</#if>
+	</#list>
+<#else>
+	会员未登录VIP价格：${goodsBaseData.price!''}
+</#if>

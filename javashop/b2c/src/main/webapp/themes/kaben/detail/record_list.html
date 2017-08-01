@@ -1,0 +1,32 @@
+<!-- 成交记录标签 -->
+<#assign recordListTag = newTag("recordListTag")>
+<!--调取"成交记录"标签，并传递参数,获取Page对象-->
+<#assign recordList = recordListTag("{'goods_id':${goods_id}}")>
+<div id="record_list_wrapper">
+	<div  class="record_list">
+		<#if recordList.totalCount != 0 >
+			<table cellspacing="0" cellpadding="0" border="0">
+				<tr>
+					<th style="width:250px;">会员名称</th> 
+					<th style="width:200px;">购买数量</th>
+					<th style="width:298px;">购买时间</th>	
+				</tr>
+				<#list recordList.result as record>  
+					<tr>
+						<td style="width:250px;">${record.uname}</td>
+						<td style="width:200px;">${record.goods_num!''}</td>
+						<td style="width:298px;">
+							<@dateformat time="${record.rog_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+						</td>
+					</tr>
+				</#list>
+			</table>
+		<#else>
+		<p class="no-word">暂无购买记录。 </p>
+		</#if>
+	</div>
+	<div class="page">
+		<@ajaxpager pageno="${recordList.currentPageNo!'1'}" pagesize="${recordList.pageSize}" totalcount="${recordList.totalCount}" />
+	</div>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,77 @@
+<div class="easyui-layout" style=" height: 329px;">
+	<div data-options="region:'north'" style="height: 40px;text-align: right;">
+		<div style="padding-top: 3px;">
+			<input type="text" style="height: 25px;" id="keywords" />
+			<a href="javascript:void(0)" class="easyui-linkbutton" >搜索</a>
+		</div>
+	</div>
+	<div data-options="region:'west'" title="分类"
+		style="width: 200px;">
+		<div class="easyui-panel" style="padding: 5px">
+			<ul id="tt"  class="easyui-tree" data-options="url:'${ctx}/shop/admin/goods-select/list-json.do',method:'get',animate:true,onClick:showGoodsList"></ul>
+		</div>
+	</div>
+	<div data-options="region:'center',title:'商品',iconCls:'icon-ok'">
+		<table id="goodsdetailed" fitColumns="true"></table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var sing=${sing};
+	var flag=false;
+	if(sing==0){
+		flag=true;
+	}
+	function showGoodsList(node){
+	  $('#goodsdetailed').datagrid({
+        	singleSelect:flag,
+        	collapsible:true,
+            url:"${ctx}/shop/admin/goods-select/list-product-by-cat-id.do?catid="+node.id,
+            columns:[[
+				{field:'ck',checkbox:true},	   
+	            {field:'sn',title:'编号',width:70},
+	            {field:'name',title:'名称',width:100},
+	            {field:'price',title:'价格',width:50},
+	            {field:'specs',title:'规格',width:30},
+	            {field:'store',title:'库存量',width:50},
+	            {field:'goods_id',title:'gid',width:0,hidden:'true'},
+	            {field:'product_id',title:'pid',width:0,hidden:'true'}
+            ]]
+         });
+	}
+
+	function getGoodsData(mulit){
+		// 2015-07-08  增加多选  冯兴隆
+		try{
+			var currentRow = $("#goodsdetailed").datagrid("getSelections");
+			if(mulit == 1){
+				var goodsData = [];
+				for(var key in currentRow){
+					var good = currentRow[key];
+					goodsData.push(good);
+				}
+				return goodsData;
+			}else{
+				var goodsData = {};
+				if(currentRow.length == 1){
+					goodsData["sn"]=currentRow[0].sn;
+					goodsData["name"]=currentRow[0].name;
+					goodsData["price"]=currentRow[0].price;
+					goodsData["store"]=currentRow[0].store;
+					goodsData["specs"]=currentRow[0].specs;
+					goodsData["goods_id"]=currentRow[0].goods_id;
+					goodsData["product_id"]=currentRow[0].product_id;
+				}
+				return goodsData;
+			}
+		}catch(e){
+			//alert(e);
+			if(mulit == 1){
+				return [];
+			}else{
+				return {};
+			}
+		}
+	}
+	
+</script>

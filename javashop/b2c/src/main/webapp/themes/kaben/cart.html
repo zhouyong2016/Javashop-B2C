@@ -1,0 +1,46 @@
+<#assign  title="购物车" />
+<#assign  index_type=2 />
+<#include 'common/header.html' />
+
+<link rel="stylesheet" href="${ctx}${themes_path}/css/cart.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/reveal.css" type="text/css" />
+<script src="${ctx}${themes_path}/js/jquery.reveal.js" type="text/javascript"></script>
+<style>
+.good_list .title{color:#fff;}
+</style>
+<div class="h-btm">
+	<div class="logo">
+		<a href="${ctx}/index.html">
+				<@image src="${site.logofile!''}" title="logo"/>
+			</a>
+	</div>
+	<div class="flow-steps">
+		<ol class="cur1">
+			<li class="num1">
+				<span>我的购物车</span>
+				<em>1</em>
+			</li>
+			<li class="num2">
+				<span>核对订单信息</span>
+				<em>2</em>
+			</li>
+			<li class="num3">
+				<span>成功提交订单</span>
+				<em>3</em>
+			</li>
+			<li class="clear"></li>
+		</ol>
+	</div>
+</div>
+<div class="mycar-index">
+	<h1>购物车</h1>
+	<div style="width:1200px;height:1px;overflow:hidden;clear:both;"></div>
+	<#include 'cart/cart_item.html' />
+</div>
+<!-- 加载促销活动详细浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="goods-add-float" style="word-wrap:break-word; word-break:break-all;">
+		</div>
+</div>
+<#include 'common/footer.html'/>

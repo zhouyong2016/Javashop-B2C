@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品评论、咨询api、JavsShop标签、API使用手册</title>
+<link href="../../stylecss.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<!--头部-->
+<div id="header">
+		<div class="header_top">
+		<h1><em>JavsShop</em>文档</h1>
+		<div class="title_line">
+			<a href="/docs/b2b2c/template_help.html">模板制作手册</a>
+			<a href="/docs/b2b2c/api/index.html">API文档</a>
+			<a href="/docs/b2b2c/tags/index.html">标签文档</a>
+		</div>
+	</div>
+</div>
+
+	<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+	<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+	<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/>  
+	<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+	<div class="diadiv" id="diadiv"></div>
+	
+	<div id="outside">
+		<div class="premise">
+			<input type="button" value="登录" name="button" id="login"></input> <input
+				type="button" value="注销登录" id="logout"></input>
+		</div>
+		<#assign regionSelect =
+		"com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+		<form id="addrForm" method="post" action="/api/shop/commentApi!add.do">
+			<table class="addressdo" style="width:800px;overflow:hidden;">
+				
+					<tr style="width:800px;overflow:hidden;">
+						<th>请输入商品ID：</th>
+						<td >
+							<input type="text" value="" id="goodsid" name="goods_id" class="goodsid" ></input>
+						</td>
+					</tr>
+					<tr style="width:800px;overflow:hidden;">
+						<th>请输入商店ID：</th>
+						<td >
+							<input type="text" value="" id="storeid" name="store_id" class="goodsid" ></input>
+						</td>
+					</tr>
+					<tr style="width:800px;overflow:hidden;">
+						<th>请选择评论类型：</th>
+						<td >
+							<input type="text" name="commenttype" value="" id="ask" />
+						</td>
+
+					</tr>
+					<tr style="width:800px;overflow:hidden;">
+						<th>请选择评论等级：</th>
+						<td >
+							<input type="text" name="grade" value=""  />
+						</td>
+
+					</tr>
+					<tr style="width:800px;overflow:hidden;">
+						<th>请输入评论内容：</th>
+						<td >
+							<textarea name="content" class="cont" id="tent"></textarea>
+						</td>
+					</tr>
+					<tr style="width:800px;overflow:hidden;">
+						<td><input type="button" id="publish" class="publish"
+							value="提交评论或咨询"></input>
+						</td>
+					</tr>
+			
+			</table>
+		</form>
+		<div id="show">
+			<h1>输出结果</h1>
+			<textarea id="frm">
+</textarea>
+		</div>
+	</div>
+	<#include '/docs/fooder.html' />
+	
+	<!--提交评论-->
+	<script>
+		$(function() {
+			var addurl = "${ctx}/api/b2b2c/storeCommentApi!add.do";
+			$("#publish").click(function(commadd) {
+				$("#addrForm").ajaxSubmit({
+					url : addurl,
+					type : "post",
+					dataType : "html",
+					success : function(result) {
+						$("#frm").val(result)
+						alert("操作成功")
+					},
+					error : function(e) {
+						alert("操作失败！");
+					}
+				});
+			})
+		})
+	</script>
+	
+	<!--会员登录-->
+	<script>
+		$(function() {
+			$("#logout").click(function() {
+				var apiurl = "/api/shop/member!logout.do";
+				$.ajax({
+					url : "${ctx}" + apiurl,
+					dataType : "json",
+					success : function(bb) {
+						if (bb.result == 1) {
+							alert("恭喜注销成功")
+						} else {
+							alert("已经注销过了错误")
+						}
+					},
+					error : function() {
+						alert("api地址错误，请检查");
+					}
+
+				});
+			});
+			
+			$("#login").click(function(){
+				$(".diadiv").dialog({
+					title :'登录',
+					width : 400,
+					top:100,
+					closed : false,
+					href:"${ctx}/docs/the_login.html",
+					buttons : [ {
+						text : '保存',
+						handler : function() {
+							submitForm();
+						}
+					}]
+				});
+			})
+		})
+		
+		function submitForm(){
+			
+			$("#loginForm").ajaxSubmit({
+				url:"${ctx}/api/shop/member!login.do?ajax=yes",
+				type:"post",
+				dataType:"json",
+				success:function(result){
+					 alert(result.message);
+				},
+				error:function(e){
+					alert("操作失败！");
+				}
+			});
+		}
+	</script>

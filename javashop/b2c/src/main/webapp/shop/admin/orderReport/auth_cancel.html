@@ -1,0 +1,130 @@
+<#include '/admin/header.html' >
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion= "com.enation.app.base.core.directive.PermssionDirective"?new()>
+
+<div class="main">
+	<div class="input">
+	<form method="post" id="theForm">
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table cellspacing="0" cellpadding="0" border="0" id="data" style="width: 99%">
+					<tr>
+						<th class="title" colspan="2">取消订单申请基本信息</th>
+					</tr>
+					<tr>
+						<td>订单号：</td>
+						<td >
+							${order.sn }
+						</td>
+					</tr>
+					<tr>
+						<td>订单总额：</td>
+						<td>
+							￥${order.need_pay_money}
+						</td>
+					</tr>
+					<tr>
+						<td>商品金额：</td>
+						<td>
+							￥${order.goods_amount}
+						</td>
+					</tr>
+					<tr>
+						<td>运费：</td>
+						<td>
+							￥${order.shipping_amount}
+						</td>
+					</tr>
+					<tr>
+						<td >申请人：</td>
+						<td>
+							<a href='javascript:void(0);' onclick=newTab('会员详细','${ctx}/shop/admin/member/detail.do?memberId=${order.member_id}')>查看</a>
+					
+						</td>
+					</tr>
+					
+		
+					<tr>
+						<td>取消原因：</td>
+						<td colspan="3">
+							${order.cancel_reason!''}
+						</td>
+					</tr>
+					<#if order.is_cancel==1>
+						<tr>
+							<td>审核</td>
+							<td>
+								<input type="button" class="button" name="status" value="通过" onclick="pass(1)"/>
+								<input type="button" class="button" name="status" value="不通过 " onclick="pass(0)"/>
+							</td>
+						</tr>
+					</#if>
+				</table>
+			</div>
+		</div>
+		</form>
+		<br/>
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+					<tr>
+						<th class="title" colspan="6">退货单商品</th>
+					</tr>
+					<tr>
+						<th>货号</th>
+						<th>订单商品</th>
+						<th>购买量</th>
+						<th>计价单位</th>
+						<th>单价 </th>
+						<th>合计</th>
+					</tr>
+					
+					<#list itemList  as item>
+			        	<tr>
+					      <td>${item.sn }  </td>
+				          <td><a target="_blank" href="${ctx}/goods-${item.goods_id }.html">
+				          
+				          ${item.name }
+				          <#if item.other??>
+				         (${item.other!''}) 
+				          </#if>
+				          
+				          </a>
+ 						  </td>
+				          <td>${item.num }</span></td>
+				          <td>${item.unit!''}</td>
+				          <td> ${item.price} </td>
+				          <td> ${item.price*item.num} </td>
+			        	</tr>
+					</#list>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function pass(status){
+	$.ajax({
+		url:"${ctx}/shop/admin/order/auth-cancel-application.do?order_id=${order.order_id }",
+		data:"status=" + status,
+		type:"POST",
+		dataType:"json",
+		success:function(result){
+			if(result.result==1){
+				$.Loading.success(result.message);
+				location.reload();
+				location.reload();
+			}
+			if(result.result==0){ 
+				$.Loading.error(result.message);
+			}
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	});
+}
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,53 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table id="orderReturndata" class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/sell-back/refund-list-json.do?status=0',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" width="width">
+			<thead>
+				<tr>
+					<th data-options="field:'id',width:35">退款ID</th>
+					<th data-options="field:'tradeno',width:100">退款单号</th>
+					<th data-options="field:'ordersn',width:100">退款订单号</th>
+					<th data-options="field:'regoperator',width:100">业务员</th>
+					<th data-options="field:'tradestatus',width:100" formatter="formatTradestatus">状态</th>
+					<th data-options="field:'regtime',width:100" formatter="formatTime">创建时间</th>
+					<th data-options="field:'apply_alltotal',width:100">申请退款金额</th>
+					<th data-options="field:'operation',width:100" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	function formatTime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	function formatOperation(value, row, index) {
+		if(row.tradestatus==0){
+			return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"'); >审核</a>";
+		}
+		return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"'); >查看</a>";
+	}
+	function formatTradestatus(value,row,index){
+		if(value==0){
+			return "申请退款";
+		}else if(value==1){
+			return "审核通过";
+		}else if(value==6){
+			return "已退款";
+		}else if(value==3){
+			return "待退款"
+		}else{
+			return "审核拒绝";
+		}
+		return "";
+	}
+    
+</script>
+<div id="log"></div>
+
+<#include '/admin/footer.html' >

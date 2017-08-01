@@ -1,0 +1,137 @@
+<#assign  title="成功提交订单" />
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/checkout.css" type="text/css" />
+
+
+<style>
+.h_btm .flow-steps ol .num3{
+  background: #ff6700;
+}
+	.h_btm .flow-steps ol .num3 span{
+	 color: #ff6700;
+}
+.h_btm .flow-steps ol .num3 em{
+	background: #ff6700 none repeat scroll 0 0;
+    color: #fff;
+}
+</style>
+<!--正文-->
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#--获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag("'orderid':${orderid}") />
+<#--创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#--获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+<#--创建发票详细标签-->
+<#assign receiptTag = newTag("receiptTag")>
+<#assign orderreceipt = receiptTag("{'orderid':${orderid}}")>
+
+<#--创建订单货物列表标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<#assign orderItemList = orderItemListTag("{'orderid':${orderid}}")>
+<div id="main">
+	<!--上部填写信息单、购买流程-->
+	<div class="h_btm">
+		<div class="logo"><@image src="${site.logofile!''}"
+			title="logo"/></div>
+		<div class="flow-steps">
+			<ol class="cur1">
+				<li class="num1"><span>我的购物车</span> <em>1</em></li>
+				<li class="num2"><span>核对订单信息</span> <em>2</em></li>
+				<li class="num3"><span>成功提交订单</span> <em>3</em></li>
+				<li class="clear"></li>
+			</ol>
+		</div>
+	</div>
+	<!--上不填写信息单、购买流程结束-->
+	<div class="encircle">
+		<@image src="${ctx}${themes_path}/images/jstj.jpg" alt="结算提交凭证正确对号图片"/>
+		<div class="checkout_order_right">
+			<h1>
+				恭喜，订单提交成功，就差去付款了！<span>应付金额：<i>${order.need_pay_money?string("currency")}</i></span>
+			</h1>
+			<div class="checkout_order_summary">
+				<div class="summary_word" style="display:none">
+						<p>
+							订单号：<span>${order.sn}</span>收货信息：<i>${order.ship_name}</i><i><#if
+								order.ship_mobile??>${order.ship_mobile!''}<#else>${order.ship_tel!''}</#if></i>
+						</p>
+						<#if order.status==orderStauts.ORDER_NOT_PAY && !order.isCod > 
+							<#if order.isOnlinePay > 
+								<a class="go_pay" href='${ctx}/order_pay_desk.html?orderid=${order.order_id}' target="_blank">去付款喽~</a>  
+							</#if> 
+						</#if>
+				</div>
+				<a href="javascript:void(0)" class="checkout_order_more"><em>收起</em><i class="order-succes-up"></i></a>
+			</div>
+			<div class="checkout_order_intro">
+				<div class="checkout_order_same">
+					<p>订单信息：</p>
+					<span>${order.sn}</span>
+				</div>
+				<div class="checkout_order_same">
+					<p style="float:left;width:60px;">收货信息：</p>
+					<p style="float:left;width:890px;margin:0 0 0 5px;height:auto;">
+						<i style="margin:0;">${order.ship_name}</i> <i><#if
+						order.ship_mobile??>${order.ship_mobile!''}<#else>${order.ship_tel!''}</#if></i>
+						<i>${order.shipping_area}-${order.ship_addr}</i>
+					</p>
+				</div>
+				<div class="checkout_order_same">
+					<p>商品信息：</p>
+					<ul>
+						<#list orderItemList as item>
+						<li><a target="_blank" href="${ctx}/goods-${item.goods_id}.html"><i>${item.name}</i></a></li>
+						</#list>
+					</ul>
+				</div>
+				<div class="checkout_order_same">
+					<p>配送方式：</p>
+					<i>${order.shipping_type!''}</i>
+				</div>
+				<div class="checkout_order_same">
+					<p>配送时间：</p>
+					<i>${order.ship_day}</i>
+				</div>
+				<#if orderreceipt.title??>
+				<div class="checkout_order_same">
+					<p>发票信息：</p>
+					<i>${orderreceipt.title!'无'}：</i> <i style="margin: 0;">${orderreceipt.content!'无'}</i>
+				</div>
+				</#if>
+				<div class="checkout_order_tools ">
+					<#if order.status==orderStauts.ORDER_CONFIRM && !order.isCod > 
+						<#if order.isOnlinePay > 
+							<a class="go_pay" href='${ctx}/order_pay_desk.html?orderid=${order.order_id}' target="_blank">去付款</a> 
+						</#if> 
+					</#if> 
+					<a href=" ${ctx}/index.html" class="go_continue">继续购物</a> 
+					<#if order.member_id?exists > 
+						<a href="member/order.html" class="go_state">我的订单>></a> 
+					<#else> 
+						<a href="orderdetail.html?ordersn=${order.sn}" class="go_state">查看订单状态>></a>
+					</#if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--正文结束-->
+<script>
+	$(function(){
+		$(".checkout_order_more").click(function(){
+			if( $(".summary_word").css("display")!='none' ){
+				$(this).find("em").text("收起");
+				$(this).find("i").addClass("order-succes-up");
+			} else{
+				$(this).find("em").text("展开");
+				$(this).find("i").removeClass("order-succes-up");
+			}
+			 $(".checkout_order_intro").toggle(500);
+			 $(".summary_word").toggle(500);
+		})
+	})
+</script>
+<#include 'common/footer.html' />

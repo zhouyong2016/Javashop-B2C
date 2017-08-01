@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="商品搜索过滤器组件"  version="2.0" javashop_version="3.0.0" author="javashop">
+
+	<plugins>
+		<plugin name="分类搜索过滤器" id="catSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="品牌搜索过滤器" id="brandSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="商品自定义属性过滤器" id="customPropertySearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>	
+			
+		<plugin name="关键字搜索过滤器" id="keywordSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="价格搜索过滤器" id="priceSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="商品排序过虑器" id="sortSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		
+			<!-- 
+		<plugin name="商品图片数据过虑器" id="goodsImageDataFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>	 -->	
+	</plugins>
+
+</component>

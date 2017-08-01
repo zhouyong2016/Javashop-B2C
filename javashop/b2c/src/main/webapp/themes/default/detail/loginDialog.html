@@ -1,0 +1,127 @@
+
+<div class="dialog_content" style="margin: 0px; padding: 0px;">
+	<div class="quick-login">
+		<form  method="post" class="validate" id="login_form">
+			<dl >
+				<dt>用户名：</dt>
+				<dd>
+					<input type="text" id="username" name="username" autocomplete="off" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>密&nbsp;&nbsp;&nbsp;码：</dt>
+				<dd>
+					<input type="password" id="password" autocomplete="off"
+						name="password" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>验证码：</dt>
+				<dd class="m_account">
+					<input type="text" tabindex="3" name="validcode" isrequired="true"
+						size="8" autocomplete="off" class="text w60" id="validcode" />
+					<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" style="width:60px;height:30px;" />
+					
+					<span class="m_forget">
+						<a href="javascript:;">换个图片</a>
+					</span>
+				</dd>
+			</dl>
+			<ul>
+				<li>›&nbsp;如果您没有登录帐号，请先<a class="register"
+					href="${ctx}/register.html">注册会员</a>然后登录
+				</li>
+				<li>›&nbsp;如果您忘记密码？通过<a class="forget"
+					href="${ctx}/findpasswordByEmail.html">邮箱找回</a>，
+					<a class="forget"
+					href="${ctx}/findpasswordByMobile.html">手机找回</a>
+				</li>
+			</ul>
+			<div class="enter">
+				<input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;陆" class="submit regis_ent">
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(function(){
+	
+	// 点击换个图片 更换验证码
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	
+	// 点击图片  更换验证码
+	$(".m_account img").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	
+	$(".regis_ent").click(function(){
+		  if($("#username").val()==""){
+				alert("请输入用户名！");
+				return false;
+			}
+			if($("#password").val()==""){
+				alert("请输入密码！");
+				return false;
+			}
+			if($("#validcode").val()==""){
+				alert("请输入验证码！");
+				return false;
+			}
+			var options = {
+					url : "/api/shop/member!login.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(data) {
+						if(data.result==1){
+							$(".dialog_content").dialog('close');
+							location.reload();
+						}
+						else{
+							alert(data.message);
+						}
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+			};
+		$('#login_form').ajaxSubmit(options);	
+	});
+});
+</script>
+<style>
+label.error { color: #F30;}
+
+.quick-login { background: #FFF; overflow: hidden; width:320px;}
+.quick-login dl { width: 100%; margin: 0 auto; overflow: hidden;}
+.quick-login dl dt { line-height: 20px; height:20px; margin: 8px 0 2px 0; text-shadow: 1px 1px 0 #FFF;}
+.quick-login dl dd span { line-height: 28px; color: #999; margin-left:8px;}
+.quick-login .text{ font-family: Tahoma; width: 250px; height: 24px; line-height: 24px; background-color:#FFF; padding: 1px 2px 3px 4px !important; padding: 3px 2px 1px 4px; border: solid 1px; border-color: #CCC #DDD #DDD #CCC; border-radius: 0; box-shadow: 2px 2px 1px 0 #E7E7E7 inset; -moz-box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if FF*/; -webkit--box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if Webkie*/;}
+.quick-login .text:focus{ background-color:#FFF; border-color: #CCC; box-shadow: 1px 1px 1px 0 #E7E7E7; -moz-box-shadow: 1px 1px 1px 0 #E7E7E7/* if FF*/; -webkit--box-shadow: 1px 1px 1px 0 #E7E7E7/* if Webkie*/;}
+
+.quick-login ul { width: 100%; display:block; clear:both; margin: 20px auto 10px auto; padding-bottom:10px; overflow: hidden; border-bottom: solid 1px #E7E7E7;}
+.quick-login ul li {line-height: 20px; color:#999;}
+.quick-login ul li a { text-decoration:underline; font-weight:600; margin:0 2px;}
+.quick-login ul li a.forget {  color: #FF7F00;}
+.quick-login ul li a.register { color: #006DD9;}
+.quick-login .enter { width: 100%; margin: 10px auto 20px auto; overflow: hidden;}
+.quick-login .enter .submit { padding: 0px;margin: 0px;height: 36px;line-height: 36px;width: 110px;border: medium none;text-align: center;text-decoration: none;vertical-align: middle;cursor: pointer;font-family: 微软雅黑,宋体;background-color: #d93600;color: #FFF;outline: medium none;display: inline-block;font-size: 14px;border-radius: 4px;-moz-user-select: none;}
+.quick-login .enter .submit:hover { text-decoration: none !important;background-color: #ff4400;color: #fff;  }
+.quick-login .enter span {  border-left: dotted 1px #ccc; padding-left:6px; margin: 0 0 0 6px; line-height:28px;}
+.quick-login .enter span a { background-image: url(../images/login.png); background-repeat: no-repeat; background-attachment: scroll; height: 28px; display: inline-block;}
+.quick-login .enter span a.qq { background-position: -88px 0px; width: 78px;}
+.quick-login .enter span a:hover.qq {background-position: -88px -28px; text-decoration:none;}
+.quick-login .enter span a.sina { background-position: -166px 0px; width: 88px;}
+.quick-login .enter span a:hover.sina {background-position: -166px -28px; text-decoration:none;}
+
+.quick-login dl dt{float:left;height:35px;line-height:35px;width:100px;}
+.quick-login dl dd{float:left;height:35px;width:220px;}
+.quick-login dl dd .text{float:left;background:#fff;width:200px;height:25px;line-height:25px;margin-top:5px;}
+.quick-login dl dd .w60{width:60px;}
+.quick-login dl .m_account input{float:left;}
+.quick-login dl .m_account img{float:left;margin:5px 5px 0px 5px;}
+.quick-login dl .m_account a{float:left;margin-top:5px;}
+.quick-login ul{width:300px;margin:0px 0px 0px 20px;}
+.quick-login ul li{text-align:left;line-height:25px;}
+</style>

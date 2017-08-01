@@ -1,0 +1,11 @@
+
+<!--创建"店铺结算列表"标签-->
+<#assign storeCartGoodsTag= newTag("storeCartGoodsTag") >  
+<!--调用"店铺结算列表"标签，并传递参数-->            
+<#assign  StoreCartGoods= storeCartGoodsTag("'namekeyword':'果','cat_id':'1'") >						
+<ul class="gw">
+<#list StoreCartGoods as cart>
+	购物项id：${cart.id}</br>
+	商品名称：${cart.name}</br>
+	销售价格：${cart.price}</br>
+</#list>

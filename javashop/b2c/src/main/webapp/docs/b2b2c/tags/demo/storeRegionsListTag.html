@@ -1,0 +1,12 @@
+
+<!--创建"店铺地区"标签-->
+<#assign StoreRegionsListTag= newTag("storeRegionsListTag") >  
+<!--调用"店铺地区"标签-->            
+<#assign  StoreRegionsList= StoreRegionsListTag() >						
+<ul class="gw">
+<#list StoreRegionsList as li>
+
+	区域名称：${li.local_name}</br>
+	所在地区id：${li.region_id}</br>
+	邮编：${li.zipcode}</br>
+</#list>

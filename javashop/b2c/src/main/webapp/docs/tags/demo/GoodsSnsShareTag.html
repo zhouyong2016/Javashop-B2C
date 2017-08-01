@@ -1,0 +1,28 @@
+
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag("'goodsid':30") >
+<#-- 创建商品分享标签 -->
+<#assign goodsSnsShareTag=newTag("goodsSnsShareTag")>
+<#-- 调用标签商品分享 -->
+<#assign sns= goodsSnsShareTag("'goodsid':30") >
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_tsohu"></a>
+	<a class="jiathis_button_t163"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {
+	url:"${sns.url}",
+	title:"${sns.title}",
+	pic:"${sns.img}"
+}
+</script>
+<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js" charset="utf-8"></script>

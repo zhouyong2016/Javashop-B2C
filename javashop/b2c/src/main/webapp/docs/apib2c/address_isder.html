@@ -1,0 +1,42 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>edit 修改收货地址API</h3>
+		<p>修改收货地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/member-address/edit.do</p>
+		<h3>输入参数：</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w150">是否必须</span><span class="w100">示例值</span><span class="w100">默认值</span><span class="w150">备注</span></h4>
+			<p><span class="w100 important">addr_id</span><span class="w100">int</span><span class="w150">必填</span><span class="w100"></span><span class="w100"></span><span class="w150">要修改的收货地址id</span></p>
+			<p><span class="w100 important">name</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">王宏俊</span><span class="w100"></span><span class="w150">收货人姓名</span></p>
+			<p><span class="w100 important">province</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">黑龙江省</span><span class="w100"></span><span class="w150">所在省</span></p>
+			<p><span class="w100 important">province_id</span><span class="w100">int</span><span class="w150">必填</span><span class="w100"></span><span class="w100"></span><span class="w150">所在省ID</span></p>
+			<p><span class="w100 important">city</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">鸡西市</span><span class="w100"></span><span class="w150">所在城市</span></p>
+			<p><span class="w100 important">city_id</span><span class="w100">int</span><span class="w150">必填</span><span class="w100"></span><span class="w100"></span><span class="w150">所在市ID</span></p>
+			<p><span class="w100 important">region</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">鸡冠区</span><span class="w100"></span><span class="w150">所在地区</span></p>
+			<p><span class="w100 important">region_id</span><span class="w100">int</span><span class="w150">必填</span><span class="w100"></span><span class="w100"></span><span class="w150">所在地区ID</span></p>
+			<p><span class="w100 important">addr</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">黑龙江省鸡西市鸡冠区西建委5组</span><span class="w100"></span><span class="w150">详细地址</span></p>
+			<p><span class="w100 important">zip</span><span class="w100">String</span><span class="w150">必填</span><span class="w100">158100</span><span class="w100"></span><span class="w150">邮编</span></p>
+			<p><span class="w100 important">tel</span><span class="w100">String</span><span class="w150">手机和电话必填一项</span><span class="w100">0467-2325125</span><span class="w100"></span><span class="w150">固定电话</span></p>
+			<p><span class="w100 important">mobile</span><span class="w100">String</span><span class="w150">手机和电话必填一项</span><span class="w100">18746789011</span><span class="w100"></span><span class="w150">手机</span></p>
+			<p><span class="w100 important">def_addr</span><span class="w100">String</span><span class="w150">选填</span><span class="w100">yes</span><span class="w100"></span><span class="w150">是否是默认地址,如果传递yes则为默认地址，不传递此值或其它值为非默认地址</span></p>
+			<p><span class="w100 important">remark</span><span class="w100">String</span><span class="w150">选填</span><span class="w100"></span><span class="w100"></span><span class="w150">备注</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w300">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w300 r-intro">为1表示添加成功，0表示失败</span></p>
+			<p><span class="w100 r_name">message</span><span class="w100 r_type">String</span><span class="w300 r-intro">为提示信息</span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w300 r-intro">返回数据</span></p>
+		</div>
+		<h3>调用结果：</h3>
+		<h5>
+			{"result":1,"message":"修改成功","data":null}
+		</h5>
+	</div>
+
+</div>

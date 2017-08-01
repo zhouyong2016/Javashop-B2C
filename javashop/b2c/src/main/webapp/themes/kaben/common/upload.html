@@ -1,0 +1,363 @@
+
+<!--引入CSS-->
+<!-- <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/upload_js/webuploader.css"> -->
+<script type="text/javascript" src="${ctx}${themes_path}/js/upload-js/webuploader.js"></script>
+<!-- <script type="text/javascript" src="${ctx}${themes_path}/upload_js/jquery-ui.js"></script> -->
+
+<div id="flashflashContent" class="imgbar_wrap" style="position: relative;">
+	<ul id="sortable" class="clearfix img_list">
+		<li draggable="false" class="first_icon" style="display: none;"><i></i></li>
+	</ul>
+	<div class="delete-imgs">
+		
+	</div>
+	<div class="upload_wrap">
+		<div class="upload">
+			<div class="localUpload_wrap">
+				<div class="localTitle">上传电脑中图片</div>
+				<div class="localUpload">
+					<div id="imgUpload">
+						<div id="filePicker"></div>
+					</div>
+					<div style="display: none;" id="maxlength_cover">24</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+
+var nowImgs = [];	// 记录当前所有的图片
+var imgId = 1;		// 图片id
+var nowImgNum = 0;
+function createHtml(imageName, actualImg, showImg) {
+	
+	var img = {id:imgId, actualImg:actualImg, showImg:showImg};
+	nowImgs.push(img);
+	
+	var htmlInput = "<input type=\"hidden\" name=\"" + imageName + "\" value=\"" + actualImg + "\" />";
+	var html = "<li style=\"display: list-item;\" draggable=\"true\" data-index=\"0\" class=\"img_box\">"
+				+	"<img src=\"" + showImg + "\">"
+				+	"<div class=\"img_cover\"></div>"
+				+	"<div class=\"toolbar_wrap\" style=\"display: none;\">" 
+				+		"<div class=\"opacity\"></div>"
+				+		"<div class=\"toolbar\">"
+				+			  "<a href=\"javascript:;\" style=\"display:none;\" class=\"edit\"></a> <a href=\"javascript:;\""
+				+				"class=\"delete delete-image\" imgid=\"" + imgId + "\" fsimg=\"" + actualImg + "\"></a>"
+				+		"</div>"
+				+		htmlInput
+				+	"</div>"
+				+"</li>";
+	$("ul.img_list").append(html);
+	$(".first_icon").show();
+	
+	imgId++;
+}
+
+$(function(){
+	var imageName = upload_iamge["imageName"];			// 提交表单时  图片的name
+	var subFolder = upload_iamge["subFolder"];  		// 上传时 图片的目录
+	var showImgs = upload_iamge["showImgs"];    		// 需要显示的图片数组（提交表单时不会提交）
+	var actualImgs = upload_iamge["actualImgs"];		// 实际图片数组（提交表单时会提交） 
+	var fileNumLimit = upload_iamge["fileNumLimit"];	// 限制上传数量
+	var fileSizeLimit = upload_iamge["fileSizeLimit"];	// 限制上传大小  单位字节
+	nowImgNum = actualImgs.length;
+	// 没有限制的话 默认限制20张
+	if (!fileNumLimit) {
+		fileNumLimit = 20;
+	}
+	
+	// 没有限制大小的话 默认2M
+	if (!fileSizeLimit) {
+		fileSizeLimit = 1024 * 1024 * 2;
+	}
+	
+	// 循环遍历出已有的图片
+	for(var i in showImgs) {
+		var showImg = showImgs[i];
+		var actualImg = actualImgs[i];
+		createHtml(imageName, actualImg, showImg);
+	}
+	
+	// 初始化Web Uploader
+	var uploader = WebUploader.create({
+	
+	    // 选完文件后，是否自动上传。
+	    auto: true,
+	
+	    // swf文件路径
+	    swf: '${ctx}${themes_path}/js/upload-js/Uploader.swf',
+	
+	    // 文件接收服务端。
+	    server: '${ctx}/api/base/upload-image/upload-image.do?subFolder=' + subFolder,
+	
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+	    
+	    fileSizeLimit : fileSizeLimit,
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+	
+	
+	uploader.on("uploadAccept", function(obj, data){
+		//
+		if (data.result == 1) {
+			data = data.data;
+			createHtml(imageName, data.img, data.img);
+		} else {
+			
+		}
+	});
+	
+	
+	
+	// 文件添加队列之前
+	uploader.on("beforeFileQueued", function(file){
+		
+		// 如果数量等于限制数量
+		if(nowImgNum >= fileNumLimit) {
+			alert("超出限制上传数量");
+			return false;
+		}
+		nowImgNum++;
+	});
+	
+	uploader.on("error", function(type){
+		//
+		if (type == "Q_EXCEED_NUM_LIMIT") {
+			alert("超出最大张数");
+		} else if(type == "F_DUPLICATE") {
+			alert("文件重复");
+		} else if (type == "Q_EXCEED_SIZE_LIMIT") {
+			alert("超出限制大小");
+		}
+	});
+	
+	
+	$("#sortable" ).sortable({
+		revert: true
+	});
+
+
+	// $(document).on 这种方式绑定事件 可以对后添加的html元素生效
+	
+	
+	$(document).on("click",".delete-image",function(){
+		nowImgNum++; //图片数量减1
+		var $this = $(this);
+		var $liItem = $this.parent().parent().parent();
+		var fsImg = $this.attr("fsimg");
+		var imgId = $this.attr("imgid");
+		var delIndex;
+		for(var index in nowImgs) {
+			var img = nowImgs[index];
+			if (img.id == imgId) {
+				delIndex = index;
+			}
+		}
+		// 如果有，则删除
+		if (delIndex) {
+			var endIndex = delIndex;
+			
+			if (endIndex == 0) {
+				endIndex = endIndex + 1;
+			}
+			
+			nowImgs.splice(delIndex, endIndex);
+		}
+		
+		$(".delete-imgs").append("<input type=\"hidden\" name=\"del_pic\" value=\"" + fsImg + "\" />");
+		$liItem.remove();
+		
+		//通过html来判断是否有这个元素 有就是还有图片 不隐藏封面logo
+		if(!$(".toolbar").html()) {
+			$(".first_icon").hide();
+		}
+	})
+	
+	// 上传的文件鼠标移入事件
+	$(document).on("mouseenter",".img_box",function() {
+		var $this = $(this);
+		$this.addClass("img_box_hover");
+		$this.find(".toolbar_wrap").show();
+	});
+
+	// 上传的文件鼠标移出事件
+	$(document).on("mouseleave",".img_box",function() {
+		var $this = $(this);
+		$this.removeClass("img_box_hover");
+		$this.find(".toolbar_wrap").hide();
+	});
+
+	// 上传文件按钮鼠标移入
+	$(document).on("mouseenter",".localUpload",function() {
+		$(this).addClass("local_hover");
+	});
+	// 上传文件按钮鼠标移出
+	$(document).on("mouseleave",".localUpload",function() {
+		$(this).removeClass("local_hover");
+	});
+
+})
+
+</script>
+<style>
+.imgbar_wrap .img_list {
+	margin-left: 0;
+}
+
+.imgbar_wrap .img_list .first_icon {
+	background: url(http://img.58cdn.com.cn/ui7/post/pc/imgs/icons_edit.png);
+	background-position: -465px 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 27px;
+	height: 27px;
+	z-index: 9;
+	display: list-item;
+}
+
+.imgbar_wrap .img_list .img_box {
+	float: left;
+	width: 130px;
+	text-align: center;
+	margin-right: 6px;
+	margin-bottom: 6px;
+	position: relative;
+}
+
+.imgbar_wrap .img_list .img_box img {
+	width: 130px;
+	cursor: move;
+}
+
+.imgbar_wrap .img_list .img_box .img_cover {
+	width: 130px;
+	cursor: move;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.upload_wrap .upload {
+	width: 600px;
+	height: 174px;
+	margin: 0;
+	position: relative;
+	overflow: hidden;
+}
+
+.upload_wrap .localUpload_wrap {
+	width: 194px;
+	height: 172px;
+	border: 1px solid #ececec;
+	float: left;
+}
+
+.upload_wrap .localTitle {
+	height: 32px;
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #ececec;
+	padding: 0 12px;
+	line-height: 32px;
+	font-size: 14px;
+	color: #9a9a9a;
+}
+
+.upload_wrap .localUpload {
+	background-image:
+		url(http://img.58cdn.com.cn/ui7/post/pc/imgs/icons_edit.png);
+	background-position: -106px 0;
+	width: 99px;
+	height: 90px;
+	margin: 30px auto 0;
+}
+
+.upload_wrap .localUpload #imgUpload, .upload_wrap .localUpload #imgUpload input{
+	width: 96px;
+	height: 90px;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.upload_wrap .localUpload #imgUpload, .upload_wrap .localUpload #imgUpload input{
+	cursor: pointer;
+}
+
+.upload_wrap .localUpload #imgUpload, .upload_wrap .localUpload #imgUpload input{
+	width: 96px;
+	height: 90px;
+	opacity: 0;
+	cursor: pointer;
+}
+.clearfix {
+    display: block;
+    list-style: none;
+}
+.imgbar_wrap .img_list .img_box .toolbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 20px;
+    z-index: 109;
+}
+.imgbar_wrap .img_list .img_box .opacity {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 20px;
+    background-color: #000;
+    opacity: .3;
+    z-index: 108;
+    _filter: alpha(opacity=30);
+}
+.imgbar_wrap .img_list .img_box .toolbar a {
+    background-image: url(http://img.58cdn.com.cn/ui7/post/pc/imgs/icons_edit.png);
+    position: absolute;
+    outline: 0;
+    text-decoration: none;
+}
+.imgbar_wrap .img_list .img_box .toolbar .edit {
+    background-image: url(http://img.58cdn.com.cn/ui7/post/pc/imgs/icons_edit.png);
+    background-position: -229px -189px;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    right: 22px;
+}
+.imgbar_wrap .img_list .img_box .toolbar .delete {
+    background-image: url(http://img.58cdn.com.cn/ui7/post/pc/imgs/icons_edit.png);
+    background-position: -180px -92px;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    right: 0;
+}
+
+
+/*自定义*/
+.toolbar_wrap {
+	display: none;
+}
+
+.upload_wrap .local_hover {
+    background-position: -233px 0;
+}
+
+.webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+}
+
+</style>

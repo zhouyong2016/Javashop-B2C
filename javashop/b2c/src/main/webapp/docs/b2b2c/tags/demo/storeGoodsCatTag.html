@@ -1,0 +1,8 @@
+<!--创建"店铺分类列表"标签-->
+<#assign StoreGoodsCatTag= newTag("storeGoodsCatTag") >  
+<!--调用"店铺分类列表"标签，并传递参数-->            
+<#assign  StoreGoodsCat= StoreGoodsCatTag("'catid':'1'") >						
+<ul class="gw">
+<#list StoreGoodsCat.parentList as goods>
+	商品名称：${goods.name}</br>
+</#list>

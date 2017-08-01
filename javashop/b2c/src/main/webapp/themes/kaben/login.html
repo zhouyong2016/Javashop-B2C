@@ -1,0 +1,290 @@
+<#assign  title="会员登录" />
+<#assign  index_type=2 />
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/login.css" type="text/css" />
+<style>
+.error{
+	color: red;
+	line-height: 40px;
+	margin-left: 2px;
+}
+.note{
+	color: red;
+	line-height: 40px;
+}
+
+</style>
+
+<!--最上导航-->
+
+
+<!--导航结束-->
+<!--header开始-->
+
+<!--Main开始-->
+<div class="main">
+	<div class="login_new">
+		<div class="left">
+			<@image src="${ctx}${themes_path}/images/denglu.jpg" alt="登录"/>
+		</div>	
+		<div class="right">
+			<div class="login_window">
+				<div class="login-type">
+					<a class="type-toggle" href="javascript:;" data-active="normal">手机动态码登录<i class="login-icon mobile-icon"></i></a>
+					网站会员登录
+				</div>
+				<div class="login_content">
+					<!-- 用户名登录 -->
+					<form method="post" class="validate" id="normal_login_form">
+                        <div class="m_account" >
+                            <label for="username" style="height:24px;line-height:24px;">用户名：</label>
+                            <input type="text" maxlength="18" tabindex="1"  name="username"  class="definition_small" id="username" placeholder="请输入会员名称"/>
+                        </div>
+
+                        <div class="m_account" >
+                            <label for="password" style="height:24px;line-height:24px;">密码：</label>
+                            <input type="password"  maxlength="18" vtype="password" tabindex="2"  name="password" id="password"  class="definition_small" placeholder="请输入密码"/>
+                        </div>
+
+                        <div class="m_account login_account" >
+                            <div class="m_input">
+                                <label for="validcode" style="height:24px;line-height:24px;">验证码：</label>
+                                <input type="text" tabindex="3" name="validcode"  size="8"  class="m_small" id="validcode" placeholder="请输入验证码" style="width:150px;"/>
+                            </div>
+                            <img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" id="LoginimgVerifyCode" style="cursor: pointer" >
+                            <!--
+                            <div class="m_forget"><a href="javascript:;">看不清楚？换个图片</a></div>
+                             -->
+                        </div>
+					</form>
+				
+					<!-- 手机号码登录 -->
+					<form method="post" class="validate" id="mobile_login_form" style="display: none">
+						<input type="hidden" name="action" value="login" />
+                        <div class="m_account" style="margin:0 auto">
+                            <label for="mobile" style="height:24px;line-height:24px;">手机：</label>
+                            <input type="text" tabindex="1" name="mobile" class="definition_small same_input" maxlength="11" placeholder="手机号" id="mobile"/>
+                        </div>
+
+                        <div class="m_account" style="margin:0 auto; border: none; height: inherit">
+                            <button type="button" class="btn-dynamic-code" style="margin: 0">免费获取手机动态码</button>
+                        </div>
+
+                        <div class="m_account">
+                            <label for="dynamic-code" style="height:24px;line-height:24px;">动态码：</label>
+                            <input type="text" id="dynamic-code" class="definition_small same_input" maxlength="6"  name="validcode" placeholder="短信验证码" tabindex="2" />
+                        </div>
+					</form>
+				</div>
+				<!--  
+				<div class="m_week">
+					<input type="checkbox" name="remember" class="satisfied" value="1" />
+					<span>两周内免登录</span>
+				</div>	
+				-->
+				<div class="m_submit">
+					<input type="button" tabindex="4" value="登  录" class="blue_btn" style="cursor: pointer;">
+				</div>
+				<div class="go_register">
+					<a href="findpasswordByEmail.html" class="go_f">忘记密码？</a>
+					<p>
+						<a href="register.html">马上注册</a>
+						还没有账户吗？    
+					</p>             
+				</div>
+				<!-- 绑定外部网站 登录 -->
+				<div class="oauth-wrapper">
+		            <h3 class="title-wrapper"><span class="title">用合作网站账号登录</span></h3>
+		            <div class="oauth cf">
+		                <a class="oauth-link oauth-qq" href="${ctx}/connect.do?type=1" target="_blank"></a>
+		                <a class="oauth-link oauth-weibo" href="${ctx}/connect.do?type=2" target="_blank"></a>
+		                <a class="oauth-link oauth-weixin" href="${ctx}/connect.do?type=3" target="_blank"></a>
+		            </div>
+		        </div>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="forward" value="${forward!''}"/>
+<!--Main end-->
+<script>
+$(function(){
+
+	//  添加IE7样式兼容  _by: Andste 2016-9-30 12:11:07
+	if(Sys.ie == 7){
+		$('.m_account').css({height: 24})
+	}
+	
+	//  兼容IE8样式问题
+	if(Sys.ie == 8){
+		$('.mobile-item').css({
+			height: 24,
+			lineHeight: 24
+		})
+	}
+	
+	var url = window.location.href;
+	forward = url.split("forward=")[1];
+	
+	$("#go_register").attr("href","${ctx}/member/register/fill_mobile.html?forward="+forward);
+	$("#forward").val(forward);
+
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	$(".code_img").click(function(){
+		$(this).attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	
+	//登录方式切换
+	var $normalLoginForm = $('#normal_login_form'),
+	 	$mobileLoginForm = $('#mobile_login_form');
+	$('.type-toggle').click(function (){
+		var	ACTIVE_KEY = 'active',
+			$this = $(this);
+		// 如果当前是手机 就切换为普通
+		if ($this.data(ACTIVE_KEY) === 'mobile') {
+			$this.html('手机动态码登录<i class="login-icon mobile-icon"></i>').data(ACTIVE_KEY, 'normal');
+            $normalLoginForm.show().find('input').prop('disabled', false);
+            $mobileLoginForm.hide().find('input').prop('disabled', true);
+		} else {
+			$this.html('普通方式登录<i class="login-icon normal-icon"></i>').data(ACTIVE_KEY, 'mobile');
+            $normalLoginForm.hide().find('input').prop('disabled', true);
+            $mobileLoginForm.show().find('input').prop('disabled', false);
+		}
+		
+	});
+	
+	$("#LoginimgVerifyCode").click(function(){
+		$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	
+	$(".blue_btn").click(function(){
+		login();
+	});
+	$("input[name='validcode']").keydown(function(event) {
+		if (event.keyCode == 13) {
+			login();
+		}
+	});
+	//输入框获得、失去焦点效果
+	$(".m_account input").blur(function(){
+		$(this).parents(".m_account").removeClass("selected");
+	})
+	$(".m_account input").focus(function(){
+		$(this).parents(".m_account").addClass("selected");
+	})
+	
+	//获取手机动态码
+	$mobileLoginForm.find('.btn-dynamic-code').click(function (){
+		var mobileNumber =  $("#mobile").val();
+		var $this = $(this);
+		
+		if (mobileNumber.length === 0) {
+			$.message.error('请输入手机号码');
+			return;
+		}else if(!/^1[3|4|5|7|8]\d{9}$/.test($('#mobile').val())) {
+			$.message.error('手机号格式有误');
+			return false;
+		}
+		var options = {
+			url : ctx + "/api/shop/sms/send-sms-code.do?mobile=" + mobileNumber + "&key=check",
+			dataType:"json",
+			success:function(result) {
+				if(result.result === 1) {
+					$.countDown({ elem: $this });
+					$.message.success(result.message);
+				} else {
+					$.message.error(result.message);
+				}
+			},
+			error : function(){
+				$.message.error("系统出错，请稍候重试");
+			}
+		}
+		$.ajax(options);
+	});
+
+	function login(){
+		
+		var options = {
+			url : "${ctx}/api/shop/member/login.do",
+			dataType : 'json',
+			success : function(data) {
+				if(data.result==1){
+					// 如果校验返回结果是注册
+					if (data.data && data.data.check_type !=undefined && data.data.check_type=="register") {
+						
+						//  跳转到注册页面
+						location.href = '${ctx}/register.html';
+					} else {
+						var forward=$("#forward").val();
+						if(forward==""){
+							location.href ="${ctx}/index.html";
+						}
+						else if(forward=="checkout.html"){
+							location.href ="${ctx}/cart.html";
+						}
+						else{
+							location.href=forward;
+						}
+					}
+				}else{
+					$.message.error(data.message);
+					$.Loading.hide();
+					$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());	//未通过校验，刷新验证码
+					
+				}
+			},
+			error : function(e) {
+				$.message.error("出现错误 ，请重试");
+				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());		//出现错误，刷新验证码
+			}
+		};
+	
+		var loginType = $('.type-toggle').data("active");
+
+
+		if (loginType == "mobile") {
+			options.url = "${ctx}/api/shop/member/sms-login.do";
+			var mobile = $('#mobile').val(), code = $('#dynamic-code').val();
+			if(!mobile && !code){
+				$.message.error('请输入手机号和短信验证码');
+				return false;
+			}else if(!/^1[3|4|5|7|8]\d{9}$/.test(mobile)){
+				$.message.error('手机号格式有误');
+				return false;
+			}else if(mobile && !code){
+				$.message.error('请输入短信验证码');
+				return false;
+			}else if(!mobile && code){
+				$.message.error('请输入手机号');
+				return false;
+			}else {
+				//hideError();
+			};
+			$.Loading.show("正在登录，请稍候...");
+			$('#mobile_login_form').ajaxSubmit(options);
+		} else {
+			if($("#username").val()==""){
+				$.message.error("请输入账号！");
+				return false;
+			}
+			if($("#password").val()==""){
+				$.message.error("请输入密码！");
+				return false;
+			}
+			if($("#validcode").val()==""){
+				$.message.error("请输入验证码！");
+				return false;
+			}
+			$.Loading.show("正在登录，请稍候...");
+			$('#normal_login_form').ajaxSubmit(options);	
+		}
+		
+		
+	}
+  
+});
+</script>
+<#include 'common/footer.html'/>

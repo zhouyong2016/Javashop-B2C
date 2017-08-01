@@ -1,0 +1,105 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<form id="regainform">
+		<div style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="regain()">恢复</a> 
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/member/list-recycle-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="regaindata">
+				<thead>
+					<tr>
+					<th data-options="field:'member_id',checkbox:true"></th>
+					<th data-options="field:'uname',width:200">用户名</th>
+					<th data-options="field:'mobile',width:200">手机</th>
+					<th data-options="field:'lv_name',sortable:'true',width:200">会员等级</th>
+					<th data-options="field:'email',width:200">电子邮件</th>
+					<th data-options="field:'regtime',width:200,sortable:'true'"
+						formatter="formatRegtime">注册时间</th>
+					<th data-options="field:'lastlogin',width:200,sortable:'true'"
+						formatter="formatLastlogin">上次登录日期</th>
+						<th data-options="field:'logincount',width:200,sortable:'true'">本月登录次数</th>
+					<th data-options="field:'area',width:200" formatter="formatArea">城市</th>
+					<th data-options="field:'sex',width:200,sortable:'true'" formatter="formatSex">性别</th>
+				</tr>
+				</thead>
+			</table>
+		</div>
+		<div id="divdia" style="display: none;"></div>
+	</form>
+</div>
+<script type="text/javascript">
+	//性别转换
+	function formatSex(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "女";
+		} else {
+			val = "男";
+		}
+		return val;
+	}
+	//注册时间转换
+	function formatRegtime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	//上次登录日期
+	function formatLastlogin(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	//城市转换
+	function formatArea(value, row, index) {
+		var val = "";
+		if (row.province != null && row.province != "请选择") {
+			val = val + row.province;
+		}
+		if (row.city != null && row.city != "请选择") {
+			val = val + "-" + row.city;
+		}
+		if (row.region != null && row.region != "请选择") {
+			val = val + "-" + row.region;
+		}
+		if (val == "") {
+			val = "未选择城市";
+		}
+		return val;
+	}
+	
+	//恢复会员信息
+	function regain(){
+		var rows = $('#regaindata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择要恢复的会员信息");
+			return;
+		}
+		if (!confirm("确认要恢复会员吗？")) {
+			return;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/member/recycle-regain-member.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						$("#regaindata").datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#regainform').ajaxSubmit(options);
+	}
+	
+
+
+</script>
+<#include '/admin/footer.html' >

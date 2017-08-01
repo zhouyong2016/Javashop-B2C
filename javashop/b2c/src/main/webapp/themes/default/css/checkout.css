@@ -1,0 +1,344 @@
+/**************************************************************
+结算-结算方式pay_way.html--上部填写信息单、购买流程
+****************************************************************/
+#main .checkout_step2{width:980px;height:81px;overflow:hidden;border-top:1px solid #e7e8e4;margin:0px auto;}
+#main .checkout_step2 img{width:980px;}
+/**********************************************************************
+结算-结算方式pay_way.html--上部填写信息单、购买流程-主要内容
+************************************************************************/
+#checkout_wrapper{width:980px;overflow:hidden;margin:0px auto;}
+#checkout_wrapper .pay_warm{width:980px;height:20px;line-height:20px;color:#000;}
+#checkout_wrapper .pay_frame{width:976px;border:2px solid #d5d5d5;}
+#checkout_wrapper .pay_frame .address{width:976px;border-bottom:1px dashed #bebebe;}
+#checkout_wrapper .pay_frame .address h2{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .address h2 span{color:#9d9d9d;font-weight:normal;}
+#checkout_wrapper .pay_frame .address p{height:34px;color:#333;padding-left:60px;}
+#checkout_wrapper .pay_frame .pay_sameb{overflow:hidden;width:976px;border-bottom:1px dashed #bebebe;background-color:#ececee;}
+#checkout_wrapper .pay_frame .pay_sameb h2{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .pay_sameb h2 span{color:#9d9d9d;font-weight:normal;}
+#checkout_wrapper .pay_frame .pay_sameb ul{width:916px;margin-left:60px;}
+#checkout_wrapper .pay_frame .pay_sameb ul li{width:916px;overflow:hidden;}
+#checkout_wrapper .pay_frame .pay_sameb ul li input{float:left;display:inline;height:34px;line-height:34px;padding:0px;margin:0px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .modify ul li .describe{width:641px;float:left;display:inline;margin-left:10px;}
+#checkout_wrapper .pay_frame .modify ul li .describe p{color:#918888;margin:0px;clear:both;}
+#checkout_wrapper .pay_frame .modify ul li .describe p b{color:#404040;margin-right:6px;}
+#checkout_wrapper .pay_frame .modify ul li .describe p span{color:#ed7108;}
+#checkout_wrapper .pay_frame .modify .pay_botton{width:112px;height:30px;margin:0px 0px 23px 61px;}
+#checkout_wrapper .pay_frame .modify .pay_botton a{display:block;width:112px;height:30px;line-height:30px;text-align:center;background:url(../images/qrfkfs.jpg) no-repeat left top;color:#000;}
+#checkout_wrapper .pay_frame .modify ul li .describe h3{clear:both;padding:0px 10px;line-height:28px;background-color:#f5d8dc;font-weight:normal;}
+#checkout_wrapper .pay_frame .modify ul li .describe table{overflow:hidden;}
+#checkout_wrapper .pay_frame .modify ul li .describe table tr{overflow:hidden;width:650px;height:35px;}
+#checkout_wrapper .pay_frame .modify ul li .describe table th{text-align:left;padding-left:9px;width:641px;height:35px;line-height:35px;background-color:#f5d3d8;}
+#checkout_wrapper .pay_frame .modify ul li .describe table tr td{white-space: nowrap;padding:0px 10px;text-align:center;background-color:#ece1e7;}
+#checkout_wrapper .pay_frame .modify ul li .describe table tr .pay_td{width:66px;}
+#checkout_wrapper .pay_frame .modify ul li .describe table tr .pay_td b{width:66px;}
+#checkout_wrapper .pay_frame .modify ul li .describe h5{height:10px;}
+/*******************************************************************************
+结算-商品清单-pay_inventory.html
+*********************************************************************************/
+#checkout_wrapper .pay_frame .pay_list{overflow:hidden;width:976px;}
+#checkout_wrapper .pay_frame .pay_list h2{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .pay_list h2 span{color:#9d9d9d;font-weight:normal;margin-left:7px;}
+/********************************************************************
+结算-商品清单-pay_inventory.html-清单标题
+******************************************************************/
+#checkout_wrapper .pay_frame .goods_wrapper .title{margin-left:62px;background-color:#ececee;overflow:hidden;width:851px;height:30px;border-top:1px dashed #bebec0;border-bottom:1px dashed #bebec0;}
+#checkout_wrapper .pay_frame .goods_wrapper .title ul{width:900px;height:30px;}
+#checkout_wrapper .pay_frame .goods_wrapper .title ul li{font-size:14px;color:#2f2f30;font-weight:bold;width:104px;height:30px;line-height:30px;float:left;display:inline;text-align:center;}
+#checkout_wrapper .pay_frame .goods_wrapper .title ul .first{width:331px;}
+/********************************************************************
+结算-商品清单-pay_inventory.html-商品清单列表
+******************************************************************/
+#checkout_wrapper .pay_frame .goods_wrapper .list{margin-left:62px;overflow:hidden;width:851px;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul{width:851px;overflow:hidden;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul li{width:851px;height:30px;line-height:30px;border-bottom:1px dashed #bcbcbc;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul li ul{width:851px;height:30px;line-height:30px;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul li ul li{width:104px;float:left;display:inline;text-align:center;height:30px;line-height:30px;color:#000;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul li ul .first{width:321px;padding-left:10px;text-align:left;}
+#checkout_wrapper .pay_frame .goods_wrapper .list ul li ul li span{color:#53a0be;}
+/********************************************************************
+结算-商品清单-pay_inventory.html-商品详细内容
+******************************************************************/
+#checkout_wrapper .pay_frame .order_total{margin-left:62px;width:914px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper{width:446px;float:left;display:inline;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul{width:446px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li{width:446px;height:30px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .remarks{width:300px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li h2{height:32px;line-height:32px;color:#53a0be;font-weight:normal;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li h2 a{float:left;margin:9px 4px 0px 10px;display:block;width:14px;height:14px;background:url(../images/jshx.jpg) no-repeat left top;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content{background-color:#fefbf4;padding-left:29px;width:417px;border-top:1px solid #eae7e0;border-bottom:1px solid #eae7e0;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia{width:417px;clear:both;height:30px}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_choose{height:30px;line-height:30px;float:left;display:inline;overflow:hidden;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia label{float:left;display:inline;height:30px;line-height:30px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_choose .pc_name{float:left;display:inline;height:30px;line-height:30px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_choose span{margin:0px 5px;float:left;display:inline;height:30px;line-height:30px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide{margin-top:5px;z-index:80;float:left;display:inline;position:relative;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide span{background:url(../images/xlcd.jpg) no-repeat left top;width:64px;height:20px;line-height:20px;padding-left:5px;display:block;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide span a{color:#000;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide ul{display:none;background-color:#fff;width:67px;overflow:hidden;border:1px solid #e8e8e8;border-top:0px none;position:absolute;top:19px;z-index:5;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide ul li{height:20px;line-height:20px;width:67px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide ul li a{display:block;width:62px;padding-left:5px;background-color:#fff;color:#000;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia .pay_hide ul li a:hover{display:block;width:62px;background-color:#9000ff;color:#fff;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia p{color:#9d9d9d;line-height:30px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_content .pay_minutia h6{height:30px;line-height:30px;color:#000;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift{overflow:hidden;background-color:#fefbf4;padding-left:29px;width:417px;border-top:1px solid #eae7e0;border-bottom:1px solid #eae7e0;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift p{float:left;display:inline;height:53px;line-height:53px;color:#000;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift p span{color:#9d9d9d;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift input{margin-top:16px;float:left;display:inline;width:128px;height:19px;border:1px solid #e4e2e3;margin-right:15px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift a{display:block;width:110px;height:33px;line-height:33px;float:left;color:#fff;text-align:center;font-weight:bold;font-size:14px;margin-top:11px;background:url(../images/jshop_button.jpg) no-repeat left -138px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_gift a:hover{display:block;width:110px;height:33px;line-height:33px;color:#fff;text-align:center;font-weight:bold;font-size:14px;margin-top:11px;background:url(../images/jshop_button.jpg) no-repeat -138px -138px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_remarks{margin-bottom:10px;overflow:hidden;background-color:#fefbf4;padding-left:29px;width:417px;border-top:1px solid #eae7e0;border-bottom:1px solid #eae7e0;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_remarks input{width:390px;height:19px;border:1px solid #e4e2e3;margin-top:10px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper ul li .pay_remarks p{line-height:20px;color:#9d9d9d;}
+/********************************************************************
+结算-商品清单-pay_inventory.html-提交订单
+******************************************************************/
+#checkout_wrapper .pay_frame .order_total .button_wrapper{padding-left:451px;overflow:hidden;width:400px;margin-bottom:15px;clear:both;overflow:hidden;}
+#checkout_wrapper .pay_frame .order_total .button_wrapper p{color:#383838;height:22px;line-height:22px;}
+#checkout_wrapper .pay_frame .order_total .button_wrapper p span{color:#8ac8e1;}
+#checkout_wrapper .pay_frame .order_total .button_wrapper a{display:block;width:110px;height:33px;line-height:33px;color:#fff;text-align:center;font-weight:bold;font-size:14px;margin-left:263px;background:url(../images/jshop_button.jpg) no-repeat left -88px;}
+#checkout_wrapper .pay_frame .order_total .button_wrapper a:hover{display:block;width:110px;height:33px;line-height:33px;color:#fff;text-align:center;font-weight:bold;font-size:14px;margin-left:263px;background:url(../images/jshop_button.jpg) no-repeat -138px -88px;}
+/********************************************************************
+结算-商品清单-pay_inventory.html-总计
+******************************************************************/ 
+#checkout_wrapper .pay_frame .order_total .total_wrapper{overflow:hidden;float:right;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul{margin:15px 10px 0px 0px;float:right;display:inline;padding-bottom:20px;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li{height:20px;line-height:20px;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li h2{color:#000;height:20px;line-height:20px;font-weight:normal;width:200px;float:left;display:inline;text-align:right;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li p{float:left;display:inline;height:20px;line-height:20px;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li span{float:left;display:inline;color:#64c000;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li h3{width:200px;font-size:18px;color:#342b22;font-weight:normal;float:left;display:inline;text-align:right;}
+#checkout_wrapper .pay_frame .order_total .total_wrapper ul li h4{font-size:18px;color:#ed7108;font-weight:normal;float:left;display:inline;text-align:right;}
+/********************************************************************
+结算-使用新地址-pay_new.html
+******************************************************************/
+
+/******************************************************************
+结算-使用新地址-pay_new.html-所选商品清单
+*********************************************************************/
+#checkout_wrapper .pay_frame .mem_tittle{width:911px;height:100px;overflow:hidden;}
+#checkout_wrapper .pay_frame .mem_tittle h2{padding-left:30px;width:946px;height:38px;line-height:38px;color:#333;padding-left:20px;}
+#checkout_wrapper .pay_frame .mem_tittle div{width:851px;height:30px;line-height:30px;overflow:hidden;margin-left:60px;}
+#checkout_wrapper .pay_frame .mem_tittle div h3{float:left;display:inline;font-weight:normal;height:30px;line-height:30px;color:#333;}
+#checkout_wrapper .pay_frame .mem_tittle div span{margin-left:10px;float:left;display:inline;}
+#checkout_wrapper .pay_frame .mem_tittle div span a{float:none;color:#9d9d9d;font-weight:normal;}
+#checkout_wrapper .pay_frame .mem_tittle div a{float:right;text-align:right;color:#9d9d9d;font-weight:normal;height:30px;line-height:30px;}
+#checkout_wrapper .pay_frame .mem_tittle ul{border-top:1px dashed #bebebe;border-bottom:1px dashed #bebebe;margin-left:60px;width:1000px;overflow:hidden;height:30px;background-color:#efefef;}
+#checkout_wrapper .pay_frame .mem_tittle ul li{width:108px;height:30px;line-height:30px;float:left;display:inline;text-align:center;color:#000;}
+#checkout_wrapper .pay_frame .mem_tittle ul .first{width:310px;}
+#checkout_wrapper .pay_frame .mem_list{width:849px;overflow:hidden;margin-left:60px;}
+#checkout_wrapper .pay_frame .mem_list table{width:849px;overflow:hidden;border-collapse:collapse;border-spacing:0px;}
+#checkout_wrapper .pay_frame .mem_list table tr{width:751px;}
+#checkout_wrapper .pay_frame .mem_list table tr td{overflow:hidden;border-bottom:1px dashed #bebebe;width:135px;vertical-align:middle;padding:15px 0px;text-align:center;}
+#checkout_wrapper .pay_frame .mem_list table tr .first{width:380px;padding:15px 0px 15px 15px;text-align:left;}
+#checkout_wrapper .pay_frame .mem_list table tr .first ul li span{color:#9d9d9d;}
+#checkout_wrapper .pay_frame .mem_list table tr .first ul li b{color:#f18d39;font-weight:normal;}
+#checkout_wrapper .pay_frame .valuation{overflow:hidden;width:911px;}
+#checkout_wrapper .pay_frame .valuation ul{width:745px;margin:15px 10px 0px 0px;float:right;display:inline;padding-bottom:20px;}
+#checkout_wrapper .pay_frame .valuation ul li{height:20px;line-height:20px;overflow:hidden;}
+#checkout_wrapper .pay_frame .valuation ul li h2{font-weight:normal;width:680px;float:left;display:inline;text-align:right;}
+#checkout_wrapper .pay_frame .valuation ul li p{float:left;display:inline;}
+#checkout_wrapper .pay_frame .valuation ul li b{float:left;display:inline;font-weight:normal;color:#13ba2c;}
+#checkout_wrapper .pay_frame .valuation ul li span{float:left;display:inline;color:#dd5d3a;font-size:16px;}
+/******************************************************************
+结算-使用新地址-pay_new.html-使用新地址提示警告信息
+*********************************************************************/
+#checkout_wrapper .pay_frame .pay_waring{width:912px;}
+#checkout_wrapper .pay_frame .pay_waring div{text-align:right;width:912px;height:22px;line-height:22px;}
+#checkout_wrapper .pay_frame .pay_waring div .pay_small{height:22px;line-height:22px;float:right;display:block;vertical-align:middle;padding:0px;margin-right:5px;}
+#checkout_wrapper .pay_frame .pay_waring div p{float:right;display:block;}
+#checkout_wrapper .pay_frame .pay_waring div p a{background:none;color:#6dbad9;}
+#checkout_wrapper .pay_frame .pay_waring div .pay_wbig{width:105px;height:20px;border:1px solid #969696;float:right;display:block;}
+#checkout_wrapper .pay_frame .pay_waring div img{float:right;display:block;width:61px;height:22px;}
+#checkout_wrapper .pay_frame .pay_waring .pay_refer{width:912px;height:33px;margin:26px 0px;}
+#checkout_wrapper .pay_frame .pay_waring .pay_refer a{float:right;text-align:center;color:#fff;font-size:14px;display:block;width:110px;height:33px;line-height:33px;background:url(../images/jshop_button.jpg) no-repeat left -88px;}
+#checkout_wrapper .pay_frame .pay_waring .pay_refer a:hover{float:right;text-align:center;color:#fff;font-size:14px;display:block;width:110px;height:33px;line-height:33px;background:url(../images/jshop_button.jpg) no-repeat -138px -88px;}
+/******************************************************************
+结算-提交凭证-pay_succeed.html-主要内容
+*********************************************************************/ 
+#main .encircle{width:976px;border:1px solid #eaeaea;padding:1px;overflow:hidden;}
+#main .encircle h1{width:943px;height:34px;line-height:34px;color:#fff;font-weight:normal;padding-left:33px;background-color:#49a9cf;}
+#main .encircle .deliver{width:907px;height:89px;margin:14px 0px 17px 69px;overflow:hidden;}
+#main .encircle .deliver img{width:93px;height:89px;float:left;display:inline;margin-right:65px;}
+#main .encircle .deliver div{float:left;display:inline;width:543px;}
+#main .encircle .deliver div p{line-height:25px;}
+#main .encircle .deliver div p b{font-weight:normal;color:#ed7108;}
+#main .encircle .deliver div p span{color:#49a9cf;}
+#main .encircle .deliver div a{font-weight:bold;color:#000;float:left;display:inline;margin:20px 70px 0px 10px;}
+#checkout_wrapper .encircle .validate .liststyle table  {margin-top:20px;}
+#checkout_wrapper .encircle .validate .liststyle table tr th{text-align:right;vertical-align:top;padding:10px 0px;}
+#checkout_wrapper .encircle .validate .liststyle table tr td{padding:10px;}
+/******************************************************************
+结算-提交凭证-pay_succeed.html-主要内容-支付方式
+*********************************************************************/ 
+#main .encircle .pay_pattern{width:939px;height:35px;padding-left:37px;overflow:hidden;border-bottom:1px solid #a4d4e7;}
+#main .encircle .pay_pattern ul{width:939px;height:35px;}
+#main .encircle .pay_pattern ul li{color:#fff;background-color:#49a9cf;float:left;display:inline;padding:10px;}
+/******************************************************************
+结算-提交凭证-pay_succeed.html-主要内容-支付操作
+*********************************************************************/ 
+#main .encircle .pay_handle{width:976px;overflow:hidden;}
+#main .encircle .pay_handle h2{width:941px;height:85px;line-height:85px;padding-left:35px;color:#2c2c2c;font-weight:bold;font-size:14px;}
+#main .encircle .pay_handle h2 span{color:#ed7108;font-weight:normal;}
+#main .encircle .pay_handle .pay_definite{width:916px;clear:both;height:25px;margin-bottom:12px;}
+#main .encircle .pay_handle .pay_definite label{float:left;display:inline;height:25px;line-height:25px;width:121px;text-align:right;}
+#main .encircle .pay_handle .pay_definite div{z-index:80;float:left;display:inline;position:relative;}
+#main .encircle .pay_handle .pay_definite div span{width:105px;height:25px;line-height:25px;padding-left:5px;display:block;}
+#main .encircle .pay_handle .pay_definite div span a{color:#000;}
+#main .encircle .pay_handle .pay_definite div ul{display:none;background-color:#fff;width:103px;overflow:hidden;border:1px solid #e8e8e8;border-top:0px none;position:absolute;top:24px;z-index:5;}
+#main .encircle .pay_handle .pay_definite div ul li{height:20px;line-height:20px;width:103px;}
+#main .encircle .pay_handle .pay_definite div ul li a{display:block;width:98px;padding-left:5px;background-color:#fff;color:#000;}
+#main .encircle .pay_handle .pay_definite div ul li a:hover{display:block;width:98px;background-color:#9000ff;color:#fff;}
+#main .encircle .pay_handle .pay_definite div .bank{background:url(../images/xzbj.jpg) no-repeat left top;}
+#main .encircle .pay_handle .pay_definite div .time{background:url(../images/abj.jpg) no-repeat left top;}
+#main .encircle .pay_handle .pay_definite input{float:left;display:inline;border:1px solid #e9e9e9;}
+#main .encircle .pay_handle .pay_definite .pd_big{width:220px;height:23px;line-height:23px;}
+#main .encircle .pay_handle .pay_definite .pd_little{width:100px;height:23px;line-height:23px;}
+#main .encircle .pay_handle .pay_entering{width:976px;clear:both;height:101px;}
+#main .encircle .pay_handle .pay_entering label{float:left;display:inline;height:25px;line-height:25px;width:121px;text-align:right;}
+#main .encircle .pay_handle .pay_entering textarea{width:400px;height:101px;border:1px solid #e9e9e9;overflow:auto;}
+#main .encircle .pay_handle .pay_confirm{width:110px;height:33px;margin:50px 0px 50px 55px;}
+#main .encircle .pay_handle .pay_confirm a{display:block;width:110px;height:33px;line-height:33px;font-size:14px;color:#fff;text-align:center;background:url(../images/jshop_button.jpg) no-repeat left -88px;}
+#main .encircle .pay_handle .pay_confirm a:hover{display:block;width:110px;height:33px;line-height:33px;font-size:14px;color:#fff;text-align:center;background:url(../images/jshop_button.jpg) no-repeat -138px -88px;}
+/******************************************************************
+结算-在线支付-pay_line.html-银行选择
+*********************************************************************/ 
+#main .encircle .pay_bank{width:946px;margin-bottom:20px;padding-left:30px;clear:both;}
+#main .encircle .pay_bank h2{width:946px;font-weight:normal;height:38px;line-height:38px;}
+#main .encircle .pay_bank div{width:946px;clear:both;}
+#main .encircle .pay_bank ul{width:946px;}
+#main .encircle .pay_bank ul li{width:166px;height:38px;float:left;display:inline;margin:0px 7px 15px 0px;}
+#main .encircle .pay_bank ul li input{height:38px;line-height:38px;padding-top:10px;margin:0px;vertical-align:middle;float:left;display:block;}
+#main .encircle .pay_bank ul li img{border:1px solid #c2c4ac;width:136px;height:38px;float:left;display:inline;margin-left:10px;}
+#main .encircle .pay_go{width:150px;height:33px;margin:30px 0px 30px 30px;clear:both;}
+#main .encircle .pay_go a{float:right;text-align:center;color:#fff;font-size:14px;display:block;width:110px;height:33px;line-height:33px;background:url(../images/jshop_button.jpg) no-repeat left -88px;}
+#main .encircle .pay_go a:hover{float:right;text-align:center;color:#fff;font-size:14px;display:block;width:110px;height:33px;line-height:33px;background:url(../images/jshop_button.jpg) no-repeat -138px -88px;}
+/******************************************************************
+结算-展开收获人信息-pay_unfold.html-确认收货人按钮
+*********************************************************************/
+#checkout_wrapper .pay_frame .pay_address .pay_old .pay_botton{width:112px;height:30px;padding:15px 0px 23px 100px;overflow:hidden;clear:both;}
+#checkout_wrapper .pay_frame .pay_address .pay_old .pay_botton a{display:block;width:112px;height:30px;line-height:30px;text-align:center;background:url(../images/qrfkfs.jpg) no-repeat left top;color:#000;}
+/******************************************************************
+结算-展开送货方式-pay_send.html-送货方式
+*********************************************************************/
+#checkout_wrapper .pay_frame .pay_send{width:976px;background-color:#ececee;border-bottom:1px solid #bebebe;}
+#checkout_wrapper .pay_frame .pay_send h2{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .pay_send h2 span{color:#9d9d9d;font-weight:normal;}
+#checkout_wrapper .pay_frame .pay_send p{width:916px;height:26px;color:#333;padding-left:60px;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion{width:916px;padding-left:60px;overflow:hidden;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion li{width:916px;height:26px;line-height:26px;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion li input{float:left;display:inline;height:26px;line-height:26px;padding:0px;margin:0px;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion li div{float:left;display:block;width:470px;line-height:26px;padding:0px;margin-left:10px;height:26px;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion li div p{width:290px;padding:0px;float:left;display:inline;}
+#checkout_wrapper .pay_frame .pay_send .send_fashion li div span{width:180px;float:left;display:inline;}
+#checkout_wrapper .pay_frame .pay_send .send_time{width:916px;padding-left:60px;}
+#checkout_wrapper .pay_frame .pay_send .send_time h2{float:left;display:inline;font-weight:normal;width:86px;height:26px;line-height:26px;}
+#checkout_wrapper .pay_frame .pay_send .send_time div{float:left;position:relative;}
+#checkout_wrapper .pay_frame .pay_send .send_time div span{color:#000;display:block;width:100px;height:25px;line-height:25px;background:url(../images/xzbj.jpg) no-repeat left top;padding-left:5px;}
+#checkout_wrapper .pay_frame .pay_send .send_time div ul{display:none;width:103px;border:1px solid #e8e8e8;background-color:#fff;border-top:0px none;position:absolute;top:24px;}
+#checkout_wrapper .pay_frame .pay_send .send_time div ul li{width:103px;height:26px;line-height:26px;}
+#checkout_wrapper .pay_frame .pay_send .send_time div ul li a{padding-left:5px;width:98px;height:26px;line-height:26px;display:block;color:#000;}
+#checkout_wrapper .pay_frame .pay_send .send_time div ul li a:hover{display:block;width:98px;background-color:#9000ff;color:#fff;}
+#checkout_wrapper .pay_frame .pay_send .pay_botton{width:112px;height:30px;padding:15px 0px 23px 100px;overflow:hidden;clear:both;}
+#checkout_wrapper .pay_frame .pay_send .pay_botton a{display:block;width:112px;height:30px;line-height:30px;text-align:center;background:url(../images/qrfkfs.jpg) no-repeat left top;color:#000;}
+/**************************************************************
+结算页修改部分
+*****************************************************************/
+#checkout_wrapper .pay_frame .box{border-bottom:1px dashed #BEBEBE}
+#checkout_wrapper .pay_frame .box .modify{width:976px;clear:both;}
+#checkout_wrapper .pay_frame .box .modify h1{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .box .selected h1{width:946px;height:34px;line-height:34px;padding-left:30px;color:#333;font-weight:bold;}
+#checkout_wrapper .pay_frame .box .selected h1 a{color:#9D9D9D;}
+#checkout_wrapper .pay_frame .box .selected span{color:#333;height:34px;padding-left:60px;display:block;}
+#checkout_wrapper .pay_frame .address .modify h1{background-color:#ececee;}
+#checkout_wrapper .pay_frame .address .modify .list{width:976px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .address .modify .input{width:976px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .address .modify .input table{width:976px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .address .modify .input table tr{height:30px;}
+#checkout_wrapper .pay_frame .address .modify .input table tr th{width:155px;height:30px;text-align:right;font-weight:normal;}
+#checkout_wrapper .pay_frame .address .modify .input table tr td input{margin-right:10px;float:left;display:inline;}
+#checkout_wrapper .pay_frame .address .modify .pay_botton{padding:10px 0px 23px 61px;margin:0px;width:915px;height:33px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .address .modify .list label{clear:both;line-height:25px;width:812px;display:block;margin-left:60px;}
+#checkout_wrapper .pay_frame .address .modify .list label input{float:left;display:block;padding:0px;margin:0px 10px 0px 0px;height:25px;line-height:25px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .payment .modify{background-color:#ECECEE;}
+#checkout_wrapper .pay_frame .payment .modify .list{color:#333;padding-left:60px;width:916px;line-height:34px;}
+#checkout_wrapper .pay_frame .payment .modify .list ul{width:912px;}
+#checkout_wrapper .pay_frame .payment .modify .list ul li{clear:both;width:912px;line-height:25px;}
+#checkout_wrapper .pay_frame .payment .modify .list ul li label{clear:both;line-height:25px;width:912px;display:block;}
+#checkout_wrapper .pay_frame .payment .modify .list ul li label input{display:inline;padding:0px;margin:0px 10px 0px 0px;height:25px;line-height:25px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .payment .modify .list ul li .biref{background-color:#F5D8DC;width:650px;margin-left:20px;}
+#checkout_wrapper .pay_frame .payment .modify .list ul li .biref p{line-height:28px;padding:0px 10px;}
+#checkout_wrapper .pay_frame .payment .modify .pay_botton{padding:10px 0px 23px 61px;margin:0px;width:915px;height:33px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .dlytype .modify{background-color:#ECECEE;}
+#checkout_wrapper .pay_frame .dlytype .modify .list{color:#333;padding-left:60px;width:916px;line-height:34px;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul{width:912px;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul li{clear:both;width:912px;line-height:25px;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul li label{clear:both;line-height:25px;width:912px;display:block;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul li label input{display:inline;padding:0px;margin:0px 10px 0px 0px;height:25px;line-height:25px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul li .biref{background-color:#F5D8DC;width:650px;margin-left:20px;}
+#checkout_wrapper .pay_frame .dlytype .modify .list ul li .biref p{line-height:28px;padding:0px 10px;}
+#checkout_wrapper .pay_frame .dlytype .modify .pay_botton{padding:10px 0px 23px 61px;margin:0px;width:915px;height:33px;background-color:#ececee;}
+#checkout_wrapper .pay_frame .goods_wrapper{width:976px;}
+#checkout_wrapper .pay_frame .goods_wrapper h1{padding-left:30px;width:911px;height:38px;line-height:38px;color:#333;padding-left:20px;}
+#checkout_wrapper .pay_frame .goods_wrapper h1 span{float:right;display:inline;color:#9D9D9D;font-weight:normal;}
+#checkout_wrapper .pay_frame .goods_wrapper table{width:849px;overflow:hidden;border-collapse:collapse;border-spacing:0px;margin-left:60px;}
+#checkout_wrapper .pay_frame .goods_wrapper table tr th{height:30px;background-color:#EFEFEF;border-top:1px dashed #BEBEBE;border-bottom:1px dashed #BEBEBE}
+#checkout_wrapper .pay_frame .goods_wrapper table tr td{overflow:hidden;border-bottom:1px dashed #bebebe;width:135px;vertical-align:middle;padding:15px 0px;text-align:center;}
+#checkout_wrapper .pay_frame .goods_wrapper table tr td span strong{display:block;width:135px;height:20px;line-height:20px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper h1{height:32px;line-height:32px;color:#53a0be;font-weight:normal;}
+#checkout_wrapper .pay_frame .order_total .button_wrapper input{margin-left:253px;line-height:32px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .pucker{clear:both;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper h1 input{display:inline;padding:0px;margin:0px 10px 0px 0px;height:32px;line-height:32px;vertical-align:middle;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .content{padding:10px 0px;background-color:#fefbf4;padding-left:29px;width:417px;border-top:1px solid #eae7e0;border-bottom:1px solid #eae7e0;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .receipt ul{width:446px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .receipt ul li{width:417px;clear:both;height:30px}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .receipt ul li select{height:24px;}
+#checkout_wrapper .pay_frame .order_total .meta_wrapper .receipt ul li input{display:inline;padding:0px;margin:-2px 5px 0px;height:30px;line-height:30px;vertical-align:middle;}
+#receiptTitle{width:240px;height:22px;line-height:22px;}
+#coupon_wrapper{clear:both;overflow:hidden;}
+#coupon_wrapper .sel_box span{width:69px;height:24px;display:block;float:left;margin-right:10px;}
+#coupon_wrapper .sel_box span select{width:69px;height:24px;}
+#coupon_wrapper .sel_box input{float:left;display:block;}
+#coupon_wrapper .sel_box #cpns_sn{width:200px;height:22px;margin-right:10px;}
+/****************************************************************
+收货人修改
+******************************************************************/
+
+
+/* 优惠劵范围对话框 */
+#pop-up2{ width:439px; display:block; overflow:hidden;}
+#pop-up2 li{list-style:none;}
+.pop-up_center2{ font-size:13px; height:40px; line-height:40px; margin-left:15px;}
+.pop-up_4{line-height:20px; float:left; line-height:20px; margin-left:15px;_margin-left:7px;}
+.pop-up_4 span{width:300px; height:20px; float:left;}
+.pop-up_size2{ font-size:14px; margin-left:15px; overflow:hidden; height:30px; margin-top:5px; border-bottom:#b0b0b0 dashed 1px; line-height:30px;}
+/*优惠劵赠送对话框  */
+#pop-up li{ width:439px; float:left;}
+.pop-up-color{ color:#1b844c;}
+.pop-up_size{ font-size:14px; margin-left:15px;_margin-left:7px; overflow:hidden; height:30px; margin-top:5px; border-bottom:#b0b0b0 dashed 1px; line-height:30px;}
+.pop-up_center{ text-align:center; font-size:13px; height:40px; line-height:40px;}
+.pop-up_yx{line-height:20px; float:left;}
+.pop-up_3{margin-left:50px;_margin-left:50px; margin-top:10px; margin-bottom:15px;}
+
+
+/********支付结果paymen_result.html**********/
+.pay_result{width:100%;height:200px;background:#fff;}
+.pay_result .pay_result_img{float:left;width:80px;padding:30px 30px 0px 240px;}
+.pay_result .pay_result_img img{width:79px;height:75px;}
+.pay_result .pay_result_word{float:left;width:600px;padding:30px 0px 0px 0px;}
+.pay_result .pay_result_word h2{ display:block;width:100%;font: 26px/50px "microsoft yahei",Arial;height: 50px;line-height:50px;}
+.pay_result .pay_result_word p{width:100%;display:block;height:35px;line-height:35px;font-size:14px;margin-bottom:10px;}
+.pay_result .pay_result_word span{color:#da4f49}
+.pay_result .pay_result_word a{width:126px;height:39px;display:block;margin:0px 20px 0px 0px;background:url(../images/zhifu_anniu.jpg) no-repeat left top;float:left;}
+.pay_result .pay_result_word .continue_buy{background-position:0px 0px;}
+.pay_result .pay_result_word .go_my_center{background-position:-153px -1px;} 
+.pay_result .pay_result_word .go_this_order{background-position:-327px -1px;} 
+
+
+/******修改 结算样式 2015-11-17***********/
+#checkout-select-area span{float:none;}
+
+
+
+
+

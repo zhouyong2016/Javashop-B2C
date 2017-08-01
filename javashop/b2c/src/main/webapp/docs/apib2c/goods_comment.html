@@ -1,0 +1,95 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获得某个商品下的评论列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/shop/cart!addProduct.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">id</span><span class="w100">商品ID</span><span class="w380"></span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/goods!comment.do');</b>
+			<b>		var param = e$.getParam();</b>
+			<b>		var options = {</b>
+			<b><i></i>			url : url,</b>
+			<b><i></i>		data : {id:param.goodsId},</b>
+			<b><i></i>			success : function(data) {</b>
+			<b><i></i><i></i>				if (data.result == 1) {</b>
+			<b><i></i><i></i><i></i>					var viewData = data.data;</b>
+			<b><i></i><i></i><i></i>					initTpl(viewData, $("#comment_html_templet"), $("#comment_html_view"));</b>
+			<b><i></i><i></i>				} else {</b>
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");</b>
+			<b>	<i></i><i></i>			}</b>
+			<b>	<i></i>		}</b>
+			<b>		};</b>
+			<b>e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "data": [
+        {
+            "lv_id": 2,
+            "sex": 1,
+            "uname": "demo_man",
+            "face": "",
+            "levelname": "黄金会员",
+            "comment_id": 2,
+            "goods_id": 149,
+            "member_id": 4,
+            "content": "衣服还行。。，hold得住叫品味，hold不住叫蓝领。宝贝一如既往的好，投诉经理电话：17052720733.销售电话：400-6878-256\n",
+            "img": null,
+            "dateline": 1461317888,
+            "ip": "0:0:0:0:0:0:0:1",
+            "reply": "谢谢您的支持",
+            "replytime": 1461317929,
+            "status": 1,
+            "type": 1,
+            "replystatus": 1,
+            "grade": 3,
+            "is_top": 0,
+            "store_id": 3,
+            "store_desccredit": 5,
+            "store_servicecredit": 5,
+            "store_deliverycredit": 5
+        },
+        {
+            "lv_id": 2,
+            "sex": 1,
+            "uname": "demo_man",
+            "face": "",
+            "levelname": "黄金会员",
+            "comment_id": 1,
+            "goods_id": 149,
+            "member_id": 4,
+            "content": "JavaShop是国内专业的Java电子商城系统及高质量定制开发服务商。我们用心为传统企业及创业团队提供省心的商城系统、分销系统、微信商城系统、cms系统、网店系统、开源商城系统。咨询电话:400-6878-256",
+            "img": null,
+            "dateline": 1461317740,
+            "ip": "0:0:0:0:0:0:0:1",
+            "reply": null,
+            "replytime": 0,
+            "status": 1,
+            "type": 1,
+            "replystatus": 0,
+            "grade": 3,
+            "is_top": 0,
+            "store_id": 3,
+            "store_desccredit": 5,
+            "store_servicecredit": 5,
+            "store_deliverycredit": 5
+        }
+    ]
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

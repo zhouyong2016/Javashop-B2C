@@ -1,0 +1,209 @@
+<#include '/admin/header.html' >
+
+
+<div class="main">
+	<!-- <a href="javascript:void(0)" onclick="ref()" id="ref">更新</a> -->
+	<div style="display: block;" class="searchAdvanced">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="80px" align="right">按订单状态：</td>
+				<td width="200px">
+					<select id="status" >
+						<option value="0">---所有---</option> 
+						<#if statusMap??>
+						<#list statusMap?keys as key>
+							<option value="${key}">${statusMap.get(key)}</option>
+						</#list>
+						</#if>
+					</select>
+				</td>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type" onchange="statistics_mode(this.value)" >
+						<option value="1">按照月统计</option>
+						<option value="0">按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month">
+					</select>
+				</td>
+				<td width="200" style="text-align: center;">
+					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+			<div class="contentTab">
+				<ul class="tab">
+					<#list pluginTabs?keys as key>
+					<li tabid="${key}"<#if key==1> class="contentTabS"</#if>
+						>${pluginTabs.get(key)}</li> </#list>
+				</ul>
+			</div>
+			
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<#list pluginHtmls?keys as key>
+						<div tabid="${key}"<#if key!=1> style="display:none"</#if>
+							class="tab-panel">${pluginHtmls.get(key)}</div>
+						</#list>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+	<div class="clear height10"></div>
+	
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" 
+			data-options="url:'order!listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
+			pagination="true" width="width" id="orderdata" sortName="order_id" sortOrder="desc">
+			<thead>
+				<tr>
+					<th data-options="field:'order_id',checkbox:true,width:100"></th>
+					<th data-options="field:'sn',width:150" >订单号</th>
+					<th data-options="field:'create_time',width:100,sortable:'true'" formatter="formatDate"  >下单日期</th>
+					<th data-options="field:'need_pay_money',width:100,sortable:'true'" >订单总额</th>
+					<th data-options="field:'paymoney',width:100,sortable:'true'" >实付金额</th>
+					<th data-options="field:'uname',width:100">会员</th>
+					<th data-options="field:'status',width:100,sortable:'true'" formatter="forStruts" >订单状态</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<input type="hidden" id="this_type" value="1" >
+
+
+<script type="text/javascript">
+	
+$(function() {
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+
+	$(".goods_input .contentTab>ul>li").click(function() {
+		var tabid = $(this).attr("tabid");
+		$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+		$(this).addClass("contentTabS");
+		$(".tab-page .tab-panel").hide();
+		$(".tab-panel[tabid=" + tabid + "]").show();
+	});
+	$("input[type=text]").attr("autocomplete", "off");
+	
+	$("#search_statis").click(function(){
+		refresh_data();
+	})
+		
+});
+
+function refresh_data(){
+	
+	var status = $("#status :selected").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	
+	//下单金额
+	saleMoney(status,cycle_type,year,month);
+	//下单量
+	saleNum(status,cycle_type,year,month);
+	
+	searchOrder();
+}
+
+//订单状态
+function forStruts(value, row, index) {
+	var val;
+	val = getType(${status_Json!''},value);
+	return val;
+}
+
+function getType(exMap,value){
+	var val;
+	$.each(exMap,function(key,values){ 
+	    if(value==key){
+	    	val=values;
+	    }
+	});
+	return val;
+}
+
+
+function searchOrder(){
+	
+	var status = $("#status :selected").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	var start_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-01 00:00:00";
+	var end_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-31 23:59:59";
+	
+	if(cycle_type!=1){
+		start_time=null;
+		end_time=null
+	}
+	
+	
+	$("#orderdata").datagrid('load', {
+		 start_time:start_time,
+		 end_time:end_time,
+		 status:status,
+		 page:1
+    }); 
+}
+
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+
+function statistics_mode(mode_value){
+	if(mode_value==1){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+	refresh_data();
+}
+
+</script>
+
+<#include '/admin/footer.html' >

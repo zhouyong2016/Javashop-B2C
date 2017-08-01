@@ -1,0 +1,100 @@
+
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/other.css" type="text/css" />
+
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag")>
+<#assign member = memberLoginCheckTag()>
+<!-- 判断会员是否登录 -->
+<#if  !member.member_id?? || member.member_id==0 >
+	<#stop "not login">
+</#if>
+
+<#-- 扫码支付结果展示页 -->
+
+<#--创建支付结果标签-->
+<#assign paymentResultForQrTag = newTag("paymentResultForQrTag") />
+<#assign paymentResult = paymentResultForQrTag()/>
+
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailByOrderSn")>
+<#assign orderDetail = orderDetailTag("{'ordersn':'${paymentResult.ordersn!''}'}")>
+<#--订单货物列表标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+<#if paymentResult.result==2>
+	<div class="payment-result">
+		<div class="payment-result-left no-pay">
+			<h4>${paymentResult.error!''}</h4>
+			<p>本网站不会以任何理由要求您提供银行卡信息或支付额外费用</p>
+		</div>
+	</div>
+<#else>
+	<div class="payment-result">
+		<#if paymentResult.result==1>
+			<div class="payment-result-left">
+				<h1>支付成功</h1>
+				<span>收货时间：${orderDetail.ship_day!''}</span>
+				<h2>${(orderDetail.order_amount-orderDetail.discount!0)?string.currency}<i>元</i></h2>
+				<a href="member/order_detail.html?ordersn=${paymentResult.ordersn!''}">查看订单详情</a>
+				<p>本网站不会以任何理由要求您提供银行卡信息或支付额外费用</p>
+			</div> 
+		<#else>
+			<div class="payment-result-left no-pay">
+				<h4>支付失败</h4>
+				<p>本网站不会以任何理由要求您提供银行卡信息或支付额外费用</p>
+			</div>
+		</#if>
+		<div class="payment-result-right">
+			<#if paymentResult.result==1>
+			<dl>
+				<dt>订单编号:</dt>
+				<dd>${orderDetail.sn!''}</dd>
+			</dl>
+			<dl>
+				<dt>收货信息：</dt>
+				<dd>
+					<p>${orderDetail.ship_name!''}&nbsp;&nbsp;${orderDetail.ship_mobile!''}</p>
+					<p>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}<#if orderDetail.ship_zip??>(${orderDetail.ship_zip!''})</#if></p>
+				</dd>
+			</dl>
+			<dl>
+				<dt>商品名称：</dt>
+				<dd>
+					<#list orderItemList as item>	
+						<p><a target="_blank" href="${ctx}/goods-${item.goods_id}.html">${item.name}</a></p>
+					</#list>
+				</dd>
+			</dl>
+			<dl>
+				<dt>配送时间：</dt>
+				<dd>${orderDetail.ship_day!''}</dd>
+			</dl>
+			<dl>
+				<dt>发票抬头：</dt>
+				<dd>${orderreceipt.title!'无'}</dd>
+			</dl>
+			<dl>	
+				<dt>发票内容：</dt>
+				<dd>${orderreceipt.content!'无'}</dd>
+			</dl>
+			<#else>
+				<h5>${paymentResult.error!''}</h5>
+			</#if>	
+			<div class="result-right-code">
+				
+			</div>
+		</div>
+	</div>
+</#if>
+</div>
+</div>
+</div>
+</div>	
+
+
+<#include 'common/footer.html'/>
+	

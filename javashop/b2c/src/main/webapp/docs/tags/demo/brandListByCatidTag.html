@@ -1,0 +1,12 @@
+
+<!--创建"品牌列表"标签-->
+<#assign BrandListByCatidTag = newTag("brandListByCatidTag")>
+<!--调用"品牌列表"标签-->
+<#assign BrandListByCatid = BrandListByCatidTag("'tagid':'1'")>
+<!--循环输出-->
+<#list BrandListByCatid as list>
+	<li>
+		标签名称：${list.name}
+		标签logo：<@image src="${list.logo!''}" alt="${list.name}" />
+	</li>
+</#list>

@@ -1,0 +1,90 @@
+<#assign havevalue= "com.enation.app.shop.front.tag.goods.HaveValueDirectiveModel"?new()> 
+<#if attrList?exists || brandList?exists >
+<table class="form-table" style="width: 100%;">
+	<tr>
+		<th>计价单位：</th>
+		<td style="text-align: left;"><input name="unit" style="width: 192px;"
+			class="input_text" value="${goods.unit!''}" maxlength="20"/>
+		</td>
+	</tr>
+	<#if brandList?exists >
+		<tr id="brand_tr">
+			<th>品牌：</th>
+			<td id="brand_id_td" style="text-align: left;">
+				<select class="easyui-combobox input_text" name="brand_id" style="width: 200px;height: 28px;padding:0;" editable="false" >
+					<option value="">请选择</option> 
+					<#list brandList as brand>
+					<option value="${brand.brand_id }"
+						<#if goods.brand_id?exists && goods.brand_id= brand.brand_id>selected="true"</#if> >${brand.name }</option> 
+					</#list>
+				</select>
+			</td>
+		</tr>
+	</#if> 
+	<#if attrList?exists > 
+		<#list attrList as attr>
+		<input type="hidden" name="propnames" value="${attr.name }" />
+		<tr>
+			<th>${attr.name } ：</th>
+			<td style="text-align: left;">
+			<#if attr.type<3 > 
+				<input type="text" name="propvalues" maxlength="200" class="input_text easyui-validatebox" value="${attr.value}" style="width: 192px"
+				<#if attr.datatype?exists && attr.datatype!=''>
+					dataType="${attr.datatype}"
+				</#if> 
+				<#if attr.required==1>
+					isrequired="true" data-options="required:true<#if attr.datatype?exists && attr.datatype!=''><#if attr.datatype=='int'>,validType:'integ'<#elseif attr.datatype=='float'>,validType:'mone'</#if></#if> "
+				</#if> />${attr.unit!''} 
+			</#if>
+			<#if (attr.type>=3) && (attr.type<=5)> 
+				<select name="propvalues" style="width: 200px;height: 28px;padding:0px;" class="easyui-combobox input_text" editable="false"
+					<#if attr.datatype?exists && attr.datatype!=''>
+						dataType="${attr.datatype}"
+					</#if> 
+					<#if attr.required==1>
+						required="true" validType="selectValueRequired"
+					</#if> 
+					>
+				<option value="">请选择</option> 
+				<#list attr.optionAr as option>
+						<option value="${option_index }"
+						<#if attr.value==(""+option_index)>selected</#if> >${option }</option> 
+					</#list>
+				</select>
+			${attr.unit!''} 
+			</#if> 
+			
+			<#if (attr.type==6) > 
+			<input type="hidden" name="propvalues" id="attr_${attr_index}" value="${attr.value!''}">
+				<#list attr.optionAr as option> 
+					<label>
+						<input type="checkbox" value="${option}" attrid="attr_${attr_index}" class="check"
+						<@havevalue v1="${attr.value}" v2="${option}" /> />${option }
+					</label> 
+				</#list>
+			</#if>
+			</td>
+		</tr>
+		</#list>
+	</#if>
+
+</table>
+
+<script type="text/javascript">
+<!--
+	$(".check").click(function() {
+		var attrid = $(this).attr("attrid");
+		var str = "";
+		$("input[attrid=" + attrid + "]").each(function() {
+			if (this.checked) {
+				str += "#";
+				str += $(this).val();
+			}
+		});
+		$("#" + attrid).val(str);
+	});
+	//-->
+</script>
+	<#else> 
+		该类型未字义属性或品牌
+</#if>

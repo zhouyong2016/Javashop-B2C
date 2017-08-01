@@ -1,0 +1,201 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<!-- 搜索框 -->
+	<div style="display: block;" class="searchAdvanced">
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type" onchange="hiddenMonth()">
+						<!-- <option value="0">--请选择--</option> -->
+						<option value="1">按照月统计</option>
+						<option value="2">按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+						<option value="0">--全年--</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month">
+						<!-- <option value="0">--请选择--</option> -->
+					</select>
+				</td>
+				
+				<td width="200" style="text-align: center;float: right">
+					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	
+	<!-- 主体 -->
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+		
+			<!-- 用户记录当前的tabId -->
+			<input type="hidden" id="now_tab_hid" value="1" />
+			
+			
+			<!-- tab页标题 -->
+			<div class="contentTab">
+				<ul class="tab">
+					
+					<li class="contentTabS" tabid="1"> 下单量 </li>
+					<li tabid="2"> 下单商品数量 </li>
+					<li tabid="3"> 下单金额 </li> 
+				</ul>
+			</div>
+			
+			<!-- tab页内容 -->
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						
+						<!-- 注意  div中不能有数据  这个用来判断是否加载了数据！！！！！！！！！ -->
+						<div class="tab-panel" h_url="${ctx}/shop/admin/industryStatistics/industry-order.do?type=0&year=0&month=0" tabid="1"></div>
+
+						<div class="tab-panel" style="display:none;" h_url="${ctx}/shop/admin/industryStatistics/industry-goods.do?type=0&year=0&month=0" tabid="2"></div>
+						
+						<div class="tab-panel" style="display:none;" h_url="${ctx}/shop/admin/industryStatistics/industry-price.do?type=0&year=0&month=0" tabid="3"></div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<div class="clear height10"></div>
+	<input type="hidden" id="now_tab_hid" value="1">
+	<input type="hidden" id="now_url" value="">
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	if(GetQueryString("type")!=null){ 
+		$("#month").val(GetQueryString("month"));
+		$("#year").val(GetQueryString("year"));
+		$("#cycle_type").val(GetQueryString("type"));
+		
+	}
+	
+	// 选项卡 单击事件
+	$(".goods_input .contentTab>ul>li").click(function() {
+		var tabId = $(this).attr("tabid");
+		$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+		$(this).addClass("contentTabS");
+		$(".tab-page .tab-panel").hide(); 
+		$("#now_tab_hid").val(tabId);	//记录当前tabId
+		loadTab(tabId);
+	});
+	
+ 
+	//加载第一页
+	loadTab(1);
+	
+	
+	
+	//搜索   点击事件 
+	$("#search_statis").click(function(){ 
+		
+		var cycle_type = $("#cycle_type").val();
+		var year = $("#year").val();
+		var month = $("#month").val(); 
+		var tab_id=$("#now_tab_hid").val(); 
+		switch(parseInt(tab_id))
+		{
+		case 1:
+			$("#now_url").val("${ctx}/shop/admin/industryStatistics/industry-order.do?type="+cycle_type+"&year="+year+"&month="+month);
+			break;
+		case 2:
+			$("#now_url").val("${ctx}/shop/admin/industryStatistics/industry-goods.do?type="+cycle_type+"&year="+year+"&month="+month);
+			break; 
+		case 3:
+			$("#now_url").val("${ctx}/shop/admin/industryStatistics/industry-price.do?type="+cycle_type+"&year="+year+"&month="+month);
+			break;
+		default:
+			alert("错误的参数，请尝试刷新页面！");
+		}
+		loadTab(tab_id);		
+	});
+}); 
+
+	
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	
+
+	/**
+	 * 根据tabId加载tab页数据 或者 刷新数据
+	 * @param tabId	tab页的id
+	 */
+	function loadTab(tabId){
+		var $tab = $(".tab-panel[tabid=" + tabId + "]"); 
+
+		$tab.show();
+		if($tab.html()!=''){
+			
+			if(!$("#now_url").val().length>0){
+				return;
+			}
+			
+			$.ajax({
+				url : $("#now_url").val(),
+				type:'get',
+				success:function(data){
+					$tab.html(data);
+					$("#now_url").val("");
+				}
+			}); 
+			
+		} else{
+			$.ajax({
+				url : $tab.attr("h_url"),
+				type:'get',
+				success:function(data){  
+					$tab.html(data);
+				}
+			}); 
+		}
+	}
+	function hiddenMonth(){
+		if($("#cycle_type").val()=="2"){ 
+				$("#month").hide(); 
+		}else{
+
+			$("#month").show(); 
+		}
+	}
+</script> 
+<#include '/admin/footer.html' >

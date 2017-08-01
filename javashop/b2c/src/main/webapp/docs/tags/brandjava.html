@@ -1,0 +1,71 @@
+<#assign title= "品牌列表实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>Brand  品牌列表</h3>
+		<h2>需要简述</h2>
+		<h6>返回所有的品牌列表参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>brand_id</td>
+						<td>Integer</td>
+						<td>品牌ID</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td>品牌名称</td>
+					</tr>
+					<tr>
+						<td>logo</td>
+						<td>String</td>
+						<td>品牌图片</td>
+					</tr>
+					<tr>
+						<td>brief</td>
+						<td>String</td>
+						<td>品牌描述</td>
+					</tr>
+					<tr>
+						<td>url</td>
+						<td>String</td>
+						<td>品牌网址</td>
+					</tr>
+					<tr>
+						<td>disabled</td>
+						<td>Integer</td>
+						<td>是否已删除(0未删除，1已删除)</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取商品评论列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/goods/comment.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">id</span><span class="w100">商品id</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/goods/comment.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {id:449},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{"result":1,"message":null,"data":[{"lv_id":2,"sex":-1,"uname":"kans","face":"","levelname":"黄金会员","comment_id":1,"goods_id":449,"member_id":26,"content":"不过真的是很不错，样式好看，颜色很正，很合身，谢谢店家","img":null,"dateline":1476198445,"ip":"0:0:0:0:0:0:0:1","reply":null,"replytime":0,"status":1,"type":1,"replystatus":0,"grade":3,"is_top":0,"store_id":15,"store_desccredit":5,"store_servicecredit":5,"store_deliverycredit":5}]}
+			</h5>
+		</span>	
+	</div>
+
+</div>

@@ -1,0 +1,107 @@
+<!-- 下单商品数量统计js -->
+
+<!-- 用户记录当前tab页是否是最新数据 是否需要刷新 0表示不需要 1表示需要 -->
+<input type="hidden" class="now_tab_data_hid" tab_id ="2" value="0" />
+
+<!-- 统计图div -->
+<div id="goods_num_statistics">
+	
+</div>
+<div class="tableDiv">
+	<!-- dataGrid -->
+	<table id="numdata" class="easyui-datagrid" 
+		data-options="pageList: [50],pageSize:50,fitColumns:'true',queryParams:{'complete':'${complete!''}'}" 
+		 width="width" sortName="order_id" sortOrder="desc">
+		<thead>
+			<tr>
+				<th data-options="field:'order_id',checkbox:true,width:100"></th>
+				<th data-options="field:'oiname',width:150" >名称</th>
+				<th data-options="field:'t_num',width:100" >下单量</th>
+			</tr>
+		</thead>
+	</table>
+	
+</div> 
+<script type="text/javascript">
+var topNum = 50;	//排行数
+var num_chart;
+$(function() {
+	
+	getGoodsNum();
+	
+	var type = $("#cycle_type").val();
+	
+	// 如果统计类型 是按年统计
+	if(type == "2") {
+		$("#month").hide();
+	} else {
+		$("#month").show();
+	}
+	
+	// 统计类型变更事件
+	$("#cycle_type").change(function(){
+		
+		var type = $(this).val();
+		
+		// 如果统计类型 是按年统计
+		if(type == "2") {
+			$("#month").hide();
+		} else {
+			$("#month").show();
+		}
+		
+	});
+});
+
+/**
+ * 获取json数据
+ * @param startDate 开始时间
+ * @param endDate 结束时间
+ */
+function getGoodsNum(){
+	
+	var param = getParam();
+	year=param[0];
+	month=param[1];
+	cat_id=param[2];
+	
+	cycle_type=param[3];
+	if(cat_id==''){
+		cat_id=0;
+	}
+	// ajax配置
+	var options = {
+		url : "${ctx}/shop/admin/goodsStatis/get-hot-goods-num-json.do?year="+year+"&month="+month+"&cycle_type="+cycle_type+"&cat_id="+cat_id,
+		type : "get",
+		dataType:"json",
+		success:function(data){
+			
+			//如果获得正确的数据
+			if (data.result == 1) {
+				
+				if(data.data && data.data.length < 1) {
+					// alert("当前条件下没有统计数据");
+				}
+				
+				// 1.获取到统计图相关配置
+				
+				moneyHighcharts(goods_num_statistics,num_chart,"下单量",data.data.highchartsjson)
+				// 3.初始化datagrid
+				$("#numdata").datagrid();
+				
+				// 4.将数据绑定到datagrid  
+				$("#numdata").datagrid('loadData', data.data.gridjson); 
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+}
+
+
+ 
+</script>

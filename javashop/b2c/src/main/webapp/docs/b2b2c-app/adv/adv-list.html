@@ -1,0 +1,80 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取广告列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/adv/adv-list.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">acid</span><span class="w100">广告位id</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/adv/adv-list.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {
+			<b><i></i>	<i></i>			acid : 2
+			<b><i></i>			},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "message": null,
+    "data": {
+        "adDetails": {
+            "acid": 2,
+            "cname": "1F左侧单幅广告",
+            "width": "212px",
+            "height": "280px",
+            "description": null,
+            "anumber": null,
+            "atype": 0,
+            "rule": null,
+            "userid": null,
+            "siteid": null,
+            "disabled": "false"
+        },
+        "advList": [
+            {
+                "aid": 5,
+                "acid": 2,
+                "atype": 0,
+                "begintime": 1431964800,
+                "endtime": 1906387200,
+                "isclose": 0,
+                "attachment": null,
+                "atturl": "http://static.b2b2cv2.javamall.com.cn/attachment/adv/2016/5/26/12//04510838.jpg",
+                "url": "http://javamall.com.cn/",
+                "aname": "1F左侧广告（休闲零食）",
+                "clickcount": 0,
+                "disabled": "false",
+                "linkman": "",
+                "company": "",
+                "contact": "",
+                "cname": "",
+                "httpAttUrl": "http://static.b2b2cv2.javamall.com.cn/attachment/adv/2016/5/26/12//04510838.jpg"
+            }
+        ]
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

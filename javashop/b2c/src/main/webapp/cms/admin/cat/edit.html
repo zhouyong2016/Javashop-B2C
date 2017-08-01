@@ -1,0 +1,76 @@
+<div class="input">
+ <form  id="catinfoForm" enctype="multipart/form-data" >
+   <table cellspacing="1" cellpadding="3" width="100%" >
+     <tr> 
+       <th><label class="text">分类名称</label></th>
+       <td><input type="text" name="name" value="${cat.name}"  maxlength="60" class="easyui-validatebox input_text" data-options="required:true" dataType="string" isrequired="true"/>
+       		<input type="hidden" name="cat_id" value="${cat.cat_id}"/>
+       </td>
+     </tr>
+     <tr>
+       <th><label class="text">上级分类</label></th>
+       <td>
+
+		<select name="parent_id"  id="parent_id" style="width: 150px;">
+		<option value="0">顶级类别</option>
+ 		<#assign children=catList />
+		<#assign level=1 />
+		<#include 'select_children.html' />  
+		</select>	</td>
+     </tr>
+     <tr>
+       <th><label class="text">文章模型 </label></th>
+       <td>
+       <select name="model_id"  id="model_id" style="width: 150px;" dataType="int" isrequired="true">
+       <option value="">--选择模型--</option>
+        <#list modelList as model>
+			<option value="${model.model_id }" >${model.china_name }</option>
+		</#list>	
+		</select>
+		</td>
+		
+     </tr>
+     
+     <tr>
+       <th><label class="text">是否加入到SiteMap</label></th>
+       <td>
+       <input type="radio" name="tositemap" value="0"  class="tositemap" <#if cat.tositemap==0>checked</#if> />否 &nbsp;<input type="radio" name="tositemap" value="1" <#if cat.tositemap==1>checked</#if> class="tositemap"/>是    </td>
+     </tr>
+     
+     <tr>
+       <th><label class="text">页面地址</label></th>
+       <td>
+       <input type="text" name="url"  dataType="String" isrequired="true" class="input_text" /> 默认为newlist-catid-1.html      </td>
+     </tr>
+
+     <tr id="detail_url" <#if isEdit><#if cat.tositemap != 1>style="display:none"</#if><#else>style="display:none"</#if>>
+       <th><label class="text">详细页地址前缀</label></th>
+       <td>
+       <input type="text" name="detail_url"  class="input_text"/>       </td>
+     </tr>
+          
+
+     <tr>
+       <th><label class="text">分类描述</label></th>
+       <td>
+      	 <script id="editor" name="descript" type="text/plain" style="height:200px;width: 99%;">${cat.descript!''}</script>
+       </td>
+     </tr>
+     
+     <tr>
+       <th><label class="text">排序</label></th>
+       <td>
+       <input type="text" class="input_text easyui-numberbox" data-options="required:true" name="cat_order" dataType="int" isrequired="true" value="${cat.cat_order}"/></td>
+     </tr>
+
+   </table>
+   </form>
+   
+   </div>
+<script type="text/javascript">
+$(function(){ 
+	$("#parent_id").val(${cat.parent_id!''});
+	$("#model_id").val(${cat.model_id!''});
+	UE.getEditor('editor').destroy();
+});
+</script>

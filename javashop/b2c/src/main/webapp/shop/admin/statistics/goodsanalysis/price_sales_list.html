@@ -1,0 +1,222 @@
+<#include '/admin/header.html' >
+
+	
+<div class="main">
+	<form id="priceForm" >
+	<div class="shadowBoxWhite whiteBox">
+		<table cellpadding="6" width="100%">
+			<tr>
+				<th class="title" colspan="4">高级搜索</th>
+			</tr>
+			<tr>
+				<td width="80px" align="right">
+					商品分类:
+				</td>
+				<td width="200px">
+					<select id="catId"
+						class="easyui-combotree combo" name="cat_id"
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
+						style="width: 200px;">
+					</select>
+				</td>
+				<td width="80px">
+					<select id="cycle_type" name="cycle_type" >
+						<option value="1">按照月统计</option>
+						<option value="0">按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70px" >
+					<select id="month">
+					</select>
+				</td>
+				<td width="200" style="text-align: center;">
+					<a id="search_data" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+
+	<div class="shadowBoxWhite whiteBox" >
+		<table>
+			<tr> 
+				<td width="200px;">
+					<input type="button" class="button" value="设置价格区间" onclick="$('#dlg').dialog('open')" style="width: 120px;height: 30px;left: 100px;" >
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="shadowBoxWhite whiteBox" style="width: 100%; heigh: 600px">
+		<table class="form-table" style="width: 100%; height: 300px">
+			<tr>
+				<td>
+					<div id="container" style="width: 100%; min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="dlg" class="easyui-dialog" title="设置价格区间" closed="true" style="width:400px;height:230px;padding:10px" buttons="#dlg-buttons" >
+		<ul>
+			<li>第一组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="0" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="100">元</li>
+			<li>第二组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="101" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="1000">元</li>
+			<li>第三组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="1001" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="10000">元</li>
+			<li>第四组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="10001" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="50000">元</li>
+		</ul>
+	</div>
+	
+	<!--创建 Button-->
+	<div id="dlg-buttons">
+	    <table cellpadding="0" cellspacing="0" style="width: 100%">
+	        <tr>
+	            <td style="text-align: right">
+	                <a href="#" class="easyui-linkbutton"  onclick="savePrice()" >保存</a> 
+	                <a href="#" class="easyui-linkbutton"  onclick="javascript:$('#dlg').dialog('close')" >关闭</a>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+	</form>
+</div>
+
+
+<script type="text/javascript">
+	var sale_money;	
+	$(function() {
+		
+		savePrice();
+		
+		var currentYear = new Date().getFullYear();
+		var historyYear = currentYear-10;
+		
+		var currentmonth = new Date().getMonth();
+		currentmonth+=1;
+		for(var i=0;i<20;i++){
+			if(currentYear==historyYear){
+				$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+			}else{
+				$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+			}
+			historyYear++;
+		}
+		
+		for(var i=1;i<=12;i++){
+			if(currentmonth==i){
+				$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+			}else{
+				$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+			}
+		}
+		
+		$("#search_data").click(function() {
+			loadData();
+		});
+		$("#cycle_type").change(function(){
+			if($(this).val()==1){
+				$("#month").show();
+			}else{
+				$("#month").hide();
+			}
+		});
+	});
+	
+	// 生成图表
+	function moneyHighcharts(obj){
+		sale_money = new Highcharts.Chart({
+	        chart: {
+	            type: 'line',
+	            renderTo: 'container'
+	        },
+	        title: {
+	            text: '价格销量分布'
+	        },
+	        xAxis: {
+	            categories: [obj[0],obj[1],obj[2],obj[3]]
+	        },
+	        yAxis: {
+	            title: {
+	                text: '销量'
+	            }
+	        },
+	        plotOptions: {
+	            line: {
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: false
+	            }
+	        },
+	        credits: {  
+	            enabled: false 	// remove high chart logo hyper-link  
+	        },
+	        series: [{
+	        	name: "价格销量",
+	        	data: [7.0, 6.9, 9.5, 14.5] 
+	        }]
+	    });
+	}
+	
+	function savePrice(){
+		var xprice = [];
+		$("input[name='minPrice']").each(function(index, comment){
+			var minp =  this.value;
+			var maxp = $(this).parent().find("input[name='maxPrice']").val();
+			xprice[index] = ""+minp+"元~"+maxp+"元";
+		});
+		moneyHighcharts(xprice);
+		loadData();
+	}
+	
+	//初始化数据
+	function init() {
+		//loadData();
+	}
+	
+	function loadData(){
+		
+		var min_price="";
+		var max_price="";
+		$("input[name='minPrice']").each(function(index, comment){
+			var minp =  this.value;
+			var maxp = $(this).parent().find("input[name='maxPrice']").val();
+			min_price = min_price+","+minp;
+			max_price = max_price+","+maxp;
+		});
+		
+		var year = $("#year :selected").val();
+		var month = $("#month :selected").val();
+		if(year==null){
+			year = new Date().getFullYear();
+			month = new Date().getMonth();
+			month+=1;
+		}
+		
+		var catId = $("input[name='cat_id']").val();
+		
+		var options = {
+				url : "${ctx}/shop/admin/goodsStatis/get-price-sales-json.do?year="+year+"&month="+month+"&minprice="+min_price+"&maxprice="+max_price,
+				type : "post",
+				dataType : 'json',
+				success : function(data) {
+					if (data.result == 1) {
+						sale_money.series[0].setData(data.data);
+					} else {
+						alert(json.message);
+					}
+				}
+			};
+		$("#priceForm").ajaxSubmit(options);
+	}
+	
+
+</script>
+
+
+
+<#include '/admin/footer.html' >

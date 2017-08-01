@@ -1,0 +1,108 @@
+<div class="input" >
+<form class="validate"   enctype="multipart/form-data">
+	<div style="color:red">提示：导入会覆盖当前站点的数据</div>
+   <table cellspacing="1" cellpadding="3" width="100%" class="form-table" >
+     <tr> 
+       <th >输入导入配置文件路径</th>
+       <td><input type="text" name="path"  style="width:500px"  dataType="string" isrequired="true" /> 
+	   </td>
+     </tr>
+     <tr> 
+       <th ><input type="radio" name="imptype" id="allcat" value="1" checked>导入所有类别</th>
+       <td>
+			
+	   </td>
+     </tr>
+     <tr> 
+       <th ><input type="radio" name="imptype" id="onecat" value="2">导入某个类别</th>
+       <td>
+		<select name="catid" id="cat_id" disabled="true" >
+			<option value="">请选择商品分类</option>
+			<#assign children=catList />
+			<#assign level=1 />
+			<#include 'select_children.html' />  	
+		</select>	
+	   </td>
+     </tr>
+     <tr> 
+       <th >选项:</th>
+       <td>
+			<input type="checkbox" name="cleanall" id="cleanall" value="1">清空所有商品数据<br>
+			<input type="checkbox" name="cleancat" id="cleancat" value="1" disabled="true">清空要导入商品分类的数据<br>
+			<input type="checkbox"  id="customrow" value="1"  >指定行数：由<input class="rownum" type="text" style="width:80px"  disabled="true" value="0" name="startNum" />行至<input type="text"  disabled="true"  class="rownum"  style="width:80px" value="0" name="endNum" />
+	   </td>
+     </tr>          
+   </table>
+	<div class="submitlist" align="center">
+	 <table>
+	 <tr><td >
+	       <input name="button" type="button"  value="导入" class="submitBtn"/>
+	   </td>
+	   </tr>
+	 </table>
+	</div>   
+   </form>
+</div>
+<script>
+ 
+function doImport(){
+	
+ 
+
+	
+	
+	if($("#onecat").attr("checked")){
+		if($("#cat_id").val()==""){
+			alert("请选择要导入的类别");
+			return ;
+		}	
+	}
+	
+	$.Loading.show('正在导入，请稍侯...'); 
+	
+	$("form").ajaxSubmit({
+		url:"goodsImport!imported.do?ajax=yes",
+		type:"POST",
+		dataType:"json",
+		success:function(result){
+			if(result.result==1){
+			 	alert("导入成功");
+			 	$.Loading.hide();
+			}else{
+				$.Loading.hide();
+				alert("导入失败");
+			 
+			}
+			
+		},
+		error:function(){
+			$.Loading.hide();
+			alert("导入错误");
+		}
+	});	
+}
+ 
+ 
+
+$(function(){
+	
+	$("#allcat").click(function(){
+		$("#cat_id").attr("disabled","true");
+		$("#cleancat").attr("disabled",true);
+		
+	});
+
+	$("#onecat").click(function(){
+		$("#cat_id").attr("disabled",false);
+		$("#cleancat").attr("disabled",false);
+	});
+
+	$("#customrow").click(function(){
+		$(".rownum").attr("disabled",!this.checked)
+	});
+	
+	$(".submitBtn").click(function(){
+		doImport();
+	});
+})
+</script>

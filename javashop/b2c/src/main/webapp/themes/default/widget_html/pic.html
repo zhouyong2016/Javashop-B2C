@@ -1,0 +1,22 @@
+					<div class="re_left">
+						<div class="re_pic">
+						<!--产品大图-->
+						<a href="<@GoodsPic pic="${image_default!''}" postfix='_big' />"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+							<@image   src="<@GoodsPic pic="${image_default!''}"  postfix='_small' />" />
+						</a>
+						<!--产品大图完毕-->
+						</div>
+						<div class="re_breviary">
+							<div class="re_levo"><a href="#"></a></div>
+							<div class="re_contre">
+								<ul>
+								<!--好像是小缩略图-->
+									<#list galleryList as gallery>
+										<li <#if gallery_index==defaultindex>class="selected"</#if>><@image src="${gallery.thumbnail  }"  big="${gallery.big}" small="${gallery.small}"/> </li>
+									</#list>
+								<!--小缩略图完毕-->
+								</ul>
+							</div>
+							<div class="re_dext"><a href="#"></a></div>
+						</div>
+					</div>

@@ -1,0 +1,9 @@
+
+<!--创建"读取商品详细"标签-->
+<#assign b2b2cGoodsBaseDataTag= newTag("b2b2cGoodsBaseDataTag") >  
+<!--调用"读取商品详细"标签，并传递参数-->            
+<#assign  b2b2cGoodsBase= b2b2cGoodsBaseDataTag("'goodsid':'1'") >						
+<ul class="gw">
+<#list b2b2cGoodsBase as goods>
+	商品名称：${goods.name}</br>
+</#list>

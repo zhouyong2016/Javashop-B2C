@@ -1,0 +1,11 @@
+
+<!--创建"检查b2b2c会员"标签-->
+<#assign CheckB2b2cMemberTag= newTag("checkB2b2cMemberTag") >  
+<!--调用"检查b2b2c会员"标签，并传递参数-->            
+<#assign  CheckB2b2cMember= CheckB2b2cMemberTag() >						
+<ul class="gw">
+<#list CheckB2b2cMember as stl>
+	是否有店铺：${stl.is_store}</br>
+	店铺id：${stl.store_id}</br>
+	
+</#list>

@@ -1,0 +1,87 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div class="main">
+	<form id="prt_tmplform">
+	<div >
+		<div style="float: left">
+			<a href="javascript:void(0)" class="button blueButton"
+				onclick="newTab('添加模板','${ctx}/shop/admin/print-tmpl//add.do')">添加</a>
+			<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
+		</div>
+	</div>
+
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/print-tmpl//list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true',toolbar:'#tb'"
+			pagination="true" id="prt_tmpldata">
+			<thead>
+				<tr>
+					<th data-options="field:'prt_tmpl_id',checkbox:true"></th>
+					<th data-options="field:'prt_tmpl_title',width:200">模板名称</th>
+					<th data-options="field:'shortcut',width:300"
+						formatter="formatShortcut">是否启用</th>
+					<th data-options="field:'action',width:100,align:'center'"
+						formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	</form>
+
+	<script type="text/javascript">
+		function formatOperation(value, row, index) {
+			if((navigator.platform == "Win32") || (navigator.platform == "Windows")){
+				var val="<a class='edit' title='查看' href='#' onclick=\"newTab('查看模板详细','${ctx}/shop/admin/print-tmpl//edit.do?prt_tmplId="+row.prt_tmpl_id+"')\"></a>";
+				return val;
+			}else{
+				return "";
+			}
+		}
+
+		function formatShortcut(value, row, index) {
+			var val;
+			if (row.shortcut == 'true') {
+				val = "是";
+			} else {
+				val = "否";
+			}
+			return val;
+		}
+		function del() {
+			var rows = $('#prt_tmpldata').datagrid("getSelections");
+			if (rows.length < 1) {
+				$.Loading.error("请选择要删除的模板");
+				return;
+			}
+			if (!confirm("确认要将这些模板放入回收站吗？")) {
+				return;
+			}
+			$.Loading.show("正在删除......");
+			var options = {
+				url : "${ctx}/shop/admin/print-tmpl//delete.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						var rows = $('#prt_tmpldata').datagrid("getSelections");
+						for ( var i = 0; i < rows.length; i++) {
+							var index = $('#prt_tmpldata').datagrid(
+									'getRowIndex', rows[i]);
+							$('#prt_tmpldata').datagrid('deleteRow', index);
+						}
+					}
+					if (result.result == 0) {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#prt_tmplform').ajaxSubmit(options);
+		}
+	</script>
+	<#include '/admin/footer.html' >

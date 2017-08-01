@@ -1,0 +1,96 @@
+<#assign title= "获取带有规格的商品的库存信息" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'goods_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>goodsSpecStoreTag 获取带有规格的商品的库存信息标签</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#try">标签测试工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>在前台输出获取带有规格的商品的库存信息</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>标签ID</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">goodsSpecStoreTag</td>
+						 
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>标签内输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>int</td>
+						<td>必填</td>
+						<td></td>
+						<td></td>
+						<td class="leftalign">商品id</td>
+					</tr>
+					
+				
+					
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>获取带有规格的商品的库存信息</td>
+						<td>list<<a href="Product.html">Product</a>></td>
+						<td class="leftalign" style="width:380px">输出商品息</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="try">
+				<h2>试一试</h2>
+				<a href="try.html?filename=GoodsSpecStoreTag.html" target="_blank">输出至少一条符合的信息</a>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

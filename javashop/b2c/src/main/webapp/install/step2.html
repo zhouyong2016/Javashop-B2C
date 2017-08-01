@@ -1,0 +1,122 @@
+<#include 'header.html'/>
+
+<div class="title">
+	<h1><span class="title_bg">配置数据库信息</span></h1>
+</div>
+<form id="db_setting" action="step3.do" method="post" onsubmit="return checkInput();"  >
+	<div class="content" style="text-align:left;">
+		<div class="content_bg">
+			<div class="content_bg02">
+				<ul class="list">
+					<li>
+						<span class="step07">数据库类型</span>
+						<!-- 使用easyui后，高度与实际差2px，宽度与实际差22px，计算好差值即可。 -->
+						<select id="dbtype" name="dbtype" class="easyui-combobox database" style="height:39px;width:262px;">
+							<option value="mysql">MySQL</option>
+							<option value="oracle">Oracle</option>
+							<option value="sqlserver">SQLServer</option>
+						</select>
+					</li>
+					<li class="icon">
+						<span class="step03">数据库主机</span>
+						<input type="text" value="localhost:3306"  name="dbhost" id="db_host" class="page02" />
+					</li>
+					
+					<li>
+						<span class="step07">数据库用户名</span>
+						<input type="text" value=""  name="uname" class="page03" id="db_uname" />
+					</li>
+					
+					<li>
+						<span class="step07">数据库密码</span>
+						<input type="password" value=""  name="pwd" class="page03" id="db_passwd">
+					</li>
+					<li class="notice">
+						<span class="step07">数据库名</span>
+						<input type="text" value="" size="25" name="dbname" id="db_name" style="width: 120px;" class="page03" />
+						<label class="establish">
+							<input type="checkbox" value="yes"  name="auto_create"   checked="checked">自动创建数据库
+						</label>
+						<span class="wran01">警告！如果自动创建数据库，此安装有可能破坏原有库中的数据！</span>
+					</li>
+				</ul>
+				<div class="next">
+					<input type="button" id="submitBtn" value="下一步"  />
+				</div>
+			</div>
+		</div> 
+	</div>  
+</form> 
+<script type="text/javascript">
+(function(a){function c(){var b=a("#loading");if(b.size()==0)b=a('<div id="loading" class="loading" style=\'z-index:3000\' />').appendTo(a("body")).hide();return b}a.Loading=a.Loading||{};a.Loading.show=function(b){var d=c();b&&d.html(b);a('<div style="height: 100%; width: 100%; position: fixed; left: 0pt; top: 0pt; z-index: 2999; opacity: 0.4;" class="jqmOverlay"></div>').appendTo(a("body"));d.show()};a.Loading.hide=function(){c().hide();a(".jqmOverlay").remove()}})(jQuery);
+function checkInput(){
+	if($.trim( $("#db_host").val())=='' ){
+		alert("请输入数据库主机");
+		$("#db_host")[0].focus();
+		return false;
+	}
+
+	if($.trim( $("#db_uname").val() )=='' ){
+		alert("请输入数据库用户名");
+		$("#db_uname")[0].focus();
+		return false;
+	}
+ 
+	if($.trim( $("#db_passwd").val() )=='' ){
+		alert("请输入数据库密码");
+		$("#db_passwd")[0].focus();
+		return false;
+	}
+
+	if($.trim( $("#db_name").val() )=='' ){
+		alert("请输入数据库名");
+		$("#db_name")[0].focus();
+		return false;
+	}
+}
+function checkAndSubmit(){
+	$.Loading.show('正在检测数据库连接，请稍候...');
+	var options = {
+		url :"test-connection.do",
+		cache:false,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			$.Loading.hide();
+			if(result.result==1){
+				$.Loading.show('数据库连接成功，转入下一步...');
+				$("#db_setting")[0].submit();
+			}else{
+				alert("数据库连接失败，请检查您输入的用户名或密码。");
+			}
+		},
+		error : function(e) {
+			alert("出错啦:(");
+		}
+	};
+	
+	$("#db_setting").ajaxSubmit(options);	
+}
+
+ //db_setting
+$(function(){
+	$("#res_no").attr("checked",true);
+	$("#submitBtn").click(function(){
+		checkAndSubmit();
+	});
+	$("#dbtype").change(function(){
+		if($("#dbtype").val()=="mysql")
+			$("#db_host").val("localhost:3306");
+		else if($("#dbtype").val()=="oracle")
+			$("#db_host").val("localhost:1521");
+		else if($("#dbtype").val()=="sqlserver")
+			$("#db_host").val("localhost:1433");
+	});
+});
+</script>
+<script>
+	$(function(){
+		$(".combo-text").css({"height":"36px","line-height":"36px","text-align":"left"});
+	})
+</script>
+<#include 'footer.html'/>

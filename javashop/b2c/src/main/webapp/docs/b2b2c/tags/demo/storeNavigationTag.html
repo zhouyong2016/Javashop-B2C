@@ -1,0 +1,10 @@
+
+<!--创建"店铺导航"标签-->
+<#assign storeNavigationTag= newTag("storeNavigationTag") >  
+<!--调用"店铺导航"标签，并传递参数-->            
+<#assign  storeNavigation= storeNavigationTag("'store_id':'15'") >						
+<ul class="gw">
+<#list storeNavigation as gp>
+        名称：${gp.name}</br>    
+	id：${gp.id}</br>
+</#list>

@@ -1,0 +1,23 @@
+
+#help_title{width:990px;height:80px;line-height:80px;text-align:center;font-size:30px;margin:10px auto;}
+.content{width:990px;overflow:hidden;margin:0px auto;text-align:center;border-bottom:1px solid #aaa;margin-bottom:20px;padding-bottom:20px;}
+.content h1{text-align:left;font-size:24px;font-weight:bold;color:#20201f;height:50px;line-height:50px;width:100%;}
+.content h2{text-align:left;font-size:18px;font-weight:bold;color:#444;height:50px;line-height:50px;width:100%;}
+.content p{color:#363535;line-height:25px;width:990px;text-align:justify;font-size:14px;}
+.content .picone img{width:800px;height:250px;margin:20px 0px;}
+.content .pictwo img{margin:20px 0px;}
+.content .selected{background:#d3cfcb;padding:0px 5px;}
+.content b{font-weight:normal;text-decoration: underline;color:#000;}
+.content .code{width:860px;overflow:hidden;border:1px dashed #ccc;margin:20px auto;padding:20px;}
+.content .black{color:#898988;line-height:25px;width:990px;text-align:left;font-size:14px;}
+.content .blue{color:#d56cf7;}
+.content .light_blue{color:#5c0ff9}
+.content .grey{color:#aaa}
+.content .red{color:#fc0303;}
+
+
+
+
+
+
+

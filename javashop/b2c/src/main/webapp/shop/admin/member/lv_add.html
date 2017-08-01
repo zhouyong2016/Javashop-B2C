@@ -1,0 +1,43 @@
+<style>
+.input_text {
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th width="100px">等级名称</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="lvname"
+						name="name" data-options="required:true"  maxlength="20"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>所需积分</th>
+					<td><input class="easyui-numberbox input_text" type="text" id="lvpoint"
+						name="point" data-options="required:true" maxlength="9"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>优惠百分比</th>
+					<td><input class="easyui-numberbox input_text" type="text" id="lvdiscount"
+						name="discount" data-options="required:true"
+						validType="maxnum[101]" maxlength="3"></input>
+					</td>
+					<td align="left"><div id="default_lvTip">如果输入80，表示该会员等级以销售价80%的价格购买。</div>
+					</td>
+
+				</tr>
+				<tr>
+					<th>默认等级</th>
+					<td>
+						<input class="easyui-validatebox" type="radio" name="default_lv" value="0" checked />否&nbsp;&nbsp; 
+						<input class="easyui-validatebox" type="radio" name="default_lv" value="1" />是</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

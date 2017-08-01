@@ -1,0 +1,240 @@
+<#include '/admin/header.html' > 
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" id="add_uri_button">添加</a>
+		<a href="javascript:void(0)" class="button"
+			data-options="iconCls:'icon-remove',plain:true" onclick="saveEdit()">保存修改</a>
+		
+		<span style="float: right;"> 
+				<span id="simpleSearch">
+					<input id="searchKeyword" class="input_text" type="text" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+					<a href="javascript:void(0)" class="easyui-linkbutton" 
+					data-options="plain:true" onclick="searchUrl()">搜索</a>
+				</span>
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="uriForm">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/core/admin/themeUri/list-json.do',fitColumns:'true'" width="width" id="uridata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',width:20" formatter="formatId">编号</th>
+						<th data-options="field:'uri',width:100" formatter="formatUri">uri</th>
+						<th data-options="field:'path',width:100" formatter="formatPath">path</th>
+						<th data-options="field:'pagename',width:100" formatter="formatPagename">页面名称</th>
+						<th data-options="field:'action',width:50" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+		<div id="uriInfo" style="display: none;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+var app_path = "";
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.id+")'></a>";
+	return val;
+}
+
+function formatUri(value, row, index){
+	var val = '<input type="text" value="'+row.uri+'" class="input_text"  name="uri" style="width:95%" maxlength="60">';
+	return val;
+}
+function formatPath(value,row,index){
+	var val = '<input type="text" value="'+row.path+'" class="input_text"  name="path" style="width:95%" maxlength="60">';
+	return val;
+}
+function formatPagename(value,row,index){
+	var val = '<input type="text" value="'+row.pagename+'" class="input_text"  name="pagename" style="width:95%" maxlength="60">';
+	return val;
+}
+function formatId(value,row,index){
+	var val = row.id+'<input type="hidden" value="'+row.id+'" class="input_text"  name="ids">';
+	return val;
+}
+function saveEdit(){
+	var options = {
+			url : "${ctx}/core/admin/themeUri/batch-edit.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {	
+				$.Loading.hide();
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#uridata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);					
+				}
+			},
+			error : function(e) {
+				$.Loading.hide();
+				$.Loading.error("出错了");
+			}
+		};
+		$('#uriForm').ajaxSubmit(options);
+}
+$("#add_uri_button").click(function(){
+	 $("#uriInfo").show();
+	　　	$('#uriInfo').dialog({
+	　　		title: '添加',			
+	　　		width: 600,
+	  		top:20,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/themeUri/add.do?ajax=yes', 	 
+	　　		modal: true,
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　				 	 uriinfoForm("add",savebtn);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#addUriForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+});
+function edit(val){
+	 $("#uriInfo").show();
+	　　	$('#uriInfo').dialog({
+	　　		title: '编辑',			
+	　　		width: 600,
+	  		top:20,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/themeUri/edit.do?ajax=yes&id='+val, 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+				//var instance = ckeditor.instances["description"];
+				//if (instance) { ckeditor.remove(instance); }
+				//$("#description").ckeditor();
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　				 	 uriinfoForm("edit",editbtn);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#uriInfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function uriinfoForm(val,savebtn){
+	var formflag= $("#uriInfoForm").form().form('validate');
+	 savebtn.linkbutton("disable");	
+	if(formflag&&checkEdit()){
+		$.Loading.show("正在保存请稍候...");
+		var uriurl="";
+		if(val=="edit"){uriurl="${ctx}/core/admin/themeUri/save-edit.do?ajax=yes"}
+		if(val=="add"){uriurl="${ctx}/core/admin/themeUri/save-add.do?ajax=yes"}
+		var options = {
+				url : uriurl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#uriInfo").dialog('close');
+						$.Loading.success(result.message);
+						$('#uridata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		savebtn.linkbutton("enable");
+			 		$.Loading.error('出现错误，请重试');
+				}
+			};
+		$("#addUriForm").ajaxSubmit(options);
+		$("#uriInfoForm").ajaxSubmit(options);
+	}else{
+		savebtn.linkbutton("enable");
+	}
+}
+function checkEdit(){
+	var result = true;
+	$("#uri").each(function(){
+		if( $.trim( $(this).val() )=='' ){
+			result = false;
+			$.Loading.error('uri不能为空');
+		}
+	});
+
+	$("#path").each(function(){
+		if( $.trim( $(this).val() )=='' ){
+			result = false;
+			$.Loading.error('模版文件不能为空');
+		}
+	});
+
+	$("#pagename").each(function(){
+		if( $.trim( $(this).val() )=='' ){
+			result = false;
+			$.Loading.error('页面名称不能为空');
+		}
+	});
+	
+	$("#point").each(function(){
+		var point  = $.trim( $(this).val() );
+		
+		if( point=='' || parseInt(point) != point ){
+			result = false;
+			$.Loading.error('积分不能为空，且必须是数字');
+		}
+	});
+
+	return result;	
+}
+function del(id){
+	if(!confirm("确认要删除吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+	var options = {
+			url : "${ctx}/core/admin/themeUri/delete.do?ajax=yes&id="+id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#uridata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#uriForm').ajaxSubmit(options);
+}
+
+function searchUrl(){
+	var keyword = $("#searchKeyword").val();
+	
+	$('#uridata').datagrid('load', {
+		 keyword:keyword
+   }); 
+}
+
+</script>
+<#include '/admin/footer.html' >

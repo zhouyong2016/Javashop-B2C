@@ -1,0 +1,33 @@
+<form method="post" action="pay_to_${order.payment_type}.html" target="_blank" id="f_order_pay">
+	<input type="hidden" name="orderid" value="${order.order_id}" /> 
+	<input type="hidden" name="paymentid" id="paymentid" value="${order.payment_id}" />
+	<div class="pay_pattern">
+		<ul>
+			<li><strong>在线支付</strong></li>
+		</ul>
+	</div>
+	<div class="pay_bank">
+		<div>
+			<h2>选择支付方式</h2>
+			<ul>
+			<#--创建"支付列表"标签-->
+			<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+			<#--调用"支付列表"标签-->          
+			<#assign paymentList = shopPaymentListTag()>
+				<#list paymentList as pay>
+					<#if pay.type!="cod"> <!-- cod为货到付款    offline线下支付 -->
+						<#if pay.type!="offline" >
+							<li>
+								<input type="radio" name="paymethod" class="sex" value="${pay.id}" <#if order.payment_id==pay.id>checked="checked"</#if> />
+								<@image src="${ctx}/themes/default/images/${pay.id}.jpg" alt="${pay.name!''}" />
+							</li>
+						</#if>
+					</#if>
+				</#list>
+			</ul>
+		</div>
+	</div>
+	<div class="pay_go btn">
+		<input type="submit" value="立刻付款" class="yellow_btn">
+	</div>
+</form>

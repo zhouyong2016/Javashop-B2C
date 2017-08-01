@@ -1,0 +1,127 @@
+<#assign title= "购物车条目" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'cart_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>CartItem   购物车条目</h3>
+		<h2>需要简述</h2>
+		<h6>购物车条目</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>id</td>
+						<td>Integer</td>
+						<td class="describe">购物项ID</td>
+					</tr>
+					<tr>
+						<td>product_id</td>
+						<td>Integer</td>
+						<td class="describe">货品ID</td>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>Integer</td>
+						<td class="describe">商品ID</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>Integer</td>
+						<td class="describe">商品名称</td>
+					</tr>
+					<tr>
+						<td>mktprice</td>
+						<td>Double</td>
+						<td class="describe">市场价格</td>
+					</tr>
+					<tr>
+						<td>price</td>
+						<td>Double</td>
+						<td class="describe">销售价格</td>
+					</tr>
+					<tr>
+						<td>coupPrice</td>
+						<td>Double</td>
+						<td class="describe">优惠后的价格</td>
+					</tr>
+					<tr>
+						<td>subtotal</td>
+						<td>Double</td>
+						<td class="describe">小计</td>
+					</tr>
+					<tr>
+						<td>num</td>
+						<td>int</td>
+						<td class="describe">数量</td>
+					</tr>
+					<tr>
+						<td>image_default</td>
+						<td>String</td>
+						<td class="describe">商品图片</td>
+					</tr>
+					<tr>
+						<td>point</td>
+						<td>Integer</td>
+						<td class="describe">积分</td>
+					</tr>
+					<tr>
+						<td>itemtype</td>
+						<td>Integer</td>
+						<td class="describe">物品类型(0商品,1捆绑商品,2赠品)</td>
+					</tr>
+					<tr>
+						<td>sn</td>
+						<td>String</td>
+						<td class="describe">捆绑促销的货号</td>
+					</tr>
+					<tr>
+						<td>addon</td>
+						<td>String</td>
+						<td class="describe">配件字串</td>
+					</tr>
+					<tr>
+						<td>specs</td>
+						<td>String</td>
+						<td class="describe">规格</td>
+					</tr>
+					<tr>
+						<td>catid</td>
+						<td>int</td>
+						<td class="describe">是否货到付款</td>
+					</tr>
+					<tr>
+						<td>others</td>
+						<td>Map</td>
+						<td class="describe">扩展项,可通过 ICartItemFilter 进行过滤修改</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

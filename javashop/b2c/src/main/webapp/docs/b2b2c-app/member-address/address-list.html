@@ -1,0 +1,85 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>会员收货地址列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/address/list.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">此api需要会员登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/address/list.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "message": null,
+    "data": {
+        "addressList": [
+            {
+                "addr_id": 2,
+                "member_id": 16,
+                "name": "王子",
+                "country": null,
+                "province_id": 1,
+                "city_id": 33,
+                "region_id": 451,
+                "province": "北京",
+                "city": "密云县",
+                "region": "密云县",
+                "addr": "维多利亚大厦A座101室",
+                "zip": "101505",
+                "tel": "",
+                "mobile": "13999999999",
+                "def_addr": 0,
+                "remark": null,
+                "isDel": 0,
+                "is_checked": null
+            },
+            {
+                "addr_id": 3,
+                "member_id": 16,
+                "name": "会员的默认地址",
+                "country": null,
+                "province_id": 2,
+                "city_id": 52,
+                "region_id": 470,
+                "province": "上海",
+                "city": "黄浦区",
+                "region": "黄浦区",
+                "addr": "黄埔大桥旁边",
+                "zip": "200001",
+                "tel": "",
+                "mobile": "13222222222",
+                "def_addr": 1,
+                "remark": null,
+                "isDel": 0,
+                "is_checked": null
+            }
+        ]
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

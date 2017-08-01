@@ -1,0 +1,30 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>apply 退货单申请API</h3>
+		<p>退货单申请</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/sell-back/return-goods.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">orderId</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">6</span><span class="w200">订单id</span></p>
+			<p><span class="w100 important">refund_way</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">支付宝</span><span class="w200">退款方式</span></p>
+			<p><span class="w100 important">return_account</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">666</span><span class="w200">退款账户</span></p>
+			<p><span class="w100 important">remark</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">商品与图片不符</span><span class="w200">退货描述</span></p>
+			<p><span class="w100 important">goodsId</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">188</span><span class="w200">商品id</span></p>
+			<p><span class="w100 important">item_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">3</span><span class="w200">退货id</span></p>
+			<p><span class="w100 important">productId</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">188</span><span class="w200">货品id</span></p>
+			<p><span class="w100 important">price</span><span class="w100 important">Double</span><span class="w100 important">必须</span><span class="w100 important">24.9</span><span class="w200">价格</span></p>
+			<p><span class="w100 important">payNum</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">付款数量</span></p>
+			<p><span class="w100 important">goodsNum</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">商品数量</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"退款申请成功","data":null}
+		</h5>
+	</div>
+</div>

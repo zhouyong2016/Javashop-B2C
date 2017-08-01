@@ -1,0 +1,240 @@
+<#include '/admin/header.html' > 
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/china-data.js"></script>
+<style type="text/css">
+#container {
+    height: 570px; 
+    min-width: 310px; 
+    max-width: 800px; 
+    margin: 0 auto; 
+}
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+}
+</style>
+
+<div class="main">
+	<div style="display: block;" class="searchAdvanced">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type" onchange="statistics_mode(this.value)" >
+						<option value="1">按照月统计</option>
+						<option value="0">按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month">
+					</select>
+				</td>
+				<td width="200" style="text-align: center;">
+					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+		
+			<!-- Tab -->
+			<div class="contentTab">
+				<ul class="tab">
+					<li class="contentTabS" statistics="1">下单会员数</li>
+					<li class="" statistics="2">下单量</li> 
+					<li class="" statistics="3">下单金额</li> 
+				</ul>
+			</div>
+			
+			<!-- tab-page -->
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<div class="tab-panel">
+							<table class="form-table" style="width: 100%;">
+								<tr>
+									<td>
+										<div id="container"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<!-- 区域分析表格 -->
+	<div class="shadowBoxWhite tableDiv">
+		<form id="regionForm">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/regionOrderStatistics/region-list-json.do',fitColumns:'true'" width="width" id="regionData">
+				<thead>
+					<tr>
+						<th data-options="field:'local_name',width:100">省份</th>
+						<th data-options="field:'member_num',width:100">下单会员数</th>
+						<th data-options="field:'order_num',width:100">下单量</th>
+						<th data-options="field:'order_price',width:100">下单金额</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+	
+	//设置时间
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	
+	//填充年
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	//填充月份
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	//生成下单会员数区域分析图
+	var cycle_type = $("#cycle_type :selected").val();
+    var d = new Date();
+	regionOrderStatistics(1,cycle_type,d.getFullYear(),d.getMonth() + 1)
+	 
+	//开始搜索
+	$("#search_statis").click(function(){
+		refresh_data();
+	});
+	
+});
+
+//切换Tab页
+$(".contentTab>ul>li").click(function(){
+ 	var tabid=$(this).attr("statistics");
+ 	$(".contentTab>ul>li").removeClass("contentTabS");
+ 	$(this).addClass("contentTabS");
+ 	
+ 	//刷新数据
+ 	refresh_data();
+});
+ 
+//查询区域分析图
+function regionOrderStatistics(tabid,cycle_type,year,month){
+	$.ajax({
+		url : "${ctx}/shop/admin/regionOrderStatistics/region-type-list-json.do",
+		data:{'type':tabid,'cycle_type':cycle_type,'year':year,'month':month},
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(tabid==1){
+				regionStatistics(result.message,"下单会员数");
+			}else if(tabid==2){
+				regionStatistics(result.message,"下单量");
+			}else{
+				regionStatistics(result.message,"下单金额");
+			}
+			
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+}
+
+//设置区域分析图
+function regionStatistics(data,name){
+	$('#container').highcharts('Map', {
+		chart :{
+			backgroundColor: '#FFFFFF'
+		},
+	    title : {														//标题
+	        text : '区域分析统计'
+	    },
+	    subtitle : {
+	        text : ''
+	    },
+	    mapNavigation: {												 //导航功能
+	        enabled: false,
+	        buttonOptions: {
+	            verticalAlign: 'bottom'
+	        }
+	    },
+	    colorAxis: {
+	        min: 0,
+	    },
+	    series : [{														//定义数据列
+	        data : data,
+	        mapData: Highcharts.maps['countries/china'],
+	        joinBy: 'hc-key',
+	        name: name,
+	        states: {
+	            color: '#FF0000'
+	        },
+	        dataLabels: {
+	            enabled: true,
+	            format: '{point.name}'
+	        }
+	    }],
+	    credits: {                                                       //版权信息
+	        text: ''
+	    }
+	});
+}
+
+//设置订单周期
+function statistics_mode(mode_value){
+	if(mode_value==1){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+	refresh_data();
+}
+
+//刷新数据
+function refresh_data(){
+	
+	var cycle_type = $("#cycle_type :selected").val();
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	//区域分析
+	var tabid=$(".contentTabS").attr("statistics");
+	regionOrderStatistics(tabid,cycle_type,year,month);
+	
+	//区域分析列表
+	$("#regionData").datagrid('load', {
+		 type:tabid,
+		 cycle_type:cycle_type,
+		 year:year,
+		 month:month,
+		 page:1
+   });
+}
+</script>

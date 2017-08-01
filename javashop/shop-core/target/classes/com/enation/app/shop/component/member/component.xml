@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店会员组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+
+	<plugins>
+		<plugin name="会员基本信息插件" id="memberDetailBasePlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员信息修改插件" id="memberEditorPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员订单列表插件" id="memberOrderListPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员积分插件" id="memberEditPointPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="等级积分插件" id="memberLevelPointHistoryPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="消费积分插件" id="memberMkPointHistoryPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员备注插件" id="memberRemarkPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="他的咨询插件" id="memberAskPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="他的评论插件" id="memberDiscussPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="每月清空会员登录次数" id="timeOutMemberPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="购物车优惠价格计算插件" id="orderVipPricePlugin">
+			<bundle id="cartPluginBundle"></bundle>
+		</plugin>
+		<plugin name="购物车记住我插件" id="cartRememberMePlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员优惠券插件" id="memberBonusPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="会员收货地址插件" id="memberAddressPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品评论时上传评论相册插件" id="commentAddImgPlugin">
+			<bundle id="goodsCommentsBundle"></bundle>
+		</plugin>
+	</plugins>
+
+</component>

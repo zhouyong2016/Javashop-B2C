@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>create</command>
+		<table>eop_app</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>appid</name><type>varchar</type><size>50</size><option>00</option></field>
+		<field><name>app_name</name><type>varchar</type><size>50</size><option>00</option></field>
+		<field><name>author</name><type>varchar</type><size>50</size><option>00</option></field>
+		<field><name>descript</name><type>memo</type><size>21845</size><option>00</option></field>
+		<field><name>deployment</name><type>int</type><size>11</size><option>00</option><default>1</default></field>
+		<field><name>path</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>authorizationcode</name><type>varchar</type><size>50</size><option>00</option></field>
+		<field><name>installuri</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>deleteflag</name><type>int</type><size>8</size><option>00</option><default>0</default></field>
+		<field><name>version</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+</dbsolution>

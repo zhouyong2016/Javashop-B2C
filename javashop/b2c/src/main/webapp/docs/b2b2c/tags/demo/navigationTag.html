@@ -1,0 +1,10 @@
+
+<!--创建"导航"标签-->
+<#assign navigationTag= newTag("navigationTag") >  
+<!--调用"导航"标签，并传递参数-->            
+<#assign  navigation= navigationTag("'store_id':'15'") >						
+<ul class="gw">
+<#list navigation as gp>
+        名称：${gp.name}</br>    
+	id：${gp.id}</br>
+</#list>

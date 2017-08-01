@@ -1,0 +1,15 @@
+<#-- 创建获取线下支付标签id TAG -->
+<#assign paymentCfgTag= newTag("paymentCfgTag")>
+<#-- 调用获取线下支付标签id TAG -->
+<#assign pcfg = paymentCfgTag()!'' >
+<div class="remittance">
+	<h2>支付方式展示图片</h2>
+	<div class="pay-line">
+		<@image src="${pcfg.pay_img!''}"/>
+	</div>
+	<h2>支付详情</h2>
+	<div class="pay-line">
+		${pcfg.biref}
+	</div>
+</div>
+

@@ -1,0 +1,84 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+	<input type="hidden" name="tag_id" value="${tag_id!''}"/> 
+		<div class='buttonArea'>
+			<span id="searchbtn">
+				<a href="javascript:void(0)" class="button"  onclick="controlBrands()">添加选中</a>
+			</span>
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<input id="searchKeyword" class="input_text" type="text" value="" size="30"
+					placeholder="请输入品牌关键字" name="searchKeyWord"> 
+					<a href="javascript:void(0)" class="easyui-linkbutton" 
+					data-options="plain:true" onclick="searchBrands()">搜索</a>
+				</span> 
+			</span>
+		</div>
+		 
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/brand/list-json.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="brandsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'brand_id',checkbox:true,width:100"></th>
+						<th data-options="field:'name',width:200">品牌名称</th>
+						<th data-options="field:'url',width:300">品牌网址</th> 
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">  
+
+//搜索
+function searchBrands(){
+	
+	 var keyword = $("#searchKeyword").val();
+	 
+	$('#brandsdata').datagrid('load', { 
+		 keyword:keyword 
+    }); 
+}
+function controlBrands(){
+	var rows = $('#brandsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要添加的品牌");
+		return;
+	}
+	$.Loading.show("正在添加品牌...");
+	var options = {
+			url : "${ctx}/shop/admin/brands-show/add.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					location.reload();     
+				}
+				if(result.result==0){
+					$.Loading.success(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

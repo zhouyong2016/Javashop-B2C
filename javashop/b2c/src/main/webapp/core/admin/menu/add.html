@@ -1,0 +1,110 @@
+<style>
+	.submitBtn {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #f7f7f7 0%, #f2f2f2 100%) repeat scroll 0 0;
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    color: #666666;
+    cursor: pointer;
+    display: inline-block;
+    height: 28px;
+    margin-right: 5px;
+    padding: 0 20px;
+}
+</style>
+<div class="input">
+	<form class="validate" id="addForm">
+		<input type="hidden" name="id"  disabled="true"  id="menuid"/>
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<th><label class="text">名称</label></th>
+				<td>
+					<input type="text" name="title" id="name" maxlength="12" value="" dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">类型</label></th>
+				<td>
+					<select name="menu.menutype">
+						<option value="2">应用</option>
+						<option value="1">系统</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">上级菜单</label></th>
+				<td>
+					<select name="pid" id="pid">
+						<option value="0">顶级菜单</option>
+						<#assign children=menuList />
+						<#assign level=1 />
+						<#assign pid=parentid />
+						<#include 'select_children.html' />
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">url</label></th>
+				<td>
+					<input type="text" name="url" id="url"  maxlength="200" dataType="string"/>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">target</label></th>
+				<td><input type="text" name="target" id="target"  maxlength="200"  /></td>
+			</tr>
+			<tr>
+				<th><label class="text">排序</label></th>
+				<td><input type="text" name="sorder" value="0" maxlength="8" style="width: 50px;ime-mode:disabled" dataType="int" isrequired="true" onkeyup="this.value=this.value.replace(/\D/g,'')" /></td>
+			</tr>
+			<tr>
+				<th><label class="text">允许导出</label></th>
+				<td>
+					<select name="canexp">
+						<option value="1">是</option>
+						<option value="0">否</option>
+					</select>
+				</td>
+			</tr>	
+			<tr style="height:70px;">
+				<th><label class="text">图标</label></th>
+				<td>
+				
+					<div class="icon_wrap">
+						<img src="${ctx}/adminthemes/new/images/menu_04.gif" />
+					 	<input type="hidden" id="icon" name="icon" value="default.png">
+					 	<span>正常态</span>
+				 	</div>
+				 	
+				 	点击图标更换
+				</td>
+			</tr>	
+			<tr>
+				<th><label class="text">演示站点是否禁止</label></th>
+				<td>
+					<select name="is_display">
+						<option value="0">否</option>
+						<option value="1">是</option>
+					</select>
+				</td>
+			</tr>				
+		</table>
+		<div class="submitlist" align="center">
+			<table>
+				<tr>
+					<td><input type="button" value=" 确定 " class="submitBtn"
+						id="saveAddBtn" /> <input name="reset" type="reset" value=" 重置 "
+						class="submitBtn" /></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+
+</div>
+<script type="text/javascript">
+$(function() {
+	$('#url').validatebox({
+		//required: true,
+		validType: 'length[1,1000]'
+	});
+});
+</script>

@@ -1,0 +1,40 @@
+<#assign  modelListTag=newTag("modelListTag") />
+<#assign  modelList=modelListTag() />
+
+<div class="tableform">
+	<div class="division">
+		<select id="model">
+		<#list modelList as model>
+		<option value="${model.model_id}">${model.china_name}</option>
+		</#list>
+		</select> 
+		<input type="text" id="keyw" />
+		<select id="field">
+		</select>
+		<input type="button" id="articleSearchBtn" value="搜索" />
+	</div>
+</div>
+<script>
+$(function(){
+	$("#model").change(function(){
+		$.get("/api/cms/data!fields.do",{"modelid":$("#model").val()},function(result){
+			$("#field").empty();
+			$.each(result,function(idx){
+				$("#field").append("<option value=\"" + result[idx].english_name + "\">" + result[idx].china_name + "</option>");
+			});
+		},"json");
+	}).change();
+	
+	$("#articleSearchBtn").click(function(){
+		var keyword = $("#keyw").val();
+		var temp = $("#field").val();
+		eval('var param = {"modelid":$("#model").val(),' + temp + ':keyword}');
+		$.post("/api/cms/data!search.do",param,function(result){
+			$("#articlelist").empty();
+			$.each(result,function(idx){
+				$("#articlelist").append("<option value=\"" + result[idx].cat_id + "-" + result[idx].id + "\">" + eval("result[idx]." + $("#field").val()) + "</option>");
+			});
+		},"json");
+	});
+});
+</script>

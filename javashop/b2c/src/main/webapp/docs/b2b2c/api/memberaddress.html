@@ -1,0 +1,130 @@
+<#assign title= "会员地址实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'address_menu.html' />
+	<div class="right_list">
+		<h3>memberaddress  会员地址</h3>
+		<h2>需要简述</h2>
+		<h6>会员地址</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>addr_id</td>
+						<td>Integer</td>
+						<td>收货地址ID</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>Integer</td>
+						<td>会员ID</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td>用户名</td>
+					</tr>
+					<tr>
+						<td>country</td>
+						<td>String</td>
+						<td>所在地区</td>
+					</tr>
+					<tr>
+						<td>province_id</td>
+						<td>Integer</td>
+						<td>所在省ID</td>
+					</tr>
+					<tr>
+						<td>city_id</td>
+						<td>Integer</td>
+						<td>所在市ID</td>
+					</tr>
+					<tr>
+						<td>region_id</td>
+						<td>Integer</td>
+						<td>所在地区ID</td>
+					</tr>
+					<tr>
+						<td>province</td>
+						<td>String</td>
+						<td>所在省</td>
+					</tr>
+					<tr>
+						<td>city</td>
+						<td>String</td>
+						<td>所在城市</td>
+					</tr>
+					<tr>
+						<td>region</td>
+						<td>String</td>
+						<td>所在地区</td>
+					</tr>
+					<tr>
+						<td>addr</td>
+						<td>String</td>
+						<td>详细地址</td>
+					</tr>
+					<tr>
+						<td>zip</td>
+						<td>String</td>
+						<td>邮编</td>
+					</tr>
+					<tr>
+						<td>tel</td>
+						<td>String</td>
+						<td>固定电话</td>
+					</tr>
+					<tr>
+						<td>mobile</td>
+						<td>String</td>
+						<td>移动电话</td>
+					</tr>
+					<tr>
+						<td>def_addr</td>
+						<td>Integer</td>
+						<td>是否是默认地址,如果传递yes则为默认地址，不传递此值或其它值为非默认地址</td>
+					</tr>
+					<tr>
+						<td>remark</td>
+						<td>String</td>
+						<td>备注</td>
+					</tr>
+					<tr>
+						<td>locationErpId</td>
+						<td>String</td>
+						<td>地址erpid</td>
+					</tr>
+					<tr>
+						<td>memberErpId</td>
+						<td>String</td>
+						<td>会员erpid</td>
+					</tr>
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

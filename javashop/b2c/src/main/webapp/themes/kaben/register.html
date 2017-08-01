@@ -1,0 +1,319 @@
+﻿<#assign  title="用户注册" />
+<#assign  index_type=2 />
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/reg.css" type="text/css" />
+<div class="register-box">
+
+	<div class="login_main">
+		<h1>立即注册会员<a href="${ctx}/index.html">回到首页</a></h1>
+		<div class="left-area">
+			<div class="two-code">
+				<@image src="${ctx}${themes_path}/images/weixin.png" alt="登录"/>
+				<i>做网店，我们是认真的</i>
+			</div>
+			<div class="login_area">
+				<span class="i06">如果您是会员</span>
+				<span class="i07">已经注册过账号，请立即</span>
+				<a href="${ctx}/login.html" class="button">登录</a> 
+				<span class="i07">已经注册过账号但忘记密码，请</span>
+				<a href="${ctx}/findpasswordByEmail.html" class="found_password">找回密码</a>
+			</div>
+			<div class="right_border"></div>
+		</div>
+		<div class="right_area">
+			<form action="register.html" method="post" id="register_form" class="validate">
+				<ul>
+					<li>
+						<div class="reg_box">
+							<span class="item">用户名：</span>
+							<input type="text" class="user_name" id="username" name="username"  fun="checkUserName" maxlength="20" placeholder="4-20个中英文数字组成" isrequired="true"/>
+						</div>
+					</li>
+					<li>
+						<div class="reg_box" style="margin:0 auto 5px;">
+							<span class="item">手机号：</span>
+							<input type="text" class="user_name_mobile" id="mobile" name="mobile" fun="checkMobile" maxlength="11" placeholder="可以用来找回用户名" isrequired="true"/>
+						</div>
+						<p class="for-email"><span>或</span><a href="${ctx}/register-meail.html">邮箱注册</a></p>
+					</li>
+					<li>
+						<div class="reg_box">
+							<span class="item">动态码：</span>
+							<input type="text" class="mobile_code" id="dynamic_code" name="sms_code" fun="checkCode" maxlength="6" placeholder="短信验证码" isrequired="true" />
+							&nbsp;&nbsp;
+							<span style="float:none;"><a href="javascript:void(0);" id="get-sms-code" class="get_code" style="color:#44b540;">获取验证码</a></span>
+						</div>
+					</li>
+					<!-- <li>
+						<div class="reg_box">
+							<span class="item">注册邮箱：</span>
+							<input type="text" class="email" maxlength="50" id="reg_email" name="email"  fun="checkEmail" i placeholder="邮箱用于登录和取回密码"/>
+						</div>
+					</li> -->
+					<li>
+						<div class="reg_box">
+							<span class="item">密&nbsp; 码：</span>
+							<input type="password" class="password" name="password" id="password"   fun="isPasswd"   maxlength="16" placeholder="6-16英文字母或数字组成" isrequired="true" />
+						</div>
+					</li>
+					<li>
+					<div class="reg_box">
+						<span class="item">确认密码：</span>
+						<input type="password" class="password" name="reg_password"  id="reg_passwd_r" name="passwd_re"   fun="checkpwd" class="definition_small" maxlength="16" placeholder="确认登录密码" isrequired="true" />
+					</div>
+					</li>
+					<li>
+						<div class="reg_box">
+							<span class="item">验证码：</span>
+							<input type="text" id="iptlogin" name="validcode" class="regis_small inputstyle _x_ipt" size="8" maxlength="4" isrequired="true" />
+							<img id="LoginimgVerifyCode" src="${ctx}/validcode.do?vtype=memberreg" alt="会员登录验证码" />
+						</div>
+					</li>
+					<li>
+						<div class="regis_read">
+							<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+							<span class="protocol">我已阅读并同意《服务协议》</span>
+						</div>
+					</li>
+					<li style="text-align:center">
+						<input type="button" class="registration" value="注册新用户"></input>
+						
+						<input type="hidden" name="type" value="1" />
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript">
+$(function(){
+	//  添加IE7下验证码图片兼容  _by: Andste 2016-9-30 11:43:31
+	if(Sys.ie == 7){
+		$('#LoginimgVerifyCode').css({height: 'auto'})
+	}
+
+	$("#get-sms-code").on('click', function(){
+		sendSms();
+	});
+	
+	$("#LoginimgVerifyCode").click(function(){
+		$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	});
+	
+	//输入框获得、失去焦点效果
+	$(".reg_box input").blur(function(){
+		$(this).parents(".reg_box").removeClass("selected");
+	})
+	 $(".reg_box input").focus(function(){
+		  $(this).parents(".reg_box").addClass("selected");
+	})
+	
+	var options = {
+			url : "${ctx}/api/shop/member/reg-mobile.do" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+ 				if(result.result==1){
+	 				location.href="register_success.html?mailurl="+result.mailurl+"&forward=${forward!''}";
+	 			}else{
+	 				$.alert(result.message);
+	 				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	 				$.Loading.hide();
+		 		} 
+			},
+			error : function(e) {
+				$.alert("出现错误 ，请重试");
+				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+				$.Loading.hide();
+			}
+	};
+	//点击注册 	
+	$(".registration").click(function(){
+		if (!$("#register_form").checkall()) {
+			return false;
+		}
+		$.Loading.show("正在提交您的信息，请稍候...");
+		$('#register_form').ajaxSubmit(options);	
+	});
+	
+	//点击弹出对话框
+	$(".protocol").on('click', function(){
+		$.ajax({
+			url:"protocol.html",
+			dataType:"html",
+			async:false,
+			cache:false,
+			success:function(html){
+				var options = {
+					title    : '用户注册协议',
+					html     : html,
+					top      : 100,
+					btn      : false,
+					backdrop : false,
+					width    : '800',
+				//	height   : '500',
+					showCall : function(){
+						$(".protocol-btn").on('click', function(){
+							//如果同意没有被勾选，点击同意以后，自动勾选
+							//if(!$("#license").is(':checked')){
+								//$("#license").attr("checked","checked");
+							//}
+							$('#dialogModal').modal('hide');  //关闭弹出层
+						})
+					},
+				}
+				$.dialogModal(options);
+				
+			},
+			error:function(){
+				$.message.error("糟糕，出错了:(");
+			}
+		});
+		//调用弹出对话框相关参数
+	})
+});
+
+//检测手机号 add_by DMRain 2016-7-6
+function checkMobile(value,callback){
+	 var input = $("#mobile");
+	 var mobile = input.val();
+	 
+	 var reg = /^0?1[3|4|5|8|7][0-9]\d{8}$/;
+	 if (!reg.test(mobile)) {
+		 return "格式不正确";
+	 }
+	 
+	 $.ajax({
+		url:"${ctx}/api/shop/member/checkmobile.do",
+		type:"POST",
+		data:"mobile=" + mobile,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"此号码已被注册");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});
+	return true;
+}
+
+//检测用户名
+function checkUserName(value,callback){
+	var input = $("#username");
+	var username  = input.val();
+	var patrn=/^([0-9A-Za-z一-龥]|-|_){4,20}$/;
+	if (!patrn.exec(username)) return "格式不正确！"  
+	$.ajax({
+		url:"${ctx}/api/shop/member/checkname.do",
+		type:"POST",
+		data:"username=" + username,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"重复的用户名！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+//检测手机号码
+function isPasswd(s){  
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec(s)) return "密码格式不正确！"  
+	return true  
+}
+
+//检测邮箱
+function checkEmail(value,callback){
+	var input = $("#reg_email");
+	var email  = input.val();
+	if($.trim(email)==''){
+		return "邮箱不能为空！";
+	}
+	var reg = /^([a-z0-9+_]|\-|\.|\-)+@([\w|\-]+\.)+[a-z]{2,4}$/i; 
+	if(!reg.test(email)){
+		return "邮箱格式不正确！";
+	}
+	$.ajax({
+		url:"${ctx}/api/shop/member/checkemail.do",
+		type:"POST",
+		data:"email="+email,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"邮箱重复！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+
+function isPasswd(s){  
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec(s)) return "密码格式不正确！"  
+	return true  
+}
+
+function checkpwd(){
+	if( $("#reg_passwd_r").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+
+var i = 60;
+var t1; 
+function aginSend(){
+	if(i == 0) {
+		var text = "重新获取 ";
+		$("#get-sms-code").html(text);
+		$("#get-sms-code").click(sendSms);
+		window.clearInterval(t1); 
+	} else {
+		var text = i + '秒';
+		$("#get-sms-code").html("重新获取: " + text);
+		i--;
+	}
+}
+
+function sendSms(){
+	var mobileNum = $.trim($("#mobile").val());
+	if(!mobileNum){
+		$.message.error("手机号不能为空") || alert('手机号不能为空')
+		return false;
+	}else if (!/^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9]|17[0-9])[0-9]{8}$/.test(mobileNum)) {
+		$.message.error("请填写正确的手机号") || alert('请填写正确的手机号')
+		return false;
+	}
+	var opts = {
+		url : ctx + "/api/shop/sms/send-sms-code.do?mobile=" + mobileNum+"&key=register",
+		type: 'POST',
+		chace: false,
+		success:function(result) {
+			if(result.result == 1) {
+				$.message.success('发送成功，请注意查收！');
+				$("#get-sms-code").off('click');
+				t1 = window.setInterval(aginSend,1000);
+			} else {
+				$.message.error(result.message);
+			}
+		},
+		error : function(){
+			$.message.error('出现错误，请重试！');
+		}
+	};
+	$.ajax(opts);
+}
+
+
+</script>
+<#include 'common/footer.html'/>

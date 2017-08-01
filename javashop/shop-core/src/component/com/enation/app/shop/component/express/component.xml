@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店快递组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="快递100api插件" id="kuaidi100Plugin">
+		</plugin>
+		<plugin name="showapi快递插件" id="showapiPlugin">
+		</plugin>
+	</plugins>
+
+	
+</component>

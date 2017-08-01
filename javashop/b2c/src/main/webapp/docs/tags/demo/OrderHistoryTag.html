@@ -1,0 +1,10 @@
+
+<!-- 获取会员购买商品列表标签 -->
+<#assign orderHistoryTag = newTag("orderHistoryTag")>
+<!-- 调用会员购买商品列表标签 -->
+<#assign ordersList = orderHistoryTag()>
+<ul>
+	<#list ordersList as order>
+		<li>${order.name}</li>
+	</#list>
+</ul>

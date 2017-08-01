@@ -1,0 +1,45 @@
+<#include '/admin/header.html' >
+<form id="uriInfoForm">
+	<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		
+		<tr>
+			<th><label class="text">URL：</label></th>
+			<td>
+			<input type="hidden" name="id" value="${themeUri.id}"/>
+			<input type="text" name="uri" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.uri}" dataType="string" id="uri" isrequired="true" data-options="required:true" />
+			</td>
+		</tr>
+		<tr>
+			<th><label class="text">模板文件：</label></th>
+			<td><input type="text" name="path" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.path}" dataType="string" id="path" isrequired="true" data-options="required:true" /> </td>
+		</tr>
+		<tr>
+			<th><label class="text">http缓存： </label></th>
+			<td>
+			<input type="radio" name="httpcache" value="1" <#if themeUri.httpcache==1>checked</#if>  >是&nbsp;&nbsp;
+			<input type="radio" name="httpcache" value="0" <#if themeUri.httpcache==0>checked</#if>  >否
+			</td>
+		</tr>	
+		<tr>
+			<th><label class="text">页面名称：</label></th>
+			<td><input type="text" name="pagename" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.pagename}"  dataType="string" id="pagename" isrequired="true" data-options="required:true" /> 
+			</td>
+		</tr>
+		<tr>
+			<th><label class="text">积分</label></th>
+			<td><input type="text" name="point" maxlength="9" class="input_text" value="${themeUri.point}"  dataType="string" id="point" required="int" value="0"/> </td>
+		</tr>
+		<tr>
+			<th><label class="text">关键字：</label></th>
+			<td><input type="text" name="keywords" maxlength="60" class="input_text" value="${themeUri.keywords!''}" dataType="string" isrequired="true"/> 
+			</td>
+		</tr>
+		<tr>
+			<th><label class="text">描述：</label></th>
+			<td> 
+				<textarea name="description" class="input_text" id="description" style="width:300px;height:100px"  >${themeUri.description!''}</textarea>
+			</td>
+		</tr>	
+	</table>
+</form>
+<#include '/admin/footer.html' >

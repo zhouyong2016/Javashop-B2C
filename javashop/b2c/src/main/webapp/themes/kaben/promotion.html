@@ -1,0 +1,141 @@
+<#assign  title="促销商品列表"/>
+<#assign  index_type=1 />
+<#include 'common/header.html'/>
+<#include 'common/reception_header.html'/>
+<link rel="stylesheet" href="${ctx}${themes_path}/css/promotion.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/index.css" type="text/css" />
+<script src="${ctx}${themes_path}/js/slider.js" type="text/javascript"></script>
+<link rel="stylesheet" href="${ctx}/themes/kaben/css/common.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/kaben/css/dialog.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />
+
+<#-- 获取广告表标签 -->
+<#assign advListTag= newTag("advListTag")>
+<#assign adv = advListTag("'acid':'12'")!'' >
+<#assign advList = adv.advList /> 
+<div class="max-adv">
+	<div id="index-adv" class="flexslider">
+		<ul class="slides">
+			 <#list advList as adv>
+				<li style="background:transparent url(${adv.atturl!''}) no-repeat scroll center top / cover "/ rel="${ctx}/${adv.url!''}">
+				</li>
+			 </#list>  
+		</ul>
+	
+	</div>
+</div>
+<#assign activitySalesDetailTag= newTag("activitySalesDetailTag")>
+<#assign activityDetail = activitySalesDetailTag("'pageSize':9")>
+<#-- 促销信息 -->
+<#assign activity = activityDetail.activity>   
+<#-- 促销内容 -->
+<#assign detail = activityDetail.detail>   
+<#-- 促销商品列表 -->
+<#assign goodsList = activityDetail.goodsList>   
+<div class="promotion-box">
+<!-- 促销内容 -->
+	<div class="promotion-title">
+		<div class="same-title title2">
+			<h2 class="promotion-time">活动名称</h2>
+			<div class="promotion-word">
+				<p>${activity.activity_name!''}</p>
+			</div>	
+		</div>
+		<div class="same-title title1">
+			<h2 class="promotion-time">活动时间</h2>
+			<div class="promotion-word">
+				<p><@dateformat time="${activity.start_time?c}" pattern="yyyy-MM-dd"/></p>
+				<span>至</span>
+				<p><@dateformat time="${activity.end_time?c}" pattern="yyyy-MM-dd"/></p>
+			</div>
+		</div>
+		<!-- 优惠门槛 -->
+		<div class="same-title title3">
+			<h2>优惠条件</h2>
+			<div class="promotion-word">
+				<h3>满<span>${detail.full_money!''}</span>元</h3>
+				<div class="promotion-condition">
+					<p <#if detail.is_full_minus == 1>style="display:block;">减${detail.minus_value!''}元</#if></p>
+					<p <#if detail.is_send_point == 1>style="display:block;">送${detail.point_value!''}分</#if></p>
+					<p <#if detail.is_free_ship  == 1>style="display:block;">免邮费</#if></p>
+					<p <#if detail.is_send_gift  == 1>style="display:block;">送赠品</#if></p>
+					<#if detail.is_send_bonus ==1>
+						<p style="display:block;">送优惠券</p>
+					</#if>
+				</div>
+			</div>
+		</div>
+		<div class="same-title title4">
+			<div class="promotion-inside">
+				<h2>活动内容</h2>
+				<div class="promotion-word last-word">
+					${activity.description!''}
+				</div>	
+			</div>
+		</div>
+	</div>
+<!-- 促销内容end -->
+	<div class="promotion-list">
+		<div class="list">
+			<ul>
+				<#list goodsList as list>
+					<li class="<#if list_index/3 = 0>no-border</#if>">
+						<div class="list-img">
+							<a target="_blank" href="${ctx}/goods-${list.goods_id!''}.html">
+								<@image class="scrollLoading" src="${list.thumbnail!''}" alt="${list.name!''}" />
+							</a>
+						</div>
+						<h2><a target="_blank" href="${ctx}/goods-${list.goods_id!''}.html">${list.name!''}</a></h2>
+						<p>${list.price?string.currency!''}</p>
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<div class="page">
+			<@pager pageno="${activityDetail.page!''}" pagesize="${activityDetail.pageSize!''}" totalcount="${activityDetail.totalCount!''}" />
+		</div>
+	</div>
+</div>
+
+<script>
+
+	$(function(){
+		//兼容IE，让活动内容、活动说明内容居中
+		var activityWord = $(".activity").height();   //活动内容文字高度
+		var introWord    = $(".intro").height();      //说动详细说明文字高度
+		//$(".activity").css("margin-top",-activityWord/2+"px");
+		//$(".intro").css("margin-top",-introWord/2+"px"); 
+		var titleWord    = $(".title3-word").height();
+		$(".title3").find(".title3-word").css("margin-top",-titleWord/2+"px"); 
+		
+		//点击跳转广告链接
+		$(".slides li").click(function(){
+			var advUrl = $(this).attr("rel");
+			location.href = advUrl;
+		})
+		
+		//广告轮播
+		$('#index-adv').flexslider({
+			animation: "slide",
+			direction:"horizontal",
+			easing:"swing"
+		});
+			//去除页面上的"编辑"按钮 
+			var a=$(".floor");
+			a.remove();
+
+		$(".flexslider").mouseover(function(){
+			$(".max-adv .flexslider .flex-direction-nav li a").show(300);
+		})
+			
+		$(".flexslider").mouseleave(function(){
+			$(".max-adv .flexslider .flex-direction-nav li a").hide();
+		})
+		
+		//获得内容高度
+		var conditionHeight = $(".promotion-condition").height();
+		$(".promotion-word h3").css("line-height",conditionHeight+"px");
+	})
+</script>
+<#include 'common/footer.html'/>
+

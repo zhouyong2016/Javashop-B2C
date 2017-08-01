@@ -1,0 +1,13 @@
+
+<!-- 获取会员订单详细快递信息 -->
+<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+<!-- 调用会员订单详细快递信息 -->
+<#assign orderDelivery = orderDeliveryListTag("{'orderid':1}")>
+<!-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+<#assign orderSend = orderDelivery.deliveryList>
+<#list orderSend as delivery>
+	${delivery.city}
+	<#if delivery.type ==1 && delivery.logi_no?exists ><p>发货，物流公司：${delivery.logi_name!''},运单号：${delivery.logi_no!''}<a href="javascript:void();" onclick="javascrpt:showRogInfo('${delivery.logi_no!''}','${delivery.logi_code!''}');return false;">查询货运状态</a></p></#if>
+	<#if delivery.type ==2 && delivery.logi_no?exists ><p>退货，物流公司：${delivery.logi_name!''},运单号：${delivery.logi_no!''}<a href="javascript:void();" onclick="javascrpt:showRogInfo('${delivery.logi_no!''}','${delivery.logi_code!''}');return false;">查询货运状态</a></p></#if>
+	<#if delivery.type ==3 && delivery.logi_no?exists ><p>换货，物流公司：${delivery.logi_name!''},运单号：${delivery.logi_no!''}<a href="javascript:void();" onclick="javascrpt:showRogInfo('${delivery.logi_no!''}','${delivery.logi_code!''}');return false;">查询货运状态</a></p></#if>
+</#list>

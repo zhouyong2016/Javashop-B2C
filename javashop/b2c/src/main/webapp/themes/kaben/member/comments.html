@@ -1,0 +1,143 @@
+<#assign title="我的评论" /> <#include 'member_header.html' />
+<!-- 引用图片点击放大js插件css文件-->
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/lightbox.css" />
+<!-- 引用图片点击放大js插件-->
+<script src="${ctx}${themes_path}/js/lightbox.js"></script>
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员我的咨询标签 -->
+<#assign commentsList = memberCommentListTag()>
+<div class="member-commen">
+	<h1>我的评价<span>童鞋的商品评价及等待评价的商品</span></h1>
+	 <div class="member-comment-tab">
+	 	<ul>
+	 		<li style="border:0px none" class="mine-comment selected">我的评价</li>
+	 		<li class="mine-wait-comment">待评价的商品</li>
+	 	</ul>
+	 </div>
+	 <div class="member-comment-box">
+	 	<div class="member-comment-list" >
+	 		<#if commentsList.commentsList?size gt 0 >
+	 		<ul class="member-comment-outside">
+	 			<#list commentsList.commentsList as comment>
+	 				<li>
+	 					<div class="member-common-goods">
+	 						<p>
+	 							<a href="${ctx}/goods-${comment.goods_id}.html" target="_blank">${comment.name}</a>
+	 						</p>
+	 						<i>
+	 							<#if comment.status == 1>
+									审核通过 
+								<#elseif comment.status== 2>
+									审核拒绝
+								<#else> 
+									待审核
+								 </#if>
+	 						</i>
+	 						<span><@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+	 						
+	 						<em>
+	 							(
+		 						<#if comment.grade == 3>
+									好评
+								<#elseif comment.grade == 2>
+									中评
+								<#else>
+									差评
+								</#if>
+								)
+								</em>
+	 					</div>
+	 					<div class="member-comment">
+ 							<div class="member-comment-right">
+		 						<p>${comment.content}</p>
+								<!-- 获取商品评论图片相册标签 -->
+								<#assign commentGalleryListTag = newTag("commentGalleryListTag")>
+								<!-- 调用商品评论图片相册标签 -->
+								<#assign galleryList = commentGalleryListTag("{'comment_id':${comment.comment_id}}")>
+								
+								<div class="suofang">
+									<#if galleryList??>
+										<#list galleryList as gallery>
+						             		<a href="<@imgurl pic='${gallery.original}'/>" rel="lightbox[img_${gallery.comment_id}]" style="float: left; margin: 10px;" target="_blank"> <@image src="${gallery.original}"  width="50" height="50"/> </a>
+						            	</#list>
+						            </#if>
+					            </div>
+							</div>
+							<#if comment.replystatus == 1>
+								<div class="aidaiReply">
+									<p>${comment.reply}</p>
+								</div>
+							</#if>
+	 					</div>
+	 				</li>
+	 			</#list>
+	 		</ul>
+	 		<@pager pageno="${page!'1'}" pagesize="${commentsList.pageSize}" totalcount="${commentsList.totalCount}" />
+	 		<#else>
+	 			<div class="member-comment-wait">
+					<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+				</div>
+	 		</#if>
+	 	</div>
+	 	<!-- 等评论商品 -->
+	 	<div class="member-comment-wait" style="display:none;">
+	 	</div>
+	 	<em class="point-upward"></em>
+	 </div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+<script>
+$(function(){
+	otherMenu(1);	
+	
+	//选项卡切换
+	$(".mine-comment").click(function(){
+		$(this).addClass("selected");
+		$(".member-comment-tab ul li").removeClass("selected");
+		$(".member-comment-list").show();
+		$(".member-comment-wait").hide();
+		$(".point-upward").css("left","35px");
+	})
+		$(".mine-wait-comment").click(function(){
+		$(this).addClass("selected");
+		$(".member-comment-tab ul li").removeClass("selected");
+		$(".member-comment-list").hide();
+		$(".member-comment-wait").empty();
+		loadWaitCommentList(1);
+		
+		$(".member-comment-wait").show();
+		$(".point-upward").css("left","155px");		
+	})
+	
+	//等评论商品
+	function loadWaitCommentList(page){
+		$(".member-comment-wait").load("waitcommont.html?page="+page,function(){
+			$(".member-comment-wait .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadWaitCommentList(pageno);
+			});
+		});	
+	}
+	
+})
+
+//设置图片缩放的属性	add by DMRain 2016-5-11
+lightbox.option({
+	'albumLabel': '第%1张   共%2张',	//设置显示的文字
+    'maxWidth': 500,			//设置显示图片弹出框的最大宽度(图片会基于此宽度按比例缩放)
+    'maxHeight': 500,			//设置显示图片弹出框的最大高度(图片会基于此高度按比例缩放)
+    'resizeDuration': 300,		//设置图片显示的加载时间(毫秒)
+    'positionFromTop': 100,		//设置弹出框到屏幕顶部的距离
+    'wrapAround': true			//设置可以循环查看图片
+})
+</script>
+
+
+<!--尾部-->
+<#include '../common/footer.html'/>

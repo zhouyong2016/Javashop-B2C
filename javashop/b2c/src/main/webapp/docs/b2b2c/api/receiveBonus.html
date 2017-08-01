@@ -1,0 +1,172 @@
+<#assign  title="领取优惠券api" /><#include '../header.html' />
+<!--头部结束-->
+<script>
+$(document).ready(function(){ 
+    
+  $("#aa tr:odd").css("background-color","#B2E0FF")
+  }); 
+</script>
+
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'bonus_menu.html' />
+	<div class="right_list">
+		<h3>receiveBonus  领取优惠券 API</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#example">返回示例</a></li>
+				<li><a href="#try">API工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>
+			<p>领取优惠券</p>
+
+		</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>API地址：</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">/api/b2b2c/bonus/receive-bonus.do?store_id=1&type_id=1</td>
+						
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0" id="aa">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>store_id</td>
+						<td>int</td>
+						<td>必须</td>
+						<td></td>
+						<td></td>
+						<td>店铺id</td>
+					</tr>
+					<tr>
+						<td>type_id</td>
+						<td>int</td>
+						<td>必须</td>
+						<td></td>
+						<td></td>
+						<td>优惠券id</td>
+					</tr>
+					<tr>
+						<td>useTimeStart</td>
+						<td>String</td>
+						<td>必须</td>
+						<td></td>
+						<td></td>
+						<td>使用开始时间</td>
+					</tr>
+					<tr>
+						<td>useTimeEnd</td>
+						<td>String</td>
+						<td>必须</td>
+						<td></td>
+						<td></td>
+						<td>使用结束时间</td>
+					</tr>
+					<tr>
+						<td>type_name</td>
+						<td>String</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>优惠券名称</td>
+					</tr>
+					<tr>
+						<td>type_money</td>
+						<td>Double</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>优惠券面额</td>
+					</tr>
+					<tr>
+						<td>min_goods_amount</td>
+						<td>Double</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>买家消费满</td>
+					</tr>
+					<tr>
+						<td>create_num</td>
+						<td>int</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>发行量</td>
+					</tr>
+					<tr>
+						<td>limit_num</td>
+						<td>int</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>每人限领</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>默认值</th>
+						<th class="line">描述</th>
+					</tr>
+					<tr>
+						<td>result</td>
+						<td>JSON</td>
+						<td>是</td>
+						<td></td>
+						<td class="line_intro" style="text-align:center">result=1表示领取成功，result=0表示领取失败</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="example">
+				<h2>返回示例</h2>
+				<textarea>{"result":1,"message":"领取成功"}</textarea>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="try.html?api=receiveBonus"  target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

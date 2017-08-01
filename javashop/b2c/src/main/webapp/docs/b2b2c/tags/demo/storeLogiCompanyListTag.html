@@ -1,0 +1,11 @@
+
+<!--创建"店铺物流公司列表"标签-->
+<#assign storeLogiCompanyListTag= newTag("storeLogiCompanyListTag") >  
+<!--调用"店铺物流公司列表"标签，并传递参数-->            
+<#assign  storeLogiCompanyList= storeLogiCompanyListTag() >						
+<ul class="gw">
+<#list storeLogiCompanyList as dly>
+	名称：${dly.name}</br>
+	id：${dly.id}</br>
+
+</#list>

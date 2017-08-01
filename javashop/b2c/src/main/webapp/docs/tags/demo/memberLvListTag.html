@@ -1,0 +1,10 @@
+
+<!--创建"会员等级列表"标签-->
+<#assign memberLvListTag = newTag("memberLvListTag")>
+<!--调用“会员等级列表”标签-->
+<#assign memberLvList = memberLvListTag()>
+<#list memberLvList as list>
+	名称：${list.name}</br>
+	id：${list.id}
+
+</#list>

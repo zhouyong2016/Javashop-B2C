@@ -1,0 +1,218 @@
+<#assign  title="绑定第三方帐号" />
+<#include 'member_header.html' />
+
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign connectOn =checkCmptIsOnTag("{'componentName':'信任登录组件'}") />
+<script>
+	otherMenu(5);
+</script>
+<#if connectOn=="ON">
+<#assign memberBindInfoTag = newTag("memberBindInfoTag") /> 
+<#assign memberBindInfo =memberBindInfoTag() />
+<div class="member-commen">
+	<h1>账户绑定<span>绑定第三方登录帐号</span></h1>
+	
+	<div class="safe-item">
+		<div class="fore1">
+			<strong>腾讯QQ</strong>
+		</div>
+		<div class="fore2">
+			<span class="ftx-03"><img src="${ctx}${themes_path}/member/images/bind_qq.png" /></span>
+			<span class="ftx-01">&nbsp;绑定QQ帐号</span>
+			<#if memberBindInfo.qq_id?? && memberBindInfo.qq_id != ''>
+			<span style="color: #71b247;">&nbsp;已绑定</span>
+			<#else>
+			<span style="color: #ff6c00;">&nbsp;未绑定</span>
+			</#if>
+			
+		</div>
+		<div class="fore3">
+			<#if memberBindInfo.qq_id?? && memberBindInfo.qq_id != ''>
+				<a class="ftx-05 remove-bind" href="javascript:void(0);" type_id="1" >解绑</a>
+			<#else>
+				<a class="ftx-05" href="${ctx}/connect.do?type=1" id="no-mobile">绑定</a>
+			</#if>
+		</div>
+	</div>
+	<div class="safe-item">
+		<div class="fore1">
+			<strong>新浪微博</strong>
+		</div>
+		<div class="fore2">
+			<span class="ftx-03"><img src="${ctx}${themes_path}/member/images/bind_sina.png" /></span>
+			<span class="ftx-01">&nbsp;绑定微博帐号</span>
+			<#if memberBindInfo.sina_id?? && memberBindInfo.sina_id != ''>
+			<span style="color: #71b247;">&nbsp;已绑定</span>
+			<#else>
+			<span style="color: #ff6c00;">&nbsp;未绑定</span>
+			</#if>
+		</div>
+		<div class="fore3">
+			<#if memberBindInfo.sina_id?? && memberBindInfo.sina_id != ''>
+				<a class="ftx-05 remove-bind" href="javascript:void(0);" type_id="2">解绑</a>
+			<#else>
+				<a class="ftx-05" href="${ctx}/connect.do?type=2" id="no-mobile">绑定</a>
+			</#if>
+		</div>
+	</div>
+	
+	
+	<div class="safe-item">
+		<div class="fore1">
+			<strong>腾讯微信</strong>
+		</div>
+		<div class="fore2">
+			<span class="ftx-03"><img src="${ctx}${themes_path}/member/images/bind_weixin.png" /></span>
+			<span class="ftx-01">&nbsp;绑定微信帐号</span>
+			<#if memberBindInfo.weixin_id?? && memberBindInfo.weixin_id != ''>
+			<span style="color: #71b247;">&nbsp;已绑定</span>
+			<#else>
+			<span style="color: #ff6c00;">&nbsp;未绑定</span>
+			</#if>
+		</div>
+		<div class="fore3">
+			<#if memberBindInfo.weixin_id?? && memberBindInfo.weixin_id != ''>
+				<a class="ftx-05 remove-bind" href="javascript:void(0);" type_id="3">解绑</a>
+			<#else>
+				<a class="ftx-05" href="${ctx}/connect.do?type=3" id="no-mobile">绑定</a>
+			</#if>
+		</div>
+	</div>
+	<div style="claer:both;"></div>
+</div>
+<script type="text/javascript">
+$(function(){
+	// 解除绑定
+	$(".remove-bind").click(function(){
+		var typeId = $(this).attr("type_id");
+		if (typeId) {
+			$.confirm('确认解除绑定吗?', function(){
+				$.ajax({
+					url : ctx + "/connect/reomve-bind.do",
+					type : "post",
+					dataType : "json",
+					data : {"type" : typeId},
+					success : function(result) {
+						if (result.result == 1) {
+							location.reload();
+						} else {
+							$.message.error("解绑失败");
+						}
+					}
+				});
+			});
+		}
+	});
+	
+});
+</script>
+<style>
+.safety-tips {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+}
+.safety-tips .mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safety-tips .mt {
+    display: block;
+    padding: 10px 0;
+}
+
+div.safety-tips .mc {
+    overflow: hidden;
+}
+.safety-tips .mc {
+    line-height: 20px;
+}
+.safe-item::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safe-item {
+    border-bottom: 1px solid #e6e6e6;
+    display: block;
+    padding: 30px 0;
+}
+.safe-item .fore1 {
+    font-family: 微软雅黑;
+    font-size: 18px;
+    padding-left: 25px;
+    text-align: left;
+    width: 130px;
+}
+
+.safe-item .fore2 {
+    border-left: 1px solid #e6e6e6;
+    height: auto;
+    line-height: 24px;
+    padding: 4px 0 4px 15px;
+    width: 500px;
+}
+.safe-item .fore3 {
+    text-align: center;
+    width: 140px;
+}
+.safe-item .fore1, .safe-item .fore2, .safe-item .fore3 {
+    float: left;
+    height: 32px;
+    line-height: 32px;
+}
+.ftx-03, .ftx03 {
+    color: #999;
+}
+.ftx-01, .ftx01 {
+
+    color: #e4393c;
+}
+.safe-item .fore3 a {
+    margin: 0 5px;
+}
+.ftx-05, .ftx05 {
+    color: #005ea7;
+}
+.ftx-06, .ftx06 {
+    color: #666;
+}
+.mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.mt {
+    padding: 10px 0;
+}
+.mt {
+    display: block;
+    padding: 10px;
+}
+.warn-box {
+    background: #fffdee none repeat scroll 0 0;
+    padding: 5px;
+}
+.ftx-04, .ftx04 {
+    color: #ff6c00;
+}
+.ml10 {
+    margin-left: 10px;
+}
+</style>
+</div>
+<#else>
+<h1>抱歉，您没有购买第三方登录组件，暂时无法使用本功能</h1>
+</#if>
+</div>
+</div>
+</div>
+</div>
+<#include '../common/footer.html'/>

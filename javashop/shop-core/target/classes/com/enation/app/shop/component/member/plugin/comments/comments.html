@@ -1,0 +1,50 @@
+<div style="width:100%;"  class="shadowBoxWhite tableDiv">
+	<table id="cbg"></table>
+</div>
+
+<script type="text/javascript">
+function onTabShow17(tabid){
+	if(17==tabid){
+		$("#cbg").datagrid({
+		      url:'${ctx}/shop/admin/comments/list-json-by-member.do?member_id=${member_id}&type=2',
+		      fitColumns:true,
+		      pagination:true,
+		      columns:[[
+		      	{field:'content',title:'内容',width:100,formatter:formatContent},
+		      	{field:'dateline',title:'发表时间',width:100,formatter:formatTime},
+		      	{field:'status',title:'显示状态',width:100,formatter:formatStatus},
+		      	{field:'reply',title:'商家回复',width:100,formatter:formatReply},
+		      ]]
+		});
+	}
+}	
+
+function formatReply(value,row,index){
+	if(value==null){
+		return"商家未回复";
+	}else {
+		return"商家已回复";
+	}
+	
+} 
+
+function formatStatus(value, row, index){
+	if(value==0){
+		return "待审核";
+	}else if(value==1){
+		return "审核通过";
+	}else if(value==2){
+		return "审核拒绝";
+	}
+}
+
+function formatTime(value,row,index){
+	
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+function formatContent(value,row,index){
+	var val=value.substring(0,25);
+	return val;
+}
+</script>

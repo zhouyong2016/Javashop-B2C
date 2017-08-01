@@ -1,0 +1,19 @@
+<style>
+ table{font-size:12px;width:100%;padding:0;margin:0;border-collapse: collapse;}  
+ table.user{border-top:1px solid #000;border-left:1px solid #000; border-right:1px solid #000; width:100%}
+ table.user tr{height:20px;}
+</style>
+
+
+<table class="user">
+	<tr>
+		<td >收件人：${order.ship_name}</td><td > 
+		
+		联系电话:${order.ship_mobile}
+		<#if order.ship_tel?? && order.ship_tel?length != 0> / ${order.ship_tel} </#if>
+		
+	</tr>	
+	<tr  >		
+		<td  >收货地址:${order.shipping_area!''}${order.ship_addr}</td><td >客户备注：${order.remark!''}</td>
+	</tr>
+</table>

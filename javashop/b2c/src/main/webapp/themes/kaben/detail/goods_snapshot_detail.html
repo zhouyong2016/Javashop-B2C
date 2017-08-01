@@ -1,0 +1,64 @@
+<#assign scroll="false" />
+<#if galleryList?size gt 4><#assign scroll="true" /></#if>
+<#list galleryList as gallery>
+	<#if gallery.isdefault==1>
+		<#assign big="${gallery.big!''}" />
+		<#assign small="${gallery.small!''}" />
+	</#if>
+</#list>
+
+<!-- 商品相册 -->
+<div id="detail-wrapper">
+		<!-- 商品相册 -->
+	<div class="gallery">	
+		<div class="preview">
+			 <a href="${big!''}"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+			 	<img   src="${big!''}" />
+			 </a>
+		</div>
+		<div class="control_bar">
+			<div class="control left-control"></div>
+			<div class="thumblist">
+				<ul>
+				<#list galleryList as gallery>
+					<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> <@image src="${gallery.thumbnail!''}"  big="${gallery.big}" small="${gallery.small}"   /></li>
+				</#list>	
+				</ul>
+			</div>
+			<div class="control right-control "></div>
+		</div>
+	</div>
+	<!-- 商品详细 -->
+	<div class="base">
+		<!-- 商品基本信息 -->
+		<div class="summary">	
+			<h2>${goods.name}</h2>	
+			<p class="sn">商品货号： ${goods.sn}</p>
+			<div class="midden-area-priceArea" >
+				<div class="priceArea-leftArea">
+				
+					<p class="kaben-price">
+						商城价：
+						<span>￥${goods.price!''}</span>元
+					</p>
+					<p>市场价：${goods.mktprice!''}元</p>
+				</div>
+				
+			</div>
+		</div>
+				<div class="choose">
+				   <#if goods.have_spec?exists && goods.have_spec==1 >
+						<#include 'spec_snapshot.html' />
+					</#if> 
+				</div>
+				<div style="clear:both;" ></div>
+			</form>
+	</div>
+
+</div>
+<!-- 加载浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="goods-add-float" style="word-wrap:break-word; word-break:break-all;">
+		</div>
+</div>

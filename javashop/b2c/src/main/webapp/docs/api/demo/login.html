@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员登录api、JavsShop标签、API使用手册</title>
+<link href="../../stylecss.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<!--头部-->
+<div id="header">
+		<div class="header_top">
+		<h1><em>JavsShop</em>文档</h1>
+		<div class="title_line">
+			<a href="/docs/template_help.html">模板制作手册</a>
+			<a href="/docs/api/index.html">API文档</a>
+			<a href="/docs/tags/index.html">标签文档</a>
+		</div>
+	</div>
+</div>
+
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+<div id="outside">
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+		<form id="addrForm" method="post" action="/api/shop/memberAddress!add.do">
+				<table class="addressdo" style="text-align: left;">
+					<tr>
+						<th style="text-align: left;width: 50px;">账号：</th>
+						<td>
+							<input style="width: 150px;" type="text" tabindex="1" isrequired="true" name="username" autocomplete="off" class="definition_small" id="username"/>
+						</td>
+					</tr>
+					<tr>
+						<th style="text-align: left;width: 50px;">密码：</th>
+						<td>
+							<input style="width: 150px;" type="password" vtype="password" tabindex="2" isrequired="true" name="password" id="password" autocomplete="off" class="definition_small" />
+						</td>
+					</tr>
+					<tr>
+						<th style="text-align: left;width: 50px;">验证码：</th>
+						<td class="m_account">
+							<span class="m_input" style="float:left;display:inline;">
+								<input style="width: 50px;" type="text" tabindex="3" name="validcode" isrequired="true" size="8" autocomplete="off" class="m_small" id="validcode"/>
+							</span>
+							<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" style="float:left;display:inline;margin:4px 5px 0px 5px;">
+							<span class="m_forget"><a href="javascript:;">看不清楚？换个图片</a></span>	
+						</td>
+					</tr>
+				</table>
+				<div class="ensure">
+					<input type="button" id="btnSubmit" value="登录" class="userSubmit">
+					<input type="button" value="注销登录" id="logout" class="userloginout"></input>
+				</div>
+			</form>
+<div id="show">		
+<h1>输出结果</h1>	
+<textarea  id="frm" >
+</textarea>
+</div>
+</div>
+<script type="text/javascript">
+<!--
+$(function(){
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});	
+	
+	
+	$("#btnSubmit").click(function(){
+		
+		$("#addrForm").ajaxSubmit({
+			url:"${ctx}/api/shop/member!login.do?ajax=yes",
+			type:"post",
+			dataType:"html",
+			success:function(result){
+				 $("#frm").val(result)
+			},
+			error:function(e){
+				alert("操作失败！");
+			}
+		});
+		
+	})
+});
+//-->
+</script>	
+
+<script>
+$(function(){
+	$("#login").click(function(){
+		var apiurl="/api/shop/member!login.do?username=18611138651&password=123456";
+		$.ajax({
+			url:"${ctx}"+apiurl,
+
+			dataType:"json",
+			success:function(aa){
+				if(aa.result==1){
+					alert("恭喜登录成功")
+				}
+				else{
+					alert("用户名和密码错误")
+				}
+			},
+			error:function(){
+				alert("api地址错误，请检查");
+			}
+			
+		});
+	});
+	
+	$("#logout").click(function(){
+		var apiurl="/api/shop/member!logout.do";
+		$.ajax({
+			url:"${ctx}"+apiurl,
+
+			dataType:"json",
+			success:function(bb){
+				if(bb.result==1){
+					alert("恭喜注销成功")
+				}
+				else{
+					alert("已经注销过了错误")
+				}
+			},
+			error:function(){
+				alert("api地址错误，请检查");
+			}
+			
+		});
+	});
+})
+</script>		

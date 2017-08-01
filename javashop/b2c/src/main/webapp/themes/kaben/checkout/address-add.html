@@ -1,0 +1,57 @@
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<div class="address_div">
+    <form id="address_form">
+        <div class="c_address" style="margin-bottom: 50px;">
+            <dl>
+                <dt><em style="color: red;">*</em> 收货人：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="shipName" maxlength="30" style="width: 100px;">
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 收货地区：</dt>
+                <dd id="selectAddress">
+                    <script type="text/javascript">
+                        $(function(){
+                            $('#selectAddress').addressSelect();
+                        })
+                    </script>
+                </dd>
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 详细地址：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="shipAddr" maxlength="120" style="width: 230px;">
+                </dd>
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 手机号码：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="shipMobile" maxlength="11" style="width: 150px;">
+                </dd>
+            </dl>
+            <dl>
+                <dt>地址别名：</dt>
+                <dd style="line-height: 26px;" class="dd-aliases">
+                    <input type="text" class="form-control" name="shipAddressName" maxlength="11" style="width: 130px;">
+                    <span>建议填写常用名称</span>
+                    <span style="margin-left: 10px;">例如：</span>
+                    <span>
+                        <a href="javascript: void(0);" class="example-aliases">家里</a>
+                        <a href="javascript: void(0);" class="example-aliases">公司</a>
+                        <a href="javascript: void(0);" class="example-aliases">学校</a>
+                    </span>
+                </dd>
+            </dl>
+            <dl class="def" style="padding-left: 113px;">
+                <input type="checkbox" value="1" name="def_addr" style="cursor: pointer;">
+                <p>使用新地址作为默认收货地址</p>
+            </dl>
+            <dl>
+                <dt></dt>
+                <dd>
+                    <a href="javascript: void(0);" class="add-btn" style="display: block; text-align: center;background:#da4f49;width:130px;border:0px none;padding:0px;margin:0px;color:#fff;font-size:12px;height:35px;line-height:35px;">保存地址</a>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>

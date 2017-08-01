@@ -1,0 +1,1 @@
+<!--创建“订单货物列表”标签--><#assign orderItemListTag = newTag("orderItemListTag")><!--调用“订单货物列表”标签，并传递参数--><#assign orderItemList = orderItemListTag("{'orderid':1}")><#list orderItemList as list><label>货品名称：${list.name}</label><br><label>货品数量：${list.num}</label><br></#list>

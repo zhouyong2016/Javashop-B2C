@@ -1,0 +1,45 @@
+<#assign consigneeListTag= newTag("consigneeListTag") />
+<#assign consigneeList= consigneeListTag() />
+
+<input type="hidden" id="regionid" value="${memberAdressRegion!0}" >
+<#list consigneeList as address>
+    <li class="li-ckt-info" address_id="${address.addr_id}">
+        <input type="hidden"
+               class="data-input"
+               province_id="${address.province_id!''}"
+               city_id="${address.city_id!''}"
+               region_id="${address.region_id!''}"
+               town_id="${address.town_id!''}"
+               shipAddr="${address.addr!''}"
+               shipName="${address.name!''}"
+               shipMobile="${address.mobile!''}"
+               shipTel="${address.tel!''}"
+               shipZip="${address.zip!''}"
+               province="${address.province!''}"
+               city="${address.city!''}"
+               region="${address.region!''}"
+               town="${address.town!''}"
+               addressId="${address.addr_id}"
+               shipAddressName="${address.shipAddressName!''}"
+        >
+        <div class="ckt-checkbox info"> <!--w: 150px-->
+            <#if address.shipAddressName?? && address.shipAddressName != ''>
+                <span title="${address.shipAddressName}">${address.shipAddressName}</span>
+            <#else/>
+                <span title="${address.name}">${address.name}</span>
+            </#if>
+        </div>
+        <div class="name-li-ckt-info" title="${address.name!''}">${address.name!''}</div>
+        <#assign addressDetail = (address.province!'') + ' ' + (address.city!'') + ' ' + (address.region!'') + ' ' + (address.town!'') + ' ' + (address.addr!'')>
+        <div class="address-li-ckt-info" title="${addressDetail}" data-title="<@substring title='${addressDetail}' length=80 dot='...' />"><@substring title='${addressDetail}' length=80 dot='...' /></div>  <!--40个字符长度-->
+        <div class="mobile-li-ckt-info" title="${address.mobile!''}">${address.mobile!''}</div>
+        <#if address.def_addr == 1>
+            <div class="default-li-ckt-info">默认地址</div>
+        </#if>
+        <div class="operate-li-ckt-info">
+            <#if address.def_addr == 0><a href="javascript: void(0);" class="set" address_id="${address.addr_id}">设置为默认</a></#if>
+            <a href="javascript: void(0);" class="edit" address_id="${address.addr_id}">编辑</a>
+            <#if address.def_addr == 0><a href="javascript: void(0);" class="delete" address_id="${address.addr_id}">删除</a></#if>
+        </div>
+    </li>
+</#list>

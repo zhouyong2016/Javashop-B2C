@@ -1,0 +1,154 @@
+<#assign title= "退货单实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>SellBackList </h3>
+		<h2>需要简述</h2>
+		<h6>返回商品列表中的字段</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>id</td>
+						<td>Integer</td>
+						<td>ID</td>
+					</tr>
+					<tr>
+						<td>tradestatus</td>
+						<td>Integer</td>
+						<td>状态 0待审核。1.审核成功代发货.6拒绝申请</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>Integer</td>
+						<td>退货人会员id</td>
+					</tr>
+					<tr>
+						<td>depotid</td>
+						<td>Integer</td>
+						<td>仓库Id</td>
+					</tr>
+					<tr>
+						<td>orderid</td>
+						<td>int</td>
+						<td>订单Id</td>
+					</tr>
+					<tr>
+						<td>regtime</td>
+						<td>Long</td>
+						<td>创建时间</td>
+					</tr>
+					<tr>
+						<td>alltotal_pay</td>
+						<td>Double</td>
+						<td>退款金额</td>
+					</tr>
+					<tr>
+						<td>total</td>
+						<td>Double</td>
+						<td>总数</td>
+					</tr>
+					
+					<tr>
+						<td>tradeno</td>
+						<td>String</td>
+						<td>退货单号</td>
+					</tr>
+					<tr>
+						<td>ordersn</td>
+						<td>String</td>
+						<td>订单号</td>
+					</tr>
+					<tr>
+						<td>regoperator</td>
+						<td>String</td>
+						<td>操作员</td>
+					</tr>
+					<tr>
+						<td>goodslist</td>
+						<td>String</td>
+						<td>商品列表</td>
+					</tr>
+					<tr>
+						<td>seller_remark</td>
+						<td>String</td>
+						<td>客服备注</td>
+					</tr>
+					<tr>
+						<td>warehouse_remark</td>
+						<td>String</td>
+						<td>库管备注</td>
+					</tr>
+					<tr>
+						<td>finance_remark</td>
+						<td>String</td>
+						<td>财务备注</td>
+					</tr>
+					<tr>
+						<td>sndto</td>
+						<td>String</td>
+						<td>退货人</td>
+					</tr>
+					<tr>
+						<td>tel</td>
+						<td>String</td>
+						<td>电话</td>
+					</tr>
+					<tr>
+						<td>adr</td>
+						<td>String</td>
+						<td>地址</td>
+					</tr>
+					<tr>
+						<td>zip</td>
+						<td>String</td>
+						<td>邮编</td>
+					</tr>
+					<tr>
+						<td>refund_way</td>
+						<td>String</td>
+						<td>退款方式</td>
+					</tr>
+					<tr>
+						<td>return_account</td>
+						<td>String</td>
+						<td>退款账户</td>
+					</tr>
+					<tr>
+						<td>remark</td>
+						<td>String</td>
+						<td>备注</td>
+					</tr>
+					
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+
+<!--创建"验证重置密码标签"标签-->
+<#assign checkFindPwdTag = newTag("checkFindPwdTag")>
+<!--调用“验证重置密码标签”标签-->
+<#assign checkFindPwd = checkFindPwdTag("'s':'1'")>
+<#list checkFindPwd as list>
+是否成功 ${list.type}
+返回信息 ${list.message}
+</#list>

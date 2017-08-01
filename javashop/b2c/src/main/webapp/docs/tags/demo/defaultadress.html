@@ -1,0 +1,13 @@
+
+
+<!-- 创建默认地址标签 -->
+<#assign defaultConsigneeTag = newTag("defaultConsigneeTag")>
+<!-- 调用默认地址标签，并保证默认地址不为空 -->
+<#assign defaul = defaultConsigneeTag()!''>
+
+<!-- 判断默认地址是否为空 -->
+<#if address??>
+默认地址联系人：${defaul.name}
+<#else>
+抱歉，目前没有默认地址
+</#if>

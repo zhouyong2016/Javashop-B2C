@@ -1,0 +1,45 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>list 获取会员地址API</h3>
+		<p>获取会员地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/member-address/list.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w100">默认值</span><span class="w100">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100 important"></span><span class="w100 important"></span><span class="w100 important"></span><span class="w100"></span><span class="w100"></span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果:</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w300">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w300 r-intro">为1表示调用正确，0表示失败</span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w300 r-intro">返回信息</span></p>
+			<p><span class="w100 r_name">addressList</span><span class="w100 r_type">String</span><span class="w300 r-intro">地址列表</span></p>
+			<p><span class="w100 r_name">addr</span><span class="w100 r_type">String</span><span class="w300 r-intro">地址</span></p>
+			<p><span class="w100 r_name">addr_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">地址id</span></p>
+			<p><span class="w100 r_name">city</span><span class="w100 r_type">String</span><span class="w300 r-intro">城市</span></p>
+			<p><span class="w100 r_name">city_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">城市id</span></p>
+			<p><span class="w100 r_name">country</span><span class="w100 r_type">String</span><span class="w300 r-intro">国家</span></p>
+			<p><span class="w100 r_name">def_addr</span><span class="w100 r_type">String</span><span class="w300 r-intro">默认地址</span></p>
+			<p><span class="w100 r_name">isDel</span><span class="w100 r_type">String</span><span class="w300 r-intro">isDel</span></p>
+			<p><span class="w100 r_name">member_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">会员id</span></p>
+			<p><span class="w100 r_name">mobile</span><span class="w100 r_type">String</span><span class="w300 r-intro">手机号</span></p>
+			<p><span class="w100 r_name">name</span><span class="w100 r_type">String</span><span class="w300 r-intro">姓名</span></p>
+			<p><span class="w100 r_name">province</span><span class="w100 r_type">String</span><span class="w300 r-intro">省</span></p>
+			<p><span class="w100 r_name">province_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">省id</span></p>
+			<p><span class="w100 r_name">region</span><span class="w100 r_type">String</span><span class="w300 r-intro">地区</span></p>
+			<p><span class="w100 r_name">region_id</span><span class="w100 r_type">String</span><span class="w300 r-intro">地区id</span></p>
+			<p><span class="w100 r_name">remark</span><span class="w100 r_type">String</span><span class="w300 r-intro">备注</span></p>
+			<p><span class="w100 r_name">tel</span><span class="w100 r_type">String</span><span class="w300 r-intro">联系电话</span></p>
+			<p><span class="w100 r_name">zip</span><span class="w100 r_type">String</span><span class="w300 r-intro">邮编</span></p>
+		</div>
+		<h3>调用结果：</h3>
+		<h5>
+			{"result":1,"data":{"addressList":[{"addr":"123","addr_id":1,"city":"海淀区","city_id":35,"country":"","def_addr":0,"isDel":0,"member_id":3,"mobile":"13811111111","name":"wang","province":"北京","province_id":1,"region":"海淀区","region_id":453,"remark":"","tel":"13811111111","zip":"100084"}
+		</h5>
+	</div>
+</div>

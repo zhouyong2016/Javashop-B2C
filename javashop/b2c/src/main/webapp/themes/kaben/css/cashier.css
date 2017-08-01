@@ -1,0 +1,572 @@
+.cashier-title {
+	width: 1050px;
+	margin: 0 auto;
+	font-size: 18px;
+	font-weight: bold;
+	height: 60px;
+	line-height: 30px;
+}
+
+.cashier-title h1 {
+	float: left;
+	color: #333;
+	font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+	font-size: 18px;
+	height: 60px;
+	line-height: 60px;
+}
+
+.cashier-title img {
+	height: 50px;
+	float: left;
+	margin: 5px 20px 5px 0;
+}
+
+.cashier-img {
+	float: left;
+	height: 60px;
+	margin: 0 0 0 100px;
+	width: 400px;
+}
+
+.cashier-img img {
+	height: 40px;
+	margin: 10px 0;
+}
+
+.cashier-img h2 {
+	display: block;
+	font: 24px/28px "microsoft yahei", Arial;
+	height: 60px;
+	line-height: 60px;
+	margin: 0 0 0 15px;
+	font-size: 22px;
+	overflow: hidden;
+	float: left;
+}
+
+.cashier-box {
+	width: 100%;
+	background: #f5f5f5;
+	padding: 20px 0;
+}
+
+.cashier-change {
+	width: 950px;
+	margin: 0 auto;
+	padding: 30px 50px;
+	position: relative;
+	box-shadow: 0 2px 5px #ccc;
+	background: #fff;
+}
+
+.cashier-change h2 {
+	width: 950px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	font-weight: 200;
+}
+
+.cashier-change h2 b {
+	font-weight: 200;
+	font-size: 14px;
+	color: #ff6700
+}
+
+.cashier-change h2 span {
+	font-size: 20px;
+	font-size: 20px;
+	color: #d93600;
+	margin: 0 5px 0 0;
+}
+
+.cashier-order-detail {
+	width: 950px;
+	border: 1px solid #e1e1e1;
+	background: #f4f4f4;
+	margin: 20px 0 0 0;
+}
+
+.cashier-order-inside {
+	margin: 3px;
+	background: #fff;
+	height: 52px;
+	overflow: hidden;
+}
+
+.cashier-order-inside h3 {
+	width: 944px;
+	height: 52px;
+	line-height: 52px;
+	font-weight: 200;
+	font-size: 12px;
+	background: #fcfcfc;
+}
+
+.cashier-order-inside h3 i {
+	width: 21px;
+	height: 21px;
+	display: block;
+	background: url("../images/fukuantai.png") no-repeat -70px 0;
+	float: left;
+	margin: 15px 10px 0 20px;
+}
+
+.cashier-order-inside h3 span {
+	margin: 0 5px;
+}
+
+.cashier-order-inside h3 b {
+	float: right;
+	margin: 0 20px 0 0;
+	display: block;
+	height: 52px;
+	line-height: 52px;
+	cursor: pointer;
+}
+
+.cashier-order-cartlist {
+	width: 844px;
+	overflow: hidden;
+	border-top: 1px solid #e1e1e1;
+	margin: 0 10px;
+	padding: 10px 40px;
+}
+
+.cashier-order-cartlist p {
+	height: 25px;
+	line-height: 25px;
+}
+
+.cashier-tools {
+	width: 950px;
+	border: 1px solid #e1e1e1;
+	background: #f4f4f4;
+	margin: 20px 0 20px 0;
+}
+
+.cashier-tools .cashier-tools-inside {
+	margin: 3px;
+	background: #fff;
+}
+
+.cashier-tools-title {
+	height: 52px;
+	line-height: 52px;
+}
+
+.cashier-tools-title h3 {
+	width: 924px;
+	height: 52px;
+	line-height: 52px;
+	font-weight: 200;
+	font-size: 12px;
+	background: #fcfcfc;
+	padding: 0 0 0 20px;
+}
+
+.cashier-tools-title h3 b {
+	float: right;
+	margin: 0 20px 0 0;
+	display: block;
+	height: 52px;
+	line-height: 52px;
+}
+
+.cashier-pay-list {
+	overflow: hidden;
+	border-top: 1px solid #e1e1e1;
+	padding: 10px 40px;
+}
+
+.cashier-pay-list li {
+	float: left;
+	height: 35px;
+	line-height: 30px;
+	margin: 0 8px 10px 0;
+	padding: 5px 5px;
+	position: relative;
+	border: 1px solid #e0e0e0;
+	cursor: pointer;
+}
+
+.cashier-pay-list li img {
+	height: 35px;
+}
+
+.cashier-pay-list li span {
+	display: none
+}
+
+.cashier-pay-list .selected {
+	border: 2px solid #f56a3e;
+	padding: 4px;
+}
+
+.cashier-pay-list .selected span {
+	background: url("../images/icons_goods.png") no-repeat -100px top;
+	bottom: 0;
+	display: block;
+	height: 12px;
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+	text-indent: -9999em;
+	width: 12px;
+
+}
+
+.cashier-pay {
+	width: 950px;
+	border: 1px solid #e1e1e1;
+	background: #f4f4f4;
+	margin: 0 0 40px 0;
+	padding: 3px 0px 0px 0px;
+}
+
+.cashier-pay .alipay-pay {
+	margin: 0px 3px 0px 3px;
+	background: #fff;
+	overflow: hidden;
+	height: 335px;
+}
+
+.alipay-left {
+	width: 471px;
+	float: left;
+	border-right: 1px solid #f4f4f4;
+	height: 310px;
+	position: relative;
+}
+
+.alipay-left p {
+	font-family: Microsoft YaHei;
+	width: 450px;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	margin: 25px 0 0 0;
+	font-size: 16px;
+}
+
+.alipay-left .pc-pay-img {
+	background: url("../images/fukuantai.png") no-repeat 0 -1417px;
+	height: 92px;
+	margin-left: 150px;
+	margin-top: 48px;
+	width: 165px;
+}
+
+.alipay-left a {
+	font-family: Microsoft YaHei;
+	width: 180px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	background: #d93600;
+	display: block;
+	margin: 30px auto 0 auto;
+}
+
+.paybtn a {
+	font-family: Microsoft YaHei;
+	width: 180px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	background: #d93600;
+	display: block;
+	margin: 30px auto 0 auto;
+}
+
+.alipay-left i {
+	display: block;
+	background: url("../images/fukuantai.png") no-repeat -212px -1417px;
+	height: 41px;
+	left: 464px;
+	position: absolute;
+	top: 130px;
+	width: 31px;
+}
+
+.alipay-right {
+	width: 472px;
+	float: left;
+}
+
+.alipay-right p {
+	font-family: Microsoft YaHei;
+	width: 472px;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	margin: 25px 0 0 0;
+	font-size: 16px;
+}
+
+.alipay-right .pay-erweima {
+	width: 472px;
+	height: 255px;
+	text-align: center;
+	position: relative;
+}
+
+.alipay-right .pay-erweima img {
+	width: 200px;
+	margin: 20px auto;
+}
+
+.alipay-right .pay-erweima .pay-wait {
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin: 20px 0px 0px -100px;
+}
+
+.wechat-pay {
+	margin: 0px 3px 0px 3px;
+	background: #fff;
+	overflow: hidden;
+	height: 335px;
+}
+
+.wechat-pay .wechat-left {
+	width: 400px;
+	float: left;
+	margin: 0 0 0 100px;
+}
+
+.wechat-pay .wechat-left .pc-pay-img {
+	width: 400px;
+	text-align: center;
+	padding: 25px 0;
+	z-index: 999;
+}
+
+.wechat-pay .wechat-right {
+	width: 400px;
+	float: left;
+}
+
+.wechat-pay .wechat-right p {
+	font-family: Microsoft YaHei;
+	width: 340px;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	margin: 25px 0 0 0;
+	font-size: 16px;
+}
+
+.wechat-pay .wechat-right .pay-erweima {
+	width: 350px;
+	height: 255px;
+	text-align: center;
+}
+
+.wechat-pay .wechat-right .pay-erweima img {
+	width: 200px;
+	margin: 20px auto;
+}
+
+.alipay_qrcode {
+	margin: 20px auto;
+	height: 210px;
+	width: 200px;
+}
+
+.pay-bottom-border {
+	width: 844px;
+	height: 20px;
+	border-bottom: 1px solid #e0e0e0;
+	clear: both;
+	margin: 0px auto;
+}
+
+.cashier-pay .bank-pay {
+	margin: 0px 3px 3px 3px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.cashier-pay .bank-pay ul {
+	margin: 10px 50px 0px 50px;
+	overflow: hidden;
+	width: 844px;
+	overflow: hidden;
+}
+
+.cashier-pay .bank-pay ul li {
+	border: 1px solid #e0e0e0;
+	float: left;
+	height: 34px;
+	line-height: 30px;
+	margin: 0 12px 12px 0;
+	padding: 5px;
+	position: relative;
+	transition: all 0.4s ease 0s;
+	overflow: hidden;
+}
+
+.cashier-pay .bank-pay ul li img {
+	height: 34px;
+}
+
+.cashier-pay .bank-pay ul .selected {
+	border: 1px solid #f56a3e
+}
+
+.show-mask-box {
+	width: 100%;
+	background-color: #000;
+	display: block;
+	height: 100%;
+	left: 0;
+	opacity: 0.5;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+.pay-mask {
+	background: #a0a0a0 none repeat scroll 0 0;
+	display: block;
+	left: 50%;
+	margin-left: -230px;
+	padding: 5px;
+	position: absolute;
+	top: 250px;
+	width: 460px;
+	z-index: 1000;
+}
+
+.cont_wrap {
+	background: #fff none repeat scroll 0 0;
+	border: 1px solid #8d8d8d;
+	height: 230px;
+}
+
+.cont_wrap .tit_bar {
+	padding: 15px 15px 0;
+	position: relative;
+	overflow: hidden;
+}
+
+.cont_wrap .tit_bar h3 {
+	float: left;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.cont_wrap .tit_bar span {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+}
+
+.cont_wrap .line {
+	background: url("../images/fukuantai.png") no-repeat scroll 0px -1346px;
+	height: 8px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.cont_wrap .payed {
+	display: inline;
+	float: left;
+	margin-left: 50px;
+	margin-top: 45px;
+	width: 174px;
+}
+
+.cont_wrap .payed a {
+	background: #ffebeb none repeat scroll 0 0;
+	border: 1px solid #ffc8c8;
+	display: block;
+	padding: 3px;
+	width: 160px;
+}
+
+.cont_wrap .payed a span {
+	background: #fff none repeat scroll 0 0;
+	display: block;
+	height: 92px;
+}
+
+.cont_wrap .payed a strong {
+	display: block;
+	font-size: 14px;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.cont_wrap .payed a em {
+	color: #666;
+	display: block;
+	font-style: normal;
+	margin-top: 15px;
+	text-align: center;
+}
+
+.cont_wrap .ask {
+	background: #ffebeb none repeat scroll 0 0;
+	border: 1px solid #ffc8c8;
+	display: inline;
+	float: left;
+	margin-left: 30px;
+	margin-top: 45px;
+	padding: 3px;
+	width: 152px;
+}
+
+.cont_wrap .ask .ask_cont {
+	background: #fff none repeat scroll 0 0;
+	display: block;
+	height: 92px;
+}
+
+.cont_wrap .ask h4 {
+	display: block;
+	font-size: 14px;
+	padding-top: 24px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.cont_wrap .ask ul {
+	margin: 10px 0 0 0;
+}
+
+.cont_wrap .ask ul li {
+	color: #666;
+	display: block;
+	margin-top: 18px;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

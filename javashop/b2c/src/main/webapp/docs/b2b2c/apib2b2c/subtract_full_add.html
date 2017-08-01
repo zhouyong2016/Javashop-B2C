@@ -1,0 +1,29 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>add-full-subtract 添加优惠卷 API</h3>
+		<p>添加优惠卷</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/b2b2c/bonus/add-full-subtract.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">create_num</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">333</span><span class="w200">发行量</span></p>
+			<p><span class="w100 important">form_submit</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">ok</span><span class="w200">提交表单</span></p>
+			<p><span class="w100 important">limit_num</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">444</span><span class="w200">每人先领取</span></p>
+			<p><span class="w100 important">min_goods_amount</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">222</span><span class="w200">买家消费满多少元使用</span></p>
+			<p><span class="w100 important">type</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">add</span><span class="w200">类型</span></p>
+			<p><span class="w100 important">type_money</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">111</span><span class="w200">优惠券面额</span></p>
+			<p><span class="w100 important">type_name</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">双十一优惠券</span><span class="w200">优惠券面值</span></p>
+			<p><span class="w100 important">useTimeEnd</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">	2016-06-01</span><span class="w200">结束时间</span></p>
+			<p><span class="w100 important">useTimeStart</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">2016-05-31</span><span class="w200">开始时间</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"添加成功","data":null}
+		</h5>
+	</div>
+</div>

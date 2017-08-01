@@ -1,0 +1,39 @@
+<#-- 创建结算订单金额标签 -->
+<#assign checkoutOrderTotalTag = newTag("checkoutOrderTotalTag") />
+<#-- 调用结算订单金额标签, 需要传递参数regionId(地区id)及typeId(配送方式id)及activity_id(促销活动id，没有就传递0) -->
+<#assign orderPrice = checkoutOrderTotalTag("{'regionId':${regionId},'typeId':${typeId},'activity_id':${activityId}}") />
+<ul>
+  <#if orderPrice.gift_id?exists && orderPrice.gift_id != 0 >
+	<#assign giftDetailTag = newTag("giftDetailTag") />
+	<#assign gift = giftDetailTag("{'gift_id':${orderPrice.gift_id}}") />
+		<#if gift.enable_store gt 0>
+		<li>
+			<input type="hidden" name="gift_id" value="${orderPrice.gift_id}"/>
+			<h2>赠送</h2>
+			<p>
+				${gift.gift_name}
+				<span>价值：${gift.gift_price?string("currency")}</span>
+				<span>数量：×1</span>
+			</p>
+		</li>
+		</#if>
+		<li style="height: 2px;background-color:white;"></li>
+	</#if>
+	<#if orderPrice.bonus_id?exists && orderPrice.bonus_id != 0 >
+	<#assign bonusDetailTag = newTag("bonusDetailTag") />
+	<#assign bonus = bonusDetailTag("{'type_id':${orderPrice.bonus_id}}") />
+		<li>
+			<input type="hidden" name="bonus_id" value="${orderPrice.bonus_id}"/>
+			<h2>赠送</h2>
+			<p>
+				${bonus.type_name}
+				<span>金额：${bonus.type_money?string("currency")}</span>
+				<span>类型：
+					<#if bonus.send_type == 0>电子券</#if>
+					<#if bonus.send_type == 3>实体券</#if>
+				</span>
+				<span>数量：×1</span>
+			</p>
+		</li>
+	</#if>
+</ul>

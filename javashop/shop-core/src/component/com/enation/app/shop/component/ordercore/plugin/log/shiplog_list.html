@@ -1,0 +1,82 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+<!--
+.division th{font-weight:normal;}
+-->
+</style>    
+<div class="tableform">
+<table cellspacing="10" cellpadding="0" border="0" width="100%">
+	<tbody>
+		<tr>
+			<td style="vertical-align: top;">
+			<h4>发货单据列表</h4>
+			<div class="division">
+			<table cellspacing="0" cellpadding="0" border="0" class="gridlist">
+				<col class="Coldate">
+				<thead>
+					<tr>
+						<th>建立日期</th>
+						<th>发货单号</th>
+						<th>物流单号</th>
+						<th>收件人</th>
+						<th>配送方式</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list  shipLogList as ship >
+				 	
+					<tr>
+						<th><@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${ship.create_time?c}" /></th>
+						<th>${ship.delivery_id }</th>
+						<th>${ship.logi_no !''}</th>
+						<th>${ship.ship_name!'' }</th>
+						<th>${ship.ship_type!'' }</th>
+					</tr>
+					
+					</#list>
+					
+				</tbody>
+			</table>
+			</div>
+			</td>
+			<td style="vertical-align: top;">
+			<h4>退货单据列表</h4>
+			<div class="division">
+			<table cellspacing="0" cellpadding="0" border="0" width="100%"
+				class="gridlist">
+				<col class="Coldate">
+				<thead>
+					<tr>
+						<th>建立日期</th>
+						<th>退货单号</th>
+						<th>物流单号</th>
+						<th>退货人</th>
+						<th>配送方式</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list  reshipLogList as ship >
+				 	
+					<tr>
+						<th><@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${ship.create_time?c}" /></th>
+						<th>${ship.delivery_id }</th>
+						<th>${ship.logi_no !''}</th>
+						<th>${ship.ship_name!'' }</th>
+						<th>${ship.ship_type!'' }</th>
+					</tr>
+					
+					</#list>
+					
+				</tbody>
+			</table>
+			</div>
+			</td>
+		</tr>
+
+
+
+		
+				
+	</tbody>
+</table>
+</div>

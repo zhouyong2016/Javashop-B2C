@@ -1,0 +1,52 @@
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 当action=freeze后，获取会员冻结积分“pointFreezeList”MAP集合 -->
+<#assign pointFreeze = memberPoint.pointFreezeList>
+
+	<#if pointFreeze?size gt 0 >
+	<table  style="width:100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>时间</th>
+			<th>明细</th>
+			<th>等级积分</th>
+			<th>消费积分</th>
+			<th>状态 </th>
+		</tr>
+    	<#list pointFreeze as pointFreeze>
+		<tr>
+	        <td><@dateformat time="${pointFreeze.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+	        <td >
+		        <#if pointFreeze.type == 'order_pay_use'>订单消费积分</#if>
+				<#if pointFreeze.type == 'order_pay_get'>订单获得积分</#if>
+				<#if pointFreeze.type == 'register'>注册</#if>
+				<#if pointFreeze.type == 'email_check'>邮箱验证</#if>
+				<#if pointFreeze.type == 'finish_profile'>完善个人资料</#if>
+				<#if pointFreeze.type == 'buygoods'>购买商品</#if>
+				<#if pointFreeze.type == 'onlinepay'>在线支付</#if>
+				<#if pointFreeze.type == 'operator_adjust'>管理员改变积分</#if>
+				<#if pointFreeze.type == 'consume_gift'>积分换赠品</#if>
+				<#if pointFreeze.type == 'login'>登录</#if>
+				<#if pointFreeze.type == 'comment'>发表评价</#if>
+				<#if pointFreeze.type == 'comment_img'>贴图评价</#if>
+				<#if pointFreeze.type == 'first_comment'>首次评论</#if>
+				<#if pointFreeze.type == 'register_link'>推广连接</#if>
+				<#if pointFreeze.type == 'activity_point'>促销活动赠送积分</#if>
+			 </td>
+	        <td><span class="status-gain">${pointFreeze.point}</span></span></td>
+	        <td><span class="status-gain">${pointFreeze.mp}</span></span></td>
+	        <td>冻结</td>
+		 </tr>
+		</#list>  
+	</table>
+	<div class="pager_border">
+		<@ajaxpager pageno="${page!'1'}" pagesize="${memberPoint.pageSize}" totalcount="${memberPoint.totalCount}" />
+		<div class="clear"></div>
+	</div>
+	<#else>
+	<div class="member-comment-wait">
+		<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+	</div>
+	</#if>
+	</div>

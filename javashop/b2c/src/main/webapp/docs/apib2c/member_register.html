@@ -1,0 +1,44 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>会员注册</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/member!register.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">username</span><span class="w100">用户名</span><span class="w380"></span></p>
+			<p><span class="w100 important">password</span><span class="w100">登录密码</span><span class="w380"></span></p>
+			<p><span class="w100 important">validcode</span><span class="w100">验证码</span><span class="w380">验证码同PC版验证码调用。</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>	var url = getFullUrl('/api/mobile/member!register.do');</b>
+			<b>	var options = {</b>
+			<b><i></i>		url : url,</b>
+			<b><i></i>		data : {username : name,password : password,validcode : code},</b>
+			<b><i></i>		success : function(data) {</b>
+			<b>	<i></i>		if (data.result == 1) {</b>
+			<b>	<i></i>	<i></i>							var param = e$.getParam();</b>
+			<b>	<i></i>							if (param.script) {</b>
+			<b>	<i></i>	<i></i>									e$.execScript(param.script);</b>
+			<b>	<i></i>							}</b>
+			<b>	<i></i>	<i></i>								e$.closeWin({name:"login"});</b>
+			<b>	<i></i>							} else {</b>
+			<b>	<i></i>	<i></i>							e$.alert("注册失败，" + data.message);</b>
+			<b>	<i></i>						}</b>
+			<b>	};</b>
+			<b>e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{"result":1,"message":"注册成功"}
+			</h5>
+		</span>	
+	</div>
+
+</div>

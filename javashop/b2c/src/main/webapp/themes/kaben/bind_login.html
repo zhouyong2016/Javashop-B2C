@@ -1,0 +1,75 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/bind_login.css" type="text/css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/placeholder.js"></script>
+	
+	<div class="login_box">
+		<div  class="login_content">
+			<div class="content_box">
+				<div class="content_txt">
+				<!-- 左侧表单填写会员信息部分 -->
+					<div class="content_left">
+						<div clsss="form_list">
+							<form class="login_form" id="login_form" method="post">
+								<h1 class="login_title">
+									欢迎登录Javashop网站
+								</h1>
+								<div class="text_body">
+									<div class="phone_box">
+										<label class="phone_num">手机号：</label>
+										<input type="text" class="phone_txt" placeholder="请输入手机号">
+										<span class="error_tips">请输入正确的手机号</span>
+									</div>
+									<div class="phone_box">
+										<label class="phone_num phone_code">短信验证码：</label>
+										<div class="code-input">
+											<input type="text" class="codes phone_txt" placeholder="请输入验证码">
+											<span class="code-box">
+												<a class="get-code green-txt" href="javascript:viod(0)">获取验证码</a>
+												<span class="code-txt">
+													<span class="code-time">12</span>
+													秒后重新获得
+												</span>
+											</span>											
+										</div>
+										<span class="error_tips">请输入正确的验证码</span>
+									</div>
+								</div>
+								<div  class="agreement">
+									<input type="checkbox" checked="checked" class="checkbox" >
+									<p class="agree-txt">
+										我同意<a class="green-txt user-service" href="" target="_blank">《用户服务协议》</a>
+									</p>
+								</div>
+								<div class="bind-box">
+									<a class="btn-div btn-green bind-btn">绑定</a>
+								</div>
+								
+							</form>
+						</div>
+					</div>
+					<!-- 中间分割线部分 -->
+					<div class="middle_line">
+						
+					</div>
+					<!-- 右侧会员头像信息部分 -->
+					<div class="content_right">
+						<div class="member_info">
+							<p class="login_way">
+								您正在使用<span class="orange-txt">百度账号</span>登录
+							</p>
+							<p class="member_head ">
+								<img src="${ctx}${themes_path}/images/logo.jpg" width="70" height="70">
+							</p>
+							<p class="user-name">wangruohui</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="login_footer">
+		
+		</div>
+	</div>
+	
+<#include 'common/footer.html'/>

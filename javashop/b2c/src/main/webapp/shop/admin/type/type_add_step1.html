@@ -1,0 +1,44 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th align="right">类型名称</th>
+					<td>
+						<input class="easyui-validatebox input_text" type="text" id="goodsname"
+						name="name" data-options="required:true" maxlength="20"></input>
+					</td>
+					
+				</tr>
+				<tr>
+					<th align="right">此类型下商品是否拥有属性</th>
+					<td>
+						<input type="radio" name="have_prop" value="1" checked /> 是&nbsp;&nbsp; 
+						<input type="radio" name="have_prop" value="0" /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型下商品是否拥有参数</th>
+					<td>
+						<input type="radio" name="have_parm" value="1" checked /> 是&nbsp;&nbsp; 
+						<input type="radio" name="have_parm" value="0" /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型是否关联品牌</th>
+					<td>
+						<input type="radio" name="join_brand" value="1" checked /> 是&nbsp;&nbsp; 
+						<input type="radio" name="join_brand" value="0" /> 否
+					</td>
+				</tr>
+				<tr>
+					<th align="right">此类型是否关联规格</th>
+					<td>
+						<input type="radio" name="join_spec" value="1" checked /> 是&nbsp;&nbsp;
+						<input type="radio" name="join_spec" value="0" /> 否
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

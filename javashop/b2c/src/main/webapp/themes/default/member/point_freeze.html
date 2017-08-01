@@ -1,0 +1,95 @@
+<#include 'member_header.html' />
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 当action=freeze后，获取会员冻结积分“pointFreezeList”MAP集合 -->
+<#assign pointFreeze = memberPoint.pointFreezeList>
+<div class="data">
+	<h2>我的积分</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip" >
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg" alt="我的订单提示信息感叹号"/>
+		<div>
+			<h3>积分规则:</h3>
+				<ol>
+					<li>当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。</li>
+					<li>各项回馈项目（包含各项商品、服务或抵用券等）及兑换标准及兑换规则均以兑换当时最新回馈活动公告或目录为准。</li>
+					<li>部分兑换商品有数量限制的，兑完为止。</li>
+					<li>公告或目录如有有效期限的，逾期即不得兑换。</li>
+					<li>积分兑换区的商品为只可用积分兑换的商品(如积分价格：100积分)</li>
+				</ol>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->	
+<div class="tab">
+	<ul  >
+		<li>
+			<a href="point.html"><span>我的积分</span> </a>
+		</li>
+		<li>
+			<a href="point_list.html?action=list"><span>积分明细</span> </a>
+		</li>
+		<li class="selected">
+			<a href="point_freeze.html?action=freeze"><span>冻结明细</span> </a>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<div class="top"></div>
+	<div class="body">
+	<#if pointFreeze?size gt 0 >
+	<table  style="width:100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>时间</th>
+			<th>明细</th>
+			<th>等级积分</th>
+			<th>消费积分</th>
+			<th>状态 </th>
+		</tr>
+    	<#list pointFreeze as pointFreeze>
+		<tr>
+	        <td><@dateformat time="${pointFreeze.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+	        <td >
+		        <#if pointFreeze.type == 'order_pay_use'>订单消费积分</#if>
+				<#if pointFreeze.type == 'order_pay_get'>订单获得积分</#if>
+				<#if pointFreeze.type == 'register'>注册</#if>
+				<#if pointFreeze.type == 'email_check'>邮箱验证</#if>
+				<#if pointFreeze.type == 'finish_profile'>完善个人资料</#if>
+				<#if pointFreeze.type == 'buygoods'>购买商品</#if>
+				<#if pointFreeze.type == 'onlinepay'>在线支付</#if>
+				<#if pointFreeze.type == 'operator_adjust'>管理员改变积分</#if>
+				<#if pointFreeze.type == 'consume_gift'>积分换赠品</#if>
+				<#if pointFreeze.type == 'login'>登录</#if>
+				<#if pointFreeze.type == 'comment'>发表评价</#if>
+				<#if pointFreeze.type == 'comment_img'>贴图评价</#if>
+				<#if pointFreeze.type == 'first_comment'>首次评论</#if>
+				<#if pointFreeze.type == 'register_link'>推广连接</#if>
+			 </td>
+	        <td><span class="status-gain">${pointFreeze.point}</span></span></td>
+	        <td><span class="status-gain">${pointFreeze.mp}</span></span></td>
+	        <td>冻结</td>
+		 </tr>
+		</#list>  
+	</table>
+	<div class="pager_border">
+		<@pager pageno="${memberPoint.pageNo}" 	pagesize="${memberPoint.pageSize}" totalcount="${memberPoint.totalCount}" />
+		<div class="clear"></div>
+	</div>
+	<#else>
+	<div class="empty" >您目前没有被冻结的积分</div>
+	</#if>
+	</div>
+	<div class="bottom"></div>
+</div>
+</div>
+<div class="rr_bottom"></div></div>
+	<!--会员中心首页右侧结束-->
+</div>
+</div>
+<#include '../common/footer.html'/>

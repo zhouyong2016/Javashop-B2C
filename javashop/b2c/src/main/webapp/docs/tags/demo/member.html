@@ -1,0 +1,6 @@
+
+<!--创建"会员信息"标签-->
+<#assign memberInfoTag = newTag("memberInfoTag")>
+<!--调用"会员信息"标签-->
+<#assign memberInfo = memberInfoTag() >
+用户名：${memberInfo.uname!''}

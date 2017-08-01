@@ -1,0 +1,212 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<form id="activityform">
+		<div class='buttonArea'>
+			<div style="float:left">
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="newTab('新增促销活动','${ctx}/shop/admin/activity/add.do')">添加</a>
+			</div>
+			<span style="float: right;"> 
+				<span id="advancedSearch" style="float: right;">
+					<a href="javascript:void(0)" class="button" id="aAdvanced">高级搜索</a>
+				</span>
+				<span id="simpleSearch">
+					<a href="javascript:void(0)" class="button b_fr" data-options="plain:true" onclick="searchActivity()" style="margin-right: 10px;">筛选</a>
+					<select name="status" class="inputSelect valid" id="activity_status" style="margin-right: 10px;width: 100px;height: 30px;">
+						<option value="0">全部</option>
+						<option value="1">进行中</option>
+						<option value="2">未开始</option>
+						<option value="3">已结束</option>
+					</select>
+				</span>
+			</span>
+		</div>
+		<div style="display: block;" class="searchAdvanced" >
+			<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<th width="70" align="right">活动名称</th>
+					<td style="width: 400px;">
+						<input type="text" value="${activity_name!''}" id="activity_name"  class="input_text">
+					</td>
+					<th width="70" align="right">活动类型</th>
+					<td>
+						<select name="activity_type" class="inputSelect valid" id="activity_type" >
+							<option value="0">--请选择--</option>
+							<option value="1">--普通促销活动--</option>
+							<option value="2">--多级促销活动--</option>
+						</select>
+					</td>
+					<th width="80" align="right">商品参加形式</th>
+					<td>
+						<select name="range_type" class="inputSelect valid" id="range_type" >
+							<option value="0">--请选择--</option>
+							<option value="1">--全部参加--</option>
+							<option value="2">--部分参加--</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th width="70" align="right">开始时间</th>
+					<td>
+						<input class="easyui-datetimebox" style="width: 240px;height: 28px;" id="start_time" />
+					</td>
+					<th width="70" align="right">结束时间</th>
+					<td>
+                        <input class="easyui-datetimebox" style="width: 240px;height: 28px;" id="end_time" />
+					</td>
+				</tr>
+				<tr>
+					<td width="60" align="right"></td>
+					<td colspan="7" align="center">
+						<a id="searchAdvance" class="button blueButton" onclick="searchActivity()" href="javascript:;">开始搜索</a>
+						<a class="button blueButton" id="resetInput" href="javascript:;">还原搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/activity/list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="activitydata">
+				<thead>
+					<tr>
+						<th data-options="field:'activity_id',checkbox:true,width:100"></th>
+						<th data-options="field:'activity_name',width:300">促销活动名称</th>
+						<th data-options="field:'start_time',width:150" formatter="formatDate">开始时间</th>
+						<th data-options="field:'end_time',width:150" formatter="formatDate">结束时间</th>
+						<th data-options="field:'activity_type',width:100" formatter="formatType">活动类型</th>
+						<th data-options="field:'status',width:100">活动状态</th>
+						<th data-options="field:'action',width:60" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="addBrand" ></div>
+</div>
+<script type="text/javascript">
+function formatDate(value, row, index){
+	if (value == null || value == 0) {
+		return "";
+	} else {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+}
+
+function formatType(value, row, index){
+	var val = "";
+	
+	if (value == 1) {
+		val = "普通促销";
+	} else if (value == 2) {
+		val = "多级促销";
+	}
+	
+	return val;
+}
+
+//操作
+function formatAction(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\"修改促销活动\",\"${ctx}/shop/admin/activity/edit.do?activity_id="
+		+ row.activity_id + "\")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del(" + row.activity_id + ")'></a>";
+	return val;
+}
+
+$(function() {
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+	$("#aAdvanced").click(function() {
+		if ($("#Advanced").val() == "0") {
+			$("#Advanced").val(1);
+			$("#activity_status").val(0);
+			$("#simpleSearch").hide();
+			$("#aAdvanced").addClass("searchAdvancedS");
+		} else {
+			reset();
+			$("#Advanced").val(0);
+			$("#simpleSearch").show();
+			$("#aAdvanced").removeClass("searchAdvancedS");
+		}
+		$(".searchAdvanced").slideToggle("slow");
+	});
+	
+	$("#resetInput").click(function(){
+		reset();
+	});
+});
+
+//搜索
+function searchActivity() {
+
+	var searchtype = $("#Advanced").val();
+	var status = $("#activity_status").val();
+
+	var activity_name = $.trim($("#activity_name").val());
+	var activity_type = $("#activity_type").val();
+	var range_type = $("#range_type").val();
+	var start_time = $('#start_time').datetimebox('getValue');
+	var end_time = $('#end_time').datetimebox('getValue');
+	if (start_time != "" && end_time != "") {
+		if (end_time <= start_time) {
+			$.Loading.errorMessage("注意：开始时间不能大于结束时间","1500");
+			return false;
+		}
+	}
+	$("#activitydata").datagrid('load', {
+		stype : searchtype,
+		status : status,
+
+		activity_name : activity_name,
+		activity_type : activity_type,
+		range_type : range_type,
+		start_time : start_time,
+		end_time : end_time,
+		page : 1
+	});
+}
+
+//删除
+function del(activityId){
+	if (!confirm("促销活动删除后不可恢复，确认要删除吗？")) {	
+		return false;
+	}
+	
+	$(".delete").removeAttr("onclick");
+	$.Loading.show("正在删除请稍候...");
+	var options = {
+		url : "${ctx}/shop/admin/activity/delete.do?ajax=yes&activity_id="+activityId,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				$('#activitydata').datagrid('reload');
+				$.Loading.successMessage(result.message, "2000");
+			}else{
+				$.Loading.errorMessage(result.message, "2000");
+			}
+			$(".delete").attr("onclick","del("+activityId+")");
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+			$(".delete").attr("onclick","del("+activityId+")");
+		}
+	};
+	$('#activityform').ajaxSubmit(options);	
+} 
+
+//定义一个刷新datagrid的方法，将其保存到window.top中
+window.top["reload_Abnormal_Monitor"]=function(){
+    $("#activitydata").datagrid("reload");
+};
+
+//初始化高级搜索条件
+function reset(){
+	$("#activity_name").val("");
+	$("#activity_type").val(0);
+	$("#range_type").val(0);
+	$('#start_time').datetimebox('setValue', '');
+	$('#end_time').datetimebox('setValue', '');
+}
+</script>
+<#include '/admin/footer.html' >

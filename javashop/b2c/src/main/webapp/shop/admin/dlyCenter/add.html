@@ -1,0 +1,65 @@
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+
+<style>
+.input_text{width: 200px;}
+.left{width:410px;}
+.table-right{width:130px;float:none;}
+
+</style>
+
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>发货点名称：</th>
+					<td class="left"><input class="input_text easyui-validatebox" type="text" id="name" maxlength="20"
+						name="name" data-options="required:true"
+						style="width: 155px;"></input>
+					</td>
+					<th>发货人姓名：</th>
+					<td class="table-right"><input class="input_text easyui-validatebox" type="text" id="url"  maxlength="20"
+						name="uname" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地区：</th>
+					<td class="left">
+						<@regionSelectDirective />
+					</td>
+					<th>手机：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" validType="mobile"
+						name="cellphone" maxlength="11" data-options="required:true"></input>
+					</td>
+				</tr>
+
+				<tr>
+					<th>邮编：</th>
+					<td class="left"><input class="input_text easyui-numberbox" name="zip" onkeyup="this.value=this.value.replace(/\D/g,'')" 
+					onafterpaste="this.value=this.value.replace(/\D/g,'')" data-options="required:true" maxlength="6">
+					</td>
+					<th>电话：</th>
+					<td class="table-right"><input class="input_text easyui-validatebox" type="text" validType="tel"
+						name="phone" maxlength="15" data-options="required:true"/>
+					</td>
+				</tr>
+				<tr>
+					<th>地址：</th>
+					<td class="left"><input class="input_text easyui-validatebox" type="text" maxlength="30"
+						name="address" data-options="required:true"></input>
+					</td>
+					<th>默认地址：</th>
+					<td class="table-right"><input type="checkbox" id="is_default_dc"  name="is_default"></input>
+						<input type="hidden" name="choose"  id="dlyCenterDisabled"/>
+					</td>
+				</tr>
+
+				<tr>
+					<th>备注：</th>
+					<td colspan="3"><textarea rows="5" cols="45" class="input_text" maxlength="100"
+							style="width: 395px;" name="memo"></textarea></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

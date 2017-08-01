@@ -1,0 +1,196 @@
+<#assign title="我的订单" /> 
+<#include 'member_header.html'/>
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderListTag = newTag("memberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")> 
+<#assign order = memberOrderList.ordersList>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderstatus="com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+<#assign orderState = orderStautsTag()>
+
+<!-- 创建获取线下支付标签id TAG -->
+<#assign paymentCfgTag= newTag("paymentCfgTag")>
+<!-- 调用获取线下支付标签id TAG -->
+<#assign pcfg = paymentCfgTag()!'' >
+
+<script src="${ctx}${themes_path}/js/Order.js" type="text/javascript"></script>
+<div class="order-list">
+	<h1 class="order-list-title">我的订单<span>这里会显示您更多的订单</span></h1>
+	<div class="order-list-tab">
+		<ul>
+			<li <#if !memberOrderList.status?exists  && !memberOrderList.keyword?exists >class="selected"</#if> style="border:0px none;"><a href="order.html"><span>所有订单</span></a></li>						
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_NOT_PAY>class="selected"</#if>><a href="order.html?status=0"><span>等待付款</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_SHIP>class="selected"</#if>><a href="order.html?status=3"><span>已发货</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_CANCELLATION>class="selected"</#if>><a href="order.html?status=6"><span>已取消</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_COMPLETE>class="selected"</#if>><a href="order.html?status=5"><span>已成功</span></a></li>
+		</ul>
+		<div class="search-order">
+			<input class="inputText default" id="search_keyword" autocomplete="off" type="text" placeholder="输入订单中商品关键词" value="${keyword!''}"/>
+			<input class="searOrderBtn" id="btnSearch" type="button" value="" />
+		</div>
+	</div>
+	<!-- 订单列表 -->
+	<div class="order-list-all">
+		<#if order?size gt 0 >
+			<#list order as orders>
+				<div class="order-list-box">
+					<h3>
+						<span style="float:left;padding-top:7px;">
+							订单号：${orders.sn!''}<i>|</i>
+							${orders.ship_name!'' }<i>|</i>
+							${orders.payment_name}<i>|</i>
+							<#if orders.is_cancel==0>
+								订单状态：${orders.orderStatus}
+							<#else>
+								订单状态：等待审核
+							</#if>
+						</span>
+						<span style="float:right">订单金额：<b>${orders.need_pay_money?string.currency}</b>元 <#if orders.order_exchange_point?? && orders.order_exchange_point gt 0>+<b>${orders.order_exchange_point!'0'}</b>积分</#if></span>
+					</h3>
+					<div class="order-goods-list">
+						<!--创建“订单货物列表”标签-->
+						<#assign orderItemListTag = newTag("orderItemListTag")>
+						<#assign orderItemList = orderItemListTag("{'orderid':${orders.order_id}}")>
+						<ul>
+							<#list orderItemList as item>
+							<li>
+								<div class="order-list-img">
+									<a target="_blank" href="../goods-${item.goods_id}.html">
+										<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+									</a>
+								</div>
+								<div class="order-list-intro">
+									<p>
+										<a target="_blank" href="../goods-${item.goods_id}.html">${item.name}</a>
+										${item.price?string.currency}元 × ${item.num}<#if item.exchange_point??&&item.exchange_point gt 0 >+${(item.exchange_point!'0')}积分 </#if>
+										<#if (item.snapshot_switch)??>
+											<#if item.snapshot_switch == 1>
+												<a class="check small-green" href="../snapshot-${item.snapshot_id}.html?product_id=${item.product_id}" >快照</a>
+											</#if>
+										</#if>
+									</p>
+								</div>
+							</li>
+							</#list>
+							
+							<!-- 订单获取的促销活动赠送的赠品与优惠券信息 by_DMRain 2016-6-12 -->
+							<#if orders.gift_id != 0 || orders.bonus_id != 0 || orders.activity_point != 0>
+								<li style="border-bottom: 1px solid #e0e0e0;height: 0px;"></li>
+								<li style="height: 30px;">
+									<div class="order-list-gift">
+										<span class="gift_icon">订单附赠</span>
+										<span style="margin-left: 10px;">赠送：</span>
+										<#if orders.gift_id != 0>
+										<#assign orderGiftDetailTag = newTag("orderGiftDetailTag") />
+										<#assign gift = orderGiftDetailTag("{'gift_id':${orders.gift_id},'order_id':${orders.order_id}}") />
+										<span>赠品【${gift.gift_name!''}】</span>
+										</#if>
+										<#if orders.bonus_id != 0>
+										<#assign orderBonusDetailTag = newTag("orderBonusDetailTag") />
+										<#assign bonus = orderBonusDetailTag("{'bonus_id':${orders.bonus_id},'order_id':${orders.order_id}}") />
+										<span>优惠券【${bonus.bonus_name!''}】</span>
+										</#if>
+										<#if orders.activity_point != 0>
+										<span>积分【${orders.activity_point!0}】</span>
+										</#if>
+									</div>
+								</li>
+							</#if>
+						</ul>
+						 <div class="order-list-tools btn-div">
+							<#-- 不是货到付款订单并且订单未支付订单并且订单未申请取消订 -->
+						 	<#if !orders.isCod && orders.status == orderState.ORDER_CONFIRM&&orders.is_cancel==0>
+						 		<#if pcfg.id == orders.payment_id>
+						 				<a href='javascript:;' class="payCfg small-white" orderid="${orders.order_id}" rel="${orders.order_id}" >查看付款账号</a>
+						 		<#else>
+						 			<a href="${ctx}/order_pay_desk.html?orderid=${orders.order_id}" class="green_btn small-white">立即付款</a>
+						 		</#if>
+								
+							</#if>
+							<!-- 在线支付付款前，货到付款确认后可取消订单 -->
+							<#if orders.status == orderState.ORDER_NOT_PAY||orders.status == orderState.ORDER_CONFIRM>
+								<#if orders.is_cancel==0>
+									<a href='javascript:;' class="cancelBtn small-white" orderid="${orders.order_id}" rel="${orders.order_id}" >取消订单</a>
+								<#else>
+									<a href="javascript:void(0);"  class="small-white" >等待审核</a>
+								</#if>
+							</#if>
+							<#if orders.status == orderState.ORDER_SHIP >
+								<a href="javascript:;"   class="rogBtn small-white" orderid="${orders.order_id}">确认收货</a>
+							<#elseif orders.status==orderState.ORDER_COMPLETE || orders.status==orderState.ORDER_ROG ||orders.status == orderState.ORDER_PAY >
+								<a href="after_sales.html?order_id=${orders.order_id}"  class="small-white" >申请售后</a>
+							<#elseif orders.status==orderState.ORDER_MAINTENANCE>
+								<a href="return_detail.html?order_id=${orders.order_id}"  class="small-white" >查看售后</a>
+							</#if>
+							<#if (orders.is_comment)??>
+								<#if orders.is_comment==1>
+									<a class="check small-white" href="member_comment.html?ordersn=${orders.sn}">去评论</a>
+								</#if>
+							</#if>
+							<a class="check small-green" href="order_detail.html?ordersn=${orders.sn}">查看</a>
+						 </div>
+					</div>
+				</div>
+			</#list>
+			<@pager pageno="${memberOrderList.page}" pagesize="${memberOrderList.pageSize}" totalcount="${memberOrderList.totalCount}" />
+		<#else>
+			<div class="member-comment-wait">
+					<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+				</div>
+		</#if>
+	</div>
+</div>
+<!-- 浮动窗口 取消订单 -->
+<#include 'order_cancel.html'/>
+
+<script>
+var ordersearchTipText = "输入订单中商品关键词";
+function odersearch(){
+	var orderkeyword = $.trim($("#search_keyword").val());
+	if(orderkeyword == ordersearchTipText){
+		orderkeyword = '';
+	}
+	if(orderkeyword==''){
+		alert("请输入订单中商品关键词！");
+	}else{
+		location.href="order.html?keyword=" + orderkeyword;
+	}
+}
+$(function(){	
+	
+	$("#search_keyword").keypress(function(event){
+		$("#search_keyword").attr("class","inputText");
+		if(event.keyCode=="13" ){
+			odersearch();
+		}
+	});
+	$("#search_keyword").click(function(){
+		if($(this).val() == ordersearchTipText){
+			$(this).val("");
+		}
+	});
+	$("#search_keyword").blur(function(){
+		if($(this).val() == ''){
+			$(this).val(ordersearchTipText);
+		}
+	});
+	
+	$("#btnSearch").click(function(){
+		odersearch();
+	});
+	Order.init();
+	selectMenu(0);
+});
+</script>
+
+</div>
+</div>
+</div>
+</div>
+<#include '../common/footer.html'/>
+<!--尾部结束-->
+
+

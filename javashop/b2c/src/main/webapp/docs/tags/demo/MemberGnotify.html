@@ -1,0 +1,29 @@
+
+<!-- 获取会员缺货登记标签 -->
+<#assign memberGnotifyListTag = newTag("memberGnotifyListTag")>
+<!-- 调用会员缺货登记标签 -->
+<#assign memberGnotifyList = memberGnotifyListTag()>
+<!-- 获取会员缺货登记"gnotifyList"集合 -->
+<#assign notificaList = memberGnotifyList.gnotifyList>
+
+<table cellspacing="0" cellpadding="0" style="width:100%">						
+	<tr>
+		<th>&nbsp;&nbsp;</th>
+		<th>商品图片</th>
+		<th>商品名称</th>
+		<th>订单编号</th>
+		<th>销售价</th>
+		<th>操作</th>
+	</tr>
+		<#list notificaList as gnotify>
+    <tr class="hovertr">
+		<td class="checkbox">&nbsp;&nbsp;</td>
+		<td class="img"><a href="goods-${gnotify.goods_id}.html" title="${gnotify.name}" class="img">
+		<img src="<@imgurl pic="${gnotify.image!''}" postfix="_thumbnail" />" alt="${gnotify.name}" height="55" width="55"/></a></td>
+		<td class="param"><a href="goods-${gnotify.goods_id}.html">${gnotify.name}</a></td>
+		<td><span>商品编号：${gnotify.sn}</span></td>
+		<td>销售价：<strong>￥${gnotify.price?string("0.##")}</strong></td>
+		<td class="oper"> <p rel="${gnotify.gnotify_id}" class="gnotify_del">删除</p></td>
+	</tr>
+    </#list>        
+</table>

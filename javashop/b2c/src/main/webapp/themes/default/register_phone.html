@@ -1,0 +1,184 @@
+<#assign  title="注册" /><#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+
+<style>
+.from-line{
+	border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    height: 50px;
+    transition: all 0.3s ease-out 0s;
+    width: 300px;
+    margin-top: 20px;
+}
+
+.from-line input{
+	border: 0 none;
+    height: 48px;
+    width: 220px;
+    font-size: 14px;
+}
+
+.from-line button{
+	background-color: #03a9f4;
+    border: 0 none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    width: 300px;
+}
+
+</style>
+<!--登录界面-->
+<div id="register_wrapper">
+	<form action="register.html" method="post" id="register_form" class="validate">
+		<input type="hidden" name="action" value="register" />
+		<h1>请注册<span>欢迎注册会员！1分钟完成注册，您可以获赠28元优惠券</span></h1>
+		<!--注册界面左侧-->
+		<div class="left" style="text-align: center;">
+			<div style="margin-left: 220px;" class="form_param" >
+				<div class="from-line" style="width: 400px;">
+					<input type="text" name="mobile" id="mobile" placeholder="请输入手机号" >
+					<button style="float: right;width: 150px;height:40px;line-height: 40px; " class="tran get-message pr" type="button" onclick="sendCode()" id="btnSendCode">
+						<a class="tran" href="javascript:;" style="color: white;" >获取短信验证码</a>
+					</button>
+				</div>
+				<!-- <div class="from-line">
+					<button class="tran get-message pr" type="button" onclick="sendCode()" id="btnSendCode">
+						<a class="tran" href="javascript:;" style="color: white;" >获取短信验证码</a>
+					</button>
+				</div> -->
+				<div class="from-line">
+					<label>验证码：</label>
+					<input type="text" name="validcode" >
+				</div>
+				<div class="from-line">
+					<label>&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;码&nbsp;：</label>
+					<input type="password" name="password">
+				</div>
+				<div class="from-line">
+					<label>确认密码：</label>
+					<input type="password" name="passwordt">
+				</div>
+			</div>
+			<div class="regis_read">
+				<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+				<p style="width: auto;">我已阅读并同意<span>《网用户协议》</span></p>
+			</div>
+			<div class="from-line" style="margin-left: 220px;" >
+				<button class="tran get-message pr m_register" type="button" onclick="" >
+					<a class="tran" href="javascript:;" style="color: white;" >注册</a>
+				</button>
+			</div>
+		</div>
+		<!--注册界面左侧结束-->
+		<!--注册页面中间细线-->
+		<div class="middle">
+		</div>
+		<!--注册页面中间细线结束-->
+		<!--右侧提示信息-->
+		<div class="right">
+			<p>已有帐号？请直接登录</p>
+			<a href="login.html">立即登录</a>
+		</div>
+		<!--右侧提示信息结束-->
+	</form>
+	<!--登录界面结束-->
+</div>
+
+
+<!--正文结束-->
+
+<script type="text/javascript">
+$(function(){
+	
+ 	$("#verifyCodebox a").click(function(){
+		$("#verifyCodebox img").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	});
+ 	var options = {
+			url : "${ctx}/api/shop/member!regMobile.do?ajax=yes" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+ 				if(data.result==1){
+	 				location.href="register_success.html?forward=${forward!''}";
+	 			}else{
+	 				$.alert(data.message);
+	 				$.Loading.hide();
+		 		} 
+			},
+			error : function(e) {
+				$.alert("出现错误 ，请重试");
+				$.Loading.hide();
+			}
+	};
+	//点击注册 	
+	$(".m_register").click(function(){
+		if("false"!=$(this).attr("validate")){
+			$.Loading.show("正在提交您的信息，请稍候...");
+			$('#register_form').ajaxSubmit(options);	
+		}
+	})
+	
+});
+ 
+//检测用户协议
+function checkLicense(){
+	if($("#license").is(':checked')){
+		return true;
+	}else{
+		return "请阅读用户协议并同意！";
+	}
+}
+
+var InterValObj; //timer变量，控制时间
+var count = 10; //间隔函数，1秒执行
+var curCount;//当前剩余秒数
+
+
+//timer处理函数
+function SetRemainTime() {
+    if (curCount == 0) {                
+        window.clearInterval(InterValObj);//停止计时器
+        $("#btnSendCode").removeAttr("disabled");//启用按钮
+        $(".form_param .from-line button").css("background-color","#03a9f4");
+        $("#btnSendCode a").html("重新发送验证码");
+    }
+    else {
+        curCount--;
+        $("#btnSendCode a").html("已发送,请在" + curCount + "秒内输入验证码");
+    }
+}
+
+//发送验证码
+function sendCode(){
+	$.ajax({
+		url:"api/shop/member!sendCode.do",
+		type:"POST",
+		data:"mobile=" + $("#mobile").val(),
+		dataType:"json",
+		success:function(data){
+			if(data.result==0){
+				//$("#btnSendCode").removeAttr("disabled");//启用按钮
+				alert(data.message);
+				$("#btnSendCode a").html("重新发送验证码");
+			}else{
+				 curCount = count;
+			     $("#btnSendCode").attr("disabled", "true");
+			     $("#btnSendCode a").html("已发送,请在" + curCount + "秒内输入验证码");
+			     InterValObj = window.setInterval(SetRemainTime, 1000);  //启动计时器，1秒执行一次
+			     $(".form_param .from-line button").css("background-color","#9D9D9D");
+			}
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	});	
+}
+
+
+</script>
+<#include 'common/footer.html' />

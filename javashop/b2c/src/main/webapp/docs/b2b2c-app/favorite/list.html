@@ -1,0 +1,38 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取用户收藏列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/favorite/list.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">需要用户登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/favorite/list.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{"result":1,"message":null,"data":[{"goods_id":435,"name":"潮牌大码男装加肥加大潮胖子宽松衬衫 男士短袖衬衫潮胖子","sn":"20169797221","brand_id":1,"cat_id":1,"type_id":1,"goods_type":0,"unit":"","weight":1.0,"market_enable":1,"brief":null,"intro":"","price":873.0,"cost":1.0,"mktprice":999.0,"params":"[]","specs":"[{\"cost\":1,\"enable_store\":0,\"goodsLvPrices\":[],\"goods_id\":435,\"name\":\"潮牌大码男装加肥加大潮胖子宽松衬衫 男士短袖衬衫潮胖子\",\"price\":873,\"product_id\":444,\"sn\":\"20169797221\",\"specList\":[],\"specs\":\"\",\"specsvIdJson\":\"[]\",\"store\":0,\"weight\":1}]","have_spec":null,"adjuncts":null,"create_time":1468889397,"last_modify":1468889397,"view_count":1,"buy_count":0,"disabled":0,"store":0,"enable_store":0,"point":0,"page_title":null,"meta_keywords":null,"meta_description":null,"p20":null,"p19":null,"p18":null,"p17":null,"p16":null,"p15":null,"p14":null,"p13":null,"p12":null,"p11":null,"p10":null,"p9":null,"p8":null,"p7":null,"p6":null,"p5":null,"p4":null,"p3":null,"p2":"","p1":"","sord":0,"have_field":0,"grade":0,"goods_comment":null,"is_pack":0,"thumbnail":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//49555405_thumbnail.jpg","big":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//49555405_big.jpg","small":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//49555405_small.jpg","original":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//49555405.jpg","store_id":15,"store_cat_id":2,"buy_num":0,"comment_num":0,"template_id":null,"goods_transfee_charge":1,"store_name":"食品酒水","commission":0.0,"is_auth":1,"auth_message":null,"favorite_id":2}]}
+			</h5>
+		</span>	
+	</div>
+
+</div>

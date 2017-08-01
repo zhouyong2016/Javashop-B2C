@@ -1,0 +1,234 @@
+<#include '/common/header.html' />
+<!-- 团购标签 -->
+<#assign groupBuyTag=newTag("groupBuyTag")>
+<#assign groupBuy=groupBuyTag("{'goodsid':${goodsid} }")>
+<!-- 团购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")>
+<#assign groupBuyAct=groupBuyActTag("{'act_id':${groupBuy.act_id} }")>
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<#assign goodsList=goodsListTag("'tagid':'${groupBuyAct.act_tag_id}','goodsnum':'5'")>
+<!-- 团购时间 -->
+<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+<div class="clear"></div>
+<div class="breadcrumb-layout">
+	<div class="breadcrumb wrapper">
+		<span><a href="${ctx}/index.html">首页</a></span>
+		<span class="arrow">&gt;</span>
+		<span>团购</span>
+	</div>
+</div>
+<div class="g-container wrapper">
+  	<div class="g-layout-l">
+    	<div class="g-main buy-now">
+      		<div class="g-group">
+		        <h2>${groupBuy.gb_name}</h2>
+		        <h3>${groupBuy.gb_title}</h3>
+        		<div class="g-item">
+          			<div class="pic">
+	          			<p>
+	          				<@image border="0" src="${groupBuy.img_url!''}"  alt="${groupBuy.gb_name!''}" />
+	          			</p></div>
+	          		<#if groupBuyAct.act_status==2>
+	          			<div class="close">
+	          				<div class="button"><span>¥<em>${groupBuy.price}</em></span><a href="">已结束</a></div>
+	          			</div>
+	          		</#if>
+          			<#if groupBuyAct.act_status==1>
+          				<div class="button">
+	          				<span>¥<em>${groupBuy.price}</em></span>
+	          				<#if groupBuy.goods_num==0>
+								<a href="">已售罄</a>
+	          					<#else>
+	          					<a href="${ctx}/goods-${groupBuy.goods_id}.html" class="addcart" id="addcart">我要团</a>
+	          				</#if>
+          				</div>
+          			</#if>
+		          	<div class="info" id="main-nav-holder">
+			            <div class="prices">
+			              <dl>
+			                <dt>市场价</dt>
+			                <dd><del>${groupBuy.goods.price}</del></dd>
+			              </dl>
+			              <dl>
+			                <dt>折扣</dt>
+			                <dd><em>${groupBuy.price/groupBuy.goods.price*10}折</em></dd>
+			              </dl>
+			              <dl>
+			                <dt>节省</dt>
+			                <dd><em>¥${groupBuy.goods.price-groupBuy.price}</em></dd>
+			              </dl>
+			            </div>
+			            <div class="trim"></div>
+			            <div class="require">
+			              <h4>本商品已被团购
+			              	<em>${groupBuy.buy_num}</em>件</h4>
+			              <p> 团购活动已经结束</p>
+			            </div>
+			            <div class="time">
+			                <!-- 倒计时 距离本期结束 -->
+			            	<i class="icon-alarm"></i>：
+			              	<span id="d1"></span><strong>天</strong>
+					      	<span id="h1"></span><strong>小时</strong>
+					      	<span id="m1"></span><strong>分</strong>
+					      	<span id="s1"></span><strong>秒</strong>
+			              
+			              <script type="text/javascript">
+			                        tms[tms.length] = "${groupBuyActSurplus.cha}";
+			                        day[day.length] = "d1";
+			                        hour[hour.length] = "h1";
+			                        minute[minute.length] = "m1";
+			                        second[second.length] = "s1";
+			             </script> 
+			          	</div>
+		        	</div>
+          		<div class="clear"></div>
+        	</div>
+	        <div class="floating-bar">
+	          	<div class="button"><span>¥<em>80.00</em></span><a href="${ctx}/goods-${groupBuy.goods_id}.html">我要团</a></div>
+          		<div class="prices">
+		            <dl>
+		              <dt>市场价</dt>
+		              <dd><del>¥${groupBuy.goods.price}</del></dd>
+		            </dl>
+		            <dl>
+		              <dt>折扣</dt>
+		              <dd><em>${groupBuy.price/groupBuy.goods.price*10}折</em></dd>
+		            </dl>
+		            <dl>
+		              <dt>节省</dt>
+		              <dd><em>¥${groupBuy.goods.price-groupBuy.price}</em></dd>
+		            </dl>
+          		</div>
+	        </div>
+      	</div>
+	    </div>
+	    <div class="g-title-bar">
+	      <ul class="tabs-nav">
+	        <li id="info" class="tabs-selected"><a href="javascript:void(0);">商品信息</a></li>
+	        <li id="transaction"><a href="javascript:void(0);">他们已经买了</a></li>
+	      </ul>
+	    </div>
+	    <div id="groupbuy_info" class="g-detail-content">
+	      	<div class="g-intro">
+	        	<div style="margin: auto;">${groupBuy.remark!''} </div>
+	      	</div>
+	    </div>
+	    <div id="groupbuy_order" class="g-detail-content hide">
+		    <!-- 成交记录标签 -->
+			<#assign recordListTag = newTag("recordListTag")>
+			<!--调取"成交记录"标签，并传递参数,获取Page对象-->
+			<#assign recordList = recordListTag("{'goods_id':${groupBuy.goods_id},'pageSize':20}")>
+			<table class="g_record t_goods">
+				<#if recordList.totalCount != 0 >
+					<tr>
+						<th class="w300">买家</th>
+						<th class="w200">价格</th>
+						<th class="w200">数量</th>
+						<th class="w300">付款日期</th>
+					</tr>
+					<#list recordList.result as record>  
+						<tr>
+							<td>${record.uname}</td>
+							<td class="goods_p">${record.price}</td>
+							<td>${record.goods_num!'0'}</td>
+							<td><@dateformat time="${record.rog_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+						</tr>
+					</#list>
+				<#else>
+					 <tr><td  style="width:100%;height:30px;line-height:30px;">暂无购买记录。</td></tr> 
+				</#if>
+			</table>
+			<div class="goods_page">
+				<@ajaxpager  pageno="${recordList.currentPageNo}" pagesize="${recordList.pageSize}" totalcount="${recordList.totalCount}" />
+			</div>
+	    </div>
+	</div>
+    <div class="g-module-sidebar">
+	      <div class="title">本期热门团购</div>
+	      <div class="content">
+	        	<div class="g-group-command">
+					<#list goodsList as goods>
+						<dl>
+							<!--商品图片-->
+							<dd class="pic-thumb">
+								<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&gbid=${gbid}"> 
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+							</dd>
+							<!--商品名称-->
+							<dd class="name">
+								<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&gbid=${gbid}" title="${goods.name}">${goods.name}</a>
+							</dd>
+							<dd class="item">
+								<span class="price">商城价：${goods.price?string.currency}</span>
+								<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&gbid=${gbid}" title="${goods.name}">抢购</a>
+							</dd>
+						</dl>
+					</#list>
+	        		
+	        	</div>
+	      </div>
+    </div>
+  </div>
+</div>
+<script language="JavaScript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    $('.group-list').children('ul').children('li').bind('mouseenter',function(){
+        $('.group-list').children('ul').children('li').attr('class','c1');
+        $(this).attr('class','c2');
+    });
+    $('.group-list').children('ul').children('li').bind('mouseleave',function(){
+        $('.group-list').children('ul').children('li').attr('class','c1');
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+        $("#groupbuy_area").val('');
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+
+//团购地区筛选
+function set_groupbuy_area(area) {
+    if(area == '') { 
+        $("#groupbuy_area").val('');
+        $.cookie('E667_groupbuy_area',null);
+    }
+    else {
+        area_array = area.split(",");
+        $("#groupbuy_area").val(area_array[0]);
+        $.cookie('E667_groupbuy_area',area);
+    }
+    submit_search();
+}
+$(function(){
+	$("#info").click(function(){
+   		$("#transaction").removeClass("tabs-selected");
+   		$("#info").addClass("tabs-selected");
+   		$("#groupbuy_info").removeClass("hide");
+   		$("#groupbuy_order").addClass("hide");
+   	});
+   	$("#transaction").click(function(){
+   		$("#info").removeClass("tabs-selected");
+   		$("#transaction").addClass("tabs-selected");
+   		$("#groupbuy_order").removeClass("hide");
+   		$("#groupbuy_info").addClass("hide");
+   	});
+})
+</script>
+<div class="clear"></div>
+<!-----footer------>
+<#include '/common/footer.html'/>

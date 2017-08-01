@@ -1,0 +1,142 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+
+<div class="main" style="background-color: white; padding: 10px 0 155px 30px;position:relative;">
+	<form id="addForm" enctype="multipart/form-data">
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<th>用户名：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="m_name" name="uname" maxlength="18" data-options="required:true"></input>
+				</td>
+				<th>密码：</th>
+				<td><input class="input_text easyui-validatebox" minlength="6" maxlength="18"
+					type="password" name="password" data-options="required:true,validType:'minLength[6]'" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>昵称：</th>
+				<td><input class="input_text" type="text" name="name" maxlength="20"></input>
+				</td>
+				<th>性别：</th>
+				<td valign="middle"><select class="easyui-validatebox"
+					name="sex">
+						<option value="1">&nbsp;男&nbsp;</option>
+						<option value="0">&nbsp;女&nbsp;</option>
+				</select></td>
+			</tr>
+			<tr>
+				<th>出生日期：</th>
+				<td><input class="input_text easyui-datebox" name="mybirthday" data-options="required:true" id="mybirthday" style="height: 28px;" />
+				</td>
+				<th>Email：</th>
+				<td><input class="input_text easyui-validatebox" type="text" name="email"
+					data-options="required:true,validType:'email'" maxlength="50"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>固定电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="name" validType="tel" name="tel"
+					data-options="required:false" maxlength="15"></input>
+				</td>
+				<th>移动电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="name" validType="mobile" name="mobile"
+					data-options="required:false"  onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="11"></input>
+				</td>
+			</tr>
+			<#if is_lvmember==1>
+			<tr>
+				<th>会员等级：</th>
+				<td>
+					<select name="lv_id">
+						<option value="0">--请选择等级--</option> 
+							<#if lvlist??> 
+								<#list lvlist as lv>
+									<option value="${lv.lv_id }">${lv.name }</option> 
+								</#list> 
+							</#if>
+					</select>
+				</td>
+			</tr>
+			</#if> 
+			<tr>
+				<th>地区：</th>
+				<td id="selectAddress">
+						<script type="text/javascript">
+							$(function() {
+								$('#selectAddress').addressSelect();
+							})
+						</script>
+					</td>
+				<th>邮编：</th>
+				<td><input class="input_text" id="zip" name="zip" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6">
+				</td>
+			</tr>
+
+			<tr>
+				<th>地址：</th>
+				<td><input class="input_text" type="text" name="address" maxlength="58"></input>
+				</td>
+			</tr>
+
+			<tr>
+				<th>安全问题：</th>
+				<td><input class="input_text" type="text" id="name"
+					name="pw_question" data-options="required:true"
+					value="我的宠物名字是？"  maxlength="58"></input>
+				</td>
+				<th>回答：</th>
+				<td><input class="input_text" type="text" id="name"
+					name="pw_answer" maxlength="58" data-options="required:true,validType:'maxLength[58]"></input></td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed" style="position:absolute;left:0px;bottom:0px;">
+		<a id="searchAdvance" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">保存</a>
+	</div>
+</div>
+<script>
+	function submitForm() {
+		var formflag = $("#addForm").form().form('validate');
+		if($("#zip").val().length>0){
+			if($("#zip").val().length<6){
+				alert("请输入正确的邮编！");
+				return;
+			}
+		}
+		var city_id = $('.app-address').find("input[name='city_id']").val(), region_id = $('.app-address').find("input[name='region_id']").val()
+		if(city_id != 1310 && (!region_id || region_id == '')){
+		    alert('请选择地址！');
+            return false
+        }
+		if (formflag) {
+			$.Loading.show("正在添加......");
+			var options = {
+				url : "${ctx}/shop/admin/member/save-member.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						newTab($("#m_name").val() + "—会员修改",
+								"${ctx}/shop/admin/member/detail.do?memberId="+ result.id);
+						parent.CloseTabByTitle("会员添加");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		}
+	}
+</script>
+
+<#include '/admin/footer.html' >

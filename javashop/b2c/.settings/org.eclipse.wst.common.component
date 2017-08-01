@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="b2c">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="core-6.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/core/core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="shop-core-6.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/shop-core/shop-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cms-core-6.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cms-core/cms-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="b2c"/>
+        <property name="java-output-path" value="/b2c/target/classes"/>
+    </wb-module>
+</project-modules>

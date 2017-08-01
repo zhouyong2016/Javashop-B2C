@@ -1,0 +1,24 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>change-address 修改地址API</h3>
+		<p>改变店铺的收货地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/store/store-order/change-address.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">address_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">6</span><span class="w200">地址id</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":null,"data":[{"store_id":15,"act_detail":null,"shiplist":[{"type_id":3,"name":"
+			快递","shipPrice":1.0}],"activity_id":null,"store_name":"食品酒水","storeprice":{"goodsPrice":1.9,"orderPrice"
+			:2.9,"shippingPrice":1.0,"needPayMoney":2.9,"discountPrice":0.0,"weight":1.1,"point":0,"discountItem"
+			:{},"actDiscount":0.0,"gift_id":0,"bonus_id":0},"shiptypeid":3}]}
+		</h5>
+	</div>
+</div>

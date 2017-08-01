@@ -1,0 +1,16 @@
+<form id="addGoodsForm" >
+<div class="subject_goods_selector"></div>
+</form>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.goodsSelector.js" > </script>
+<script type="text/javascript">
+	
+		$(function(){
+			//创建商品选择器
+			var container=$(".subject_goods_selector");
+			var options={
+					goodsid_name:'goods_ids'
+			};
+			container.goodsSelector(options);
+			
+		});
+</script>

@@ -1,0 +1,17 @@
+<style>
+ table.inner{width:100%;border-collapse: collapse;font-size:12px} table.inner td{border:0px;}
+ table.inner tr.xuxian td{border-top:1px dotted; #000}
+</style>
+ 	
+ 	
+ 	<table class="inner">
+ 		<tr>
+ 			<td>数量合计:${itemCount}</td><td>商品金额:${order.goods_amount}</td><td>优惠金额:${order.discount}</td><td>应收邮资:${order.shipping_amount}</td><td>应收合计:${order.need_pay_money}</td>
+ 		</tr>
+ 		
+ 		<tr class="xuxian">
+ 			<td >库别:${depotname!''}</td><td>结算方式:${order.payment_name}</td><td>发货人：${adminname}</td><td colspan="2">客户签字：</td>
+ 		</tr>
+ 		
+ 		
+ 	</table>

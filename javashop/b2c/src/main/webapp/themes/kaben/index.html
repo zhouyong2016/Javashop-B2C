@@ -1,0 +1,145 @@
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'团购组件'}") />
+<#assign floorIsOn=checkCmptIsOnTag("{'componentName':'装修组件'}") />
+<#assign exchangeIsOn=checkCmptIsOnTag("{'componentName':'积分兑换组件'}") />
+<#assign  title="商城首页" />
+<#assign  index_type=1 />
+<#include 'common/header.html'/>
+<#include 'common/reception_header.html'/>
+<script src="${ctx}${themes_path}/js/slider.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="${ctx}/themes/kaben/css/dialog.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!-- 调用广告标签 -->
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#assign adv = advListTag("'acid':'12'")!'' >
+<!-- 获取广告列表 -->
+<#assign advList = adv.advList /> 
+<#assign n = 1 />
+<#--检测组件是否启用 -->
+<#if groupbuyIsOn=="ON">
+	<!-- 团购活动 -->
+	<#assign groupBuyActTag=newTag("groupBuyActTag")>
+	<#assign groupBuyAct=groupBuyActTag()>
+	<#if groupBuyAct!="">
+		<#assign groupBuyGoodsListTag=newTag("groupBuyGoodsListTag")>
+		<!-- 获取商品列表标签 -->
+		<#assign goodsListGroupBuy=groupBuyGoodsListTag("'tagid':'${groupBuyAct.act_tag_id}','goodsnum':'5'")>
+		<!-- 团购时间 -->
+		<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+		<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+	</#if>
+</#if>
+<div class="max-adv">
+	<div id="index-adv" class="flexslider">
+		<ul class="slides">
+			 <#list advList as adv>
+				<li style="background:transparent url(${adv.atturl!''}) no-repeat scroll center" rel="${ctx}/${adv.url!''}">
+				</li>
+			 </#list>  
+		</ul>
+	
+	</div>
+</div>
+<script type="text/javascript">
+
+//点击跳转广告链接
+$(".slides li").click(function(){
+	var advUrl = $(this).attr("rel");
+	location.href = advUrl;
+})
+
+//计算广告高度
+function advheight (){
+	var advBoxHeight = $(window).height()*0.565;
+	$(".slides").css("height",advBoxHeight+"px");
+}
+$(function(){
+	$('#index-adv').flexslider({
+		animation: "slide",
+		direction:"horizontal",
+		easing:"swing"
+	});
+		//去除页面上的"编辑"按钮 
+		var a=$(".floor");
+		a.remove();
+
+	$(".flexslider").mouseover(function(){
+		$(".max-adv .flexslider .flex-direction-nav li a").show(300);
+	})
+		
+	$(".flexslider").mouseleave(function(){
+		$(".max-adv .flexslider .flex-direction-nav li a").hide();
+	})
+//	advheight();
+});
+</script>
+<#if groupbuyIsOn=="ON">
+<#if groupBuyAct!="">
+<div class="index-main">
+		<div class="time_groupbuy">
+			<div class="groupbuy_left">
+				<div class="l_groupbuy_time">
+					<h1>限时抢购</h1>
+						<div class="g_time">
+							<span id="d1"></span><strong>天</strong> 
+							<span id="h1"></span><strong>小时</strong>
+							<span id="m1"></span><strong>分</strong> 
+							<span id="s1"></span><strong>秒</strong>
+						</div>
+						<script type="text/javascript">
+							tms[tms.length] = "${groupBuyActSurplus.cha}";
+							day[day.length] = "d1";
+							hour[hour.length] = "h1";
+							minute[minute.length] = "m1";
+							second[second.length] = "s1";
+						</script>
+					</#if>
+				</div>
+				<div class="groupbuy_list">
+					<ul>
+						<#if groupBuyAct!="">
+							<#list goodsListGroupBuy as goods>
+								<li>
+									<div class="groupbuy_img">
+										<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"><@image class="scrollLoading" src="${goods.small!''}" alt="${goods.name}" width="210px" height="208px" /></a>
+									</div>
+									<div class="groupbuy_name">
+										<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name}</a>
+									</div>
+									<div class="groupbuy_price">
+										<span>${goods.gb_price?string.currency}</span>
+									</div>
+								</li>
+							</#list>
+						</#if>
+					</ul>
+				</div>
+			</div>
+		</div>	
+		<!-- 限时团购 end -->									
+	</#if>
+<script>
+	$(function(){
+		$('#groupbuy').flexslider({
+			animation: "slide",
+			direction:"horizontal",
+			easing:"swing"
+		});
+	})
+</script>
+	<!--  相同楼层 -->
+	<#if floorIsOn=="ON" >
+		<#include '/showcasestyle/showcase-style.html'>
+		<#assign floorListTag=newTag("floorListTag") >
+		<#assign floorlist=floorListTag("{'pageid':1}")>
+		<#list floorlist as floors>
+			<#assign floor_id=floors.id>
+			<#include '${floors.path}' />
+		</#list>
+	</#if>
+</div>
+<#include 'common/footer.html'/>

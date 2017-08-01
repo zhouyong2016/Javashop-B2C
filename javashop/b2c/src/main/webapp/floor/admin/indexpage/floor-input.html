@@ -1,0 +1,48 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form method="post" name="addForm" id="addForm" enctype="multipart/form-data">
+			<table>
+				<tbody>
+					<tr>
+						<th>楼层标题:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="20" isrequired="true" datatype="string" 
+							data-options="required:true" name="title" autocomplete="off" title="" >
+						</td>
+					</tr>
+					<#if pageid?exists>
+					<input name="page_id" id="page_id" type="hidden" value="${pageid}">
+					<tr>
+						<th>楼层色调:</th>
+						<td>
+							<input type="hidden" name="style" value="new_storey">
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="50" isrequired="true" datatype="string" 
+							data-options="required:true" name="style_show" disabled="disabled" style="background-color:gary" autocomplete="off" title="" onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"  value="new_storey">
+						</td>
+						<td>系统默认1种风格：new_storey(新风格)</td>
+					</tr>
+					</#if>
+					<tr>
+						<th>显示:</th>
+						<td>
+							<input type="radio" name="is_display" value="0" checked="checked">显示
+							<input type="radio" name="is_display" value="1">不显示 
+ 						</td>
+ 						<td>可以控制本楼层是否在首页显示</td>
+					</tr>
+					<tr>
+						<th>排序:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="5" isrequired="true" datatype="string" 
+							data-options="required:true" name="sort" autocomplete="off" title="" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " value="1">
+						</td>
+						<td>可以控制本楼层在首页的显示顺序</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>

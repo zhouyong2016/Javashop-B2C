@@ -1,0 +1,220 @@
+<#assign title= "商品搜索结果信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'goods_menu.html' />
+	<div class="right_list">
+		<h3>Goods  搜索商品结果</h3>
+		<h2>需要简述</h2>
+		<h6>搜索商品</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>Integer</td>
+						<td>商品ID</td>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td>商品名称</td>
+					</tr>
+					<tr>
+						<td>sn</td>
+						<td>String</td>
+						<td>捆绑促销的货号</td>
+					</tr>
+					
+					<tr>
+						<td>brand_id</td>
+						<td>Integer</td>
+						<td>品牌ID</td>
+					</tr>
+					<tr>
+						<td>cat_id</td>
+						<td>Integer</td>
+						<td>分类ID</td>
+					</tr>
+					<tr>
+						<td>type_id</td>
+						<td>int</td>
+						<td>商品类型id</td>
+					</tr>
+					<tr>
+						<td>unit</td>
+						<td>String</td>
+						<td>计价单位</td>
+					</tr>
+					<tr>
+						<td>weight</td>
+						<td>Double</td>
+						<td>重量</td>
+					</tr>
+					<tr>
+						<td>market_enable</td>
+						<td>Integer</td>
+						<td>是否上架（0为未上架，1为上架）</td>
+					</tr>
+					<tr>
+						<td>thumbnail</td>
+						<td>String</td>
+						<td>缩略图</td>
+					</tr>
+					<tr>
+						<td>big</td>
+						<td>String</td>
+						<td>大图</td>
+					</tr>
+					<tr>
+						<td>small</td>
+						<td>String</td>
+						<td>小图</td>
+					</tr>
+					<tr>
+						<td>intro</td>
+						<td>String</td>
+						<td>商品详细描述</td>
+					</tr>
+					<tr>
+						<td>price</td>
+						<td>Double</td>
+						<td>售价</td>
+					</tr>
+					<tr>
+						<td>mktprice</td>
+						<td>Double</td>
+						<td>市场价</td>
+					</tr>
+					<tr>
+						<td>store</td>
+						<td>Integer</td>
+						<td>库存</td>
+					</tr>
+					<tr>
+						<td>create_time</td>
+						<td>Long</td>
+						<td>添加时间(毫秒数)</td>
+					</tr>
+					<tr>
+						<td>last_modify</td>
+						<td>Long</td>
+						<td>最后修改时间(毫秒数)</td>
+					</tr>
+					<tr>
+						<td>view_count</td>
+						<td>Integer</td>
+						<td>浏览次数</td>
+					</tr>
+					<tr>
+						<td>buy_count</td>
+						<td>Integer</td>
+						<td>购买次数</td>
+					</tr>
+					<tr>
+						<td>disabled</td>
+						<td>Integer</td>
+						<td>是否已删除(0未删除，1已删除)</td>
+					</tr>
+					<tr>
+						<td>page_title</td>
+						<td>String</td>
+						<td>seo标题</td>
+					</tr>
+					<tr>
+						<td>meta_keywords</td>
+						<td>String</td>
+						<td>seo 的meta信息</td>
+					</tr>
+					<tr>
+						<td>meta_description</td>
+						<td>String</td>
+						<td>seo的描述信息</td>
+					</tr>
+					<tr>
+						<td>point</td>
+						<td>Integer</td>
+						<td>积分</td>
+					</tr>
+					<tr>
+						<td>sord</td>
+						<td>Integer</td>
+						<td>排序值</td>
+					</tr>
+					<tr>
+						<td>grade</td>
+						<td>Double</td>
+						<td>评价值</td>
+					</tr>
+					<tr>
+						<td>save_price</td>
+						<td>Double</td>
+						<td>节省金额</td>
+					</tr>
+					<tr>
+						<td>agio</td>
+						<td>Double</td>
+						<td>折扣</td>
+					</tr>
+					<tr>
+						<td>brand_name</td>
+						<td>String</td>
+						<td>所属的品牌名称</td>
+					</tr>
+					<tr>
+						<td>propMap</td>
+						<td>Map</td>
+						<td>商品属性，以p<index>为key，属性值为value的map</td>
+					</tr>
+					<tr>
+						<td>hasSpec</td>
+						<td>int</td>
+						<td>是否有规格</td>
+					</tr>
+					<tr>
+						<td>specList</td>
+						<td>List</td>
+						<td>规格列表</td>
+					</tr>
+					<tr>
+						<td>productid</td>
+						<td>Integer</td>
+						<td>如果没有规格时唯一的货品id</td>
+					</tr>
+					<tr>
+						<td>isLast=false</td>
+						<td>boolean</td>
+						<td>是否是列表中的最后一个</td>
+					</tr>
+					<tr>
+						<td>isFirst=false</td>
+						<td>boolean</td>
+						<td>是否是列表中的第一个</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

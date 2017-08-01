@@ -1,0 +1,125 @@
+/**************************************************************
+购物车-购物车图标、购物车进程
+***************************************************************/
+#cart_wrapper{width:980px;}
+#cart_wrapper .cart_nav{width:980px;height:69px;overflow:hidden;border-tOP:1px solid #e7e8e4;}
+#cart_wrapper .cart_nav .step1{width:980px;height:69px;float:left;display:inline;margin-right:21px;}
+#cart_wrapper .cart_nav .step1 img{width:980px;height:69px;}
+/***************************************************
+购物车-选购商品列表
+******************************************************/
+#cart_wrapper .goods_list{width:978px;border:1px solid #dcdcdc;overflow:hidden;}
+#cart_wrapper .goods_list .title{width:978px;overflow:hidden;}
+#cart_wrapper .goods_list .title ul{width:1090px;height:35px;background-color:#94959d}
+#cart_wrapper .goods_list .title ul li{width:105px;height:35px;float:left;display:inline;line-height:35px;color:#fff;text-align:center;}
+#cart_wrapper .goods_list .title ul .shop_name{width:191px;padding-left:62px;text-align:left;}
+/***********************************************************
+购物车-选购的具体商品
+**************************************************************/
+#cart_wrapper .goods_list  .content{width:978px;overflow:hidden;}
+#cart_wrapper .goods_list  .content .sw_list{width:978px;overflow:hidden;}
+#cart_wrapper .goods_list  .content .sw_list li{width:978px;height:65px;border:1px dashed #bebebe;overflow:hidden;}
+#cart_wrapper .goods_list  .content .sw_list li ul{width:1010px;height:65px;overflow:hidden;}
+#cart_wrapper .goods_list  .content .sw_list li ul li{color:#000;width:105px;height:65px;line-height:65px;border:0px none;float:left;display:inline;text-align:center;}
+#cart_wrapper .goods_list  .content .sw_list li ul li img{width:49px;height:49px;margin-top:8px;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_name{width:226px;padding-left:31px;text-align:left;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_name a{color:#000;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_price{color:#666;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_num{position:relative;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_num input{width:28px;height:17px;border:1px solid #ddd;position:absolute;tOP:21px;left:29px;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_num .sw_much{display:block;position:absolute;top:21px;left:58px;width:18px;height:9px;overflow:hidden;background:url(../images/gwcspbj.jpg) no-repeat left top;}
+#cart_wrapper .goods_list  .content .sw_list li ul .item_num .sw_few{display:block;position:absolute;top:31px;left:58px;width:18px;height:9px;overflow:hidden;background:url(../images/gwcspbj.jpg) no-repeat left -10px;}
+#cart_wrapper .goods_list  .content .sw_list li ul .last a{text-decoration:underline; color:#7f7f7f;}
+/**************************************************************
+购物车-所选商品总价
+***************************************************************/
+#cart_wrapper .goods_list  .cart_total{width:978px;height:42px;line-height:42px;border-bottom:1px dashed #bebebe;clear:both;}
+#cart_wrapper .goods_list  .cart_total p{float:right;color:#746e6e;display:inline;margin-right:25px;}
+#cart_wrapper .goods_list  .cart_total p .price{font-size:20px;color:#ed7108;}
+#cart_wrapper .goods_list  .cart_total p b{font-weight:normal;color:#ed7108;margin-left:5px;}
+/********************************************************************
+购物车-确定购买按钮
+*********************************************************************/
+#cart_wrapper .goods_list .shop_botton{width:978px;height:51px;padding-top:16px;overflow:hidden;clear:both;}
+#cart_wrapper .goods_list .shop_botton input{border:0px none;width:110px;height:33px;line-height:33px;float:right;display:block;margin-right:35px;}
+#cart_wrapper .goods_list .shop_botton .btn{cursor:pointer;border:0px none;text-align:center;padding:0px;}
+#cart_wrapper .goods_list .shop_botton .returnbuy_btn{background:url(../images/jshop_button.jpg) no-repeat left -43px;}
+#cart_wrapper .goods_list .shop_botton .returnbuy_btn.hovre{background:url(../images/jshop_button.jpg) no-repeat -138px -43px;}
+#cart_wrapper .goods_list .shop_botton .checkout_btn{background:url(../images/jshop_button.jpg) no-repeat left top;}
+#cart_wrapper .goods_list .shop_botton .checkout_btn.hover{background:url(../images/jshop_button.jpg) no-repeat -138px top;}
+/*************************************************************************
+购物车-推荐商品
+**************************************************************************/
+#main  .shop_rec{width:976px;height:284px;padding:1px;border:1px solid #d6d6d6;margin-top:9px;}
+#main  .shop_rec .shop_caption{width:957px;height:30px;line-height:30px;background-color:#ececee;padding-left:19px;}
+#main  .shop_rec .shop_caption h1{width:957px;height:30px;line-height:30px;color:#767677;font-weight:bold;font-size:14px;}
+#main  .shop_rec .shop_cargo{width:976px;overflow:hidden;height:232px;margin:22px 0px 0px;clear:both;}
+#main  .shop_rec .shop_cargo .sc_left{width:10px;height:45px;margin:60px 9px 0px 20px;float:left;display:inline;background:url(../images/gwczyanz.jpg) no-repeat left top;}
+#main  .shop_rec .shop_cargo .sc_left a{display:block;width:10px;height:45px;}
+#main  .shop_rec .shop_cargo .sc_right{width:10px;height:45px;margin:60px 20px 0px 9px;float:right;display:inline;background:url(../images/gwczyany.jpg) no-repeat left top;}
+#main  .shop_rec .shop_cargo .sc_right a{display:block;width:10px;height:45px;}
+#main  .shop_rec .shop_cargo .sc_middle{width:898px;height:210px;float:left;display:inline;overflow:hidden;}
+#main  .shop_rec .shop_cargo .sc_middle ul{width:1000px;height:275px;overflow:hidden;}
+#main  .shop_rec .shop_cargo .sc_middle ul li{width:157px;height:275px;overflow:hidden;float:left;display:inline;margin-right:30px;}
+#main  .shop_rec .shop_cargo .sc_middle ul li img{width:157px;height:156px;margin-bottom:5px;}
+#main  .shop_rec .shop_cargo .sc_middle ul li h1{width:157px;line-height:20px;height:20px;overflow:hidden;color:#4c4c4c;font-weight:normal;text-align:center;}
+#main  .shop_rec .shop_cargo .sc_middle ul li h1 a{color:#4c4c4c;}
+#main  .shop_rec .shop_cargo .sc_middle ul li p{width:157px;color:#ed7108;line-height:20px;text-align:center;}
+#main  .shop_rec .shop_cargo .sc_middle ul li p span{font-size:16px;background:none;margin:0px;padding:0px;color:#E90101;}
+#main  .shop_rec .shop_cargo .sc_middle ul li .btn{cursor:pointer;border:0px none;text-align:center;padding:0px;}
+#main  .shop_rec .shop_cargo .sc_middle ul li .addtocart_btn{margin:5px 0px 0px 12px;background:url(../images/jshop_button.jpg) no-repeat left -274px;width:133px;height:35px;display:inline;}
+#main  .shop_rec .shop_cargo .sc_middle ul li .returnbuy_btn.hovre{background:url(../images/jshop_button.jpg) no-repeat -138px -274px;}
+/*************************************************************
+购物车-弹出提示信息
+**************************************************************/
+#popup{width:433px;height:172px;overflow:hidden;margin:0px auto;}
+#popup h1{width:417px;height:33px;line-height:33px;color:#fff;padding-left:16px;background-color:#49a9cf;font-size:14px;}
+#popup .p_case{width:429px;height:135px;border:2px solid #49a9cf;overflow:hidden;}
+#popup .p_case .p_message{width:277px;height:72px;margin-left:71px;clear:both;overflow:hidden;padding-top:15px;}
+#popup .p_case .p_message p{width:277px;line-height:23px;}
+#popup .p_case .p_message p span{color:#3ca0c8;}
+#popup .p_case .p_botton{width:280px;height:33px;float:right;}
+#popup .p_case .p_botton a{width:110px;height:33px;line-height:33px;text-align:center;color:#fff;font-size:14px;display:block;float:left;margin-right:30px;background:url(../images/jshop_button.jpg) no-repeat left -88px;}
+#popup .p_case .p_botton a:hover{background:url(../images/jshop_button.jpg) no-repeat -138px -88px;}
+/****************************************************************************************
+购物车修改样式
+****************************************************************************************/
+#cart_wrapper{width:980px;overflow:hidden;margin:0px auto;}
+#cart_wrapper thead{width:980px;height:35px;background-color:#94959d;}
+#cart_wrapper thead tr th{color:#fff;font-weight:normal;border-bottom:1px dashed #BEBEBE;font-weight:bold;}
+#cart_wrapper tbody tr td{text-align:center;height:65px;border-bottom:1px dashed #bebebe;}
+#cart_wrapper tbody tr .cart_quantity{padding-left:20px;width:93px;}
+#cart_wrapper tbody tr .itemTotal{width:80px;}
+#cart_wrapper tbody tr .cart_last{width:70px;}
+#cart_wrapper tbody tr td a{display:block;width:auto;}
+#cart_wrapper tbody tr td a span{width:auto;display:block;} 
+#cart_wrapper tbody tr td a span img{width:50px;height:50px;}
+#cart_wrapper tbody tr td strong{display:block;height:20px;line-height:20px;}
+/*******************************************************
+购物车价格
+*************************************************/
+#cart_wrapper .total_wrapper{width:978px;height:42px;line-height:42px;border-bottom:1px dashed #bebebe;clear:both;}
+#cart_wrapper .total_wrapper div {width:978px;height:42px;}
+#cart_wrapper .total_wrapper div ul{width:978px;height:42px;}
+#cart_wrapper .total_wrapper div ul li{color:#746e6e;text-align:right;padding-right:25px;width:953px;}
+#cart_wrapper .goods_list  .cart_total p .price{font-size:20px;color:#ed7108;}
+#cart_wrapper .goods_list  .cart_total p b{font-weight:normal;color:#ed7108;margin-left:5px;}
+#cart_wrapper .button_wrapper{width:958px;height:51px;padding-top:16px;overflow:hidden;clear:both;padding-right:20px;}
+#cart_wrapper .button_wrapper  input{text-align:center;border:0px none;width:110px;height:33px;float:right;display:block;}
+/****************************************************
+当不是会员并进行结算时弹出登录样式
+********************************************************/
+/**.ui_c .ui_dialog .ui_main .ui_content{width:300px;}**/
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper{width:300px;}
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr{width:300px;height:35px;}
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr th{height:35px;line-height:35px;vertical-align:middle;}
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr td{vertical-align:middle;height:35px;line-height:35px;}
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr #verifyCodebox #LoginimgVerifyCode{padding-top:4px;}
+.ui_c .ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr #verifyCodebox span{margin-right:20px;display:block;height:35px;line-height:35px;float:right;display:inline;}
+.ui_dialog .ui_main .ui_content #login_dialog_wrapper table tr #verifyCodebox #iptlogin{margin-top:5px;}
+/*********************************************************
+购物车-增加按钮
+************************************************************/
+#num{height:20px;float:left;display:inline;margin-top:5px;}
+#num .numadjust{cursor:pointer;margin-right:5px;float:left;width:18px;height:18px;display:block;border:1px solid #a3b0b9;background-color:#fff;text-align:center;line-height:18px;}
+#num input{margin:0px 5px 0px 0px;text-align:center;width:26px;height:18px;float:left;display:inline;border:1px solid #a3b0b9;}

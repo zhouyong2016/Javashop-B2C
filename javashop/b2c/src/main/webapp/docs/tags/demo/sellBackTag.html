@@ -1,0 +1,11 @@
+<!-- 创建退货申请商品标签 -->
+<#assign sellBackTag= newTag("sellBackTag")>
+<!-- 调用退货申请商品,传递参数id:1 -->
+<#assign sellBack = sellBackTag("'id':'1'")>
+
+退货单号 ${sellBack.tradeno} 
+订单号 ${sellBack.ordersn}
+
+
+
+

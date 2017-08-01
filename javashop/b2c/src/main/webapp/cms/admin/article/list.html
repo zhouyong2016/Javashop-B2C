@@ -1,0 +1,150 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<div id="depotinfo" style="display: none;"></div>
+	<div class='buttonArea' style="height: auto">
+		<input type="hidden" id="catid" value="${catid}"> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			data-options="plain:true"
+			onclick="newTab('添加文章','${ctx}/cms/admin/data/add.do?catid=${catid}')">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			data-options="plain:true" onclick="updateSort()">保存排序</a> <span
+			style="float: right; height: 28px;"> 关键字：<input type="text"
+			class="input_text" name="searchText" value="${searchTitle!''}" /> <select
+			name="searchField"> <#list fieldList as field>
+				<option value="${field.english_name}">${field.china_name}</option>
+				</#list>
+		</select> <input type="button" class="button blueButton" value="搜索" onclick="search()" /> </span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="dataForm" >
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/cms/admin/data/list-json.do?catid=${catid}',fitColumns:'true',pageSize:${pageSize}" pagination="true"
+				width="width" id="helpdata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',width:30" formatter="formatIds">id</th>
+						<th data-options="field:'page_title',width:100">页面标题</th>
+						<th data-options="field:'sort',width:100" formatter="formatSorts">排序</th>
+						<th data-options="field:'add_time',width:100"
+							formatter="formatDate">添加时间</th>
+						<th data-options="field:'edit',width:100" formatter="formatEdit">修改</th>
+						<th data-options="field:'delete',width:100"
+							formatter="formatDelete">删除</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function formatDate(value,row,index){
+	if(value==null){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+function formatSorts(value, row, index) {
+	var val = '<input type="text" onblur="onlyNumber(this,'+row.sort+')" value="'+row.sort+'" class="input_text" style="width:60px" name="sorts" maxlength="9">';
+	return val;
+}
+
+
+function formatIds(value,row,index){
+	var val = row.id+'<input type="hidden"  value="'+row.id+'" name="dataids">';
+	return val;
+}
+function formatEdit(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick=\"newTab('修改','${ctx}/cms/admin/data/edit.do?dataid="+row.id+"&catid="+$("#catid").val()+"')\")></a>";
+	return val;
+}
+function formatDelete(value, row, index) {
+	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.id+ ')"><img catid="'+row.id+'" src="${ctx}/cms/admin/images/transparent.gif"></a>';
+	return val;
+}
+
+//验证排序值是否输入有误 add by DMRain 2016-3-16
+function onlyNumber(obj,sort){
+	var z = /^[0-9]*$/;
+	if(!z.test(obj.value)){
+	   	alert("排序值输入有误！");
+	   	obj.value = "" + sort;
+    }else{
+    	if(obj.value.length > 1){
+    		if(obj.value.charAt(0) == "0"){
+    			var s = "";
+       			for(var i = 0; i < obj.value.length; i++){
+       				if(obj.value.charAt(i) == "0"){
+       					s = obj.value.substring(i+1);
+       				}else{
+       					break;
+       				}
+       			}
+       			if(s == ""){
+       				s = 0;
+       			}
+       			obj.value = "" + s;
+    		}
+    	}
+    }
+}
+
+function del(id){
+	if(!confirm("确认要删除吗？")){	
+		return ;
+	}
+	var options = {
+			url : "${ctx}/cms/admin/data/delete.do?ajax=yes&dataid="+id+"&catid="+$("#catid").val(),
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if(result.result==1){
+					$('#helpdata').datagrid('reload');
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#dataForm').ajaxSubmit(options);	
+}
+function search(){
+
+	var searchText = $.trim($("input[name='searchText']").val());
+	var searchField = $("select[name='searchField']").val();
+	var url = "${ctx}/cms/admin/data/list-json.do?ajax=yes&catid="+$("#catid").val() + "&searchField=" + searchField + "&searchText=" + searchText;
+	$('#helpdata').datagrid({url:url});
+}
+function updateSort(){
+	$.Loading.show('正在保存排序，请稍侯...');
+	var options = {
+			url :"${ctx}/cms/admin/data/update-sort.do?ajax=yes"+"&catid="+$("#catid").val(),
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {				
+			 	if(result.result==1){
+			 		$.Loading.hide();
+			 		$.Loading.success(result.message);
+			 		$('#helpdata').datagrid('reload');
+			 	}else{
+			 		$.Loading.error(result.message);
+			 	}
+			},
+			error : function(e) {
+				$.Loading.hide();
+				$.Loading.error("出错了");
+			}
+		};
+
+	$("#dataForm").ajaxSubmit(options);		
+}
+
+//定义一个刷新datagrid的方法，将其保存到window.top中
+window.top["reload_Abnormal_Monitor"]=function(){
+    $("#helpdata").datagrid("reload");
+};
+</script>
+<#include '/admin/footer.html' >

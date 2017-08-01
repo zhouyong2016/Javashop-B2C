@@ -1,0 +1,12 @@
+
+<!--创建"收藏店铺"标签-->
+<#assign SessionConsigneeTag= newTag("sessionConsigneeTag") >  
+<!--调用"收藏店铺"标签，并传递参数-->            
+<#assign  sessionConsignee= SessionConsigneeTag("'page'：'1','pageSize':'10'") >						
+<ul class="gw">
+<#list sessionConsignee.storelist as stl>
+
+	店铺名称：${store.name}</br>
+	
+</#list>
+	

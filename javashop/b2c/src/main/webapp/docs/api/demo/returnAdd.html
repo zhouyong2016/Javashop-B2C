@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>JavaShop标签、API使用手册</title>
+<link href="../../stylecss.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<!--头部-->
+<div id="header">
+	<div class="header_top">
+		<h1><em>JavsShop</em>文档</h1>
+	</div>
+</div>
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+<div id="outside">
+	<div class="premise">
+		<input type="button" value="登录" name="button" id="login"></input>
+		<input type="button" value="注销登录" id="logout"></input>
+	</div>
+<#assign regionSelect ="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<form action="" method="post" class="validate" id="addrForm">
+	<table cellspacing="0" cellpadding="0" width="100%" id="apply_for" class="addressdo">
+		<tr>
+			<th style="width:125px;">类型：</th>
+			<td>
+				<label><input value="1" name="type" type="radio" checked="checked" style="width:80px;"/><span>退货</span></label>
+			 	<label><input value="2" name="type" type="radio" style="width:80px;"/><span>换货</span></label>
+			 </td>
+		</tr>
+		<tr>
+			<th>所属订单：</th>
+			<td><input type="text" isrequired="true" name="ordersn"
+				class="input_text" /></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><span class="prompt">一次只能输入一个订单号</span></td>
+		</tr>
+		<tr>
+			<th>商品货号：</th>
+			<td><input type="text" isrequired="true" name="goodsns"class="input_text" /></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><span class="prompt">可输入多个，请用英文逗号,分开</span></td>
+		</tr>
+		<tr>
+			<th>申请理由：</th>
+			<td><textarea name="applyreason" isrequired="true" cols="50" rows="5"></textarea></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td colspan="2" class="last">
+				<div class="btn">
+					<input type="button" id="publish" class="publish" value="提交评论或咨询"></input>
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+<div id="show">		
+<h1>输出结果</h1>	
+<textarea  id="frm" >
+</textarea>
+</div>
+</div>
+	<#include '/docs/fooder.html' />
+
+<script>
+	$(function() {
+		var add = "/api/shop/returnorder!returnAdd.do";
+		$("#publish").click(function() {
+			$("#addrForm").ajaxSubmit({
+				url : add,
+				type : "post",
+				dataType : "html",
+				success : function(result) {
+					$("#frm").val(result)
+				},
+				error : function(e) {
+					alert("操作失败！");
+				}
+			});
+		})
+	})
+</script>

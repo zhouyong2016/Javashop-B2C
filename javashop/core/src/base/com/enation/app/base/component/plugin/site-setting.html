@@ -1,0 +1,99 @@
+<div>
+<style>
+.markposbox{
+width:350px;
+}
+.markposbox li{
+	width:100px;
+	float:left;
+	border:1px solid #CCC;
+	margin:2px;
+}
+ 
+
+</style>
+<div class="main" style="background-color: white;">
+<input type="hidden" name="site_seting.themeid" value="${site_seting.themeid}" />
+<input type="hidden" name="site_seting.themepath" value="${site_seting.themepath}" />
+<input type="hidden" name="site_seting.adminthemeid" value="${site_seting.adminthemeid}" />
+	<table class="form-table">
+		<tr>
+			<th >
+				网站名称：
+			</th>
+			<td>
+				<input type="text" class="input_text combo" name="site_seting.sitename" style="width:300px" value="${site_seting.sitename!'' }" maxlength="15"/>
+			</td>
+		</tr>
+
+		<tr>
+			<th class="label">
+				网站标题：
+			</th>
+			<td>
+				<input type="text" class="input_text combo" name="site_seting.title" style="width:300px" value="${site_seting.title!'' }" maxlength="15"/>
+			</td>
+		</tr>
+		<tr>
+			<th class="label">
+				关键字：
+			</th>
+			<td>
+				<input type="text" class="input_text combo" name="site_seting.keywords" style="width:300px" value="${site_seting.keywords!'' }" maxlength="150"/>
+			</td>
+		</tr>	
+		<tr>
+			<th class="label">
+				描述：
+			</th>
+			<td>
+				 <textarea style="width:300px;height:100px" name="site_seting.descript" maxlength="500" >${site_seting.descript!''}</textarea>
+			</td>
+		</tr>		
+
+	 
+		<tr>
+			<th class="label">
+				Logo：
+			</th>
+			<td>
+				<@image src="${site_seting.logofile!'' }" id="logofile" style='width:100px' /><br/>
+				<input type="hidden" id="logofile_url" name="site_seting.logofile" value="${site_seting.logofile!'' }" >
+				<input type="button" id="uploadLogoBtn" value="上传" />
+			</td>
+		</tr>
+		
+		<tr>
+			<th class="label">
+				关闭站点：
+			</th>
+			<td>
+				<input type="radio" name="site_seting.siteon"   value="1" <#if site_seting.siteon=="1">checked="checked"</#if> />否&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="site_seting.siteon"   value="0"  <#if site_seting.siteon=="0">checked="checked"</#if>  />是
+			</td>
+		</tr>		
+		<tr>
+			<th class="label">
+				关闭原因:
+			</th>
+			<td>
+				 <textarea style="width:300px;height:100px" name="site_seting.closereson" maxlength="255">${site_seting.closereson!''}</textarea>
+			</td>
+		</tr>				
+	</table>
+	</div>
+	<script>
+	function getLogoPath(path){
+		$("#logofile").attr("src",path);
+		
+		$("#logofile_url").val(path);
+	}
+	$(function(){
+		
+		$("#uploadLogoBtn").click(function(){
+			openImgDlg(getLogoPath)
+		});
+		 		
+	});
+	</script>
+</div>

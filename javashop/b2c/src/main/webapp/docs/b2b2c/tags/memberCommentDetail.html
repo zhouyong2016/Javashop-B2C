@@ -1,0 +1,133 @@
+<#assign title= "会员评论" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'store_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>MemberComment   会员评论</h3>
+		<h2>需要简述</h2>
+		<h6>会员评论</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>comment_id</td>
+						<td>Integer</td>
+						<td class="describe">评论ID</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>Integer</td>
+						<td class="describe">会员ID</td>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>Integer</td>
+						<td class="describe">商品ID</td>
+					</tr>
+					<tr>
+						<td>content</td>
+						<td>String</td>
+						<td class="describe">内容</td>
+					</tr>
+					<tr>
+						<td>img</td>
+						<td>String</td>
+						<td class="describe">图片</td>
+					</tr>
+					<tr>
+						<td>dateline</td>
+						<td>long</td>
+						<td class="describe">时间</td>
+					</tr>
+					<tr>
+						<td>ip</td>
+						<td>String</td>
+						<td class="describe">ip</td>
+					</tr>
+					<tr>
+						<td>reply</td>
+						<td>String</td>
+						<td class="describe">回复</td>
+					</tr>
+					<tr>
+						<td>repytime</td>
+						<td>long</td>
+						<td class="describe">回复时间</td>
+					</tr>
+					<tr>
+						<td>status</td>
+						<td>int</td>
+						<td class="describe">状态</td>
+					</tr>
+					<tr>
+						<td>type</td>
+						<td>int</td>
+						<td class="describe">类型</td>
+					</tr>
+					<tr>
+						<td>replystatus</td>
+						<td>int</td>
+						<td class="describe">回复状态</td>
+					</tr>
+					<tr>
+						<td>grade</td>
+						<td>int</td>
+						<td class="describe">评分</td>
+					</tr>
+					<tr>
+						<td>is_top</td>
+						<td>int</td>
+						<td class="describe">是否置顶</td>
+					</tr>
+					<tr>
+						<td>store_id</td>
+						<td>int</td>
+						<td class="describe">店铺id</td>
+					</tr>
+					<tr>
+						<td>store_desccredit</td>
+						<td>int</td>
+						<td class="describe">商品符合描述</td>
+					</tr>
+					<tr>
+						<td>store_servicecredit</td>
+						<td>int</td>
+						<td class="describe">店铺评论评分</td>
+					</tr>
+					<tr>
+						<td>store_deliverycredit</td>
+						<td>int</td>
+						<td class="describe">发货速度评分</td>
+					</tr>
+					
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

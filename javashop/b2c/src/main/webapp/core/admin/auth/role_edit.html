@@ -1,0 +1,51 @@
+<script type="text/javascript" src="${ctx}/core/admin/js/Auth.js"></script>
+<script type="text/javascript" src="${ctx}/core/admin/js/jquery.checktree.js"></script>
+<div class="easyui-panel" style="border-style:none;" >
+			<form method="post"  class="validate" id="editroleForm" >
+				<input type="hidden" name="roleid" value="${role.roleid }" />
+				<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		     		<tr>
+		       			<th><label class="text">角色名称：</label></th>
+		       			<td><input type="text" class="input_text" name="rolename" id="rolename" maxlength="60"  dataType="string" isrequired="true" value="${role.rolename!''}"/></td>
+		      		</tr>
+		     		<tr>
+		      			<th><label class="text">描述：</label></th>
+		       			<td> 
+		    	  			<textarea name="rolememo" style="width:300px;height:150px;" id="rolememo" class="input_text" onblur="checkLength()" onkeydown="checkLength()">${role.rolememo!""}</textarea>
+		       			</td>
+		      		</tr>
+				</table>
+		   		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		   			<tr>
+		      			<th><label class="text">权限选择：</label></th>
+		      			<td>
+							<div id="actbox">
+									<ul>
+										<#list authList as act>
+											<li id="li_${act.actid }"><input type="checkbox" name="acts" value="${act.actid }" /><span>${act.name }</span>
+											</li>
+										</#list>
+									</ul>
+							</div>
+			  			</td>
+		     		</tr>
+				</table>
+			
+		</form>
+</div>
+<script>
+
+$(function(){
+	<#list role.actids as actid>
+		$("#actbox input[value=${actid}]").attr("checked",true);
+	</#list>
+});
+
+function checkLength(){
+	if($("#rolememo").val().length>100){
+		$("#rolememo").val($("#rolememo").val().substring(0,100));
+	}
+}
+
+
+</script>

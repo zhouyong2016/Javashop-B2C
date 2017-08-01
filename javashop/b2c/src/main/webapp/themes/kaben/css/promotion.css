@@ -1,0 +1,84 @@
+/* .promotion-box{background: #f5f5f5 none repeat scroll 0 0;height: auto;margin: 0;overflow: hidden;padding: 0;width: 100%;}
+.promotion-title{background: #ffffff none repeat scroll 0 0;box-shadow: 0 2px 5px #ccc;margin: 30px auto;min-height: 500px;overflow: hidden;width: 1140px;position:relative;padding:30px;}
+.promotion-title .same-title{width:317px;height:317px;position:absolute;background:url(../images/cuxiao.png) no-repeat center center;}
+.promotion-title .title1{top:40px;left:140px;}
+.promotion-title .title1 p{width:317px;font-size:16px;line-height:30px;color:#ff6700;text-align:center;font-weight:200;}
+.promotion-title .title1 span{width:317px;line-height:35px;text-align:center;color:#ff6700;display:block;font-size:14px;}
+.promotion-title .title1 .promotion-time{margin:90px 0 0 0;}
+.promotion-title .title2{top:230px;left:340px;}
+.promotion-title .title2 h2{width:317px;height:317px;text-align:center;line-height:317px;font-size:30px;font-weight:200;color:#ff6700;}
+.promotion-title .title3{top:40px;left:520px;}
+.promotion-title .title3 h2{width:100%;height:30px;line-height:30px;text-align:center; color: #ff6700;font-size: 30px;font-weight: 200;margin:0 0 10px 0;}
+.promotion-title .title3 p{width:241px;margin:0px auto;line-height:25px;font-size:14px;color:#ff6700;text-align:center;font-weight:200;display:none;}
+.promotion-title .title3 p span{font-size:18px;color:#fc7c79;margin:0 5px;}
+.promotion-title .title3 .promotion-inside{width:317px;height:317px;display:position:relative;}
+.title3-word{position:absolute;width:317px;overflow:hidden;top:50%;left:0;}
+.promotion-title .title4{top:230px;left:710px;}
+.promotion-title .title4 p{width:201px;margin:0px auto;line-height:25px;font-size:14px;color:#ff6700;text-align:center;font-weight:200;position:absolute;top:50%;left:58px;}
+.promotion-title .title4 .promotion-inside{width:317px;height:317px;display:position:relative;}
+ */
+ 
+ 
+ 
+.promotion-box{background: #f5f5f5 none repeat scroll 0 0;height: auto;margin: 0;overflow: hidden;padding: 0;width: 100%;}
+.promotion-title{background: #ffffff none repeat scroll 0 0;box-shadow: 0 2px 5px #ccc;margin: 30px auto;min-height: 500px;overflow: hidden;width: 1140px;position:relative;padding:30px;}
+.same-title{width:100%;margin:0 0 20px 0;overflow:hidden;}
+.same-title h2{
+ 	 border-bottom: 1px solid #33a600;
+    float: left;
+    font: 200 14px/30px "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+    height: 30px;
+    margin-bottom: -1px;
+    padding: 9px 0;
+    width:100px;
+    color:#33a600;
+ }
+.same-title .promotion-word{
+ 	  border-top: 1px dotted #33a600;
+    clear: both;
+    line-height: 22px;
+    overflow: hidden;
+    padding: 10px 0 0;
+    width:500px;
+ }
+.same-title .promotion-word p{font-size:14px;line-height:25px;}
+.same-title .last-word{width:100%;}
+.same-title .last-word p{font-size:12px;}
+
+.title1 .promotion-word p{float:left;}
+.title1 .promotion-word span{float:left;margin:0 10px}
+.title3 h3{float:left;font-size:14px;margin:0 20px 0 0;}
+.title3 .promotion-condition{float:left;}
+.title3 .promotion-condition p{font-size:14px;}
+.title3 .promotion-condition p span{font-size:14px;}
+.last-word{text-align:center;}
+.last-word p{text-align:left;}
+.last-word img{margin:10px 0;}
+
+/***促销页面商品列表****/
+.promotion-list{background: #ffffff none repeat scroll 0 0;box-shadow: 0 2px 5px #ccc;margin: 30px auto;overflow: hidden;width: 1140px;position:relative;padding:30px;}
+.promotion-list .list{width:1140px;overflow:hidden;}
+.promotion-list .list ul{width:1200px;overflow:hidden;}
+
+.promotion-list .list ul li{width:379px;height:450px;border-right:1px solid #efefef;border-bottom:1px solid #efefef;float:left;}
+.promotion-list .list ul .no-border{border-right:0px none;}
+.list-img{width:379px;height:330px;text-align:center;}
+.list-img img{width:260px;height:260px;margin:20px auto;}
+.list ul li h2{width:300px;line-height:25px;height:75px;overflow:hidden;font-size:16px;font-weight:200;margin:0 auto;color:#737373;}
+.list ul li p{width:300px;height:30px;line-height:30px;text-align:center;color:#c30a18;font-size:20px;}
+
+
+
+.page span{float:right;width:auto;margin:20px 20px 0 0;height:22px;line-height:22px;}
+.page ul{float:right;width:auto;margin:20px 0 0 0;}
+.page ul li{width:auto;height:24px;line-height:24px;float:left;padding:0px;margin:0px;}
+.page ul li a{cursor: pointer;width:45px;height:22px;line-height:22px;text-align:center;display:block;margin:0px 5px 0px 0px;border:1px solid #ccc;   transition: all 0.4s ease 0s;}
+.page ul li a:hover{background-color: #757575;color:#fff;border:1px solid #757575}
+.page ul li .selected{background-color: #757575;color:#fff;border:1px solid #757575}
+.page ul li .selected:hover{color:#666;background-color: #fff;border:1px solid #ccc;}
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+<#include '/admin/header.html' > 
+<#assign goodsSearch= "com.enation.app.shop.core.taglib.goodssearch.GoodsSearchDirectiveModel"?new()/>
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox">
+		<table width="100%">
+			<tr>
+				<th colspan="4" class="title">按商品发放红包</th>
+			</tr>
+			<tr>
+				<td>
+					<form method="POST" id="sendGoodsForm">
+						<input type="hidden" name="typeid" value="${typeid}" />
+						<@goodsSearch />
+					</form>
+				</td>
+			</tr>
+			<tr>
+				
+				<td colspan="4" align="center">
+					<br>
+					<a class="easyui-linkbutton submitBtn" id="sendForGoodsBtn">确定发送红包</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script>
+	$(function() {
+
+		$("#sendForGoodsBtn").click(function() {
+			$("#goodsids option").attr("selected", true);
+			$("#sendGoodsForm").ajaxSubmit({
+				url : "${ctx}/shop/admin/bonus/send-for-goods.do?ajax=yes",
+				dataType : "json",
+				success : function(res) {
+					if (res.result == 1) {
+						parent.SelectTable("优惠券列表");
+						parent.refreshCurrentTab();
+						alert("成功发放[" + res.count + "]个红包");
+					} else {
+						alert(res.message);
+					}
+				},
+				error : function() {
+					alert("红包发放失败");
+				}
+			});
+		});
+
+	});
+</script>
+<#include '/admin/footer.html' >

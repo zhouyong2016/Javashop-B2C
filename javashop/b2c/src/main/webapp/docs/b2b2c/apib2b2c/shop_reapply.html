@@ -1,0 +1,41 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>re-apply 重新申请店铺API</h3>
+		<p>重新申请店铺</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/b2b2c/store-api/re-apply.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w200">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">attr</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">北京市海淀区</span><span class="w200">详情地址</span></p>
+			<p><span class="w100 important">bank_account_name</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">中国农业银行</span><span class="w200">银行开户名</span></p>
+			<p><span class="w100 important">bank_account_number</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">88888</span><span class="w200">银行开户卡号</span></p>
+			<p><span class="w100 important">bank_city</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">海淀区</span><span class="w200">银行所在城市</span></p>
+			<p><span class="w100 important">bank_city_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">35</span><span class="w200">银行所在城市id</span></p>
+			<p><span class="w100 important">bank_code</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">9999</span><span class="w200">开户银行支行账号</span></p>
+			<p><span class="w100 important">bank_name</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">北京农业银行</span><span class="w200">开户银行支行名称</span></p>
+			<p><span class="w100 important">bank_province</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">北京</span><span class="w200">银行所在城市</span></p>
+			<p><span class="w100 important">bank_province_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">银行所在城市id</span></p>
+			<p><span class="w100 important">bank_region</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">海淀区</span><span class="w200">银行所在地区</span></p>
+			<p><span class="w100 important">bank_region_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">453</span><span class="w200">银行所在地区id</span></p>
+			<p><span class="w100 important">id_number</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">6666666</span><span class="w200">身份证</span></p>
+			<p><span class="w100 important">store_city</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">海淀区</span><span class="w200">店铺所在城市</span></p>
+			<p><span class="w100 important">store_city_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">35</span><span class="w200">店铺所在城市id</span></p>
+			<p><span class="w100 important">store_name</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">XXX</span><span class="w200">店铺名称</span></p>
+			<p><span class="w100 important">store_province</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">北京</span><span class="w200">店铺所在省</span></p>
+			<p><span class="w100 important">store_province_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">店铺所在省id</span></p>
+			<p><span class="w100 important">store_region</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">海淀区</span><span class="w200">店铺所在区</span></p>
+			<p><span class="w100 important">store_region_id</span><span class="w200 important">int</span><span class="w100 important">必须</span><span class="w100 important">453</span><span class="w200">店铺所在区id</span></p>
+			<p><span class="w100 important">tel</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">13911111111</span><span class="w200">联系电话</span></p>
+			<p><span class="w100 important">zip</span><span class="w200 important">String</span><span class="w100 important">必须</span><span class="w100 important">100086</span><span class="w200">邮箱编号</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"提交申请成功,请等待审核","data":null}
+		</h5>
+	</div>
+</div>

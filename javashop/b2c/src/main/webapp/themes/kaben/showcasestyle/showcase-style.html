@@ -1,0 +1,87 @@
+<#assign showCaseListTag=newTag("showCaseListTag") >
+<#assign showCaseList=showCaseListTag("{'flag':'index_top'}") >
+<#assign showCaseGoodsListTag=newTag('showCaseGoodsListTag') >
+<#if showCaseList??&& showCaseList?size gt 0>
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />
+
+<div class="showcase">
+ 	<div class="showcase_tab">
+		<ul class="showcase_ul">
+			<#list showCaseList as showCase >
+				<li  class="show_this_case  <#if showCase_index<1>onshowcase</#if>" data-showcase-id="${showCase.id}" >
+					<i class="arrow"></i>
+					<a href="javascript:void(0);">${showCase.title}</a>
+				</li>
+			</#list>
+			<span style='display:block;z-index:999;position:absolute;right:1px;'><input class="showcase_btn" style="cursor:pointer "type="button" value="换一批" id="refreshshowcase"></span>
+		</ul>
+	</div>
+	<#if showCaseList??&& showCaseList?size gt 0>
+		<#list showCaseList as showCase >
+			<div class="showcase_goods" id="showcase_goods_${showCase.id}" <#if showCase_index<1 >style="display:block" <#else>style="display:none"</#if>> 
+				<ul>
+					<#assign showCaseGoodsList=showCaseGoodsListTag("{'goodsids':'${showCase.content!''}'}") >
+					<#if showCaseGoodsList??&&showCaseGoodsList?size gt 0>
+					<#list showCaseGoodsList as goods >
+					<#if goods_index<6>
+					<li>
+						<dl>
+							<!--商品名称-->
+							<dt class="showcase_goods_name">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+									title="${goods.name}">${goods.name}</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="showcase_goods_img">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="showcase_goods_price">商城价：${goods.price?string.currency}</dd>
+						</dl>
+					</li>
+					</#if>
+					</#list>
+					</#if>
+				</ul>
+			</div>
+		</#list>
+	</#if>
+</div>
+<script type="text/javascript">
+ 
+	$(function(){
+		$(".show_this_case").mousemove(function(){
+			var tab=$(this);
+			var id=tab.attr("data-showcase-id");
+			var parent=tab.closest(".showcase");
+			parent.find(".showcase_goods").hide();
+			$("#showcase_goods_"+id).show();
+			$(".show_this_case").removeClass("onshowcase")
+			tab.addClass("onshowcase");
+		});
+		
+		
+		$(".show_this_case").mouseout(function(){
+		});
+		$("#refreshshowcase").click(function(){
+			var showtab=$(".onshowcase");
+			var id=showtab.attr("data-showcase-id");
+			var showcasegoods=$("#showcase_goods_"+id);
+			$.ajax({
+				url:"${ctx}/api/core/showcase/refresh.do?id="+id,
+				type:"GET",
+				dataType:"json",
+				success:function(result){
+					if(result.result==1){
+						var html=result.data;
+						showcasegoods.html(html);
+					}
+				}
+			});
+		});
+		
+		
+	})
+</script>
+</#if>

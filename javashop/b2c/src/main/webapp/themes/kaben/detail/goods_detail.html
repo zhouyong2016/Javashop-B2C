@@ -1,0 +1,233 @@
+<#assign scroll="false" />
+<#if galleryList?size gt 4><#assign scroll="true" /></#if>
+<#list galleryList as gallery>
+	<#if gallery.isdefault==1>
+		<#assign big="${gallery.big!''}" />
+		<#assign small="${gallery.small!''}" />
+	</#if>
+</#list>
+<!--获取VIP价格标签-->
+<#assign vipPriceTag = newTag("goodsVipPriceTag")>
+<!--调用VIP价格标签-->
+<#assign vipPrice =vipPriceTag()!''>
+<!-- 如果登录了就判断积分 -->
+<!-- 商品相册 -->
+<div id="detail-wrapper">
+		<!-- 商品相册 -->
+	<div class="gallery">	
+		<div class="preview">
+			 <a href="${big!''}"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+			 	<img   src="${big!''}" />
+			 </a>
+		</div>
+		<div class="control_bar">
+			<div class="control left-control"></div>
+			<div class="thumblist">
+				<ul>
+				<#list galleryList as gallery>
+					<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> <@image src="${gallery.thumbnail!''}"  big="${gallery.big}" small="${gallery.small}"   /></li>
+				</#list>	
+				</ul>
+			</div>
+			<div class="control right-control "></div>
+		</div>
+	</div>
+	<!-- 商品详细 -->
+	<div class="base">
+		<!-- 商品基本信息 -->
+		<div class="summary">	
+			<h2>${goods.name}</h2>	
+			<p class="sn">商品货号： ${goods.sn}</p>
+			<div class="midden-area-priceArea" >
+				<div class="priceArea-leftArea">
+				<#if groupbuyIsOn=="ON">
+              		<#if goods.is_groupbuy??&& goods.is_groupbuy==1&&groupBuyAct!="">
+              		<p class="kaben-price">
+						团购价格：
+						<span>￥${groupBuy.price}</span>元
+					</p>
+					<#else>
+						<p class="kaben-price">
+						商城价：
+						<span>￥${goods.price!''}</span>元
+					</p>
+					</#if>
+				<#else>
+					<p class="kaben-price">
+						商城价：
+						<span>￥${goods.price!''}</span>元
+					</p>
+              	</#if>
+					<p>市场价：${goods.mktprice!''}元</p>
+					<!-- 积分价格 -->
+
+				<#if exchangeSetting??&&exchangeSetting!='' >
+					<input type="hidden" id="exchange_check_is_need" value="1">
+					<p class="kaben-exchange">
+						<input type="checkbox" name="is_exchange" id="is_exchange" />
+						积分购:
+						<span id="exchange_money_span">￥${exchangeSetting.exchange_money!''}</span>元+
+						<span id="exchange_point_span">${exchangeSetting.exchange_point!''}</span>积分
+					</p>
+				</#if>
+                <#if goodsPartAct.activity??>
+                   <!--促销展示-->
+                   <div class="other-goods">
+                       <#include './activity-info.html' />
+                    </div>
+                </#if>
+				</div>
+				<div class="priceArea_rightArea">
+					<p>最高折扣</p>
+					<ul>
+						<li class="vip_price">
+							<strong>
+							<#if member??>
+								<#if goods.have_spec?exists && goods.have_spec==1 >
+									  <span class="no-choose">未选择规格</span>
+								<#else>
+									<span>${vipPrice.vipprice?string("currency")}</span>元
+								</#if>
+							<#else>
+								<span>￥${vipPrice.vipprice!0.00}</span>元
+							</#if>
+							</strong>
+						</li>	
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+		
+		<#if goods.market_enable!=2 >
+			<#if goods.isvirtual?exists && goods.isvirtual==1>
+			<form action="virtual_checkout.html" id="goodsform" method="post">
+			<#else>
+			<form action="cart.html" id="goodsform" method="post">
+			<#if goodsPartAct.activity??>
+				<input type="hidden" value="${goodsPartAct.activity.activity_id}" id="activityId" name="activity_id">
+			</#if>
+			<!-- 积分兑换 -->
+			<input type="hidden" name="exchange" id="exchange" value="">
+			</#if>
+				<div class="choose">
+					
+					
+					 <#if goods.have_spec?exists && goods.have_spec==1 >
+						<#include 'spec.html' />
+					<#else>
+						 
+						<#include 'no_spec.html' />
+					</#if> 
+					
+				
+				</div>
+				<div style="clear:both;" ></div>
+			</form>
+		<#else>
+			<label>预览商品</label>
+		</#if>
+	</div>
+
+</div>
+<div class="add-success-msg" style="display:none">
+	<div >
+		<div class="message">
+			恭喜，该商品已添加到您的购物车！
+		</div>
+		<div class="button_wrapper">
+			<div class="btn-div"><input type="button" class="returnbuy_btn small-green" value="继续购物"></div>
+			<div class="btn-div"><input type="button" class="checkout_btn small-white" value="去结算"></div>
+		</div>
+	</div>	
+</div>
+<!-- 加载浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="goods-add-float" style="word-wrap:break-word; word-break:break-all;">
+		</div>
+</div>
+<div id="point_tip" style="display:none">
+	<div class="">
+		抱歉,您的积分不足以兑换此商品！<br><br>
+		<#if member??>可用积分:${member.mp}</#if><br><br>
+	</div>
+</div>
+
+<div id="login_tip" style="display:none">
+	<div class="">
+		您当前是游客身份，游客身份不能购买积分商品！<br><br>
+	</div>
+	<div class="button-wrapper">
+		<div class="btn-div">
+			<input type="button" class="small-green to-login-btn go-next-button" value="马上登录">
+		</div>
+					
+		<div class="btn-div">
+			<input type="button" class="small-yellow to-checkout-btn go-next-button"  value="立即注册">
+		</div>
+	</div>
+</div>
+<script>
+var goodsid = ${goods.goods_id};
+var isLogin="false";
+var checkPoint="false";
+$(function(){
+	Goods.init(${scroll});
+	CommentList.init();
+	CommentForm.init();	
+	if($("#exchange_check_is_need").val()==1){
+		$.ajax({
+			url:"${ctx}/api/shop/exchange/is-login.do",
+			dataType:"json",
+			type:"POST",
+			success:function(result){
+				if(result.result==1){
+					isLogin=result.data;
+				}
+			}
+		});
+		var exchange_point='';
+		<#if exchangeSetting??&&exchangeSetting!='' >
+			exchange_point=${exchangeSetting.exchange_point};
+		</#if>
+		$.ajax({
+			url:"${ctx}/api/shop/exchange/check-point.do",
+			dataType:"json",
+			type:"POST",
+			data:{"exchange_point":exchange_point},
+			success:function(result){
+				if(result.result==1){
+					isLogin=result.data;
+				}
+			}
+		});
+	}
+	//配送费用
+	$("#region_id").change(function(){
+		if($(this).val()!=0){
+			$("#dly-div").load("/detail/goods_dly_list.html?regionid="+$(this).val());
+		}
+	});
+	
+	//显示促销活动详细
+	$(".act_detail").click(function(){
+		var actId = $("#activityId").val();
+		$(".goods-add-float").load("detail/activity_detail.html?activityId="+actId);
+	})
+	
+	//积分价格添加到表单
+	$("#is_exchange").click(function(){
+		var checkState = $("#is_exchange").prop("checked");
+		var money=$("#exchange_money_span").html();
+		var point=$("#exchange_point_span").html();
+		if(checkState){
+			//被选中
+			
+			$("#exchange").val("true");
+		}else{
+			$("#exchange").val("false");
+		}
+	});
+});	
+</script>

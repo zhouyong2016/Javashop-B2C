@@ -1,0 +1,27 @@
+
+<#-- 获取购物车消息 -->
+<#assign cartMessage = newTag("cartMessageTag")>
+<#assign cart_message = cartMessage()>	
+<script type="text/javascript">
+
+<#if cart_message != '0'>
+$(function(){
+	var options = {
+			title    : '购物车更新提示',
+			html     : "${cart_message!''}",
+			top      : 100,
+			btn      : false,
+			backdrop : false,
+			width    : '200',
+		//	height   : '500',
+			showCall : function(){
+				$(".protocol-btn").on('click', function(){
+					$('#dialogModal').modal('hide');  //关闭弹出层
+				})
+			},
+		}
+		$.dialogModal(options);
+});
+
+</#if>
+</script>

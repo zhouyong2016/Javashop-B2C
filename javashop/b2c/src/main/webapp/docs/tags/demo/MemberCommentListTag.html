@@ -1,0 +1,16 @@
+			
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员我的咨询标签 -->
+<#assign memberCommentList = memberCommentListTag()>
+<!-- 获得我的咨询MAP集合 -->
+<#assign comment = memberCommentList.commentsList>
+<ul>
+<#list comment as commentList>
+<li>
+	我的咨询：${commentList.content}
+	我的咨询回复：${commentList.reply!''}
+	会员购买的商品：${commentList.name}
+	</li>
+</#list>
+	</ul>

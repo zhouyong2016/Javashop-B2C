@@ -1,0 +1,33 @@
+body{width:100%;margin:0px;padding:0px;}
+div{margin:0;padding:0;font-family:"微软雅黑";color:#989898;}
+ul,li,a{border:none; list-style-type:none;text-decoration:none;}
+img{border:none;}
+
+/* 页面头 */
+.home{margin:0 auto;height:100px;}
+.logo{float:left;height:100px;line-height}
+.logo a{float:left;padding:29px 15px 32px 95px;}
+.logo span{float:left;line-height:100px;font-size:30px;}
+.header{float:right;line-height:100px;height:100px;padding-right:8%;}
+.header span a{color:#666666;padding:0 14px;font-size:16px;}
+
+/* 登录 */
+.banner{width: 100%;margin:0;height:599px;position:relative;}
+.banner .img_bg{width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1}
+.banner .img_bg img{width:100%;height:100%;}
+.login{width:366px;height:295px;float:right;position:absolute;top:153px;right:14%;}
+.login-tab{border:1px solid #e4e4e4;height:294px;width:365px;background:#fff;}
+.tab{width:304px;height:219px;margin:30px;float:left;}
+.tab-one{width:304px;height:36px;background:url(../images/input_bg.gif) no-repeat scroll left top;margin-bottom:10px;overflow:hidden;font-size:14px;}
+.tab-one span{float:left;padding-top:4px;color:#999;padding-left:5px;}
+.tab-one span input{border:none;background:#fff;height:25px;width:200px;line-height:25px;outline:none;overflow:hidden;}
+.tab-two{width:302px;height:33px;font-size:14px;line-height:32px;overflow:hidden;}
+.tab-two span{display:block;float:left;color:#666;}
+.tab-three input.text1{outline:none;line-height:25px;float:left;width:204px;padding:5px;height:26px;background:url(../images/input_bg_01.gif) no-repeat scroll left top;border:none;margin-bottom:10px;}
+.tab-three span{float:left;}
+.tab-img{margin-top:2px;height:33px;}
+.tab-img img{padding-left:10px;width:64px;height:33px;}
+.tab-button input.btn{width:304px;height:40px;line-height:40px;font-size:16px;border:none;background:#437ff3;color:#fff;font-weight:bold;}
+.text_bg{width:35%;height:143px;position:absolute;top:205px;right:51%;background:url(../images/text_bg.gif) no-repeat scroll left top;overflow:hidden;text-indent:-500px;}
+.last{height:145px;text-align:center;margin:0 auto;background:#ebebeb;border-top:2px solid #cecece;}
+.last p{line-height:20px;color:#666;margin:0px;font-size:12px;padding-top:60px;}

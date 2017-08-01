@@ -1,0 +1,19 @@
+
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!--调用"商品基本信息"标签，并传递参数-->
+<#assign goods = goodsBaseDataTag("{'goodsid':242}")>  
+
+<#-- 创建商品属性标签 -->
+<#assign goodsAttributeListTag= newTag("goodsAttributeListTag")>
+<#-- 调用标签获取商品属性信息 -->
+<#assign attrList= goodsAttributeListTag("'goodsid':${goods.goods_id!''}")!'' >
+
+<table>
+<#list attrList as goodsattr>
+	<tr>
+		<th>${goodsattr.attrName}：</th>
+		<td>${goodsattr.attrValue}</td>
+	</tr>
+</#list>
+</table>

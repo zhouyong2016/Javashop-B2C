@@ -1,0 +1,8 @@
+
+<!--创建“订单价格”标签-->
+<#assign checkoutOrderTotalTag = newTag("checkoutOrderTotalTag")>
+<!--调用“订单价格”标签，并传递参数-->
+<#assign checkoutOrderTotal = checkoutOrderTotalTag("'regionId':'1'},{'typeId':'1'}")>
+
+运费：${checkoutOrderTotal.shippingPrice}
+优惠价格总计：${checkoutOrderTotal.discountPrice}

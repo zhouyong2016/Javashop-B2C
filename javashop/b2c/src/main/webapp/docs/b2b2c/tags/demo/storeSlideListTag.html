@@ -1,0 +1,12 @@
+
+<!--创建"幻灯片列表"标签-->
+<#assign storeSlideListTag= newTag("storeSlideListTag") >  
+<!--调用"幻灯片列表"标签-->            
+<#assign  storeSlideList= storeSlideListTag("'storeid':'15'") >						
+<ul class="gw">
+<#list storeSlideList as li>
+
+	店铺id：${li.store_id}</br>
+	幻灯片id：${li.silde_id}</br>
+
+</#list>

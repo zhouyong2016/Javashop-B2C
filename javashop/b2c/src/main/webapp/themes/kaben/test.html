@@ -1,0 +1,50 @@
+<#include 'common/header.html' />
+<body>
+<form  id="form_fxl">
+<input name="uname" value="sylow" type="text" />
+</form>
+<div id="test_fxl"></div>
+</body>
+<script>
+
+/* jQuery.extend({
+	   ajax:function(opt){
+		   alert(JSON.stringify(opt));
+	   }
+}) */
+
+
+$(function(){
+		
+		//$("#test_fxl").load("http://127.0.0.1:8080${ctx}/fxl.html");
+		var options = {
+				url : "http://127.0.0.1:8080/b2c/api/shop/member/login.do",
+				//url : "/b2c/api/shop/member/login.do",
+				dataType:"json",
+				//cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+				success:function(result){
+					if(result.result==1){
+						alert(result.message);
+						//location.href="${ctx}/index.html";
+						
+					}else{
+						alert(result.message);
+					}
+				},
+				error:function(){
+					
+					alert("出错了:(");
+				}
+			};
+		
+		//$.ajax(options);
+		//alert(URL_SETTING);
+		$("#form_fxl").ajaxSubmit(options);
+	
+	
+	//alert(1);
+	
+})
+</script>
+
+</html>

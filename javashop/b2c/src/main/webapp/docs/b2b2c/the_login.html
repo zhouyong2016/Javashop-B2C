@@ -1,0 +1,33 @@
+<div class="easyui-panel" style="border-style: none;width: 400px;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="loginForm" method="post" >
+			<table class="dd" style="text-align: left;">
+				<tr>
+					<th style="text-align: left; width: 50px;">账号：</th>
+					<td style="text-align: left;border:1px solid #ccc;">
+					<input style="width: 150px;" type="text" tabindex="1"
+						isrequired="true" name="username" autocomplete="off"
+						class="definition_small" id="username" />
+					</td>
+				</tr>
+				<tr>
+					<th style="text-align: left; width: 50px;">密码：</th>
+					<td style="text-align: left;border:1px solid #ccc;"><input style="width: 150px;" type="password"
+						vtype="password" tabindex="2" isrequired="true" name="password"
+						id="password" autocomplete="off" class="definition_small" /></td>
+				</tr>
+				<tr>
+					<th style="text-align: left; width: 60px;">验证码：</th>
+					<td class="m_account"><span class="m_input"> 
+					<input style="width: 50px;height:23px;line-height:23px;border:1px solid #ccc;float:left;display:inline;" type="text" tabindex="3" name="validcode"
+							isrequired="true" size="8" autocomplete="off" class="m_small"
+							id="validcode" /> </span> 
+							<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" style="float:left;display:inline;margin:2px 5px 0px 5px;"> 
+							<span class="m_forget"><a href="javascript:;" style="float:left;display:inline;">看不清楚？换个图片</a>
+					</span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

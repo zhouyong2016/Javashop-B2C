@@ -1,0 +1,21 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editLogiForm" method="post" class="validate" >
+		 <input type="hidden" name="cid" value="${logi.id }"/>
+			<table>
+				<tr>
+					<td align="right">物流公司名称</td>
+					<td><input class="easyui-validatebox input_text"  maxlength="12" type="text" name="name" id="name" maxlength="60" dataType="string" data-options="required:true" isrequired="true" value="${logi.name }"/>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">代码</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="code" id="code" maxlength="60" dataType="string" data-options="required:true" isrequired="true" value="${logi.code }"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+	
+

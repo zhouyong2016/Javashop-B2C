@@ -1,0 +1,118 @@
+<script type="text/javascript">
+	$(function() {
+		Param.init();
+	})
+</script>
+<script type="text/javascript">
+<!--
+	function setParamNum() {
+		document.getElementById("paramnum").value = '';
+		var result = checkInputs();
+		if (result) {
+			var param_div = document.getElementById("param_div");
+			var tbls = param_div.getElementsByTagName("table");
+			var paramnum = document.getElementById("paramnum").value;
+
+			for ( var i = 0; i < tbls.length; i++) {
+
+				var texts = tbls[i].getElementsByTagName("input");
+
+				if (paramnum != '') {
+					paramnum += ",";
+				}
+				paramnum += (texts.length - 1);
+
+			}
+			document.getElementById("paramnum").value = paramnum;
+			return true;
+		}
+		return false;
+
+	}
+	function checkInputs() {
+		var groups = document.getElementsByName("groupnames");
+		var params = document.getElementsByName("paramnames");
+		var paramsLen = params.length;
+		var groupsLen = groups.length;
+		for ( var i = 1; i < groupsLen; i++) {
+			if (groups[i].value == "") {
+				alert("请输入参数组名称");
+				return false;
+			}
+		}
+		for ( var i = 1; i < paramsLen; i++) {
+			if (params[i].value == "") {
+				alert("请输入参数名称");
+				return false;
+			}
+		}
+		return true;
+	}
+//-->
+</script>
+
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form method="post" action="${ctx}/shop/admin/type/save-params.do" name="theForm1"
+			id="paramsForm">
+			<input type="hidden" name="paramnum" id="paramnum" />
+
+			<div style="text-align: center">
+				<div class="list-div" id="listDiv"
+					style="width: 100%; text-align: left">
+
+					<div class="toolbar">
+						<ul>
+							<li><a href="javascript:;" id="paramAddBtn">新增参数组</a>
+							</li>
+						</ul>
+						<div style="clear: both"></div>
+					</div>
+
+					<div class="input detail">
+						<div id="param_div">
+							<#if goodsType??> 
+							<#if goodsType.paramGroups??> 
+								<#list goodsType.paramGroups as group>
+									<table cellpadding="3" cellspacing="0" style="width: 100%;">
+										<tr class="group">
+											<td style="background-color: #DDEEF2;">参数组名</td>
+											<td width="50%" style="background-color: #DDEEF2;">
+												<input type="text" class="input_text" name="groupnames" maxlength="60" value="${group.name }" />
+											</td>
+											<td  style="background-color: #DDEEF2;">
+												
+												<span>
+													<a href="javascript:;" class="sysbtn addBtn">新增参数</a>
+													<a href="javascript:;">
+														<img class="delete" src="${ctx}/shop/admin/images/transparent.gif"> </a>
+												</span> 
+												
+												<span style="display: inline; float: left"> </span>
+											</td>
+										</tr>
+		
+										<#list group.paramList as gparam>
+										<tr class="param">
+											<td width="10%" style="text-align: right;">参数名</td>
+											<td width="26%"><input type="text" name="paramnames" class="input_text" value="${gparam.name }" maxlength="50"/>
+											</td>
+											<td>&nbsp;
+												<a href="javascript:;">
+													<img class="delete" src="${ctx}/shop/admin/images/transparent.gif">
+												</a>
+											</td>
+										</tr>
+										</#list>
+									</table>
+								</#list> 
+							</#if> 
+							</#if>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="typeId" value="${goodsType.type_id}">
+		</form>
+	</div>
+</div>

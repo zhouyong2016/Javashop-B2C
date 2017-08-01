@@ -1,0 +1,10 @@
+
+
+<!--创建"商品详细"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!--调用"商品详细"标签，并传递参数-->
+<#assign goodsBaseData = goodsBaseDataTag("{'goodsid':30}")>
+商品名称：${goodsBaseData.name}</br>
+商品ID：${goodsBaseData.goods_id}</br>
+商品大图片地址：${goodsBaseData.big!''}
+

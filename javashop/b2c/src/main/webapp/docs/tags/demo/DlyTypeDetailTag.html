@@ -1,0 +1,9 @@
+
+
+<!--创建"配送方式详细"标签-->
+<#assign dlyTypeDetailTag = newTag("dlyTypeDetailTag")>
+<!--调用"配送方式详细"标签，并传递参数-->
+<#assign dlyTypeDetail = dlyTypeDetailTag("{'id':1}")>
+
+${dlyTypeDetail.name}
+

@@ -1,0 +1,76 @@
+<#assign title= "商品分类" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'goods_menu.html' />
+<div class="right_list">
+		<h3>StoreCat   商品分类</h3>
+		<h2>需要简述</h2>
+		<h6>商品分类条目</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>store_cat_id</td>
+						<td>Integer</td>
+						<td class="describe">商品分类ID</td>
+					</tr>
+					<tr>
+						<td>store_cat_pid</td>
+						<td>Integer</td>
+						<td class="describe">父类ID</td>
+					</tr>
+					<tr>
+						<td>store_id</td>
+						<td>Integer</td>
+						<td class="describe">店铺ID</td>
+					</tr>
+					<tr>
+						<td>disable</td>
+						<td>Integer</td>
+						<td class="describe">是否禁用</td>
+					</tr>
+					<tr>
+						<td>sort</td>
+						<td>Integer</td>
+						<td class="describe">排序</td>
+					</tr>
+					<tr>
+						<td>store_cat_name</td>
+						<td>String</td>
+						<td class="describe">店铺分类名称</td>
+					</tr>
+					<tr>
+						<td>cat_path</td>
+						<td>String</td>
+						<td class="describe">分类路径</td>
+					</tr>
+				
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

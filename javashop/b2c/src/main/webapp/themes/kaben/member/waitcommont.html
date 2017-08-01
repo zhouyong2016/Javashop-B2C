@@ -1,0 +1,66 @@
+<!-- 获取会员未评论订单列表标签 -->
+<#assign memberWaitCommontOrderListTag = newTag("memberWaitCommontOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign memberWaitCommontOrderList = memberWaitCommontOrderListTag()> 
+<#assign order = memberWaitCommontOrderList.ordersList>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderstatus="com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+<#assign orderState = orderStautsTag()>
+<div class="order-list">
+	<!-- 订单列表 -->
+	<div class="order-list-all">
+		<#if order?size gt 0 >
+			<#list order as orders>
+						<div class="order-list-box">
+							 <h3>
+								<span style="float:left;padding-top:7px;">
+									订单号：${orders.sn!''}<i>|</i>
+									${orders.ship_name!'' }<i>|</i>
+									${orders.payment_name}<i>|</i>
+									<#if orders.is_cancel==0>
+										订单状态：${orders.orderStatus}
+									<#else>
+										订单状态：等待审核
+									</#if>
+								</span>
+								<span style="float:right">订单金额：<b>${orders.order_amount?string.currency}</b>元 <#if orders.order_exchange_point?? && orders.order_exchange_point gt 0>+<b>${orders.order_exchange_point!'0'}</b>积分</#if></span>
+							</h3>
+							<div class="order-goods-list">
+								<!--创建“订单货物列表”标签-->
+								<!-- <#assign orderItemCommentsListTag = newTag("orderItemCommentsListTag")>
+								<#assign orderItemCommentsList = orderItemCommentsListTag("{'orderid':${orders.order_id}}")> -->
+								<#assign orderItemList =orders.itemList>
+								<ul>
+									<#list orderItemList as item>
+									<li>
+										<div class="order-list-img">
+											<a target="_blank" href="../goods-${item.goods_id}.html">
+												<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+											</a>
+										</div>
+										<div class="order-list-intro">
+											<p>
+												<a target="_blank" href="../goods-${item.goods_id}.html">${item.name}</a>
+												${item.price?string.currency}元 × ${item.num}<#if item.exchange_point??&&item.exchange_point gt 0 >+${(item.exchange_point!'0')?number*item.num}积分 </#if>
+											</p>
+										</div>
+									</li>
+									</#list>
+								</ul>
+								 <div class="order-list-tools btn-div">
+									<a class="check small-white" href="member_comment.html?ordersn=${orders.sn}">去评论</a>
+									<a class="check small-green" href="order_detail.html?ordersn=${orders.sn}">查看</a>
+								 </div>
+							</div>
+						</div>
+			</#list>
+			<@pager pageno="${memberWaitCommontOrderList.page}" pagesize="${memberWaitCommontOrderList.pageSize}" totalcount="${memberWaitCommontOrderList.totalCount}" />
+		<#else>
+			<div class="member-comment-wait">
+					<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+				</div>
+		</#if>
+	</div>
+</div>

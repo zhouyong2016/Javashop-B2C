@@ -1,0 +1,30 @@
+			
+<!--创建"会员信息"标签-->
+<#assign memberInfoTag = newTag("memberInfoTag")>
+<!--调用"会员信息"标签-->
+<#assign member= memberInfoTag() >
+<ul>
+	<!-- 创建会员信息标签 -->
+<#assign memberIsLoginTag=newTag("memberIsLoginTag")>
+<!-- 调用会员登录标签 -->
+<#assign isLogin=memberIsLoginTag()>
+
+	<#if isLogin >
+		<!-- 获取member信息 -->
+
+		<script type="text/javascript">var isLogin= true;</script>
+		<li>您好：
+		<#if member.name??>
+		${member.name}
+		<#else>
+		${member.uname}
+		</#if>
+		</li>
+		<li><a href="member_index.html">[会员中心]</a></li>
+		<li><a href="logout.html">[退出]</a></li>
+	<#else>
+		<script type="text/javascript">var isLogin= false;</script>
+		<li><a href="login.html">登录 </a></li>
+		<li><a href="register.html">注册 </a></li>
+	</#if>
+</ul>

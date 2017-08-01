@@ -1,0 +1,138 @@
+﻿
+.register-box{
+    color: #6c6c6c;
+    font: 12px/1.5 arial,"Microsoft YaHei","SimSun";
+    
+     background:url("../images/regist_bg.jpg") repeat scroll left top #fff ;
+    height: 724px;
+    min-width: 980px;
+    padding: 26px 0 0;
+}
+.login_main{
+	background: #fff none repeat scroll 0 0;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 0 4px 1px #d9d9d9;
+    margin: 0 auto;
+    min-height: 550px;
+    padding: 0 10px 50px;
+    width: 900px;
+}
+.login_main h1{
+	  border-bottom: 1px solid #ededed;
+    height: 56px;
+    line-height: 56px;
+    padding: 0 38px 0 20px;
+    font-size:20px;
+    position:relative;
+}
+.login_main h1 a{
+	position:absolute;display:block;width:150px;color:#2475c0;right:-90px;top:-10px;font-size:12px;font-weight:normal;height:15px;
+}
+.left-area{width:300px;height:400px;float:left;margin:25px;position:relative;}
+.left-area .two-code{wisth:300px;height:260px;}
+.left-area .two-code img{width:200px;height:200px;margin:20px 50px 0px 50px}
+.left-area .two-code i{display:block;height:40px;line-height:40px;font-size:20px;text-align:center;width:300px;}
+
+.i01{font-size:14px;display:block;margin-top:40px;margin-left:40px;color:#666666;}
+.i02{display:block;float:left;margin-left:55px;margin-top:90px;color:#999999;_margin-left:25px;}
+.i03{display:block;float:left;margin-left:55px;margin-top:90px;color:#999999;_margin-left:60px;}
+.i04{display:block;float:left;margin-left:65px;margin-top:100px;color:#999999;_margin-left:-240px;_margin-top:200px;}
+.i05{display:block;float:left;margin-left:70px;margin-top:100px;color:#999999;_margin-left:-90px;_margin-top:200px;}
+.login_area{width:350px;height:90px;margin-top:30px;float:left;_float:none;}
+.login_area .i06{display:block;float:left;font-size:14px;margin-left:40px;color:#666666;width:300px;_margin-left:25px;}
+.login_area .i07{display:block;float:left;font-size:14px;margin-left:40px;color:#999999;margin-top:15px;_margin-left:25px;}
+.login_area .button{float:left;width:60px;height:23px;line-height:23px;text-align:center;background:#fff;border:1px solid #c8c8c8;color:#44b540;margin-left:10px;margin-top:13px;margin-right:50px;_margin-right:30px;}
+.login_area .found_password{display:block;float:left;color:#2475c0;text-decoration:underline;margin-top:18px;margin-left:10px;}
+.right_border{position:absolute;width:1px;height:300px;background:#eee;top:50px;left:320px;}
+
+.right_area{width:550px;height:400px;float:left;}
+.right_area ul{width:450px;height:400px;margin:20px auto;}
+.right_area ul li{width:450px;}
+.right_area ul li .reg_box{
+	border: 1px solid #dedede;
+    border-radius: 5px;
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    height: 24px;
+    line-height: 24px;
+    margin: 0 auto 15px;
+    overflow: hidden;
+    padding: 10px 18px;
+    position: relative;
+    width:410px;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+.right_area ul li .reg_box span{float:left;line-height:25px;}
+.right_area ul li .reg_box .item{
+    color: #666;
+    display: inline-block;
+    vertical-align: middle;
+    flaot:left;
+    line-height:25px;
+}
+.right_area ul li .reg_box input{
+	border: 0 none;
+    color: #ccc;
+    font-family: "Microsoft YaHei";
+    padding-left: 3px;
+    vertical-align: middle;
+    width: 140px; 
+    margin:0 10px 0 0;
+    float:left;
+    line-height: 25px;
+    height: 26px;
+}
+.right_area ul li .reg_box img{
+    height: 44px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100px;
+}
+.regis_read{width:450px;height:30px;line-height:20px;overflow:hidden;}
+.registration{
+    background: #44b540 ;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px #dbdbdb;
+    color: #fff;
+    display: inline-block;
+    font-size: 16px;
+    height: 34px;
+    line-height: 32px;
+    margin-top: 15px;
+    text-align: center;
+    width:300px;
+    border:0px none;
+}
+.right_area ul li .selected{
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 5px rgba(240, 127, 5, 0.4);
+}
+.right_area ul li .selected input{color:#666;}
+
+/**********************/
+.register-seccess{width:800px;height:300px;padding:0px 0px;border:1px solid #e0e0e0;margin:70px auto; box-shadow: 0 2px 5px #ccc;}
+.register-seccess .success-word{margin:70px auto 50px auto;width:500px;line-height:60px;height:60px;text-align:center;}
+.register-seccess .success-word img{width:60px;height:60px;display:inline;float:left;margin:0px 20px 0px 0px}
+.register-seccess .success-word h1{display:inline;float:left;height:60px;line-height:60px;font-size:20px;font-weight: normal;}
+.register-seccess .seccess-btn{width:390px;height:60px;margin:0px auto;}
+.register-seccess .seccess-btn a{float:left;margin:0px 10px 0px 0px;}
+
+/******注册协议*******/
+.protocol{color:#38f; cursor: pointer;}
+.protocol-con{width:100%;height:500px;overflow-y:scroll;}
+.protocol-con h4{width:100%;height:30px;line-height:30px;font-weight:bold;font-size:14px;margin:5px 0;}
+.protocol-con h5{width:100%;height:30px;line-height:30px;font-weight:bold;font-size:12px;margin:5px 0;}
+.protocol-con p{width:100%;line-height:22px;font-size:12px;font-weight:200;text-align:justify;}
+.protocol-con p strong{font-weight:200;}
+.protocol-tools{width:100%;height:36px;text-align:center;padding:20px 0 1px 0;border-top:1px solid #ddd;margin:10px 0 0 0;}
+.protocol-tools input{width:150px;height:30px;line-height:30px;background:#ff3f13;color:#fff;border:0 none;}
+
+.for-email{  float: right;
+    font-size: 14px;
+    margin: 2px 0 5px 0;
+    padding: 0 5px;}
+.for-email a{
+	 color: #38f;
+    margin: 0 0 0 5px;
+}
+.validate ul li .regis_read .satisfied{margin:9px 0 0 0;}

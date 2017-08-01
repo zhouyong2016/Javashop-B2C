@@ -1,0 +1,12 @@
+
+<!--创建"商品属性列表"标签-->
+<#assign goodsAttributeListTag = newTag("goodsAttributeListTag")>
+<!--调用"商品属性列表"标签，并传递参数-->
+<#assign goodslist = goodsAttributeListTag("'goodsid':242")>  
+
+<#list goodslist as goodsattr>
+	<tr>
+		<th>${goodsattr.attrName}：</th>
+		<td>${goodsattr.attrValue}</td>
+	</tr>
+</#list>

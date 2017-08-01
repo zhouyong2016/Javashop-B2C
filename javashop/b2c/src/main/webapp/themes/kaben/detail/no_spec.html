@@ -1,0 +1,65 @@
+<div class="rer-quantity" style="margin-top:10px;">
+	<label>订购数量：</label>
+	<div class="Numinput" id="num"></div>								
+</div>
+<div class="btn-box">
+	<input type="hidden" name="goodsid" value="${goods.goods_id}" />
+	<input type="hidden" name="action" value="add-goods" />
+	<input type="hidden" name="showCartData" value="0" />
+	 
+	
+		
+	    <#if goods.store==0> 
+		<div class="btn-div">
+			<input type="button" class="white-btn" value="暂无库存"   goodsid="${goods.goods_id}"/>
+		</div>	
+		<#else>
+		<div class="btn-div">
+			<input type="button" class="buynow-btn green-btn" value="立即购买" id="buyNow" />	
+		</div>
+		<div class="btn-div">
+			<input type="button" class="addtocart-btn yellow-btn" value="加入购物车"  id="addbutton" <#if goods.isvirtual?exists &&goods.isvirtual==1 >style="display:none"</#if> />	
+		</div>
+		<div class="btn-div">
+			<a href="javascript:void(0);" class="favorite" goodsid="${goods.goods_id}"></a>	
+		</div>
+		
+	    </#if>
+</div>
+<script>
+	$(function(){
+		
+		$(".addtocart-btn,.buynow-btn").click(function(){	
+			var btnId = $(this).attr("id");
+
+				 $.Loading.show("请稍候...");
+				$("#addbutton").attr("disabled",true);
+				var action = $("#goodsform [name='action']").val();
+				var options={
+					url:"api/shop/cart/" + action + ".do?ajax=yes",
+					dataType:"json",
+					cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+					success:function(result){
+						$.Loading.hide();
+						if(result.result==1){
+							if(btnId!="buyNow"){
+								Goods.showAddSuccess();
+							}else{
+								window.location.href="cart.html";
+							}
+							
+						}else{
+							$.dialog.alert("发生错误:"+result.message); 
+						}
+						$("#addbutton").attr("disabled",false);
+					},
+					error:function(){
+						$.Loading.hide();
+						$.alert("抱歉,发生错误");
+						$("#addbutton").attr("disabled",false);
+					}
+				};
+				$("#goodsform").ajaxSubmit(options);
+	});
+	})
+</script>

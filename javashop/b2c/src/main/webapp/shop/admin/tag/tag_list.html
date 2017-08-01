@@ -1,0 +1,178 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	 <div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlTag()">添加</a>
+		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="tagform">
+			<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/tag/list-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true',toolbar:'#tb'"pagination="true" width="width" id="tagdata">
+				<thead>
+				    <tr>
+				   		<th data-options="field:'tag_id',checkbox:true,width:100" ></th>
+				   		<th data-options="field:'id',width:20" formatter="formatId">标签id</th>
+				   	 	<th data-options="field:'tag_name',width:100">标签</th>
+				   	 	<th data-options="field:'type',width:100" formatter="formatType">标签类型</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			</table>
+		</form>
+		<div id="Taginfo" style="display: none;"></div>
+	</div>
+</div>
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.tag_id+")'></a>";
+	return val;
+}
+function formatType(value,row,index){
+	if(value==1){
+		return "品牌标签"
+	}else{
+		return "商品标签";
+	}
+}
+function formatId(value,row,index){
+	var val=row.tag_id;
+	return val;
+}
+function del(){ 
+	 	var rows = $('#tagdata').datagrid("getSelections"); 
+	 	if(rows.length<1){
+	 		$.Loading.error("请选择要删除的标签");
+	 		return;
+	 	}
+		if(!confirm("确认要删除这些标签吗？")){	
+			return ;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/tag/delete.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$('#tagdata').datagrid('reload');
+						$('#tagdata').datagrid('clearSelections');
+					}else{
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+				}
+		};
+		$('#tagform').ajaxSubmit(options);	
+		
+}
+ function controlTag(){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '添加标签',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/tag/add.do', 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var savebtn = $(this);
+	　　				 	addTagForm(savebtn);		
+	　　				 }
+	　　			}
+	　　		},{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#addTagForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+ }
+ function edit(tagId){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '修改标签',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/tag/edit.do?tagId='+tagId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var editbtn = $(this);
+		　　				editTagForm(editbtn);		
+		　　			}
+　　				 }
+　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editTagForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+ }
+function addTagForm(savebtn){
+	var formflag= $("#addTagForm").form().form('validate');
+	if(formflag){
+		 $.Loading.show("正在保存请稍候...");
+		 savebtn.linkbutton("disable");
+		var options = {
+			url : "${ctx}/shop/admin/tag/save-add.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				$("#Taginfo").dialog('close');
+				$('#tagdata').datagrid('reload');
+				savebtn.linkbutton("enable");
+		 	},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		
+		};
+		$('#addTagForm').ajaxSubmit(options);
+	}
+}
+function editTagForm(editbtn){
+	var formflag= $("#editTagForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候..");
+		editbtn.linkbutton("disable");
+		var options = {
+				url : "${ctx}/shop/admin/tag/save-edit.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#Taginfo").dialog('close');
+						$('#tagdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误 ，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+		};
+		$('#editTagForm').ajaxSubmit(options);
+	}
+}
+
+</script>
+	   	 

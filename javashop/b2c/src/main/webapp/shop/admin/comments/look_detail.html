@@ -1,0 +1,61 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="replyForm" method="post" class="validate">
+			<input type="hidden" name="commentId" value="${memberComment.comment_id }"/>
+				<table>
+					<tr>
+						<td>
+							<#if memberComment.type = 1>
+								<h3>评论内容： </h3>
+							<#else>
+								<h3>咨询内容： </h3>
+							</#if>
+							<textarea rows="5" cols="80" style="resize: none;text-align:left;">${memberComment.content!''} </textarea>
+							<#if galleryList?size != 0>
+								<br/>
+								<h3>评论图片： </h3>
+								<#list galleryList as gallery>
+									<a href="${gallery.original!''}" target="_blank">
+										<img src="${gallery.original!''}" width="100px;" height="100px;"/> 
+									</a> 
+								</#list>
+							</#if>
+						</td>
+					</tr>
+					<#if memberComment.type = 1>
+						<tr>
+							<td>
+								<#if memberComment.replystatus = 1>
+									<h3>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]回复如下： </h3>
+									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 565px;">
+										${memberComment.reply!''}
+									</div>
+								<#else>
+									<h3>商家回复：</h3>
+									<h3>商家还没有回复此条评论</h3>
+								</#if>
+							</td>
+						</tr>
+					</#if>
+					<#if memberComment.type = 2>
+						<tr>
+							<td>
+								<#if memberComment.status == 0>
+									<h3>商家回复：</h3>
+									<h3>此条咨询还没有通过商家审核</h3>
+								<#else>
+									<h3>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]<#if memberComment.status == 2>拒绝</#if>通过审核并回复如下： </h3>
+									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 565px;">
+										${memberComment.reply!''}
+									</div>
+								</#if>
+							</td>
+						</tr>
+					</#if>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>

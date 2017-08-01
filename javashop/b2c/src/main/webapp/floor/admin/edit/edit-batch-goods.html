@@ -1,0 +1,73 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<div class="clear height10"></div>
+	<div style="display: block;"
+		class="input shadowBoxWhite wf100 whiteBox">
+		<div class="floor_goods"></div>
+	</div>
+	<div class="buttonWrap">
+			<a href="javascript:;" id="batchGoods" class="easyui-linkbutton">确定</a>
+	</div>
+</div>
+<script type="text/javascript" src="${ctx}/floor/admin/edit/jquery.goodsSelector.js" > </script>
+<script type="text/javascript">
+		var pageid=${pageid};
+		$(function(){
+			//创建商品选择器
+			var container=$(".floor_goods");
+			var options={
+					goodsid_name:'goods_ids',
+					selected_data_url:'${ctx}/core/admin/templateshow/get-selected-goods.do?floor_id='+${floor_id}
+			};
+			container.goodsSelector(options);
+			
+			$("#batchGoods").click(function() {
+				
+				//判断linkbutton是否已禁用，如果禁用则跳过
+			 	var disabled=  $(this).hasClass("l-btn-disabled");
+				if( !disabled ){
+						var goods_ids = [];
+						$("input[name='goods_ids']").each(function(i, o){
+							goods_ids[i] = $(o).val();
+						});
+						if(goods_ids.length==0){
+							$.Loading.error("请添加商品");
+							return;
+						}
+						
+						$("#batchGoods").linkbutton("disable");
+						$.Loading.show("正在保存请稍候..");
+						$.ajax({
+							url : "${ctx}/core/admin/template/save-batch-goods.do?ajax=yes" ,
+							type : "POST",
+							dataType : "json",
+							data:{
+								"floor_id":${floor_id},
+								"goods_ids":goods_ids,
+								"keyword":container.find(".keyword").val(),
+							},
+							success : function(result) {
+								
+								if (result.result == 1) {
+									$.Loading.success(result.message);
+									parent.SelectTable("模板编辑");
+									parent.refreshCurrentTab();
+									parent.CloseTabByTitle("批量添加商品");
+									//刷新tab
+									
+								}else{
+									$("#batchGoods").linkbutton("enable");
+									$.Loading.error(result.message);
+								}
+							},
+							error : function(e) {
+								$.Loading.error("出错了,请重试");
+								$("#batchGoods").linkbutton("enable");
+							}
+						});
+					}
+				});
+		});
+</script>
+<#include '/admin/footer.html' >

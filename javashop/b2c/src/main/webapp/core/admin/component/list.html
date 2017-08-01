@@ -1,0 +1,159 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<table class="easyui-treegrid" id="catdata"
+		data-options="url:'${ctx}/core/admin/component/list-json.do',fitColumns:'true',idField: 'id',treeField: 'name',onLoadSuccess:init">
+		<thead>
+			<tr>
+				<th data-options="field:'name',width:200">名称</th>
+				<th data-options="field:'install_state',width:100" formatter="fminstall">安装状态</th>
+				<th data-options="field:'enable_state',width:100" formatter="fmenable">启用状态</th>
+				<th data-options="field:'option',width:100" formatter="fmoption" >操作</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+
+<script>
+
+
+function init(){
+	
+	$(".stop").click(function(){ 
+		 if(!$(this).hasClass("l-btn-disabled")){
+			
+			if(confirm( "确认停用此组件吗?" )){ 
+				$(this).addClass("l-btn-disabled"); 
+				$(this).css("color","#CCC");
+				$(this).unbind("click");
+				request("${ctx}/core/admin/component/stop.do?componentid="+$(this).attr("componentid") ); 
+				
+			}
+		}
+	});
+	
+	$(".imgTree").click(function(){
+		var $this = $(this);
+		var status = $this.attr("status");
+		if(status=='close')  {
+			$this.parent().next().show().next().show();
+			$this.attr("status","open");
+			$this.attr("src","images/sitemapopened.gif");
+			
+		}else if(status=='open'){
+			$this.attr("status","close");
+			$this.attr("src","images/sitemapclosed.gif");
+			$this.parent().next().hide().next().hide();
+		}
+			
+	});
+	
+	
+	$(".start").click(function(){
+		if(!$(this).hasClass("l-btn-disabled")){
+			$(this).addClass("l-btn-disabled"); 
+			$(this).css("color","#CCC");
+			$(this).unbind("click");
+			request("${ctx}/core/admin/component/start.do?componentid="+$(this).attr("componentid") );
+		
+		}
+	});
+	
+	
+	$(".install").click(function(){
+		if(!$(this).hasClass("l-btn-disabled")){
+		var componentid = $(this).attr("componentid");
+		if(componentid=="productComponent" ){
+			if($("b[componentid='goodsSpecComponent']").attr("installstate")=="1"){
+				alert("标准货品组件和规格组件只能同时使用一个");
+				return ;
+			}
+		}
+		
+		
+		if(componentid=="goodsSpecComponent" ){
+			if($("b[componentid='productComponent']").attr("installstate")=="1"){
+				alert("标准货品组件和规格组件只能同时使用一个");
+				return 
+			}
+		}
+		$(this).addClass("l-btn-disabled"); 
+		$(this).css("color","#CCC");
+		$(this).unbind("click");
+		request("${ctx}/core/admin/component/install.do?componentid="+$(this).attr("componentid") );
+		
+		}
+	});
+	
+	$(".uninstall").click(function(){
+		if(!$(this).hasClass("l-btn-disabled")){
+		if(confirm( "确认卸载此组件吗?此操作可能会破坏现有数据，且无法恢复!" )){
+			$(this).addClass("l-btn-disabled"); 
+			$(this).css("color","#CCC");
+			$(this).unbind("click");
+			request("${ctx}/core/admin/component/un-install.do?componentid="+$(this).attr("componentid") );  
+		}
+		}
+	});
+}
+
+function request(requrl){
+	$.ajax({
+		url:requrl+"&ajax=yes",
+		dataType:"json",
+		success:function(result){
+			if(result.result==1){
+				alert("操作成功"); 
+				location.reload();
+			}else{
+				$.Loading.error(result.message);
+			}
+		},error:function(){
+			alert("启动组件出现错误");
+		}
+	});
+}
+
+
+function fminstall(value,row,index){
+	var val="";
+	if(value==0){
+		val="未安装";
+	}else if(value==1){
+		val="已安装";
+	}else if(value==2){
+		val="错误"+row.error_message;
+	}
+	return val;
+}
+
+function fmenable(value,row,index){
+	var val ="";
+	if(value==0){
+		val="已停用";
+	}else if(value==1){
+		val="已启用";
+	}else if(value==2){
+		val="错误";
+	}
+	return val;
+}
+	
+function fmoption(value,row,index){
+	var val="";
+	if(row.install_state==1  ){
+		if(row.enable_state==0){
+			val='<a componentid="'+row.componentid+'" class="start button"  href="javascript:;">启用</a>&nbsp;&nbsp;';
+			val+='<a componentid="'+row.componentid+'" class="uninstall button"  href="javascript:;">卸载</a>'
+		}
+		if(row.enable_state==1){
+			val='<a componentid="'+row.componentid+'" class="stop button" href="javascript:;">停用</a>'
+		}
+	}else if(row.install_state==0){
+		val='<a  class="install button" href="javascript:;" componentid="'+row.componentid+'" installstate="'+row.install_state+'" >安装</a>';
+	}
+	return val;
+}
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,10 @@
+
+<!-- 订单货物列表标签 -->
+<#assign orderChildItemListTag= newTag("orderChildItemListTag")>
+<!-- 调用订单货物列表标签 -->
+<#assign orderChildItemList = orderChildItemListTag("'orderid':'1'")>
+
+<#list orderChildItemList. as list>
+${list}
+</#list>
+

@@ -1,0 +1,127 @@
+<style>
+	#edit_send_span .easyui-validatebox{width:200px;}
+	#edit_send_button{width:90px;height:29px;text-align:center;border:1px solid #d7d7d7;margin:1px 10px 0 0;float:right;}
+	.show-lodding{width:90px;height:29px;margin:1px 10px 0 0;float:right;;display:block;background:url("../images/wait.gif") no-repeat center center;background-size:16px;}
+</style>
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editSmtpForm" method="post" class="validate" >
+		<input type="hidden" name="id" value="${smtp.id }"/>
+			<table>
+				<tr>
+					<td>host:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="host" data-options="required:true"  value="${smtp.host }"  isrequired="true" maxlength="50"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>port：</td>
+					<td><input class="easyui-numberbox input_text" type="text" name="port" data-options="required:true"  value="${smtp.port }" dataType="int" isrequired="true" maxlength="5"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>启用ssl：</td>
+					<td>
+						<input type="radio" name="open_ssl" value="1" <#if smtp.open_ssl ==1 > checked="checked"</#if>/>是
+						<input type="radio" name="open_ssl" value="0" <#if smtp.open_ssl ==0 > checked="checked"</#if>/>否
+					</td>
+				</tr>
+				
+				<tr>
+					<td>用户名：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="username" data-options="required:true"  value="${smtp.username }" dataType="string" isrequired="true" maxlength="50"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>密码：</td>
+					<td><input class="easyui-validatebox input_text" type="password" name="password" value="" placeholder="不填则为不修改" maxlength="35"/></td>
+				</tr>
+				
+				<tr>
+					<td>每日最大发信数：</td>
+					<td><input class="easyui-numberbox input_text" type="text" name="max_count" data-options="required:true"  value="${smtp.max_count }" dataType="int" isrequired="true" maxlength="10"/>封
+					</td>
+				</tr>
+				
+				<tr>
+					<td>from：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="mail_from" data-options="required:true"  value="${smtp.mail_from }" dataType="string" isrequired="true" maxlength="50"/>
+					</td>
+				</tr>
+				<tr><td><label class="text">今日已发</label></td>
+					<td>${smtp.send_count }封</td>
+				</tr>
+					<tr>
+					<td><input type="checkbox" id="edit_test_send"><span style="margin:0 0 0 5px">测试:</span></td>
+					<td>
+					<div id="edit_send_span" style="display:none"">
+						<input class="easyui-validatebox input_text" type="text" name="send_to" data-options="required:false"   dataType="string" isrequired="false" maxlength="50"/>
+						<input type="button" id="edit_send_button" value="点击发送">
+						<div class="show-lodding" style="display:none;"></div>
+					</div>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span id="edit_error_message" style="color:red"></span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("#edit_test_send").click(function(){
+			var _self=$(this);
+			if(_self.prop("checked")){
+				$("#edit_send_span").show();
+			}else{
+				$("#edit_send_span").hide();
+			}
+		});
+		$("#edit_send_button").click(function(){
+			var testbtn=$(this);
+			var error=$("#edit_error_message");
+			if(!testbtn.hasClass("disable")){
+				var formflag= $("#editSmtpForm").form('validate');
+				if(formflag){
+					$.Loading.show("正在测试请稍候...");
+					testbtn.addClass("disable");	
+					
+					$("#edit_send_button").hide();
+					$(".show-lodding").show();
+					var options = {
+						url : "test-send.do",
+						type : "POST",
+						dataType : "json",
+						success : function(result) {
+							if(result.result==1){
+								$.Loading.success("发送测试邮件成功");
+								error.html("");
+							}else{
+								$.Loading.error("发送测试邮件失败");
+								error.html(result.message);
+							}
+							testbtn.removeClass("disable");
+							$("#edit_send_button").show();
+							$(".show-lodding").hide();
+					 	},
+					 	error : function(e) {
+					 		$.Loading.error('出现错误，请重试');
+					 		testbtn.removeClass("disable");
+					 		error.html(result.message);
+					 		$("#edit_send_button").show();
+							$(".show-lodding").hide();
+						}
+					};
+					$('#editSmtpForm').ajaxSubmit(options);	
+				}
+			}
+		});
+	});
+	
+</script>

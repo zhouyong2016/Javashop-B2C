@@ -1,0 +1,13 @@
+
+<!--创建"获得该店铺 下的商品个数"标签-->
+<#assign StoreGoodsNumTag= newTag("storeGoodsNumTag") >  
+<!--调用"获得该店铺 下的商品个数"标签-->            
+<#assign  StoreGoodsNum= StoreGoodsNumTag("'storeid':'15'") >						
+<ul class="gw">
+
+
+
+	  商品数量：${StoreGoodsNum}</br>
+
+
+

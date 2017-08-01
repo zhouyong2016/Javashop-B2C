@@ -1,0 +1,12 @@
+
+<!--创建"店铺配送方式"标签-->
+<#assign storeDlytypeTag= newTag("storeDlytypeTag") >  
+<!--调用"店铺配送方式"标签-->            
+<#assign  storeDlytype= storeDlytypeTag("'storeid':'15','regionid':'1','originalPrice':'1','weight':'1'") >						
+<ul class="gw">
+
+
+<#list storeDlytype as dly>
+	  价钱：${dly.dlyPrice}</br>
+</#list>
+

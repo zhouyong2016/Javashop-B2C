@@ -1,0 +1,87 @@
+<#assign  title="缺货登记" /><#include 'member_header.html' />
+<!-- 获取会员缺货登记标签 -->
+<#assign memberGnotifyListTag = newTag("memberGnotifyListTag")>
+<!-- 调用会员缺货登记标签 -->
+<#assign memberGnotifyList = memberGnotifyListTag()>
+<!-- 获取会员缺货登记"gnotifyList"集合 -->
+<#assign notificaList = memberGnotifyList.gnotifyList>
+				<div class="data">
+					<h2>缺货登记</h2>
+				</div>	 
+				<!--温馨提示-->
+				<div class="tip">
+					<div class="top"></div>
+					<div class="body">
+						<@image src="${ctx}/themes/default/images/gth.jpg"/>
+						<div>
+							<h2>温馨提示</h2>
+							<p>1、这里将显示您的缺货信息。</p>
+							<p>2、您还可以进行缺货信息登记、查看等操作。</p>
+						</div>
+					</div>
+					<div class="bottom"></div>
+				</div>
+				<!--温馨提示结束-->					
+				<div class="tab">
+					<ul>
+						<li class="selected"><a href="gnotify.html"><span>登记商品</span></a></li>
+					</ul>
+				</div>
+				<div class="box">		
+					<div class="top"></div>
+					<div class="body">
+						<#if memberGnotifyList?size gt 0 >
+						<table cellspacing="0" cellpadding="0" style="width:100%">						
+							<tr>
+								<th>&nbsp;&nbsp;</th>
+								<th>商品图片</th>
+								<th>商品名称</th>
+								<th>订单编号</th>
+								<th>销售价</th>
+								<th>操作</th>
+							</tr>
+					 		<#list notificaList as gnotify>
+						    <tr class="hovertr">
+								<td class="checkbox">&nbsp;&nbsp;</td>
+								<td class="img"><a href="../goods-${gnotify.goods_id}.html" title="${gnotify.name}" class="img">
+								<img src="<@imgurl pic="${gnotify.image!''}" postfix="_thumbnail" />" alt="${gnotify.name}" height="55" width="55"/></a></td>
+								<td class="param"><a href="../goods-${gnotify.goods_id}.html">${gnotify.name}</a></td>
+								<td><span>商品编号：${gnotify.sn}</span></td>
+								<td>销售价：<strong>￥${gnotify.price?string("0.##")}</strong></td>
+								<td class="oper"> <p rel="${gnotify.gnotify_id}" class="gnotify_del">删除</p></td>
+							</tr>
+						    </#list>        
+						</table>
+				 		<div class="pager_border">
+							<@pager pageno="${memberGnotifyList.page}" pagesize="${memberGnotifyList.pageSize}" totalcount="${memberGnotifyList.totalCount}" />
+							<div class="clear"></div>
+						</div>
+						<#else>
+						<div class="empty" >您尚未登记过任何商品</div>
+						</#if>
+					</div>
+					<div class="bottom"></div>
+	</div>
+</div>
+<div class="rr_bottom"></div></div>
+		<!--会员中心首页右侧结束-->
+	</div>
+	</div>
+<script>
+$(function(){
+	$(".gnotify_del").click(function(){
+		var gnotifyid=$(this).attr("rel");
+		$.post("../api/shop/gnotify!gnotifyDel.do",{"gnotify_id":gnotifyid},function(result){
+			if(result.result==1){
+				alert("删除成功");
+				location.href="gnotify.html";
+			}
+			else{				
+				alert(result.message);
+			}			
+		},"json");
+	});
+})
+</script>
+		<!--会员中心首页右侧结束-->
+		<#include '../common/footer.html'/>

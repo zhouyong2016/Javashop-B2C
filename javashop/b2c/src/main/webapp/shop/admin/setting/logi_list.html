@@ -1,0 +1,176 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" id="add_logi_button">添加</a>
+		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="logiform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/logi/list-logi-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true'" pagination="true" width="width" id="logidata">
+				<thead>
+				    <tr>
+				    	<th  data-options="field:'id',checkbox:true,width:100" ></th>
+				   	 	<th  data-options="field:'name',width:100">公司名称</th>
+				   	 	<th  data-options="field:'code',width:100">代码</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+			<div id="dlytype_info" style="display: none;"></div>
+		</form>
+		<div id="logiinfo" style="display: none;"></div>
+	</div>
+</div>
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'></a>";
+	return val;
+}
+function del(){ 
+	var rows = $('#logidata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要删除的物流公司");
+		return;
+	}
+	if(!confirm("确认要将这些物流公司删除吗？")){	
+		return;
+	}
+	 var options = {
+			url : "${ctx}/shop/admin/logi/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					var rows = $('#logidata').datagrid("getSelections");
+					for(var i =0;i<rows.length;i++){
+			 			var index = $('#logidata').datagrid('getRowIndex',rows[i]);
+			 			$('#logidata').datagrid('deleteRow',index);
+			 		}
+					location.reload();
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+	};
+	$('#logiform').ajaxSubmit(options);	
+}
+$("#add_logi_button").click(function(){
+	 $("#logiinfo").show();
+	　　	$('#logiinfo').dialog({
+	　　		title: '添加物流公司',			
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/logi/add-logi.do', 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=  savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 addLogiForm(savebtn);
+		　　			}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#addLogiForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+});
+function edit(logiId){
+	 $("#logiinfo").show();
+	　　	$('#logiinfo').dialog({
+	　　		title: '修改物流公司',			
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/logi/edit-logi.do?cid='+logiId, 	
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled=  editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 editLogiForm(editbtn);
+		　　			}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editLogiForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function addLogiForm(savebtn){
+	var formflag= $("#addLogiForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+	 	var options = {
+			url : "${ctx}/shop/admin/logi/save-add.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$("#logiinfo").dialog('close');
+					$('#logidata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		};
+		$('#addLogiForm').ajaxSubmit(options);	
+	}
+}
+function editLogiForm(editbtn){
+	var formflag= $("#editLogiForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");	
+		var options = {
+			url : "${ctx}/shop/admin/logi/save-edit.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$("#logiinfo").dialog('close');
+					$('#logidata').datagrid('reload');
+					editbtn.linkbutton("enable");
+				}else{
+					$.Loading.error(result.message);
+					editbtn.linkbutton("enable");
+				}
+		 	},
+		 	error : function(e) {
+		 		$.Loading.error("出现错误 ，请重试");	
+		 		editbtn.linkbutton("enable");
+			}
+		};
+		$('#editLogiForm').ajaxSubmit(options);
+	}
+}
+ 
+</script>
+<#include '/admin/footer.html' >

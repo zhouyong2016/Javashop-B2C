@@ -1,0 +1,63 @@
+.btn-div input,.btn-div a{overflow:hidden;float:left;display:block;margin-left:10px;cursor:pointer;border:0px none;text-align:center;padding:0px;font-size:14px;font-weight:bold;color:#fff;background:url(../images/jshop_button.jpg)}
+.btn-div a{text-decoration: none;}
+
+
+/****************************************************
+立即购买
+*******************************************************/
+.btn-div .buynow_btn{text-indent:-999px;width:126px;height:33px;background-position:left -227px;}
+.btn-div input.buynow_btn{!important;_text-indent:0px;line-height:999px;}
+.btn-div.hover input.buynow_btn{!important;_text-indent:0px;line-height:999px;background:url(../images/jshop_button.jpg) no-repeat -138px -227px}
+.btn-div a.buynow_btn{line-height:33px;}
+.btn-div.hover a.buynow_btn{background-position:-138px -227px;}
+ a.btn_payment { background: none repeat scroll 0 0 #EA5504; color: #FFFFFF; cursor: pointer; font-weight: bold; height: 25px; padding-left: 5px; padding-right: 5px;}
+
+/****************************************************
+加入购物车
+*******************************************************/
+.btn-div .addtocart_btn{text-indent:-999px;width:133px;height:35px;background-position:left -274px;}
+.btn-div input.addtocart_btn{!important;_text-indent:0px;line-height:999px;}
+.btn-div.hover input.addtocart_btn{!important;_text-indent:0px;line-height:99999px;background:url(../images/jshop_button.jpg) no-repeat -138px -274px;}
+.btn-div a.addtocart_btn{line-height:35px;}
+.btn-div.hover a.addtocart_btn{background-position:-138px -274px;}
+
+
+
+/****************************************************
+去结算
+*******************************************************/
+.btn-div .checkout_btn{text-indent:-999px;width:110px;height:33px;background-position:left top;}
+.btn-div input.checkout_btn{!important;_text-indent:0px;line-height:999px;}
+.btn-div.hover input.checkout_btn{!important;_text-indent:0px;line-height:999px;background-position:-138px top;}
+.btn-div a.checkout_btn{line-height:33px;}
+.btn-div a.checkout_btn:hover{background-position:-138px top;}
+
+
+/****************************************************
+继续购物
+*******************************************************/
+.btn-div .returnbuy_btn{text-indent:-999px;width:110px;height:33px;background-position:left -43px;}
+.btn-div input.returnbuy_btn{!important;_text-indent:0px;line-height:999px;}
+.btn-div.hover input.returnbuy_btn{!important;_text-indent:0px;line-height:999px;background-position:-138px -43px;}
+.btn-div a.returnbuy_btn{line-height:33px;}
+.btn-div a.returnbuy_btn:hover{background-position:-138px -43px;}
+
+
+/****************************************************
+蓝色按钮
+*******************************************************/
+.btn-div .blue_btn{width:110px;height:33px;line-height:33px;background-position:left -88px;}
+.btn-div.hover input.blue_btn{background-position:-138px -88px;}
+.btn-div a.blue_btn:hover{background-position:-138px -88px;}
+/****************************************************
+黄色按钮
+*******************************************************/
+.btn-div .yellow_btn{width:110px;height:33px;line-height:33px;background-position:left -138px;}
+.btn-div.hover input.yellow_btn{background-position:-138px -138px;}
+.btn-div a.yellow_btn:hover{background-position:-138px -138px;}
+/****************************************************
+绿色按钮
+*******************************************************/
+.btn-div .green_btn{width:110px;height:33px;line-height:33px;background-position:left -180px;}
+.btn-div.hover input.green_btn{background-position:-138px -180px;}
+.btn-div a:hover.green_btn{background-position:-138px -180px;}

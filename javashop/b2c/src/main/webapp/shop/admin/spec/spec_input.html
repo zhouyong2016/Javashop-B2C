@@ -1,0 +1,161 @@
+<link href="${ctx}/shop/admin/spec/css/grid.css" rel="stylesheet" type="text/css" />
+<style>
+.spec_pic {
+	border: 1px solid #3366CC;
+	padding: 1px;
+	vertical-align: middle;
+}
+</style>
+<div class="main" style="background-color: white; overflow: hidden;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form method="post" class="validate" name="theForm" id="specAddForm">
+			<div class="input">
+				<table cellspacing="1" cellpadding="3" width="100%"
+					class="form-table">
+					<tr>
+						<th><label class="text">规格名称：</label>
+						</th>
+						<td><input type="text" name="spec_name" data-options="required:true" class="easyui-validatebox input_text" maxlength="8"/>
+						</td>
+					</tr>
+					<tr>
+						<th><label class="text">规格备注：</label>
+						</th>
+						<td>
+							<input type="text" name="spec_memo" class="easyui-validatebox  input_text" maxlength="25"/>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<label class="text">显示类型：</label>
+						</th>
+						<td><label><input type="radio" checked value="0" name="spec_type">文字</label> 
+							<label><input type="radio" value="1" name="spec_type">图片</label>
+						</td>
+					</tr>
+					
+				</table>
+			</div>
+			<div class="grid" style="padding: 0px 20px 0px 40px; width: auto;">
+				<div class="toolbar">
+					<ul>
+						<li><a id="addBtn" href="javascript:;" class="button">添加规格值</a>
+						</li>
+						<li>&nbsp;&nbsp;<span class="help_icon" helpid="spec_add"></span>
+						</li>
+					</ul>
+					<div style="clear: both"></div>
+				</div>
+				<table>
+					<thead>
+						<tr>
+							<th>规格值名称</th>
+							<th>&nbsp;</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="tb"></tbody>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+<table id="temp" style="display: none">
+	<tr>
+		<td>
+			<input type="text" name="valueArray" class="input_text"  maxlength="10"/> 
+			<input type="hidden" name="valueIdArray" value="0" />
+		</td>
+		<td>
+			<img height="30" width="30" src="${ctx}/shop/admin/spec/image/spec_def.gif" class="spec_pic"> 
+			<span class="specImage"> 
+			<a href="javascript:;" class="sysbtn upload">上传图片</a> 
+			<input type="hidden" name="imageArray" class="imageArray" value="" /> </span>
+		</td>
+		<td><a href="javascript:;"> 
+			<img class="delete" src="${staticserver }/images/transparent.gif" valueid="0"> </a></td>
+	</tr>
+</table>
+
+<div id="upload"></div>
+<script type="text/javascript">
+
+
+
+	var imageInput;
+
+	function uploadOk(data) {
+		if (data.result == 1) {
+			Spec.uploadOk(data.path);
+
+		} else {
+			alert(data.message);
+		}
+		Eop.Dialog.close("upload");
+	}
+
+	function getPath(path) {
+		imageInput.parent().prev().attr("src", path);
+		imageInput.val(path);
+	}
+
+	function addRow() {
+		var tr = $("#temp tr").clone();
+		if ($("input[value=]").attr("checked")) {
+
+			tr.find("span.specImage").parent().children().hide();
+		}
+		var body = $(".grid table:first>tbody");
+		$(".grid table:first>tbody").append(tr);
+
+		$(".grid .sysbtn.upload").click(function() {
+			self.imageInput = $(this).siblings("input");
+			openImgDlg(getPath);
+		});
+
+		$(".grid table .delete").click(function() {
+			var $this = $(this);
+			var valueid = $this.attr("valueid");
+			if ("0" == valueid) {
+				deleteRow($this);
+			} else {
+				$.ajax({
+					url : "${ctx}/shop/admin/spec/check-value-used.do?valueid="+ valueid,
+					dataType : "json",
+					success : function(result) {
+						if (result.result == 1) {
+							alert("此规格正在被商品使用，不能删除");
+						} else {
+							deleteRow($this);
+						}
+					},
+					error : function() {
+						alert("抱歉检测规格是否使用出错!");
+					}
+				});
+			}
+		});
+
+		function deleteRow(link) {
+			link.parent().parent().parent().remove();
+		}
+	}
+
+	$(function() {
+		$("span.specImage").parent().children().hide();
+
+		$("input[value=1]").click(function() {
+			$("span.specImage").parent().children().show();
+		});
+
+		$("input[value=0]").click(function() {
+			$("span.specImage").parent().children().hide();
+		});
+
+		$("#addBtn").click(function() {
+			addRow();
+		});
+
+	});
+</script>
+

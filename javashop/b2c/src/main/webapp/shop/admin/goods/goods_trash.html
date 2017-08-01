@@ -1,0 +1,158 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="goodsform" method="post">
+		<div class='buttonArea'>
+			<span id="searchbtn">
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" id="cleanBtn" onclick="cleargoods()">清除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" id="revertBtn" onclick="revertgoods()" >还原</a>
+			</span>
+			
+		</div>
+		
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/goods/trash-list-json.do" id="goodsdata"
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" >
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:500" formatter="formatName">商品名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
+						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th>
+						<th data-options="field:'action',align:'center',width:100" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatName(value,row,index){
+	var val="<a href=\"../../goods-"+row.goods_id+".html\"target=\"_blank\">"+row.name+"</a>";
+	return val;
+}
+function market_enable(value,row,index){
+	var val;
+	if(value==1){val="是";}else if(value==0){val="否";}
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+function formatAction(value,row,index){
+	var val="<a class='delete' title='删除' href='#' onclick='del("+row.goods_id+")' ></a>";
+	return val;
+}
+function revertgoods(){
+	var disabled=  $("#revertBtn").hasClass("l-btn-disabled");
+	if( !disabled ){
+		var rows = $('#goodsdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择要还原的商品");
+			return;
+		}
+		if (!confirm("确认要将这些商品还原吗？")) {
+			return;
+		}
+		$("#revertBtn").linkbutton("disable");	
+		var options = {
+				url : "${ctx}/shop/admin/goods/revert.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						$('#goodsdata').datagrid("reload");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#revertBtn").linkbutton("enable");	
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					$("#revertBtn").linkbutton("enable");	
+				}
+			};
+			$('#goodsform').ajaxSubmit(options);
+	}
+}
+function cleargoods(){
+		var disabled=  $("#cleanBtn").hasClass("l-btn-disabled");
+		if( !disabled ){
+			var rows = $('#goodsdata').datagrid("getSelections");
+			if (rows.length < 1) {
+				$.Loading.error("请选择要清除的商品");
+				return;
+			}
+			if (!confirm("确认要将这些商品清除吗？")) {
+				return;
+			}
+			$("#cleanBtn").linkbutton("disable");	
+			var options = {
+				url : "${ctx}/shop/admin/goods/clean.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						//$('#goodsdata').datagrid("reload");
+						location.reload();
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#cleanBtn").linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					$("#cleanBtn").linkbutton("enable");
+				}
+			};
+			$('#goodsform').ajaxSubmit(options);
+		}
+}
+function del(goods_id){
+		var options = {
+			url : "${ctx}/shop/admin/goods/clean.do?ajax=yes&goods_id="+goods_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					//$('#goodsdata').datagrid("reload");
+					location.reload();
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				$("#cleanBtn").linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				$("#cleanBtn").linkbutton("enable");
+			}
+		};
+		$('#goodsform').ajaxSubmit(options);
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

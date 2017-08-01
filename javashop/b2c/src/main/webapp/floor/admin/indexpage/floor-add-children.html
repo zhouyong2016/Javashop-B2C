@@ -1,0 +1,72 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 40px">
+		<form id="addchildrenForm" method="post" class="validate" enctype="multipart/form-data" >
+			<table>
+				<tr>
+						<th>楼层标题:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="20" isrequired="true" datatype="string" 
+							data-options="required:true" name="title" autocomplete="off" title="" >
+						</td>
+					</tr>
+					<#if pageid?exists >
+					<input name="page_id" id="page_id" type="hidden" value="${pageid}">
+					<tr>
+						<th>楼层色调:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="50" isrequired="true" datatype="string" 
+							data-options="required:true" name="style" autocomplete="off" title=""  onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"  value="style1">
+						</td>
+						<#if is_b2c>
+						<td>系统默认2种风格：style1(有商品大图),style2(无商品大图)</td>
+						<#else>
+						<td>系统默认1种风格：style1(无商品大图)</td>
+						</#if>
+					</tr>
+					</#if>
+					<tr>
+						<th>上级楼层:</th>
+						<td>
+							<input class="easyui-combotree combo" value="${floor.id}" name="parent_id" id="parent_floor"
+							data-options="url:'${ctx}/core/admin/floor/add-list-json.do?pageid=${pageid}',method:'get',required:false,height:28" 
+							style="width:200px;">
+						</td>
+						<td>设置该子楼层所属的上级楼层</td>
+					</tr>
+					<tr>
+						<th>显示:</th>
+						<td>
+							<input type="radio" name="is_display" value="0" <#if floor.is_display??&&floor.is_display==0>checked="checked"</#if>>显示
+							<input type="radio" name="is_display" value="1" <#if floor.is_display??&&floor.is_display==1>checked="checked"</#if>>不显示 
+						</td>
+						<td>可以控制本楼层是否在首页显示</td>
+					</tr>
+					<tr>
+						<th>排序:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="5" isrequired="true" datatype="string" 
+							data-options="required:true" name="sort" autocomplete="off" title=""  onkeyup="this.value=this.value.replace(/[^\d]/g,'') " value="1">
+						</td>
+						<td>可以控制本楼层在首页的显示顺序</td>
+					</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script>
+$(function(){
+	$('#parent_floor').combotree({
+		onBeforeSelect: function(node) {
+			// 判断是否是叶子节点
+			var root = $(this).tree('getRoots');
+			if (root.indexOf(node)<0) {
+				$.Loading.error('请选择顶级楼层作为上级楼层！');
+				return false;
+			} 
+		}
+	});
+});
+</script>

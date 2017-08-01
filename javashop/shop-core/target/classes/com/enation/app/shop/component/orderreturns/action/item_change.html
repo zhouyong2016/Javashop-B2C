@@ -1,0 +1,23 @@
+<form  id="changeSn_form">
+		<input type="hidden"  name="returnOrderId"  value="${rorder.id}"/>
+	
+	 <table>
+ <tr>
+      <th>货号</th>
+      <th>商品名称</th>
+      <th>目标货号</th>      
+ </tr>
+ <#list itemList as item >
+ 		<#if  item.state == 6  >
+         <tr>
+          <td>${item.sn }</td>
+          <td>${item.name } </td>
+		  <td><input type="text" name="targetsn_array"/></td>
+		  <input type="hidden" name="itemid_array" value="${item.item_id }"/>
+        </tr>
+        </#if>
+</#list>
+ </table> 
+	
+		<input type="button" value="确定" id="change_btn"/>
+</form>

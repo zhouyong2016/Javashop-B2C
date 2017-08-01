@@ -1,0 +1,31 @@
+a.edit {
+	background: url(../images/icon.gif) no-repeat 0px -347px;
+	margin: 0px 8px 0px 8px;;
+	display: block;
+	float: left;
+	height: 20px;
+	overflow: hidden;
+	text-indent: -600px;
+	width: 16px;
+}
+
+a.del {
+	background:url(../images/icon.gif) no-repeat scroll -69px -347px;
+	display: block;
+	float: left;
+	height: 20px;
+	overflow: hidden;
+	text-indent: -600px;
+	width: 16px;
+}
+
+a.stock {
+	background:url(../images/icon.gif) no-repeat scroll -138px -347px;
+	display: block;
+	float: left;
+	height: 20px;
+	margin: 6px -1px 6px 0;
+	overflow: hidden;
+	text-indent: -600px;
+	width: 20px;
+}

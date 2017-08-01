@@ -1,0 +1,48 @@
+<#include '/admin/header.html' />
+<link href="${ctx}/statics/js/common/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/statics/js/common/jquery.ztree.core-3.5.min.js"></script>
+<script type="text/javascript" src="${ctx}/statics/js/common/jquery.ztree.exedit-3.5.min.js"></script>
+<script type="text/javascript" src="${ctx}/core/admin/js/Menu.js"></script>
+<style>
+<!--
+
+.ztree_wrapper{width:200px;float:left}
+#detail_wraper{width:600px;float:left;min-height:400px}
+.icon_wrap{width:90px;height:30px;float:left;display:block}
+.icon_wrap img{width:21px;height:21px; cursor: pointer;}
+.icon_wrap span{display:block}
+.icon_list_wrap {width:400px;height:400px;overfow-height:auto;}
+.icon_list_wrap li { width:25px;margin:2px;display:block;float:left;border:1px solid #fff;height:25px}
+.icon_list_wrap li img {margin-top:2px;margin-left:2px}
+.icon_list_wrap li.hover,.icon_list_wrap li.selected{border:1px solid #ccc}
+.ztree li span.button.icon02{margin:0; background: url(${ctx}/${staticserver}/js/common/zTreeStyle/img/diy/4.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+
+-->
+</style>
+		<div class="toolbar" >
+		
+				<div style="width: 100%; float: left; height: 25px;">
+					<ul>
+						<li><a href="javascript:;" id="add-menu-btn">添加菜单</a>
+						</li>
+					</ul>
+				</div> 
+				
+			</div>
+				
+<div class="box ztree_wrapper">
+	<div class="ztree" id="menutree">
+		
+	</div>
+</div>
+<div id="detail_wraper" class="box">
+
+	<div style="display:block;width:300px;margin:150px auto;color:red">
+  		点击菜单进行修改操作，点击添加按钮添加新菜单。<br>
+  		拖拽菜单可移动菜单（改变排序和父菜单）
+	</div>   
+	
+</div>
+
+
+<#include '/admin/footer.html' />

@@ -1,0 +1,45 @@
+<div class="main shadowBoxWhite"  style="overflow: hidden;">
+	<style>
+		.goods_brand{width:90px;}
+	</style>
+	<div class="easyui-panel" style="border-style: none; ">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="brandEditForm" method="post" class="validate" enctype="multipart/form-data">
+				<table>
+					<tr>
+						<td class="goods_brand">品牌名称</td>
+						<td>
+							<input class="input_text easyui-validatebox" type="text" id="name" name="name" data-options="required:true"  maxlength="25" value="${brand.name!''}"></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="goods_brand">品牌网址：</td>
+						<td>
+							<input class="input_text easyui-validatebox"  type="text" id="url" name="url" data-options="required:true,validType:'url'"  maxlength="254" value="${brand.url}"></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="goods_brand">品牌LOGO：</td>
+						<td>
+							<input class="easyui-validatebox" type="file" id="image" name="file"></input>
+						</td>
+					</tr>
+					<#if imgPath??>
+					<tr>
+						<td></td>
+						<td><img alt="" src="${imgPath!''}" height="100px;">
+						</td>
+					</tr>
+					</#if>
+					<tr>
+						<td class="goods_brand">详细说明</td>
+						<td>
+							<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;">${brand.brief!''}</script>
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="brand_id" value="${brand.brand_id}">
+			</form>
+		</div>
+	</div>
+</div>

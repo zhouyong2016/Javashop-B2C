@@ -1,0 +1,112 @@
+<#assign title= "购物车条目" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'bill_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>BillDetail 结算单详细条目</h3>
+		<h2>需要简述</h2>
+		<h6>结算单条目</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>属性</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="describe">描述</th>			
+					</tr>
+					<tr>
+						<td>id</td>
+						<td>Integer</td>
+						<td class="describe">详细单ID</td>
+					</tr>
+					<tr>
+						<td>sn</td>
+						<td>String</td>
+						<td class="describe">详细单编号</td>
+					</tr>
+					<tr>
+						<td>bill_id</td>
+						<td>Integer</td>
+						<td class="describe">结算单Id</td>
+					</tr>
+					<tr>
+						<td>start_time</td>
+						<td>Long</td>
+						<td class="describe">开始时间</td>
+					</tr>
+					<tr>
+						<td>end_time</td>
+						<td>Long</td>
+						<td class="describe">结束时间</td>
+					</tr>
+					<tr>
+						<td>bill_time</td>
+						<td>Long</td>
+						<td class="describe">出账日期</td>
+					</tr>
+					<tr>
+						<td>store_id</td>
+						<td>Integer</td>
+						<td class="describe">店铺Id</td>
+					</tr>
+					<tr>
+						<td>store_name</td>
+						<td>String</td>
+						<td class="describe">店铺名称</td>
+					</tr>
+					<tr>
+						<td>price</td>
+						<td>Double</td>
+						<td class="describe">订单总金额</td>
+					</tr>
+					<tr>
+						<td>returned_price</td>
+						<td>Double</td>
+						<td class="describe">退货金额</td>
+					</tr>
+					<tr>
+						<td>cod_price</td>
+						<td>Double </td>
+						<td class="describe">积货到付款金额</td>
+					</tr>
+					<tr>
+						<td>commi_price</td>
+						<td>Double </td>
+						<td class="describe">佣金金额</td>
+					</tr>
+					<tr>
+						<td>bill_price</td>
+						<td>Double </td>
+						<td class="describe">结算金额</td>
+					</tr>
+					<tr>
+						<td>returned_commi_price</td>
+						<td>Double </td>
+						<td class="describe">退还金额</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

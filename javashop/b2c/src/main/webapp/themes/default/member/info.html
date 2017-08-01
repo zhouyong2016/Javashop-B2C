@@ -1,0 +1,208 @@
+<#assign  title="基本资料" />
+<#include 'member_header.html' />
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="data">
+	<h2>完善基本资料</h2>
+</div>
+
+<div class="form_wrap white_box">
+	<div class="box">
+		<div class="top"></div>
+		<div class="body">
+
+			<form id="form_saveMember" method="post" class="validate"  action="#">
+			
+				<table width="100%" cellspacing="0" cellpadding="0"	class="perfection">
+					<tr>
+						<th>注册邮箱：</th>
+						<td class="email"><span class="def"><span id="lbEmail">${member.email!''}</span></span></td>
+					</tr>
+					<tr>
+						<th>用户名：</th>
+						<td>
+							<span class="def"><span id="lbNickName">${member.uname!''}</span></span>
+						</td>
+					</tr>
+					<tr>
+						<th class="member_turename">真实姓名：</th>
+						<td colspan="3"><input type="text" isrequired="true" name="nickname" value="${member.nickname!''}" class="input_text member_t" maxlength="15"/>
+							<p class="prompt member_p">请务必填写您的真实姓名，以便出现问题时客服核对您的真实信息！</p>
+						</td>
+					</tr>
+					<tr>
+						<th>设置头像：</th>
+						<td colspan="3">
+							<div class="userico">
+								<#if member.face?exists && member.face != ''>
+								<img src="<@imgurl pic='${member.face}'/>" width="100" />
+								<#else>
+								<@image src="${ctx}/themes/default/images/default_face.jpg" width="100" height="100" />
+								</#if>
+							</div>
+							<div class="uploadIco">
+								<h3 style="float: none; display: block;">从您的电脑中上传图片作为头像</h3>
+								<div class="file clearfix">
+									<div class="ifUpfile">
+											<input type="file" name="file">
+									</div>
+									<span id="imgS"></span>
+								</div>
+								<!--file end-->
+								<p class="prompt">(建议尺寸120*120像素，200k以内)</p>
+								<input name="txtIco" type="hidden" id="txtIco" value="/ajax/MImageHandler.ashx?d=ico\default.jpg" />
+							</div>
+						</td>
+					</tr>
+					<tr id="gender">
+						<th>性别：</th>
+						<td class="middle" colspan="3"><label class="gender">
+							<input type="radio" name="sex" <#if member.sex!=0>checked</#if> value="1"  />
+							<span>男</span></label>
+							<label class="gender" id="lgender">
+							<input type="radio" value="0"  name="sex" <#if member.sex==0>checked</#if> />
+							<span>女</span>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>生日：</th> 
+						<td colspan="3" class="birthday middle">    <!--  mybirthday   -->     
+							<input class="Wdate" type="text" name="mybirthday" onClick="WdatePicker()" <#if member.birthday??> value="<@dateformat time="${(member.birthday)?c}" pattern="yyyy-MM-dd"/>"</#if> >                     
+						</td>
+					</tr>
+					<tr>
+						<th>居住地：</th>
+						<td colspan="3" class="choseAddr ">
+							<div class="select clearfix"><@regionSelect /></div>
+						</td>
+					</tr>
+					<tr>
+						<th>联系地址：</th>
+						<td colspan="3" class="birthday middle">
+							<input name="address" type="text" value="${member.address!''}" class="input_text" width="100px;" maxlength="60"/>
+						</td>
+					</tr>
+					<tr>
+						<th>邮编：</th>
+						<td colspan="3" class="birthday middle">
+							<input name="zip" type="text" value="${member.zip!''}" id="zipcode" class="easyui-number"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6" style="width: 100px;">
+						</td>
+					</tr>
+					<tr>
+						<th class="label middle">手机：</th>
+						<td colspan="3">
+							<input onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" id="cellphone" name="mobile" type="text" value="${member.mobile!''}" class="easyui-numberbox" style="float:left;display:inline;" maxlength="11" />
+						</td>
+					</tr>
+					<tr>
+						<th>固定电话：</th>
+						<td colspan="3">
+							<input class="easyui-numberbox" id="tel" name="tel" type="text" value="${member.tel!''}"  onkeyup="this.value=this.value.replace(/[^\d-]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="13" />
+						</td>
+					</tr>
+					<!-- 
+					<tr>
+						<th></th>
+						<td colspan="3">
+							<p class="prompt">手机与固定电话至少填写一项</p>
+						</td>
+					</tr>
+					 -->
+				</table>
+				<div class="mc-mdOper">
+					<div class="btn">
+						<input type="button" name="btnSubmit" value="保存资料" id="btnSubmit" class="yellow_btn" />
+					</div>
+					<#if member.info_full == 0>
+					<span>
+						<span>即可获得<strong>20奖励积分</strong>！</span>
+					</span>
+					</#if>
+				</div>
+			</form>
+		</div>
+		<div class="bottom"></div>
+	</div>
+</div>
+</div>
+<script language="javascript"> 
+function check(){
+	var a = /^(\d{4})-(\d{2})-(\d{2})$/
+	if (!a.test(document.getElementById("birthdaysss").value)) { 
+	alert("日期格式不正确!") 
+	return false 
+	} 
+	else 
+	return true 
+	} 
+</script> 
+<script type="text/javascript">
+$(function(){
+	<#if member.province_id?exists && member.city_id?exists && member.region_id?exists>
+	RegionsSelect.load(${member.province_id},${member.city_id},${member.region_id});
+	</#if>
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#zipcode").val(zipcode);
+	};
+	
+	//保存会员信息	
+	$("#btnSubmit").click(function(result){
+		if(!$("#form_saveMember").checkall())
+			return false;
+		
+		if($("#tel").val()==""&& $("#cellphone").val()==""){
+			alert("手机与固定电话至少填写一项");
+			return false;
+		}		
+		//判断手机格式
+		 if($("#cellphone").val()!=""){
+			 var tel = $("#cellphone").val();
+			 var reg = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+			 if(reg.test(tel)==false){
+				 alert("手机格式错误");
+				 return false;
+			 }
+		 }
+		 if($("#tel").val()!=""){
+	 		var tel = $("#tel").val();
+			var reg = /(\d{4}|\d{3})-(\d{7,8})/;
+			if(reg.test(tel)==false){
+		 		alert("电话格式错误");
+				return false;
+		 	}
+		}
+		//判断真是姓名
+		if($(".member_t").val()==""){
+			alert("真是姓名不能为空");
+			return false;
+		}
+		if(isNaN($("#zipcode").val())!==false){
+			alert("邮编必须为纯数字");
+			return false;
+		}
+		
+		　　
+		 $("#form_saveMember").ajaxSubmit({
+				url:"${ctx}/api/shop/member!saveInfo.do",
+				dataType:"json",
+				success:function(data){
+					if(data.result==1){
+						alert("保存成功");
+						location.href="member.html"
+					}
+					else{
+						alert(data.message);
+					}
+				}
+			})
+	});
+});
+</script>
+
+<div class="rr_bottom"></div></div>
+		<!--会员中心首页右侧结束-->
+	</div>
+	</div>
+	<#include '../common/footer.html'/>

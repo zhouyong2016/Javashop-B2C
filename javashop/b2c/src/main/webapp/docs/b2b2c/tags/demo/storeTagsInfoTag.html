@@ -1,0 +1,7 @@
+<!--创建"标签搜索"标签-->
+<#assign storeTagsInfoTag= newTag("storeTagsInfoTag") >  
+<!--调用"标签搜索"标签，并传递参数-->            
+<#assign  storeTagsInfo= storeTagsInfoTag("'tag_id':'1'") >						
+<ul class="gw">
+
+	名称：${storeTagsInfo.tag_name}

@@ -1,0 +1,48 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+	
+		<form id="addForm" method="post" class="validate" enctype="multipart/form-data">
+				<input type="hidden" name="mstartdate" value="2015-01-01"/>
+		<input type="hidden" name="menddate" value="2015-01-01"/>
+			<table width="100%">
+				<tr>
+					<th>广告名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="advname" name="aname" data-options="required:true" maxlength="30"></input>
+					</td>
+					<th>广告位置：</th>
+					<td><select class="easyui-validatebox input_text" name="acid">
+							<#list adColumnList as adc>
+							<option value="${adc.acid }">${adc.cname }</option> </#list>
+					</select></td>
+				</tr>
+				<tr>
+					<th>广告链接：</th>
+					<td  colspan="3">
+						<input maxlength="50" class="easyui-validatebox input_text" type="text" name="url" data-options="required:true" style="width:300px" placeholder="请输入符合规范的站内链接，前面不要加'/'"></input>
+						<br/>
+						<span style="color: red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/search-cat-86.html，只需填写search-cat-86.html即可！</span>
+					</td>
+				</tr>
+				<tr>
+					<th>上传广告文件：</th>
+					<td colspan="3"><input class="easyui-validatebox" type="file" accept="image/*,.swf"
+						name="pic"></input></td>
+				</tr>
+				<tr>
+				 
+					<th>是否开启：</th>
+					<td  colspan="3">
+					<input class="easyui-validatebox input_text" type="radio" style="width: 10px;" name="isclose" value="0" checked />
+						开启&nbsp;&nbsp; <input type="radio" name="isclose" value="1" />
+						关闭</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

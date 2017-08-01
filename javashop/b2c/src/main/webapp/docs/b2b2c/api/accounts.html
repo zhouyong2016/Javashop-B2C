@@ -1,0 +1,75 @@
+<#assign title= "订单api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu">
+<#include '../menu_api.html' />
+	</div>
+	<div class="right_list">
+		<h1>订单API</h1>
+		<p class="api_intro">提供了对订单的创建、取消、改变店铺的配送方式以及红包、改变收货地址、订单确认、订单支付、订单发货、修改配送费用、修改订单金额、修改收货人信息的功能</p>
+		<h2>API列表</h2>
+		<ul class="list">
+		
+			<li>
+				<div class="api_func"><a href="create.html">create</a></div>
+				<span>创建订单</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="cancel.html">cancel</a></div>
+				<span>取消订单</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="changeArgsType.html">changeArgsType</a></div>
+				<span>改变店铺的配送方式以及红包</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="changeAddress.html">changeAddress</a></div>
+				<span>改变收货地址</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="orderconfirm.html">confirm</a></div>
+				<span>订单确认</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="order_pay.html">pay</a></div>
+				<span>订单支付</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="ship.html">ship</a></div>
+				<span>订单发货</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="saveShipPrice.html">saveShipPrice</a></div>
+				<span>修改配送费用</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="savePrice.html">savePrice</a></div>
+				<span>修改订单金额</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="saveConsigee.html">saveConsigee</a></div>
+				<span>修改收货人信息</span>
+			</li>
+							
+		</ul>
+	</div>
+</div>
+<script>
+setMenu(8);
+</script>
+<!--正文结束-->
+
+</body>
+</html>
+
+
+
+
+
+

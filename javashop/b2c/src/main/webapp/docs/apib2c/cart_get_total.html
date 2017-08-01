@@ -1,0 +1,39 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>getTotal 购物车的价格总计信息API</h3>
+		<p>购物车的价格总计信息</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/cart/get-total.do<p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w100">默认值</span><span class="w100">备注</span></h4>
+			<p><span class="w100 important">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果:</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w400">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w400 r-intro">如果等于“0”，调用错误，如果等于“1”，那么表示调用成功</span></p>
+			<p><span class="w100 r_name">message</span><span class="w100 r_type">String</span><span class="w400 r-intro">提示信息</span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w400 r-intro">返回数据Map</span></p>
+			<p><span class="w100 r_name">goodsPrice</span><span class="w100 r_type">Double</span><span class="w400 r-intro">商品价格</span></p>
+			<p><span class="w100 r_name">orderPrice</span><span class="w100 r_type">Double</span><span class="w400 r-intro">商品价格</span></p>
+			<p><span class="w100 r_name">shippingPrice</span><span class="w100 r_type">Double</span><span class="w400 r-intro">配送费用</span></p>
+			<p><span class="w100 r_name">needPayMoney</span><span class="w100 r_type">Double</span><span class="w400 r-intro">需要支付的金额</span></p>
+			<p><span class="w100 r_name">discountPrice</span><span class="w100 r_type">Double</span><span class="w400 r-intro">折扣价</span></p>
+			<p><span class="w100 r_name">weight</span><span class="w100 r_type">Double</span><span class="w400 r-intro">商品重量</span></p>
+			<p><span class="w100 r_name">point</span><span class="w100 r_type">Integer</span><span class="w400 r-intro">获得积分</span></p>
+			<p><span class="w100 r_name">discountItem</span><span class="w100 r_type">String</span><span class="w400 r-intro">优惠项目</span></p>
+			<p><span class="w100 r_name">actDiscount</span><span class="w100 r_type">Double</span><span class="w400 r-intro">法案折扣</span></p>
+			<p><span class="w100 r_name">gift_id</span><span class="w100 r_type">String</span><span class="w400 r-intro">礼品id</span></p>
+			<p><span class="w100 r_name">bonus_id</span><span class="w100 r_type">Double</span><span class="w400 r-intro">奖金id</span></p>
+		</div>
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":null,"data":{"goodsPrice":0.0,"orderPrice":0.0,"shippingPrice":0.0,"needPayMoney":0.0,"discountPrice":0.0,"weight":0.0,"point":0,"discountItem":{},"actDiscount":0.0,"gift_id":0,"bonus_id":0}}
+		</h5>
+	</div>
+</div>

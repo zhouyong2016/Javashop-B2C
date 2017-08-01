@@ -1,0 +1,111 @@
+<#include 'member_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag()>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+
+<h2>售后方式</h2>
+
+<div class="return_detail">
+	<h1>退款申请</h1>
+	<form id="returnForm" class="validate">
+		<input type="hidden" name="orderid" value="${orderid}" />
+		
+		<h3>是否已收货</h3>
+		<input type="radio" value="0" name="ship_status" />未收货
+		<input type="radio" value="1" name="ship_status"/>已收货
+		
+		<h3>退款方式</h3>
+		<div class="return-way">
+			<h4>退款方式：${orderDetail.payment_name}</h4>
+				
+			<h4>退款账户：${orderDetail.payment_name}</h4>
+				
+		</div>
+		
+		<h3>退货原因</h3>
+		<div class="return-way">
+			<select name="reason" id="ship_status0" disabled="disabled" style="display: none;">
+				<option value="请选择退款原因">请选择退货原因</option>
+				<option value="商品质量有问题">商品质量有问题</option>
+				<option value="不喜欢/不想要">不喜欢/不想要</option>
+				<option value="收到商品与描述不符">收到商品与描述不符</option>
+				<option value="发票问题">发票问题</option>
+				<option value="其他">其他</option>
+			</select>
+			<select name="reason" id="ship_status1" disabled="disabled" style="display: none;">
+				<option value="买错/不想要">买错/不想要</option>
+				<option value="未按照时间发货">空包裹</option>
+				<option value="快递一直没有收到">快递一直没有收到</option>
+				<option value="快递无记录">快递无记录</option>
+			</select>
+		</div>
+		<div>
+			<h3>退款金额</h3>
+			<div class="return-way">
+				<input type="text" name="apply_alltotal" value="${orderDetail.order_amount}" dataType="float" id="price" isrequired="true"/>
+			</div>
+		</div>
+		<h3>问题描述</h3>
+		<div class="return-word">
+			<textarea name="remark" maxlength="100"   isrequired="true"></textarea>
+		</div>
+		<div class="return-tools btn-div">
+			<input type="button" name="btnSubmit" value="申请退款" id="btnSubmit" class="yellow-btn" />
+		</div>
+	</form>
+	
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#btnSubmit").click(function(){
+		
+		if(!$("#returnForm").checkall()){
+			return false;
+		}
+		
+		if($('input[name="ship_status"]:checked').val()==null){
+			alert("请选择是否收货");
+			return false;
+		}
+		
+		 var options = {
+			url : "${ctx}/api/shop/sell-back/return-money.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					alert(result.message);
+					location.href="return_list.html"
+				}else{
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$('#returnForm').ajaxSubmit(options); 
+	});
+	$("input[name='ship_status']").click(function(){
+		var status=$('input[name="ship_status"]:checked').val();
+		$("select[name='reason']").hide();
+		$("#ship_status"+status).show();
+		$("#ship_status"+status).removeAttr("disabled");
+	})
+});
+	
+</script>
+<#include '../common/footer.html'/>

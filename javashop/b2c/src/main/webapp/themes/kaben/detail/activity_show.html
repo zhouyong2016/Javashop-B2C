@@ -1,0 +1,15 @@
+<#-- 检测商品是否参加促销活动 -->
+<#assign checkGoodsPartActTag = newTag("checkGoodsPartActTag")>
+<#assign goodsPartAct = checkGoodsPartActTag("{'goods_id':${goods_id}}")!'' >
+<#if goodsPartAct.activity??>
+	<input type="hidden" value="${goodsPartAct.activity.activity_id}" id="activityId" name="activity_id">
+	<p class="act">促销活动：${goodsPartAct.activity.activity_name}</p>
+	<a href="javascript:void(0)" style="color: #ba7538;" class="act_detail" data-reveal-id="myModal">查看详细</a>
+</#if>
+<script type="text/javascript">
+//显示促销活动详细
+$(".act_detail").click(function(){
+	var actId = $("#activityId").val();
+	$(".goods-add-float").load("${ctx}/detail/activity_detail.html?activityId="+actId);
+})
+</script>

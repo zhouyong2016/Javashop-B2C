@@ -1,0 +1,125 @@
+<#include '/admin/header.html' > 
+<div class="main">
+	<div id="modelinfo" style="display: none;"></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+	</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		<form id="modelForm"  >
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/cms/admin/model/list-json.do',fitColumns:'true'" width="width" id="modeldata">
+				<thead>
+				    <tr>
+				   	 	<th  data-options="field:'model_id',width:100">id</th>
+				   	 	<th  data-options="field:'china_name',width:100">模型名称</th>
+				   	 	<th  data-options="field:'english_name',width:100">表名</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+		</form>
+	</div>
+</div>
+ <script type="text/javascript">
+ 
+ var flag=false;
+ 
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='#' onclick=\"newTab('查看详细','${ctx}/cms/admin/model/edit.do?modelid="+row.model_id+"')\"></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.model_id +")'></a>";
+	return val;
+}
+function del(model_id){
+	if(!confirm("确认删除此模型吗？将会同时删除相应文章数据，删除后不可恢复！")){	
+		return ;
+	}
+	$.Loading.show("正在检测模型是否已经被使用...");
+	var options = {
+			url : '${ctx}/cms/admin/model/check.do?modelid='+model_id+'&ajax=yes',
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#modeldata').datagrid('reload');
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#modelForm').ajaxSubmit(options);
+	$.Loading.hide();
+}
+function append(){
+	$("#modelinfo").show();
+　　	$('#modelinfo').dialog({
+　　		title: '添加模型',			
+　　		width: 800,
+  		top:30,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/cms/admin/model/add.do', 	
+　　		modal: true,
+　　		onLoad : function() {
+　　			if(flag){
+				UE.getEditor('editor').destroy();
+			}
+			var ue = UE.getEditor('editor', {
+				maximumWords:200,
+			    zIndex: 99999
+			});
+			flag = true;
+		},
+　　		buttons: [{					
+　　			 text:'保存',
+　　			 handler:function(){
+　　				 var savebtn = $(this);
+　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+　　				 if(!disabled){
+	　　				 $.Loading.show("正在保存请稍候...");
+	　　				 savebtn.linkbutton("disable");	
+　　				 	 addmodelForm(savebtn);
+　　				 }
+　　			 }
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				 $('#addmodelForm')[0].reset();
+　　			 }
+　　		}]
+　　	});
+}
+function addmodelForm(savebtn){
+	var formflag= $("#addmodelForm").form('validate');
+	if(formflag){
+		 var options = {
+			url : "${ctx}/cms/admin/model/save-add.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$("#modelinfo").dialog('close');
+					$('#modeldata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("disable");	
+		 	},
+			 error : function(e) {
+				 savebtn.linkbutton("disable");
+				 $.Loading.error("出现错误 ，请重试");	
+			}
+		};
+		$('#addmodelForm').ajaxSubmit(options);	
+	}else{
+		$.Loading.hide();
+		savebtn.linkbutton("disable");
+	}
+}
+</script>
+<#include '/admin/footer.html' >

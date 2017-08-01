@@ -1,0 +1,18 @@
+
+<!--创建"商品列表"标签-->
+<#assign goodsListTag= newTag("goodsListTag") >  
+<!--调用"商品列表"标签，并传递参数-->            
+<#assign  guwenGoodsList= goodsListTag("'tagid':'1','goodsnum':'3'") >						
+<ul class="gw">
+<#list guwenGoodsList as goods>
+	<li>
+		<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@image src="${goods.thumbnail!''}" alt="${goods.name}" /></a>
+		<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@substring title="${goods.name}" length="25" dot="..." /></a>
+		<span class="type">2010年  法国  干红</span><br/>
+		<span class="pice">
+				${goods.price?string.currency}<br/>
+              	<i>（市场价：<em>${goods.mktprice?string.currency}</em>）</i>
+              </span><br/>
+		<span class="buy">[购买10人]</span>
+	</li>
+</#list>

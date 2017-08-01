@@ -1,0 +1,177 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<form id="gift_form">
+		<div class='buttonArea'>
+			<div style="float:left">
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="append()">添加</a>
+			</div>
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<a href="javascript:void(0)" class="button b_fr" 
+					data-options="plain:true" onclick="searchGift()">搜索</a>
+					<input id="keyword" class="input_text b_fr mr5" maxlength="50" type="text" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+				</span>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/gift/list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="giftdata">
+				<thead>
+					<tr>
+						<th data-options="field:'gift_id',checkbox:true,width:100"></th>
+						<th data-options="field:'gift_name',width:200">赠品名称</th>
+						<th data-options="field:'gift_price',width:100" formatter="formatMoney">赠品价格</th>
+						<th data-options="field:'actual_store',width:100">实际库存</th>
+						<th data-options="field:'enable_store',width:100">可用库存</th>
+						<th data-options="field:'create_time',width:150" formatter="formatTime">创建时间</th>
+						<th data-options="field:'action',width:60" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" ></div>
+</div>
+<script type="text/javascript">
+
+function formatMoney(value, row, index){
+	var val = "￥" + value;
+	return val;
+}
+
+function formatTime(value, row, index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+//操作
+function formatOperation(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+			+ row.gift_id + ")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del(" + row.gift_id + ")'></a>";
+	return val;
+}
+
+//关键字搜索
+function searchGift(){
+	var keyword = $.trim($("#keyword").val());
+
+	$("#giftdata").datagrid('load', {
+		 keyword : keyword,
+		 page : 1
+    });
+}
+
+//添加和修改赠品信息
+function append(giftid) {
+	var map = {};
+	
+	if (!giftid) {
+		map["href"] = "${ctx}/shop/admin/gift/add.do";
+		map["formId"] = "#giftAddForm";
+		map["url"] = "${ctx}/shop/admin/gift/save-add.do";
+		map["title"] = "添加赠品";
+	} else {
+		map["href"] = "${ctx}/shop/admin/gift/edit.do?gift_id=" + giftid;
+		map["formId"] = "#giftEditForm";
+		map["url"] = "${ctx}/shop/admin/gift/save-edit.do";
+		map["title"] = "修改赠品";
+	}
+	
+	map["divDialog"] = "#divdia";
+	map["gridreload"] = "#giftdata";
+
+	invokeDialog(map);
+}
+
+function invokeDialog(map) {
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title : map["title"],
+		width : 600,
+		top:10,
+		height : 550,
+		closed : false,
+		cache : false,
+		href : map["href"],
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				 var savebtn = $(this);
+　　				 var disabled = savebtn.hasClass("l-btn-disabled");
+　　				 if(!disabled){
+					 submitForm(map,savebtn);
+	　　			 }
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				$(map["divDialog"]).dialog('close');
+			}
+		} ]
+	});
+}
+
+function submitForm(map,savebtn) {
+	var formflag = $(map["formId"]).form('validate');
+	
+	if (formflag) {
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.successMessage(result.message, "2000");
+					$(map["divDialog"]).dialog('close');
+					$(map["gridreload"]).datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.errorMessage(result.message, "2000");
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+}
+
+//删除
+function del(giftid){
+	if (!confirm("确认要删除此赠品吗？")) {	
+		return false;
+	}
+	
+	$(".delete").removeAttr("onclick");
+	$.Loading.show("正在删除请稍候...");
+	var options = {
+		url : "${ctx}/shop/admin/gift/delete.do?ajax=yes&gift_id="+giftid,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				$('#giftdata').datagrid('reload');
+				$.Loading.successMessage(result.message, "2000");
+			}else{
+				$.Loading.errorMessage(result.message, "2000");
+			}
+			$(".delete").attr("onclick","del("+giftid+")");
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+			$(".delete").attr("onclick","del("+giftid+")");
+		}
+	};
+	$('#gift_form').ajaxSubmit(options);	
+}
+</script>
+<#include '/admin/footer.html' >

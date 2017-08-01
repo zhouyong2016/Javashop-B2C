@@ -1,0 +1,765 @@
+<#-- 创建订单结算检测标签 -->
+<#assign orderSettleCheckTag= newTag("orderSettleCheckTag")>
+<#-- 获取订单检测结果地址  -->
+<#assign checkResult = orderSettleCheckTag() >
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout-new.css" />
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+<div id="checkout_wrapper">
+	<div class="pay_frame">
+		<form class="validate" id="checkoutform">
+			<#-- 创建会员是否有默认地址标签 -->
+			<#assign defaultConsigneeTag= newTag("defaultConsigneeTag")>
+			<#-- 获取是否有默认地址  -->
+			<#assign defAddress = defaultConsigneeTag()!'none' >
+			<h3>收货人信息 <a href="javascript:;" class="c-new-address" style="float: right; color: #337ab7; font-size: 12px;">新建收货地址</a></h3>
+			<div class="box address <#if defAddress=='none'>relborder</#if>">
+				<div class="modify" >
+                    <!-- 地址 -->
+                    <input type="hidden" value="" name="shipAddr" class="c_addr">
+                    <!-- 邮编 -->
+                    <input type="hidden" value="" name="shipZip" class="c_addr1">
+                    <!-- 收货人 -->
+                    <input type="hidden" value="" name="shipName" class="c_addr2">
+                    <!-- 手机 -->
+                    <input type="hidden" value="" name="shipMobile" class="c_addr3">
+                    <!-- 电话 -->
+                    <input type="hidden" value="" name="shipTel" class="c_addr4">
+                    <!-- 省份ID -->
+                    <input type="hidden" value="" name="province_id" class="c_addr5">
+                    <!-- 城市ID -->
+                    <input type="hidden" value="" name="city_id" class="c_addr6">
+                    <!-- 县级ID -->
+                    <input type="hidden" value="" name="region_id" class="c_addr7">
+                    <!-- 城镇ID -->
+                    <input type="hidden" value="" name="town_id">
+                    <!-- 省份 -->
+                    <input type="hidden" value="" name="province" class="c_addr8">
+                    <!-- 城市 -->
+                    <input type="hidden" value="" name="city" class="c_addr9">
+                    <!-- 县级 -->
+                    <input type="hidden" value="" name="region" class="c_addr10">
+                    <!-- 城镇 -->
+                    <input type="hidden" value="" name="town">
+                    <!-- 地址ID -->
+                    <input type="hidden" value="" name="addressId" class="c_addr11">
+                    <!-- 是否是默认 -->
+                    <input type="hidden" value="" name="def_addr" class="c_addr12">
+
+                    <input type="hidden" value="" name="shipAddressName" class="c_addr13">
+				
+					<#-- 创建会员是否登录标签 -->
+					<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+					<#-- 获取是否登录  -->
+					<#assign isLogin = memberIsLoginTag() >
+
+					<!-- 判断会员地址数量 -->
+					<#assign memberAddressNumTag= newTag("memberAddressNumTag")>
+					<#assign addressNum = memberAddressNumTag() >
+                        <div class="center-ckt-info">
+                            <script type="text/javascript" src="${ctx}${themes_path}/js/checkout-address.js"></script>
+                            <ul id="address_list">
+                                <script type="text/javascript">
+                                    $(function () {
+                                        //  初始化收货人地址列表
+                                        Address.info.i_InfoInitAddress();
+                                    });
+                                </script>
+                            </ul>
+                            <input type="hidden" name="addressId">
+                        </div>
+                        <div class="collapse-ckt-info">
+                            <span class="more-collapse-ckt">更多地址</span>
+                            <i class="icon-collapse-ckt-info"></i>
+                        </div>
+                        <div class="placeholder-20"></div>
+                </div>
+			</div>
+			
+			<div class="box payment">
+				<div class="payment_selected" >
+					<h3>
+						付款方式<a href="javascript:;" class="payment_btn">[修改]</a>
+					</h3>
+					<span class="pay_payment">您选择的支付方式：<i>暂未选择</i></span>
+					<input type="hidden" class="hidden_payment" name="paymentId" value="">
+				</div>
+				<div class="payment_modify" style="display:none">
+					<h3>付款方式</h3>
+					<div class="list">
+						<#include 'payment_list.html' />
+					</div>
+					
+					<div class="pay_botton btn-div">
+						<input type="button" class="yellow_btn" id="savePaymentBtn"
+							value="确认付款方式"  >
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="send_pucker box">
+				<h3>
+					送货时间
+					<a href="javascript:void(0)" class="change_sand">[修改]</a>
+				</h3>
+				<div class="send_selected">
+					<span class="send_ok">您选择的送货时间：<i>任意时间</i></span>
+					<input type="hidden" value="任意时间" name="shipDay" class="hidden_send_time"/>
+				</div>
+				<div class="send_timetools" style="display:none;">
+					<label class="sand_time">
+						<input type="radio"  value="任意日期" name="shipDay" checked="true"/>
+						<p>任意日期</p>
+					</label>
+					<label class="sand_time">
+						<input type="radio"  value="仅工作日" name="shipDay"/>
+						<p>仅工作日</p>
+					</label class="sand_time">
+					<label >
+						<input type="radio"  value="仅休息日" name="shipDay"/>
+						<p>仅休息日</p>
+					</label>
+					<input type="button" value="保存送货时间" class="send_timesave">
+				</div>
+			</div>
+			
+			<div class="box dlytype">
+				<div class="dly_selected" >
+					<h3>
+						配送方式：<a href="javascript:;" class="dly_btn">[修改]</a>
+					</h3>
+					<span class="dly_payment">您选择的配送方式：<i>暂未选择</i></span>
+					<input type="hidden" name="typeId" value="" class="hidden_dly" type_name=""/>
+				</div>
+				<div class="modify dly_modify" style="display:none">
+					<h3>配送方式</h3>
+					<div class="dly_list">
+						<#include 'dlytype_list.html' />
+					</div>
+					
+					<div class="pay_botton btn-div">
+						<input type="button" class="yellow_btn" id="savedlymentBtn" value="确认配送方式"  >
+					</div>
+				</div>
+			</div>
+			
+
+		<!--发票信息 start-->
+		<div class="ckt-item invoice">
+			<div class="top-ckt">
+				<span class="title-top">发票信息</span>
+				<div class="clearfix"></div>
+			</div>
+			<div class="content-ckt invoice">
+				<div class="">普通发票</div>
+				<div class="receipt-title">个人</div>
+				<div class="receipt-content">办公用品</div>
+				<a href="javascript: void(0);" class="edit-invoice">修改</a>
+				<div style="display: none;" id="invoice_content">
+					<div class="invoice-dialog" id="invoice_dialog">
+						<div class="invoice-head">
+							<div class="title-invoice-head">发票抬头：</div>
+							<div class="items-invoice-head">
+								<div class="ckt-checkbox head-invoice">
+									<span>个人</span>
+								</div>
+								<div class="ckt-checkbox head-invoice company">
+									<span>单位：<input type="text" class="company-invoice-input"  maxlength="255"></span>
+								</div>
+							</div>
+						</div>
+						<div class="invoice-content">
+							<div class="title-invoice-head">发票内容：</div>
+							<div class="items-invoice-content">
+								<div class="ckt-checkbox content-invoice selected">
+									<span>办公用品</span>
+								</div>
+								<div class="ckt-checkbox content-invoice">
+									<span>劳保用品</span>
+								</div>
+								<div class="ckt-checkbox content-invoice">
+									<span>耗材</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="invoice-inputs" style="display: none;">
+							<!--1: 需要发票  2:不需要发票-->
+							<input type="hidden" name="receipt" value="2">
+
+							<!--1: 个人  2:单位-->
+							<input type="hidden" name="receiptType">
+
+							<!--明细 办公用品 劳保用品 耗材-->
+							<input type="hidden" name="receiptContent">
+
+							<!--单位【公司】名称-->
+							<input type="hidden" name="receiptTitle">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="placeholder-20"></div>
+		</div>
+			
+		<div class="goods_wrapper">
+				<#-- 创建购物车标签 -->
+				<#assign cartTag = newTag("cartCheckTag")>
+				<#--通过购物车标签获取购物项列表 -->
+				<#assign itemList = cartTag() >	
+				
+				<#-- 创建促销活动详细标签 -->
+				<#assign activityCurrDetailTag = newTag("activityCurrDetailTag")>
+				<#--调用促销活动详细标签 -->
+				<#assign activity = activityCurrDetailTag() >
+				<#if activity?exists && activity?size gt 0>
+					<#list activity as act>
+						<input type="hidden" id="isActivity" value="${act.activity_id}" name="activity_id"/>
+						<input type="hidden" id="fullMoney" value="${act.full_money}"/>
+					</#list>
+				<#else>
+					<input type="hidden" id="isActivity" value="0" name="activity_id"/>
+					<input type="hidden" id="fullMoney" value="0"/>
+				</#if>
+				<h3>商品清单<a href="cart.html">[返回购物车修改]</a></h3>
+				<#if itemList?exists && itemList?size gt 0>
+				<input type="hidden" value="1" id="checkIsNull"/>
+				<table cellspacing="0" cellpadding="3" width="100%" >
+					<thead>
+						<tr>
+							<th style="width:100px;">图片</th>
+							<th style="width:600px;">商品名称</th>
+							<!-- <th>商品积分</th> -->
+							<th >销售价格</th> 
+							<th >优惠价格</th>
+							<th>数量</th>
+							<th>小计</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list itemList as item >
+						<tr itemid="${item.id}" style="width:100px;">
+							<td>
+								<a target="_blank" href="goods-${item.goods_id}.html">
+									<span  class="cart-product-img">
+										<@image height="50"  src="${item.image_default!''}"  style="cursor: pointer;" />
+									</span>
+								</a>				
+							</td>
+							<td style="text-align: left;width:600px;">
+							<p>
+								<a target="_blank" href="goods-${item.goods_id}.html">${item.name}</a>
+								<#if item.others?exists>
+									<#if item.others.specList?exists>
+									<span style="height:20px;"><#list item.others.specList as spec><#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong></#list></span>
+									</#if>
+								</#if>
+							</p>
+							<#if item.activity_id != 0 >	
+								<p>
+									<strong class="act-strong">
+										促销商品
+									</strong>
+									<a href="${ctx}/promotion.html" class="act_detail" act_id="${item.activity_id}" data-reveal-id="myModal">查看促销</a>
+								</p>
+							</#if>
+							</td>
+							<!-- <td>${item.point}</td> -->
+							<td class=" mktprice1">${item.price?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point}分</#if></td>
+							<td>${item.coupPrice?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point}分</#if></td>
+							<td>
+								${item.num}
+							</td>
+							<td class="itemTotal">${item.subtotal?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point?number*item.num}分</#if></td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+				<#else>
+					<input type="hidden" value="0" id="checkIsNull"/>
+				</#if>
+			</div>
+			<!-- 赠送的赠品及优惠券 -->
+			<div class="gift_bonus">
+				
+			</div>
+			<div class="total_box">
+				<!-- 备注 -->
+				<div class="remark">
+					<span class="remark_title">订单备注：</span>
+					<i class="remark_show" name="remark" value=""></i>
+					<input name="remark"  type="hidden"/>
+					<div class="remark_word" style="display:none">
+						<input type="text" class="remark_intro" placeholder="请写下您的特殊要求，超过30个字我记不住了哦^-^"  value="" maxlength="30"/>
+						<input type="button" class="save_remark" value="保存备注"/>
+					</div>
+					<i name="xxx" value="1111"/>
+				</div>
+				<div class="checkout-bonus-box">
+						<span class="checkout-bonus-use" rel="close">使用优惠券</span>
+						<div class="checkout-bonus-list">
+						</div>
+				</div>
+				<!-- 使用余额支付 -->
+				<#--检测组件是否启用 -->
+				<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+				<#assign groupbuyIsOn = checkCmptIsOnTag("{'componentName':'余额支付组件'}") />
+				<#if groupbuyIsOn=="ON">
+					<div class="checkout-balance-payment ">
+						<h1><label><input type="checkbox" name="isUseCredit" id="selectOrderBalance" value="1" />使用余额 <strong>（账户当前余额：<span class="ftx-01">${member.advance}</span>元）</strong></label></h1>
+						<input type="hidden" id="usedCreditNum" name = "usedCreditNum" value="0.00" />
+						<input type="hidden" id="c_advance" value="${member.advance}" />
+					</div>
+				</#if>
+				<!-- 价格 -->
+				<div class="total">
+					
+				</div>
+			</div>
+			<div class="order_total btn-div" >
+				<input type="button" id="createBtn" class="enable green-btn" value="确认结算"  />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div id="add_the_address"></div>
+<!-- 加载促销活动详细浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="goods-add-float" style="word-wrap:break-word; word-break:break-all;">
+		</div>
+</div>
+
+<!-- 新增地址隐藏显示内容 -->
+<div class="checkout-address-append" style="display:none">
+	<div class="new-other-address address-append" onclick="add_address();">
+		<a href="javascript:void(0)" class="add_address">添加地址</a>
+	</div>
+</div>
+<script>
+
+
+<#if checkResult.result == 1 >
+	alert("${checkResult.errorMessage!''}");
+</#if>
+
+var Ckt = {};
+$(function(){
+$(function(){
+	invoiceEvent();
+	/* 发票信息事件绑定
+	 ============================================================================ */
+	function invoiceEvent(){
+		var invoice = $('.content-ckt.invoice');
+
+		//  发票信息编辑
+		$('.edit-invoice').on('click', function(){
+			Ckt.invoice.e_invoice();
+		});
+
+		//  发票抬头选择
+		$('#dialogModal').on('click', '.ckt-checkbox.head-invoice', function(){
+			var _this = $(this);
+			Ckt.invoice.s_invoiceHead(_this);
+		});
+
+		//  发票内容选择
+		$('#dialogModal').on('click', '.ckt-checkbox.content-invoice', function(){
+			var _this = $(this);
+			Ckt.invoice.s_invoiceContent(_this);
+		});
+	}
+	
+	//如果结算页面中没有商品信息，直接跳转至购物车页面
+	//add by DMRain 2016-4-22
+	var goodsExist = $("#checkIsNull").val();
+	if(goodsExist == 0){
+		location.href = "cart.html";
+	}
+	
+	//加载支付默认方式
+	var paymentId = $(".payment-default").find("input").val();
+	var paymentName =$(".payment-default").find("p").text();
+	$(".pay_payment").find("i").text(paymentName);
+	$(".hidden_payment").val(paymentId);
+	
+	
+	
+	//默认第一次加载价格
+	var regionid = $(".c_addr7").val();
+	//如果地址为空，默认地址ID为0
+	if(regionid == ""){
+		regionid="0";
+	}
+	var val=$('input:radio[name="typeId"]:checked').val();
+	var typy_name=$('input:radio[name="typeId"]:checked').attr("type_name");
+	var typeId = $('input:radio[name="typeId"]:checked').val();
+	var activity_id = $("#isActivity").val();
+	$(".dly_selected").show();
+	$(".dly_modify").hide();
+	$(".dly_payment i").text(typy_name);
+	$(".hidden_dly").val(val);
+	$(".hidden_dly").attr("type_name",typy_name);
+	$(".total").load("checkout/checkout_total.html?regionId="+regionid+"&typeId="+typeId+"&activityId="+activity_id);    //加载购物车价格
+	
+	//加载赠送的赠品和优惠券
+	$(".gift_bonus").load("checkout/gift_bonus.html?regionId="+regionid+"&typeId="+typeId+"&activityId="+activity_id);
+	
+	//是否使用余额
+	$('#selectOrderBalance').bind('change',function(){
+		if (this.checked) {
+			calPrice(true);
+		}else{
+			calPrice(false);
+		}
+		
+	});
+
+	
+	//备注
+	$(".remark_title").click(function(){
+		var _this = $(this);
+		if(_this.is('.remark_title_minus')){
+			$(".remark_word").hide();
+			_this.removeClass("remark_title_minus");
+			$(".remark_show").show();
+		}else {
+			$(".remark_word").show();
+			_this.addClass("remark_title_minus");
+			$(".remark_show").hide();
+		}
+	})
+	
+
+	//优惠券
+	$(".checkout-bonus-use").click(function(){
+		var regionid = $(".c_addr7").val();
+		var typeid = $(".hidden_dly").val();
+		var activity_id = $("#isActivity").val();
+		
+		var bonusShow = $(this).attr("rel");
+		if(bonusShow=="close"){
+			$(this).addClass("checkout-bonus-minus");
+			$(".checkout-bonus-list").show();
+			$(this).attr("rel","show");
+			$(".checkout-bonus-list").load("checkout/bonus.html?regionid="+regionid+"&typeid="+typeid+"&activityId="+activity_id);
+		}else{
+			$(this).removeClass("checkout-bonus-minus");
+			$(".checkout-bonus-list").hide();
+			$(this).attr("rel","close");
+		}
+	})
+	
+	
+	
+	
+/* 	$(".remark_intro").focus(function(){
+		$(this).val("");
+	})
+	$(".remark_intro").blur(function(){
+		if($(this).val()==""){
+			$(this).val("请写下您的特殊要求，超过30个字我记不住了哦^-^");
+		}
+	}) */
+	$(".save_remark").click(function(){
+		var remark = $(".remark_intro").val();
+		$(".remark_word").hide();
+		$(".remark_title").removeClass("remark_title_minus");
+		$(".remark_show").show();
+		$(".remark_show").text(remark);
+		$(".remark_show").attr("value",remark);
+		$("input[name='remark']").val(remark);
+	})
+	
+	//送货时间
+	$(".send_timesave").click(function(){
+		var val=$('input:radio[name="shipDay"]:checked').val();
+		$(".send_selected").show();
+		$(".send_timetools").hide();
+		$(".send_timetools").attr("isClose","1");
+		$(".send_ok").empty();
+		$(".send_ok").html("您选择的配送时间：<i>"+val+"</i>");
+		$(".send_pucker").removeClass("relborder");
+		$(".change_sand").show();
+		$(".hidden_send_time").val(val);
+	});
+	
+	$(".change_sand").click(function(){
+		$(".send_pucker").addClass("relborder");
+		$(".send_selected").hide();
+		$(".send_timetools").show();
+		$(".send_timetools").attr("isClose","0");
+		$(this).hide();
+	});
+	
+	
+	
+	//配送方式
+	$("#savedlymentBtn").click(function(){
+		var regionid = $(".c_addr7").val();
+		var val=$('input:radio[name="typeId"]:checked').val();
+		var typy_name=$('input:radio[name="typeId"]:checked').attr("type_name");
+		var typeId = $('input:radio[name="typeId"]:checked').val();
+		var activity_id = $("#isActivity").val();
+		$(".dly_selected").show();
+		$(".dly_modify").hide();
+		$(".dly_modify").attr("isClose","1");
+		$(".dly_payment i").text(typy_name);
+		$(".hidden_dly").val(val);
+		$(".hidden_dly").attr("type_name",typy_name);
+		
+		$(".total").load("checkout/checkout_total.html?regionId="+regionid+"&typeId="+typeId+"&activityId="+activity_id);    //加载购物车价格
+	//	$(".enable").attr("disabled",false);              //禁用按钮解禁
+		
+		//加载赠送的赠品和优惠券
+		$(".gift_bonus").load("checkout/gift_bonus.html?regionId="+regionid+"&typeId="+typeId+"&activityId="+activity_id);
+		
+		//重新加载优惠券
+		var bonusShow = $(".checkout-bonus-use").attr("rel");
+		if(bonusShow == "show"){
+			$(".checkout-bonus-list").load("checkout/bonus.html?regionid="+regionid+"&typeid="+typeId+"&activityId="+activity_id);
+		}
+	});
+	$(".dly_btn").click(function(){
+		var regionid = $(".c_addr7").val();
+		$(".dly_selected").hide();
+		$(".dly_modify").show();
+		$(".dly_modify").attr("isClose","0");
+		$(".dly_list").load("checkout/dlytype_list.html?regionid="+regionid);
+	})
+	
+	//支付方式
+	/* $("#savePaymentBtn").click(function(){
+		var val=$('input:radio[name="paymentId"]:checked').val();
+		var payment_name=$('input:radio[name="paymentId"]:checked').attr("payment_name");
+		$(".payment_selected").show();
+		$(".payment_modify").hide();
+		$(".pay_payment i").text(payment_name);
+		$(".hidden_payment").val(val);
+	}); */
+	
+	//支付方式
+	$("#savePaymentBtn").click(function(){
+		//新添加验证收货地区是否支持货到付款 add by DMRain 2016-2-19
+		if($(".payment_modify .list #cod").attr("checked")){
+			var addList = $(".current .def_addr").attr("province_id") + "," 
+			+ $(".current .def_addr").attr("city_id") + "," 
+			+ $(".current .def_addr").attr("region_id");
+			
+			$.ajax({  
+			    url: "${ctx}/api/shop/order/check-regions-cod.do?ajax=yes",  
+			    async: false,
+				data:"regionList="+addList,  
+			    dataType: "json",  
+			    type: "POST",  
+			    success: function (result) {
+			    	if(result.result==0){
+						alert(result.message);
+					}else{
+						var val=$('input:radio[name="paymentId"]:checked').val();
+						var payment_name=$('input:radio[name="paymentId"]:checked').attr("payment_name");
+						$(".payment_selected").show();
+						$(".payment_modify").hide();
+						$(".payment_modify").attr("isClose","1");
+						$(".pay_payment i").text(payment_name);
+						$(".hidden_payment").val(val);
+					} 
+			    }  
+			});
+		}else{
+			var val=$('input:radio[name="paymentId"]:checked').val();
+			var payment_name=$('input:radio[name="paymentId"]:checked').attr("payment_name");
+			$(".payment_selected").show();
+			$(".payment_modify").hide();
+			$(".payment_modify").attr("isClose","1");
+			$(".pay_payment i").text(payment_name);
+			$(".hidden_payment").val(val);
+		}
+	});
+	
+	$(".payment_btn").click(function(){
+		$(".payment_selected").hide();
+		$(".payment_modify").show();
+		$(".payment_modify").attr("isClose","0");
+	})
+	
+	/* 发票信息逻辑处理
+	 ============================================================================ */
+	Ckt.invoice = (function(){
+
+		//  修改发票信息
+		function E_invoice(){
+			var invoiceDialog = $('#invoice_dialog');
+			invoiceDialog.dialogModal({
+				title    : '发票信息',
+				top      : 100,
+				showCall : function(){
+					$('.company-invoice-input').on('click', function(e){
+						if($(this).closest('.head-invoice').is('.selected')){
+							e.stopPropagation();
+						}
+					});
+				},
+				callBack : function(){
+					var dialogModal = $('#dialogModal');
+					if(dialogModal.find('.ckt-checkbox.head-invoice.selected').length < 1){
+						$.message.error('请选择发票抬头！');
+						return false;
+					}else {
+						if(dialogModal.find('.ckt-checkbox.head-invoice.company').is('.selected')){
+							if(!dialogModal.find('.company-invoice-input').val()){
+								$.message.error('请填写发票信息！');
+								return false;
+							}else {
+								setTnvoice();
+								return true;
+							}
+						}else {
+							setTnvoice();
+							return true;
+						}
+					}
+
+					function setTnvoice(){
+						var title    = '',
+							comInput = dialogModal.find('.head-invoice.selected').find('.company-invoice-input');
+						if(comInput.length > 0){
+							title = comInput.val()
+						}else {
+							title = dialogModal.find('.head-invoice.selected').find('span').html();
+						}
+
+						$('.receipt-title').html(title);
+						$('.receipt-content').html(dialogModal.find('.content-invoice.selected').find('span').html());
+					}
+				}
+			});
+		}
+
+		//  发票抬头选择
+		function S_invoiceHead(_this){
+			var _this   = _this,
+				_state  = _this.is('.selected'),
+				company = _this.is('.company');
+			var invoiceInputs  = $('#dialogModal').find('.invoice-inputs'),
+				receipt        = invoiceInputs.find("input[name='receipt']"),
+				receiptType    = invoiceInputs.find("input[name='receiptType']"),
+				receiptTitle   = invoiceInputs.find("input[name='receiptTitle']"),
+				receiptContent = invoiceInputs.find("input[name='receiptContent']");
+			if(_state){
+				_this.removeClass('selected');
+				receipt.val(2);
+				receiptType.val('');
+				receiptTitle.val('');
+				receiptContent.val('');
+			}else {
+				_this.addClass('selected')
+					 .siblings().removeClass('selected');
+				if(company){
+					//  显示input，并焦点
+					var _thisInput = _this.find('input');
+					_thisInput.addClass('shows').focus();
+					receipt.val(1);
+					receiptType.val(2);
+					_thisInput.on('input propertychange', function(){
+						var _val = $(this).val();
+						receiptTitle.val(_val)
+					})
+					if(!receiptContent.val()){
+						receiptContent.val('办公用品')
+					}
+					//  设置input
+				}else {
+					//  设置input
+					receipt.val(1);
+					receiptType.val(1);
+					receiptTitle.val('');
+					_this.siblings().find('input').val('');
+					if(!receiptContent.val()){
+						receiptContent.val('办公用品')
+					}
+				}
+			}
+		}
+
+		//  发票内容选择
+		function S_invoiceContent(_this){
+			var _this = _this;
+			var receiptContent = $('#dialogModal').find('.invoice-inputs').find("input[name='receiptContent']");
+			_this.addClass('selected')
+				 .siblings().removeClass('selected');
+			receiptContent.val(_this.find('span').html());
+		}
+
+		return {
+			e_invoice        : function(){
+				return E_invoice();
+			},
+			s_invoiceHead    : function(_this){
+				return S_invoiceHead(_this);
+			},
+			s_invoiceContent : function(_this){
+				return S_invoiceContent(_this);
+			}
+		}
+	})();
+	
+	});
+	
+	
+	//结算悬停
+	$("#createBtn").mouseover(function(){
+		$(this).addClass("order_light");
+	})
+	$("#createBtn").mouseleave(function(){
+		$(this).removeClass("order_light");
+	})
+	
+	//显示促销活动详细
+	$(".act_detail").click(function(){
+		var actId = $(this).attr("act_id");
+		$(".goods-add-float").load("detail/activity_detail.html?activityId="+actId);
+	});
+})
+
+//余额计算价格
+function calPrice(isUse){
+	//是否使用了余额
+	if (isUse) {
+		//获得总价 和 剩余余额
+		var total = $("#needPayVal").val();
+		var advance = $("#c_advance").val();
+		var total = isNaN(parseFloat(total)) ? 0 : parseFloat(total);
+		advance = isNaN(parseFloat(advance)) ? 0 : parseFloat(advance);
+		var price;
+		var	deduction;
+		//如果总价比余额大
+		if (total > advance) {
+			price = (total - advance).toFixed(2);
+			deduction = (advance).toFixed(2);
+		} else {
+			price = (0).toFixed(2);
+			deduction = total.toFixed(2);
+		}
+		
+		//得到结果开始赋值
+		$("#oldNeedPay").val(total);
+		$("#needPayVal").val(price);
+		$("#needPay").html("￥" + price);
+		$("#usedCreditNum").val(deduction);
+		$("#credit_h2").html("￥"+deduction);
+	}else{
+		//得到使用余额前的总价
+		var total = $("#oldNeedPay").val();
+		total = isNaN(parseFloat(total)) ? 0 : parseFloat(total);
+		$("#needPayVal").val(total);
+		total = (total).toFixed(2);
+		$("#needPay").html("￥" + total);
+		$("#credit_h2").html("￥0.00");
+	}
+}
+
+</script>
+<#include '../cart/cart_message.html' />

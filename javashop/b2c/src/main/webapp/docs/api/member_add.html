@@ -1,0 +1,198 @@
+<#assign title= "添加会员地址api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'address_menu.html' />
+	<div class="right_list">
+		<h3>add  添加会员地址API</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#example">返回示例</a></li>
+				<li><a href="#try">API工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>
+			<p>添加一个会员地址</p>
+
+		</h6>
+		<div class="intro">	
+			<div class="same">
+				<h2>API地址：</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">/api/shop/member-address/add.do</td>
+						
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th class="frist">名称</th>
+						<th class="type">类型</th>
+						<th class="yes">是否必须</th>
+						<th class="case">示例值</th>
+						<th class="original">默认值</th>
+						<th class="last">描述</th>
+					</tr>
+					<tr>
+						<td class="frist">name</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">王宏俊</td>
+						<td class="original"></td>
+						<td class="final">收货人姓名</td>
+					</tr>
+					<tr>
+						<td class="frist">province</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">黑龙江省</td>
+						<td class="original"></td>
+						<td class="final">所在省</td>
+					</tr>
+					<tr>
+						<td class="frist">province_id</td>
+						<td class="type"><a href="regions.html">int</a></td>
+						<td class="yes">必填</td>
+						<td class="case"></td>
+						<td class="original"></td>
+						<td class="final">所在省ID</td>
+					</tr>
+					<tr>
+						<td class="frist">city</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">鸡西市</td>
+						<td class="original"></td>
+						<td class="final">所在城市</td>
+					</tr>
+					<tr>
+						<td class="frist">city_id</td>
+						<td class="type"><a href="regions.html">int</a></td>
+						<td class="yes">必填</td>
+						<td class="case"></td>
+						<td class="original"></td>
+						<td class="final">所在市ID</td>
+					</tr>
+					<tr>
+						<td class="frist">region</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">鸡冠区</td>
+						<td class="original"></td>
+						<td class="final">所在地区</td>
+					</tr>
+					<tr>
+						<td class="frist">region_id</td>
+						<td class="type"><a href="regions.html">int</a></td>
+						<td class="yes">必填</td>
+						<td class="case"></td>
+						<td class="original"></td>
+						<td class="final">所在地区ID</td>
+					</tr>
+					<tr>
+						<td class="frist">addr</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">黑龙江省鸡西市鸡冠区西建委5组</td>
+						<td class="original"></td>
+						<td class="final">详细地址</td>
+					</tr>
+					<tr>
+						<td class="frist">zip</td>
+						<td class="type">String</td>
+						<td class="yes">必填</td>
+						<td class="case">158100</td>
+						<td class="original"></td>
+						<td class="final">邮编</td>
+					</tr>
+					<tr>
+						<td class="frist">tel</td>
+						<td class="type">String</td>
+						<td class="yes">手机和电话必填一项</td>
+						<td class="case">0467-2325125</td>
+						<td class="original"></td>
+						<td class="final">固定电话</td>
+					</tr>
+					<tr>
+						<td class="frist">mobile</td>
+						<td class="type">String</td>
+						<td class="yes">手机和电话必填一项</td>
+						<td class="case">18746789011</td>
+						<td class="original"></td>
+						<td class="final">手机</td>
+					</tr>
+					<tr>
+						<td class="frist">def_addr</td>
+						<td class="type">Integer</td>
+						<td class="yes">选填</td>
+						<td class="case">0</td>
+						<td class="original"></td>
+						<td class="final">是否是默认地址,如果传递是“1”，则表示是默认地址，如果传递是“0”则表示非默认地址</td>
+					</tr>
+					<tr>
+						<td class="frist">remark</td>
+						<td class="type">String</td>
+						<td class="yes">选填</td>
+						<td class="case"></td>
+						<td class="original"></td>
+						<td class="final">备注</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th class="line">描述</th>
+					</tr>
+					<tr>
+						<td>result</td>
+						<td>int</td>
+						<td class="line_intro">为1表示添加成功，0表示失败 </td>
+					</tr>
+					<tr>
+						<td>message</td>
+						<td><a href="memberaddress.html">String</a></td>
+						<td class="line_intro">为提示信息</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="example">
+				<h2>返回示例</h2>
+				<textarea>{"result":1,"message":"添加成功"}</textarea>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="${ctx}/docs/api/demo/address_add.html" target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '../fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

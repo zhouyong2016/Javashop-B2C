@@ -1,0 +1,209 @@
+<#include '/admin/header.html' >
+
+<div id="memberpricedlg"></div>
+<div class="main">
+	<div class="input">
+		<form method="post" name="theForm" id="theForm">
+			<#if is_edit==true>
+				<input value="${ctx}/shop/admin/goods/save-edit.do" type="hidden" id="goods_inputAction" />
+			 	<input type="hidden" name="isedit" value="yes" />
+				<input type="hidden" name="goods_id" value="${goodsView.goods_id  }" />
+			<#else>
+				<input value="${ctx}/shop/admin/goods/save-add.do" type="hidden" id="goods_inputAction" />
+				<input type="hidden" id="isedit" name="isedit" value="no" />
+				<input type="hidden" id="goods_id"  name="goods_id" value="${(goodsView.goods_id)!''}" />
+			</#if>
+			<input id="preview_goods_id" type="hidden" value="${(goodsView.goods_id)!'0'}" >
+			<div style="display: block;" class="goods_input">
+				<div class="contentTab">
+					<ul class="tab">
+						<#list pluginTabs as tab>
+							<li tabid="${tab.order}" <#if tab.order==1> class="contentTabS"</#if> >
+								${tab.tabTitle}
+							</li> 
+						</#list>
+						
+					</ul>
+				</div>
+				<div class="shadowBoxWhite wf100 whiteBox">
+					<div class="text">
+						<div class="tab-page">
+							<#list pluginTabs as tab>
+								<li tabid="${tab.order}"
+									<#if tab.order!=1> 
+										style="display:none"
+									</#if> 
+									class="tab-panel"> 
+									${tab.tabHtml}
+								</li> 
+							</#list>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="goodsinput" class="easyui-linkbutton">确定</a>
+			<#if is_edit==true>
+			
+			<#else>
+			<a href="javascript:;" id="draft" class="easyui-linkbutton">保存草稿</a>
+			 
+			</#if>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	//esayui-validatebox添加正则验证匹配单引号,双引号,<>等符号
+	$.extend($.fn.validatebox.defaults.rules, {
+		notSpecialCode: {
+       	 	validator: function(value,param){
+        		var reg= /["'\<\>]/im; 
+        		return !reg.test(value);
+        	},
+        	message: '请不要输入单引号,双引号,<>等符号'
+    	}
+	});
+	
+	var t;
+	
+	$(function() {
+		
+		//如果是 (修改商品 && 草稿商品)||添加商品 ，启动自动保存
+		<#if (is_edit==true && goodsView.market_enable==2) || is_edit!=true >
+		//百度富文本加载完成后调用此事件，否则js会报错
+		ue.addListener( 'ready', function(editor) {
+			//防止初始化后即刻执行，延时30秒执行
+			setTimeout(autoSaveGoods, 1000*10);
+	 	});
+		</#if>
+		
+		$(".goods_input .contentTab>ul>li").click(function() {
+			var tabid = $(this).attr("tabid");
+			$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+			$(this).addClass("contentTabS");
+			$(".tab-page .tab-panel").hide();
+			$(".tab-panel[tabid=" + tabid + "]").show();
+		});
+
+		$("input[type=text]").attr("autocomplete", "off");
+		
+		$("#goodsinput").click(function() {
+			
+			//如果商品开启了规格，就必须添加规格，否则无法保存	add by DMRain 2016-2-191
+			if($("#haveSpec").val() == 1){
+				if($("#spec-input .detail .spec_table tbody tr").length == 0){
+					$.Loading.error("您已开启规格，但是还未添加规格，请添加后再保存！");
+					return false;
+				}
+			} 
+			//图片上传判定
+			if(typeof($("input[name='picnames']").val()) == "undefined"){
+				$.Loading.error("图片必须上传！");
+				return false;
+			}
+			// 判定设置库存是否大于实际库存
+			if(parseInt($(".stock").val()) > parseInt($(".stock").attr("rel"))){
+				alert("对不起，库存不足！");
+				 return false;
+			}
+			
+			//判断linkbutton是否已禁用，如果禁用则跳过
+		 	var disabled=  $(this).hasClass("l-btn-disabled");
+			if( !disabled ){
+				var formflag = $("#theForm").form('validate');
+				if (formflag) {
+					$("#goodsinput").linkbutton("disable");
+					$.Loading.show("正在保存请稍候..");
+					var options = {
+						url : $("#goods_inputAction").val() ,
+						type : "POST",
+						dataType : "json",
+						success : function(result) {
+							
+							if (result.result == 1) {
+								$.Loading.success(result.message);
+								if( $("#goods_inputAction").val()=="${ctx}/shop/admin/goods/save-add.do" ){
+									var name=$("input[name='name']").val().substring(0,11)+"..";
+									parent.addTab1(name,"${ctx}/shop/admin/goods/edit.do?goodsId="+result.data)
+									parent.CloseTabByTitle("添加商品");
+								}else{
+									$("#goodsinput").linkbutton("enable");
+									clearTimeout(t);
+								}
+							}else{
+								$.Loading.error(result.message);
+								$("#goodsinput").linkbutton("enable");
+							}
+						},
+						error : function(e) {
+							$.Loading.error("出错了,请重试");
+							$("#goodsinput").linkbutton("enable");
+						}
+					};
+					$('#theForm').ajaxSubmit(options);
+				}else{
+					$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+					
+					var tabid=$(".validatebox-invalid:first").parent().parent().parent().parent().parent().attr("tabid");
+					if(tabid==null){
+						var tabid=$(".validatebox-invalid:first").parent().parent().parent().parent().parent().parent().attr("tabid");
+					}
+					$(".goods_input .contentTab>ul>li[tabid=" + tabid + "]").addClass("contentTabS");
+					$(".tab-panel").hide();
+					$(".tab-panel[tabid=" + tabid + "]").show();
+				}
+			}
+		});
+		
+		//保存草稿
+		$("#draft").click(function(){
+			autoSaveGoods();
+		})
+		
+		//自动保存保存商品数据(每隔30秒)
+		function autoSaveGoods(){
+			//间隔秒数
+			var time = 30;
+			$.Loading.show("自动保存中...");
+			
+			var url;
+			if($("#preview_goods_id").val()==0){
+				url="${ctx}/shop/admin/goods/add-draft-goods.do";
+			}else{
+				url="${ctx}/shop/admin/goods/edit-draft-goods.do?preview_goods_id="+$("#preview_goods_id").val();
+			}
+			var options = {
+				url : url,
+				type : "POST",
+				dataType : "json",
+				success : function(data) {
+					if (data.result == 1) {
+						$("#preview_goods_id").val(data.data.goods_id);
+						
+						$("#goods_inputAction").val("${ctx}/shop/admin/goods/save-edit.do");
+						$("#isedit").val("yes");
+						$("#goods_id").val(data.data.goods_id);
+						if(data.data.market_enable==2){
+							$.Loading.success("已自动保存商品草稿");
+							t = setTimeout(autoSaveGoods, 1000*time);
+						}else{
+							$.Loading.error("上架商品无法保存为草稿");
+						}
+					}else{
+						$.Loading.error("自动保存出错：" + data.message);
+						t = setTimeout(autoSaveGoods, 1000*time);
+					}
+				},
+				error : function(e) {
+					$.Loading.error("出错了,请重试");
+					t = setTimeout(autoSaveGoods, 1000*time);
+				}
+			};
+			$('#theForm').ajaxSubmit(options);
+			
+		}
+	});
+</script>
+
+<#include '/admin/footer.html' >

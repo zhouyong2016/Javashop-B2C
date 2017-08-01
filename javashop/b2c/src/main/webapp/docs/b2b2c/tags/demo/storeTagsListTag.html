@@ -1,0 +1,11 @@
+
+<!--创建"店铺商品标签列表"标签-->
+<#assign StoreTagsListTag= newTag("storeTagsListTag") >  
+<!--调用"店铺商品标签列表"标签，并传递参数-->            
+<#assign  StoreTagsList= StoreTagsListTag("'store_id':'15'") >						
+<ul class="gw">
+<#list StoreTagsList as stl>
+	标签id：${stl.tag_id}</br>
+	标签名：${stl.tag_name}</br>
+
+</#list>

@@ -1,0 +1,52 @@
+<form id="editRemarkForm">
+	<div class="detail">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tbody>
+				<tr>
+					<th>会员备注:</th>
+					<td align="left">
+						<textarea name="modify_memo" class="input_text"
+							style="width: 750px; height: 200px;">${member.remark!''}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="hidden" value="${memberid }" name="memberid">
+	</div>
+	<div class="submitlist" align="center">
+		<table>
+			<tr>
+				<td><input name="button" type="button" value=" 确    定   "
+					class="submitBtn button blueButton" id="editRemarkBtn" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+<script>
+	$(function() {
+
+		$("#editRemarkBtn").click(function() {
+			$.Loading.show('正在更新数据，请稍侯...');
+			var that = this;
+			var options = {
+				url : "${ctx}/shop/admin/member/edit-remark.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+					} else {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#editRemarkForm').ajaxSubmit(options);
+
+		});
+	});
+</script>

@@ -1,0 +1,327 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<div style="display: block;" class="searchAdvanced">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="80px" align="right">按订单状态：</td>
+				<td width="200px">
+					<select id="status" >
+						<option value="99">---所有---</option> 
+						<#if statusMap??>
+						<#list statusMap?keys as key>
+							<#if (key?number)=(order_status?number)>
+								<option value="${key}" selected="selected" >${statusMap.get(key)}</option>
+							<#else>
+								<option value="${key}">${statusMap.get(key)}</option>
+							</#if>
+						</#list>
+						</#if>
+					</select>
+				</td>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type"  onchange="statistics_mode(this.value)" >
+						<option value="1" <#if cycle_type==1 >selected="selected"  </#if> >按照月统计</option>
+						<option value="0" <#if cycle_type==0 >selected="selected"  </#if> >按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month" <#if cycle_type==0 > style="display: none;" </#if>  >
+					</select>
+				</td>
+				<td width="200" style="text-align: center;">
+					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+			<div class="contentTab">
+				<ul class="tab">
+					<li tabid="1" >下单金额</li> 
+					<li tabid="2" class="contentTabS" >下单量</li> 
+				</ul>
+			</div>
+			
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<div tabid="2"  class="tab-panel">
+							<table class="form-table" style="width: 100%;">
+								<tr>
+									<td>
+										<div id="container" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+	<div class="clear height10"></div>
+	
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" 
+			data-options="url:'order!listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
+			pagination="true" width="width" id="orderdata" sortName="order_id" sortOrder="desc">
+			<thead>
+				<tr>
+					<th data-options="field:'order_id',checkbox:true,width:100"></th>
+					<th data-options="field:'sn',width:150" >订单号</th>
+					<th data-options="field:'create_time',width:100,sortable:'true'" formatter="formatDate"  >下单日期</th>
+					<th data-options="field:'need_pay_money',width:100,sortable:'true'" >订单总额</th>
+					<th data-options="field:'paymoney',width:100,sortable:'true'" >实付金额</th>
+					<th data-options="field:'uname',width:100">会员</th>
+					<th data-options="field:'status',width:100,sortable:'true'" formatter="forStruts" >订单状态</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	
+</div>
+
+
+<script type="text/javascript">
+var last_type=null;
+
+$(function() {
+	
+	//填充下拉框年月的值
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	currentYear = ${year};
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	currentmonth = ${month};
+	
+	for(var i=0;i<20;i++){	//上下20年
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){	//12个月份
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	// tab的选择
+	$(".goods_input .contentTab>ul>li").click(function() {
+		
+		var tabid = $(this).attr("tabid");
+		$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+		$(this).addClass("contentTabS");
+		$(".tab-page .tab-panel").hide();
+		$(".tab-panel[tabid=" + tabid + "]").show();
+		
+		if(tabid==1){
+			saleMoney();
+		}else{
+			saleNum();
+		}
+		
+	});
+	
+	$("input[type=text]").attr("autocomplete", "off");
+	
+	$("#search_statis").click(function(){
+		saleNum();
+		searchOrder();
+	});
+	
+	//加载数据
+   	saleNum();
+   	searchOrder();
+		
+});
+
+
+
+//订单状态
+function forStruts(value, row, index) {
+	var val;
+	val = getType(${status_Json!''},value);
+	return val;
+}
+
+function getType(exMap,value){
+	var val;
+	$.each(exMap,function(key,values){ 
+	    if(value==key){
+	    	val=values;
+	    }
+	});
+	return val;
+}
+
+
+/**
+ * 搜索订单数据
+ */
+function searchOrder(){
+	
+	var status = $("#status :selected").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	var start_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-01 00:00:00";
+	var end_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-31 23:59:59";
+	
+	if(cycle_type!=1){
+		start_time=null;
+		end_time=null
+	}
+	
+	$("#orderdata").datagrid('load', {
+		 start_time:start_time,
+		 end_time:end_time,
+		 status:status,
+		 page:1
+    }); 
+}
+
+// 格式化时间
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+
+// 按周期隐藏 月份下拉框
+function statistics_mode(mode_value){
+	if(mode_value==1){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+}
+
+// 生成图表
+function numHighcharts(obj){
+	sale_num = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: 'container'
+        },
+        title: {
+            text: '订单销售量统计（'+obj+")"
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            title: {
+                text: '数量 (件)'
+            },
+            labels:{
+            	formatter: function () {
+                    return this.value + '(件)';
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        credits: {  
+            enabled: false // remove high chart logo hyper-link  
+        }, 
+        series: [{
+            name: "本"+obj,
+            pointStart: 1
+        }, {
+            name: "上"+obj,
+            pointStart: 1
+        }]
+    });
+}
+
+
+function saleNum(status,cycle_type,year,month){
+	
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	if(year==null){
+		year=2015;
+		month=4;
+	}
+	
+	var status = $("#status :selected").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	
+	if(cycle_type!=last_type){
+		if(cycle_type==1){					//判断按哪个周期显示数据
+			numHighcharts('月');					
+		}else{
+			numHighcharts('年');
+		}
+		last_type = cycle_type;
+	}
+	
+	jQuery.getJSON("salesStatis!getSaleNumJson.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {
+		sale_num.series[0].setData(data.message); 
+	});
+	
+	if(cycle_type==1){	
+		if(month==1){
+			year = year-1;
+			month = 12;
+		}else{
+			month = month-1;
+		}
+	}else{
+		year = year-1;
+	}
+	
+	jQuery.getJSON("salesStatis!getSaleNumJson.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {  
+		sale_num.series[1].setData(data.message); 
+	});
+}
+
+//跳转下单金额
+function saleMoney(){
+	
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	if(year==null){
+		year=2015;
+		month=4;
+	}
+	
+	var status = $("#status :selected").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	
+	location.href = "salesStatis!orderStatis.do?order_statis_type=1&year="+year+"&month="+month+"&cycle_type="+cycle_type+"&order_status="+status;
+
+}
+
+</script>
+
+<#include '/admin/footer.html' >

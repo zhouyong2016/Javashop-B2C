@@ -1,0 +1,74 @@
+<!--创建"收货人详细"标签-->
+<#assign consigneeDetailTag = newTag("consigneeDetailTag")>
+<!--调用“收货人详细”标签-->
+<#assign consigneeDetail = consigneeDetailTag('{"addressid":"${addressid}"}')>
+
+<div class="address_div">
+    <form id="address_form">
+        <div class="c_address" style="margin-bottom: 50px;">
+            <dl>
+                <dt><em style="color: red;">*</em> 收货人：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="name" maxlength="30" value="${consigneeDetail.name!''}" style="width: 100px;">
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 收货地区：</dt>
+                <dd id="selectAddress">
+                    <script type="text/javascript">
+                        $(function(){
+                            $('#selectAddress').addressSelect({
+                                deData: ${consigneeDetail.addressToBeEdit}
+                            });
+                        })
+                    </script>
+                </dd>
+
+                <script type="text/javascript">
+                    var deData = ${consigneeDetail.addressToBeEdit}
+                </script>
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 详细地址：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="addr" maxlength="120" value="${consigneeDetail.addr!''}" style="width: 230px;">
+                </dd>
+            </dl>
+            <dl>
+                <dt><em style="color: red;">*</em> 手机号码：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="mobile" maxlength="11" value="${consigneeDetail.mobile!''}" style="width: 150px;">
+                </dd>
+            </dl>
+            <!--<dl>
+                <dt>邮编：</dt>
+                <dd>
+                    <input type="text" class="form-control" name="zip" maxlength="6" value="${consigneeDetail.zip!'000000'}" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" style="width: 150px;">
+                </dd>
+            </dl>-->
+            <dl>
+                <dt>地址别名：</dt>
+                <dd style="line-height: 26px;" class="dd-aliases">
+                    <input type="text" class="form-control" name="shipAddressName" value="${consigneeDetail.shipAddressName!''}" maxlength="11" style="width: 130px;">
+                    <span>建议填写常用名称</span>
+                    <span style="margin-left: 10px;">例如：</span>
+                    <span>
+                        <a href="javascript: void(0);" class="example-aliases">家里</a>
+                        <a href="javascript: void(0);" class="example-aliases">公司</a>
+                        <a href="javascript: void(0);" class="example-aliases">学校</a>
+                    </span>
+                </dd>
+            </dl>
+
+            <dl class="def" style="padding-left: 113px;">
+                <input type="checkbox" value="1" name="def_addr" <#if consigneeDetail.def_addr == 1>checked onclick="return false;" title="设置其它地址为默认即取消此地址默认属性！" style="cursor: not-allowed;"<#else>style="cursor: pointer;"</#if>>
+                <p>使用此地址作为默认收货地址</p>
+            </dl>
+            <dl>
+                <dt></dt>
+                <dd>
+                    <a href="javascript: void(0);" class="add-btn" style="display: block; text-align: center;background:#da4f49;width:130px;border:0px none;padding:0px;margin:0px;color:#fff;font-size:12px;height:35px;line-height:35px;">保存地址</a>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>

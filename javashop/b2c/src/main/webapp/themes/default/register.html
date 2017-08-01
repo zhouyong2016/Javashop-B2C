@@ -1,0 +1,202 @@
+<#assign  title="注册" /><#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+<!--登录界面-->
+<div id="register_wrapper">
+	<form action="register.html" method="post" id="register_form" class="validate">
+		<input type="hidden" name="action" value="register" />
+		<h1>请注册<span>欢迎注册会员！1分钟完成注册，您可以获赠28元优惠券</span></h1>
+		<!--注册界面左侧-->
+		<div class="left">
+			<div class="regis_same">
+				<label>用户名：</label>
+				<div class="content_in">
+					<input type="text" maxlength="50" id="username" name="username" autocomplete="off" class="definition_small"  fun="checkUserName" />
+					<p>4-20个字符，可由中英文数字及‘_’、‘-’组成，注册后用户名不能更改</p>
+				</div>
+			</div>
+			<div class="regis_same">
+				<label>注册邮箱：</label>
+				<div class="content_in">
+					<input type="text" maxlength="200" id="reg_email" name="email"  fun="checkEmail" isrequired="true" autocomplete="off" class="definition_small" />
+					<p>邮箱将用于登录和取回密码，请输入小写</p>
+				</div>
+			</div>
+			<div class="regis_same">
+				<label>密码：</label>
+				<div class="content_in">
+					<input type="password" id="password"  isrequired="true"  fun="isPasswd" name="password" autocomplete="off" class="definition_small" />
+					<p>6--16个英文字母或数字</p>
+				</div>
+			</div>
+			<div class="regis_same">
+				<label>确认密码：</label>
+				<div class="content_in">
+					<input type="password" id="reg_passwd_r" name="passwd_re"  isrequired="true" autocomplete="off" fun="checkpwd" class="definition_small" />
+					<p>请再次输入密码</p>
+				</div>
+			</div>
+
+			<div class="regis_same">
+				<label>验证码：</label>
+				<div id="verifyCodebox">
+					<input type="text" id="iptlogin" name="validcode" isrequired="true" class="regis_small inputstyle _x_ipt" size="8" autocomplete="off" />
+					<img id="LoginimgVerifyCode" src="${ctx}/validcode.do?vtype=memberreg" alt="会员登录验证码" />
+					<a href="javascript:;">看不清楚？换个图片</a>
+				</div>
+			</div>
+			<div class="regis_ent">
+				<span class="m_register btn"><input type="button" value="注册新用户" class="blue_btn" /></span>
+			</div>
+			<div class="regis_read">
+				<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+				<p>我已阅读并同意<span>《网用户协议》</span></p>
+			</div>
+		</div>
+		<!--注册界面左侧结束-->
+		<!--注册页面中间细线-->
+		<div class="middle">
+		</div>
+		<!--注册页面中间细线结束-->
+		<!--右侧提示信息-->
+		<div class="right">
+			<p>已有帐号？请直接登录</p>
+			<a href="login.html">立即登录</a>
+		</div>
+		<!--右侧提示信息结束-->
+	</form>
+	<!--登录界面结束-->
+</div>
+
+
+<!--正文结束-->
+
+<script type="text/javascript">
+$(function(){
+	
+ 	$("#verifyCodebox a").click(function(){
+		$("#verifyCodebox img").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	});
+ 	var options = {
+			url : "${ctx}/api/shop/member!register.do?ajax=yes" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+ 				if(result.result==1){
+	 				location.href="register_success.html?mailurl="+result.mailurl+"&forward=${forward!''}";
+	 			}else{
+	 				
+	 				$.alert(result.message);
+	 				$.Loading.hide();
+		 		} 
+ 				$("#verifyCodebox img").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+			},
+			error : function(e) {
+				$.alert("出现错误 ，请重试");
+				$.Loading.hide();
+				$("#verifyCodebox img").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+			}
+	};
+	//点击注册 	
+	$(".m_register").click(function(){
+		if( $("#reg_passwd_r").val()==$("#password").val() ){
+			if("false"!=$(this).attr("validate")){	
+				$.Loading.show("正在提交您的信息，请稍候...");
+				$('#register_form').ajaxSubmit(options);		
+			}
+		}
+		
+		
+	})
+	
+	$(document).keyup(function(event){
+
+		  if(event.keyCode ==13 && "false"!=$(this).attr("validate")){
+					$.Loading.show("正在提交您的信息，请稍候..."); 
+					$('#register_form').ajaxSubmit(options);	
+		  }
+		});
+});
+ 
+//检测用户协议
+function checkLicense(){
+	if($("#license").is(':checked')){
+		return true;
+	}else{
+		return "请阅读用户协议并同意！";
+	}
+}
+
+//检测用户名
+function checkUserName(value,callback){
+	var input = $("#username");
+	var username  = input.val();
+	var patrn=/^([0-9A-Za-z一-龥]|-|_){1,20}$/;
+	if (!patrn.exec(username)) {
+		return "用户名格式不正确！";
+	}
+	
+	//  遇到中文 把一个中文换成NB 两个字符  就可以已一个中文两个字符 得到长度
+	var sLength = username.replace(/[^\x00-\xff]/g,"NB").length; 
+	if (sLength < 4 || sLength > 20) {
+		return "用户名长度不正确";	
+	} 
+	
+	$.ajax({
+		url:"api/shop/member!checkname.do?ajax=yes",
+		type:"POST",
+		data:"username=" + username,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"重复的用户名！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+
+//检测邮箱
+function checkEmail(value,callback){
+	var input = $("#reg_email");
+	var email  = input.val();
+	if($.trim(email)==''){
+		return "注册邮箱不能为空！";
+	}
+	var reg = /^([a-z0-9+_]|\-|\.|\-)+@([\w|\-]+\.)+[a-z]{2,4}$/i; 
+	if(!reg.test(email)){
+		return "注册邮箱格式不正确！";
+	}
+	$.ajax({
+		url:"api/shop/member!checkemail.do?ajax=yes",
+		type:"POST",
+		data:"email="+email,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"注册邮箱重复！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+
+function isPasswd(s){  
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec(s)) return "密码格式不正确！"  
+	return true  
+}
+
+function checkpwd(){
+	if( $("#reg_passwd_r").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+</script>
+<#include 'common/footer.html' />

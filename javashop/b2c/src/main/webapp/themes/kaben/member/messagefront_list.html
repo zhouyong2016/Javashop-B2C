@@ -1,0 +1,87 @@
+<#assign  title="站内消息" />
+<#include 'member_header.html' />
+<!-- 获得站内消息列表标签 -->
+<#assign messageFrontTag = newTag("messageFrontTag")>
+<#assign messagesFront = messageFrontTag()>
+<script src="${ctx}${themes_path}/js/messageFront.js" type="text/javascript"></script>
+<div class="member-commen">
+	<h1>站内消息<span>站内消息列表</span></h1>
+	<div class="messagefront-list">
+		<ul>
+			<li <#if messagesFront.status  == "0" >class="selected"</#if> style="border:0px none;"><a href="messagefront_list.html"><span>消息</span></a></li>						
+			<li <#if messagesFront.status  == "1" >class="selected"</#if>><a href="messagefront_list.html?status=1"><span>回收站消息</span></a></li>
+		</ul>
+		<em class="point-upward"  <#if messagesFront.status  == "0" >style="left:25px;"<#else>style="left:120px;"</#if>></em>
+	</div>
+	<div class="member-point-box">
+		<div class="member-point-list point-same-table" >
+		 	<#if messagesFront.messagesList?size gt 0 >
+		 		<div class="message-btn">
+		 			<#if messagesFront.status  == "1" >
+		 				<a href="javascript:void(0)" class="message-same-btn" id="delete-all">全部删除</a>
+			 		<#else>
+		 				<a href="javascript:void(0)" class="message-same-btn" id="in-recycle-all">放入回收站</a>
+				 		<a href="javascript:void(0)" class="message-same-btn" id="have-read-all">标记为已读</a>
+					</#if>
+		 		</div>
+		 		<div class="message-list">
+					<table  style="width:100%" cellspacing="0" cellpadding="0">
+						<tr>
+							<th style="width:50px;"><input type ="checkbox" id="all-check"></th>
+							<th style="width:300px;">消息标题</th>
+							<th style="width:150px;">发送时间</th>
+							<th style="width:100px;">发送人</th>
+							<th style="width:200px;">操作</th>
+						</tr>
+						<#list messagesFront.messagesList as message>
+					        <tr >
+					        	<td>
+					        		<input type ="checkbox" name="msgcheckbox" value="${message.msg_id}">
+					        	</td>
+					        	<td >
+						      	 	<a href="${ctx}/member/messagefront_detail.html?msgId=${message.msg_id}">${message.msg_title!''}</a>
+						        </td>
+						        <td><@dateformat time="${message.send_time?c}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+						        <td >
+						      	 	${message.adminuser_name!''}
+						        </td>
+						        <td >
+						        	<#if messagesFront.status  == "1" >
+							 			<a href="javascript:void(0)"   class="easyui-linkbutton delete-one  message-same-btn" messageid="${message.msg_id}" >删除</a>
+							 		<#else>
+								 		<#if message.is_read == 0 >	
+						      	 		<a href="javascript:void(0)"   class="easyui-linkbutton have-read-one message-same-btn" messageid="${message.msg_id}" >未读</a>
+							      	 	<#else>
+							      	 		<a href="javascript:void(0)"   class="message-same-btn" messageid="${message.msg_id}" >已读</a>	
+							        	</#if>
+							      	 	<a href="javascript:void(0)"   class="recycle-one message-same-btn" messageid="${message.msg_id}" >放入回收站</a>
+									</#if>
+						        </td>
+						      </tr>
+					    </#list>    
+					</table>
+					<@pager pageno="${messagesFront.page}" pagesize="${messagesFront.pageSize}" totalcount="${messagesFront.totalCount}" />
+				<#else>
+					<#if messagesFront.status  == "1" >
+		 				<div class="empty" style="text-align:center;">回收站暂时没有消息</div>
+			 		<#else>
+				 		<div class="empty" style="text-align:center;">您目前还未接收到站内发送的消息</div>
+					</#if>
+				</#if>
+			</div>
+		</div>
+	 </div>
+</div>	
+
+
+</div>
+</div>
+</div>
+</div>	
+<script>
+	$(function(){
+		otherMenu(7);
+		MessageFront.init();
+	})
+</script>
+<#include '../common/footer.html'/>

@@ -1,0 +1,178 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea'>
+		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="commentsform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/comments/list-json.do?type=1',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="commentsdata">
+				<thead>
+					<tr>
+						<th data-options="field:'comment_id',checkbox:true"></th>
+						<th data-options="field:'gname',width:200" formatter="formatName">商品名称</th>
+						<th data-options="field:'muname',width:200" formatter="formatUname">评论人</th>
+						<th data-options="field:'dateline',width:300" formatter="formatDateline">评论日期</th>
+						<th data-options="field:'grade',width:200,formatter:function(value,rowData,rowIndex){
+							var val = '';
+							switch(value) {
+								case 1:
+									val='差评';
+									break;
+								case 2:
+									val='中评';
+									break;
+								case 3:
+									val='好评';
+									break;
+								default :
+									val='好评';
+									
+							}
+							return val;
+						}">评价</th>
+						<#if product_type=="b2c">
+							<th data-options="field:'status',width:200" formatter="formatStatus">显示状态</th>
+							<th data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
+						<#else>
+							<th data-options="field:'action',width:100,align:'center'" formatter="formatDetail">操作</th>
+						</#if>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	<div id="divdia"></div>
+</div>
+<script type="text/javascript">
+	function details(commentid) {
+		$("#divdia").dialog({
+			title : "评论信息",
+			top:20,
+			width : 700,
+			height : 500,
+			closed : false,
+			cache : false,
+			href : "${ctx}/shop/admin/comments/detail.do?commentId=" + commentid,
+			modal : true,
+			buttons : [ {
+				text : '关闭',
+				handler : function() {
+					$("#divdia").dialog('close');
+				}
+			} ]
+		});
+	}
+
+	//查看评论详细 主要应用与b2b2c后台商品评论列表
+	//add by DMRain 2016-4-20
+	function lookDetails(commentid) {
+		$("#divdia").dialog({
+			title : "查看信息",
+			top:20,
+			width : 700,
+			height : 500,
+			closed : false,
+			cache : false,
+			href : "${ctx}/shop/admin/comments/look-detail.do?commentId=" + commentid,
+			modal : true,
+			buttons : [ {
+				text : '关闭',
+				handler : function() {
+					$("#divdia").dialog('close');
+				}
+			} ]
+		});
+	}
+	
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='审核回复' href='javascript:void(0);' onclick='details("
+				+ row.comment_id + ")' ></a>";
+		return val;
+	}
+
+	//查看评论详细 主要应用与b2b2c后台商品评论列表
+	//add by DMRain 2016-4-20
+	function formatDetail(value, row, index) {
+		var val = "<a class='edit' title='查看' href='javascript:void(0);' onclick='lookDetails("
+				+ row.comment_id + ")' ></a>";
+		return val;
+	}
+	
+	function formatDefault_lv(value, row, index) {
+		var val;
+		if (value == 1) {
+			val = "是";
+		} else {
+			val = "否";
+		}
+		return val;
+	}
+
+	function formatName(value, row, index) {
+		var val = '<a href="${ctx}/goods-'+row.goods_id+'.html" target="_blank" >'
+				+ value + '</a>';
+		return val;
+	}
+
+	function formatUname(value, row, index) {
+		var val;
+		if (value != null && value != '') {
+			val = value;
+		}
+		if (value == null && value == '') {
+			val = "游客";
+		}
+		return val;
+	}
+
+	function formatDateline(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+
+	function formatStatus(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "未审核";
+		}
+		if (value == 1) {
+			val = "审核通过";
+		}
+		if (value == 2) {
+			val = "审核拒绝";
+		}
+		return val;
+	}
+	function del() {
+		var rows = $('#commentsdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除评论");
+			return;
+		}
+		if (!confirm("确认要将评论删除吗？")) {
+			return;
+		}
+		var options = {
+			url : "${ctx}/shop/admin/comments/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$('#commentsdata').datagrid("reload");
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#commentsform').ajaxSubmit(options);
+	}
+</script>
+<#include '/admin/footer.html' >

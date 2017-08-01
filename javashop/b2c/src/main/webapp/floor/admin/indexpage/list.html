@@ -1,0 +1,31 @@
+<#include '/admin/header.html' >
+<style>
+	.tree-file{background:none;}
+	.tree-folder{background:none;}
+	.tree-folder-open{background:none;}
+</style>
+<script type="text/javascript" src="${ctx}/floor/admin/js/floor.js"></script>
+<div class="main">
+	<!-- 主体 -->
+	<div class='buttonArea'>
+		<span id="add_floor_button" style="float: left; display: block"> 
+		<a href="javascript:void(0)" class="button blueButton" >添加楼层</a>
+		</span>
+		<span id="save_sort_button" style="float: left; display: block"> 
+		<a href="javascript:void(0)" class="button" >保存排序</a>
+		</span>
+	</div>
+	<form action="" id="floorform">
+		<table id="pcfloordata">
+		</table>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+	<div class="clear height10"></div>
+	<div id="floor_input" ></div>
+</div>
+
+<#include '/admin/footer.html' >
+<script type="text/javascript" >
+var ctx="${ctx}";
+var pageid=${pageid};
+</script>

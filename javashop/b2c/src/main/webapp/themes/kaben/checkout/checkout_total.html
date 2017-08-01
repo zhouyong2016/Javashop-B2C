@@ -1,0 +1,54 @@
+<#-- 创建结算订单金额标签 -->
+<#assign checkoutOrderTotalTag = newTag("checkoutOrderTotalTag") />
+<#-- 调用结算订单金额标签, 需要传递参数regionId(地区id)及typeId(配送方式id)及activity_id(促销活动id，没有就传递0) -->
+<#assign orderPrice = checkoutOrderTotalTag("{'regionId':${regionId},'typeId':${typeId},'activity_id':${activityId}}") />
+<ul>
+	<li>
+		<p>${orderPrice.goodsPrice?string("currency")}<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>+${(orderPrice.exchange_point)!''}分</#if></p>
+		<h2>商品价格总计：</h2>
+	</li>
+	
+	<li>
+		<p>${orderPrice.shippingPrice?string("currency")}</p>
+		<h2>运费总计：</h2>
+	</li>
+	<#if orderPrice.activity_point?exists && orderPrice.activity_point != 0 >
+	<li>
+		<input type="hidden" name="activity_point" value="${orderPrice.activity_point}"/>
+		<p>${orderPrice.activity_point!0}积分</p>
+		<h2>订单获得积分：</h2>
+	</li>
+	</#if>
+	<#if orderPrice.actDiscount?exists && orderPrice.actDiscount != 0>
+		<li>
+			<input type="hidden" name="act_discount" value="${orderPrice.actDiscount}"/>
+			<p>-${orderPrice.actDiscount?string("currency")}</p>
+			<h2>促销活动减价：</h2>
+		</li>
+	</#if>
+	<#if orderPrice.is_free_ship == 1>
+		<li>
+			<input type="hidden" name="freeShip" value="1"/>
+			<p>-${orderPrice.shippingPrice?string("currency")}</p>
+			<h2>促销活动免运费：</h2>
+		</li>
+	</#if>
+	<li>
+		<p>${orderPrice.orderPrice?string("currency")}<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>+${(orderPrice.exchange_point)!''}分</#if></p>
+		<h2>订单总价：</h2>
+	</li>
+	<#if orderPrice.discountPrice?exists && orderPrice.discountPrice!=0>
+	<li>
+		<p>${orderPrice.discountPrice?string("currency")}</p>
+		<h2>优惠抵扣：</h2>
+	</li>
+	</#if>	
+	<li>
+		<h4>${orderPrice.needPayMoney?string("currency")}<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>+${(orderPrice.exchange_point)!''}分</#if></h4>
+		<h3 style="float:right;font-size:16px;width:80px;">应付金额：</h3>
+		<input type="hidden" name="needPay" value="${orderPrice.needPayMoney}">
+		<#if orderPrice.exchange_point?? && orderPrice.exchange_point!=0>
+		<input type="hidden" name="needPayPoint" value="${orderPrice.exchange_point}">
+		</#if>
+	</li>
+</ul>

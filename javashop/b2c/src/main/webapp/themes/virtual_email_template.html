@@ -1,0 +1,47 @@
+<table width="832" border="0" align="left" cellpadding="0" cellspacing="0" style=" margin-left:25px;">
+  <tr>
+        <td height="60" style="border-bottom:1px solid #c8c8c8;"><a href="${domain!''}"><@image src="${logo!''}" border="0" /></a></td>
+  </tr>
+      <tr>
+        <td height="10"></td>
+      </tr>
+      <tr>
+        <td height="30" style="line-height:30px;">亲爱的${username}：</td>
+      </tr>
+      <tr>
+        <td height="30" align="left" style="line-height:30px;">您的订单 <a href="${domain}/member_orderdetail_${order.sn}.html" style="color:#0385DD;text-decoration:underline;">${order.sn}</a>中虚拟商品账号信息：</td>
+      </tr>
+      <tr>
+      	<td   align="left" style="line-height:30px;">
+			<#list itemList as item>
+				<div >
+					<h1 style="font-size:14px">${item.name}</h1>
+					<ul>
+					    <#list item.accountList as account>
+						<li style="color:red">帐号：${account.no}密码:${account.pwd}</li>				
+						</#list>
+					</ul>
+				</div>
+			</#list>
+		</td>
+      </tr>
+      <tr>
+        <td height="20" align="left" style="line-height:30px; font-size:14px; font-weight:bold;">
+        <#if order.member_id?exists &&  order.member_id!=0>
+	        <a href="${domain}/member_orderdetail_${order.sn}.html" style="color:#da6d00; text-decoration:underline;">点此查看订单详情</a>
+        <#else>
+    	    <a href="${domain}/orderdetail_${order.sn}.html" style="color:#da6d00; text-decoration:underline;">点此查看订单详情</a>
+        </#if>
+        </td>
+      </tr>
+      <tr>
+        <td height="30" align="left" style="line-height:30px;">如果无法点击此链接，您也可以登录<a href="${domain}/member_index.html" style="color:#bc0404; font-weight:bold;">会员中心</a>查看订单详情。</td>
+      </tr>
+
+      <tr>
+        <td height="30" align="left" style="line-height:30px;">本邮件为${sitename!''}系统发出，请勿直接回复。</td>
+      </tr>
+      <tr>
+        <td height="30" align="left" style="line-height:30px; font-size:14px; font-weight:bold; color:#3d3d3d;">感谢您的信任与支持，祝您购物愉快！</td>
+      </tr>
+</table>

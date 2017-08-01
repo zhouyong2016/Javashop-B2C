@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+
+	<action>
+		<command>truncate</command>
+		<table>brand</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>goods_cat</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>goods_type</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>type_brand</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>goods</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>product</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>product_store</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>tags</table>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>tags</table>
+		<fields>tag_id,tag_name,rel_count</fields>
+		<values>1,'热卖排行',0</values>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>tag_rel</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>goods_depot</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>goods_spec</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>store_log</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>member</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>member_address</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>order</table>
+	</action>
+
+	<action>
+		<command>truncate</command>
+		<table>order_items</table>
+	</action>
+	<action>
+		<command>truncate</command>
+		<table>order_log</table>
+	</action>
+
+	<action>
+		<command>truncate</command>
+		<table>order_meta</table>
+	</action>
+	
+	<action>
+		<command>truncate</command>
+		<table>site_menu</table>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>site_menu</table>
+		<fields>menuid,parentid,name,url,target,sort</fields>
+		<values>1,0,'商城首页','index.html','',1</values>
+	</action>
+
+</dbsolution>

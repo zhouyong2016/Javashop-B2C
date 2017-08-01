@@ -1,0 +1,23 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editDepotForm" method="post" class="validate" >
+		<input type="hidden" name="id" value="${room.id }"/>
+			<table>
+				<tr>
+					<td>仓库名称</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="name" maxlength="13" dataType="string" data-options="required:true" isrequired="true" value="${room.name }"/>
+					</td>
+				</tr>
+				<tr>
+					<td>是否为默认仓库</td>
+					<td>
+						<input class="easyui-validatebox" type="checkbox" id="is_default"  data-options="required:false" <#if room.choose==1>checked </#if> />
+						<input type="hidden" id="choose" value="choose" name="choose" /> </td>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+	
+

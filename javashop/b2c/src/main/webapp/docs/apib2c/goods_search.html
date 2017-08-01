@@ -1,0 +1,67 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>search 搜索商品API</h3>
+		<p>搜索商品</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/goods/search.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">示例值</span><span class="w300">备注</span></h4>
+			<p><span class="w100 important">catid</span><span class="w100 important">int</span><span class="w100 important">1</span><span class="w300">分类id,如果不输入，则搜索全部的分类下的商品</span></p>
+			<p><span class="w100 important">brandid</span><span class="w100 important">int</span><span class="w100 important">1</span><span class="w300">品牌id，如果不输入，是搜索全部的品牌下的商品</span></p>
+			<p><span class="w100 important">keyword</span><span class="w100 important">String</span><span class="w100 important">4</span><span class="w300">搜索关键字，会搜索商品名称和商品编号</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果:</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w300">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w300 r-intro">如果等于“0”搜索错误，如果等于“1”那么表示搜索成功</span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w300 r-intro">返回数据Map</span></p>
+		</div>
+			<h3>返回示例：</h3>
+			<h5>
+				{
+    "result": 1,
+    "data": [
+        {
+            "adjuncts": "",
+            "big": "http://static.v4.javamall.com.cn/attachment/goods/201202221444355358_big.jpg",
+            "brand_id": 1,
+            "brief": "",
+            "buy_count": 0,
+            "cat_id": 6,
+            "commission": 0,
+            "create_time": 1329893200,
+            "disabled": 0,
+            "goods_id": 9,
+            "goods_type": "0",
+            "intro": "<p>\n\t<font color=\"#800000\" face=\"黑体\" size=\"4\"><strong><font color=\"#000000\" face=\"Arial\" size=\"3\" style=\"background-color: #c0c0c0\">&nbsp;</font>商品介绍</strong></font>&nbsp; <font color=\"#c0c0c0\" size=\"4\">product</font><br />\n\t<font color=\"#000000\" face=\"宋体\" size=\"2\">与日本小林制果技术合作，原料经过先进的计算机筛选设备严选，颗颗饱满香脆。<br />\n\t工厂通过HACCP，ISO9000认证；生产全过程经过严密管控！<br />\n\t不含防腐剂、蓬松剂，营养又健康！</font></p>\n<p>\n\t<font color=\"#800000\" face=\"黑体\" size=\"4\"><strong><font color=\"#000000\" face=\"Arial\" size=\"3\" style=\"background-color: #c0c0c0\">&nbsp;</font>品牌介绍</strong></font>&nbsp; <font color=\"#c0c0c0\" size=\"4\">Brand</font><br />\n\t<font color=\"#000000\" face=\"宋体\" size=\"2\">旺旺公司之业务可追溯至台湾宜兰食品工业股份有限公司，旺旺公司于 1992年正式投资大陆市场。旺旺秉持着&ldquo;缘、自信、大团结&rdquo;的经营理念，立志成为&ldquo;综合消费食品王国&rdquo;，向着&ldquo;中国第一，世界第一&rdquo;的目标不断前进。 　　旺旺自投资大陆市场以来，足迹遍布中国大陆、台湾、香港、新加坡、日本。如今的旺旺已经发展成为一个业务多元化的综合性企业，除了经营食品行业外，旺 旺还涉足医疗服务、餐饮连锁、农业、酒店、房地产等领域。</font></p>\n<p>\n\t<font color=\"#000000\" face=\"宋体\" size=\"2\"><strong>温馨提示:</strong></font></p>\n<p>\n\t<font color=\"#000000\" face=\"宋体\" size=\"2\">由于部分商品包装更换较为频繁，因此您收到的货物有可能与图片不完全一致，请您以收到的商品实物为准，同时我们会尽量做到及时更新，由此给您带来不便请多多谅解，谢谢！</font></p>\n",
+            "last_modify": 1329893200,
+            "market_enable": 1,
+            "meta_description": "旺旺 挑豆随手包海苔花生45g/袋",
+            "meta_keywords": "旺旺 挑豆随手包海苔花生45g/袋",
+            "mktprice": 3,
+            "name": "旺旺挑豆随手包海苔花生45g/袋",
+            "original": "http://static.v4.javamall.com.cn/attachment/goods/201202221444355358.jpg",
+            "page_title": "旺旺 挑豆随手包海苔花生45g/袋",
+            "params": "[{\"name\":\"规格参数\",\"paramList\":[{\"name\":\"规格\",\"value\":\"45g/袋\",\"valueList\":[]},{\"name\":\"重量\",\"value\":\"45g\",\"valueList\":[]},{\"name\":\"产品标准号\",\"value\":\"\",\"valueList\":[]},{\"name\":\"生产日期\",\"value\":\"\",\"valueList\":[]},{\"name\":\"保质期\",\"value\":\"270天\",\"valueList\":[]},{\"name\":\"储存方法\",\"value\":\"\\t存放于阴凉干爽处，避免阳光直射\",\"valueList\":[]},{\"name\":\"配料\",\"value\":\"花生、食用盐、海苔等\",\"valueList\":[]},{\"name\":\"产地\",\"value\":\"湖南长沙\",\"valueList\":[]},{\"name\":\"厂家\",\"value\":\"\",\"valueList\":[]}],\"paramNum\":9}]",
+            "point": 0,
+            "price": 2.7,
+            "small": "http://static.v4.javamall.com.cn/attachment/goods/201202221444355358_small.jpg",
+            "sn": "0000567840",
+            "sord": 0,
+            "specs": "[{\"cost\":2.3,\"goodsLvPrices\":[],\"goods_id\":9,\"name\":\"旺旺挑豆随手包海苔花生45g/袋\",\"price\":2.7,\"product_id\":9,\"sn\":\"0000567840\",\"specList\":[],\"specs\":\"\",\"specsvIdJson\":\"[]\",\"store\":0,\"weight\":45}]",
+            "store": 0,
+            "thumbnail": "http://static.v4.javamall.com.cn/attachment/goods/201202221444355358_thumbnail.jpg",
+            "type_id": 1,
+            "unit": "",
+            "view_count": 0,
+            "weight": 45
+        }
+    ]
+}
+			</h5>
+	</div>
+</div>

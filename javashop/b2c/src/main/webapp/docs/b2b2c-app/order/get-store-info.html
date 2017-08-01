@@ -1,0 +1,123 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>通过session获取购物车所有商品、商品所对应的商家、商家的配送方式等信息</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/order/store-cart-goods.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/order/store-cart-goods.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "message": null,
+    "data": {
+        "store_list": [
+            {
+                "storeprice": {
+                    "goodsPrice": 58,
+                    "orderPrice": 58,
+                    "shippingPrice": 0,
+                    "needPayMoney": 58,
+                    "discountPrice": 0,
+                    "weight": 300,
+                    "point": 0,
+                    "discountItem": {},
+                    "actDiscount": 0,
+                    "gift_id": 0,
+                    "bonus_id": 0,
+                    "is_free_ship": 0,
+                    "act_free_ship": 0,
+                    "exchange_point": null,
+                    "activity_point": null
+                },
+                "store_id": 17,
+                "shiptypeid": 0,
+                "goodslist": [
+                    {
+                        "id": 1,
+                        "product_id": 407,
+                        "goods_id": 401,
+                        "name": "菲诗小铺（THE FACE SHOP）金盏花舒缓补水系列",
+                        "mktprice": 58,
+                        "price": 58,
+                        "coupPrice": 58,
+                        "subtotal": 58,
+                        "num": 1,
+                        "limitnum": null,
+                        "image_default": "http://static.b2b2cv2.javamall.com.cn/attachment//store/17/goods/2016/5/30/10//02365691_thumbnail.jpg",
+                        "point": 0,
+                        "itemtype": 0,
+                        "sn": "201605300001",
+                        "addon": null,
+                        "specs": null,
+                        "catid": 45,
+                        "others": {},
+                        "exchange": null,
+                        "unit": null,
+                        "goods_type": 0,
+                        "pmtList": null,
+                        "weight": 300,
+                        "activity_id": null,
+                        "is_check": null,
+                        "store_id": 17,
+                        "store_name": "化妆品店铺",
+                        "goods_transfee_charge": 1
+                    }
+                ],
+                "store_name": "化妆品店铺",
+                "shiplist": [
+                    {
+                        "name": "免运费",
+                        "shipPrice": 0,
+                        "type_id": 0
+                    }
+                ]
+            }
+        ],
+        "order_price": {
+            "goodsPrice": 58,
+            "orderPrice": 58,
+            "shippingPrice": 0,
+            "needPayMoney": 58,
+            "discountPrice": 0,
+            "weight": 300,
+            "point": 0,
+            "discountItem": {},
+            "actDiscount": 0,
+            "gift_id": 0,
+            "bonus_id": 0,
+            "is_free_ship": 0,
+            "act_free_ship": 0,
+            "exchange_point": null,
+            "activity_point": null
+        }
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

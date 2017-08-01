@@ -1,0 +1,117 @@
+<!-- 获取商品评论标签 -->
+<#assign commentListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentPage = commentListTag("{'goods_id':${goods_id},'type':1}")>
+<div id="discuss_list_wrapper">
+<!-- 暂时不使用评分制度了，按好评中评差评使用 
+	<div class="grade">
+		<div>
+			<h4>商品综合得分</h4>	
+			<span>
+				<#assign commentGradeStatisticsTag = newTag("commentGradeStatisticsTag")>
+				<#assign gradeMap = commentGradeStatisticsTag("{'goods_id':${goods_id}}")>
+				<#assign grade_1= gradeMap.grade_1!0 >
+				<#assign grade_2= gradeMap.grade_2!0 >
+				<#assign grade_3= gradeMap.grade_3!0 >
+				<#assign grade_4= gradeMap.grade_4!0 >
+				<#assign grade_5= gradeMap.grade_5!0 >
+				<#assign grade_count =grade_1+grade_2+grade_3+grade_4+grade_5 />
+				<#if grade_count!=0 >
+					<#assign grade_sum = 1*grade_1+2*grade_2+3*grade_3+4*grade_4+5*grade_5 />
+			 		<#assign grade = grade_sum/grade_count />
+				</#if>
+				<#if grade??&&grade gt 0 && grade lt 6>
+			   		<#list 1..grade as t>
+			   			<i></i>
+			   		</#list>
+			   		<#if 5-grade gt 0>
+			   		<#list 1..5-grade as t>
+			   			<i class="star_off"></i>
+			   		</#list>
+			   		</#if>
+			   		<b>${grade}</b>
+			   	<#else>
+			      <i></i><i></i><i></i><i></i><i></i>
+			      <b >5</b>
+			    </#if>   
+			</span>
+			<div class="btn_wrapper btn">
+				<a href="#discussForm" class="blue_btn">我要评论</a>
+			</div>
+		</div>	
+	</div>
+	-->
+	<div class="grade_list">
+	<#if commentPage.totalCount != 0 >
+		<ul>
+			<#list commentPage.result as comment>  
+				<li <#if !comment_has_next >class="last"</#if>>
+					<div class="problem_pic">
+	        			<#if comment.member_id != 0 && comment.face?exists>
+	        				<#if comment.sex == 0 && comment.face == "">
+	        					<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+	       					<#elseif comment.sex == 1  && comment.face == "">
+	       						<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+		        			<#else>
+		        				<@image src="${comment.face}" width="65"/>
+		        			</#if>
+	       				<#else>
+	       					<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+	       				</#if>
+						<span class="name"> 
+						     <#if comment.member_id != 0>
+				            	${comment.uname!''}
+				            <#else>
+				            	匿名
+				            </#if>
+				         </span>
+	  					<#if comment.levelname?exists>
+	         				<h2>
+	         					<#if comment.levelname?exists>
+									<span class="lv">
+	          							${comment.levelname!''}
+	            					</span>
+	        					</#if>
+	        				</h2>
+	           			</#if>
+					</div>
+					<div class="problem_right">
+						<div class="problem_time">
+							<p>我的评分：
+							<#if comment.grade=3>
+								好评
+							<#elseif comment.grade=2>
+								中评
+							<#else>
+								差评	
+							</#if>
+							</p>
+							<span><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+						</div>
+						<p>${comment.content!''}</p>
+						<#if comment.img?exists && comment.img != ''>
+			                        <div class="suolue"> <@image src="${comment.img}"  width="150"/></div>
+			            </#if>
+						 <#if comment.replystatus==1>
+						<div class="problem_answer">
+							<div class="pa_top"></div>
+							<div class="ps_bottom">
+								<h3>${site.sitename}客服：</h3>
+								<p>${comment.reply}</p>
+							</div>
+						</div>
+						</#if>
+						<div class="clear"></div>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	<#else>
+		 暂无评论，抢沙发，赢取更多积分。 
+	</#if>
+	</div>
+	<div class="page">
+		<@ajaxpager pageno="${page!'1'}" pagesize="${commentPage.pageSize}" totalcount="${commentPage.totalCount}" />
+	</div>	
+	<div class="clear"></div>
+</div>

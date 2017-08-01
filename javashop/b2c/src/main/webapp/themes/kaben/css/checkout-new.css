@@ -1,0 +1,835 @@
+/* 是头发的特技 是特技的头发 duang duang duang...
+ ============================================================================ */
+.li-ckt-info,
+.address-li-ckt-info,
+.center-ckt-info /*,
+.ul-ckt-pay*/,
+.detail-item-discount,
+.content-item-coupon,
+.bill_btn {
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
+
+/* 无耻老贼 住口！
+ ============================================================================ */
+.aliases-li-ckt-info,
+.li-ckt-pay,
+.more-collapse-ckt,
+.ckt-checkbox,
+.item-discount-inventory {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 一些公共样式
+ ============================================================================ */
+.ckt-checkbox {
+    position: relative;
+    display: block;
+    height: 28px;
+    line-height: 28px;
+    background-color: #ffffff;
+    font-size: 12px;
+    color: #333;
+    border: 1px solid #dddddd;
+    text-align: center;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.ckt-checkbox:hover,
+.ckt-checkbox.selected {
+    height: 26px;
+    line-height: 26px;
+    border: 2px solid #ff3500;
+}
+.ckt-checkbox.selected {
+    background: url("../../../statics/e_tools/images/icon-ckt-selected.png") no-repeat bottom right;
+    background-size: 20px 20px;
+}
+
+/*
+ ============================================================================ */
+.ckt-control i {
+    font-style: normal;
+}
+
+.ckt-control .clearfix {
+    clear: both;
+}
+
+.ckt-control .placeholder-20 {
+    clear: both;
+    height: 20px;
+}
+
+.ckt-control {
+    width: 998px;
+    margin: 0 auto;
+    color: #666666;
+    font-size: 12px;
+}
+
+.ckt-title {
+    float: left;
+    line-height: 42px;
+    font-size: 16px;
+    font-family: "Microsoft YaHei";
+}
+
+.ckt-content {
+    border: 1px solid #f0f0f0;
+    padding: 0 20px;
+    clear: both;
+    background-color: #ffffff;
+}
+
+/* 模块样式
+ ============================================================================ */
+.ckt-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.top-ckt {
+    clear: both;
+    line-height: 40px;
+}
+
+.title-top {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.other-top {
+    float: right;
+    height: 40px;
+    line-height: 40px;
+}
+
+.other-top a {
+    color: #005ea7;
+}
+
+.other-top a:hover {
+    color: #ff6700;
+}
+
+/* 收货人信息
+ ============================================================================ */
+.center-ckt-info {
+    height: 42px;
+    margin: 10px 20px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.li-ckt-info {
+    position: relative;
+    height: 30px;
+    margin: 6px 0;
+    font-size: 12px;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.li-ckt-info:hover {
+    background-color: #fff3f3;
+}
+
+.name-li-ckt-info,
+.address-li-ckt-info,
+.mobile-li-ckt-info,
+.operate-li-ckt-info {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.name-li-ckt-info {
+    margin-left: 150px;
+    width: 55px;
+    text-align: center;
+}
+
+.ckt-checkbox.info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 148px;
+}
+
+.ckt-checkbox.info:hover,
+.ckt-checkbox.info.selected {
+    width: 146px;
+}
+
+.address-li-ckt-info {
+    width: 490px;
+}
+
+.address-li-ckt-info.min {
+    width: 330px;
+}
+
+.mobile-li-ckt-info {
+    width: 80px;
+    text-align: center;
+}
+
+.default-li-ckt-info {
+    float: left;
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 4px;
+    margin-left: 10px;
+    background-color: #7b7b7b;
+    color: #ffffff;
+    text-align: center;
+}
+
+.set-default-li-ckt-info {
+    margin-left: 10px;
+    color: #005ea7;
+    line-height: 28px;
+}
+
+.operate-li-ckt-info {
+    display: none;
+    float: left;
+    margin-left: 10px;
+}
+
+.operate-li-ckt-info.show {
+    display: block;
+}
+
+.operate-li-ckt-info a {
+    margin-right: 5px;
+    color: #005ea7;
+}
+
+.collapse-ckt-info {
+    display: none;
+    width: 70px;
+    height: 30px;
+    margin-left: 20px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.collapse-ckt-info.show {
+    display: block;
+}
+
+.icon-collapse-ckt-info {
+    display: inline-block;
+    vertical-align: middle;
+    height: 10px;
+    line-height: 10px;
+    width: 9px;
+    margin-left: 5px;
+    background: url('../../../statics/e_tools/images/icon-ckt-addr.png') no-repeat 0 0;
+}
+
+.icon-collapse-ckt-info.more {
+    background: url('../../../statics/e_tools/images/icon-ckt-addr.png') no-repeat 0 -10px;
+}
+
+/* 支付方式
+ ============================================================================ */
+.content-ckt-pay {
+    margin: 10px 20px;
+}
+
+.ul-ckt-pay {
+    float: left;
+}
+
+.ul-ckt-pay.min {
+    width: 550px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.ckt-checkbox.pay {
+    float: left;
+    width: 98px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.ckt-checkbox.pay.selected,
+.ckt-checkbox.pay:hover {
+    width: 96px;
+}
+
+.collapse-ckt-pay {
+    display: none;
+    float: left;
+    width: 70px;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: 20px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.collapse-ckt-pay.more {
+    width: 45px;
+    margin-left: 0;
+}
+
+.icon-collapse-ckt-pay {
+    display: inline-block;
+    vertical-align: middle;
+    height: 10px;
+    line-height: 10px;
+    width: 9px;
+    margin-left: 5px;
+    background: url('../../../statics/e_tools/images/icon-ckt-pay.png') no-repeat 0 0;
+}
+
+.icon-collapse-ckt-pay.more {
+    background: url('../../../statics/e_tools/images/icon-ckt-pay.png') no-repeat -10px 0;
+}
+
+.icon-collapse-ckt-pay.coll {
+    background: url('../../../statics/e_tools/images/icon-ckt-addr.png') no-repeat 0 -10px;;
+}
+
+/* 配送清单
+ ============================================================================ */
+.item-ckt.inventory {
+    margin-top: 10px;
+}
+
+.item-ckt.inventory table {
+
+}
+
+.ckt-item.inventory table th,
+.ckt-item.inventory table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.ckt-item.inventory table th {
+    border-bottom: none;
+}
+
+.ckt-item.inventory table td {
+    border-style: dashed;
+}
+
+.ckt-item.inventory .thead-img-inventory {
+    width: 100px;
+}
+
+.ckt-item.inventory .tbody-name-inventory {
+    text-align: left;
+}
+
+.money-td-inventory {
+    color: red;
+}
+
+.bottom-ckt-inventory {
+    margin-top: 15px;
+    clear: both;
+}
+
+.bottom-ckt-inventory input {
+    width: 250px;
+    height: 15px;
+    padding: 5px 10px;
+    margin-right: 20px;
+    display: inline-block;
+}
+
+.ckt-item.invoice {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: none;
+}
+
+.content-ckt.invoice > div {
+    float: left;
+    margin-left: 20px;
+}
+
+.content-ckt.invoice .edit-invoice {
+    margin-left: 25px;
+    color: #005ea7;
+}
+
+.ckt-checkbox.time {
+    width: 125px;
+    margin-left: 10px;
+    float: left;
+}
+
+.ckt-checkbox.time:hover,
+.ckt-checkbox.time.selected {
+    width: 123px;
+}
+
+.invoice-dialog {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.invoice-content {
+    clear: both;
+}
+
+.ckt-checkbox.head-invoice {
+    width: 295px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.ckt-checkbox.head-invoice.selected {
+    width: 293px;
+    padding-left: 10px;
+}
+
+.ckt-checkbox.head-invoice:hover {
+    border: 1px solid #dddddd;
+    width: 295px;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.ckt-checkbox.head-invoice.selected:hover {
+    width: 293px;
+    border: 2px solid #ff3500;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 10px;
+}
+
+.title-invoice-head,
+.items-invoice-head {
+    float: left;
+}
+
+.title-invoice-head {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.items-invoice-head {
+    margin-left: 20px;
+}
+
+.company-invoice-input {
+    display: none;
+    padding-left: 10px;
+    width: 230px;
+    border: none;
+    outline: none;
+}
+
+.company-invoice-input:focus {
+    border: none;
+    outline: none;
+}
+
+.company-invoice-input.shows {
+    display: inline-block;
+}
+
+.ckt-checkbox.content-invoice {
+    float: left;
+    width: 70px;
+    margin-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.ckt-checkbox.content-invoice:hover,
+.ckt-checkbox.content-invoice.selected {
+    width: 68px;
+}
+
+/* 订单附言
+ ============================================================================ */
+.mark-input {
+    display: inline-block;
+    margin-left: 10px;
+    width: 375px;
+    height: 15px;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.tip-mark-input {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/* 优惠劵、余额
+ ============================================================================ */
+.ckt-item.coupon {
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.content-ckt.coupon {
+    min-height: 100px;
+    border: 1px solid #f2f2f2;
+}
+
+.title-items-coupon {
+    height: 35px;
+    background-color: #f2f2f2;
+}
+
+.title-item-coupon {
+    float: left;
+    text-align: center;
+    line-height: 35px;
+    width: 100px;
+    height: 35px;
+    color: #333333;
+    cursor: pointer;
+}
+
+.title-item-coupon.active {
+    background-color: #ffffff;
+    color: #ff3500;
+    font-weight: bold;
+}
+
+.content-items-couopn {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.content-item-coupon {
+    position: relative;
+    float: left;
+    margin-right: 30px;
+    margin-top: 30px;
+    width: 201px;
+    height: 100px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+}
+
+.content-item-coupon.unavailable {
+    cursor: not-allowed;
+}
+
+.content-item-coupon.usable.selected,
+.content-item-coupon.usable:hover {
+    box-shadow: 0 10px 10px rgba(0,0,0,.2);
+}
+
+.curtain-coupon {
+    position: absolute;
+    top: -6px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    overflow: hidden;
+}
+
+.dot-item-conpon {
+    width: 150%;
+    height: 10px;
+    margin-left: -6px;
+    overflow: hidden;
+}
+
+.dot-item-conpon i {
+    float: left;
+    margin-right: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background-color: #ffffff;
+}
+
+.content-item-coupon.usable .price-coupon {
+    text-align: center;
+    line-height: 60px;
+    height: 45px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: rgba(255, 51, 0, 0.8);
+}
+
+.content-item-coupon.unavailable .price-coupon {
+    background-color: #dddddd;
+}
+
+.detail-coupon {
+    height: 53px;
+    border: 2px solid rgba(242, 242, 242, 0);
+    overflow: hidden;
+}
+
+.detail-coupon.selected {
+    border: 2px solid rgba(255, 51, 0, 0.8);
+    background: url("../../../statics/e_tools/images/icon-ckt-selected.png") no-repeat bottom right;
+    background-size: 20px 20px;
+}
+
+
+.detail-coupon p {
+    margin-top: 5px;
+    padding-left: 10px;
+    color: #666666;
+    font-size: 12px;
+}
+
+.no-coupon {
+    text-align: center;
+}
+/* 新增地址样式
+ ============================================================================ */
+
+.dd-aliases span {
+    float: left;
+}
+
+.example-aliases {
+    float: left;
+    display: block;
+    width: 35px;
+    height: 20px;
+    margin-right: 5px;
+    line-height: 20px;
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+}
+
+.example-aliases:hover {
+    color: rgba(255, 51, 0, 0.8);
+    border: 1px solid rgba(255, 51, 0, 0.8);
+}
+
+/* 总结
+ ============================================================================ */
+
+.ckt-total {
+    min-height: 300px;
+}
+
+.details-ckt-total {
+    float: right;
+    padding: 0 20px;
+}
+
+.details-ckt-total li {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.title-details-ckt-total {
+    width: 200px;
+    float: left;
+    margin-right: 80px;
+    text-align: right;
+}
+
+.price-details-ckt-total {
+    float: right;
+    color: #333333;
+}
+
+.clear-details-ckt-total {
+    clear: both;
+}
+
+.amounts-payable-ckt {
+    float: right;
+    padding: 0 20px;
+}
+
+.summary-ckt-total {
+    padding-top: 10px;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    clear: both;
+}
+
+.title-details-ckt-total.amounts {
+    margin-right: 0;
+}
+
+.price-details-ckt-total.amounts {
+    color: #ff3500;
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.address-info-ckt {
+    clear: both;
+    float: right;
+    padding: 10px 20px;
+    color: #999999;
+}
+
+.ckt-total .bill_btn {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    width: 130px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #27a9e3;
+    float: right;
+    margin: 20px 0;
+    border-radius: 2px;
+}
+
+.ckt-total .bill_btn:hover {
+    background-color: #26b5ec;
+}
+
+/* 收货人信息dialog页面样式
+ ============================================================================ */
+.c_address dl {
+    clear: both;
+    font-size: 0;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.c_address dt {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: normal;
+    margin: 0;
+    padding: 10px 1% 10px 0;
+    text-align: right;
+    vertical-align: top;
+    width: 20%;
+    word-spacing: normal;
+}
+
+.c_address dt em {
+    color: #f30;
+    font: 12px/16px Tahoma;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.c_address dd {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: normal;
+    padding: 10px 0;
+    vertical-align: top;
+    width: 79%;
+    word-spacing: normal;
+    text-align: left;
+}
+
+.c_address dd input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: inline-block;
+    font: 12px/20px Tahoma;
+    height: 20px;
+    outline: 0 none;
+    padding: 2px 4px;
+    vertical-align: middle;
+    float: left;
+    margin-right: 10px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.c_address dd p {
+    float: left;
+    display: inline;
+    height: 20px;
+    line-height: 20px;
+}
+
+.c_address .def {
+    display: block;
+    line-height: 20px;
+    margin-top: -1px;
+    min-height: 20px;
+    padding: 5px 0 6px;
+}
+
+.c_address .def input {
+    margin: 0 5px;
+    float: left;
+    display: inline;
+    height: 20px;
+    line-height: 20px;
+}
+
+.c_address .def p {
+    float: left;
+    display: inline;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.c_address dl dd span select {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #777;
+    padding: 4px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>设置地址成为默认收货地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/address/isdefaddr.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">addr_id</span><span class="w100">收货地址id</span><span class="w380">此api需要会员登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/address/isdefaddr.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {addr_id : 2},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("设置失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+		{"result":1,"message":"设置为默认地址成功！","data":null}
+			</h5>
+		</span>	
+	</div>
+
+</div>

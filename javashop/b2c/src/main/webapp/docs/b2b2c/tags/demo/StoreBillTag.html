@@ -1,0 +1,10 @@
+
+<!--创建"结算单详细"标签-->
+<#assign storeBillTag= newTag("storeBillTag") >  
+<!--调用"结算单详细"标签，并传递参数-->            
+<#assign  bill= storeBillTag("'id':'1'") >						
+
+	账单id：${bill.bill_id}</br>
+	账单名称：${bill.name}</br>
+	账单总金额：${bill.price}</br>
+	

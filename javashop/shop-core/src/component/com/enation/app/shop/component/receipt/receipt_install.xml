@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>create</command>
+		<table>receipt</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>order_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>title</name><type>varchar</type><size>255</size><option>00</option><default>''</default></field>
+		<field><name>add_time</name><type>long</type><size>11</size><option>00</option></field>
+		<field><name>content</name><type>varchar</type><size>255</size><option>00</option><default>''</default></field>
+		<field><name>status</name><type>int</type><size>8</size><option>00</option><default>0</default></field>
+	</action>
+</dbsolution>

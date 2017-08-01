@@ -1,0 +1,78 @@
+<#include 'member_header.html'/>
+<script src="${ctx}${themes_path}/js/Order.js"></script>
+
+
+<!-- 获取会员评论标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员评论标签-->
+<#assign memberCommentList = memberCommentListTag()>
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 获取关键字“member”会员MAP集合 -->
+<#assign mp = memberPoint.member>
+
+<div class="mmember_index">
+	<div class="member_face" style="width: 154px; height: 154px; border-radius: 100%;">
+		<#if member.face?exists && member.face != ''> 
+		<img src="<@imgurl pic='${member.face}'/>" style="width:150px;height:150px;" />
+		<#else> 
+			<@image src="${ctx}${themes_path}/images/photo.jpg" style="width:150px;height:150px;" /> 
+		</#if>
+	</div>
+	<div class="member_intro">
+			<p><label>账号：<span>${member.uname!''}</span></label><label class="flot_right" style="margin-top:1px;">会员等级：${member.lvname!''}</label></p>
+			<p><label>编号：<i>${90000000+member.member_id}</i></label><label class="flot_right">联系手机：${member.mobile!''}</label></p>
+			<p><label style="margin-top:-3px;">邮箱：${member.email!''}</label><label class="flot_right" style="margin-top:-3px;">消费积分：${member.mp!''}</label></p>
+	</div>
+	<a class="uploadIco" href="info.html">修改资料</a>
+</div>
+<!-- 指数 -->
+
+<div class="member_parameter ">
+	<ul>
+		<!-- 会员订单数量标签 -->
+		<#assign orderNumberTag = newTag("orderNumberTag")>
+		<#assign orderNumberPay = orderNumberTag()!''>
+		<li>
+			<@image src="${ctx}${themes_path}/images/m1.png" /> 
+				<h3>待支付的订单：<span>${orderNumberPay["0"]!'0'}</span></h3>
+				<a href="order.html?status=0">查看待支付订单></a>
+		</li>
+		
+		<li>
+			<@image src="${ctx}${themes_path}/images/m2.png" /> 
+				<h3>已发货的订单：<span>${orderNumberPay["3"]!'0'}</span></h3>
+				<a href="order.html?status=3">查看已发货订单></a>
+		</li>
+		
+		<li>
+			<@image src="${ctx}${themes_path}/images/m3.png" /> 
+				<h3>已评价商品数：<span>${memberCommentList.totalCount}</span></h3>
+				<a href="${ctx}/member/comments.html">查看我的评论></a>
+		</li>
+		
+		<li>
+			<@image src="${ctx}${themes_path}/images/m4.png" /> 
+				<h3>喜欢的商品数：<span>${collect.totalCount}</span></h3>
+				<a href="${ctx}/member/favorite.html">查看我的收藏></a>
+		</li>
+	</ul>
+</div>	
+
+
+</div>
+</div>
+</div>
+</div>
+
+<#include '../common/footer.html'/>

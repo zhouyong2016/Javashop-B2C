@@ -1,0 +1,69 @@
+<#-- 创建"会员地址列表"标签 -->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<#-- 调用"会员地址列表"标签 -->
+<#assign consigneeList= consigneeListTag()>
+
+<#-- 初始化时候显示4个，展开的时候显示全部【10个】 -->
+<#list consigneeList as address>
+	<label class="checkout_addresslist <#if address.def_addr?exists&& address.def_addr==1>current</#if> <#if address_index gt 2>more_address</#if> " <#if address_index gt 2>style="display:none;"</#if>>
+		<input type="radio" autocomplete="off" class="def_addr"  style="display:none;" <#if address.def_addr?exists&& address.def_addr==1> checked=true </#if> 
+		value="${address.addr_id}" 
+		province_id="${address.province_id?c}" 
+		city_id="${address.city_id?c}" 
+		region_id="${address.region_id?c}" 
+		name="addressId" 
+		shipAddr="${address.addr!''}" 
+		shipName="${address.name!''}"  
+		shipMobile="${address.mobile!''}"  
+		shipTel="${address.tel!''}" 
+		shipZip="${address.zip!''}" 
+		province="${address.province}"   
+		city="${address.city}" 
+		region="${address.region}"/>
+		
+		<strong style="color: red;"><#if address.def_addr?exists&& address.def_addr==1> 默认地址<#else><a href="javascript:void(0);"   class="go_member" rel="${address.addr_id}">修改地址</a></#if></strong> 
+		
+		
+		<h3><@substring title="${address.name!''}" length="14" dot="..." /></h3>
+		<p>${address.province}-${address.city}-${address.region}</p>
+		<p title="${address.addr!''}"><@substring title="${address.addr!''}" length=52 dot="..." /></p>
+		<p>${address.mobile!''} / ${address.tel!''}</p>
+		<p>${address.zip!''}</p>
+		<#if address.def_addr?exists&& address.def_addr==1>
+			<span class="checkout_yes"></span>
+			<input type="hidden" class="is_default" rel="${address.addr_id}">
+		<#else>
+			<span class=""></span>
+			<input type="hidden" class="is_default" rel="">
+		</#if>
+		
+	</label>
+	
+</#list>
+<script type="text/javascript">
+    $(function () {
+        checkOutAddress.addressChange();
+        checkOutAddress.listaddress();
+        $(".go_member").click(function () {
+            var addressID = $(this).attr("rel");
+            $("#add_the_address ").empty();
+            $("#add_the_address").append("<div id='address_div'></div>");
+            var html   = $("#address_div").load("${ctx}/checkout/checkout_edit_address.html?addressid=" + addressID);
+            var dialog = $.dialog({
+                title  : "修改收货人地址",
+                width  : 700,
+                top    : 100,
+                content: html,
+                lock   : true,
+                init   : function () {
+                }
+            });
+            //dialog.content("url:checkout/new_address.html");
+        })
+    })
+</script>
+
+
+
+
+

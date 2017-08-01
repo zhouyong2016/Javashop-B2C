@@ -1,0 +1,147 @@
+<#include 'member_header.html' />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'id':${id!'0'},'order_id':${order_id!'0'} }" )>
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':'${sellBack.id}' }")>
+<#assign goodsList = sellBackGoodsList.goodsList> 
+<div class="return-intro">
+	<h1>退货详细</h1>
+	<div class="return-detail-box">
+		<h2>
+			<span>订单编号：${sellBack.ordersn}<em>|</em></span>
+			<span class="return-detail-sn">申请时间：<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+			<i>
+				<#if sellBack.type==1>
+					<#if sellBack.tradestatus  == 0>
+				    	申请退款
+					<#elseif sellBack.tradestatus  == 1>
+						审核通过
+					<#elseif sellBack.tradestatus  == 2>
+						审核拒绝
+					<#elseif sellBack.tradestatus  == 6>
+						已退款
+					</#if>
+				<#elseif sellBack.type==2>
+					<#if sellBack.tradestatus  == 0>
+				    	申请退货
+					<#elseif sellBack.tradestatus  == 1>
+						审核通过
+					<#elseif sellBack.tradestatus  == 2>
+						已拒绝
+					<#elseif sellBack.tradestatus  == 3>
+						已完成
+					<#elseif sellBack.tradestatus  == 4>
+						已入库
+					<#elseif sellBack.tradestatus  == 5>
+						部分入库
+					<#elseif sellBack.tradestatus  == 6>
+						已退款
+					</#if>
+				</#if>
+			</i>
+		</h2>
+		<h2>
+			<span>退款方式:${sellBack.refund_way}<em>|</em></span>
+			<span>退款账号:${sellBack.return_account!''}<em>|</em></span>
+			<span>申请退款金额:${sellBack.apply_alltotal}<em>|</em></span>
+		</h2>
+		<h2>
+			<span>
+				<#if sellBack.type==1>
+					退款原因
+				<#elseif sellBack.type==2>
+					退货原因
+				</#if>
+				：${sellBack.reason}<em>|</em>
+			</span>
+			<#if sellBack.alltotal_pay??>
+				<span >
+					<#if sellBack.type==1>
+						退款金额
+					<#elseif sellBack.type==2>
+						退货金额
+					</#if>
+				：${sellBack.alltotal_pay!''}
+				<em>|</em>
+				</span>
+				
+			</#if>
+			
+			<span >
+				收货状态：
+				<#if sellBack.ship_status == '0'>
+					未收货
+				<#elseif sellBack.ship_status == '1'>
+					已收货
+				</#if>
+			</span>
+		</h2>
+		<div class="return-detail-list">
+			<#if (goodsList?size>0)>
+				<table>
+					<tr>
+						<th class="return-detail-title">退货商品</th>
+						<th>购买单价</th>
+						<th>购买数量</th>
+						<th>退货数量</th>
+					</tr>
+					<#list goodsList as data>
+						<tr>
+							<td class="return-detail-intro">
+								<a target="_blank" href="../goods-${data.goods_id}.html"> 
+									<img height="50" src="${data.goods_image!''}" style="cursor: pointer;" />
+								</a>
+								<p>
+									<a href="${ctx}/goods-${data.goods_id}.html">
+										${data.goods_name}
+										<#if data.spec??>
+									         (${data.spec!''}) 
+									    </#if>
+									</a>
+								</p>
+							</td>
+							<td>${data.price?string.currency}</td>
+							<td>${data.ship_num!0 }</td>
+							<td>${data.return_num!0}</td>	
+						</tr>
+					</#list>
+					<#if sellBack.gift_id?exists && sellBack.gift_id != 0>
+						<#--创建“订单赠品”标签-->
+						<#assign orderGiftDetailTag = newTag("orderGiftDetailTag")>
+						<#--调用“订单赠品”标签，并传递参数-->
+						<#assign gift = orderGiftDetailTag("{'order_id':${sellBack.orderid},'gift_id':${sellBack.gift_id}}")>
+						<tr>
+							<td class="return-detail-intro">
+								<img height="50" width="50" src="${gift.gift_img!''}"/>
+								<p>${gift.gift_name}<span style="color: red; ">（赠品）</span></p>
+							</td>
+							<td>${gift.gift_price?string.currency}</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+					</#if>
+				</table>
+			</#if>
+			<h3>申请理由：</h3>
+			<p class="return-derail-same">${sellBack.remark!''}</p>
+			<#if sellBack.seller_remark??>
+				<h3>客服回复：</h3>
+				<p class=" return-derail-same return-derail-reply">${sellBack.seller_remark!''}</p>
+			</#if>
+		</div>
+	</div>
+</div>
+
+
+	</div>
+	</div>
+	</div>
+	</div>
+	<script>
+	$(function(){
+		selectMenu(3);
+	})
+</script>
+<#include '../common/footer.html'/>

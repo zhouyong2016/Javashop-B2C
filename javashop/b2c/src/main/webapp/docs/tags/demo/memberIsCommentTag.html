@@ -1,0 +1,10 @@
+
+<!-- 获取会员是否可以评论标签 -->
+<#assign memberIsCommentTag = newTag("memberIsCommentTag")>
+<!-- 调用会员是否可以评论标签 -->
+<#assign memberIsComment = memberIsCommentTag("'goods_id':'1'")>
+是否登录:${memberIsComment.isLogin}
+是否购买了:${memberIsComment.isBuy}
+是否评论过:${memberIsComment.isCommented}
+	
+	      

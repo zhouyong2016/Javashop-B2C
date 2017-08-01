@@ -1,0 +1,268 @@
+<#assign  title="订单详细" />
+<#include 'member_header.html' />
+<!--创建“订单访问权限判断”标签-->
+<#assign orderAccessAuthTag = newTag("orderAccessAuthTag")>
+<#-- 调用“订单访问权限判断”标签，并传递参数-->
+<#assign auth = orderAccessAuthTag('{"order_sn":"${ordersn}"}')>
+<#-- 创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<#-- 调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<#-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<#-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>   
+<#-- 获取会员订单日志标签 -->
+<#assign orderDetailLogTag = newTag("orderDetailLogTag")>
+<#-- 调用订单日志标签 -->
+<#assign orderDetailLog = orderDetailLogTag("{'orderid':${orderDetail.order_id}}")>
+<#-- 获取会员订单详细快递信息 -->
+<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+<#-- 调用会员订单详细快递信息 -->
+<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+<#-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+<#assign orderSend = orderDelivery.deliveryList>
+<#-- 创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<#-- 调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+
+<#assign orderMetaTag = newTag("orderMetaTag")>
+
+<#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+<#-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<#-- 调用发票标签 -->
+<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+<#assign orderstatus="com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+<link rel="stylesheet" href="${ctx}${themes_path}/css/reveal.css" type="text/css" />
+<script src="${ctx}${themes_path}/js/Order.js" type="text/javascript"></script>
+<script src="${ctx}${themes_path}/js/jquery.reveal.js" type="text/javascript"></script>
+<div class="order-detail">
+	<h1>订单详细<span>这里显示您订单的详细信息</span></h1>
+	<div class="order-detail-title">
+		订单号：${orderDetail.sn}/
+			<em>
+				<#if orderDetail.is_cancel==0>
+					<@orderstatus status="${orderDetail.status}" type="order" />
+				<#else>
+					审核取消订单
+				</#if>
+				</em>
+		<div class="order-tools btn-div">
+			<#if orderDetail.status == orderState.ORDER_NOT_PAY >
+				<#if !orderDetail.isCod && orderDetail.pay_status==orderState.PAY_NO||!orderDetail.isCod && orderDetail.pay_status == orderState.PAY_PARTIAL_PAYED> 
+					<a href="${ctx}/api/shop/payment/execute.do?orderid=${orderDetail.order_id}" class="small-green">按此为订单付款</a>
+				</#if>
+				<a href="javascript:;" sn="${orderDetail.sn}" orderid="${orderDetail.order_id}" class="small-white cancelBtn">取消订单</a>
+			</#if> 
+			<#if orderDetail.status==orderState.ORDER_SHIP> 
+				<a href="javascript:;" orderid="${orderDetail.order_id}" class="small-yellow rogBtn">确认收货</a>
+			</#if> 
+		</div>
+	</div>
+	<div class="order-item-list">
+		<table>
+		<#list orderItemList as item>	
+			<tr>
+				<td style="text-align:cente;">
+					<a target="_blank" href="../goods-${item.goods_id}.html" >
+						<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+					</a>	
+				</td>
+				<td>
+					<a target="_blank" href="../goods-${item.goods_id}.html">${item.name}  
+						<#if item.other??>
+					         (${item.other!''}) 
+					    </#if>
+				    </a>
+				</td>
+				<td>	
+					<#if (item.snapshot_switch)??>
+						<#if item.snapshot_switch == 1>
+							<a class="check small-green" href="../snapshot-${item.snapshot_id}.html?product_id=${item.product_id}" >快照</a>
+						</#if>
+					</#if>
+				</td>
+				<td>${item.price?string.currency}元 × ${item.num}<#if item.exchange_point??&&item.exchange_point gt 0 >+${(item.exchange_point!'0')}积分 </#if></td>	
+			</tr>
+		</#list>
+		</table>
+	</div>
+	
+	<!-- 订单获取的促销活动赠送的赠品信息 by_DMRain 2016-6-12-->
+	<#if orderDetail.gift_id?exists && orderDetail.gift_id != 0 >
+	<#assign orderGiftDetailTag = newTag("orderGiftDetailTag") />
+	<#assign gift = orderGiftDetailTag("{'gift_id':${orderDetail.gift_id},'order_id':${orderDetail.order_id}}") />
+	<div class="order-detail-same">
+		<h2>获取赠品<em style="color: #ff6700">(赠)</em></h2>
+		<p><span>赠品图片：</span><img height="50px;" width="50px;" src="${gift.gift_img!''}" /></p>
+		<p><span>赠品名称：</span>${gift.gift_name!''}</p>
+		<p><span>赠品价值：</span>${(gift.gift_price!0)?string.currency}元</p>
+		<!--  暂时还没有用到，先注释掉
+		<p><span>是否可以购买：</span><#if gift.gift_type == 0>不可购买</#if></p>
+		-->
+	</div>
+	</#if>
+	<!-- 订单获取的促销活动赠送的优惠券信息 by_DMRain 2016-6-12-->
+	<#if orderDetail.bonus_id?exists && orderDetail.bonus_id != 0 >
+	<#assign orderBonusDetailTag = newTag("orderBonusDetailTag") />
+	<#assign bonus = orderBonusDetailTag("{'bonus_id':${orderDetail.bonus_id},'order_id':${orderDetail.order_id}}") />
+	<div class="order-detail-same">
+		<h2>获取优惠券<em style="color: #ff6700">(赠)</em></h2>
+		<p><span>优惠券名称：</span>${bonus.bonus_name!''}</p>
+		<p><span>优惠券面额：</span>${(bonus.bonus_money!0)?string.currency}元</p>
+		<p><span>优惠券有效期：</span><@dateformat time="${bonus.use_start_date?c}" pattern="yyyy-MM-dd"/> -- <@dateformat time="${bonus.use_end_date?c}" pattern="yyyy-MM-dd"/></p>
+		<p><span>最小订单金额：</span>${(bonus.min_goods_amount!0)?string.currency}元</p>
+		<p><span>优惠券类型：</span><#if bonus.send_type == 0>电子券</#if><#if bonus.send_type == 3>实体券</#if></p>
+	</div>
+	</#if>
+	<!-- 订单获取的积分信息 by_DMRain 2016-6-14 -->
+	<#if orderDetail.activity_point?exists && orderDetail.activity_point != 0 >
+	<div class="order-detail-same" style="min-height: 10px;">
+		<h2>获取积分<em style="color: #ff6700">(赠)</em></h2>
+		<p><span>积分：</span>${orderDetail.activity_point!0}分</p>
+	</div>
+	</#if>
+	<div class="order-detail-same" id="detail-same">
+		<h2>收货信息</h2>
+		<p><span>姓名：</span>${orderDetail.ship_name!''}</p>
+		<p><span>移动电话：</span>${orderDetail.ship_mobile!''}</p>
+		<p><span>固定电话：</span>${orderDetail.ship_tel!''}</p>
+		<p><span>收货地址：</span>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}</p>
+		<p><span>邮编：</span>${orderDetail.ship_zip!''}</p>
+	</div>
+	<div class="order-detail-same" >
+		<h2>支付及配送方式</h2>
+		<p><span>支付方式：</span>${orderDetail.payment_name!''}</p>
+		<p><span>配送方式：</span>${orderDetail.shipping_type!''} </p>
+		<p><span>配送时间：</span>${orderDetail.ship_day!''}&nbsp;${orderDetail.ship_time!''} </p>
+		<#if orderDetail.status != 8 && orderDetail.status != 0 && orderDetail.status != 1 && orderDetail.status != 2 && orderDetail.status != 6 && orderDetail.status != 7>
+			<h3 class="btn-div"><a href="javascript:void(0)" class="small-white order-send-detail" style="width:118px;"  rel="${orderDetail.sn!''}" data-reveal-id="myModal" data-animation="fade" >查看物流</a></h3>
+		</#if>
+	</div>
+	<div class="order-detail-same">
+		<h2>发表信息</h2>
+		<p><span>发票抬头：</span>${orderreceipt.title!'无'}</p>
+		<p><span>发票内容：</span>${orderreceipt.content!'无'}</p>
+	</div>
+	<#if orderDetail.remark??>
+		<div class="order-detail-same">
+			<h2>其他信息</h2>
+			<p><span>订单留言：</span>${orderDetail.remark!''}</p>
+			<#if orderDetail.status==8>
+				<p><span>取消原因：</span>${orderDetail.cancel_reason!''}</p>
+			</#if>
+		</div>
+	</#if>
+	<div class="order-detail-same">
+		<h2>订单日志</h2>
+		<#list orderDetailLog as orderLog>
+			<p><span><@dateformat time="${(orderLog.op_time)?c}" pattern="yyyy-MM-dd"/> ：</span><b>${orderLog.message}</b> </p>
+		</#list>
+	</div>
+	<div class="order-detail-price">
+		<table>
+			<tr>
+				<th>商品金额：</th>
+				<td>${(orderDetail.goods_amount!0)?string.currency}元</td>
+			</tr>
+			<tr>
+				<th>订单总额：</th>
+				<td>${(orderDetail.order_amount!0)?string.currency}元</td>
+			</tr>
+			<#if orderDetail.order_exchange_point?? &&orderDetail.order_exchange_point gt 0 >
+				<tr>
+					<th>消费积分:</th>
+					<td>${orderDetail.order_exchange_point!'0'}积分</td>
+				</tr>
+			</#if>
+			<#if orderDetail.discount?exists && orderDetail.discount != 0 >
+			<tr>
+				<th>优惠金额：</th>
+				<td>-${(orderDetail.discount!0)?string.currency}元</td>
+			</tr>
+			</#if>
+			<tr>
+				<th>配送费用：</th>
+				<td>${(orderDetail.shipping_amount!0)?string.currency}元</td>
+			</tr>
+			<#if orderMeta.couponprice?exists>
+			<tr>
+				<th>优惠券抵扣：</th>
+				<td>${orderMeta.couponprice}元</td>
+			</tr>
+			</#if>
+			<#if orderDetail.act_discount?exists && orderDetail.act_discount != 0 >
+			<tr>
+				<th>促销减免：</th>
+				<td>-${(orderDetail.act_discount!0)?string.currency}元</td>
+			</tr>
+			</#if>
+			<tr>
+				<th>已付金额：</th>
+				<td>${(orderDetail.paymoney!0)?string.currency}元</td>
+			</tr>
+			<tr>
+				<th>应付金额：</th>
+				<td><span>${(orderDetail.need_pay_money!0)?string.currency}</span>元</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!-- 加载浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="member-add-float">
+		</div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>	
+<!-- 浮动窗口 取消订单 -->
+<#include 'order_cancel.html'/>
+<!-- 浮动窗口 取消订单结束 -->
+<script>
+$(function(){
+	selectMenu(0);
+	Order.init();
+	
+	//查看物流
+	$(".order-send-detail").click(function(){
+		var orderSn = $(this).attr("rel");
+		$.ajax({
+			url: 'order_exp_info.html?ordersn=' + orderSn,
+			type: 'GET',
+			dataType:'html',
+			success: function(html){
+				if(!html){
+					$.message.error('出现错误，请重试！')
+					return
+				}
+				$.dialogModal({
+					title: '物流信息',
+					html : html,
+					btn  : false
+				})
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				$.message.error('出现错误，请重试！')
+			}
+		})
+	})
+	$("#address_edit").click(function(){
+		$(".btns_info").empty();
+	})
+	
+})
+
+function showRogInfo(logino,logicode){
+ 	$("#store_content").load('${ctx}/api/shop/order/orderKuaidi.do&logino='+logino+'&code='+logicode,function(){});
+}
+
+</script>
+<#include '../common/footer.html'/>

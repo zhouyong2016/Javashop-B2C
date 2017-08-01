@@ -1,0 +1,71 @@
+<#assign title= "商品标签api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu">
+<#include '../menu_api.html' />
+	</div>
+	<div class="right_list">
+		<h1>店铺商品标签API</h1>
+		<p class="api_intro">提供了增加、修改、删除店铺商品标签的功能和增加、修改、删除店铺商品标签引用的功能</p>
+		<h2>API列表</h2>
+		<ul class="list">
+		
+			<li>
+				<div class="api_func"><a href="addStoreGoodsTags.html">add</a></div>
+				<span>添加店铺商品标签</span>
+			</li>
+				<li>
+				<div class="api_func"><a href="editStoreGoodsTags.html">edit</a></div>
+				<span>修改店铺商品标签</span>
+			</li>
+			
+				<li>
+				<div class="api_func"><a href="deleteStoreGoodsTags.html">delete</a></div>
+				<span>删除店铺商品标签</span>
+			</li>
+				<li>
+				<div class="api_func"><a href="deleteRelStoreGoodsTags.html">deleteRel</a></div>
+				<span>删除商品标签引用</span>
+			</li>
+			
+				<li>
+				<div class="api_func"><a href="addTagRel.html">saveRel</a></div>
+				<span>添加商品标签引用</span>
+			</li>
+			
+				<li>
+				<div class="api_func"><a href="saveSort.html">saveSort</a></div>
+				<span>修改商品标签引用排序</span>
+			</li>
+			
+
+		</ul>
+		<h2>数据结构列表</h2>
+		<ul class="list">
+			<li>
+				<div class="api_func"><a href="tag.html">StoreTag</a></div>
+				<span>店铺标签</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<script>
+setMenu(4);
+</script>
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+

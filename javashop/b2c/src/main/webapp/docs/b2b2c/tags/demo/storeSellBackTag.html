@@ -1,0 +1,10 @@
+
+<!--创建"退货申请"标签-->
+<#assign StoreSellBackTag= newTag("StoreSellBackTag") >  
+<!--调用"退货申请"标签，并传递参数-->            
+<#assign  StoreSellBack= StoreSellBackTag() >						
+<ul class="gw">
+<#list StoreSellBack.goodsList as ssl>sellBackList
+	名称：${ssl.name}</br>
+	
+</#list>

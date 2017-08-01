@@ -1,0 +1,11 @@
+
+<!--创建"发货设置列表"标签-->
+<#assign dlyCenterListTag= newTag("dlyCenterListTag") >  
+<!--调用"发货设置列表"标签，并传递参数-->            
+<#assign  dlyCenterList= dlyCenterListTag() >						
+<ul class="gw">
+<#list dlyCenterList as dly>
+	名称：${dly.name}</br>
+	地址：${dly.address}</br>
+	联系人：${dly.uname}</br>
+</#list>

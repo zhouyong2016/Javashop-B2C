@@ -1,0 +1,82 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<!--  embedded ActiveMQ Broker -->
+	<amq:broker useJmx="false" persistent="false">
+		<amq:transportConnectors>
+			<amq:transportConnector uri="tcp://localhost:0"/>
+		</amq:transportConnectors>
+		<amq:systemUsage>
+	        <amq:systemUsage>
+	            <amq:memoryUsage>
+	                <amq:memoryUsage limit="64 mb"/>
+	            </amq:memoryUsage>
+	            <amq:storeUsage>
+	                <amq:storeUsage limit="512 mb"/>
+	            </amq:storeUsage>
+	            <amq:tempUsage>
+	                <amq:tempUsage limit="128 mb"/>
+	            </amq:tempUsage>
+	        </amq:systemUsage>
+    	</amq:systemUsage>
+	</amq:broker>
+
+	<!--  ActiveMQ connectionFactory  -->
+	<amq:connectionFactory id="jmsConnectionFactory" brokerURL="vm://localhost"/>
+
+	<!--  ActiveMQ destinations  -->
+	<amq:queue name="destination" physicalName="org.apache.activemq.spring.Test.spring.embedded"/>
+
+	<!--  Spring JmsTemplate config -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<!--  lets wrap in a pool to avoid creating a connection per send -->
+			<bean class="org.springframework.jms.connection.SingleConnectionFactory">
+				<property name="targetConnectionFactory" ref="jmsConnectionFactory"/>
+			</bean>
+		</property>
+		<!-- custom MessageConverter -->
+		<property name="messageConverter" ref="eopMessageConverter"/>
+	</bean>
+
+	<!--  OrderMessage converter  -->
+	<bean id="eopMessageConverter" class="com.enation.framework.jms.EopMessageConverter"/>
+
+	<!-- POJO which send Message uses  Spring JmsTemplate -->
+	<bean id="eopProducer" class="com.enation.framework.jms.EopProducer">
+		<property name="template" ref="jmsTemplate"/>
+		<property name="destination" ref="destination"/>
+	</bean>
+ 
+	<!--  Message Driven POJO (MDP) -->
+	<bean id="messageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<bean class="com.enation.framework.jms.EopConsumer"> 
+			</bean>
+		</constructor-arg>
+		<!--  may be other method -->
+		<property name="defaultListenerMethod" value="execute"/>
+		<!-- custom MessageConverter define -->
+		<property name="messageConverter" ref="eopMessageConverter"/>
+	</bean>
+
+	<!--  listener container，MDP无需实现接口 -->
+	<bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="jmsConnectionFactory"/>
+		<property name="destination" ref="destination"/>
+		<property name="messageListener" ref="messageListener"/>
+	</bean>
+	
+	<bean id="ehCacheImpl" class="com.enation.framework.cache.EhCacheImpl"></bean>
+	
+	
+	
+	<!-- <bean id="cacheFactory" class="com.enation.framework.cache.CacheFactory" init-method="init">
+		<property name="cache" ref="cache"></property>
+	</bean> -->
+	
+</beans>

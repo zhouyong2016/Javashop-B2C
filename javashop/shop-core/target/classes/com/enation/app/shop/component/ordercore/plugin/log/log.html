@@ -1,0 +1,8 @@
+<script type="text/javascript">
+$(function(){
+	$(".order_detail .tab li[tabid=3]").click(function(){
+		$("#log_wrapper").load("${ctx}/admin/plugin?beanid=orderDetailLogPlugin&orderid=${orderid}",{cache:true});
+	});
+});
+</script>
+<div id="log_wrapper">加载中...</div>

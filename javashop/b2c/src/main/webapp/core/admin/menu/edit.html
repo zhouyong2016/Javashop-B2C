@@ -1,0 +1,125 @@
+<style>
+	.submitBtn{
+	background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #f7f7f7 0%, #f2f2f2 100%) repeat scroll 0 0;
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    color: #666666;
+    cursor: pointer;
+    display: inline-block;
+    height: 28px;
+    margin-right: 5px;
+    padding: 0 20px;
+	}
+</style>
+<div class="input">
+	<form class="validate" id="editForm">
+		<input type="hidden" name="id" value="${menu.id}" />
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<th><label class="text">名称</label></th>
+				<td>
+					<input type="text" name="title" id="name" maxlength="12" value="${menu.title}" dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">类型</label></th>
+				<td>
+					<select name="menutype">
+						<option value="2"<#if menu.menutype==2>selected</#if>>应用</option>
+						<option value="1"<#if menu.menutype==1>selected</#if>>系统</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">上级菜单</label></th>
+				<td>
+					<select name="pid" id="pid">
+						<option value="0">顶级菜单</option>
+						<#assign children=menuList />
+						<#assign level=1 />
+						<#assign pid=menu.pid />
+						<#include 'select_children.html' />
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">url</label></th>
+				<td>
+					<input type="text" name="url" id="url"	value="${menu.url!''}" maxlength="500" autocomplete="off"
+						class="easyui-validatebox" dataType="string" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">target</label></th>
+				<td>
+					<input type="text" name="target" id="target" value="${menu.target!''}"  maxlength="120"  onkeyup="this.value=this.value.replace(/[\u4E00-\u9FA5]/g, '');"  />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">排序</label></th>
+				<td>
+					<input type="text" name="sorder" value="${menu.sorder}" maxlength="8" style="width: 50px;ime-mode:disabled" dataType="int" isrequired="true" onkeyup="this.value=this.value.replace(/\D/g,'')"/>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">允许导出</label></th>
+				<td>
+					<select name="canexp">
+						<option value="1"<#if menu.canexp==1>selected</#if>>是</option>
+						<option value="0"<#if menu.canexp==0>selected</#if>>否</option>
+					</select>
+				</td>
+			</tr>	
+			
+			<#if menu.icon?? && menu.icon!=''>
+			<tr style="height:70px;">
+				<th><label class="text">图标</label></th>
+				<td>
+				
+					<div class="icon_wrap">
+					 	<input type="hidden" name="icon" value="${menu.icon!''}" id="menu_icon">
+					 	<img src="${ctx}/${menu.icon!'default.png'}" />
+					 	<span>正常态</span>
+				 	</div>
+				 	
+				 	<!-- <div class="icon_wrap">
+					 	<input type="hidden" name="menu.icon_hover" value="${menu.icon!''}">
+					 	<img src="${staticserver}/images/menuicon/${menu.icon_hover!'default.png'}" />
+					 	<span>悬停态</span>
+				 	</div>
+				 	点击图标更换 -->
+				</td>
+			</tr>	
+			</#if>
+			<tr>
+				<th><label class="text">演示站点是否禁止</label></th>
+				<td>
+					<select name="is_display">
+						<option value="0"<#if menu.is_display==0>selected</#if>>否</option>
+						<option value="1"<#if menu.is_display==1>selected</#if>>是</option>
+					</select>
+				</td>
+			</tr>	
+							
+		</table>
+		<div class="submitlist" align="center">
+			<table>
+				<tr>
+					<td>
+						<input type="button" value="确定 " class="submitBtn"	id="saveEditBtn" />
+						<input name="reset" type="reset" value="重置 " class="submitBtn" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	$('#url').validatebox({
+		//required: true,
+		validType: 'length[1,1000]'
+	});
+});
+</script>
+ 

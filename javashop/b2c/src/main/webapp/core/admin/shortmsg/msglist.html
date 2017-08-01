@@ -1,0 +1,8 @@
+<ul>
+<#list msgList as msg >
+<li>
+	<span  class="name">${msg.title}</span>
+	<span  class="link"><a href="${msg.url}" target="${msg.target!''}" msgid="${msg.msgid}">查看</a></span>
+</li>
+</#list>
+</ul>

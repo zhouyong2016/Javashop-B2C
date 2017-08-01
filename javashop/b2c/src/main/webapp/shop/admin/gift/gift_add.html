@@ -1,0 +1,45 @@
+<#assign imageuploader="com.enation.framework.directive.ImageUploaderDirectiveModel"?new()>
+<script type="text/javascript">
+//上传图片插件配置
+var image_uploader_setting = {
+	imageName : "gift_img",	// 表单提交时 的name
+	subFolder : "/gift",		// 上传目录
+	showImgs : [],	//显示的img值数组，不提交。只做显示用
+	actualImgs : [],	// 实际的img值数组，会提交
+	fileNumLimit : 1
+}
+</script>
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="giftAddForm" method="post" class="validate">
+				<table>
+					<tr>
+						<td>赠品名称：</td>
+						<td>
+							<input class="input_text easyui-validatebox" type="text" name="gift_name" data-options="required:true" maxlength="20"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>赠品价格：</td>
+						<td>
+							<input class="input_text easyui-numberbox" type="text" name="gift_price" dataType="float" precision="2" data-options="required:true" maxlength="9" style="width: 80px;"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>赠品库存：</td>
+						<td>
+							<input class="input_text easyui-numberbox" type="text" name="actual_store" data-options="required:true" maxlength="9" style="width: 80px;"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>赠品图片：</td>
+						<td>
+							<@imageuploader isback="true" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>

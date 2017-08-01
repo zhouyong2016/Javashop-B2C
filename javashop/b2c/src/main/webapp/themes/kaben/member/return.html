@@ -1,0 +1,251 @@
+<#--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<#--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag()>
+<#--创建“订单货物列表”标签-->
+<#assign orderChildItemListTag = newTag("orderItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderChildItemListTag("{'orderid':${order_id}}")>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+
+<#--调用退款所需积分是否充足标签 -->
+<#assign checkPointPlenty = newTag("checkPointPlentyTag")>
+<#assign isPlenty = checkPointPlenty("{'member_id':'${member.member_id}','order_id':${order_id}}")>
+<div class="return_detail">
+
+	<form id="return">
+		<input type="hidden" name="orderid" value="${order_id}" />
+		<h3>是否已收货</h3>
+		<!-- <input type="radio" value="0" name="ship_status" />未收货 -->
+		<input type="radio" value="1" name="ship_status" checked="checked"/>已收货
+		
+		<h3>请选择要退货的商品</h3>
+		<table class="is-return">
+			<#list orderItemList as item>	
+				<tr>
+					<td>
+					<#if item.state==0 >
+						<input type="checkbox" name="goodsId" value="${item.goods_id}" autocomplete="off"/>
+						<span style="display:none">
+						<input type="checkbox" class="need_sync" goods_id="${item.goods_id}" name="item_id" value="${item.item_id}" autocomplete="off"/> 
+						<input type="checkbox" class="need_sync" goods_id="${item.goods_id}"  name="productId" value="${item.product_id}"  autocomplete="off"/>
+						<input type="checkbox" class="need_sync"  goods_id="${item.goods_id}" name="price" value="${item.price}"  autocomplete="off"/>
+						<input type="checkbox" class="need_sync" goods_id="${item.goods_id}" name="payNum" value="${item.num}" autocomplete="off"/> 
+						</span>
+					</#if>
+					</td>
+					<td class="return-img">
+						<a target="_blank" href="../goods-${item.goods_id}.html">
+							<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+						</a>	
+						<p><a target="_blank" href="../goods-${item.goods_id}.html">${item.name}<#if item.other?? ><span>(${item.other})</span></#if></a></p>
+					</td>
+					<td class="return-price">
+						<div class="return-goods-price">
+							${item.price?string.currency}
+						</div>
+						<div class="return-goods-num">
+							x${item.num}
+						</div>
+					</td>
+					<td>
+						<input name="goodsNum"  type="text" value="${item.num}" disabled="disabled" maxnum="${item.num}" goods_id="${item.goods_id}" class="input_text return-num"   autocomplete="off" />
+					</td>
+				</tr>
+			</#list>
+			<#if orderDetail.gift_id?exists && orderDetail.gift_id != 0>
+			<#--创建“订单赠品”标签-->
+			<#assign orderGiftDetailTag = newTag("orderGiftDetailTag")>
+			<#--调用“订单赠品”标签，并传递参数-->
+			<#assign gift = orderGiftDetailTag("{'order_id':${orderDetail.order_id},'gift_id':${orderDetail.gift_id}}")>
+				<tr>
+					<td>
+						<#if gift.gift_status == 0>
+						<input type="checkbox" name="gift_id" value="${gift.gift_id}" disabled="disabled" checked="checked"/>
+						</#if>
+					</td>
+					<td class="return-img">
+						<img height="50" width="50" src="${gift.gift_img!''}"/>
+						<p>${gift.gift_name}<span style="color: red; ">（赠品，必须退回）</span></p>
+					</td>
+					<td class="return-price">
+						<div class="return-goods-price">
+							${gift.gift_price?string.currency}
+						</div>
+						<div class="return-goods-num">
+							x1
+						</div>
+					</td>
+					<td><input type="text" value="1" disabled="disabled" class="input_text return-num" /></td>
+				</tr>
+			</#if>
+		</table>	
+		<h3>退款方式</h3>
+		<div class="return-way">
+			<h4>请选择退款方式</h4>
+			<select name="refund_way"> 
+				<option value="0">-- 请选择退款方式 --</option>
+				<#list paymentList as payment>
+					<#if payment.type!="cod">
+						<option value="${payment.name}"> ${payment.name} </option>
+					</#if>
+				</#list>
+			</select>
+			<h4>请选择退款账户</h4>
+			<input type="text" name="return_account" id="account_id" class="return-way-name" maxlength="255" />
+			
+			<h4>退款金额</h4>
+			<input type="text"  name="apply_alltotal" value="${orderDetail.paymoney}" dataType="float" id="price" isrequired="true" maxlength="9"/>
+			<input type="hidden"  id="paypricereturn" value="${orderDetail.paymoney!''}"/>
+		</div>
+		<h3>退货原因</h3>
+		<div class="return-way">
+			<select name="reason" id="reason">
+				<option value="0">请选择退货原因</option>
+				<option value="商品质量有问题">商品质量有问题</option>
+				<option value="收到商品与描述不符">收到商品与描述不符</option>
+				<option value="不喜欢/不想要">不喜欢/不想要</option>
+				<option value="发票问题">发票问题</option>
+				<option value="空包裹">空包裹</option>
+				<option value="其他">其他</option>
+			</select>
+		</div>
+		<h3>问题描述</h3>
+		<div class="return-word">
+			<textarea name="remark" maxlength="100" class="return-word-detail"></textarea>
+		</div>
+		<div class="return-tools btn-div">
+			<input type="button" name="btnSubmit" value="申请退货" id=btnSub class="yellow-btn" />
+		</div>
+
+	</form>
+</div>
+
+<!--会员中心首页右侧结束-->
+<script type="text/javascript">
+$(function(){
+	
+	$("input[name='goodsId']").click(function(){
+		var checked = this.checked;
+		var goodsid  = $(this).val();
+		if(checked){
+			$(".need_sync[goods_id="+goodsid+"]").attr("checked","checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").removeAttr("disabled");
+		}else{
+			$(".need_sync[goods_id="+goodsid+"]").removeAttr("checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").attr("disabled","disabled");
+		}
+	});
+	
+	$("#btnSub").click(function(){
+		
+		if($("#reason").val()=="0"){
+			alert("请选择退货原因");
+			return false;
+			
+		}
+		if($("input[name='goodsId']").filter(":checked").length==0){
+			alert("请选择要退货的商品");
+			return false;
+		}
+		
+		var error =0;
+		
+		$("[name='goodsNum']").each(function(i,v){
+			var $this = $(v);
+			var maxnum= $this.attr("maxnum");
+			var num = $this.val();
+			
+			if(num==""){
+				alert("请输入退货数量");
+				error=1;
+				return ;
+			}
+			if(num < "0"){
+				alert("不能为负数");
+				error=1;
+				return ;
+			}
+			
+			if(num=="0"){
+				alert("退货数量不能为0");
+				error=1;
+				return ;
+			}
+			
+			if (!$.isNumber(num)){
+				alert("退货数量请输入数字");
+				error=1;
+				return ;
+			}
+			
+			if(parseInt(num) > parseInt(maxnum)){
+				alert("退货数量不能大于购物数量");
+				error=1;
+				return ;
+			}
+			
+		});
+		
+		
+		if(1==error){
+			return false;
+		}
+		 
+		if($("select[name='refund_way']").val()=="0"){
+			alert("请选择退款方式");
+			return false;
+			
+		}
+		if($("input#account_id").val()==""){
+			alert("请填写退款账号");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		//退款金额
+		var return_money=$("input[name='apply_alltotal']")[1].value;
+		if( Number($(return_money[1]).val())< 0){
+			alert("退款金额不能为负数");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		if( Number(return_money) > Number($("#paypricereturn").val())){
+			alert("退款金额不能大于实付金额");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		
+		
+		
+		if($(".return-word-detail").val().length > 100){
+			alert("问题描述不能超过100字");
+			return false;
+		}
+		
+		
+		
+		$("#btnSub").attr("disabled",true); 
+		var options = {
+				url : "${ctx}/api/shop/sell-back/return-goods.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						alert(result.message);
+						location.href="return_list.html"
+					}else{
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#return').ajaxSubmit(options);
+	});
+	 
+})
+</script>

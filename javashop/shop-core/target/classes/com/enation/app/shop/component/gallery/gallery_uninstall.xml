@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="drop">
+			<name>thumbnail</name>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="drop">
+			<name>big</name>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="drop">
+			<name>small</name>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="drop">
+			<name>original</name>
+		</field>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>goods_gallery</table>
+	</action>
+</dbsolution>

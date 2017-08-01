@@ -1,0 +1,26 @@
+<!-- 下单金额统计js -->
+
+<script src="${ctx}/shop/admin/statistics/member/js/order_price_statistics.js" type="text/javascript" ></script>
+
+<!-- 用户记录当前tab页是否是最新数据 是否需要刷新 0表示不需要 1表示需要 -->
+<input type="hidden" class="now_tab_data_hid" tab_id ="3" value="0" />
+
+<!-- 统计图div -->
+<div id="order_price_statistics">
+	
+</div>
+<div class="tableDiv">
+
+	<!-- dataGrid -->
+	<table id="order_price_dg" class="easyui-datagrid" 
+		data-options="pagination:false,rownumbers:true, fitColumns:'true'">
+		<thead>
+			<tr>
+				<th data-options="field:'member_id',checkbox:true,width:100"></th>
+				<th data-options="field:'name',width:150" >昵称</th>
+				<th data-options="field:'nickname',width:100" >用户名</th>
+				<th data-options="field:'price',width:100,sortable:'true'" >下单总金额</th>
+			</tr>
+		</thead>
+	</table>
+</div> 

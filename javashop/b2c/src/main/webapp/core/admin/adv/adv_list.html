@@ -1,0 +1,210 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/core/admin/js/Adv_New.js"></script>
+<div class="main">
+<form id="advform">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"
+			onclick="controlAdv()">添加</a> <a href="javascript:void(0)" class="button"
+			onclick="del()">删除</a>
+		<span style="float: right;height:28px;text-align: center"> 
+			<a href="javascript:void(0)" class="button b_fr" onclick="searchAdv()">搜索</a>
+			<input id="advname" class="input_text b_fr mr5" type="text" maxlength="50" value="" size="30"	placeholder="请输入模糊关键字" name="advname">
+		  <select name="acid" id="acid" class="inputSelect " style="width: 135px;>
+					<option value="0">请选择广告位</option>
+					<#list adList as ad>
+						<option value="${ad.acid}">${ad.cname}</option>
+					</#list>
+			</select>
+		</span>
+		
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/core/admin/adv/list-json.do?acid=${acid!''}',pageList: [10,15,19,30],pageSize:10,fitColumns:'true',onLoadSuccess:inits"
+				pagination="true" id="advdata">
+				<thead>
+					<tr>
+						<th data-options="field:'aid',checkbox:true,width:70">ID</th>
+						<th data-options="field:'aname',width:200" formatter="formatName">广告名称</th>
+						<th data-options="field:'cname',width:200">所属广告位</th>
+						<th data-options="field:'isclose',width:200"
+							formatter="formatIsclose">状态</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		
+		<div id="divdia" style="display: none;"></div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+
+	function controlAdv(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/core/admin/adv/add.do";
+			map["formId"] = "#addForm";
+			map["url"] = "${ctx}/core/admin/adv/add-save.do?ajax=yes";
+			map["title"] = "添加广告";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "${ctx}/core/admin/adv/edit.do?advid=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "${ctx}/core/admin/adv/edit-save.do?ajax=yes";
+			map["title"] = "修改广告";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#advdata";
+
+		//需要验证的参数
+		//map["nameId"]="#name";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 800,
+			height : 400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		if(map["formId"]=='#addForm'&&$("input[name='pic']").val()==''){
+			alert("未上传广告图片");
+			return ;
+		}
+		var formflag = $(map["formId"]).form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlAdv("
+				+ row.aid + ")' ></a>";
+
+		return val;
+	}
+	
+	
+	/**
+	* 格式化广告名
+	* 提供cname的样式名和atturl属性
+	* 以供显示广告预览使用
+	*/
+	function formatName(value, row, index) {
+		var val = "<a class='easyui-tooltip' atturl='"+row.httpAttUrl+"' >"+value+"</a>";
+
+		return val;
+	}
+	
+
+	function formatIsclose(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = '已开启&nbsp;<input type="button" class="stop button" advid="'+row.aid+'" value="停用" />';
+		} else if (value == 1) {
+			val = '已停用&nbsp;<input type="button" class="start button" advid="'+row.aid+'" value="开启" />';
+		}
+		return val;
+	}
+
+	function del() {
+		var rows = $('#advdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除广告");
+			return;
+		}
+		if (!confirm("确认要删除广告吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		var options = {
+			url : "${ctx}/core/admin/adv/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				$("#advdata").datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#advform').ajaxSubmit(options);
+	}
+	
+	function inits(){
+		Adv.init();
+	}
+	//搜索
+	function searchAdv(){
+		var formflag= $("#advform").form().form('validate');
+		if(formflag){
+			var advname = $.trim($("#advname").val());
+			var acid = $("#acid").val();
+			$('#advdata').datagrid('load', {
+				 advname:advname,
+				 ac:acid,
+				 page:1
+		    }); 
+		}
+	}
+	
+</script>
+<#include '/admin/footer.html' >

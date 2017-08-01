@@ -1,0 +1,8 @@
+
+<!--创建"查询默认会员地址"标签-->
+<#assign memberAdressRegionTag= newTag("memberAdressRegionTag") >  
+<!--调用"查询默认会员地址"标签，并传递参数-->            
+<#assign  memberAdressRegion= memberAdressRegionTag() >						
+<ul class="gw">
+
+   查询默认会员地址 id：${memberAdressRegion}</br>

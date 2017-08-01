@@ -1,0 +1,72 @@
+	<#assign cartTag= newTag("cartTag")> 
+	<#assign itemList = cartTag() >
+<!-- 	
+	<style>
+		.my_cartlist_all{overflow:hidden;position:relative;}
+	</style> -->
+		<#if (itemList?size>0) >
+		<div class="common-cart-box">
+			<div class="my_cartlist_all">
+				<#list itemList as item>
+					<dl itemid="${item.id}" class="item${item.id}  <#if !item_has_next>last</#if> item">
+						<dd class="goods_thumb">
+						
+								<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}" >
+									<@image height="40" width="40" src="${item.image_default!''}" style="cursor: pointer;" />
+								</a>	
+							
+						</dd>
+						<dt class="goods_name">
+							<p><a href="${ctx}/goods-${item.goods_id}.html" style="color:#333"><@substring	title="${item.name}" length="52" dot="..." /></a></p>
+							<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong>
+									</#list>
+								</span>
+							</#if>
+						</dt>
+						<dd class="goods_price"><p>${item.price}×${item.num}元</p><p><#if item.others.exchange_point??>+${item.others.exchange_point}积分</#if></p></dd>
+						<dd class="handle" style="display:none;">
+							<p  itemid="${item.id}" class="delete" style="color:#ccc;">x</p>
+						</dd>
+					</dl>
+				</#list>
+				</div>
+				<div class="checkout common-cart-checkout">
+					<#-- 创建订单价格标签 -->
+				<#assign orderPiceTag= newTag("orderPriceTag") >
+				<#--通过订单价标签获取订单价格 -->
+				<#assign orderPrice = orderPiceTag("{'is_bonded':0}") >	
+				<span class="color03">${orderPrice.goodsPrice?string("currency")}</span>
+				<a  class="btn-cart" href="${ctx}/cart.html" style="color:#fff;">查看我的购物车</a>
+					
+				</div>
+			</div>
+	<#else>
+		<p style="border:0px!important;" class="no_cartlist">您的购物车中还没有任何商品</p>		
+	</#if>
+<script>
+	$(function(){
+		
+		//加载购物车价格
+		$(".item").mouseover(function(){
+			$(this).find(".handle").show();
+		})
+		$(".item").mouseleave(function(){
+			$(this).find(".handle").hide();
+		})
+
+	})
+</script>
+
+	
+	<script>
+		$(function(){
+			if($(".my_cartlist_all dl").length > 3){
+				$(".my_cartlist_all").jscroll();
+				$(".my_cartlist_all").css("height","300px");
+			}
+			
+		})
+	</script>

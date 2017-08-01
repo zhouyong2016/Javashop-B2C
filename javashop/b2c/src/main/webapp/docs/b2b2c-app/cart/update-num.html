@@ -1,0 +1,41 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>修改购物车中商品的数量</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/cart/update-num.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">cartid</span><span class="w100">购物车id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">productid</span><span class="w100">货品id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">num</span><span class="w100">修改的数量</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/cart/update-num.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : { cartid : 2, productid : 407, num : 2 },
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+			{"result":1,"data":[{"storeprice":{"goodsPrice":399.0,"orderPrice":399.0,"shippingPrice":0.0,"needPayMoney":399.0,"discountPrice":0.0,"weight":200.0,"point":0,"discountItem":{}},"store_id":4,"goodslist":[{"store_id":4,"store_name":"爱鞋部落","goods_transfee_charge":0,"id":920,"product_id":244,"goods_id":281,"name":"CNE春款欧美舒适性感尖头真皮纯色高跟鞋细跟女单鞋 ","mktprice":399.0,"price":399.0,"coupPrice":399.0,"num":1,"image_default":"http://static.b2b2cv2.javamall.com.cn/attachment/store/4/goods/201505222251351842_thumbnail.jpg","point":0,"itemtype":0,"sn":"1474728428","catid":0,"weight":200.0}],"store_name":"爱鞋部落"}]}
+			</h5>
+		</span>	
+	</div>
+
+</div>

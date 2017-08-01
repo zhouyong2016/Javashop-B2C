@@ -1,0 +1,9 @@
+
+<!--创建"商品评论值"标签-->
+<#assign commentGradeStatisticsTag = newTag("commentGradeStatisticsTag")>
+<!--调用"商品评论值"标签，并传递参数-->
+<#assign commentGradeStatistics = commentGradeStatisticsTag("{'goods_id':1}")>
+
+${commentGradeStatistics.grade_1!'没有评分为 1分的记录'}<br>
+
+${commentGradeStatistics.grade_2!'没有评分为 2分的记录'}<br>

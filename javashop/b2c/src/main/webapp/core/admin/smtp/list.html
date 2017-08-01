@@ -1,0 +1,211 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" id="add_smtp_button">添加</a>
+		<a href="javascript:void(0)" class="button"
+			data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="smtpform">
+			<table class="easyui-datagrid"
+				data-options="url:'smtp-listJson.do',fitColumns:'true'" width="width" id="smtpdata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true,width:100"></th>
+						<th data-options="field:'host',width:100">host</th>
+						<th data-options="field:'username',width:100">用户名</th>
+						<th data-options="field:'send_count',width:100">今日发信数</th>
+						<th data-options="field:'max_count',width:100">最大发信数</th>
+						<th data-options="field:'mail_from',width:100">Form</th>
+						<th data-options="field:'action',width:100" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+		<div id="SMTPinfo" style="display: none;"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+ 
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'></a>";
+		return val;
+}
+function del(){ 
+	var rows = $('#smtpdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error('请选择要删除的SMTP');
+		return;
+	}
+	if(!confirm("确认要将这些smtp删除吗？")){	
+		return ;
+	}
+	 var options = {
+		url : "delete.do",
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				var rows = $('#smtpdata').datagrid("getSelections"); 
+				for(var i =0;i<rows.length;i++){      
+					var index = $('#smtpdata').datagrid('getRowIndex',rows[i]); 
+					$('#smtpdata').datagrid('deleteRow',index);      
+				}
+			}
+			if(result.result==0){ 
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	};
+	$('#smtpform').ajaxSubmit(options);	
+}
+ $("#add_smtp_button").click(function(){
+	 $("#SMTPinfo").show();
+	　　	$('#SMTPinfo').dialog({
+	　　		title: '添加SMTP',			//对话框的标题
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'add.do', 	 //对话框所引用的html页面
+	　　		modal: true,
+	　　		buttons: [{					//创建按钮
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 addSMTPForm(savebtn);		//调用SMTP/add.html页面的函数
+		　　			 }	
+	　　			}
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				$('#addSmtpForm')[0].reset() ;
+　　			 }
+	　　		}]
+	　　	});
+ });
+ function edit(smtpId){
+	 $("#SMTPinfo").show();
+	　　	$('#SMTPinfo').dialog({
+	　　		title: '修改SMTP',			//对话框的标题
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'edit.do?smtpId='+smtpId, 	 //对话框所引用的html页面
+	　　		modal: true,
+	　　		buttons: [{					//创建按钮
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled= editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 editSMTPForm(editbtn);		//调用SMTP/add.html页面的函数
+		　　			}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#editSmtpForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+ }
+ 
+ 
+ function testSMTPSendEdit(testbtn){
+	 var formflag= $("#editSmtpForm").form('validate');
+		if(formflag){
+			$.Loading.show("正在测试请稍候...");
+			testbtn.linkbutton("disable");	
+			var options = {
+					url : "test-send.do",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+						}else{
+							$.Loading.error(result.message);
+						}
+						testbtn.linkbutton("enable");
+				 	},
+				 	error : function(e) {
+				 		$.Loading.error('出现错误，请重试');
+				 		testbtn.linkbutton("enable");
+					}
+				};
+			$('#editSmtpForm').ajaxSubmit(options);	
+		}
+ }
+ 
+
+ 
+ 
+ function addSMTPForm(savebtn){
+	var formflag= $("#addSmtpForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		var options = {
+				url : "save-add.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#SMTPinfo").dialog('close');
+						$('#smtpdata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#addSmtpForm').ajaxSubmit(options);	
+	}
+	
+}
+ function editSMTPForm(editbtn){
+		var formflag= $("#editSmtpForm").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在保存请稍候..");
+			editbtn.linkbutton("disable");
+			var options = {
+				url : "save-edit.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#SMTPinfo").dialog('close');
+						$('#smtpdata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		editbtn.linkbutton("enable");
+				}
+			};
+			$('#editSmtpForm').ajaxSubmit(options);
+		}
+		
+	 }
+</script>
+<#include '/admin/footer.html' >

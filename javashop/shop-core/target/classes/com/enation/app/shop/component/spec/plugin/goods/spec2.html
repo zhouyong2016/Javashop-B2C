@@ -1,0 +1,157 @@
+<style>
+	<#if  !goods.have_spec?exists  || goods.have_spec==0>#spec-input {
+		display: none
+	}
+	
+	<#else>#no-spec-input {
+		display: none
+	}
+	</#if>
+</style>
+<link href="${ctx}/shop/admin/css/spec/spec2.css" rel="stylesheet" type="text/css" />
+<script >
+	var ctx="${ctx}";
+</script>
+
+<script type="text/javascript" src="${ctx}/shop/admin/js/spec/memberprice.js"></script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/spec/spec-v2.js"></script>
+<input type="hidden" name="haveSpec" id="haveSpec" value="${goods.have_spec!'0'}" />
+<#include 'no_spec.html' />
+<div id="spec-input" style="text-align: left;">
+	<input type="button" id="specCloseBtn" value="关闭规格" goodsid="${goods.goods_id!'0'}" class="button" />
+	<table class="form-table">
+		<tbody>
+			<#list specList as spec>
+			<tr>
+				<th>${spec.spec_name}：</th>
+				<td>
+					<ul class="spec" specname="${spec.spec_name}">
+						<#list spec.valueList as specValue>
+						<li><span><input class="chk" autocomplete="off"
+								type="checkbox" value="${specValue.spec_value_id}"
+								spec_value="${specValue.spec_value}"
+								specid="${specValue.spec_id}" />
+						</span> <#if spec.spec_type==1><span>
+						<img alt="${ specValue.spec_value }" src="${specValue.spec_image}">
+						</span></#if> <span>${specValue.spec_value}</span></li> </#list>
+					</ul></td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<div class="detail" >
+		<table class="spec_table"  cellspacing="0" cellpadding="0" border="0" >
+			<thead>
+				<tr>
+					<#if goods.have_spec?exists && goods.have_spec==1 &&
+					specNameList?exists > <#list specNameList as specName>
+					<th class="w1" style="min-width:50px">${specName}</th> </#list> </#if>
+					<th class="w2">货号*</th>
+					<th class="w2">销售价*</th>
+					<th class="w3">重量</th>
+					<th class="w3">成本价</th>
+					<th class="w1">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if goods.have_spec?exists && goods.have_spec==1 && productList?exists > 
+					<#list productList as product> 
+						<#assign specids=''> 
+						<#assign specvids=''> 
+						<#assign propid=''>
+						<tr>
+							<#list product.specList as spec> 
+								<#if spec_index!=0 > 
+									<#assign specids=specids+','> 
+									<#assign specvids=specvids+','> 
+									<#assign propid=propid+'_'> 
+								</#if> 
+								<#assign specids=specids+spec.spec_id>
+								<#assign propid=propid+spec.spec_value_id> 
+								<#assign specvids=specvids+spec.spec_value_id>
+								<td>${spec.spec_value} 
+									<input type="hidden" name="specvalue_${product_index}" value="${spec.spec_value}" />
+								</td>
+							</#list>
+							<td>
+								<input type="text" style="width: 150px" class="ipt"
+								name="sns" prop='sn' propid="${propid}" value="${product.sn}"
+								autocomplete="off" class="input_text"> 
+								
+								<input type="hidden" name="productids" value="${product.product_id}"
+								class="ipt" prop='productid' propid="${propid}" />
+							</td>
+						
+					<td><input type="hidden" value="${specids}" name="specids">
+						<input type="hidden" value="${specvids}" name="specvids">
+						<!-- 形成price id，用js通过此id反向选择checkobx --> 
+						
+						<input type="text" size="8" name="prices" class='ipt price'
+						value="${(product.price!0)?c}" prop='price' propid="${propid}"
+						autocomplete="off" class="input_text"/>
+						
+						
+						<div class="member_price_box" index="${product_index}">
+							<!-- 声明控件，稍后初始化 -->
+							<#if lvList?exists> <#list lvList as lv> <input type="hidden"
+								class="lvid" productid="${product.product_id}"
+								value="${lv.lv_id}" name="lvid_${product_index}"> <input
+								type="hidden" class="lvPrice" productid="${product.product_id}"
+								lvid="${lv.lv_id}" name="lvPrice_${product_index}">
+							</#list> </#if>
+						</div>
+						</td>
+					<td><input type="text" size="10" name="weights"
+						value="${(product.weight!0)?c}" autocomplete="off" class='ipt'
+						prop='weight' propid="${propid}" class="input_text"
+						style="width: 80px" />
+					</td>
+					<td><input type="text" size="8" name="costs"
+						value="${(product.cost!0)?c}" autocomplete="off" class='ipt'
+						prop='cost' propid="${propid}" class="input_text"
+						style="width: 80px" />
+					</td>
+					<td>&nbsp;&nbsp;<a href="javascript:;">
+						<img class="delete" src="${ctx}/shop/admin/images/transparent.gif" productid="${product.product_id}">
+					</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				</tr>
+				</#list>
+				<!-- 暂无此功能 -->
+				<!-- <script>
+					$(function() {
+						//初始化货品会员价
+						$.ajax({
+							url : '${ctx}/shop/admin/member-price!getLvPriceJson.do?ajax=yes',
+							data : 'goodsid=${goods.goods_id}',
+							dataType : 'json',
+							success : function(result) {
+								if (result.result == 1) {
+									var priceData = result.priceData;
+									$.each(priceData, function(i, price) {
+										$(".member_price_box>input.lvPrice[productid="
+														+ price.productid
+														+ "][lvid="
+														+ price.lvid + "]")
+												.val(price.price);
+									});
+
+									SpecOper.syncMemberPriceFromTable();
+								} else {
+									alert("生成会员价格出错：" + result.message);
+								}
+							},
+							error : function(result) {
+								alert("生成会员价格出错");
+							}
+						});
+
+						MemberPrice.bindMbPricBtnEvent();
+					})
+				</script> -->
+				</#if>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

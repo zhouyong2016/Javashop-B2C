@@ -1,0 +1,12 @@
+
+<!--创建"结算页查询商城发放优惠劵列表"标签-->
+<#assign StoreMemberBonusListTag= newTag("storeMemberBonusListTag") >  
+<!--调用"结算页查询商城发放优惠劵列表"标签-->            
+<#assign  StoreMemberBonusList= StoreMemberBonusListTag() >						
+<ul class="gw">
+<#list StoreMemberBonusList.bonusList as dly>
+	id：${dly.type_id}</br>
+	发行量：${dly.create_num}</br>
+	每人限领：${dly.limit_num}</br>
+
+</#list>

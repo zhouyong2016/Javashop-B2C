@@ -1,0 +1,8 @@
+
+<span class="float b">您的当前位置：</span>
+<!-- 创建当前位置标签 -->
+<#assign searchNav= newTag("searchNavTag")>
+<!-- 获取当前位置结果 -->
+<#assign cat = searchNav()!'' >
+<span><a href="index.html">首页</a></span>&gt;
+<span><#if cat?exists><a href="search-cat-${cat.cat_id!''}.html">${cat.name!''}</a><#else>商品搜索</#if></span>

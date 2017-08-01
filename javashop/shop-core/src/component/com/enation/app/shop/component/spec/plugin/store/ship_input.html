@@ -1,0 +1,104 @@
+<style>
+#frame_store_box H1{font-size:14px;}
+</style>
+<div class="grid" id="frame_store_box">
+
+<#list depotList as depot>
+<h1>${depot.depotname}</h1>
+<hr />
+<table >
+<thead>
+	<th>货号</th>
+	<#list specNameList as specName>
+	<th >${specName}</th>
+	</#list>
+	<th>库存</th>
+	<th>出货量</th>
+</thead>
+
+
+<#assign productList=depot.productList />
+<tbody>
+ 	<#if productList?exists >
+		<#list  productList as product>
+			<tr>
+				<td >	
+						${product.sn}
+								
+				</td>
+			
+			<#list product.specList as spec>
+				 
+						
+				<#if spec.spec_type==1>
+				<td>
+				<div class="select-spec-unselect spec_selected">
+				<center><img height="20" width="20" src="${spec.spec_image}"
+					alt="${spec.spec_value}" title="${spec.spec_value}"></center>
+				</div>
+	
+				</td>
+				</#if>
+				
+				<#if spec.spec_type==0>
+				<td>
+				<div class="select-spec-unselect spec_selected"><span>${spec.spec_value}</span></div>	
+				</td>
+				</#if>
+				
+ 			</#list>
+			
+				<td >	
+					${product.store}
+				</td>				
+				<td>
+					    <input type="hidden" name="id"  disabled="true" value="${product.storeid}" />
+						<input type="hidden" name="productid"  disabled="true" value="${product.product_id}" />		
+						<input type="input"  disabled="true" name="store" size="6" store="${product.store}" value="0" autocomplete="off" />	
+						<input type="hidden" name="depotid"  disabled="true" value="${depot.depotid}" />
+						<input type="button" value="出货" class="shipbtn" />
+				</td>
+			</tr>
+		</#list>
+	</#if>	
+</tbody>
+
+</table>
+</#list>
+
+</div>
+<script>
+$(function(){
+	
+	$("#frame_store_box .shipbtn").click(function(){
+		
+		var self = $(this);
+		var storeInput = self.parents("tr").find("input").not("[type=button]");
+		var value = self.val();
+		if("出货" ==  value){
+			storeInput.attr("disabled",false);
+			self.val("取消");
+		}else{
+			storeInput.attr("disabled",true);
+			self.val("出货");
+		}
+		
+	});
+	
+	$("#frame_store_box input[name=store]").change(function(){
+		
+		var self = $(this);
+		var value  = self.val();
+		
+		if(value==""){ alert("请输入出货量") ;self.val(1); return false; }
+		if(!$.isNumber(value) ){ alert("出货量必须是数字");self.val(1); return false;}
+		if( parseInt( value )<=0  ){
+			alert("出货量必须大于0");
+			self.val(1);
+			return false;
+		}
+		
+	});
+	
+})
+</script>

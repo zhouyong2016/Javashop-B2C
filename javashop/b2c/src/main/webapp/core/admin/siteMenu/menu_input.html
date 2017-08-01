@@ -1,0 +1,58 @@
+<div class="main" style="background-color: white;">
+	<form  method="post" id="menuinfoForm">
+		<#if isEdit> 
+			<input type="hidden" name="menuid" value="${menuid!''}" />
+		</#if>
+		<input type="hidden" id="childrenId" value="${menuid!''}">
+		<table cellspacing="1" cellpadding="3" width="100%" >
+			<tr>
+				<th>名称</th>
+				<td><input type="text" name="name" class="input_text easyui-validatebox"
+					value="${siteMenu.name!''}" maxlength="13" data-options="required:true"
+					 isrequired="true" /></td>
+			</tr>
+			<tr>
+				<th>上级菜单</th>
+				<td><select name="parentid" id="parentid">
+						<option value="0">顶级类别</option> <#assign children=menuList />
+						<#assign level=1 /> <#include 'select_children.html' />
+				</select></td>
+			</tr>
+			<tr>
+				<th>链接</th>
+				<td><input type="text" name="url" class="input_text" maxlength="30"
+					style="width: 200px" value="${siteMenu.url!''}" dataType="string"
+					isrequired="true" maxlength="60" placeholder="请输入符合规范的站内链接"/><br/>
+					<span style="color: red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/goods-402.html，只需填写goods-402.html即可！</span>
+				</td>
+			</tr>
+			<tr>
+				<th>目标</th>
+				<td><input type="text" name="target"
+					class="input_text" style="width: 200px"
+					value="${siteMenu.target!''}" dataType="string" maxlength="60"/></td>
+			</tr>
+			<tr>
+				<th>排序</th>
+				<td><input type="text" name="sort" class="input_text easyui-numberbox"
+					style="width: 50px" value="${siteMenu.sort!''}" dataType="int"
+					data-options="required:true" isrequired="true" maxlength="9"/></td>
+			</tr>
+		</table>
+	</form>
+
+</div>
+<script type="text/javascript">
+$(function(){
+	<#if !isEdit>
+	if(${menuid!'1'}==1){
+		$("#parentid").val(${menuid!''});
+	}else{
+		$("#parentid").val($("#childrenId").val());
+	}
+	
+	<#else>
+		$("#parentid").val(${siteMenu.parentid!''});
+	</#if>
+});
+</script>

@@ -1,0 +1,50 @@
+<#assign title= "商品收藏api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu">
+<#include '../menu_api.html' />
+	</div>
+	<div class="right_list">
+		<h1>商品收藏API</h1>
+		<p class="api_intro">提供了收藏商品及删除商品的操作功能</p>
+		<h2>API列表</h2>
+		<ul class="list">
+		
+			<li>
+				<div class="api_func"><a href="addCollect.html">addCollect</a></div>
+				<span>收藏一件商品（前提必须是要会员登录后）</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="cancelCollect.html">cancelCollect</a></div>
+				<span>删除一件收藏过的商品（前提必须是要会员登录后）</span>
+			</li>
+		</ul>
+		<h2>数据结构列表</h2>
+		<ul class="list">
+			<li>
+				<div class="api_func"><a href="Favorite.html">Favorite</a></div>
+				<span>收藏一件商品（前提必须是要会员登录后）</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<#include '../fooder.html' />
+
+<script>
+setMenu(1);
+</script>
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+

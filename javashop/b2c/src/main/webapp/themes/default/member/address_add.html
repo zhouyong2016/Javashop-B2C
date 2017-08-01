@@ -1,0 +1,65 @@
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="form_wrap white_box">
+	<div class="box" >
+		<div class="top"></div>
+		<div class="body">
+			<form id="member_addr"  class="validate"   action="" method="post">
+				<table cellspacing="0" cellpadding="0" border="0" >
+					<tbody>
+						<tr>
+							<th>默认收货地址：</th>
+							<td>
+							<label><input type="radio"   value="0" name="def_addr">否</label> 
+							<label><input type="radio"   value="1"  name="def_addr">是</label></td>
+						</tr>
+						<tr>
+							<th><em></em>姓名：</th>
+							<td><input type="text"  class="input_text "  isrequired="true" name="name"  maxlength="20"  autocomplete="off"></td>
+						</tr>	
+						<tr>
+							<th>手机：</th>
+							<td><input type="text" class="input_text" name="mobile" id="mobile" autocomplete="off"
+								onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11"></td>
+						</tr>	
+						<tr>
+							<th>电话：</th>
+							<td><input type="text"  class="input_text"  name="tel"  id="tel" dataType="tel_num" autocomplete="off"
+							onkeyup="this.value=this.value.replace(/[^\d-]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="13">
+							<spanclass="infotips">其中联系电话和联系手机必须填写一项</span></td>
+						</tr>					
+						<tr>
+							<th><em></em>地区：</th>
+							<td>		
+							<@regionSelect />
+							</td>
+						</tr>
+						<tr>
+							<th><em></em>地址：</th>
+							<td><textarea   rows="3" cols="30" name="addr" isrequired="true" type="textarea" maxlength="40" ></textarea></td>
+						</tr>
+						<tr>
+							<th><em></em>邮编：</th>
+							<td><input   class="input_text" isrequired="true" name="zip" id="zipcode" autocomplete="off"  dataType="post_code"
+								onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="6" ></td>
+						</tr>
+						<tr>
+							<th></th>	
+							<td>
+								<div class="btn"><input type="button"  class="yellow_btn" id="btnSubmit" value="保存并返回"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		
+			</div>
+			<div class="bottom"></div>
+			</div>
+			</div>
+			<script type="text/javascript">
+
+			
+			
+			
+			</script>
+			

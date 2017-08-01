@@ -1,0 +1,18 @@
+
+<!-- 创建广告标签 -->
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#assign adv = advListTag("'acid':'1'")!'' >
+<!-- 获取广告列表 -->	
+<#assign advList = adv.advList />
+
+<ul>
+	<#list advList as advNewList>
+	<li class="">
+		<a target="_blank" title="${advNewList.aname!''}" href="">
+			<@image src="${advNewList.atturl}" alt="${advNewList.aname!''}" />
+		</a>
+	</li> 
+	</#list>
+</ul>
+

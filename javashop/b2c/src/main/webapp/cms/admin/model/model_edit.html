@@ -1,0 +1,281 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<div class="shadowBoxWhite whiteBox">
+		<form method="post" id="addmodelForm" >
+			<table>
+				<tr>
+					<th width="100px;"><label class="text">模型名称:</label></th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						value="${dataModel.china_name!''}" name="china_name"
+						data-options="required:true" maxlength="60" dataType="string"
+						isrequired="true" /> <input type="hidden"
+						name="model_id" value="${dataModel.model_id }"
+						id="modelid" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">表名:</label></th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						value="${dataModel.english_name!''}" name="english_name"
+						data-options="required:true" maxlength="22" size="40"
+						isrequired="true" style="ime-mode: disabled;" onblur="validation(this)" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">备注：</label></th>
+					<td>
+						<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;">${dataModel.brief!''}</script>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="text-align: center;"><a href="javascript:;"
+						class="easyui-linkbutton" id="editbtn" onclick="editModel()">
+							保 存</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="clear height10"></div>
+	
+	<form id="fieldForm">
+		<div class='buttonArea'>
+			<a href="javascript:void(0)" class="button blueButton"
+				onclick="append()">添加字段</a>
+		</div>
+		
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/cms/admin/model/file-list-json.do?modelid=${dataModel.model_id }',fitColumns:'true'"
+				width="width" id="fielddata">
+				<thead>
+					<tr>
+						<th data-options="field:'field_id',checkbox:true,width:100"></th>
+						<th data-options="field:'china_name',width:100">提示文字</th>
+						<th data-options="field:'english_name',width:100">字段名</th>
+						<th data-options="field:'taxis',width:100">排序</th>
+						<th data-options="field:'edit',width:100" formatter="formatEdit">修改</th>
+						<th data-options="field:'delete',width:100"
+							formatter="formatDelete">删除</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+</div>
+</form>
+<div id="fieldinfo" style="display: none;"></div>
+<script type="text/javascript">
+
+
+var ue = UE.getEditor('editor', {
+	maximumWords:200,
+    zIndex: 900
+});
+
+
+function editModel(){
+	var disabled=  $("#editbtn").hasClass("l-btn-disabled");
+	if( !disabled ){
+		
+		var formflag= $("#addmodelForm").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在保存请稍候..");
+			$("#editbtn").linkbutton("disable"); 
+			var options = {
+					url : "${ctx}/cms/admin/model/save-edit.do",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+							location.replace(location);
+						}else{
+							$.Loading.error(result.message);
+						}
+						$("#editbtn").linkbutton("enable"); 
+					},
+				 	error : function(e) {
+				 		$.Loading.error('出现错误，请重试');
+				 		$("#editbtn").linkbutton("enable"); 
+					}
+				};
+			$('#addmodelForm').ajaxSubmit(options);	
+		}
+	}
+}
+function formatEdit(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+ row.field_id + ")' ></a>";
+	return val;
+}
+function formatDelete(value, row, index) {
+	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.field_id+ ')"></a>';
+	return val;
+}
+function edit(fieldid){
+	var modelid=$("#modelid").val();
+	 $("#fieldinfo").show();
+	　　	$('#fieldinfo').dialog({
+	　　		title: '修改字段',			
+	　　		width: 800,
+	  		top: 10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/cms/admin/field/edit.do?modelid='+modelid+'&fieldid='+fieldid+'&ajax=yes', 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+	　　			
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				  var editbtn = $(this);
+		　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+	　　				 		 fieldinForm("edit",editbtn);
+	　　				 	}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#fieldinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function append(){
+	var modelid=$("#modelid").val();
+	 	$("#fieldinfo").show();
+	　　	$('#fieldinfo').dialog({
+	　　		title: '添加字段',			
+	　　		width: 800,
+	  		top: 10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/cms/admin/field/add.do?ajax=yes&modelid='+modelid, 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+	　　			
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					 fieldinForm("add",savebtn);
+　　					 }
+		　　		 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){ 
+	　　				$('#fieldAddForm')[0].reset();
+	　　			 }
+	　　		}]
+	　　	});
+}
+function fieldinForm(val,btn){
+	var fieldurl = "";
+	var fieldId = "";
+	if(val=="edit"){
+		fieldurl = "${ctx}/cms/admin/field/save-edit.do?ajax=yes";
+		fieldId = "#fieldinfoForm";
+	}
+	if(val=="add"){
+		fieldurl = "${ctx}/cms/admin/field/save-add.do?ajax=yes";
+		fieldId = "#fieldAddForm";
+	}
+	var formflag= $(fieldId).form('validate');
+	if(formflag){
+		//验证字段名
+		var $name = $("#english_name");
+		var name = $.trim($name.val());
+		var Regx =  /^[a-zA-Z_]+$/;
+		formflag = Regx.test(name);
+		if(formflag){
+			formflag = name != "_";
+			if(formflag){
+				formflag = name.length < 16;
+				if(!formflag){
+					$.Loading.errorMessage("字段名的长度不允许超过16位!",3000);
+					return false;
+				}
+			}else{
+				$.Loading.errorMessage("字段名不允许单独出现下划线!",3000);
+				return false;
+			}
+		}else{
+			$.Loading.errorMessage("字段名不允许包含中文、数字及特殊字符!",3000);
+			return false;
+		}
+		
+	}
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		btn.linkbutton("disable");	
+		var options = {
+				url : fieldurl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result == 1 ){
+						$("#fieldinfo").dialog('close');
+						$.Loading.success(result.message);
+						$('#fielddata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+						btn.linkbutton("enable");
+					}
+					
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		btn.linkbutton("enable");
+				}
+			};
+		$(fieldId).ajaxSubmit(options);	
+	}else{
+		$.Loading.hide();
+		btn.linkbutton("enable");
+		
+	}
+}
+function del(field_id){
+	if(!confirm("确认要删除字段吗？")){	
+		return ;
+	}
+	var options = {
+			url : "${ctx}/cms/admin/field/delete.do?ajax=yes&fieldid="+field_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+				$.Loading.success(result.message);
+					$('#fielddata').datagrid('reload');
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#fieldForm').ajaxSubmit(options);	
+}
+
+//对输入的表名称进行格式验证，只允许输入小写英文字母和下划线，且不能以下划线开始和结束
+//add by DMRain 2016-4-15
+function validation(obj){
+	var z = /^[a-z]+[a-z_]*$/;
+	if(obj.value != ""){
+		if(!z.test(obj.value)){
+		   	alert("您输入的表名称不符合规范，请重新输入！");
+		   	obj.value = "";
+	    }else{
+	    	var va = obj.value.charAt(obj.value.length-1);
+	    	if(va == "_"){
+	    		alert("您输入的表名称不符合规范，请重新输入！");
+			   	obj.value = "";
+	    	}
+	    }
+	}
+}
+</script>
+<#include '/admin/footer.html' >

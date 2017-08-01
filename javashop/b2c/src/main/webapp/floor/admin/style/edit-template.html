@@ -1,0 +1,132 @@
+<#include '/admin/header.html' >
+<script src="${ctx}${themes_path}/js/home_index.js"></script>
+<div class="main">
+	<div class="clear height10"></div>
+	<div style="display: block;"
+		class="input shadowBoxWhite wf100 whiteBox">
+		<div id="editTemplate" class="index-main"></div>
+	</div>
+	<div id="divdia" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var path="${stylepath}";
+		var floorId="${floor_id}";
+		var pageid="${pageid}";
+		$("#editTemplate").load("${ctx}"+path+"?floor_id="+floorId+"&page_id="+pageid,function(){
+			//$(".floor").show();
+			$.getScript("${ctx}${themes_path}/js/home_index.js");
+			$(".new_dialog").unbind("click").click(function(){
+				var button=$(this);
+				var id=button.attr("data-operation-id");
+				var operation_url=button.attr("data-operation-url");
+				var save_url=button.attr("data-save-url");
+				var title=button.attr("data-title");
+				var formId=button.attr("data-formId");
+				var floor_id=button.attr("data-floorId");
+				var index=button.attr("data-goods-index");
+					append(id,operation_url,save_url,title,formId,floor_id,index);
+			});
+
+
+			$(".new_tab").unbind("click").click(function(){
+				var button=$(this);
+				var id=button.attr("data-operation-id");
+				var operation_url=button.attr("data-operation-url");
+				var title=button.attr("data-title");
+				var floor_id=button.attr("data-floorId");
+				var index=button.attr("data-goods-index");
+				if(typeof(id)=="undefined"){
+					id='';
+				}
+				if(typeof(index)=="undefined"){
+					index='';
+				}
+				var url=operation_url+"?data_id=" +id+"&floor_id="+floor_id+"&index="+index;
+				newTab(title,url);
+			});
+			//禁用a标签
+			$("a").removeAttr('href');
+			$("a").removeAttr('onclick');
+		});
+
+	});
+	function append(id,operation_url,save_url,title,formId,floor_id,index) {
+		var id2;
+		if(typeof(id)=="undefined"){
+			id2='';
+		}else{
+			id2=id;
+		}
+		var map = {}; // Map map = new HashMap();
+
+				map["href"] = operation_url+"?data_id=" +id2+"&floor_id="+floor_id+"&index="+index;
+				map["formId"] = "#"+formId;
+				map["url"] = save_url;
+				map["title"] = title;
+				map["loadshow"] = "正在修改......";
+		map["divDialog"] = "#divdia";
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 726,
+			height : 600,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						 submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在保存请稍候...");
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			savebtn.linkbutton("enable");
+			$.Loading.hide();
+		}
+	}
+</script>
+
+<#include '/admin/footer.html' >

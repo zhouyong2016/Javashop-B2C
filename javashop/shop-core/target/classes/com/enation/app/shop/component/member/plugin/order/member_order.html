@@ -1,0 +1,44 @@
+<div style="width:100%;"  class="shadowBoxWhite tableDiv">
+	<table id="odg"></table>
+</div>
+<script type="text/javascript">
+
+function onTabShow5(tabid){
+	if(5==tabid){
+		$('#odg').datagrid({
+	      url:'${ctx}/shop/admin/order/list-order-by-member-id.do?member_id=${memberid}',
+	      fitColumns:true,
+	      pagination:true,
+	      columns:[[
+		      {field:'sn',title:'订单号',width:100},
+		      {field:'status',title:'订单状态',width:100,formatter:forStruts},
+		      {field:'payStatus',title:'支付状态',width:100},
+		      {field:'create_time',title:'下单日期',width:100,formatter:formatTime},
+	      ]]
+		});
+	}
+}
+
+//订单状态
+function forStruts(value, row, index) {
+	var val;
+	val = getType(${status_Json!''},value);
+	return val;
+}
+
+function getType(exMap,value){
+	var val;
+	$.each(exMap,function(key,values){ 
+	    if(value==key){
+	    	val=values;
+	    }
+	});
+	return val;
+}
+
+function formatTime(value,row,index){
+	
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+ 
+</script>

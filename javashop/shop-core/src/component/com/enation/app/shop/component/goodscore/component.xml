@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="商品核心组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="商品基本信息管理插件" id="goodsBasePlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品自定义属性管理插件" id="goodsPropsAdminPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品自定义参数管理插件" id="goodsParamsAdminPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+
+
+		<plugin name="默认货号生成插件" id="defaultGoodsSnCreatePlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>	
+		<plugin name="商品搜索优化设置插件" id="goodsSeoPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>	
+		<plugin name="商品标签管理插件" id="goodsTagPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品导入前清除商品数据插件" id="goodsDataCleanImportPlugin">
+			<bundle id="goodsImportPluginBundle"></bundle>
+		</plugin>
+			
+	<!-- 	<plugin name="商品数据日志记录插件 " id="goodsDatalogPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin> -->
+		
+		<!-- <plugin name="商品sitemap记录插件" id="goodsSitemapPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+			<bundle id="sitemapPluginBundle"></bundle>
+		</plugin> -->
+		
+		<plugin name="预警库存插件" id="warningSettingPlugin">
+			<bundle id="settingPluginBundle"></bundle>
+		</plugin> 
+					
+	</plugins>
+
+	
+</component>

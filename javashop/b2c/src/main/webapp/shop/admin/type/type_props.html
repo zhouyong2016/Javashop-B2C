@@ -1,0 +1,135 @@
+<script type="text/javascript">
+	var editIndex = undefined;
+	function endEditing() {
+		if (editIndex == undefined) {
+			return true;
+		}
+		if ($('#dprops').datagrid('validateRow', editIndex)) {
+			$('#dprops').datagrid('getRows', editIndex);
+			$('#dprops').datagrid('endEdit', editIndex);
+			editIndex = undefined;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	var propstype = [ {
+		type : "1",
+		typename : "输入项 可搜索",
+		group : "输入项"
+	}, {
+		type : "2",
+		typename : "输入项 不可搜索",
+		group : "输入项"
+	}, {
+		type : "3",
+		typename : "选择项 可搜索",
+		group : "选择项"
+	}, {
+		type : "4",
+		typename : "选择项 不可搜索",
+		group : "选择项"
+	} ];
+
+	var requireds = [ {
+		rvalue : "0",
+		rtype : "否"
+	}, {
+		rvalue : "1",
+		rtype : "是"
+	} ];
+
+	var datatypes = [ {
+		dvalue : " ",
+		dtype : "无"
+	}, {
+		dvalue : "int",
+		dtype : "整数"
+	}, {
+		dvalue : "float",
+		dtype : "浮点数"
+	} ]
+	function formatid(value, row, index) {
+		return index;//'<input type="text" value="'+index+'" name="index">';
+	}
+</script>
+<div class="main" style="background-color: white;">
+	<div class="buttonArea" style="height: auto">
+		<a href="javascript:void(0)" class="button" onclick="addprops()">添加</a>
+		<a href="javascript:void(0)" class="button" onclick="removeitprops()">删除</a>
+		<a href="javascript:void(0)" class="button" onclick="reject()">还原</a>
+	</div>
+	<table class="easyui-datagrid" style="width: width;" id="dprops"
+		data-options="url:'${ctx}/shop/admin/type/edit-json.do?typeId=${goodsType.type_id}',remoteSort:true,fitColumns:'true',onClickRow: onClickRow">
+		<thead>
+			<tr>
+				<th data-options="field:'id',hidden:true"></th>
+				<th
+					data-options="field:'name',width:100,sortable:true,required:true,editor:{type:'validatebox',options:{required:true,validType:'length[1,10]'}}">属性名</th>
+				<th
+					data-options="field:'type',width:150,
+					formatter:function(value,row){
+						for (var i = 0; i < propstype.length; i++) {
+							if (propstype[i].type == value)
+							return propstype[i].typename;
+						}
+						return value;
+					},
+					editor:{
+					type:'combobox',
+						options:{
+							valueField:'type',
+							textField:'typename',
+							groupField:'group',
+							panelHeight: 'auto',
+							data:propstype,
+							required:true,
+							editable:false
+						}
+					}">类型</th>
+				<th data-options="field:'options',width:100,editor:'text'">选择项(逗号分隔)</th>
+				<th data-options="field:'unit',width:100,editor:'text'">单位</th>
+				<th
+					data-options="field:'required',width:100,
+					formatter:function(value,row){
+							for (var i = 0; i < requireds.length; i++) {
+								if (requireds[i].rvalue == value)
+								return requireds[i].rtype;
+							}
+							return value;
+						},
+						editor:{
+						type:'combobox',
+							options:{
+								valueField:'rvalue',
+								textField:'rtype',
+								panelHeight: 'auto',
+								data:requireds,
+								required:true,
+								editable:false
+							}
+						}">必填</th>
+				<th
+					data-options="field:'datatype',width:100,
+					formatter:function(value,row){
+								for (var i = 0; i < datatypes.length; i++) {
+									if (datatypes[i].dvalue == value)
+									return datatypes[i].dtype;
+								}
+								return value;
+							},
+							editor:{
+							type:'combobox',
+								options:{
+									valueField:'dvalue',
+									textField:'dtype',
+									panelHeight: 'auto',
+									data:datatypes,
+									editable:false
+								}
+					}">校验</th>
+			</tr>
+		</thead>
+	</table>
+</div>

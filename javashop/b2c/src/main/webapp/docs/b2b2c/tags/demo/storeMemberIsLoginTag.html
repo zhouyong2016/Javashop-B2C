@@ -1,0 +1,9 @@
+
+<!--创建"判断会员是否登陆"标签-->
+<#assign StoreMemberIsLoginTag= newTag("storeMemberIsLoginTag") >  
+<!--调用"判断会员是否登陆"标签，并传递参数-->            
+<#assign  storeMemberIsLogin= StoreMemberIsLoginTag() >						
+<ul class="gw">
+
+	是否登录：${storeMemberIsLogin}</br>
+	

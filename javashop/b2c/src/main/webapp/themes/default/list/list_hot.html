@@ -1,0 +1,17 @@
+<ul>
+	  <#list goodsList as goods>
+		<li class="<#if goods_index==0>first</#if> <#if !goods_has_next>last</#if>">
+			<a href="goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}" alt="${goods.name}" /></a>
+			<div class="h_intro">
+
+				<div><a href="goods-${goods.goods_id}.html" title="${goods.name}"><@substring title="${goods.name}" length="36" dot="..." /></a></div>
+				<p>商城价：<span>${goods.price?string.currency}</span></p>
+
+			</div>
+		</li>
+	</#list>
+</ul>
+
+	
+	
+	

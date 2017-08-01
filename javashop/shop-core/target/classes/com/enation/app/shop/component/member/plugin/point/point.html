@@ -1,0 +1,73 @@
+<div>
+	<form id="editPointForm">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tbody>
+					<tr>
+						<th>当前积分:</th>
+						<td id="curr">${member.point }</td>
+					</tr>
+					<tr>
+						<th>调整积分（增/减）:</th>
+						<td><input type="text" name="point" size="20"  id="point" class="input_text">输入负值即可减少积分；</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" value="${memberid }" name="memberId">
+		</div>
+	</form>
+</div>
+<div class="submitlist" align="center">
+	<table>
+		<tr>
+			<td><input name="button" type="button" value=" 确    定"
+				class="submitBtn button blueButton" id="editPointBtn" /></td>
+		</tr>
+	</table>
+</div>
+
+<script>
+	$(function() {
+
+		$("#editPointBtn").click(function() {
+			if ($("#point").val() == "") {
+				alert("请输入调整积分");
+				return false;
+			}
+			
+			if(isNaN($("#point").val())){
+				alert("请输入数字");
+				return false;
+			}
+
+			$.Loading.show('正在更新数据，请稍侯...');
+			var that = this;
+			var options = {
+				url : "${ctx}/shop/admin/member/edit-save-point.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						var op = parseInt($("#curr").html());
+						op = op + parseInt($("#point").val());
+						if(op <= 0){
+							$("#curr").html(0);
+						}else{
+							$("#curr").html(op);
+						}
+						$("#point").val("");
+					} else {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#editPointForm').ajaxSubmit(options); 
+
+		});
+	});
+</script>

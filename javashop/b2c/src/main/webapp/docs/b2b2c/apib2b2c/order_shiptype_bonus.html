@@ -1,0 +1,26 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>change-args-type 改变店铺的配送方式以及优惠券API</h3>
+		<p>改变店铺的配送方式以及红包</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/store/store-order/change-args-type.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">bonus_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">优惠券id</span></p>
+			<p><span class="w100 important">regionid</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">451</span><span class="w200">区域id</span></p>
+			<p><span class="w100 important">store_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">15</span><span class="w200">商店id</span></p>
+			<p><span class="w100 important">type_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">7</span><span class="w200">类型id</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":null,"data":{"storeprice":{"goodsPrice":89.9,"orderPrice":359.9,"shippingPrice"
+			:270.0,"needPayMoney":344.9,"discountPrice":15.0,"weight":270.0,"point":0,"discountItem":{},"actDiscount"
+			:0.0,"gift_id":0,"bonus_id":0}}}
+		</h5>
+	</div>
+</div>

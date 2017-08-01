@@ -1,0 +1,137 @@
+<#-- 创建购物车标签 --> 
+<#assign kabenCartTag= newTag("kabenCartTag")>
+<#--通过购物车标签获取购物项列表 --> 
+<#assign itemList =kabenCartTag("{'is_bonded':'0'}") > 
+<#-- 创建会员是否登录标签 --> 
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")> 
+<#-- 获取是否登录 --> 
+<#assign isLogin = memberIsLoginTag() >
+<script type="text/javascript">
+	var isLogin = ${isLogin?string};
+</script>
+<!--Main开始-->
+<div class="main">
+	<div class="cart_area">
+		<#if itemList?exists && itemList?size gt 0>
+			<ul>
+				<li class="title">
+					<span class="c02">一般商品清单</span>
+				</li>
+				<li class="item">
+					<span class="c03">商品名称</span>
+					<span class="c04">单价</span>
+					<span class="c04">商品积分</span>
+					<span class="c04">数量</span>
+					<span class="c04">小计</span>
+					<span class="c04">库存状况</span>
+					<span class="c04">操作</span>
+				</li>
+				<#list itemList as item >
+					<li class="content" itemid="${item.id}" productid="${item.product_id}" price="${item.coupPrice}">
+						<span class="c05">
+							<a target="_blank" href="goods-${item.goods_id}.html" class="color">
+								<@image height="50" width="36" src="${item.image_default!''}" style="cursor: pointer;" /> 
+								${item.name}
+							</a>
+						</span>
+						<span>
+						</span>
+						<span class="c06">${item.price?string("currency")}</span>
+						<span class="c04">获得：<span class="color">${item.point}</span></span>
+						<span class="c04">
+							<div id="num" class="Numinput" value="${item.num}" itemid="${item.id}" productid="${item.product_id}">
+								<span class="numadjust decrease cut">-</span> 
+								<input size="5" name="num" autocomplete="off" type="text" value="${item.num}">
+								<span class="numadjust increase add">+</span>
+							</div>
+							<input type="hidden" name="is_bonded" class="is_bonded" value="0">
+						</span>
+						<span class="c07 itemTotal">${item.subtotal?string("currency")}</span>
+						<span class="c04">现货</span>
+						<span class="c04">
+							<input type="hidden" name="itemid" class="itemid" value="${item.id}" >
+							<a href="" class="collect">收藏</a>
+							<a href="javascript:;" class="delete cancel">删除</a>
+						</span>
+					</li>
+				</#list>
+			</ul>
+			<div class="total">
+				<#include '/cart/no_bonded_totle.html' />
+				<a href="javascript:void(0);" class="continue returnbuy_btn">继续购物</a>
+				<a href="javascript:void(0);" class="buy checkout_btn" isbonded="0">去结算</a>
+			</div>
+		</#if>
+		
+		<#-- 通过购物车标签获取购物项列表 -->
+		<#assign goodsList =kabenCartTag("{'is_bonded':'1'}") > 
+		<#if goodsList?exists && goodsList?size gt 0>
+			<ul>
+				<li class="title">
+					<span class="c02">保税商品清单</span>
+				</li>
+				<li class="item">
+					<span class="c03">商品名称</span>
+					<span class="c04">单价</span>
+					<span class="c04">商品积分</span>
+					<span class="c04">数量</span>
+					<span class="c04">小计</span>
+					<span class="c04">库存状况</span>
+					<span class="c04">操作</span>
+				</li>
+				<#list goodsList as item >
+					<li class="content" itemid="${item.id}" productid="${item.product_id}" price="${item.coupPrice}">
+						<span class="c05">
+							<a target="_blank" href="goods-${item.goods_id}.html" class="color">
+									<@image height="50" width="36" src="${item.image_default!''}" style="cursor: pointer;" /> 
+									${item.name}
+							</a>
+						</span>
+						<span class="c06">
+							${item.price?string("currency")} 
+							<input type="hidden" class="coupPrice" value="${item.coupPrice}">
+						</span>
+						<span class="c04">获得：<span class="color">${item.point}</span></span>
+						<span class="c04">
+							<div id="num" class="Numinput" value="${item.num}" itemid="${item.id}" productid="${item.product_id}">
+								<span class="numadjust decrease">-</span> 
+								<input size="5" name="num" autocomplete="off" type="text" value="${item.num}">
+								<span class="numadjust increase">+</span>
+							</div>
+							<input type="hidden" name="is_bonded" class="is_bonded" value="1">
+							<input type="hidden" class="subtotal" value="${item.subtotal}" >
+						</span>
+						<span class="c07 itemTotal">${item.subtotal?string("currency")}</span>
+						<span class="c04">现货</span>
+						<span class="c04">
+							<input type="hidden" name="itemid" class="itemid" value="${item.id}" >
+							<a href="" class="collect">收藏</a>
+							<a href="javascript:void(0);" class="cancel delete">删除</a>
+						</span>
+					</li>
+				</#list>
+			</ul>
+			<div class="total">
+				<#include '/cart/cartTotal.html' />
+				<a href="javascript:void(0);" class="continue returnbuy_btn">继续购物</a>
+				<a href="javascript:void(0);" class="buy checkout_btn" isbonded="1">去结算</a>
+			</div>
+		</#if>
+		<div id="login_tip" style="display: none">
+			<div class="message">
+				您当前是游客身份，游客身份不能购买商品！<br><br>
+			</div>
+			<div class="button_wrapper">
+				<div class="btn-div">
+					<input type="button" class="green_btn to_login_btn" value="马上登录">
+				</div>
+
+				<div class="btn-div">
+					<input type="button" class="yellow_btn to_checkout_btn"
+						value="直接购买">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--Main end-->

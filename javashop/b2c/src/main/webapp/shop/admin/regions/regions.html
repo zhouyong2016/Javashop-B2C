@@ -1,0 +1,204 @@
+<#include '/admin/header.html' >
+
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea' style="height: auto;">
+		<a href="javascript:void(0)" class="button" onclick="controlRegions()">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="init()" id="initRegion">初始化</a>
+	</div>
+	<div class="clear height10"></div>
+	
+		<table id="rediondata" >
+		</table>
+	
+</div>
+
+<div id="divdia"></div>
+<script>
+	
+
+
+	$(initPage())
+	
+	function initPage(){
+		$("#rediondata").treegrid({
+			fitColumns:'true',
+		    url:'${ctx}/shop/admin/region/list-children.do?parentid=0',
+		    animate:false,
+		    idField:'region_id',
+		    treeField:'local_name',
+		    columns:[[
+		        {field:'region_id',title:'ID',width:80},
+		        {field:'local_name',title:'名称',width:200},
+		        {field:'add',title:'添加子',width:25,formatter:formatAdd},
+		        {field:'edit',title:'编辑',width:25,formatter:formatEdit},
+		        {field:'delete',title:'删除',width:25,formatter:formatDelete}
+		    ]],
+		    onBeforeExpand:function(row,param){
+		        if(row){
+		        	$(this).treegrid('options').url="${ctx}/shop/admin/region/list-children.do?parentid="+row.region_id;
+		    	}
+		    }
+		});
+	    
+	}
+
+	function controlRegions(id, obj) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/shop/admin/region/add.do";
+			map["formId"] = "#regionForm";
+			map["url"] = "${ctx}/shop/admin/region/save-add.do?ajax=yes";
+			map["title"] = "添加地区";
+			map["loadshow"] = "正在添加......";
+		} else {
+			if (obj == 1) {
+				map["href"] = "${ctx}/shop/admin/region/children.do?region_id=" + id;
+				map["formId"] = "#childrenForm";
+				map["url"] = "${ctx}/shop/admin/region/save-add-children.do?ajax=yes";
+				map["title"] = "添加子分类";
+				map["loadshow"] = "正在修改......";
+			} else {
+				map["href"] = "${ctx}/shop/admin/region/edit.do?region_id=" + id;
+				map["formId"] = "#regioneditForm";
+				map["url"] = "${ctx}/shop/admin/region/save-edit.do?ajax=yes";
+				map["title"] = "修改地区";
+				map["loadshow"] = "正在修改......";
+			}
+
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#rediondata";
+		addDialog(map);
+	}
+
+	function addDialog(map) {
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 600,
+			height : 250,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						 submitForm(map,savebtn);
+	　　				}
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+		
+		//弹出窗dialog居中展示
+		$(map["divDialog"]).panel("move",{top:$(document).scrollTop() + ($(window).height()-250) * 0.5}); 
+		$(".window-shadow").css('display','none');
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+	 	 	savebtn.linkbutton("disable");	
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						//$(map["gridreload"]).treegrid('reload');
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatAdd(value, row, index) {
+		var val = "<a href='javascript:void(0);' onclick='controlRegions("
+				+ row.region_id
+				+ ",1)'><img class='add' src='${ctx}/shop/admin/images/transparent.gif'></a>";
+		return val;
+	}
+	function formatEdit(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlRegions("
+				+ row.region_id + ",2)' ></a>";
+		return val;
+	}
+	function formatDelete(value, row, index) {
+		var val = '<a href="javascript:;" onclick="del('
+				+ row.region_id
+				+ ')"><img catid="'+row.region_id+'" class="delete" src="${ctx}/shop/admin/images/transparent.gif"></a>';
+		return val;
+	}
+
+	function del(id) {
+		if (!confirm("确认要删除该地区及其所属地区吗？")) {
+			return false;
+		}
+
+		$.Loading.show("正在删除该地区及其所属地区...");
+		var self = this;
+		$.ajax({
+			url : "${ctx}/shop/admin/region/delete.do?region_id=" + id + "&ajax=yes",
+			dataType : "json",
+			success : function(res) {
+				$.Loading.success(res.message);
+				//$("#rediondata").treegrid('reload');
+				initPage(); 
+			},
+			error : function() {
+				alert("删除失败");
+				$.Loading.hide();
+			}
+		});
+	}
+
+	function init() {
+		if (!confirm("确认要将地区初始化吗，此操作会清除当前地区数据？")) {
+			return false;
+		}
+		
+		$("#initRegion").linkbutton("disable");
+		$.Loading.show("正在初始化地区数据......");
+		$.ajax({
+			url : "${ctx}/shop/admin/region/reset.do?ajax=yes",
+			dataType : "json",
+			success : function(res) {
+				$.Loading.success(res.message);
+				$("#rediondata").treegrid('reload');
+				$("#initRegion").linkbutton("enable");
+			},
+			error : function() {
+				alert("初始化所需时间较长,请三分钟之后再来查看");
+				$("#initRegion").linkbutton("enable");
+				$.Loading.hide();
+			}
+			
+		});
+	}
+</script>
+<#include '/admin/footer.html' >

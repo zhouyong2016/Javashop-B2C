@@ -1,0 +1,179 @@
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+<div class="address_div">
+	<form class="validate" id="checkform">
+	<div class="c_address">
+			<dl class="def">
+				<label class="chaeng-def">
+					<input type="checkbox"  value="1"  name="def_addr" class="addr12 new-addr" checked="checked">
+					<p>使用新地址作为默认收货地址</p>
+				</label>
+			</dl>
+			<dl>
+				<dt><em style="color: red;">*</em> 收货地区：</dt>
+				 <dd id="selectAddress" >
+                    <script type="text/javascript">
+                        $(function(){
+                            $('#selectAddress').addressSelect();
+                        })
+                    </script>
+                </dd>
+			</dl>
+			<dl>
+				<dt><em style="color: red;">*</em> 地址：</dt>
+				<dd><input id="addr" type="text" class="text addr"   maxlength="30" 
+					name="shipAddr" isrequired="true" dataType="string" autocomplete="off"></dd>
+			</dl>
+			<dl>
+				<dt><em style="color: red;">*</em> 邮编：</dt>
+				<dd><input type="text" id="zip"  maxlength="6"
+					name="shipZip"   dataType="post_code"  class="text addr1" autocomplete="off" value=""></dd>
+			</dl>
+			<dl>
+				<dt><em style="color: red;">*</em> 收货人姓名：</dt>
+				<dd>
+					<input type="text" class="text addr2"  maxlength="20" id="name" value=""  name="shipName" autocomplete="off" isrequired="true" dataType="string" placeholder="请填写真实姓名，以免延误收货">
+		 		</dd>
+			</dl>
+			<dl>
+				<dt><em style="color: red;">*</em> 联系手机：</dt>
+				<dd><input type="text" class="text addr3" id="mobile" maxlength="11" name="shipMobile" autocomplete="off" placeholder="请填写准确联系电话，以免延误收货"></dd>
+			</dl>
+			<dl>
+				<dt> 联系电话：</dt>
+				<dd><input type="text" class="text addr4" id="tel" dataType="tel_num" maxlength="16" name="shipTel" autocomplete="off">
+					</dd>
+			</dl>
+			<dl>
+				<dt> 地址别名：</dt>
+				<dd style="line-height: 26px;" class="dd-aliases">
+					<input type="text" class="text addr13" id="alias" name="shipAddressName" autocomplete="off" maxlength="30"/>
+					<span>建议填写常用名称</span>
+                 	   <span style="margin-left: 10px;">例如：</span>
+                  	   <span>
+                         <a href="javascript: void(0);" class="example-aliases">家里</a>
+                         <a href="javascript: void(0);" class="example-aliases">公司</a>
+                         <a href="javascript: void(0);" class="example-aliases">学校</a>
+                    </span>
+				</dd>
+			</dl>
+	</div>
+<input type="button" value="保存地址" id="btnSubmit" class="checkout_new_address" style="cursor: pointer;"> 
+</form>
+</div>
+<script>
+
+
+
+
+$(function(){
+	
+	$(".chaeng-def").click(function(){
+		var isDef = $(this).find("input").val();
+		if(isDef == "1"){
+			$(".new-addr").val("0");
+		}else{
+			$(".new-addr").val("1");
+		}
+	})
+	 //  添加别名
+	$(".example-aliases").on('click', function(){
+				var _val = $(this).html();
+				$("#alias").val(_val);
+	}); 
+	 //添加收货地址 
+	function add_address(){
+		$("#add_the_address ").empty();
+		$("#add_the_address").append("<div id='address_div'></div>");
+		var html = $("#address_div").load("checkout/new_address.html");
+		var dialog = $.dialog({ 
+			title:"新增收货人地址",
+			width:700,
+			top:100,
+			content:html,
+			lock:true,
+			init:function(){
+		}});
+		//dialog.content("url:checkout/new_address.html");
+	}
+	 //保存地址信息
+	$("#btnSubmit").click(function(){
+		//判断收货地址
+		if($("#region_id").val()== "0"){
+			alert("请选择收货地址");
+			 return false;
+		};
+		
+		
+		//判断收货详细地址
+		if($(".addr").val()== ""){
+			alert("请输入详细地址");
+			 return false;
+		};
+		
+		//判断邮编格式
+		 if($(".addr1").val()!=""){
+			 var tel = $(".addr1").val();
+			 var reg =/^[0-9]{6}$/;
+			 if(reg.test(tel)==false){
+				 alert("邮编格式错误");
+				 return false;
+			 }
+		 } 
+		//校验用户名
+		var membername = $(".addr2").val();
+		if(membername.indexOf(" ")!=-1){
+			alert("请确保会员名称前、后或名称中有空格");
+			return false;
+		}
+		if($(".addr2").val() == ""){
+			alert("请输入联系人姓名");
+			return false;
+		}
+		
+		//校验手机
+		if($(".addr3").val()==""){
+			alert("手机未填写");
+			return false;
+		}		
+		//判断手机格式
+		 if($(".addr3").val()!=""){
+			 var tel = $(".addr3").val();
+			 var reg = /^1[3|4|5|7|8]\d{9}$/;
+			 if(reg.test(tel)==false){
+				 alert("手机格式错误");
+				 return false;
+			 }
+		 }
+		//判断电话
+		 if($(".addr4").val()!=""){
+			 var tel = $(".addr4").val();
+			 var reg = /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+			 if(reg.test(tel)==false){
+				 alert("电话格式错误");
+				 return false;
+			 }
+		 }
+		 
+		var options = {
+			url :ctx+"/api/shop/member-address/add-new-address.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.href="checkout.html";
+				}
+				if (result.result == 0) {
+					alert(result.message);
+					 
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试");
+			}
+		};
+		$("#checkform").ajaxSubmit(options);
+	})
+	 /* checkOutAddress.saveAddress();  */
+})
+</script>

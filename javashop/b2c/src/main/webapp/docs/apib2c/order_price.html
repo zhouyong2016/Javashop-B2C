@@ -1,0 +1,52 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获得订单总价</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/order!getTotalPrice.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100"></span><span class="w380"></span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/order!getTotalPrice.do');</b>
+			<b>		var options = {</b>
+			<b><i></i>			url : url,</b>
+			<b><i></i>			success : function(data) {</b>
+			<b><i></i><i></i>				if (data.result == 1) {</b>
+			<b><i></i><i></i><i></i>					var viewData = data.data;</b>
+			<b><i></i><i></i><i></i>					var price = viewData.needPayMoney;</b>
+			<b><i></i><i></i><i></i>					$("#price_p").html("总计：" + e$.formatMoney(price));</b>
+			<b><i></i><i></i>				} else {</b>
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");</b>
+			<b><i></i><i></i>				}</b>
+			<b><i></i>			}</b>
+			<b>		};</b>
+			<b>		e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "data": {
+        "discountItem": {},
+        "discountPrice": 0,
+        "goodsPrice": 507.64,
+        "needPayMoney": 515.64,
+        "orderPrice": 515.64,
+        "point": 518,
+        "shippingPrice": 8,
+        "weight": 1.4
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

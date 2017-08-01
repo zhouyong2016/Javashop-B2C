@@ -1,0 +1,8 @@
+
+<!--创建"获取退款订单积分是否充足"标签-->
+<#assign orderChildItemListTag = newTag("orderChildItemListTag")>
+<!--调用“获取退款订单积分是否充足”标签-->
+<#assign orderChildItemList = orderChildItemListTag("'memberid':'1'")>
+<#list orderChildItemList.itemList as list>
+	是否充足：${list.id}</br>
+</#list>

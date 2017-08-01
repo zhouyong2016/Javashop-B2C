@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+	<bean id="shiroRealm" class="com.enation.app.base.security.ShiroRealm"></bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="sessionMode" value="http" /><!-- native -->
+		<property name="realm" ref="shiroRealm" />
+	</bean>
+
+	<bean id="logoutSSO" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+		<property name="redirectUrl" value="/admin" />
+	</bean>
+
+
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="globalSessionTimeout" value="1800000" />
+		<property name="deleteInvalidSessions" value="true" />
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+		<property name="sessionIdCookieEnabled" value="true" />
+	</bean>
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/admin" />
+		<property name="filters">  
+	            <map>  
+	                <entry key="sysAuth">  
+	                    <bean  
+	                        class="com.enation.app.base.security.AuthFilter" />  
+	                </entry>  
+	            </map>  
+	        </property>  
+		<property name="filterChainDefinitions" ref="extensibleFilterChainDefinitions"/>
+	</bean>
+	
+	<bean id="extensibleFilterChainDefinitions" class="com.enation.app.base.security.domain.ExtensibleFilterChainDefinitions">
+		<property name="locations" value="classpath*:spring_cfg/*filter-chain-definitions.properties"/>
+	</bean>
+</beans>

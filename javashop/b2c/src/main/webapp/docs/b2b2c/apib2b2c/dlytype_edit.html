@@ -1,0 +1,30 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>update 修改物流工具 API</h3>
+		<p>修改物流工具</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/b2b2c/dly-type/update.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w200">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w200 important">default_continueprice_yz</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">4</span><span class="w200">默认运费4g</span></p>
+			<p><span class="w200 important">default_continueunit_yz</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">3</span><span class="w200">内3元</span></p>
+			<p><span class="w200 important">default_firstmoney_yz</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">2</span><span class="w200">每增加2g</span></p>
+			<p><span class="w200 important">default_firstunit_yz</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">增加运费1元</span></p>
+			<p><span class="w200 important">dlyname</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">XXX快递</span><span class="w200">模板名称</span></p>
+			<p><span class="w200 important">express_py_areaids_1</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">35,453</span><span class="w200">区id</span></p>
+			<p><span class="w200 important">express_kd_areanames_1</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">三河</span><span class="w200">城市设置运费</span></p>
+			<p><span class="w200 important">express_kd_continuemoney_1</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">6</span><span class="w200">续费</span></p>
+			<p><span class="w200 important">express_kd_firstmoney_1</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">5</span><span class="w200">首费</span></p>
+			<p><span class="w200 important">tplType</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">2</span><span class="w200">类型</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"修改成功","data":null}
+		</h5>
+	</div>
+</div>

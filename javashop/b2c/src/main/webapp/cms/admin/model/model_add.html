@@ -1,0 +1,38 @@
+<form method="post" id="addmodelForm"  >
+	<table >
+	     <tr>
+	       <th width="60px;"><label class="text">模型名称:</label></th>
+	       <td><input type="text" class="easyui-validatebox input_text" name="china_name" data-options="required:true"  maxlength="60"  dataType="string" isrequired="true" /></td>
+	      </tr>
+	     <tr>
+	       <th><label class="text">表名:</label></th>
+	       <td><input type="text" class="easyui-validatebox input_text" name="english_name" data-options="required:true" maxlength="22" size="40" onblur="validation(this)" style="ime-mode: disabled;" isrequired="true"/></td>
+	      </tr>
+	     <tr>
+	       <th><label class="text">备注</label></th>
+	       <td>
+    			<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;"></script>
+	       </td>
+	     </tr>
+    </table>
+</form>
+<script type="text/javascript">
+
+//对输入的表名称进行格式验证，只允许输入小写英文字母和下划线，且不能以下划线开始和结束
+//add by DMRain 2016-4-15
+function validation(obj){
+	var z = /^[a-z]+[a-z_]*$/;
+	if(obj.value != ""){
+		if(!z.test(obj.value)){
+		   	alert("您输入的表名称不符合规范，请重新输入！");
+		   	obj.value = "";
+	    }else{
+	    	var va = obj.value.charAt(obj.value.length-1);
+	    	if(va == "_"){
+	    		alert("您输入的表名称不符合规范，请重新输入！");
+			   	obj.value = "";
+	    	}
+	    }
+	}
+}
+</script>

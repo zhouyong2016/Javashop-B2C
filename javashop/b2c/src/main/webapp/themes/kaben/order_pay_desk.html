@@ -1,0 +1,293 @@
+<#assign  title="收款台" /> 
+<#assign memberIsLoginTag=newTag("memberLoginCheckTag")>
+<#assign isLogin=memberIsLoginTag("'login_url':'/store/login.html'")>
+
+<#include 'common/header.html'/>
+
+<#--创建订单详细标签 -->
+<#assign orderDetailTag=newTag("orderDetailTag")>
+<#--读取订单详细 -->
+<#assign order=orderDetailTag()>
+
+<#--创建查询订单发票标签 -->
+<#assign receiptTag=newTag("receiptTag")>
+<#--读取订单发票详细 -->
+<#assign receipt=receiptTag("'orderid':${order.order_id}")>
+
+<#--创建查询订单发票标签 -->
+<#assign paymentListTag=newTag("paymentListTag")>
+<#--读取订单发票详细 -->
+<#assign paymentList=paymentListTag()>
+
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/cart.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/cashier.css" />
+
+<!-- 收款台 -->
+<div class="cashier-title">
+	<@image src="${site.logofile!''}" title="logo"/>
+	<h1>收银台</h1>
+	<div class="cashier-img">
+		<@image src="${ctx}${themes_path}/images/jstj.jpg" alt=""/>
+		<h2>订单提交成功，请您尽快付款</h2>
+	</div>
+</div>
+
+<!-- 支付方式选择 -->
+<div class="cashier-box">
+	<div class="cashier-change">
+		<h2>订单号：<b>${order.sn}</b></h2>
+		<h2>应付金额：<span>${order.needPayMoney?string("currency")}</span><i>元</i></h2>
+		<div class="cashier-order-detail">
+			<div class="cashier-order-inside">
+				<h3><i></i>送货至：<span>${order.ship_name!''}</span><span>${order.shipping_area!''}<span>${order.ship_addr!''}</span><span>${order.ship_mobile}</span><b rel="close">展开+</b></h3>
+				<div class="cashier-order-cartlist">
+					<p>发票信息：<#if receipt.title??>${receipt.title}<#else>此订单没有索取发票</#if> </p>
+					<p>送货时间：${order.ship_day!''}</p>
+					<p>订单备注：${order.remark!'无'}</p>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!-- 支付切换 -->
+		<div class="cashier-tools">
+		
+			<div class="cashier-tools-inside">
+				<div class="cashier-tools-title">
+					<h3>支付平台</h3>
+				</div>
+				<ul class="cashier-pay-list">
+					<#list paymentList as payment>
+						<#if payment.type=="alipayDirectPlugin">
+						<li class="alipay" rel="alipay" payid="${payment.id}" pluginid="${payment.type}">
+							<img src="${ctx}${themes_path}/images/zhifubao.png"/>
+							<span></span>
+						</li>
+						<#elseif payment.type=="weixinPayPlugin">
+						<li class="wechat" rel="wechat" payid="${payment.id}" pluginid="${payment.type}">
+							<img src="${ctx}${themes_path}/images/weixinpay.png"/>
+							<span></span>
+						</li>
+						<#else>
+						<li class="bank" rel="bank" payid="${payment.id}"  pluginid="${payment.type}">
+							<@image src="${payment.pay_img!''}" width="150" /> 
+							<span></span>
+						</li>
+						</#if>
+					</#list>			
+				</ul>
+			</div>
+		</div>
+		
+		<!-- 支付方式 -->
+		<div class="cashier-pay" style="border: 0px;">
+			<div class="same-pay-way alipay-pay" style="display:none">
+				<div class="alipay-left">
+					<p>使用电脑支付</p>
+					<div class="pc-pay-img">
+					</div>
+					<a href="javascript:void(0);">立即支付</a>
+					<i></i>
+				</div>
+				<div class="alipay-right">
+					<p>使用支付宝钱包扫一扫即可付款</p>
+					<div class="pay-erweima">
+						<iframe class="alipay_qrcode" src=""  frameborder="no" style="display:none"></iframe>
+						<img src="${ctx}${themes_path}/images/loading.jpg" class="pay-wait" />
+					</div>
+				</div>
+				<div class="pay-bottom-border"></div>
+			</div>
+			<div class="same-pay-way wechat-pay" style="display:none">
+				<div class="wechat-left">
+					<div class="pc-pay-img">
+						<img src="${ctx}${themes_path}/images/weixin.jpg" />
+					</div>
+				</div>
+				<div class="wechat-right">
+					<p>使用微信扫一扫即可付款</p>
+					<div class="pay-erweima">
+						<img src="" class="wechat_qrcode" style="display:none">
+						<img src="${ctx}${themes_path}/images/loading.jpg" class="pay-wait" />
+					</div>
+				</div>
+				<div class="pay-bottom-border"></div>
+			</div>
+			<!--	暂时先不启用其它银行卡支付方式选择项DIV
+			 <div class="same-pay-way bank-pay">
+				<ul>
+					<li><img src="${ctx}${themes_path}/images/pay-boc.png" class="" rel=""/></li>
+				</ul>
+			 </div>
+			 -->
+		</div>
+		<div class="same-pay-way bank-pay paybtn">
+			<ul>
+				<li >
+					<a href="javascript:void(0);">立即支付</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="show-mask-box" style="display:none;"></div>
+<div class="pay-mask" style="display:none;">
+	<div class="cont_wrap">
+		<div class="tit_bar">
+			<h3>付款确认</h3>
+			<span>X</span>
+		</div>
+		<div class="line"></div>
+		<p class="payed">
+			<a href="${ctx}/member/order_detail.html?ordersn=${order.sn}" class="paySuccess">
+				<span>
+					<strong>已完成支付</strong>
+					<em>查看订单详情</em>
+				</span>
+			</a>
+		</p>
+		<div class="ask">
+			<div class="ask_cont">
+				<h4>支付遇到问题</h4>
+				<ul>
+					<!-- <li>
+						<a class="mod_popup_pay_close"  href="javascript:void(0);" >修改支付方式</a>
+					</li> -->
+					<li>
+						<a href="${ctx}/help.html?articleid=28">查看支付帮助</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<script>
+	$(function(){
+		
+		var t; //循环调用对象
+		
+		$(".cashier-order-inside h3 b").click(function(){
+			var isShow = $(this).attr("rel");
+			if(isShow == "close"){
+				$(".cashier-order-inside").css("height","auto");
+				$(this).attr("rel","show");
+				$(this).text("收起-");
+			}else{
+				$(".cashier-order-inside").css("height","52px");
+				$(this).attr("rel","close");
+				$(this).text("展开+");
+			}
+			
+		})
+		
+		$(".cashier-pay-list li").click(function(){
+			//切换选中态
+			$(".cashier-pay-list li").removeClass("selected");
+			$(this).addClass("selected");
+			var payWay = $(this).attr("rel");
+			$("."+payWay+"-pay").show();
+			$(".cashier-pay").css("border","1px solid #e1e1e1");
+			
+			if(payWay == "alipay"){
+				$(".wechat-pay").hide();
+				//支付方式切换显示
+				$(".alipay_qrcode").attr("src","${ctx}/api/shop/payment/alipay-qrcode.do?orderId=${orderid}&mtype=2");
+				$(".pay-wait").hide();
+				$(".alipay_qrcode").show();
+				$(".paybtn").hide();
+				
+				//停止刷新微信支付状态
+				clearTimeout(t);
+				
+			}else if(payWay == "wechat"){
+				$(".alipay-pay").hide();
+				$(".wechat_qrcode").attr("src","${ctx}/api/shop/payment/wechat-qrcode.do?orderId=${orderid}");
+				$(".pay-wait").hide();
+				$(".wechat_qrcode").show();
+				$(".paybtn").hide();
+				
+				//刷新微信支付状态
+				refreshPayStatus();
+			}else{
+				$(".alipay-pay").hide();
+				$(".wechat-pay").hide();
+				$(".paybtn").show();
+				
+				//停止刷新微信支付状态
+				clearTimeout(t);
+			}
+		})
+		
+		//微信支付，刷新支付状态
+		function refreshPayStatus(){
+			//每几秒钟查询微信支付付款后，返回数据。
+			$.post("${ctx}/api/shop/payment/get-pay-status-for-wechat.do",{orderId:${orderid},pluginId:"weixinPayPlugin"},function(data){
+				//判断支付成功
+				if(data.result==1){
+					window.parent.location.href="${ctx}/qr-payment-result.html?orderId=${orderid}&pluginId=weixinPayPlugin&trade_status=SUCCESS";
+				}else{
+					//支付失败
+				}
+			});
+	        t = setTimeout(refreshPayStatus, 1000*3);
+	    }
+		
+		//支付宝跳转电脑支付
+		$(".alipay-pay a").click(function(){
+			var payid =  $(".cashier-pay-list li.alipay").attr("payid");
+			//打开新窗口跳转支付
+			window.open('${ctx}/api/shop/payment/execute.do?orderid=${order.order_id}&paymentid='+payid); 
+			$(".show-mask-box").show();
+			$(".pay-mask").show();
+			$(".bank-pay ul li").removeClass("selected");
+			$(this).addClass("selected");
+		})
+		
+		//银行卡点击切换
+		$(".bank-pay ul li").click(function(){
+			var pluginId =  $(".cashier-pay-list li.selected").attr("pluginid");
+			
+			if(pluginId==null){
+				alert("请选择支付方式");
+				return false;
+			}
+			
+			if(pluginId=="alipayDirectPlugin" && pluginId=="weixinPayPlugin"){
+				return;
+			}
+			var payid =  $(".cashier-pay-list li.selected").attr("payid");
+			//打开新窗口跳转支付
+			window.open('${ctx}/api/shop/payment/execute.do?orderid=${order.order_id}&paymentid='+payid); 
+			
+			$(".show-mask-box").show();
+			$(".pay-mask").show();
+			$(".bank-pay ul li").removeClass("selected");
+			$(this).addClass("selected");
+			
+			$('body,html').animate({
+                scrollTop: 0
+            },
+            300);
+            return false;
+		})
+		
+		
+		//关闭遮罩
+		$(".tit_bar span").click(function(){
+			$(".show-mask-box").hide();
+			$(".pay-mask").hide();
+		});
+		
+		
+			
+	})
+</script>
+
+
+<#include 'common/footer.html'/>

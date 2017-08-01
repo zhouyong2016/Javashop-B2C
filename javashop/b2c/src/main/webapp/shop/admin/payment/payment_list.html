@@ -1,0 +1,72 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"  onclick="newTab('添加支付方式','${ctx}/shop/admin/payCfg/add.do')">添加</a>
+		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="paymentform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/payCfg/list-json.do',fitColumns:'true'" width="width" id="paymentdata">
+				<thead>
+				    <tr>
+				    	<th  data-options="field:'id',checkbox:true,width:100" ></th>
+				   	 	<th  data-options="field:'name',width:100">支付方式</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+		 </form>
+		<div id="payCfginfo" style="display: none;"></div>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+ 
+function formatAction(value,row,index){
+		var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\"修改支付方式\",\"${ctx}/shop/admin/payCfg/edit.do?paymentId="+row.id+"\")'></a>";
+			return val;
+}
+function del(){ 
+	var rows = $('#paymentdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要删除的支付方式");
+		return;
+	}
+	if(!confirm("确认要将这些支付方式删除吗？")){	
+		return ;
+	}
+	var options = {
+			url : "${ctx}/shop/admin/payCfg/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					var rows = $('#paymentdata').datagrid("getSelections"); 
+					for(var i =0;i<rows.length;i++){      
+			 			var index = $('#paymentdata').datagrid('getRowIndex',rows[i]); 
+			 			$('#paymentdata').datagrid('deleteRow',index);      
+			 		}
+				}
+				if(result.result==0){ 
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+	};
+	$('#paymentform').ajaxSubmit(options);	
+}
+
+//定义一个刷新datagrid的方法，将其保存到window.top中 add_by DMRain 2016-8-31
+window.top["reload_Abnormal_Monitor"]=function(){
+    $("#paymentdata").datagrid("reload");
+};
+</script>
+<#include '/admin/footer.html' >
+	   	 

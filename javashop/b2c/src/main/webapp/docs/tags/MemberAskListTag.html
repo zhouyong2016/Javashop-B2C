@@ -1,0 +1,97 @@
+<#assign title= "会员我的咨询列表标签" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_member_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>memberAskListTag 会员我的咨询列表标签</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#try">标签测试工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>输出当前会员对商品的咨询及回复列表</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>标签ID</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">memberAskListTag</td>
+						 
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>标签内输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>无</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class="leftalign"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>会员对商品的咨询列表</td>
+						<td><a href="membercomment.html">Map</a></td>
+						<td class="leftalign" style="width:380px">此返回值是Map型，其关键字如下：
+						</br>commentsList:List型，输出咨询列表，关键字段参照Map类型。
+						</br>pageSize:int型，每页订单条数。
+						</br>page：String型，共有多少页。 
+						</br>totalCount：Long型，表示订单条数 </td>
+					</tr>
+				</table>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="try.html?filename=MemberAskListTag.html" target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

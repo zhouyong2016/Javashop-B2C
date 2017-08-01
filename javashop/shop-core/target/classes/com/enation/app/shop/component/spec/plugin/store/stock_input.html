@@ -1,0 +1,94 @@
+<form id="storeform">
+	<div class="main">
+		<div class="detail" id="frame_store_box">
+
+			<#list depotList as depot>
+			<h1>${depot.depotname}</h1>
+			<hr />
+			<table cellspacing="0" cellpadding="0" border="0">
+				<thead>
+					<th>货号</th> <#list specNameList as specName>
+					<th>${specName}</th> </#list>
+					<th>库存</th>
+					<th>进货量</th>
+				</thead>
+
+
+				<#assign productList=depot.productList />
+				<tbody>
+					<#if productList?exists > <#list productList as product>
+					<tr>
+						<td>${product.sn}</td> <#list product.specList as spec> <#if
+						spec.spec_type==1>
+						<td>
+							<div class="select-spec-unselect spec_selected">
+								<center>
+									<img height="20" width="20" src="${spec.spec_image}"
+										alt="${spec.spec_value}" title="${spec.spec_value}">
+								</center>
+							</div></td> </#if> <#if spec.spec_type==0>
+						<td>
+							<div class="select-spec-unselect spec_selected">
+								<span>${spec.spec_value}</span>
+							</div></td> </#if> </#list>
+
+						<td>${product.store}</td>
+						<td>
+							<input type="hidden" name="id"  value="${product.storeid}" /> 
+							<input type="hidden" name="productid"  value="${product.product_id}" />
+<!-- 						 <input type="input" disabled="true" class="input_text" name="storeNum" style="width: 60px;" store="${product.store}" value="0" autocomplete="off" />  
+ -->						<input type="input" name="storeNum" size="6" class="easyui-numberspinner" data-options="min:0" maxlength="6" style="width: 60px;" store="${product.store}" value="0" autocomplete="off" /> 
+							<input type="hidden" name="depotid"  value="${depot.depotid}" /> 
+							<!--  <input type="button" class="button" value="进货" class="stockbtn" id="stockbtn" />  -->
+						</td>
+					</tr>
+					</#list> </#if>
+				</tbody>
+
+			</table>
+			</#list>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	$(function() {
+		$("#frame_store_box #stockbtn").click(
+				function() {
+					var self = $(this);
+					var storeInput = self.parents("tr").find("input").not(
+							"[type=button]");
+					var value = self.val();
+					if ("进货" == value) {
+						storeInput.attr("disabled", false);
+						self.val("取消");
+					} else {
+						storeInput.attr("disabled", true);
+						storeInput.val(0);
+						self.val("进货");
+					}
+				});
+		$("#frame_store_box input[name=store]").change(function() {
+
+			var self = $(this);
+			var value = self.val();
+
+			if (value == "") {
+				alert("请输入进货量");
+				self.val(1);
+				return false;
+			}
+			if (isNaN(value)) {
+				alert("进货量必须是数字");
+				self.val(1);
+				return false;
+			}
+			if (parseInt(value) <= 0) {
+				alert("进货量必须大于0");
+				self.val(1);
+				return false;
+			}
+
+		});
+
+	})
+</script>

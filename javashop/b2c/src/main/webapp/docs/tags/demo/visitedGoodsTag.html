@@ -1,0 +1,20 @@
+
+<!-- 获取浏览历史标签 -->
+<#assign visitedGoodsTag= newTag("visitedGoodsTag") > 
+<!-- 调用浏览历史标签 -->
+<#assign visitedGoodsTag = visitedGoodsTag() >
+<ul>
+	<#list visitedGoodsTag.visitedGoods as visitedGoods>
+	<li class="<#if visitedGoods_index==0>first</#if> <#if !visitedGoods_has_next>last</#if>">
+		<a href="goods-${visitedGoods.goods_id}.html"><img alt="${visitedGoods.name}" src="${visitedGoods.thumbnail!''}"></a>
+		<div class="h_intro">
+			<div>
+				<a href="goods-${visitedGoods.goods_id}.html" title="${visitedGoods.name}"><@substring title="${visitedGoods.name}" length="36" dot="..." /></a>
+			</div>
+			<p>
+				价格：<span>${visitedGoods.price?string.currency}</span>
+			</p>
+		</div>
+	</li> 
+	</#list>
+</ul>

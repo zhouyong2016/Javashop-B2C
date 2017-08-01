@@ -1,0 +1,201 @@
+<div class="child_floor_show child_floor_style1"
+	id="child_floor_show_${(childs.id)!'0'}"
+	<#if childs_index<1 >style="display:block"
+	<#else>style="display:none"</#if>>
+	<div class="child_floor_show_left floor_show_left_style1 items-box">
+		<#if childs.goods_ids?? >
+			<#list childs.goods_ids?keys as key>
+				<#if key =="0" >
+					<#assign goods_id=childs.goods_ids[key] >
+						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
+						<#assign flag=1 >
+						<#if floorGoods.name??>
+						<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+							data-operation-id="${goods_id}"
+							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+							data-title="修改楼层商品"
+							data-formId="editEachGoodsForm"
+							data-floorId="${childs.id}"
+							data-goods-index="${key}">
+						<div class="floor_img_hidden">
+							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+								<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
+							</a>
+							<div class="floor_name_hidden">
+								<div class="floor_name_txt">
+									<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+										${floorGoods.name}
+									</a>
+								</div>
+							</div>
+						</div>
+						</#if>
+				</#if>
+			</#list>
+		<#else>
+			<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
+				   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+				   data-operation-id=""
+				   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+				   data-title="新增楼层商品"
+				   data-formId="editEachGoodsForm"
+				   data-floorId="${childs.id}"
+				   data-goods-index="0">
+		</#if>
+	</div>
+	<div class="child_floor_show_right floor_show_right_style1">
+		<ul>
+			<li class="items-box box-li">
+				<#if childs.goods_ids?? >
+					<#list childs.goods_ids?keys as key>
+					<#if key =="1" >
+						<#assign goods_id=childs.goods_ids[key] >
+						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
+						
+							<#if floorGoods.name??>
+											<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+										data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+										data-operation-id="${goods_id}"
+										data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+										data-title="修改楼层商品"
+										data-formId="editEachGoodsForm"
+										data-floorId="${childs.id}"
+										data-goods-index="${key}">
+									<div class="show_right show_right_img" >
+										<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+											<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}"  />
+										</a>
+										<div class="show_right_name">
+											<div class="show_right_txt">
+												<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+													${floorGoods.name}
+												</a>
+											</div>
+										</div>
+									</div>
+							</#if>
+							
+						</#if>
+					</#list>
+					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
+						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+						   data-operation-id=""
+						   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+						   data-title="新增楼层商品"
+						   data-formId="editEachGoodsForm"
+						   data-floorId="${childs.id}"
+						   data-goods-index="1">
+				<#else>
+					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
+						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+						   data-operation-id=""
+						   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+						   data-title="新增楼层商品"
+						   data-formId="editEachGoodsForm"
+						   data-floorId="${childs.id}"
+						   data-goods-index="1">
+				</#if>
+			</li>
+			<li class="items-box box-li">
+				<#if childs.goods_ids?? >
+					<#list childs.goods_ids?keys as key>
+					<#if key =="2" >
+						<#assign goods_id=childs.goods_ids[key] >
+						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
+						<#if floorGoods.name??>
+							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+							data-operation-id="${goods_id}"
+							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+							data-title="修改楼层商品"
+							data-formId="editEachGoodsForm"
+							data-floorId="${childs.id}"
+							data-goods-index="${key}">
+							<div class="show_right show_right_img">
+								<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+									<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}"  />
+								</a>
+								<div class="show_right_name">
+									<div class="show_right_txt">
+										<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+											${floorGoods.name}
+										</a>
+									</div>
+								</div>
+							</div>
+							</#if>
+						</#if>
+					</#list>
+					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
+						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+						   data-operation-id=""
+						   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+						   data-title="新增楼层商品"
+						   data-formId="editEachGoodsForm"
+						   data-floorId="${childs.id}"
+						   data-goods-index="2">
+				<#else>
+					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
+						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+						   data-operation-id=""
+						   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+						   data-title="新增楼层商品"
+						   data-formId="editEachGoodsForm"
+						   data-floorId="${childs.id}"
+						   data-goods-index="2">
+				</#if>
+			</li>
+			<script type="text/javascript">
+				(function() {
+					var li = $('.box-li');
+					for (var i = 0; i < li.length; i++) {
+						if (li.eq(i).find('div').length == 0) {
+							li.eq(i).find('.add').show();
+						} else {
+							li.eq(i).find('.add').remove();
+						}
+					}
+				})();
+			</script>
+		</ul>
+	</div>
+</div>
+<script>
+	//  大图鼠标移入显示商品名称
+	$(document).ready(function() {
+		$('.floor_img_hidden').hover(function() {
+			$(".floor_name_hidden", this).stop().animate({
+				top : '340px'
+			}, {
+				queue : false,
+				duration : 180
+			});
+		}, function() {
+			$(".floor_name_hidden", this).stop().animate({
+				top : '391px'
+			}, {
+				queue : false,
+				duration : 180
+			});
+		});
+	});
+	//  两个小图鼠标移入显示商品名称
+	$(document).ready(function() {
+		$('.show_right').hover(function() {
+			$(".show_right_name", this).stop().animate({
+				top : '141px'
+			}, {
+				queue : false,
+				duration : 180
+			});
+		}, function() {
+			$(".show_right_name", this).stop().animate({
+				top : '241px'
+			}, {
+				queue : false,
+				duration : 180
+			});
+		});
+	});
+</script>

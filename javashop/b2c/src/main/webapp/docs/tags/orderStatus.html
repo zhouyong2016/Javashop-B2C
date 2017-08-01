@@ -1,0 +1,127 @@
+<#assign title= "订单状值、状态信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>订单状态值实体信息</h3>
+		<h2>需要简述</h2>
+		<h6>订单状态信息、订单状态值</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>ORDER_CHANGED=-7</td>
+						<td>static final int</td>
+						<td>已换货</td>
+					</tr>
+					<tr>
+						<td>ORDER_CHANGE_REFUSE=-6</td>
+						<td>static final int</td>
+						<td>换货被拒绝</td>
+					</tr>
+					<tr>
+						<td>ORDER_RETURN_REFUSE=-5</td>
+						<td>static final int</td>
+						<td>退货被拒绝</td>
+					</tr>
+					<tr>
+						<td>ORDER_CHANGE_APPLY=-4</td>
+						<td>static final int</td>
+						<td>申请换货</td>
+					</tr>
+					<tr>
+						<td>ORDER_RETURN_APPLY=-3</td>
+						<td>static final int</td>
+						<td>申请退货</td>
+					</tr>
+					<tr>
+						<td>ORDER_CANCEL_SHIP=-2</td>
+						<td>static final int</td>
+						<td>退货</td>
+					</tr>
+					<tr>
+						<td>ORDER_CANCEL_PAY=-1</td>
+						<td>static final int</td>
+						<td>退款</td>
+					</tr>
+					<tr>
+						<td>ORDER_NOT_PAY=0</td>
+						<td>static final int</td>
+						<td>未付款/新订单</td>
+					</tr>
+					<tr>
+						<td>ORDER_PAY=1</td>
+						<td>static final int</td>
+						<td>已支付待确认</td>
+					</tr>
+					<tr>
+						<td>ORDER_PAY_CONFIRM=2</td>
+						<td>static final int</td>
+						<td>已确认支付</td>
+					</tr>
+					<tr>
+						<td>ORDER_ALLOCATION=3</td>
+						<td>static final int</td>
+						<td>配货中</td>
+					</tr>
+					<tr>
+						<td>ORDER_ALLOCATION_YES=4</td>
+						<td>static final int</td>
+						<td>配货完成，待发货</td>
+					</tr>
+					<tr>
+						<td>ORDER_SHIP=5</td>
+						<td>static final int</td>
+						<td>已发货</td>
+					</tr>
+					<tr>
+						<td>ORDER_ROG=6</td>
+						<td>static final int</td>
+						<td>已收货</td>
+					</tr>
+					<tr>
+						<td>ORDER_COMPLETE=7</td>
+						<td>static final int</td>
+						<td>已完成</td>
+					</tr>
+					<tr>
+						<td>ORDER_CANCELLATION=8</td>
+						<td>static final int</td>
+						<td>作废</td>
+					</tr>
+					<tr>
+						<td>ORDER_CONFIRM=9</td>
+						<td>static final int</td>
+						<td>订单已确认</td>
+					</tr>
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

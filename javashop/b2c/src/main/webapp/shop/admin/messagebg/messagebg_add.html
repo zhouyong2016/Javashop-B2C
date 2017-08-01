@@ -1,0 +1,115 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<th>标题：</th>
+				<td>
+					<input class="input_text easyui-validatebox" name="msg_title" data-options="required:true" maxlength="30"/>
+				</td>
+			</tr>
+			<tr>
+				<th>消息内容：</th>
+				<td>
+					<textarea class="input_text easyui-validatebox" rows="10"  placeholder="限20000字"  name="msg_content" data-options="required:true" maxlength="20000"></textarea>
+					<span class="un">还可以输入<font id="font_size">20000</font>个字</span>
+				</td>
+			</tr>
+			<tr>
+				<th>范围：</th>
+				<td>
+					<input type="radio" name="send_type" value="0" id="sendAll" checked="true">发送全站
+					<input type="radio" name="send_type" value="1" id="sendPart">发送指定会员
+					<input type="hidden" name="member_ids" id="content">
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="saveBtn" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">发送</a>
+	</div>
+	<div id="show_members"></div>
+</div>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.membersSelector.js"></script>
+<script>
+	$(function(){
+		$("#sendPart").click(function(){
+			//创建会员选择器
+			var container = $("#show_members");
+			if(container.text() == ""){
+				var options = {
+					membersid_name : 'members_ids',
+				};
+				container.membersSelector(options);
+			}
+		});
+		$("#sendAll").click(function(){
+			var container = $("#show_members");
+			container.empty();
+		});
+	});
+	
+	function submitForm() {
+		var formflag = $("#addForm").form().form('validate');
+		if (formflag) {
+			var sendType = $("input[name='send_type']:checked").val();
+			if(sendType == 1){
+				var members_ids = [];
+				$("input[name='members_ids']").each(function(i, o) {
+					members_ids[i] = $(o).val();
+				});
+				if(members_ids.length <= 0){
+					alert("请选择要通知的会员......");
+					return;
+				}
+				$("#content").val(members_ids);
+			}
+			$.Loading.show("正在添加......");
+			var options = {
+				url : "${ctx}/shop/admin/message/save-message.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						newTab("历史消息","${ctx}/shop/admin/message/list.do");
+						parent.CloseTabByTitle("发送消息");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					var result = JSON.parse(e.responseText)
+					$.Loading.error(result.message);
+					$("#saveBtn").linkbutton("enable");
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+			$("#saveBtn").linkbutton("disable");
+		}
+	}
+	
+	$('textarea').each(function() {  
+		var ta = $(this), p = ta.parent(), ml = parseInt(ta.attr('maxlength')),  
+		v = ta.val(), h = ta.attr('placeholder');  
+		if (v == h) v = '';  
+		if (h && ml) {  
+			p.css({'position': 'relative'});  
+			ta.bind('click keyup', function() {  
+				var m = $(this), v1 = m.val();  
+				if (v1.length > ml) {  
+					m.val(v1.substring(0, ml))  
+				}  
+				$("#font_size").text(ml-m.val().length);  
+			});  
+		}  
+	}); 
+	
+</script>
+
+<#include '/admin/footer.html' >

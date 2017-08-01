@@ -1,0 +1,31 @@
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<#assign pointList = memberPoint.pointHistoryList>
+
+	<#if pointList?size gt 0 >
+	<table  style="width:100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>时间</th>
+			<th>明细</th>
+			<th>等级积分</th>
+			<th>消费积分</th>
+		</tr>
+		<#list pointList as pointHistory>
+	        <tr >
+		        <td><@dateformat time="${pointHistory.time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+		        <td >
+		      	 	${pointHistory.reason!''}
+		        </td>
+		        <td><span class="status-gain">${pointHistory.point!0}</span></span></td>
+				<td><span class="status-gain">${pointHistory.mp!0}</span></span></td>
+		      </tr>
+	    </#list>    
+	</table>
+	<div class="pager_border">
+	<@ajaxpager pageno="${page!'1'}" pagesize="${memberPoint.pageSize}" totalcount="${memberPoint.totalCount}" />
+	</div>
+	<#else>
+	<div class="empty" >您目前还没有积分记录</div>
+	</#if>
+	</div>

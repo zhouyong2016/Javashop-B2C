@@ -1,0 +1,9 @@
+
+<!--创建"商品相册"标签-->
+<#assign StoreGoodsGalleryTag= newTag("storeGoodsGalleryTag") >  
+<!--调用"商品相册"标签，并传递参数-->            
+<#assign  StoreGoodsGallery= StoreGoodsGalleryTag("'goodsid':'1'") >						
+<ul class="gw">
+<#list StoreGoodsGalleryTag as sgg>
+	列表尺寸：${sgg.thumbnail}</br>
+</#list>

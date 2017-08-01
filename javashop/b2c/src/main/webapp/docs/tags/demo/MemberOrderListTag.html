@@ -1,0 +1,13 @@
+
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderList = newTag("memberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign ordersList = memberOrderList()>
+<!-- 获得会员订单列表 -->
+<#assign order = ordersList.ordersList>
+<ul>
+<#list order as oorderList>
+	<li>${oorderList.sn}</li>
+</#list>
+</ul>
+<@pager pageno="${ordersList.page}" pagesize="${ordersList.pageSize}" totalcount="${ordersList.totalCount}" />

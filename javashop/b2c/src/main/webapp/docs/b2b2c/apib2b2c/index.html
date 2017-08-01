@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<#if !title??>
+<title>JavaShop API文档</title>
+<#else>
+<title>${title} - JavaShop API文档</title>
+</#if>
+<meta name="keywords" content="Javashop API文档">
+<meta name="description" content="Javashop API文档">
+<link href="common.css" rel="stylesheet" type="text/css" />
+<link href="api.css" rel="stylesheet" type="text/css" />
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+</head>
+<body>
+
+<div class="header">
+	<div class="title-box">
+		<div class="header-logo">
+			<h1>JavaShop<em>API</em><i>文档</i></h1>
+		</div>
+		<div class="header-right">
+			<ul>
+				<li><a href="#">apiCloud配置文档</a></li>
+				<li><a href="#">api文档</a></li>
+				<li class="last"><a href="#">apiCloud中Bug解决办法</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- 详细内容 -->
+<div class="main">
+	<div class="main-left">
+		<ul class="menu">
+			<li class="left-parent">
+				<h2>购物车API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="cart_add_product">将一个货品添加到购物车</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>商品管理API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="goods_manage_add">发布商品</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_edit">编辑商品</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_delete">删除商品(将商品添加至回收站)</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_under">下架商品</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_clean">清除商品</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_revert">还原商品</a></li>
+						<li><a href="javascript:void(0)" rel="goods_manage_save">修改商品库存</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>商品分类API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="goods_sort_child">获取子类别</a></li>
+						<li><a href="javascript:void(0)" rel="goods_sort_add">添加商品分类</a></li>
+						<li><a href="javascript:void(0)" rel="goods_sort_edit">修改分类</a></li>
+						<li><a href="javascript:void(0)" rel="goods_sort_delete">删除店铺商品分类</a></li>
+						<li><a href="javascript:void(0)" rel="goods_sort_batch_delete">批量删除店铺商品分类</a></li>
+					</ul>		
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺商品标签API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="shop_tag_add_quote">添加商品标签引用</a></li>
+						<li><a href="javascript:void(0)" rel="shop_tag_delete_quote">删除商品标签引用</a></li>
+						<li><a href="javascript:void(0)" rel="shop_tag_savesort_quote">修改商品标签引用排序</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>收藏店铺API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="shop_collect_add">添加收藏店铺</a></li>
+						<li><a href="javascript:void(0)" rel="shop_collect_delete">删除收藏店铺</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>评论API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="comment_advisory">对商品的评论或者提出咨询</a></li>
+						<li><a href="javascript:void(0)" rel="comment_reply">回复评论咨询</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺会员地址操作API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="member_default_address">设置会员默认收货地址</a></li>
+						<li><a href="javascript:void(0)" rel="member_add_address">添加店铺会员收货地址</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>订单API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="order_create">创建订单</a></li>
+						<li><a href="javascript:void(0)" rel="order_cancel">取消订单</a></li>
+						<li><a href="javascript:void(0)" rel="order_shiptype_bonus">改变店铺的配送方式以及红包</a></li>
+						<li><a href="javascript:void(0)" rel="order_change_address">改变收货地址</a></li>
+						<li><a href="javascript:void(0)" rel="order_confirm">订单确认</a></li>
+						<li><a href="javascript:void(0)" rel="order_ship">订单发货</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>退货申请API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="sell_back_application">退货单申请</a></li>
+						<li><a href="javascript:void(0)" rel="sell_back_check">审核退货申请</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺支付API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="to_third_pay">跳转到第三方支付页面</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺管理API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="shop_name_repeat">查看用户名是否重复</a></li>
+						<li><a href="javascript:void(0)" rel="shop_application">申请开店</a></li>
+						<li><a href="javascript:void(0)" rel="shop_reapply">重新申请开店</a></li>
+						<li><a href="javascript:void(0)" rel="shop_edit">修改店铺</a></li>
+						<li><a href="javascript:void(0)" rel="shop_check_idnumber">检测身份证</a></li>
+						<li><a href="javascript:void(0)" rel="shop_edit_storelogo">修改店铺Logo</a></li>
+						<li><a href="javascript:void(0)" rel="shop_auth">提交店铺认证信息</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺物流模板API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="dlytype_add">添加物流工具</a></li>
+						<li><a href="javascript:void(0)" rel="dlytype_edit">修改物流工具</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺物流公司API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="store_company_open">开启店铺物流公司</a></li>
+						<li><a href="javascript:void(0)" rel="store_company_close">关闭店铺物流公司</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺促销管理API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="subtract_full_add">添加优惠券</a></li>
+						<li><a href="javascript:void(0)" rel="subtract_full_edit">修改优惠券</a></li>
+						<li><a href="javascript:void(0)" rel="subtract_receive_bonus">领取优惠券</a></li>
+						<li><a href="javascript:void(0)" rel="subtract_bonus_delete">删除优惠券</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺幻灯片API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="silde_store_edit">修改店铺幻灯片设置</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺运费模板API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="template_transport_delete">删除模板</a></li>
+						<li><a href="javascript:void(0)" rel="template_transport_default">设置默认模板</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>店铺导航栏API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="navigation_shop_add">添加店铺导航栏</a></li>
+						<li><a href="javascript:void(0)" rel="navigation_shop_edit">修改店铺导航栏</a></li>
+						<li><a href="javascript:void(0)" rel="navigation_shop_delete">删除店铺导航栏</a></li>
+					</ul>
+				</div>
+			</li>
+			
+						
+						
+		</ul>
+	</div>
+	
+	<div class="main-right">
+		<!-- 此处加载相关页面 -->
+	</div>
+	
+</div>
+
+
+
+<!-- 移入显示二维码 -->
+<script>
+	$(function(){
+		//首次加载页面方法
+		$(".main-right").load("cart_add_product.html");
+		
+		$(".left-child ul li a").click(function(){
+			
+			$(".menu a").removeClass("selected");
+			$(this).addClass("selected");
+			var htmlName = $(this).attr("rel");
+			loadHtml(htmlName);
+		})
+		
+		//加载相关页面
+		function loadHtml(name){
+			$(".main-right").empty();
+			$(".main-right").load(name+".html");
+		}
+		
+		$(".weixin").mouseover(function(){
+			$(".show-weixin").show();
+		})
+		$(".weixin").mouseleave(function(){
+			$(".show-weixin").hide();
+		})
+	})
+</script>
+
+<div class="footer">
+	<div class="footer-top">
+		<div class="footer-phone"><span></span>400-6878-256</div>
+		<p>北京市西城区南滨河路甲25号金工宏洋大厦A座6层</p>
+		<div class="weixin"><div class="show-weixin" style="display:none;"><img src="big-erweima.jpg"/></div></div>
+	</div>
+</div>
+
+</body>
+</html>

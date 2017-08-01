@@ -1,0 +1,63 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addTypeForm" method="post" class="validate" >
+			<table>
+				<tr>
+					<td align="right">类型名称：</td>
+					<td><input class="easyui-validatebox input_text" type="text" id="name" name="goodsType.name" data-options="required:true" />
+					</td>
+				</tr>
+				<tr>
+					<td>此类型下商品是否拥有属性：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_prop" data-options="required:true" value="1">是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_prop" data-options="required:true" value="0">否</input>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>此类型下商品是否拥有参数：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_parm" data-options="required:true" value="1">是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_parm" data-options="required:true" value="0">否</input>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>此类型是否关联品牌：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_brand" data-options="required:true" value="1">是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_brand" data-options="required:true" value="0">否</input>
+					</td>
+				</tr>
+
+				<tr>
+					<td>此类型是否关联规格：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_spec" data-options="required:true" value="1">是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_spec" data-options="required:true" value="0">否</input>
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+
+function submitForm(){
+		 var options = {
+					url : "type!step2.do?ajax=yes",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						window.location.href="type!list.do";
+				 		},
+				 	error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+				};
+				$('#addTypeForm').ajaxSubmit(options);	
+		}
+
+function clearForm(){
+	$('#addTypeForm')[0].reset() ;
+}
+
+</script>

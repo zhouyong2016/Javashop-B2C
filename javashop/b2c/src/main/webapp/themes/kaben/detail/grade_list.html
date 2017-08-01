@@ -1,0 +1,93 @@
+
+<div id="discuss_list_wrapper">
+<!-- 获取商品评论标签 -->
+<#assign commentGradeListTag = newTag("commentGradeListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentGradeList = commentGradeListTag("{'goods_id':${goods_id},'grade':${grade},'type':1}")>
+
+	<div class="grade_list">
+	<#if commentGradeList.totalCount != 0 >
+		<ul>
+			<#list commentGradeList.result as comment>  
+				<li <#if !comment_has_next >class="last"</#if>>
+					<div class="problem_pic">
+	        			<#if comment.member_id != 0 && comment.face?exists>
+	        				<#if comment.sex == 0 && comment.face == "">
+	        					<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+	       					<#elseif comment.sex == 1  && comment.face == "">
+	       						<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+		        			<#else>
+		        				<@image src="${comment.face}" width="65"/>
+		        			</#if>
+	       				<#else>
+	       					<@image src="${ctx}/themes/default/images/ntx.jpg" alt="默认头像"/>
+	       				</#if>
+						<h6>
+						     <#if comment.member_id != 0>
+				            	${comment.uname!''}
+				            <#else>
+				            	匿名
+				            </#if>
+				         </h6> 
+	  					<#if comment.levelname?exists>
+	         				<h6>
+	         					<#if comment.levelname?exists>
+									
+	          							${comment.levelname!''}
+	            					
+	        					</#if>
+	        				</h6>
+	           			</#if>
+					</div>
+					<div class="problem_right">
+						<div class="problem_time">
+							<p>我的评分：
+							<#if comment.grade=3>
+								好评
+							<#elseif comment.grade=2>
+								中评
+							<#else>
+								差评	
+							</#if>
+							</p>
+							<span class="comment_time"><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+						</div>
+						<p style="word-wrap: break-word;" class="comment_word">${comment.content!''}</p>
+						<!-- 获取商品评论图片相册标签 -->
+						<#assign commentGalleryListTag = newTag("commentGalleryListTag")>
+						<!-- 调用商品评论图片相册标签 -->
+						<#assign galleryList = commentGalleryListTag("{'comment_id':${comment.comment_id}}")>
+						
+						<div class="commentsuolue" style="clear: both;">
+							<#if galleryList??>
+								<#list galleryList as gallery>
+				             		<a href="<@imgurl pic='${gallery.original}'/>" rel="lightbox[img_${gallery.comment_id}]" style="float: left; margin: 10px;" target="_blank"> <@image src="${gallery.original}"  width="50" height="50"/> </a>
+				            	</#list>
+				            </#if>
+			            </div>
+						 <#if comment.replystatus==1>
+						<div class="problem_answer">
+							<div class="ps_bottom">
+								<!--<h3>${site.sitename}客服：</h3>-->
+								<p style="word-wrap: break-word;">${comment.reply}</p>
+							</div>
+							<i class="point-up"></i>
+						</div>
+						</#if>
+						<div class="left_point"></div>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	<#else>
+	<p class="no-word">暂无评论，抢沙发，赢取更多积分。 </p>
+	</#if>
+	</div>
+	<div class="page">
+		<@pager pageno="${page!'1'}" pagesize="${commentGradeList.pageSize}" totalcount="${commentGradeList.totalCount}" />
+	</div>	
+	<div class="clear"></div>
+</div>
+
+
+

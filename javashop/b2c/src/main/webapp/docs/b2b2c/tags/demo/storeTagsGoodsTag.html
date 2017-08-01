@@ -1,0 +1,9 @@
+<!--创建"店铺商品搜索列表"标签-->
+<#assign storeTagsGoodsTag= newTag("storeTagsGoodsTag") >  
+<!--调用"店铺商品搜索列表"标签，并传递参数-->            
+<#assign  storeTagsGoodsTag= storeTagsGoodsTag() >						
+<ul class="gw">
+<#list storeTagsGoods.list as cat>
+	名称：${cat.name}
+
+</br></#list>

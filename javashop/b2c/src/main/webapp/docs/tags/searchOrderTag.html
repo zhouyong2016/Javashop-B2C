@@ -1,0 +1,117 @@
+<#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>searchOrderTag 游客订单查询标签</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#try">标签测试工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>游客订单查询标签</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>标签ID</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">SearchOrderTag</td>
+						 
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>标签内输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>ship_name</td>
+						<td>String</td>
+						<td>是</td>
+						<td>张三</td>
+						<td></td>
+						<td>收货人姓名</td>
+					</tr>
+					<tr>
+						<td>ship_tel</td>
+						<td>String</td>
+						<td>是</td>
+						<td>13111111111</td>
+						<td></td>
+						<td>必填 收货人电话</td>
+					</tr>
+					<tr>
+						<td>action</td>
+						<td></td>
+						<td>是</td>
+						<td></td>
+						<td></td>
+						<td>当提交form表单的时候，必须填写</br>name="action" value="search"</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>游客订单列表</td>
+						<td>Map<<a href="order.html">order</a>></td>
+						<td class="leftalign" style="width:380px;text-align:center">
+						此返回值是Map型，其关键字如下： </br>
+						ordersPage 订单分页列表 ：ordersPage.result值为List类型 </br>
+						totalCount 订单总数</br>
+						ship_name 收货人姓名</br>
+						ship_tel 收货人电话</br>
+						pageSize 分页大小</br>
+						page 当前页</br>
+						</td>
+					</tr>
+				</table>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="try.html?filename=SearchOrderTag.html" target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

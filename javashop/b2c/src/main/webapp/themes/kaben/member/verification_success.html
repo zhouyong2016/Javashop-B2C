@@ -1,0 +1,64 @@
+<#assign title="安全中心" />
+<#include 'member_header.html'/>
+<#assign memberMobileValidTag = newTag("memberMobileValidTag") >
+<#assign validTag = memberMobileValidTag()>
+<div class="safety-tips">
+	<div class="mt">
+		<h3 class="mt-h3"></h3>
+	</div>
+	<div class="mc" style="margin-top: 20px;">
+		<span class="show_msg" style="color: #ff6c00; margin-left: 300px; font-size: xx-large; font-weight: bolder;"></span>
+		<br><br>
+		<span class="ftx-03" style="margin-left: 290px;">增加账户安全度，请去
+			<a class="ftx-05" href="security_center.html">安全中心</a>
+			完善账户信息。
+		</span>
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var stype = ${type};
+	
+	//判断验证类型
+	if(stype == 1){
+		$(".mt-h3").html("修改登录密码");
+		$(".show_msg").html("登录密码修改成功！");
+	}else if(stype == 2){
+		$(".mt-h3").html("邮箱验证");
+		$(".show_msg").html("邮箱验证成功！");
+	}else if (stype == 3) {
+		$(".mt-h3").html("手机验证");
+		$(".show_msg").html("手机验证成功！");
+	}
+});
+</script>
+<script>
+otherMenu(4);
+</script>
+<style>
+.safety-tips {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+}
+.safety-tips .mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safety-tips .mt {
+    display: block;
+    padding: 10px 0;
+}
+.ftx-05, .ftx05 {
+    color: #005ea7;
+}
+</style>
+<#include '../common/footer.html'/>

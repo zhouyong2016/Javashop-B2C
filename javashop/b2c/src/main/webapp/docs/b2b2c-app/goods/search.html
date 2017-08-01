@@ -1,0 +1,43 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>商品搜索</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/goods/search.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">catid</span><span class="w100">商品分类id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">store_id</span><span class="w100">商家店铺id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">goods_name</span><span class="w100">商品名称</span><span class="w380">无</span></p>
+			<p><span class="w100 important">sort</span><span class="w100">排序字段</span><span class="w380">无</span></p>
+			<p><span class="w100 important">order</span><span class="w100">正序or倒序</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/goods/search.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {catid:4, goods_name:"大码男装"},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{"result":1,"message":null,"data":[{"goods_id":433,"name":"大码男装 加大加肥宽松男潮胖子上衣 短袖衬衫新款夏","sn":"216749752","brand_id":32,"cat_id":4,"type_id":15,"goods_type":"0","unit":"","weight":1.0,"market_enable":1,"thumbnail":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//48414361_thumbnail.jpg","big":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//48414361_big.jpg","small":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//48414361_small.jpg","original":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//48414361.jpg","brief":null,"intro":"","price":539.0,"mktprice":677.0,"store":0,"adjuncts":null,"params":"[]","specs":"[{\"cost\":1,\"enable_store\":0,\"goodsLvPrices\":[],\"goods_id\":433,\"name\":\"大码男装 加大加肥宽松男潮胖子上衣 短袖衬衫新款夏\",\"price\":539,\"product_id\":442,\"sn\":\"216749752\",\"specList\":[],\"specs\":\"\",\"specsvIdJson\":\"[]\",\"store\":0,\"weight\":1}]","create_time":1468889323,"last_modify":1468889323,"view_count":0,"buy_count":0,"disabled":0,"page_title":null,"meta_keywords":null,"meta_description":null,"point":0,"sord":0,"commission":null}]}
+			</h5>
+		</span>	
+	</div>
+
+</div>

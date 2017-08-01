@@ -1,0 +1,8 @@
+
+<!-- 获取支付方式列表标签 -->
+<#assign shopPaymentListTag = newTag("shopPaymentListTag")>
+<!-- 调用支付方式列表标签 -->
+<#assign paymentList = shopPaymentListTag()>
+<#list paymentList as list>
+	${list.name}
+</#list>

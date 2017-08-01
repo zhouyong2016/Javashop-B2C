@@ -1,0 +1,245 @@
+/********邮箱绑定成功**********/
+#register_wrapper{width:500px;margin:60px auto;overflow:hidden;background:#fff;}
+#register_wrapper .span-auto{width:500px;overflow:hidden;text-align:center;}
+#register_wrapper .span-auto h1{
+	 color:#ff6700;
+    font: 20px/24px "microsoft yahei";
+    margin-bottom: 26px;
+}
+#register_wrapper .span-auto .btn-div{width:500px;height:40px;text-align:center;padding-top:30px;}
+#register_wrapper .span-auto .btn-div a{display:inline-block;width:118px;}
+
+/********结算成功*****/
+.payment-result{width:1200px;margin:40px auto;height:330px;}
+.payment-result .payment-result-left{width:507px;height:330px;overflow:hidden;float:left;background:#33a600;padding-top:70px;text-align:center;}
+.payment-result .payment-result-left h1{width:507px;height:60px;font-size:40px;color:#fff;}
+.payment-result .payment-result-left span{color:#fff;height:47px;font-size:14px;display:block;}
+.payment-result .payment-result-left h2{color:#ffff00;font-size:30px;height:57px;}
+.payment-result .payment-result-left h2 i{font-size:16px;margin-left:5px;}
+.payment-result .payment-result-left a{display:inline-block;width:158px;height:38px;line-height:38px;text-align:center;color:#fff;border:1px solid #fff;margin-bottom:45px;}
+.payment-result .payment-result-left p{width:507px;line-height:30px;}
+.payment-result-right{width:693px;flaot:left;overflow:hidden;height:350px;padding-top:50px;}
+.payment-result-right dl{width:693px;overflow:hidden;}
+.payment-result-right dl dt{width:131px;line-height:30px; 
+color: #a7a7a7;
+    font-weight: 400;
+    text-align:right;
+    font-size:14px;
+    float:left;
+    }
+.payment-result-right dl dd{float:left;width:562px;line-height:30px;padding:0px 0px 10px 0px;font-size:14px;color:#333}
+.payment-result-right dl dd p{line-height:30px;color:#333;font-size:14px;}
+.payment-result .no-pay{background:#80bb41;}
+.payment-result .no-pay h4{width:507px;height:200px;line-height:200px;font-size:40px;color:#fff;margin-bottom:30px;}
+.payment-result-right h5{font-weight:normal;width:693px;height:250px;line-height:250px;text-align:center;font-size:18px;}
+
+
+/************帮助中心*****************/
+.help-main{ 
+	background:#f5f5f5;width:100%;padding-bottom:30px;
+}
+.help-main .help_navigation{
+	height: 40px;
+    line-height: 40px;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 1180px;
+}
+.help-main .help_content{
+	margin: 0px auto;
+    overflow: hidden;
+    width: 1180px;
+}
+.help-main .help_content .left{
+	background: #fff none repeat scroll 0 0;
+    float: left;
+    overflow: hidden;
+    padding-top:20px;
+    width: 234px;
+    padding-bottom:20px;
+}
+.help-main .help_content .left p{
+	color: #333;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 52px;
+    margin: 0 48px 2px;
+    width: 138px;
+}
+.help-main .help_content .left a{
+	padding: 6px 48px;display:block;font-size:14px;color:#757575;
+}
+.help-main .help_content .left .selected{
+	color:#ff6700;
+}
+.help-main .help_content .right{
+	 background: #fff;
+    display: inline;
+    float: left;
+    margin: 0 0 0 14px;
+    overflow: hidden;
+    padding: 36px 48px;
+    width: 836px;
+}
+
+/*********帮助中心样式调整**********/
+.help-main .help_content .right p{
+	font-size:14px;color:#757575;line-height:30px;
+}
+.help-main .help_content .right li b{
+	font-size:16px;display:block;margin-top:20px;color:#4b4c4c;
+}
+
+.help-main .help_content .right h2,h4{
+	font-size:16px;display:block;margin-top:20px;color:#4b4c4c;
+}
+.help-main .help_content .right span{
+	font-size:14px;color:#757575;line-height:30px;
+}
+.help-main .help_content .right table{
+	border-top:1px solid #e7e7e7;border-left:1px solid #e7e7e7;
+}
+.help-main .help_content .right table tr th{padding:10px 20px;font-size:14px;border-bottom:1px solid #e7e7e7;border-right:1px solid #e7e7e7;}
+.help-main .help_content .right table tr td{padding:10px 20px;font-size:14px;border-bottom:1px solid #e7e7e7;border-right:1px solid #e7e7e7;}
+.help-main .help_content .right li{font-size:14px;color:#757575;line-height:30px;}
+
+/*************找回密码****************/
+#findpwd_wrapper{width:100%;overflow:hidden;background:#f5f5f5;overflow:hidden;padding:30px 0px;}
+.findpwd-box{
+	margin: 0 auto 10px;
+    width: 794px;
+    padding:30px;
+    background:#fff;
+}
+.findpwd-box h1{
+	   font-size: 30px;
+    font-weight: normal;
+    
+     color: #333;
+    line-height: 1.5;
+}
+.findpwd-box h1 span{
+	color: #757575;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-left: 10px;
+}
+
+.find-title{ 
+	margin: 30px 0 0;
+    overflow: hidden;
+    width:794px;
+}
+.find-title ul{
+	font-size: 16px;
+    line-height: 1.25;
+    list-style-type: none;
+    margin: 0;
+    width:800px;
+    overflow:hidden;
+}
+.find-title ul li{
+	 color: #757575;
+    cursor: pointer;
+    float: left;
+    font-size: 16px;
+    line-height: 1.25;
+    list-style-type: none;
+     border-left: 1px solid #e0e0e0;
+     width:397px;
+     text-align:center;
+}
+.find-title ul .selected{color:#000;}
+.same-find{ 
+	border-top: 1px solid #e0e0e0;
+    margin-top:20px;
+    padding: 25px 0;
+    position: relative;
+    width:794px;
+    text-align:center;
+}
+.same-find h3{
+ 	color: #333;
+    font-size: 15px;
+    padding-bottom: 10px;
+}
+.same-find label{width:130px;display:inline-block;height:30px;line-height:30px;position:relative;text-align:center;}
+.same-find label input{display:none;margin:0px 5px 0px 0px;}
+.same-find label p{display:inline-block;height:30px;line-height:30px;font-family: arial,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei","微軟正黑體","儷黑 Pro",sans-serif;font-size: 12px;}
+.same-find label i{width:14px;height:14px;position:absolute;left:15px;top:8px;background:url(../images/icon_tip.png) no-repeat 0px -101px;}
+.same-find label .selected{background-position: 0 -85px;z-index:1;}
+.same-find .find-word{
+    line-height: 12px;
+    width:210px;
+    display:block;
+    padding: 5px 10px;
+    margin:10px auto;
+}
+.same-find .btn-div{
+	width:236px; margin:10px auto;overflow:hidden;
+}
+.same-find .btn-div input{
+	float:left;margin:0px 14px 0px 0px;width:110px;height:33px;line-height:33px;
+}
+.same-find .btn-div a{
+	float:left;margin:0px;width:108px;height:33px;line-height:33px;
+}
+
+.find-by-phone .find-mobile{
+	height: 20px;
+    line-height: 20px;
+    width:210px;
+    display:block;
+    padding: 5px 10px;
+    margin:10px auto;
+}
+.find-by-phone .find-code-box{
+	height: 28px;
+    line-height: 27px;
+    width:214px;
+    display:block;
+    padding: 0px 10px;
+    margin:10px auto;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+.find-by-phone .find-code-box .find-code{border:0px none;float:left;width:90px;height:28px;line-height:28px;}
+.find-by-phone .find-code-box .get-message{border:0px none;border-left:1px solid #e0e0e0; float:right;background:#fff;cursor: pointer;padding:0px 0px 0px 10px;}
+
+/*********找回密码结果**************/
+.back-password-blank{width:100%;height:30px;border-top: 1px solid #e0e0e0;margin:30px 0px 0px 0px;padding:20px 0px 0px 0px;}
+.back-password-same{
+	 height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    width: 800px;
+}
+.back-password-same span {
+    float: left;
+    font-size: 14px;
+    height: 38px;
+    line-height: 38px;
+    padding-right: 10px;
+    text-align: right;
+    vertical-align: middle;
+    width: 210px;
+}
+.back-password-same .tip{ 
+	color: #ff6700;
+    font-size: 12px;
+    text-align: left;
+}
+.back-password-same input {
+    border: 1px solid #e3e3e3;
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 10px;
+    padding: 0 10px;
+    width: 280px;
+}
+#back-password-btn input{
+	  display: inline-block;
+    line-height: 36px;
+    margin: 0px 0px 30px 220px;
+}

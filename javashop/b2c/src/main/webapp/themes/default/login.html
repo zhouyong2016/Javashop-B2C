@@ -1,0 +1,124 @@
+<#assign  title="登录" /><#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+
+<!--登录界面-->
+<div id="login_wrapper">
+	<!--左侧登录界面-->
+	<div class="left">
+		<form action="" method="post" class="validate" id="login_form">
+			<input type="hidden" name="action" value="login" />
+			<input type="hidden" value="${forward!''}" name="forward" >
+				<h1>已注册用户从这里登录</h1>
+				<div class="m_account">
+					<label>账号：</label>
+					<div class="m_input">
+						<input type="text" tabindex="1" isrequired="true" name="username" autocomplete="off" class="definition_small" id="username"/>
+					</div>
+				</div>
+				<div class="m_account">
+					<label>密码：</label>
+					<div class="m_input">
+						<input type="password" vtype="password" tabindex="2" isrequired="true" name="password" id="password" autocomplete="off" class="definition_small" />
+					</div>
+					<div class="m_forget">
+						<a href="findpasswordByEmail.html">邮箱找回</a>&nbsp;&nbsp;
+						<a href="findpasswordByMobile.html">手机找回</a>
+					</div>
+				</div>
+				<div class="m_account">
+					<label>验证码：</label>
+					<div class="m_input">
+						<input type="text" tabindex="3" name="validcode" isrequired="true" size="8" autocomplete="off" class="m_small" id="validcode"/>
+					</div>
+					<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码">
+					<div class="m_forget"><a href="javascript:;">看不清楚？换个图片</a></div>
+				</div>
+				<div class="m_week">
+					<input type="checkbox" name="remember" class="satisfied" value="1" />
+					<span>两周内免登录</span>
+				</div>	
+				<div class="m_submit">
+					<span class="m_register btn">
+					<input type="button" tabindex="4" value="登  录" class="blue_btn">
+					</span>
+					<a href="register.html?forward=${forward!''}">免费注册</a>
+				</div>
+		</form>
+	</div>
+		<!--左侧登录界面结束-->
+		<!--中间竖线-->
+	<div class="middle"></div>
+	<!--中间竖线结束-->
+	<!--右侧宣传-->
+	<div class="right">
+		<p>正品保障 假一赔十</p>
+		<p>订单满百全国免费配送</p>
+		<p>30天超长退换承诺</p>
+		<p>海量产品自由淘</p>
+	</div>
+	<!--右侧宣传结束-->
+</div>
+	<!--登录界面结束-->
+<script>
+$(function(){
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	var options = {
+			url : "${ctx}/api/shop/member!login.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				if(data.result==1){
+					var forward='${ctx}/member/member.html'; //默认是会员中心
+					<#if forward?? >
+						forward='${forward}';
+					</#if>
+					 
+					location.href =forward;
+				}
+				else{
+					$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+					alert(data.message)
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+				$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+			}
+		};
+	$(".blue_btn").click(function(){
+		  if($("#username").val()==""){
+				alert("请输入账号！");
+				return false;
+			}
+			if($("#password").val()==""){
+				alert("请输入密码！");
+				return false;
+			}
+			if($("#validcode").val()==""){
+				alert("请输入验证码！");
+				return false;
+			}
+		$('#login_form').ajaxSubmit(options);	
+	});
+	$(document).keyup(function(event){
+		  if(event.keyCode ==13){
+			  if($("#username").val()==""){
+					alert("请输入账号！");
+					return false;
+				}
+				if($("#password").val()==""){
+					alert("请输入密码！");
+					return false;
+				}
+				if($("#validcode").val()==""){
+					alert("请输入验证码！");
+					return false;
+				}
+				$('#login_form').ajaxSubmit(options);
+		  }
+		});
+});
+</script>
+<#include 'common/footer.html' />

@@ -1,0 +1,11 @@
+<!-- 创建退货申请商品列表标签 -->
+<#assign sellBackGoodsListTag= newTag("sellBackGoodsListTag")>
+<!-- 调用退货申请商品列表,传递参数acid:1 -->
+<#assign sellBackGoodsList = sellBackGoodsListTag("'id':'1'")>
+<#list sellBackGoodsList.goodsList as list>
+商品id ${list.goods_id} 
+发货数量  ${list.ship_num}
+销售价格  ${list.price}
+</#list>
+
+

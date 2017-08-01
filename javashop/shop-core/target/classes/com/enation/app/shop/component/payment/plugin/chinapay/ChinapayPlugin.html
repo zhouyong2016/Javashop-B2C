@@ -1,0 +1,25 @@
+<tr>
+	<th>商户代码：</th>
+	<td><input type="text" name="merId" value="${merId!''}" class="input_text easyui-validatebox"  id="merId" maxlength="50"/></td>
+</tr>
+<tr>
+	<th>支付接口地址：</th>
+	<td><input type="text" name="payUrl" value="${payUrl!''}" class="input_text easyui-validatebox"  id="payUrl" maxlength="150"/></td>
+</tr>
+<tr>
+	<th>商户密钥存放位置：</th>
+	<td><input type="text" name="merPath" value="${merPath!''}" class="input_text easyui-validatebox"  id="merPath" maxlength="150"/></td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#merId').validatebox({ 
+		required:true 
+		}); 
+	$('#payUrl').validatebox({ 
+		required:true 
+		}); 
+	$('#merPath').validatebox({ 
+		required:true 
+		}); 
+})
+</script>

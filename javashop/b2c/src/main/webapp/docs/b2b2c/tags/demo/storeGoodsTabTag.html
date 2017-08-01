@@ -1,0 +1,11 @@
+
+<!--创建"店铺商品tab显示"标签-->
+<#assign StoreGoodsTabTag= newTag("storeGoodsTabTag") >  
+<!--调用"店铺商品tab显示"标签，并传递参数-->            
+<#assign  StoreGoodsTab=StoreGoodsTabTag() >						
+<ul class="gw">
+<#list StoreGoodsTab as sgt>
+ 选项卡：	${sgt.name}|url: ${sgt.url}
+ </br>
+ 
+</#list>

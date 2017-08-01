@@ -1,0 +1,22 @@
+<tr>
+	 <th>客户号：</th>
+	 <td>
+ 	 <input type="text" name="chnid" value="${chnid!''}" class="input_text easyui-validatebox"  id="chnid" maxlength="50"/>
+	</td>
+</tr>
+<tr>
+	 <th> 密钥：</th>
+	 <td>
+ 	 <input type="text" name="key"  value="${key!''}" class="input_text easyui-validatebox"  id="key" maxlength="50"/>
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#chnid').validatebox({ 
+		required:true 
+		}); 
+	$('#key').validatebox({ 
+		required:true 
+		}); 
+})
+</script>

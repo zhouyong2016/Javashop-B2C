@@ -1,0 +1,17 @@
+	<div class="of_wares">
+		<div class="of_warestop"></div>
+		<h2>推荐商品</h2>
+		<div class="of_goods">
+			<ul>
+				<#list goodsList as goods>
+				<li>
+					<a href="goods-${goods.goods_id}.html"><@image src=""${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+					<h3>${goods.name}</h3>
+					<h4>市场价：<span>${goods.mktprice?string.currency}</span></h4>
+					<p>网店：<span>${goods.price?string.currency}</span></p>
+				</li>
+				</#list>
+			</ul>
+		</div>
+		<div class="of_waresbottom"></div>
+	</div>

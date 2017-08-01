@@ -1,0 +1,20 @@
+
+<!--创建"评论"标签-->
+<#assign commentListTag = newTag("commentListTag")>
+
+
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentPage = commentListTag("{'goods_id':1,'type':2}")>
+
+
+<#assign commentList =commentPage.result>
+
+<!--循环输出-->
+<#list commentList as comment>
+<li>
+	${comment.content!''}
+</li>	
+</#list>
+
+<!--评论的分页一般是异步的，请自行绑定分页点击事件-->
+<@ajaxpager pageno="${page!'1'}" pagesize="${commentPage.pageSize}" totalcount="${commentPage.totalCount}" />

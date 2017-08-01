@@ -1,0 +1,154 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+	<input type="hidden" name="tagid" value="${tagid }"/>
+	<input type="hidden" name="tagids" value=""/>
+		<div class='buttonArea'>
+			<span id="searchbtn">
+				<a href="javascript:void(0)" class="button"  onclick="controlGoods()">添加选中</a>
+			</span>
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<input id="searchKeyword" class="input_text" type="text" maxlength="50" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+					<a href="javascript:void(0)" class="easyui-linkbutton" 
+					data-options="plain:true" onclick="searchGoods()">搜索</a>
+				</span>
+				<a href="javascript:void(0)" class="button"
+				data-options="plain:true" id="aAdvanced"  >高级搜索</a>
+			</span>
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">商品名称</td>
+					<td>
+						<input type="text" value="${name!''}" id="name"  class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">商品编号</td>
+					<td>
+						<input type="text" value="${name!''}" id="sn"class="input_text" style="width: 95%;">
+					</td>
+					<td width="70" align="right">类别</td>
+					<td>
+						<input class="easyui-combotree" name="cat.parent_id" id="catid"
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get'" style="width: 200px;height: 28px;" />
+					</td>
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="searchGoods()" href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/goods/list-json.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc"
+				>
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:500">商品名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
+						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function market_enable(value,row,index){
+	var val;
+	if(value==1){val="是";}else if(value==0){val="否";}
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+$(function(){
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})		
+
+//搜索
+function searchGoods(){
+	
+	var searchtype = $("#Advanced").val();
+	var keyword = $("#searchKeyword").val();
+	var name = $("#name").val();
+	var sn = $("#sn").val();
+	var catid = $("#catid").combo('getValue');
+	
+	$('#goodsdata').datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 name:name,
+		 sn:sn,
+		 catid:catid,
+		 page:1
+    }); 
+}
+function controlGoods(){
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要添加商品");
+		return;
+	}
+	$.Loading.show("正在添加商品...");
+	var options = {
+			url : "${ctx}/shop/admin/goods-show/batch-add.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					location.reload();     
+				}
+				if(result.result==0){
+					$.Loading.success(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

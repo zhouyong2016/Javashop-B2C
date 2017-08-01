@@ -1,0 +1,13 @@
+
+<!--创建"商品详细"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!--调用"商品详细"标签，并传递参数-->
+<#assign goodsBaseData = goodsBaseDataTag("{'goodsid':30}")>
+<!--创建"商品相册"标签-->
+<#assign goodsGalleryTag = newTag("goodsGalleryTag")>
+<!--调用"商品相册"标签-->
+<#assign goodsGallery = goodsGalleryTag()!''>
+
+<#list goodsGallery as pick>
+	<li><@image src="${pick.small}"/></li>
+</#list>

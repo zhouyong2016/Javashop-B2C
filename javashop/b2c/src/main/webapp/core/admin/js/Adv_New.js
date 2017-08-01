@@ -1,0 +1,82 @@
+var Adv=$.extend({
+	init:function(){
+		var self =this;
+		$(".stop").click(function(){var advid=$(this).attr("advid");self.doStop(advid);});
+		$(".start").click(function(){var advid=$(this).attr("advid");self.doStart(advid);});
+		$("#delBtn").click(function(){self.doDelete();});
+		$("#toggleChk").click(function(){
+			self.toggleSelected(this.checked);}
+		);
+		
+		self.viewAdv();
+	},
+	viewAdv:function(){
+		 $('.easyui-tooltip').tooltip({
+			    position: 'right',
+			    content: '<span style="color:#fff">This is the tooltip message.</span>',
+			    onShow: function(){
+			    	 var url = $(this).attr("atturl");
+					 $(this).tooltip('tip').html("<img src='"+url+"'  >")
+			    }
+			     
+			});
+	}
+	,
+	doDelete:function(){
+		if(!this.checkIdSeled()){
+			alert("请选择要删除的广告");
+			return ;
+		};
+		if(!confirm("确认要删除选定的广告？")){	
+			return ;
+		}
+		$.Loading.show("正在删除广告...");
+		this.deletePost(ctx+"/core/admin/adv/delete.do", "广告删除成功");
+		
+	},
+	doStop:function(advid){
+	    $.Loading.show('正在停用广告，请稍侯...');
+		var that =this;
+		var options = {
+			url : ctx + "/core/admin/adv/stop.do?ajax=yes&advid="+advid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {	
+				if(result.result==1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+				$("#advdata").datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$.ajax(options);
+	},
+	doStart:function(advid){
+	    $.Loading.show('正在启用广告，请稍侯...');
+		var that =this;
+		var options = {
+			url : ctx + "/core/admin/adv/start.do?ajax=yes&advid="+advid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {	
+				if(result.result==1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+				$("#advdata").datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.hide();
+				alert("出现错误 ，请重试");
+			}
+		};
+		$.ajax(options);
+	}
+	
+});
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd" default-autowire="byName" default-lazy-init="false">
+        	
+     <context:component-scan base-package="com.enation" />
+        	
+	<!-- 属性文件读入 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/config/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 数据源定义,使用Apache DBCP 连接池
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" />
+	</bean>
+	 -->
+	 
+   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">      
+    <property name="driverClass" value="${jdbc.driverClassName}" />      
+    <property name="jdbcUrl" value="${jdbc.url}" />      
+    <property name="user" value="${jdbc.username}" />      
+    <property name="password" value="${jdbc.password}" />    
+    <property name="minPoolSize" value="50" />  
+    <property name="maxPoolSize" value="400" />  
+    <property name="maxIdleTime" value="1800" />  
+    <property name="acquireIncrement" value="2" />  
+    <property name="maxStatements" value="0" />  
+    <property name="initialPoolSize" value="50" />  
+    <property name="idleConnectionTestPeriod" value="60" />  
+    <property name="acquireRetryAttempts" value="30" />  
+    <property name="breakAfterAcquireFailure" value="true" />  
+    <property name="testConnectionOnCheckout" value="true" />  
+   </bean>  
+
+   	<bean id="jdbcTemplate" class="com.enation.framework.database.impl.LowerCaseJdbcTemplate"></bean>	
+   	<bean id="sqlFileExecutor" class="com.enation.framework.database.impl.DefaultSqlFileExecutor"></bean>	
+	<bean id = "transactionManager" 
+         class = "org.springframework.jdbc.datasource.DataSourceTransactionManager" > 
+         <property name = "dataSource" > 
+             <ref bean = "dataSource" /> 
+         </property > 
+     </bean >
+	<bean id="springContextHolder" class="com.enation.framework.context.spring.SpringContextHolder" lazy-init="false"/>
+	<bean class="com.enation.framework.component.ComponentLoader"></bean>	
+ 	<bean id="daoSupport" class="com.enation.framework.database.impl.JdbcDaoSupport"></bean>
+
+	<!-- 使用Spring封装的Mail Sender -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+			</props>
+		</property>	
+	</bean>	
+	
+		
+	<!-- 支持 @Transactional 标记 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>  
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+</beans>

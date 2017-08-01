@@ -1,0 +1,23 @@
+<div class="detail" >
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<thead>
+			<tr>
+				<th>日期</th>
+				<th>类型</th>
+				<th>摘要</th>
+				<th>积分</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list listPointHistory as log>
+			<tr>
+				<td><@dateformat pattern="yyyy-MM-dd HH:mm:ss"
+					time="${log.time?c}" /></td>
+				<td><#if log.type==1> 获得 <#else> 使用 </#if></td>
+				<td>${log.reason}</td>
+				<td>${log.point}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>

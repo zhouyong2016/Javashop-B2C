@@ -1,0 +1,93 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="newTab('添加品牌','${ctx}/shop/admin/brands-show/search.do?tag_id=${tag_id}')">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" id="saveOrdernum" onclick="saveOrdernum()">保存排序</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv"> 
+		<form id="goodsShowform">
+		<input type="hidden" name="tag_id" value="${tag_id }" id="tagid"/>
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/brands-show/list-json-brand.do?ajax=yes&tag_id=${tag_id}',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="brandsShowData">
+				<thead>
+					<tr>
+						<th data-options="field:'name',width:100"  >品名称</th>
+						<th data-options="field:'ordernum',width:100" formatter="formatOrdernum">排序</th>
+						<th data-options="field:'delete',width:100" formatter="formatDelete">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="SMTPinfo" style="display: none;"></div>
+	</div>
+</div>
+
+<script type="text/javascript"> 
+function formatOrdernum(value,row,index){
+	var val="<input type=\"text\"  maxlength=\"10\" class=\"input_text\" value=\""+row.ordernum+"\" name=\"brand_num\"/>";
+		val+="<input type=\"hidden\" name=\"brand_id\" value=\""+row.brand_id+"\" />" ;
+	return val;
+}
+function formatDelete(value,row,index){
+	var val="<a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.rel_id+","+row.tag_id+")'></a>";
+	return val;
+}
+function del(rel_id,tag_id){ 
+	if(confirm("确定删除标签？")){
+		$.ajax({
+			url :"${ctx}/shop/admin/brands-show/del.do?tag_id="+tag_id+"&id="+rel_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#brandsShowData').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);				
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+        }); 
+	} 
+}
+function saveOrdernum(){
+	if(confirm("确定保存排序？")){
+		var is_num=true;
+		var classBlack = document.getElementsByClassName('input_text');
+		for (var i=0; i<classBlack.length; i++) {
+		   if(isNaN(classBlack[i].value)){
+			   is_num=false;
+		   }
+		}
+		
+		if(is_num){
+		$("#saveOrdernum").linkbutton("disable");
+		var options = {
+				url : "${ctx}/shop/admin/brands-show/save-order.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);				
+					}
+					$("#saveOrdernum").linkbutton("enable"); 
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					$("#saveOrdernum").linkbutton("enable"); 
+				}
+			};
+			$('#goodsShowform').ajaxSubmit(options);	
+		}else{
+			$.Loading.error("您输入的排序不是数字,并且不能为空");
+		} 
+	}
+}
+</script>
+<#include '/admin/footer.html' >

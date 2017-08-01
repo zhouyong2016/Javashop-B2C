@@ -1,0 +1,52 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table  id="dg" class="easyui-datagrid" 
+		data-options="url:'${ctx}/shop/admin/order-report/refund-list-json.do?state=${state!-1}',pageList: [10,15,20,30],pageSize:20,fitColumns:'true'" 
+		pagination="true" width="width">
+			    <thead>
+				    <tr>
+				   	 	<th  data-options="field:'sn',width:100" >流水号</th>
+				    	<th  data-options="field:'refund_way',width:100" >退款方式</th>
+				    	<th  data-options="field:'create_time',width:100" formatter="formatTime" >创建日期</th>
+				    	<th  data-options="field:'refund_money',width:100" formatter="formatMoney">退款金额</th>
+				    	<th  data-options="field:'refund_user',width:100" >退款人</th>
+				    	<th  data-options="field:'refund_time',width:100" formatter="formatTime" >退款时间</th>
+				    	<th  data-options="field:'status',width:100" formatter="formatStatus" >退款状态</th>
+				    	<th data-options="field:'operation',width:100" formatter="formatOperation">操作</th>
+				    </tr>
+			    </thead>
+		 </table>
+	</div>
+</div>
+<script type="text/javascript">
+
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){
+	if(value!=""&&value!=null){
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}else{
+		return "";
+	}
+}
+function formatStatus(value,row,index){
+	if(value==0){
+		return "新建";
+	}else if(value==1){
+		return "已退款";
+	}
+}
+function formatOperation(value, row, index) {
+	if(row.status==0){
+		return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >退款</a>";
+	}
+	return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >查看</a>";
+}
+</script>
+
+<#include '/admin/footer.html' >

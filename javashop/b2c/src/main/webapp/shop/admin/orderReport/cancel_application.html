@@ -1,0 +1,44 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table id="orderReturndata" class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/order/cancel-application-list-json.do',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" width="width">
+			<thead>
+				<tr>
+					<th data-options="field:'sn',width:150" formatter="forsn">订单号</th>
+					<th data-options="field:'create_time',width:100,sortable:'true'" formatter="formatDate" >下单日期</th>
+					<th data-options="field:'need_pay_money',width:100,sortable:'true'" formatter="forMoney">订单总额</th>
+					<th data-options="field:'operation',width:100" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+function forsn(value,row,index){
+	var val="<a href='#' onclick=\"newTab('查看订单详细"+(row.sn).substring(0,6)+"','${ctx}/shop/admin/order/detail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+	return val;
+}
+function formatOperation(value, row, index) {
+	return "<a href='javascript:void(0);' onclick=newTab('审核取消订单','${ctx}/shop/admin/order/cancel-detail.do?order_id="+row.order_id+"'); >查看</a>";
+}
+function forMoney(value, row, index) {
+	var val = "￥" + value;
+	return val;
+}
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+	
+}
+
+
+</script>
+<#include '/admin/footer.html' >

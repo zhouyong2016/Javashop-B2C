@@ -1,0 +1,40 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>会员注册</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/member/register.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">username</span><span class="w100">用户名</span><span class="w380">无</span></p>
+			<p><span class="w100 important">password</span><span class="w100">密码</span><span class="w380">无</span></p>
+			<p><span class="w100 important">code</span><span class="w100">验证码</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/member/register.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("注册失败。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$("#register_form").submitForm(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+			{"result":1,"message":"注册成功"}
+			</h5>
+		</span>	
+	</div>
+
+</div>

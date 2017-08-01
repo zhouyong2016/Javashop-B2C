@@ -1,0 +1,58 @@
+<!-- 商品规格 -->
+<input type="hidden" value="1" name="havespec" />
+<div class="goods-spec" id="goods-spec">
+	<!-- 创建商品规格标签 -->
+	<#assign goodsSpecTag = newTag("goodsSnapshotSpecTag") >
+	<!-- 调用商品规格标签 -->
+	<#assign goodsSpace = goodsSpecTag("'snapshot_id':${goods.snapshot_id!''},'product_id':${product_id}")!'' >
+	<!-- 规格列表 -->
+	<#list goodsSpace.specList as spec>
+		<table width="100%" class="spec-item">
+			<tbody>
+				<tr>
+					<td style="width: 10%; white-space: nowrap;"><span><em>${spec.spec_name}</em>：</span></td>
+					<td style="padding-left: 15px;">
+		 				<ul>
+							<#list spec.valueList as val  >
+								<#if spec.spec_type==0>
+									<li>
+										<a specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="<#if val_index == 0>selected</#if>" title="${val.spec_value!''}">
+											${val.spec_value!''}
+											<span></span>
+										</a>
+									</li>
+								</#if>
+								<#if spec.spec_type==1>
+									<li>
+										<a specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="<#if val_index == 0>selected</#if>" title="${val.spec_value!''}" >
+											${val.spec_value!''}
+											<span></span>
+											<!-- <@image  title="${val.spec_value!''}" alt="${val.spec_value!''}" src="${val.spec_image!''}" /> -->
+										</a>
+									</li>
+								</#if>				
+							</#list>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</#list>
+</div>
+<script type="text/javascript">
+
+var Products=
+	[
+	<#list goodsSpace.productList as product>	
+	  {'product_id':${product.product_id},'goods_id':${product.goods_id},'sn':'${product.sn}','store':${product.store!0},
+		'price':${product.price},
+	   'specs':${product.specsvIdJson}
+	  }
+	  <#if product_has_next >,</#if>
+	</#list>
+	];
+$(function(){
+	Eop.Spec.init(1);
+});
+
+</script>	

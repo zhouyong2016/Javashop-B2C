@@ -1,0 +1,75 @@
+<#assign checkGoodsPartActTag = newTag("checkGoodsPartActTag")>
+<#assign goodsPartAct = checkGoodsPartActTag("{'goods_id':${goods.goods_id}}")!'' >
+
+<#if goodsPartAct.activity??>
+    <#assign activitySalesDetailTag= newTag("activitySalesDetailTag") />
+    <#assign activityDetail = activitySalesDetailTag("'pageSize':9") />
+    <#assign activity = activityDetail.activity />
+    <#assign detail = activityDetail.detail />
+
+    <div class="other-goods-item" style="height: auto;">
+        <div class="other-item-title" style="position: absolute;top: 0;">促&#12288;销：</div>
+        <div class="other-item-content activity-item-content" style="margin-left: 50px;">
+            <#if detail.is_full_minus == 1>
+                <div class="item-activity">
+                    <span class="icon-activity" style="width:40px;">满减</span>
+                    <span class="detail-activity">满${detail.full_money!''} 减${detail.minus_value!''}元</span>
+                </div>
+            </#if>
+            <#if detail.is_send_point == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">送积分</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送${detail.point_value!''}分</span>
+                </div>
+            </#if>
+            <#if detail.is_free_ship  == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">免邮</span>
+                    <span class="detail-activity">满${detail.full_money!''} 免邮费</span>
+                </div>
+            </#if>
+            <#if detail.is_send_gift  == 1>
+                <#assign activityGift = activityDetail.activityGift />
+                <div class="item-activity">
+                    <span class="icon-activity">赠品</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送赠品</span>&nbsp;
+                    <#if activityGift.enable_store == 0><span style="color: red">(已赠完)</span></#if>
+                </div>
+            </#if>
+            <#if detail.is_send_bonus == 1 >
+                <div class="item-activity">
+                    <span class="icon-activity">送优惠券</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送优惠券</span>
+                </div>
+            </#if>
+
+            <div class="show-more show" data-href="${ctx}/promotion.html">
+                展开促销<i class="icon-content-activity"></i>
+            </div>
+        </div>
+    </div>
+</#if>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        var activity = $('.activity-item-content');
+        var showMore = $('.show-more'), data_href = showMore.attr('data-href');
+        var items    = activity.find('.item-activity');
+        showMore.on('click', function () {
+            if (showMore.is('.show-detail')) {
+                location.href = ctx + data_href;
+                return false
+            }
+            activity.css({height: 27 * items.length});
+            showMore.addClass('show-detail')
+            setTimeout(function () {
+                showMore.html('查看促销详情');
+            }, 200)
+        })
+        
+        //修改IE11下商品详情灰色价格区域在有促销情况下显示不全
+        $("body .midden-area-priceArea").css("height","auto");
+    })
+</script>

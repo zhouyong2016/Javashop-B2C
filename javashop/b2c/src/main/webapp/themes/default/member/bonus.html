@@ -1,0 +1,76 @@
+<#assign  title="我的优惠券" />
+<#include 'member_header.html' />
+
+<!-- 获得会员优惠券列表标签 -->
+<#assign memberBonusListTag = newTag("memberBonusListTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign memberBonus = memberBonusListTag("'type':1")>
+
+<#assign bonuslist = memberBonus.bonusList>
+
+<div class="data">
+	<h2>我的优惠券</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg" />
+		<div>
+			<h2>温馨提示</h2>
+			<p>这里将显示您的优惠券信息</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="tab">
+	<ul >
+		<li class="selected"><a href="bonus.html"><span>我的优惠券</span></a></li>
+	</ul>
+</div>
+<div class="box" >
+	<div class="top"></div>
+	<div class="body">
+		<#if bonuslist?size gt 0 >
+		<table id="tblComm" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<th class="title">红包类型</th>
+				<th class="date">红包金额</th>
+				<th class="date">最小订单金额</th>
+				<th class="date">到期时间</th>
+				<th class="date">使用状态</th>
+			</tr>
+			<#list bonuslist as mb>
+			<tr>
+				<td>${mb.type_name}</td>
+				<td>${mb.type_money}</td>
+				<td>${mb.min_goods_amount}</td>
+				<td><@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/></td>
+				<td>
+					<#if mb.order_sn??>
+						已使用
+						<#else>未使用
+					</#if>
+				</td>
+			</tr>
+			</#list>
+		</table>
+		
+		<div class="pager_border">
+			<@pager pageno="${memberBonus.page}" pagesize="${memberBonus.pageSize}" totalcount="${memberBonus.totalCount}" />
+			<div class="clear"></div>
+		</div>
+		
+		<#else>
+			<div class="empty" >您还没有任何优惠券</div>
+		</#if>	
+	</div>
+	<div class="bottom"></div>
+	</div>
+</div>
+<div class="rr_bottom"></div></div>
+		<!--会员中心首页右侧结束-->
+	</div>
+	</div>
+		<#include '../common/footer.html'/>

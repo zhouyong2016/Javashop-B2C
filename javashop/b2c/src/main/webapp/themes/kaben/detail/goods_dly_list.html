@@ -1,0 +1,11 @@
+<#-- 创建配送列表标签-->
+<#assign shopDlyTypeListTag = newTag("shopDlyTypeListTag") >    
+<#-- 调用配送列表标签-->
+<#assign dlyTypeList = shopDlyTypeListTag("{'regionid':${regionid}}")>
+<select>
+	<#list dlyTypeList as dlyType> 
+		<#if dlyType.name!="虚拟商品自动发货">
+			<option>${dlyType.name} &nbsp;&nbsp;${dlyType.price?string("currency")}</option>
+		</#if>
+	</#list>
+</select>

@@ -1,0 +1,22 @@
+<tr>
+	<th>财付通商户号(10位数字)：</th>
+	<td>
+ 	 	<input type="text" name="tenpaybid" value="${tenpaybid!''}" class="input_text easyui-validatebox"  id="tenpaybid" maxlength="10"/>
+	</td>
+</tr>
+<tr>
+	<th>财付通密钥：</th>
+	<td>
+ 	 	<input type="text" name="tenpaykey" value="${tenpaykey!''}" class="input_text easyui-validatebox" id="tenpaykey" maxlength="50"/>
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#tenpaybid').validatebox({ 
+		required:true 
+		}); 
+	$('#tenpaykey').validatebox({ 
+		required:true 
+		}); 
+})
+</script>

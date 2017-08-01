@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.enation.app.javashop</groupId>
+		<artifactId>javashop</artifactId>
+		<version>6.2.1</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<artifactId>cms-core</artifactId>
+	<name>cms-core</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+				
+		</plugins>
+			
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.css</include>
+					<include>**/*.html</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>com.enation.app.javashop</groupId>
+			<artifactId>core</artifactId>
+			<version>6.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+</project>

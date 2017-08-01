@@ -1,0 +1,35 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>add 商品的评论和提出咨询API</h3>
+		<p>评论和咨询</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/b2b2c/store-comment-api/add.do</p>
+		<h3>评论输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w300">备注</span></h4>
+			<p><span class="w100 important">commenttype</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">评论类型,可选值：1或2，1为评论，2为咨询</span></p>
+			<p><span class="w100 important">content</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">评价内容</span></p>
+			<p><span class="w100 important">goods_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">商品id</span></p>
+			<p><span class="w100 important">grade</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">等级</span></p>
+			<p><span class="w100 important">picnames</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">1.png</span><span class="w300">图片名称</span></p>
+			<p><span class="w100 important">store_deliverycredit</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">发货速度</span></p>
+			<p><span class="w100 important">store_desccredit</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">描述相符</span></p>
+			<p><span class="w100 important">store_servicecredit</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">服务态度</span></p>
+		</div>
+		<h3>咨询输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w300">备注</span></h4>
+			<p><span class="w100 important">commenttype</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">评论类型,可选值：1或2，1为评论，2为咨询</span></p>
+			<p><span class="w100 important">content</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">评价内容</span></p>
+			<p><span class="w100 important">goods_id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w300">商品id</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"发表成功","data":null}
+		</h5>
+	</div>
+</div>

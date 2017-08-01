@@ -1,0 +1,39 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main"> 
+	<div class="shadowBoxWhite tableDiv">
+		<form id="tagform">
+			<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/brands-show/list-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true'" pagination="true" width="width" id="tagdata">
+				<thead>
+				    <tr>
+				   		<th  data-options="field:'tag_id',checkbox:true,width:100" ></th>
+				   		<th  data-options="field:'id',width:20" formatter="formatId">标签id</th>
+				   	 	<th  data-options="field:'tag_name',width:100">标签</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			</table>
+		</form>
+		<div id="Taginfo" style="display: none;"></div>
+	</div>
+</div>
+ 
+</div>
+<script type="text/javascript">  
+ 
+
+function formatAction(value,row,index){
+	var val="<a class='edit' title='编辑品牌' href='javascript:void(0);' onclick='edit("+row.tag_id+")'></a>";
+		return val;
+	}
+	function formatId(value,row,index){
+		var val=row.tag_id;
+		return val;
+	}
+
+	function edit(id) {
+		newTab('分类品牌编辑', '${ctx}/shop/admin/brands-show/brand-list.do?tag_id=' + id);
+	}
+</script>
+<#include '/admin/footer.html' >

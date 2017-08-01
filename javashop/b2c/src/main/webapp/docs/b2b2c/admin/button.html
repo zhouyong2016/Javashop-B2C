@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>javashop button demo</title>
+
+
+<script type="text/javascript" src="../../adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../../adminthemes/new/js/jquery-form-2.33.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+<link rel="stylesheet" type="text/css" href="../../adminthemes/new/js/easy-ui/themes/icon.css"/>  
+<script type="text/javascript" src="../../adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+
+<script type="text/javascript">
+
+
+
+$(function(){
+	$("#disabled").click(function(){
+		$("#saveBtn").linkbutton("disable");
+	});
+	$("#enable").click(function(){
+		$("#saveBtn").linkbutton("enable");
+	});
+	
+	
+	$("#saveBtn").click(function(){
+		//判断linkbutton是否已禁用，如果禁用则跳过
+	 	var disabled=  $(this).hasClass("l-btn-disabled");
+		if( !disabled ){
+			alert("走程序");
+			myfun();//调用业务逻辑
+		}else{
+			alert("已禁用，不走程序")
+		}
+	});
+	
+ 
+	
+	
+});
+
+function myfun(){
+	$("#saveBtn").linkbutton("disable").linkbutton('loading');
+	setTimeout(function(){
+		$("#saveBtn").linkbutton("enable").linkbutton('unloading');
+	},6000);   
+}
+</script> 
+
+</head>
+<body>
+
+
+	<a href="javascript:;" id="saveBtn"  class="easyui-linkbutton"  >保存</a>
+	
+	<input type="button" id="disabled" value="禁用" />
+	<input type="button" id="enable" value="可用" />
+	
+	
+	
+</body>
+</html>

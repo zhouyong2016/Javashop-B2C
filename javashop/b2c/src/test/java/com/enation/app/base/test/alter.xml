@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>es_my_test</table>
+		<field type="add">
+			<name>field4</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+		
+		<field type="add">
+			<name>field5</name>
+			<type>int</type>
+			<size>8</size>
+		</field>
+		
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_my_test</table>
+		<field type="drop">
+			<name>field5</name>
+		</field>
+	</action>
+ 
+</dbsolution>

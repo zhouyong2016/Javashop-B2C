@@ -1,0 +1,47 @@
+
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+
+<!-- 一、如果是action=null，请注释掉二、三，然后点击“提交” -->
+<#assign point = memberPoint.memberLv>
+当前等级：${point.name!''}
+
+<!-- 二、如果是action=list,请注释掉一、三，并在url参数的“？”后加入action=list,然后点击“提交” -->
+<#assign point = memberPoint.pointHistoryList>
+<ul>
+	<#list point as pointList>
+		<li>${pointList.reason!''}</li>
+	</#list>
+</ul>
+
+<!-- 三、如果是action=freeze,请注释一、二、并在url参数的“？”后加入action=freeze,然后点击“提交”  -->
+	<#assign point = memberPoint.pointFreezeList>
+	<ul>
+		<#list point as pointList>
+		<tr>
+	        <td><@dateformat time="${pointList.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+	        <td >
+	        <#if pointList.type == 'order_pay_use'>订单消费积分</#if>
+			<#if pointList.type == 'order_pay_get'>订单获得积分</#if>
+			<#if pointList.type == 'register'>注册</#if>
+			<#if pointList.type == 'email_check'>邮箱验证</#if>
+			<#if pointList.type == 'finish_profile'>完善个人资料</#if>
+			<#if pointList.type == 'buygoods'>购买商品</#if>
+			<#if pointList.type == 'onlinepay'>在线支付</#if>
+			<#if pointList.type == 'operator_adjust'>管理员改变积分</#if>
+			<#if pointList.type == 'consume_gift'>积分换赠品</#if>
+			<#if pointList.type == 'login'>登录</#if>
+			<#if pointList.type == 'comment'>发表评价</#if>
+			<#if pointList.type == 'comment_img'>贴图评价</#if>
+			<#if pointList.type == 'first_comment'>首次评论</#if>
+			<#if pointList.type == 'register_link'>推广连接</#if>
+			 </td>
+	        <td><span class="status-gain">${pointList.point}</span></span></td>
+	        <td><span class="status-gain">${pointList.mp}</span></span></td>
+	        <td>冻结</td>
+		 </tr>
+			
+		</#list>
+	</ul>

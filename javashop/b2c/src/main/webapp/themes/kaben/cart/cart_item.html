@@ -1,0 +1,110 @@
+<#-- 创建购物车标签 -->
+<#assign cartTag= newTag("cartTag")>
+<#--通过购物车标签获取购物项列表 -->
+<#assign itemList = cartTag() >	
+<#-- 创建会员是否登录标签 -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+<#-- 获取是否登录  -->
+<#assign isLogin = memberIsLoginTag() >
+
+<#include 'cart_message.html' /> 
+<script type="text/javascript">
+var isLogin = ${isLogin?string};
+</script>
+	<div id="cart-wrapper">
+		<#if itemList?exists && itemList?size gt 0>
+			<table cellspacing="0" cellpadding="3" width="100%" >
+				<thead>
+					<tr>
+						<th style="text-align: right; width: 55px;"><input type="checkbox" name="select_all" style="margin-right: 5px;" />全选</th>
+						<th style="width:650px;">商品信息</th>
+						<!-- <th>商品积分</th> -->
+						<th>销售价格</th> 
+						<th>优惠价格</th>
+						<th>数量</th>
+						<th style="width:100px;">小计</th>
+						<th class="cart_last" style="width:100px;">删除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list itemList as item >
+						<tr itemid="${item.id}" productid="${item.product_id}" price="${item.coupPrice}" <#if item.others.exchange_point??>point="${item.others.exchange_point}"</#if>>
+							<td style="width: 55px;">
+								<input type="checkbox" name="product_id" value="${item.product_id}" style="margin-right: 15px;"  <#if item.is_check?? && item.is_check==1> checked="checked" </#if> <#if item.others.exchange_point??>exchange="true"<#else>exchange="false"</#if>/>
+							</td>
+							<td style="width:650px;">
+								<a target="_blank" href="goods-${item.goods_id}.html" class="cart_list_img">
+									<@image height="50" width="36" src="${item.image_default!''}" style="cursor: pointer;" />
+								</a>
+								<p><a target="_blank" href="goods-${item.goods_id}.html"<#if item.others.specList?exists>class="has_spec"</#if>>${item.name}</a>
+								<#if item.others?exists>
+									<#if item.others.specList?exists>
+										<span class="caer_spec">
+											<#list item.others.specList as spec>
+												<#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong>
+											</#list>
+										</span>
+									</#if>
+								</#if>
+								<!-- 显示并可查看促销活动信息 -->
+								<#if item.activity_id != 0 >
+									<span class="act_span">
+										<strong>
+											促销商品
+										</strong>
+										<a href="${ctx}/promotion.html" class="act_detail" act_id="${item.activity_id}" data-reveal-id="myModal">查看促销</a>
+									</span>
+								</#if>
+								</p>
+							</td>
+							<!-- <td style="font-weight:bold; font-size:14px;">${item.point}</td> -->
+							<td class=" mktprice1" style="font-weight:bold; font-size:14px;">${item.price?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point}分</#if></td>
+							<td>${item.coupPrice?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point}分</#if></td>
+							<td class="cart-quantity" style="text-align:center;">
+								<div id="num" class="Numinput" value="${item.num}" itemid="${item.id}" productid="${item.product_id}" >
+									<span class="numadjust decrease">-</span>
+									<input size="5" name="num" autocomplete="off" type="text" value="${item.num}">
+									<span class="numadjust increase">+</span>
+								</div>
+							</td>
+							<td class="itemTotal" style=" color:#ff6700;font-size: 14px;font-weight: bold;width:100px;">${item.subtotal?string("currency")}<#if item.others.exchange_point??>+${item.others.exchange_point?number*item.num}分</#if></td>
+							<td class="cart_last" style="width:100px;"><a href="javascript:;" class="delete"></a></td>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+			<!-- 总价 -->
+			<div class="cart-wrapper">
+				<#include '/cart/cartTotal.html' />
+				<div class="cart_tools">
+					<div class="btn-div">
+						<input type="button" class="clean_btn white-btn" value="清空购物车">
+					</div>
+					<div class="btn-div">
+						<input type="button" class="returnbuy_btn yellow-btn" value="继续购物"  />
+					</div>
+					
+					<div class="btn-div">
+						<input type="button"  class="checkout-btn green-btn" value="去结算"   />
+					</div>
+				</div>
+			</div>
+			<div id="login_tip" style="display:none">
+				<div class="message">
+					您当前是游客身份，游客身份不能购买商品！<br><br>
+				</div>
+				<div class="button-wrapper">
+					<div class="btn-div">
+					<input type="button" class="small-green to-login-btn go-next-button" value="马上登录">
+					</div>
+					
+					<div class="btn-div">
+						<input type="button" class="small-yellow to-checkout-btn go-next-button"  value="立即注册">
+					</div>
+				</div>
+			</div>
+		<#else>
+			<#include 'cart_item_blank.html' />
+		</#if>
+	</div>
+

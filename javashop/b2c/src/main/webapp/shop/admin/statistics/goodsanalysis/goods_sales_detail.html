@@ -1,0 +1,130 @@
+<#include '/admin/header.html' >
+
+</style>
+<div class="main">
+	<div style="display: block;" class="searchAdvanced">
+		<form id="hotgoodsForm">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="60px" align="right">
+					商品名称:
+				</td>
+				<td width="180px">
+					<input style="width: 180px;" class="input_text" type="text" id="name" name="name" value="">
+				</td>
+				<td width="80px" align="right">
+					商品分类:
+				</td>
+				<td width="170px">
+					<select id="catId" class="easyui-combotree combo" name="cat_id" 
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
+						style="width: 170px;">
+					</select>
+				</td>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type" name="cycle_type" onchange="statistics_mode(this.value)" >
+						<option value="1" <#if cycle_type==1 >selected="selected"  </#if> >按照月统计</option>
+						<option value="0" <#if cycle_type==0 >selected="selected"  </#if> >按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month">
+					</select>
+				</td>
+				<td width="170" style="text-align: center;">
+					<a id="submit_form" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+		</form>
+	</div>
+	
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" 
+			data-options="url:'${ctx}/shop/admin/goodsStatis/goods-sales-detail-json.do',pageList: [5,10,15,20,50],pageSize:5,fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
+			pagination="true" width="width" id="goodsdata" sortName="order_id" sortOrder="desc">
+			<thead>
+				<tr>
+					<th data-options="field:'order_id',checkbox:true,width:100"></th>
+					<th data-options="field:'oiname',width:150" >名称</th>
+					<th data-options="field:'t_order_num',width:100" >下单量</th>
+					<th data-options="field:'t_goods_num',width:100" >下单商品件数</th>
+					<th data-options="field:'t_money',width:100" >下单金额</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+</div>
+
+<input type="hidden" id="this_type" value="1" >
+
+<script type="text/javascript">
+
+$(function(){
+	
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	currentYear = ${year};
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	currentmonth = ${month};
+	
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	$("#submit_form").click(function(){
+		var name = $("#name").val();
+		var catId = $("input[name='cat_id']").val();
+		var cycle_type = $("#cycle_type").val();
+		var year = $("#year").val();
+		var month = $("#month").val();
+		
+		$("#goodsdata").datagrid('load', {
+			name : name,
+			cat_id : catId,
+			cycle_type:cycle_type,
+			year : year,
+			month : month
+	    });
+	})
+	
+})
+
+function statistics_mode(mode_value){
+	if(mode_value==1){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+	//refresh_data();
+}
+
+</script>
+<#include '/admin/footer.html' >
+

@@ -1,0 +1,39 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取商品详细</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/goods/detail.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">id</span><span class="w100">商品id</span><span class="w380">无</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/goods/detail.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {id:436},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{"result":1,"message":null,"data":{"comment_count":0,"enable_store":"0","sn":"201679751","weight":"1.0","store":"0","product_id":"445","productList":[{"product_id":445,"goods_id":436,"name":"潮牌大码男装2015夏季新款加肥加大满身印飞鸟印花短袖衬","sn":"201679751","store":0,"enable_store":0,"price":377.0,"cost":1.0,"weight":1.0,"specs":null,"goodsLvPrices":null,"specList":[],"specsvIdJson":"[]"}],"have_spec":0,"store_id":15,"class":"class com.enation.app.shop.core.goods.model.Product","comment_percent":"100%","total_enable_store":0,"cost":"1.0","intro":"","goodsLvPrices":null,"specList":[],"imgList":[{"img_id":657,"goods_id":436,"thumbnail":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944_thumbnail.jpg","small":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944_small.jpg","big":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944_big.jpg","original":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944.jpg","tiny":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944_tiny.jpg","isdefault":1,"sort":1}],"thumbnail":"http://static.b2b2cv2.javamall.com.cn/attachment//store/15/goods/2016/7/19/8//50499944_thumbnail.jpg","price":"377.0","favorited":false,"goods_id":"436","name":"潮牌大码男装2015夏季新款加肥加大满身印飞鸟印花短袖衬","specsvIdJson":"[]","specs":null}}
+			</h5>
+		</span>	
+	</div>
+
+</div>

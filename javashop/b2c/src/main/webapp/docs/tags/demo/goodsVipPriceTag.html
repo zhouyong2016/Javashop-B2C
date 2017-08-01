@@ -1,0 +1,6 @@
+
+<!--创建"会员价格"标签-->
+<#assign goodsVipPriceTag = newTag("goodsVipPriceTag")>
+<!--调用“会员价格”标签-->
+<#assign goodsVipPrice = goodsVipPriceTag()>
+${goodsVipPrice.vipprice}

@@ -1,0 +1,9 @@
+
+<!--创建"查询某一个优惠劵的详细信息"标签-->
+<#assign storeBonusDetailTag= newTag("storeBonusDetailTag") >  
+<!--调用"查询某一个优惠劵的详细信息"标签，并传递参数-->            
+<#assign  storeBonusDetail= storeBonusDetailTag("'bonusid':'1'") >						
+<ul class="gw">
+
+   优惠开始时间：${storeBonusDetail.useTimeStart}</br>
+   优惠结束时间：${storeBonusDetail.useTimeEnd}</br>

@@ -1,0 +1,286 @@
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<script language="javascript"  src="${ctx}/shop/admin/js/AjaxEditor.js"></script>
+<script language="javascript"  src="${ctx}/shop/admin/js/SelectEditor.js"></script>
+<script type="text/javascript" src="${ctx}/resource/com/enation/app/shop/component/ordercore/plugin/base/base.js"></script>
+<style>
+.edit-panel .num  {
+ 	display: block;
+}
+.edit-panel .ipt {display:none;}
+
+.edit-panel .set {display:none;}
+
+.edit-panel a {
+	background: url("${ctx}/shop/admin/images/edit.png") no-repeat scroll 0 0px transparent;
+	display:inline-block;
+	width:18px; 
+	text-indent: -9999px;
+	text-align:left;
+}
+.edit-panel .num a{
+	  background-position: -15px 1px;
+	  height: 15px;
+}
+.edit-panel .num a:hover{
+	  background-position: 1px 1px
+}
+.edit-panel .ipt a.save  {
+  background-position: 2px -14px 
+}
+.edit-panel .set a.save  {
+  background-position: 2px -14px;
+  height: 18px;
+}
+
+.edit-panel .ipt a.cancel  {
+  background-position: 2px -29px 
+}
+.edit-panel .set a.cancel  {
+  background-position: 2px -29px 
+}
+
+
+.edit-panel .num a.no-enable{
+ 	background-position: -12px 1px
+}
+.edit-panel .ipt a.no-enable {
+  background-position: -14px -14px 
+}
+.edit-panel .set a.no-enable {
+  background-position: -14px -14px 
+}
+
+.edit-panel .num span{
+   padding-right: 6px;    
+ 
+}
+
+.edit-panel .ipt input{width:70px}
+
+
+.box{margin-top:10px; width: 300px;}
+
+.edit-panel .ipt{width: 80%;}
+
+#province_id {width:50%;}
+#province{width:50%;}
+#city_id {width:50%;}
+#city {width:50%;}
+#region_id {width:50%;}
+#region {width:50%;}
+</style>
+<#if itemList?exists >
+<input type="hidden" value="${order.order_id}" name="order_id" id="orderid">
+<form id="orderbaseform">
+	
+	<table style="width: 100%;">
+		<tr><th class="title">订单号：${order.sn }</th></tr>
+	</table>
+	<div class="detail">
+		<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+			<thead>
+				<tr>
+					<th>货号</th>
+					<th>订单商品</th>
+					<th>购买量</th>
+					<th>计价单位</th>
+					<th>单价 </th>
+					<th>消费积分</th>
+					<th>合计</th>
+				</tr>
+			</thead>
+	        <tbody>
+		        <#list itemList  as item>
+			         <tr>
+					      <td>${item.sn }  </td>
+				          <td><a target="_blank" href="${ctx}/goods-${item.goods_id }.html">
+				          
+				          ${item.name }
+				          <#if item.other??>
+				         (${item.other!''}) 
+				          </#if>
+				          
+				          </a>
+ 						  </td>
+				          <td>${item.num }</span></td>
+				          <td>${item.unit!''}</td>
+				          <td> ${item.price} </td>
+				          <td>${item.exchange_point!'0'}</td>
+				          <td> ${item.price*item.num} </td>
+			        </tr>
+				</#list>
+	        </tbody>
+		</table>
+	</div>
+	<!-- 新增订单获得的赠品信息 by_DMRain 2016-6-13 -->
+	<#if gift?exists>
+	<div class="detail" style="margin-top: 10px;">
+		<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<th rowspan="2" style="font-size: small;width: 100px;text-align: center;">获得赠品</th>
+				<th>赠品名称</th>
+				<th>赠品价值</th>
+				<th>数量</th>
+			</tr>
+			<tr>
+				<td>${gift.gift_name}</td>
+				<td>${gift.gift_price?string("currency")}</td>
+				<td>1</td>
+			</tr>
+		</table>
+	</div>
+	</#if>
+	<!-- 新增订单获得的优惠券信息 by_DMRain 2016-6-13 -->
+	<#if bonus?exists>
+	<div class="detail" style="margin-top: 10px;">
+		<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<th rowspan="2" style="font-size: small;width: 100px;text-align: center;">获得优惠券</th>
+				<th>优惠券名称</th>
+				<th>优惠券金额</th>
+				<th>优惠券有效期</th>
+				<th>最小使用的订单金额</th>
+				<th>优惠券类型</th>
+			</tr>
+			<tr>
+				<td>${bonus.bonus_name}</td>
+				<td>${bonus.bonus_money?string("currency")}</td>
+				<td><@dateformat pattern="yyyy-MM-dd" time="${bonus.use_start_date?c }"/> - <@dateformat pattern="yyyy-MM-dd" time="${bonus.use_end_date?c }"/></td>
+				<td>${bonus.min_goods_amount?string("currency")}</td>
+				<td><#if bonus.send_type == 0>电子券</#if><#if bonus.send_type == 3>实体券</#if></td>
+			</tr>
+		</table>
+	</div>
+	</#if>
+</form>
+</#if>
+<div class="tableform">
+	<div class="box" style="width: 330px;" >
+		<h5>订单价格</h5>
+		<#include 'price.html' />
+	</div>
+
+	<div class="box">
+		<h5>订单其它信息</h5>
+		<#include 'other.html' />
+	</div>
+
+	<div class="box">
+		<h5>会员信息</h5>
+
+		<#if member?exists> <#include 'member.html' /> <#else> 非会员购买 </#if>
+	</div>
+
+	<div class="box">
+		<h5>收货人信息</h5>
+		<#include 'consignee.html' />
+	</div>
+
+	<div class="box">
+		<h5>物流信息</h5>
+		<#include 'sign.html' />
+	</div>
+
+	<#if order.ship_status != SHIP_NO>
+	<div class="box">
+		<h5>货运状态</h5>
+		<#include 'ship_state.html' />
+	</div>
+	</#if>
+
+	<div class="box">
+		<h5>订单备注</h5>
+		<div class="division" style="min-height: 100px;word-break: break-word; text-align: left;padding:10px;overflow-wrap: break-word;"><#if order.remark?exists > ${order.remark} <#else> 无 </#if></div>
+	</div>
+
+	<#if order.status ==ORDER_CANCELLATION>
+	<div class="box">
+		<div class="division" style="overflow:hidden;overflow-wrap: break-word;">
+			<h5>订单取消原因</h5>
+			<div class="cancel-word-detail" style="padding:10px;">${order.cancel_reason!''}</div>
+		</div>
+	</div>
+	</#if>
+	
+	<div class="box" style="width: 400px">
+		<h5>特殊处理</h5>
+		<div class="division">
+			<table cellspacing="0" cellpadding="0" border="0">
+				<tbody>
+					<tr>
+						<th style="width: 80px;">特殊处理：</th>
+						<td><textarea style="height: 50px; width: 100%;overflow-wrap: break-word;" onpropertychange="checkLength(this,255);" oninput="checkLength(this,255);"
+								id="admin_remark">${order.admin_remark!''}</textarea> <input
+							type="hidden" id="admin_order_id" value="${order.order_id}" /></td>
+					</tr>
+					<tr><td>&nbsp;</td>
+						<td conspan="2" align="center"><input type="button" class="button"
+							id="submitbtn" value="保存"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="clear: both"></div>
+
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	
+	var oid = $("#admin_order_id").val();
+	$("#submitbtn").click(function(){
+		var  rk =$("#admin_remark").val();
+		$.ajax({
+			type:"POST",
+			url:"${ctx}/shop/admin/order/save-admin-remark.do?ajax=yes&orderId="+ oid +"&remark=" + rk,
+			dataType:"json",
+			success:function(result){
+				if(result.result==1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error:function(){
+				alert("异步失败");
+			}
+		});
+	});
+});
+</script>
+<script>
+
+	$(function(){
+		$(".detail tbody tr").mouseover(function(){
+			$(this).addClass("row-over");
+		});
+		$(".detail tbody tr").mouseout(function(){
+			$(this).removeClass("row-over");
+		});
+		$(".detail tbody tr").toggle(function(){
+			$(this).addClass("row-selected");
+		},function(){
+			$(this).removeClass("row-selected");
+		});
+		
+		
+		$(".detail thead th").mouseover(function(){
+			$(this).css("color","#8bbf00");
+		});
+		$(".detail thead th").mouseout(function(){
+			$(this).css("color","#333");
+		});
+		// a标签跳转
+		$(".detail tbody tr a").click(function(){
+			window.open($(this).attr('href')); 
+		})
+	})
+	function checkLength(obj,maxlength){
+		    if(obj.value.length > maxlength){
+		        obj.value = obj.value.substring(0,maxlength);
+		    }
+	}
+</script>

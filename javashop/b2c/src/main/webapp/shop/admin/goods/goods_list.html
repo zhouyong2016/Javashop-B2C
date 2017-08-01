@@ -1,0 +1,188 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+			<span id="searchbtn" style="float:left;display:block">	
+			<@permssion actid="goods,super_admin">		
+				<a href="javascript:void(0)" class="button blueButton"  onclick="newTab('添加商品','${ctx}/shop/admin/goods/select-cat.do')">添加</a>
+				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+				<#if market_enable?? && market_enable=='2'>
+				<#else>
+				<a href="javascript:void(0)" class="button"  onclick="newTab('商品草稿箱','${ctx}/shop/admin/goods/list.do?market_enable=2')">商品草稿箱</a>
+				</#if>
+				<a href="javascript:void(0)" class="button"  onclick="newTab('商品回收站','${ctx}/shop/admin/goods/trash-list.do')">回收站</a>
+			</@permssion>
+			</span>
+			<span style="float: right;height:28px;"> 
+				<a href="javascript:void(0)" class="button b_fr" id="aAdvanced"  >高级搜索</a>
+				<a href="javascript:void(0)" class="button b_fr" onclick="searchGoods()">搜索</a>
+				<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="请输入模糊关键字" name="searchKeyWord"> 
+			</span>
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">商品名称</td>
+					<td>
+						<input type="text" value="${name!''}" id="name"  class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">商品编号</td>
+					<td>
+						<input type="text" value="${name!''}" id="sn" data-options="validType:['englishCheckSub']" class="input_text easyui-validatebox" style="width: 95%;">
+					</td>
+					<td width="70" align="right">类别</td>
+					<td>
+						<input class="easyui-combotree" name="cat.parent_id" id="catid"
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get'" style="width: 200px;height: 28px;" />
+					</td>
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="searchGoods()" href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:500" formatter="formatName">商品名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
+						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th>
+						<th data-options="field:'action',align:'center',width:100" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatName(value,row,index){
+	if(row.market_enable==2){
+		val="<a href='${ctx}/goods-"+row.goods_id+".html' target=\"_blank\">【预览】"+row.name+"</a>";
+	}else{
+		val="<a href='${ctx}/goods-"+row.goods_id+".html' target=\"_blank\">"+row.name+"</a>";
+	}
+	return val;
+}
+function market_enable(value,row,index){
+	var val;
+	if(value==1){
+		val="是";
+	}else if(value==2){
+		val="草稿";
+	}else{
+		val="否";
+	}
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatTime(value,row,index){
+	
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='#' onclick='newTab(\""+(row.name).substring(0,11)+"..\",\"${ctx}/shop/admin/goods/edit.do?goodsId="+row.goods_id+"\")' ></a>";
+	return val;
+}
+function del(){ 
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择删除商品");
+		return;
+	}
+	if(!confirm("确认要将这些商品放入回收站吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+ 	var options = {
+			url : "${ctx}/shop/admin/goods/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+		 			$('#goodsdata').datagrid("reload");      
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+	
+function append(){
+		location.href="goods!selectCat.do";
+}
+
+$(function(){
+	if("${optype}"=="stock"){
+		$("#searchbtn").hide();
+	};
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})		
+
+//搜索
+function searchGoods(){
+	var formflag= $("#gridform").form().form('validate');
+	if(formflag){
+		var searchtype = $("#Advanced").val();
+		var keyword = $.trim($("#searchKeyword").val());
+		var name = $.trim($("#name").val());
+		var sn = $.trim($("#sn").val());
+		var catid = $("#catid").combo('getValue');
+		
+		$('#goodsdata').datagrid('load', {
+			 stype:searchtype,
+			 keyword:keyword,
+			 name:name,
+			 sn:sn,
+			 catid:catid,
+			 page:1
+	    }); 
+	}
+}
+ 	
+</script>
+
+<#include '/admin/footer.html' >
+
+

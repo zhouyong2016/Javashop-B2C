@@ -1,0 +1,34 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<form id="brandform">
+		<div class='buttonArea'>
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<a href="javascript:void(0)" class="button b_fr" 
+					data-options="plain:true" onclick="searchBrand()">搜索</a>
+					<input id="keyword" class="input_text b_fr mr5" type="text" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+				</span>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'gnotify!gnotifyJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="branddata">
+				<thead>
+					<tr>
+						<th data-options="field:'gnotify_id',checkbox:true,width:100"></th>
+						<th data-options="field:'product_id',width:200">货品id</th>
+						<th data-options="field:'goodsname',width:300">商品名称</th>
+						<th data-options="field:'tnum',width:300">登记数量</th>
+						<!-- <th data-options="field:'action',width:25" >操作</th> -->
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="addBrand" ></div>
+
+	<#include '/admin/footer.html' >

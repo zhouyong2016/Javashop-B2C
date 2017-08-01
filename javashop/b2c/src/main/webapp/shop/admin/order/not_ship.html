@@ -1,0 +1,454 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 150px;
+}
+</style>
+<script language="javascript" src="${ctx}/adminthemes/new/js/CLodopFuncs.js"></script>
+<div id="loading"></div>
+<div class="main">
+	<form id="orderform">
+		<div class='buttonArea'>
+			<!--  <a href="javascript:void(0)" class="easyui-linkbutton"onclick="print(1)" id="printShip">打印发货单</a>
+			 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="print(2)" id="printExpress">打印快递单</a>  -->
+			 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="listForExpressNo()">填写快递单号</a> 
+			 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="shipBtn()">发货</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  <input type="radio" name="printtype" value="0" checked="checked">直接打印 
+			<!-- <input type="radio" name="printtype" value="1">预览打印 
+			 <input type="radio" name="printtype" value="2">设计打印  -->
+			 
+			 <span style="float: right;"> 
+				 <span id="simpleSearch"> 
+				 		<input id="searchKeyword" class="input_text" type="text" value="" size="30" placeholder="请输入订单号,收货人" name="searchKeyWord">
+						<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a> 
+				</span> 
+				<a href="javascript:void(0)" class="button" data-options="plain:true" id="aAdvanced">高级搜索</a> 
+				</span>
+		</div>
+		<div style="display: block;" class="searchAdvanced">
+			<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">订单号</td>
+					<td><input type="text" value="" id="sn" class="input_text">
+					</td>
+
+					<td width="70" align="right">下单时间</td>
+					<td><input class="easyui-datebox" style="width: 90px;height: 28px;"
+						id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+						<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+						data-options="buttons:e_buttons" /></td>
+
+					<td width="70" align="right">订单状态</td>
+					<td>
+						<select id="status" class="inputSelect valid">
+							<option value="">---所有---</option> 
+							<#list statusList as status>
+								<option value="${status.key}">${status.value}</option> 
+							</#list>
+						</select>
+					</td>
+
+					<td width="70" align="right">收货人</td>
+					<td><input type="text" value="${name!''}" id="ship_name"
+						class="input_text"></td>
+				</tr>
+				<tr>
+					<td width="70" align="right">付款状态</td>
+					<td>
+						<select id="paystatus" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option> 
+							<#list payStatusList as status>
+								<option value="${status.key}">${status.value}</option> 
+							</#list>
+						</select>
+					</td>
+					<td width="70" align="right">发货状态</td>
+					<td width="272">
+						<select id="shipstatus" class="inputSelect valid" style="width: 200px;">
+							<option value="">---所有---</option>
+							<#list shipList as status>
+								<option value="${status.key}">${status.value}</option> 
+							</#list>
+						</select>
+					</td>
+					<td width="70" align="right">配送方式</td>
+					<td>
+						<select id="shipping_type" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option> 
+							<#if shipTypeList??>
+								<#list shipTypeList as slist>
+									<option value="${slist.type_id}">${slist.name}</option>
+								</#list>
+							</#if>
+						</select>
+					</td>
+					<td width="70" align="right">支付方式</td>
+					<td>
+						<select id="payment_id" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option>
+							<#if payTypeList??>
+								<#list payTypeList as plist>
+									<option value="${plist.id}">${plist.name}</option>
+								</#list>
+							</#if>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" align="right"></td>
+					<td colspan="7" align="center"><a id="searchAdvance"
+						class="button blueButton" onclick="searchOrder()"
+						href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/order/list-json.do?order_state=wait_ship',pageList: [5,10,15],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="orderdata" sortName="order_id" sortOrder="desc" queryParams="{'order_state':'wait_ship'}">
+				<thead>
+					<tr>
+						<th data-options="field:'order_id',checkbox:true"></th>
+						<th data-options="field:'sn',width:200" formatter="forsn">订单号</th>
+						<th data-options="field:'create_time',width:200,sortable:true"
+							formatter="formatDate">下单日期</th>
+						<th data-options="field:'order_amount',width:200,sortable:true"
+							formatter="forMoney">订单总额</th>
+						<th data-options="field:'ship_name',width:200">收货人</th>
+						<th data-options="field:'status',width:200,sortable:true" formatter="forStruts">状态</th>
+						<th data-options="field:'shipping_type',width:200,sortable:true">配送方式</th>
+						<th data-options="field:'payment_name',width:200,sortable:true" >支付方式</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+	</form>
+</div>
+<div id="orderinfo" style="display: none;"></div>
+
+<script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='edit' title='查看' href='#' onclick=\"newTab('查看订单详细','${ctx}/shop/admin/order/detail.do?orderId="+row.order_id+"')\"></a>";
+	return val;
+}
+function forsn(value,row,index){
+	var val="<a href='#' onclick=\"newTab('查看订单详细','${ctx}/shop/admin/order/detail.do?orderId="+row.order_id+"')\">"+row.sn+"</a>"
+	return val;
+}
+function forMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+function shipBtn(){
+	var rows = $('#orderdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要发货的订单");
+		return;
+	}
+	if(confirm("确认发货？")){
+		 $.Loading.show("正在处理发货...");
+		$("#orderform").ajaxSubmit({
+			url:"${ctx}/shop/admin/order-print/batch-ship.do",
+			dataType:"json",
+			cache:false,
+			success:function(json){
+				 $.Loading.hide();
+				 if(json.result==1){
+					 alert("发货成功");
+					 location.reload();
+				 }else{
+					 alert(json.message);
+				 }
+			},
+			error:function(){
+				alert("出现意外错误");
+				$.Loading.hide();
+			}
+		});
+	}
+}
+function listForExpressNo(){
+	var rows = $('#orderdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要填写的快递单号的订单");
+		return;
+	}
+	var ids = [];
+	for(var i=0; i<rows.length; i++){
+		ids.push(rows[i].order_id);
+	}
+	 $("#orderinfo").show();
+	　　	$('#orderinfo').dialog({
+	　　		title: '填写快递单号',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: "${ctx}/shop/admin/order/list-for-express-no.do?orderIds="+ids.join(','), 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					 if($("#expressno").val()==""){
+		　　					 $.Loading.error("请填写快递单号");
+		　　				 }
+		　　				addExpressNoForm(savebtn);
+		　　			 }	
+	　　				 
+	　　				
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#addExpressNoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+	　　	sanEvent();
+}
+function addExpressNoForm(savebtn){
+	var formflag= $("#addExpressNoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		var logi_name="";
+		$("select[name='logi_id']").find("option:selected").each(function(){
+			logi_name+=$(this).text()+",";
+		});
+		var options = {
+				url : "${ctx}/shop/admin/order-print/save-ship-no.do?ajax=yes",
+				type : "POST",
+				data:{"logi_name":logi_name},
+				dataType : "json",
+				success : function(result) {
+					$("#orderinfo").dialog('close');
+					$.Loading.success(result.message);
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#addExpressNoForm').ajaxSubmit(options);	
+	}
+}
+function sanEvent(){
+	$("#addExpressNoForm [name=expressno]:first").focus();
+	$("#addExpressNoForm [name=expressno]").focus(function(e){
+		$(this).select();
+	}).keydown(function(e){
+		var curr=this;
+		var  autoinc = $("#autoinc:checked").size()>0?true:false;
+		
+		$.Loading.success($("#addExpressNoForm [name=expressno]:first").val());
+		
+		var ship_type=  $("#autoinc").attr("ship_type");
+		var no= ($(this).val());
+		var index=0;
+		  $("#addExpressNoForm [name=expressno]").each(function(){
+			  index++;
+			if(autoinc){
+				no =parseInt(no)+1;
+				$("#addExpressNoForm [name=expressno]:eq("+index+")").val(no);
+			}else{
+				if(this==curr){
+					 $("#addExpressNoForm [name=expressno]:eq("+index+")").select();
+					 return;
+				}	
+			}
+			
+			
+		});    
+		
+	});
+	$("#addExpressNoForm [name=expressno]:first").focus();
+}
+
+function print(val){
+	var rows = $('#orderdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		if(val==1){$.Loading.error("请选择要打印发货单的订单");}
+		if(val==2){$.Loading.error("请选择要打印快递单的订单");}
+		return;
+	}
+	if(!(navigator.platform == "Win32") && !(navigator.platform == "Windows")){
+		alert("请在windows下使用");
+		return false;
+	}
+	if(val==1){printShip();}
+	if(val==2){printExpress();}
+	
+};
+//打印发货单
+function printShip(){
+	$("#printShip").linkbutton("disable");
+	var printtype = $("[name=printtype]:checked").val();
+	$("#orderform").ajaxSubmit({
+		url:"${ctx}/shop/admin/order-print/ship-script.do",
+		success:function(json){
+			 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+			 LODOP.PRINT_INIT("快递单打印");
+			 LODOP.SET_PRINT_PAGESIZE(1,2400,1400,"");
+			 eval(json);
+			 if("0"==printtype)
+				 	LODOP.PRINT();
+				 
+			 if("1"==printtype)
+					LODOP.PREVIEW();
+			 $.Loading.hide();
+			 $("#printShip").linkbutton("enable");
+		},error : function(e) {
+	 		$.Loading.error('出现错误，请重试');
+	 		 $("#printShip").linkbutton("enable");
+		}
+	});
+}
+//打印快递单
+function printExpress(){
+	$("#printExpress").linkbutton("disable");
+	 var printtype = $("[name=printtype]:checked").val();
+	$("#orderform").ajaxSubmit({
+		url:"${ctx}/shop/admin/order-print/express-script.do",
+		dataType : "json",
+		success:function(json){
+			if(json.result==0){
+				$.Loading.error(json.message);
+			}else{
+				 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+				 LODOP.PRINT_INIT("快递单打印");
+				 LODOP.SET_PRINT_PAGESIZE(1,2300,1250,"");
+				 eval(json.script);
+				if("0"==printtype)
+					LODOP.PRINT();
+					 
+				if("1"==printtype)
+					LODOP.PREVIEW();
+					 
+				if("2"==printtype)
+					LODOP.PRINT_DESIGN();
+				 $.Loading.hide();
+			}
+			$("#printExpress").linkbutton("enable");
+		},error : function(e) {
+	 		$.Loading.error('出现错误，请重试');
+	 		$("#printExpress").linkbutton("enable");
+		}
+	});
+}
+
+$(function(){
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            //$("#aAdvanced").text("简单搜索")
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            //$("#aAdvanced").text("高级搜索");
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})
+
+function searchOrder(){
+	var searchtype = $("#Advanced").val();
+	var keyword = $("#searchKeyword").val();
+	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	
+	
+	if(start_time != '' && end_time != ''){
+		if(end_time < start_time){
+			$.Loading.error("结束时间不能小于开始时间");
+			return ;
+		}
+	}
+	
+	var status = $("#status").val();
+	var sn = $("#sn").val();
+	var ship_name = $("#ship_name").val();
+	var paystatus =	$("#paystatus").val();
+	var	shipstatus = $("#shipstatus").val();
+	var	shipping_type = $("#shipping_type").val();
+	var	payment_id = $("#payment_id").val();
+
+
+	$("#orderdata").datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 
+		 start_time:start_time,
+		 end_time:end_time,
+		 status:status,
+		 sn:sn,
+		 ship_name:ship_name,
+		 paystatus:paystatus,
+		 shipstatus:shipstatus,
+		 shipping_type:shipping_type,
+		 payment_id:payment_id,
+		 page:1
+	});
+}
+var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#start_time').datebox('setValue',"");
+}
+});
+
+var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+e_buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#end_time').datebox('setValue',"");
+}
+});
+function forStruts(value, row, index) {
+	if(row.is_cancel==1){
+		return "申请取消订单";
+	}
+	var val;
+	val = getType(${status_Json},value);
+	return val;
+}
+function getType(exMap,value){
+	var val;
+	$.each(exMap,function(key,values){ 
+	    if(value==values.key){
+	    	val=values.value;
+	    }
+	});
+	return val;
+}
+
+</script>
+
+
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,123 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取商品分类列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/goodscat!list.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100"></span><span class="w380"></span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>	var url = getFullUrl('/api/mobile/goodscat!list.do');</b>
+			<b>	var options = {</b>
+			<b><i></i>		url : url,</b>
+			<b><i></i>		data : {</b>
+			<b><i></i>		},</b>
+			<b>	<i></i>	success : function(data) {</b>
+			<b>	<i></i><i></i>		if (data.result == 1) {</b>
+			<b>	<i></i><i></i><i></i>			var viewData = data.data;</b>
+			<b>	<i></i><i></i><i></i>			classifyData = viewData;</b>
+			<b>	<i></i><i></i><i></i>			initTpl(viewData, $("#classify_html_templet"), $("#classify_html_view"), bind);</b>
+			<b>	<i></i><i></i>		} else {</b>
+			<b>	<i></i><i></i><i></i>			e$.alert("获取资源失败，请稍后重试。");</b>
+			<b>	<i></i><i></i>		}</b>
+			<b>	<i></i>	}</b>
+			<b>	};</b>
+			<b>e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+{
+    "result": 1,
+    "data": [
+        {
+            "cat_id": 1,
+            "children": [
+                {
+                    "cat_id": 2,
+                    "children": [
+                        {
+                            "cat_id": 4,
+                            "children": [],
+                            "image": "",
+                            "level": 3,
+                            "name": "单鞋",
+                            "parent_id": 2
+                        },
+                        {
+                            "cat_id": 5,
+                            "children": [],
+                            "image": "",
+                            "level": 3,
+                            "name": "休闲鞋",
+                            "parent_id": 2
+                        },
+                        {
+                            "cat_id": 6,
+                            "children": [],
+                            "image": "",
+                            "level": 3,
+                            "name": "马丁鞋",
+                            "parent_id": 2
+                        }
+                    ],
+                    "image": "",
+                    "level": 2,
+                    "name": "时尚女鞋",
+                    "parent_id": 1
+                },
+                {
+                    "cat_id": 3,
+                    "children": [],
+                    "image": "",
+                    "level": 2,
+                    "name": "流行男鞋",
+                    "parent_id": 1
+                }
+            ],
+            "image": "",
+            "level": 1,
+            "name": "鞋靴、箱包、珠宝、奢侈品",
+            "parent_id": 0
+        },
+        {
+            "cat_id": 7,
+            "children": [
+                {
+                    "cat_id": 8,
+                    "children": [],
+                    "image": "",
+                    "level": 2,
+                    "name": "中外名酒",
+                    "parent_id": 7
+                },
+                {
+                    "cat_id": 9,
+                    "children": [],
+                    "image": "",
+                    "level": 2,
+                    "name": "进口食品",
+                    "parent_id": 7
+                }
+            ],
+            "image": "",
+            "level": 1,
+            "name": "食品、生鲜、特产",
+            "parent_id": 0
+        }
+    ]
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>
+
+

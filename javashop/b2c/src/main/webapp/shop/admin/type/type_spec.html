@@ -1,0 +1,111 @@
+<script type="text/javascript">
+    function contains(obj_sel, option) {
+        var options = obj_sel.options;
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].value == option.value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    function rightMove() {
+
+        var brand_sel = document.getElementById("brand_sel");
+        var choose_sel = document.getElementById("choose_sel");
+
+        var brand_options = brand_sel.options;
+        var s = choose_sel.options.length;
+        for (var i = brand_options.length-1; i>=0; i--) {
+            var is_selected = brand_options[i].selected;
+            if (is_selected) {
+                var option = new Option(brand_options[i].text, brand_options[i].value);
+                if (!contains(choose_sel, option)) {
+                    choose_sel.options[s++] = new Option(brand_options[i].text, brand_options[i].value);
+                }
+                brand_options[i].remove();
+            }
+        }
+    }
+
+    function leftMove() {
+        var brand_sel = document.getElementById("brand_sel");
+        $("#choose_sel>option").each(function () {
+            var option = $(this);
+            if (option.attr("selected")) {
+
+                //加入到左侧
+                var brand_option = new Option(option.text(), option.val());
+                if (!contains(brand_sel, brand_option)) {
+                    brand_sel.options[brand_sel.options.length++] = brand_option;
+                }
+
+                //删除右侧
+                option.remove();
+            }
+        });
+    }
+
+    function clean() {
+        $("#choose_sel>option").each(function () {
+        	var option= $(this);
+        	var brand_option = new Option(option.text(), option.val());
+        	var brand_sel = document.getElementById("brand_sel");
+        	brand_sel.options[brand_sel.options.length++] =brand_option;
+            $(this).remove();
+        });
+
+    }
+
+    function selectChoose() {
+        $("#choose_sel>option").attr("selected", "true");
+        return true;
+    }
+
+    var selectSpec = new Array();
+    <#list goodsType.specList as spec>
+    selectSpec.push('${spec.spec_id}');
+    </#list>
+    $(function () {
+
+        //左侧选择框去掉已经选择的规格
+        var selectObj = document.getElementById("brand_sel");
+        var options = selectObj.options;
+        for (var i = options.length - 1; i >= 0; i--) {
+            if ($.inArray(options[i].value, selectSpec) > -1) {
+                options[i].remove();
+            }
+        }
+    });
+</script>
+<div class="easyui-panel" style="border-style: none;">
+    <form method="post" name="theForm1" id="typeSpecFrom" class="validate">
+        <table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+            <tr>
+                <td width="19%" height="77" align="left">
+                    <select name="speclist" id="brand_sel" multiple="true" style="width: 200px; height: 200px; border: 1px solid #000000">
+                    <#list specList as spec>
+                        <option value="${spec.spec_id }">${spec.spec_name }</option>
+                    </#list>
+                </select>
+                <td width="13%" align="center">
+                    <input name="submit" type="button" class="button" value="  ->  " onclick="javascript:rightMove();"/>
+                    <br/>
+                    <input name="submit" type="button" class="button" value="  <-  " onclick="javascript:leftMove();"/>
+                    <br/>
+                    <input name="submit" type="button" class="button" value="  重置  " onclick="javascript:clean();"/>
+                </td>
+                <td width="68%" height="77" align="left">
+                    <select class="easyui-validatebox" name="choose_specs" id="choose_sel" multiple="true"
+                            style="width: 200px; height: 200px; border: 1px solid #000000">
+                        <#list goodsType.specList as spec>
+                            <option value="${spec.spec_id }" selected="true">${spec.spec_name }</option>
+                        </#list>
+                    </select></td>
+            </tr>
+        </table>
+        <input class="easyui-validatebox" type="hidden" name="typeId" value="${goodsType.type_id}">
+    </form>
+</div>

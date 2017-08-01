@@ -1,0 +1,176 @@
+<#include '/admin/header.html' >
+
+<div class="main">
+	<form id="brandform">
+		<div class='buttonArea'>
+			<div style="float:left">
+				<a href="javascript:void(0)" class="button blueButton"  onclick="controlBrands()">添加</a>
+				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+			</div>
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<a href="javascript:void(0)" class="button b_fr" 
+					data-options="plain:true" onclick="searchBrand()">搜索</a>
+					<input id="keyword" class="input_text b_fr mr5" type="text" maxlength="50" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+				</span>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="branddata">
+				<thead>
+					<tr>
+						<th data-options="field:'brand_id',checkbox:true,width:100"></th>
+						<th data-options="field:'name',width:200">品牌名称</th>
+						<th data-options="field:'url',width:300">品牌网址</th>
+						<th data-options="field:'action',width:25" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="addBrand" ></div>
+
+	<script type="text/javascript">
+	
+	var flag=false;
+	
+		function controlBrands(brandid) {
+			var map = {}; // Map map = new HashMap();
+			if (!brandid) {
+				map["href"] = "${ctx}/shop/admin/brand/add.do";
+				map["formId"] = "#brandForm";
+				map["url"] = "${ctx}/shop/admin/brand/save.do";
+				map["title"] = "添加品牌";
+			} else {
+				map["href"] = "${ctx}/shop/admin/brand/edit.do?brandId=" + brandid;
+				map["formId"] = "#brandEditForm";
+				map["url"] = "${ctx}/shop/admin/brand/save-edit.do";
+				map["title"] = "修改品牌";
+			}
+			map["divDialog"] = "#addBrand";
+			map["gridreload"] = "#branddata";
+
+			addDialog(map);
+		}
+		function addDialog(map) {
+			$(map["divDialog"]).show();
+			$(map["divDialog"]).dialog({
+				title : map["title"],
+				width : 800,
+				top:10,
+				height : 400,
+				closed : false,
+				cache : false,
+				href : map["href"],
+				modal : true,
+				onLoad : function() {
+					if(flag){
+						UE.getEditor('editor').destroy();
+					}
+					var ue = UE.getEditor('editor', {
+					    zIndex: 99999
+					});
+					flag = true;
+				},
+				buttons : [ {
+					text : '保存',
+					iconCls : 'icon-ok',
+					handler : function() {
+						 var savebtn = $(this);
+		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+							 submitForm(map,savebtn);
+			　　			 }
+					}
+				}, {
+					text : '取消',
+					handler : function() {
+						$(map["divDialog"]).dialog('close');
+					}
+				} ]
+			});
+		}
+		function submitForm(map,savebtn) {
+			var formflag = $(map["formId"]).form().form('validate');
+			if (formflag) {
+				$.Loading.show("正在保存请稍候...");
+　				savebtn.linkbutton("disable");
+				var options = {
+					url : map["url"],
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+							$(map["divDialog"]).dialog('close');
+							$(map["gridreload"]).datagrid('reload');
+						}
+						if (result.result == 0) {
+							$.Loading.error(result.message);
+						}
+						savebtn.linkbutton("enable");
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						savebtn.linkbutton("enable");
+					}
+				};
+				$(map["formId"]).ajaxSubmit(options);
+			}
+		}
+
+		//清空
+		function clearForm(map) {
+			$(map["formId"]).form('clear');
+		}
+
+		//操作
+		function formatOperation(value, row, index) {
+			var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlBrands("
+					+ row.brand_id + ")'></a>";
+			return val;
+		}
+
+		//删除
+		function del() {
+			var rows = $('#branddata').datagrid("getSelections");
+			if (rows.length < 1) {
+				$.Loading.error('请选择要删除的品牌');
+				return;
+			}
+			if (!confirm("确认要将这些品牌删除吗？")) {
+				return;
+			}
+			var options = {
+				url : "${ctx}/shop/admin/brand/delete.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success('删除成功');
+						$('#branddata').datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.error("出现错误，请重试");
+				}
+			};
+			$('#brandform').ajaxSubmit(options);
+		}
+		
+		function searchBrand(){
+			var keyword = $("#keyword").val();
+
+			$("#branddata").datagrid('load', {
+				 keyword:keyword
+		    });
+		}
+	</script>
+	<#include '/admin/footer.html' >

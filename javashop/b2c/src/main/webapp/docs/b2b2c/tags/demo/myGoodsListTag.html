@@ -1,0 +1,8 @@
+
+<!--创建"店铺商品"标签-->
+<#assign myGoodsListTag= newTag("myGoodsListTag") >  
+<!--调用"店铺商品"标签，并传递参数-->            
+<#assign  myGoodsList= myGoodsListTag("'page':'1'") >	
+店铺id：${myGoodsList.store_id}
+页码：${myGoodsList.page}
+

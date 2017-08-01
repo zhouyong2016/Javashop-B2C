@@ -1,0 +1,37 @@
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>位置名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name" name="cname" data-options="required:true" maxlength="20"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>广告类型：</th>
+					<td><select class="easyui-validatebox" name="atype">
+							<option value=0>图片</option>
+							<option value=1>Flash</option>
+					</select>
+					</td>
+
+				</tr>
+				<tr>
+					<th>宽度：</th>
+					<td><input class="input_text easyui-numberbox" type="text" id="acwidth"
+						name="width" data-options="required:true" maxlength="4"></input>&nbsp;px
+					</td>
+
+				</tr>
+				<tr>
+					<th>高度：</th>
+					<td><input class="input_text easyui-numberbox" type="text" id="acheight"
+						name="height" data-options="required:true" maxlength="4"></input>&nbsp;px
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

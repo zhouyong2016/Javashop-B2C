@@ -1,0 +1,11 @@
+<#if member?? >
+<!-- 获取member信息 -->
+	<script type="text/javascript">var isLogin= true;</script>
+	<a href="javascript:void(0);" class="register" style="text-decoration: none;">您好：${member.uname}</a>
+	<a href="${ctx}/member/member.html" class="register">[会员中心]</a>
+	<a href="javascript:void(0);" id="logout" class="register">[退出]</a>
+<#else>
+	<script type="text/javascript">var isLogin= false;</script>
+	<a href="${ctx}/login.html" class="login">登录 </a>
+	<a href="${ctx}/register.html" class="register">注册 </a>
+</#if>

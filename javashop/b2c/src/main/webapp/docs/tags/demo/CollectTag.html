@@ -1,0 +1,12 @@
+
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 将调用的结果赋值给变量 -->
+<#assign collectList = collect.result>
+<ul>
+	<#list collectList as collectTagList>
+		<li>${collectTagList.name!''}</li>
+	</#list>
+</ul>

@@ -1,0 +1,69 @@
+<#assign  title="我的咨询" />
+<#include 'member_header.html' />
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<#assign memberAskList = memberAskListTag()>
+<div class="member-commen">
+	<h1>我的咨询<span>会员咨询过的商品列表</span></h1>
+	
+	 <div class="member-comment-box">
+		 <div class="member-comment-list" >
+	 		<#if memberAskList.commentsList?size gt 0 >
+	 		<ul class="member-comment-outside">
+	 			<#list memberAskList.commentsList as askList>
+	 				<li>
+	 					<div class="member-common-goods">
+	 						<p>
+	 							<a href="${ctx}/goods-${askList.goods_id}.html#discuss_wrapper" target="_blank">${askList.name}</a>
+	 						</p>
+	 						<i>
+	 							<#if askList.status == 1>
+									审核通过 
+								<#elseif askList.status== 2>
+									审核拒绝
+								<#else> 
+									待审核
+								 </#if>
+	 						</i>
+	 						<span><@dateformat time="${askList.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+	 					</div>
+	 					<div class="member-comment">
+ 							<div class="member-comment-right">
+		 						<p style="word-wrap: break-word;">${askList.content}</p>
+		 						<#if askList.img?exists && askList.img != '' && askList.img != 'null'>
+									<div class="userImg">
+										<img src="${askList.img}"/>
+									</div>
+								</#if>
+							</div>
+							<#if askList.replystatus == 1>
+								<div class="aidaiReply">
+									<p style="word-wrap: break-word;">${askList.reply}</p>
+								</div>
+							</#if>
+	 					</div>
+	 				</li>
+	 			</#list>
+	 		</ul>
+	 		<@pager pageno="${page!'1'}" pagesize="${memberAskList.pageSize}" totalcount="${memberAskList.totalCount}" />
+	 		<#else>
+	 			<div class="member-comment-wait">
+					<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+				</div>
+	 		</#if>
+	 	</div>
+	 </div>	
+</div>
+<script>
+	$(function(){
+		otherMenu(2);
+	})
+</script>
+
+</div>
+</div>
+</div>
+</div>
+
+
+		<#include '../common/footer.html'/>

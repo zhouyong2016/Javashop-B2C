@@ -1,0 +1,13 @@
+
+<!--创建"店铺发货地址"标签-->
+<#assign StoreDlyCenterTag= newTag("storeDlyCenterTag") >  
+<!--调用"店铺发货地址"标签-->            
+<#assign  StoreDlyCenter= StoreDlyCenterTag("'dly_id':'1'") >						
+<ul class="gw">
+
+
+<#list StoreDlyCenter as dly>
+	  名称：${dly.name}</br>
+             地址: ${dly.address}</br>
+</#list>
+

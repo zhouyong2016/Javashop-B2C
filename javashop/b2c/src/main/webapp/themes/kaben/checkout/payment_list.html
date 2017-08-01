@@ -1,0 +1,40 @@
+<#-- 创建会员是否登录标签 -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag") >
+<#-- 调用会员是否登录信息 -->
+<#assign isLogin = memberIsLoginTag() >
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+<ul>
+	<li>
+		<label class="payment-default" >
+			<input type="radio" autocomplete="off"  value="0"  payment_name="在线支付"  name="paymentId"  style="cursor: pointer;" checked="checked" ><p>在线支付</p>
+		</label>
+	</li>
+	
+	<#list paymentList as payment  >
+		<#if payment.type=="creditPayPlugin">
+			<#if isLogin>
+				<li>
+					<label>
+						<input type="radio"  value="${payment.id}"  payment_name="${payment.name}"  name="paymentId"  style="cursor: pointer;"><p>${payment.name}</p>
+					</label>
+					<div class="biref" style="display:none">
+						可用余额：${member.advance}元&nbsp;&nbsp;<a target="_blank" href="member/repaid.html">余额账户充值</a>
+					</div>
+				</li>
+			</#if>
+		
+		<#elseif payment.is_online==0>
+			<li>
+				<label>
+					<input type="radio" autocomplete="off"  value="${payment.id}"  payment_name="${payment.name}"  
+						name="paymentId" id="${payment.type}"  style="cursor: pointer;" <#if payment_index==0>checked</#if>>
+					<p>${payment.name}</p>
+				</label>
+			</li>
+		</#if>	
+		
+	</#list>
+</ul>

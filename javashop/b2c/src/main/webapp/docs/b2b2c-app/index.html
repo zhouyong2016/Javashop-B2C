@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<#if !title??>
+<title>JavaShop API文档</title>
+<#else>
+<title>${title} - JavaShop API文档</title>
+</#if>
+<meta name="keywords" content="Javashop b2b2c app API文档">
+<meta name="description" content="Javashop b2b2c app API文档">
+<link href="${ctx}/docs/b2b2c-app/css/common.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/docs/b2b2c-app/css/api.css?v=1.0" rel="stylesheet" type="text/css" />
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+</head>
+<body>
+
+<div class="header">
+	<div class="title-box">
+		<div class="header-logo">
+			<h1>Javshop<em> b2b2c-app API</em><i>文档</i></h1>
+		</div>
+		<div class="header-right">
+			<ul>
+				<li><a href="#">apiCloud配置文档</a></li>
+				<li><a href="#">api文档</a></li>
+				<li class="last"><a href="#">apiCloud中Bug解决办法</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- 详细内容 -->
+<div class="main">
+	<div class="main-left">
+		<ul class="menu">
+			<li class="left-parent">
+				<h2>广告相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="adv/adv-list" class="selected">获取广告列表</a></li>
+						<li><a href="javascript:void(0)" rel="adv/get-one-adv">获取广告详细信息</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>购物车相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="cart/goods-list">购物车列表</a></li>
+						<li><a href="javascript:void(0)" rel="cart/add-product">将一个货品添加到购物车</a></li>
+						<li><a href="javascript:void(0)" rel="cart/update-num">修改购物车中商品的数量</a></li>
+						<li><a href="javascript:void(0)" rel="cart/delete-goods">删除购物车内某一商品</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>收藏相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="favorite/add">添加收藏</a></li>
+						<li><a href="javascript:void(0)" rel="favorite/delete">删除一个收藏</a></li>
+						<li><a href="javascript:void(0)" rel="favorite/list">获取当前用户收藏列表</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>商品相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="goods/search">商品搜索</a></li>
+						<li><a href="javascript:void(0)" rel="goods/detail">获取商品详细</a></li>
+						<li><a href="javascript:void(0)" rel="goods/comment-list">获取商品评论列表</a></li>
+						<li><a href="javascript:void(0)" rel="goods/cat-list">获取商品分类列表</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>会员相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="member/member-register">会员注册</a></li>
+						<li><a href="javascript:void(0)" rel="member/member-login">会员登录</a></li>
+						<li><a href="javascript:void(0)" rel="member/member-login-out">会员注销</a></li>
+						<li><a href="javascript:void(0)" rel="member/is-login">检测会员是否登录</a></li>
+						<li><a href="javascript:void(0)" rel="member/change-pwd">修改会员登录密码</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>会员收货地址操作API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="member-address/address-list">获取用户收货地址列表</a></li>
+						<li><a href="javascript:void(0)" rel="member-address/default-address">获取用户默认收货地址</a></li>
+						<li><a href="javascript:void(0)" rel="member-address/set-default">设置地址成为默认</a></li>
+						<li><a href="javascript:void(0)" rel="member-address/delete-address">删除一个收货地址</a></li>
+						<li><a href="javascript:void(0)" rel="member-address/add-address">新增一个收货地址</a></li>
+						<li><a href="javascript:void(0)" rel="member-address/edit-address">修改一个收货地址</a></li>
+					</ul>
+				</div>
+			</li>
+			
+			<li class="left-parent">
+				<h2>订单相关API</h2>
+				<div class="left-child">
+					<ul>
+						<li><a href="javascript:void(0)" rel="order/get-payment">获取支付方式</a></li>
+						<li><a href="javascript:void(0)" rel="order/get-store-info">获取商品、商家信息、配送方式</a></li>
+						<li><a href="javascript:void(0)" rel="order/create-order">提交订单</a></li>
+						<li><a href="javascript:void(0)" rel="order/order-list">订单列表</a></li>
+						<li><a href="javascript:void(0)" rel="order/rog-confirm">确认收货</a></li>
+						<li><a href="javascript:void(0)" rel="order/cancel-order">取消订单</a></li>
+						
+					</ul>
+				</div>
+			</li>
+			
+		</ul>
+	</div>
+	
+	<div class="main-right">
+		<!-- 此处加载相关页面 -->
+	</div>
+	
+</div>
+
+<div class="footer">
+	<div class="footer-top">
+		<div class="footer-phone"><span></span>400-6878-256</div>
+		<p>北京市西城区南滨河路甲25号金工宏洋大厦A座6层</p>
+		<div class="weixin"><div class="show-weixin" style="display:none;"><img src="big-erweima.jpg"/></div></div>
+	</div>
+</div>
+
+
+<!-- 移入显示二维码 -->
+<script>
+	$(function(){
+		//首次加载广告方法
+		$(".main-right").load("adv/adv-list.html");
+		
+		$(".left-child ul li a").click(function(){
+			$(".menu a").removeClass("selected");
+			$(this).addClass("selected");
+			var htmlName = $(this).attr("rel");
+			loadHtml(htmlName);
+		})
+		
+		//加载相关页面
+		function loadHtml(name){
+			$(".main-right").empty();
+			$(".main-right").load(name+".html");
+		}
+		
+		$(".weixin").mouseover(function(){
+			$(".show-weixin").show();
+		})
+		$(".weixin").mouseleave(function(){
+			$(".show-weixin").hide();
+		})
+	})
+</script>
+</body>
+</html>

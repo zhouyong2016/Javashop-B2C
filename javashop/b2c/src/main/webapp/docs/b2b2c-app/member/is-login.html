@@ -1,0 +1,80 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>判断会员是否登录</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/member/is-login.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">如果已经登录，返回会员信息json，如果未登录，提示尚未登录</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/member/is-login.do');</b>
+			<b>		var options = {</b>
+			<b><i></i>		url : url,</b>
+			<b>	<i></i>		success : function(data) {</b>
+			<b>	<i></i>	<i></i>		alert(JSON.stringify(data));
+			<b>	<i></i>		}</b>
+			<b>		};</b>
+			<b>		e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "message": null,
+    "data": {
+        "member_id": 16,
+        "lv_id": 2,
+        "uname": "food",
+        "email": "food@qq.com",
+        "password": "96e79218965eb72c92a549dd5a330112",
+        "regtime": 1428651298,
+        "pw_answer": "",
+        "pw_question": "",
+        "name": "food",
+        "sex": 1,
+        "birthday": -28800,
+        "advance": 0,
+        "province_id": 0,
+        "city_id": 0,
+        "region_id": 0,
+        "province": "",
+        "city": "",
+        "region": "",
+        "address": "",
+        "zip": "",
+        "mobile": "",
+        "tel": "",
+        "info_full": 0,
+        "recommend_point_state": 0,
+        "point": 30,
+        "qq": null,
+        "msn": null,
+        "remark": null,
+        "lastlogin": 1476228123,
+        "logincount": 6,
+        "mp": 228,
+        "lvname": "黄金会员",
+        "parentid": 0,
+        "agentid": null,
+        "is_cheked": 0,
+        "registerip": "0:0:0:0:0:0:0:1",
+        "nickname": null,
+        "face": "",
+        "midentity": 0,
+        "last_send_email": null,
+        "find_code": null
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

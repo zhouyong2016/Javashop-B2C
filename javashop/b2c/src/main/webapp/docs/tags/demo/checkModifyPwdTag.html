@@ -1,0 +1,8 @@
+<!--创建"验证手机重置密码标签"标签-->
+<#assign checkModifyPwdTag = newTag("checkModifyPwdTag")>
+<!--调用“验证手机重置密码标签”标签-->
+<#assign checkModifyPwd = checkModifyPwdTag()>
+<#list checkModifyPwd as list>
+是否成功 ${list}
+
+</#list>

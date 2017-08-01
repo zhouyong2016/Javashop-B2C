@@ -1,0 +1,129 @@
+<#assign title="我的评论" />
+<#include 'member_header.html' />
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员我的咨询标签 -->
+<#assign commentsList = memberCommentListTag()>
+
+<div class="data">
+	<h2>我的评论</h2>
+</div>
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg" />
+
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、这里将显示您的咨询信息</p>
+			<p>2、您还可以查看您的咨询信息以及管理员的回复等</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="tab">
+	<ul>
+		<li class="selected"><a href="comments.html"><span>我的评论</span>
+		</a>
+		</li>
+		<li><a href="waitcommont.html" ><span>待评论的商品</span>
+		</a>
+		</li>
+	</ul>
+</div>
+<div class="box commontlist">
+	<div class="top"></div>
+	<div class="body">
+		<#if commentsList?size gt 0 >
+		<table id="tblComm" cellspacing="0" cellpadding="0" width="100%">
+			<tr>
+				<th class="title">评论商品</th>
+				<th class="date">提交时间</th>
+				<th class="status">状态</th>
+			</tr>
+			<#list commentsList.commentsList as comment>
+			<tr>
+				<td class="title"><span> <a
+						href="${ctx}/goods-${comment.goods_id}.html" target="_blank">${comment.name}</a>
+				</span></td>
+				<td class="date"><@dateformat time="${comment.dateline?c}"
+					pattern="yy-MM-dd HH:mm"/></td>
+				<td class="status"><span> <#if comment.status == 1> <span
+						class="status-used">审核通过</span> <#elseif comment.status == 2> <span
+						class="status-expired">审核拒绝</span> <#else> <span
+						class="status-virgin">待审核</span> </#if> </span></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<div class="myComm">
+						<div class="myRating">
+							评价：<strong>
+									<#if comment.grade == 1>
+										差评
+									</#if>
+									<#if comment.grade == 2>
+										中评
+									</#if>
+									<#if comment.grade == 3>
+										好评
+									</#if>
+								</strong>
+						</div>
+						<div class="commContent">
+							<h3>我的评论：</h3>
+							<p>${comment.content}</p>
+						</div>
+						<#if comment.img?exists && comment.img != '' && comment.img != 'null'>
+						<div class="userImg">
+							<p>
+								<a href="" target="_blank"><img src="${comment.img}"
+									width="150" />
+								</a>
+							</p>
+						</div>
+						</#if> <#if comment.replystatus == 1>
+						<div class="aidaiReply">
+							<h3>Javashop示例商城客服：</h3>
+							<p>${comment.reply}</p>
+						</div>
+						</#if>
+					</div></td>
+			</tr>
+			</#list>
+		</table>
+		<div class="pager_border">
+			<@pager pageno="${page!'1'}" pagesize="${commentsList.pageSize}"
+			totalcount="${commentsList.totalCount}" />
+			<div class="clear"></div>
+		</div>
+		<#else>
+		<div class="empty">您尚未评价过商品</div>
+		</#if>
+	</div>
+	<div class="bottom"></div>
+</div>
+<div class="box commontwait">
+	<!-- 已经购买等待评论的商品 -->
+</div>
+</div>
+<div class="rr_bottom"></div>
+</div>
+<!--会员中心首页右侧结束-->
+</div>
+</div>
+<script>
+	$(function() {
+		$(".waitcomment").click(function() {
+			$(".tab ul li").removeClass("selected");
+			$(this).parent().addClass("selected");
+			$(".commontwait").load("waitcommont.html", function() {
+				$(".commontlist").hide();
+				$(".commontwait").show();
+				Favorite.init();
+			})
+		})
+	})
+</script>
+<#include '../common/footer.html'/>

@@ -1,0 +1,36 @@
+<style>
+	.combo{display:inline}
+	.combo-arrow{margin:2px 1px 0px 0px}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id=regioneditForm method="post" class="validate">
+			<table>
+				<tr>
+					<th>地区名称</th>
+					<td><input class="input_text  easyui-validatebox" type="text" id="local_name" maxlength="60"
+						name="local_name" data-options="required:true" value="${regions.local_name!''}"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>邮政编码:</th>
+					<td>
+						 <input class="input_text easyui-numberbox" type="text" maxlength="60"
+						name="zipcode" data-options="required:true" value="${regions.zipcode!''}"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>是否支持货到付款:</th>
+					<td>
+						<select name="cod" id="cod" style="height: 30px;width: 200px;">
+					     	<option value="1" <#if regions.cod==1>selected </#if>	>支持</option>
+					     	<option value="0" <#if regions.cod==0>selected </#if> 	>不支持</option>
+					     </select>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="region_id" value="${regions.region_id}" >
+		</form>
+	</div>
+</div>

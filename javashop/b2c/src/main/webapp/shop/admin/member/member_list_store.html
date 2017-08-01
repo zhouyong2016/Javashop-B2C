@@ -1,0 +1,406 @@
+<#include '/admin/header.html' >
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="memberform">
+		<div id="tb" style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="newTab('会员添加','${ctx}/shop/admin/member/add-member.do')">添加</a>
+			 <a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="selectMember()">选择</a>
+		 
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+					<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 300px;"
+					placeholder="请输入用户名，姓名，手机号" name="searchKeyWord"> 
+					<a href="javascript:void(0)" class="easyui-linkbutton" 
+					data-options="plain:true" onclick="searchMember()">搜索</a>
+				</span>
+				<a href="javascript:void(0)" class="button" id="aAdvanced"  >高级搜索</a>
+			</span>
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<th width="70" align="right">用户名</th>
+					<td>
+						<input type="text" value="${name!''}" id="uname"  class="input_text">
+					</td>
+					
+					<th width="70" align="right">手机</th>
+					<td>
+						<input type=" text" value="${name!''}" id="mobile" maxlength="11" class="input_text easyui-numberbox">
+					</td>
+					
+					<th width="70" align="right">会员等级</th>
+					<td>
+						<select name="member.lv_id" class="inputSelect valid" id="lv_id" >
+							<option value="0">--请选择等级--</option>
+							<#if lvlist??>
+								<#list lvlist as lv>
+									<option value="${lv.lv_id }">${lv.name }</option>
+								</#list>
+							</#if>
+						</select>
+					</td>
+					
+					<th width="70" align="right">电子邮件</th>
+					<td width="300px">
+						<input type="text" value="${email!''}" id="email"  class="input_text">
+					</td>
+				</tr>
+				<tr>
+					<th width="70" align="right">注册时间</th>
+					<td width="300px">
+						<input class="easyui-datebox" style="width: 90px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time" />
+					</td>
+					<th width="70" align="right">城市</th>
+					<td width="350px">
+						<@regionSelectDirective  province_id="${province_id!''}" city_id="${city_id!''}" region_id="${region_id!''}" />
+					</td>
+					<th width="70" align="right">性别</th>
+					<td>
+						<select id="sex" class="inputSelect valid" >
+							<option value="2">全部</option>
+							<option value="1">男</option>
+							<option value="0">女</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td width="60" align="right"></td>
+					<td colspan="7" align="center">
+						<a id="searchAdvance" class="button blueButton" onclick="searchMember()" href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/member/member-list-json.do?isshopkeeper=1',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" id="memberdata" sortName="member_id" sortOrder="desc" >
+			<thead>
+				<tr>
+					<th data-options="field:'member_id'" formatter="formatRadio"></th>
+					
+					<th data-options="field:'uname',width:200">用户名</th>
+					<th data-options="field:'mobile',width:200">手机</th>
+					<#if is_lvmember==1>
+					<th data-options="field:'lv_name',sortable:'true',width:200">会员等级</th>
+					</#if>
+					<th data-options="field:'email',width:200">电子邮件</th>
+					<th data-options="field:'regtime',width:200,sortable:'true'"
+						formatter="formatRegtime">注册时间</th>
+					<th data-options="field:'lastlogin',width:200,sortable:'true'"
+						formatter="formatLastlogin">上次登录日期</th>
+					<th data-options="field:'logincount',width:200,sortable:'true'">本月登录次数</th>
+					<th data-options="field:'area',width:200" formatter="formatArea">城市</th>
+					<th data-options="field:'sex',width:200,sortable:'true'" formatter="formatSex">性别</th>
+					<!-- <th data-options="field:'login',width:100,align:'center'"
+						formatter="formatLogin">登录</th>
+						 -->
+					<th data-options="field:'action',width:100,align:'center'"
+						formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+
+</div>
+<script type="text/javascript">
+
+
+	
+
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/shop/admin/member/add-member.do";
+			map["formId"] = "#addForm";
+			map["url"] = "${ctx}/shop/admin/member/save-member.do";
+			map["title"] = "添加会员";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "${ctx}/shop/admin/member/edit-member.do?memberId=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "${ctx}/shop/admin/member/save-edit-member.do";
+			map["title"] = "修改会员";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#memberdata";
+
+		//需要验证的参数
+		map["nameId"] = "#name";
+		map["urlId"] = "#url";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 600,
+			height : 400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					if($("#store_region_id").val()=='0'){
+						$.Loading.error("没有选择所在地区。 ");
+						return;
+					}
+					if($("#bank_region_id").val()=='0'){
+						$.Loading.error("没有选择开户地区。 ");
+						return;
+					}
+					submitForm(map);
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function addDialogMax(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 800,
+			height : 600,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() { 
+
+					if($("#store_region_id").val()=='0'){
+						$.Loading.error("没有选择所在地区。 ");
+						return;
+					}
+					if($("#bank_region_id").val()=='0'){
+						$.Loading.error("没有选择开户地区。 ");
+						return;
+					} 
+					submitForm(map); 
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$.Loading.hide();  
+
+					var rows = $('#memberdata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#memberdata').datagrid('getRowIndex',
+								rows[i]);
+						$('#memberdata').datagrid('deleteRow', index);
+					}
+				},
+				error : function(e) {
+					 $.messager.progress('close'); 
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\""
+				+ row.uname
+				+ "-信息修改\",\"${ctx}/shop/admin/member/detail.do?memberId="
+				+ row.member_id + "\")' ></a>";
+		return val;
+	}
+
+	function formatRegtime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+
+	function formatLastlogin(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+
+	function formatArea(value, row, index) {
+		var val = "";
+		if (row.province != null && row.province != "请选择") {
+			val = val + row.province;
+		}
+		if (row.city != null && row.city != "请选择") {
+			val = val + "-" + row.city;
+		}
+		if (row.region != null && row.region != "请选择") {
+			val = val + "-" + row.region;
+		}
+		if (val == "") {
+			val = "未选择城市";
+		}
+		return val;
+	}
+	function formatRadio(value,row,index){ 
+   	 	return "<input type='radio' name='membername' value='"+row.uname+"'>";
+	}
+	function formatSex(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "女";
+		} else {
+			val = "男";
+		}
+		return val;
+	}
+
+	function formatLogin(value, row, index) {
+		//暂时不能登录
+		//var val = '<a href="member!sysLogin.do?name='
+		//		+ row.uname
+		//		+ '" target="_blank"><img class="modify" src="images/transparent.gif" >登录</a>';
+		//return val;
+	}
+	function del() {
+		var rows = $('#memberdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择要删除的会员");
+			return;
+		}
+		if (!confirm("确认要将删除会员吗？")) {
+			return;
+		}
+		var options = {
+			url : "${ctx}/shop/admin/member/delete.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					var rows = $('#memberdata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#memberdata').datagrid('getRowIndex',
+								rows[i]);
+						$('#memberdata').datagrid('deleteRow', index);
+					}
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#memberform').ajaxSubmit(options);
+	}
+
+	$(function() {
+		$(".searchAdvanced").hide();
+		//高级查询按钮
+		$("#aAdvanced").click(function() {
+			if ($("#Advanced").val() == "0") {
+				$("#Advanced").val(1);
+				$("#simpleSearch").hide();
+				//$("#aAdvanced").text("简单搜索")
+				$("#aAdvanced").addClass("searchAdvancedS");
+			} else {
+				$("#Advanced").val(0);
+				$("#simpleSearch").show();
+				//$("#aAdvanced").text("高级搜索");
+				$("#aAdvanced").removeClass("searchAdvancedS");
+			}
+			$(".searchAdvanced").slideToggle("slow");
+		});
+	});
+
+	function searchMember() {
+
+		var searchtype = $("#Advanced").val();
+		var keyword = $("#searchKeyword").val();
+
+		var start_time = $('#start_time').datebox('getValue');
+		var end_time = $('#end_time').datebox('getValue');
+		var uname = $("#uname").val();
+		var mobile = $("#mobile").val();
+		var lv_id = $("#lv_id").val();
+		var email = $("#email").val();
+		var sex = $("#sex").val();
+		var province_id = $("#province_id").val();
+		var city_id = $("#city_id").val();
+		var region_id = $("#region_id").val(); 
+		if (email.length != 0) {
+			var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+			if (!reg.test(email)) {
+				alert("对不起，您输入的字符串类型格式不正确!");//请将“字符串类型”要换成你要验证的那个属性名称！    
+				return;
+			}
+		}
+
+		$("#memberdata").datagrid('load', {
+			stype : searchtype,
+			keyword : keyword,
+
+			start_time : start_time,
+			end_time : end_time,
+			uname : uname,
+			mobile : mobile,
+			lvId : lv_id,
+			email : email,
+			sex : sex,
+			province_id : province_id,
+			city_id : city_id,
+			region_id : region_id,
+			page : 1
+		});
+	}
+	
+	function selectMember(){
+		if($("input[name='membername']:checked").val()== undefined){
+			alert("请选择一个会员");
+			return;
+		}
+		newTab("查看店铺详细","${ctx}/b2b2c/admin/store/add.do?uname="+$("input[name='membername']:checked").val());
+	}
+</script>
+<#include '/admin/footer.html' >

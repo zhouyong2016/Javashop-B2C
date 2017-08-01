@@ -1,0 +1,13 @@
+
+<!--创建"店铺优惠券"标签-->
+<#assign StoreBonusListTag= newTag("storeBonusListTag") >  
+<!--调用"店铺优惠券"标签，并传递参数-->            
+<#assign  StoreBonusList= StoreBonusListTag("'store_id':'15'") >						
+<ul class="gw">
+
+   总信息数：${StoreBonusList.totalCount}</br>
+
+<#list StoreBonusList.bonusList.result as dly>
+	  优惠价格：${dly.type_money}元</br>
+             满: ${dly.min_goods_amount}元</br>
+</#list>

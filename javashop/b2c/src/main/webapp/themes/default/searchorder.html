@@ -1,0 +1,112 @@
+<#assign  title="游客订单查询" />
+<#include 'common/header.html' />
+
+<link rel="stylesheet" href="${ctx}/themes/default/css/button.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/dialog.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/checkout.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+
+<script src="${ctx}/themes/default/js/shop.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/LoginDialog.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DropDownMenu.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/ui.datepicker.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DatePicker.js" type="text/javascript"></script>
+
+
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="top_space"></div>
+<div id="yk_dd_wh">
+	<h1>游客订单查询</h1>
+	<form action="searchorder.html" method="GET" id="searchForm">
+		<input type="hidden" name="action" value="search"/>
+	    <ul>
+			<li ><label>收&nbsp;货&nbsp;人：</label><input name="ship_name" type="text" value="${ship_name!''}" ></input><p>&nbsp;&nbsp;（请输入收货人姓名）</p></li>
+			<li><label>联系方式：</label><input name="ship_tel" value="${ship_tel!''}" type="text" maxlength="11" /><p>&nbsp;&nbsp;（请输入手机或固定号码）</p></li>
+			<li ><a href="javascript:;" id="search_Orders">搜索订单</a></li>
+	    </ul>
+	</form>
+	<ul class="rim_yesno">
+		<li ><a href="${ctx}/member/order.html">会员订单查询</a></li>
+		<li>还不是会员？<span><a href="register.html">立即注册</a></span></li>
+	</ul>
+	<!-- 创建游客订单查询标签 -->
+	<#assign searchOrderTag= newTag("searchOrderTag")>
+	<!-- 调用商品分类信息 -->
+	<#assign orders = searchOrderTag()!'' >
+	<#if orders.ordersPage??>
+		<!-- 获取订单分页列表 -->
+		<#assign ordersPage = orders.ordersPage />
+	</#if>
+	<ul class="rim_list">
+		<ol class="visitor_list">
+			<li class="visitor_number">订单号</li>
+			<li>下单时间</li>
+			<li>收货人</li>
+			<li>总价</li>
+			<li>状态</li>
+			<li>付款方式</li>
+			<li>配送方式</li>
+			<li>操作</li>
+		</ol>
+		<#if ordersPage?exists>
+			<#list ordersPage.result as order>
+		        <ol class="visitor_good_list">
+		        	<li class="visitor_number">
+		        		<a href="orderdetail.html?ordersn=${order.sn}">${order.sn}</a>
+		        	</li>
+		        	<li><@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+		        	<li>${order.ship_name}</li>
+		        	<li>￥${order.order_amount?string("0.##")}</li>
+		        	<li><@orderstatus status="${order.status}" type="order" /></li>
+		        	<li>${order.payment_name}</li>
+		        	<li>${order.shipping_type}</li>
+		        	<li>
+		        		<a href="orderdetail.html?ordersn=${order.sn}">详情</a>&nbsp;
+		        	</li>
+		        </ol>
+			</#list>
+        </#if>
+        <ol class="bottom">
+        	<#if ordersPage?exists>
+        		<@pager pageno="${orders.page}" pagesize="${orders.pageSize}" totalcount="${orders.totalCount}" />
+        	</#if>
+        	  <div class="clear"></div>
+        </ol>
+    </ul>
+</div>
+<div id="yk_dd_wh2">
+	<h2 class="yk_dd_ul1x">注册会员有惊喜</h2>
+    <ul class="yk_zc_wh">
+    	<ol>
+    	<li><a href="register.html"><@image src="${ctx}/themes/default/images/14.jpg" /></a></li>
+        <li><a href="register.html"><@image src="${ctx}/themes/default/images/15.jpg" /></a></li>
+        <li ><a href="register.html"><@image src="${ctx}/themes/default/images/16.jpg" /></a></li>
+        </ol>
+        <ol class="visitor_register"><li><a href="register.html">点击快速注册</a></li></ol>
+    </ul>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#search_Orders").click(function(){
+		var ship_name = $("input[name='ship_name']").val();
+		if(ship_name==""){
+			alert("请输入收货人姓名!");
+			return false;
+		}
+		var ship_tel = $("input[name='ship_tel']").val();
+		
+		if(!checkTel(ship_tel)){
+			alert("请输入手机或固定号码!");
+			return false;
+		}
+		$("#searchForm").submit(); 
+	});
+	
+	function checkTel(tel){
+	   var mobile = /^1[3|4|5|8|7]\d{9}$/ , phone = /^0\d{2,3}-?\d{7,8}$/;
+	   return mobile.test(tel) || phone.test(tel);
+	}
+	
+});
+</script>
+<#include 'common/footer.html' />

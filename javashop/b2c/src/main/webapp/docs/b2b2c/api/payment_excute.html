@@ -1,0 +1,116 @@
+<#assign  title="跳转到第三方支付页面api" /><#include '../header.html' />
+<!--头部结束-->
+<script>
+$(document).ready(function(){ 
+    
+  $("#aa tr:odd").css("background-color","#B2E0FF")
+  }); 
+</script>
+
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'payment_menu.html' />
+	<div class="right_list">
+		<h3>execute  跳转到第三方支付页面API</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#example">返回示例</a></li>
+				<li><a href="#try">API工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>
+			<p>跳转到第三方支付页面</p>
+
+		</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>API地址：</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">/api/b2b2c/store-payment-api/pay.do?orderid=1</td>
+						
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0" id="aa">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>orderid</td>
+						<td>int</td>
+						<td>必须</td>
+						<td>1</td>
+						<td></td>
+						<td>订单ID</td>
+					</tr>
+					<tr>
+						<td>paymentid</td>
+						<td>int</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>支付方式ID</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>默认值</th>
+						<th class="line">描述</th>
+					</tr>
+					<tr>
+						<td>result</td>
+						<td>String</td>
+						<td>是</td>
+						<td></td>
+						<td class="line_intro" style="text-align:center"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="example">
+				<h2>返回示例</h2>
+				<textarea><form id="alipaysubmit" name="alipaysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="POST"><input type="hidden" name="sign" value="aee0849287c6b6ca29ddb5da29099b6b"/><input type="hidden" name="body" value="订单：145224446754"/><input type="hidden" name="_input_charset" value="utf-8"/><input type="hidden" name="total_fee" value="10.0"/><input type="hidden" name="subject" value="Javashop多店铺示例商城订单"/><input type="hidden" name="sign_type" value="MD5"/><input type="hidden" name="service" value="create_direct_pay_by_user"/><input type="hidden" name="notify_url" value="http://localhost:8080/api/shop/b_alipayDirectPlugin_payment-callback.do"/><input type="hidden" name="partner" value="test"/><input type="hidden" name="seller_email" value="test"/><input type="hidden" name="out_trade_no" value="145224446754"/><input type="hidden" name="payment_type" value="1"/><input type="hidden" name="show_url" value="http://localhost:8080/b_145224446754.html"/><input type="hidden" name="return_url" value="http://localhost:8080/b_alipayDirectPlugin_payment-result.html"/><input type="submit" value="确认" style="display:none;"></form><script>document.forms['alipaysubmit'].submit();</script></textarea>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="try.html?api=excute" target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

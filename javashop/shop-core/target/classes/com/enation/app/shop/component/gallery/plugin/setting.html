@@ -1,0 +1,57 @@
+<div>
+<style>
+.markposbox{
+width:350px;
+}
+.markposbox li{
+	width:100px;
+	float:left;
+	border:1px solid #CCC;
+	margin:2px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<table class="form-table">
+		<tr>
+			<th class="label" style="width: 200px;">
+				商品详细页小图尺寸:
+			</th>
+			<td>
+				宽<input type="text" class="input_text combo easyui-numberbox"  name="photo.tiny_pic_width" style="width:50px;" maxlength="4" value="${photo.tiny_pic_width!'' }"/>px&nbsp;&nbsp;
+				高<input type="text" class="input_text combo easyui-numberbox"  name="photo.tiny_pic_height" style="width:50px" maxlength="4" value="${photo.tiny_pic_height!'' }"/>px
+			</td>
+		</tr>
+		<tr>
+			<th class="label" style="width: 200px;">
+				缩略图尺寸:
+			</th>
+			<td>
+				宽<input type="text" class="input_text combo easyui-numberbox" name="photo.thumbnail_pic_width" style="width:50px" maxlength="4" value="${photo.thumbnail_pic_width!'' }"/>px&nbsp;&nbsp;
+				高<input type="text" class="input_text combo easyui-numberbox" name="photo.thumbnail_pic_height" style="width:50px" maxlength="4" value="${photo.thumbnail_pic_height!'' }"/>px
+			</td>
+		</tr>
+
+		<tr>
+			<th class="label" style="width: 200px;">
+				商品详细页图片尺寸:
+			</th>
+			<td>
+				宽<input type="text" class="input_text combo easyui-numberbox" name="photo.small_pic_width" style="width:50px"  maxlength="4" value="${photo.small_pic_width!'' }"/>px&nbsp;&nbsp;
+				高<input type="text" class="input_text combo easyui-numberbox" name="photo.small_pic_height" style="width:50px"  maxlength="4" value="${photo.small_pic_height!'' }"/>px
+			</td>
+		</tr>
+		
+		<tr>
+			<th class="label" style="width: 200px;">
+				商品相册图片尺寸:
+			</th>
+			<td>
+				宽<input type="text" class="input_text combo easyui-numberbox" name="photo.big_pic_width" style="width:50px"  maxlength="4" value="${photo.big_pic_width!'' }"/>px&nbsp;&nbsp;
+				高<input type="text" class="input_text combo easyui-numberbox" name="photo.big_pic_height" style="width:50px" maxlength="4" value="${photo.big_pic_height!'' }"/>px
+			</td>
+		</tr>
+				
+	</table>
+	</div>
+ 
+</div>

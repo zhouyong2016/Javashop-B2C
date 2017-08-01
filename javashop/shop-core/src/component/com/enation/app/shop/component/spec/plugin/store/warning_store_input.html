@@ -1,0 +1,56 @@
+<div class="detail">
+	<div class="main">
+		<form id="storeform">
+			<#list depotList as depot>
+			<h1>${depot.depotname}</h1>
+			<hr />
+			<table cellspacing="0" cellpadding="0" border="0">
+				<thead>
+					<th>货号</th>
+					<th>商品名称</th> <#list specNameList as specName>
+					<th>${specName}</th> </#list>
+					<th>可用库存</th>
+					<th>库存</th>
+
+				</thead>
+				<#assign productList=depot.productList />
+				<tbody>
+					<#if productList?exists > <#list productList as product>
+					<tr>
+						<td>${product.sn}</td>
+						<td>${product.name}</td> <#list product.specList as spec> <#if
+						spec.spec_type==1>
+						<td>
+							<div class="select-spec-unselect spec_selected">
+								<center>
+									<img height="20" width="20" src="${spec.spec_image}"
+										alt="${spec.spec_value}" title="${spec.spec_value}">
+								</center>
+							</div></td> </#if> <#if spec.spec_type==0>
+						<td>
+							<div class="select-spec-unselect spec_selected">
+								<span>${spec.spec_value}</span>
+							</div></td> </#if> </#list>
+
+						<td> <input type="input"
+							name="enableStoreNum" size="6"  maxlength="7" style="width: 50px;" readonly="readonly" 
+							value="${(product.enable_store)!0}" autocomplete="off" data-options="required:true,min:0"/> 
+						</td>
+
+						<td><input type="hidden" name="id" value="${product.storeid}" />
+							<input type="hidden" name="productid"
+							value="${product.product_id}" /> <input type="input"
+							name="storeNum" size="6" class="easyui-numberspinner" maxlength="7" style="width: 60px;"
+							value="${(product.store)!0}" autocomplete="off" data-options="required:true,min:0"/> <input
+							type="hidden" name="depotid" value="${depot.depotid}" />
+						</td>	
+							
+					</tr>
+					</#list> </#if>
+				</tbody>
+
+			</table>
+			</#list>
+		</form>
+	</div>
+</div>

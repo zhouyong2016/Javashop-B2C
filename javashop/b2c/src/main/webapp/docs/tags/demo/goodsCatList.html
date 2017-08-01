@@ -1,0 +1,8 @@
+
+<!-- 获取商品分类列表标签 -->
+<#assign goodsCatListTag = newTag("goodsCatListTag")>
+<!-- 调用商品分类列表标签 -->
+<#assign goodsCatList = goodsCatListTag("'catid':'1'")>
+<#list goodsCatList as catList>
+${catList.name}
+</#list>

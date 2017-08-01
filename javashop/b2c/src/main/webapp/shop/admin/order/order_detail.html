@@ -1,0 +1,274 @@
+<#include '/admin/header.html' >
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<link href="${ctx}/adminthemes/new/css/dialog.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/global.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="${staticserver }/js/admin/Tab.js"></script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/OrderDetail.js"></script>
+<script language="javascript"  src="${ctx}/adminthemes/new/js/CLodopFuncs.js"></script>
+<style>
+<!--
+.box {width:250px;display:block;float:left}
+
+.division {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border-color: #CCCCCC #BEC6CE #BEC6CE #CCCCCC;
+	border-style: solid;
+	border-width: 1px 2px 2px 1px;
+	line-height: 150%;
+	margin: 10px;
+	padding: 5px;
+	white-space: normal;
+}
+
+.division table {
+	margin: 0;
+	padding: 0;
+	width:100%
+}
+
+.orderdetails_basic th {
+	color: #336699;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.division th {
+	background: none repeat scroll 0 0 #E2E8EB;
+	border-right: 1px solid #CCCCCC;
+	font-size: 14px;
+	text-align: right;
+	white-space: nowrap;
+	width: 140px;
+}
+
+.division th,.division td {
+	border-color: #FFFFFF #DBE2E7 #DDDDDD #FFFFFF;
+	border-left: 1px solid #FFFFFF;
+	border-right: 1px solid #DBE2E7;
+	border-style: solid;
+	border-width: 1px;
+	padding: 5px;
+	vertical-align: top;
+}
+
+.tableform {
+	background: none repeat scroll 0 0 #EFEFEF;
+	border-color: #DDDDDD #BEC6CE #BEC6CE #DDDDDD;
+	border-style: solid;
+	border-width: 1px;
+	margin: 10px;
+	padding: 5px;
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	clear: both;
+	color: #111111;
+	margin: 0.5em 0;
+}
+
+
+.allo_box {
+	background: none repeat scroll 0 0 #EEEEEE;
+	border: 1px solid #CCCCCC;
+	position: absolute;
+	width: 300px;
+	display: none;
+}
+
+.allo_box li {
+	line-height: 30px;
+	border-bottom: 1px solid #ccc
+}
+
+.allo_items li.selected {
+	background-color: #00EE76
+}
+
+.close_box a {
+	float: right
+}
+-->
+</style>
+<div class="main">
+	<div id="orderinfo" style="display: none; overflow:hidden" ></div>
+	<div id="cancelorder" style="padding-left:30px; display: none;"> 
+		请选择取消原因：
+		<select name="reason">
+			<option value="现在不想购买">现在不想购买</option>
+			<option value="商品价格比较贵">商品价格比较贵</option>
+			<option value="重复下单">重复下单</option>
+			<option value="收件信息有误">收件信息有误</option>
+			<option value="发票信息有误/发票未开">发票信息有误/发票未开</option>
+			<option value="无法支付订单">无法支付订单</option>
+			<option value="恶意订单">恶意订单</option>
+		</select>	
+	</div>
+	<div class="toolbar">
+		<form id="nextForm" action="" method="post">
+			<div style="float:left">
+				<@permssion actid="customer_service,super_admin">
+					<a href="#" class="easyui-linkbutton" id="confirmorder" disabled="disabled" data-options="toggle:true,group:'g1'">确认订单</a>
+	   			</@permssion>
+				<@permssion actid="finance,super_admin">
+					<a href="#" class="easyui-linkbutton" id="pay" disabled="disabled" data-options="toggle:true,group:'g1'">确认收款</a>
+				</@permssion>
+				<@permssion actid="depot_admin,super_admin">
+					<a href="#" class="easyui-linkbutton" id="ship" disabled="disabled" data-options="toggle:true,group:'g1'">发货</a>
+					<a href="#" class="easyui-linkbutton" id="rog" disabled="disabled" data-options="toggle:true,group:'g1'">确定收货</a>
+				</@permssion>
+				<@permssion actid="customer_service,super_admin">
+					<a href="#" class="easyui-linkbutton"  id="returned" disabled="disabled" data-options="toggle:true,group:'g1'">售后</a>
+					<a href="#" class="easyui-linkbutton" id="cancel"  disabled="disabled" data-options="toggle:true,group:'g1'">取消订单</a>
+				</@permssion>
+			</div>
+			<span style="float:right;display:block;height:30px;">
+				<a href="javascript:;" id="printExpress"  class="easyui-linkbutton"  >打印快递单 </a>
+				<a href="javascript:;" id="printShip"  class="easyui-linkbutton"  >打印发货单 </a>
+			</span>
+		</form>
+		<div style="clear: both"></div>
+	</div>
+	<div id="memberpricedlg"></div>
+	<div id="return"></div>
+	<div class="input">
+			<div style="display: block;" class="order_detail">
+				<div class="contentTab" >
+					<ul class="tab">
+		
+						<#list pluginTabs as tab>
+							<li tabid="${tab.order}" 
+								<#if tab.order==0> class="contentTabS"</#if> 
+							>${tab.tabTitle}</li>
+						</#list>
+					</ul>
+				</div>
+				<div class="shadowBoxWhite wf100 whiteBox">
+				
+					<div class="text">
+						<div class="tab-page">
+					
+							<#list pluginTabs as html>
+								<div tabid="${html.order}" 
+									<#if html.order!=0> style="display:none"</#if> 
+									class="tab-panel">${html.tabHtml}
+								</div>
+							</#list>
+						</div>
+					</div>	 	  		
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+<script>
+$(function(){
+ 	 $(".order_detail .contentTab>ul>li").click(function(){
+ 	 	 var tabid=$(this).attr("tabid");
+ 	 	 $(".order_detail .contentTab>ul>li").removeClass("contentTabS");
+ 	 	 $(this).addClass("contentTabS");
+ 	 	 $(".tab-page .tab-panel").hide();
+ 	 	 $(".tab-panel[tabid="+tabid+"]").show();
+ 	 });
+	 	 
+	if($("#alert_null").val() == 'kong'){
+		alert("已经是最后一条！");
+	}
+	
+	OrderDetail.init(${orderId},${ord.status},${ord.pay_status},${ord.ship_status},<#if ord.isCod>true<#else>false</#if>,${ord.payment_id!''},${ord.is_cancel});
+	
+	$("#next").click( function(){
+		$("#nextvalue").val('previous');
+		$("#nextForm").attr("action","${ctx}/shop/admin/order/next-detail.do?rand="+new Date().getTime());
+		$("#nextForm").submit(); 
+		});
+	$("#previous").click( function(){
+		$("#nextvalue").val('next');
+		$("#nextForm").attr("action","${ctx}/shop/admin/order/next-detail.do?rand="+new Date().getTime());
+		$("#nextForm").submit(); 
+		});
+	
+	var disabled=$("#printExpress").hasClass("l-btn-disabled");
+	$("#printExpress").click(function(){
+		
+		if(!disabled){
+			
+			if(!(navigator.platform == "Win32") && !(navigator.platform == "Windows")){
+				alert("请在windows下使用");
+				return false;
+			}
+			if (window.navigator.userAgent.indexOf("Chrome") !== -1){
+				alert("chrome 不能打印，请使用其他浏览器。");	
+				return false;
+			}
+			
+			$.Loading.show("正在处理打印，请稍候...");
+			$("#printExpress").linkbutton("disable");
+			$("#nextForm").ajaxSubmit({
+				url:"${ctx}/shop/admin/order-print/express-script.do?order_id=${ord.order_id}",
+				dataType : "json",
+				success:function(json){
+					if(json.result==1){
+						 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+						 LODOP.PRINT_INIT("快递单打印");
+						 LODOP.SET_PRINT_PAGESIZE(1,2300,1250,"");
+						 eval(json.script);
+						 LODOP.PRINT();
+						 $("#printExpress").linkbutton("enable");
+						 $.Loading.hide();
+					}else{
+						$.Loading.error(json.message);
+						$("#printExpress").linkbutton("enable");
+					}
+				},error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		$("#printExpress").linkbutton("enable");
+				}
+			});
+		}
+	});
+	
+	var disabled=$("#printShip").hasClass("l-btn-disabled");
+	$("#printShip").click(function(){
+		
+		if(!disabled){
+			
+			if(!(navigator.platform == "Win32") && !(navigator.platform == "Windows")){
+				alert("请在windows下使用");
+				return false;
+			}
+			if (window.navigator.userAgent.indexOf("Chrome") !== -1){
+				alert("chrome 不能打印，请使用其他浏览器。");	
+				return false;
+			}
+			
+			$("#printShip").linkbutton("disable");
+			$.Loading.show("正在处理打印，请稍候...");
+			$("#nextForm").ajaxSubmit({
+				url:"${ctx}/shop/admin/order-print/ship-script.do?order_id=${ord.order_id}",
+				success:function(json){
+					 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+					 LODOP.PRINT_INIT("快递单打印");
+					 LODOP.SET_PRINT_PAGESIZE(1,2400,1400,"");
+					 eval(json);
+					 LODOP.PRINT();
+					 $("#printShip").linkbutton("enable");
+					 $.Loading.hide();
+				},error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		$("#printShip").linkbutton("enable");
+				}
+			});
+		}
+	});
+});
+</script>
+
+<#include '/admin/footer.html' >

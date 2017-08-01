@@ -1,0 +1,171 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+	<form id="lvform">
+		<div style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="append()">添加</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="del()">删除</a>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/member/list-lv-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="lvdata">
+				<thead>
+					<tr>
+						<th data-options="field:'lv_id',checkbox:true"></th>
+						<th data-options="field:'name',width:200">等级名称</th>
+						<th data-options="field:'default_lv',width:300"
+							formatter="formatDefault_lv">默认等级</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div id="divdia" style="display: none;"></div>
+	</form>
+</div>
+<script type="text/javascript">
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/shop/admin/member/add-lv.do";
+			map["formId"] = "#addForm";
+			map["url"] = "${ctx}/shop/admin/member/save-add-lv.do";
+			map["title"] = "添加会员等级";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "${ctx}/shop/admin/member/edit-lv.do?lvId=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "${ctx}/shop/admin/member/save-edit-lv.do";
+			map["title"] = "修改会员等级";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#lvdata";
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 550,
+			height : 300,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);//获取按钮本身
+					savebtn.linkbutton("disable"); //禁用	
+					map["btn"]=savebtn;
+					submitForm(map);
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map) { 
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+						map["btn"].linkbutton("enable");
+					}
+					$.Loading.hide();
+				},
+				error : function(e) {
+					map["btn"].linkbutton("enable"); 
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			map["btn"].linkbutton("enable"); 
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.lv_id + ")' ></a>";
+		return val;
+	}
+
+	function formatDefault_lv(value, row, index) {
+		var val;
+		if (value == 1) {
+			val = "是";
+		} else {
+			val = "否";
+		}
+		return val;
+	}
+	function del() {
+		var rows = $('#lvdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除的会员等级");
+			return;
+		}
+		if (!confirm("确认要删除会员等级吗？默认等级不能删除!")) {
+			return;
+		}
+		var options = {
+			url : "${ctx}/shop/admin/member/delete-lv.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					var rows = $('#lvdata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#lvdata').datagrid('getRowIndex',
+								rows[i]);
+						$('#lvdata').datagrid('deleteRow', index);
+					}
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$('#lvform').ajaxSubmit(options);
+	}
+
+	$.extend($.fn.validatebox.defaults.rules, {
+		maxnum : {
+			validator : function(value, param) {
+				return value < param[0];
+			},
+			message : '最大数字为100'
+		}
+	});
+</script>
+<#include '/admin/footer.html' >

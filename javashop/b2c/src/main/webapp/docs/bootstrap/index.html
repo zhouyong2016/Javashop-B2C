@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>bootstrap_demo</title>
+    <script type="text/javascript">var ctx = '${ctx}'</script>
+    <link rel="stylesheet" href="${ctx}/statics/e_tools/css/doc.min.css">
+    <script type="text/javascript" src="${ctx}/statics/e_tools/js/e_broswer.js"></script>
+</head>
+<style type="text/css">
+    .header {
+        text-align: center;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        background-color: #ffffff;
+        z-index: 999;
+        box-shadow: 0 3px 4px rgba(0,0,0,0.18);
+    }
+    .navbar .btn-group {
+        float: left;
+        margin: 8px;
+    }
+    .demo-show {
+        padding-top: 50px;
+    }
+    .has-hr {
+        border-bottom: 2px solid #eee;
+    }
+    .h4 {
+        text-align: center;
+        color: #ff6700;
+    }
+    .header {
+        position: fixed;
+    }
+    textarea {
+        width: 100%;
+        resize: none;
+    }
+    .use-show ol li {
+        margin-top: 10px;
+    }
+</style>
+<body>
+<div class="header">
+    <header class="navbar navbar-collapse">
+        <div class="container">
+            <!--使用说明开始-->
+            <!--<div class="btn-group">
+                <button class="btn btn-danger" data-id="use">开始使用</button>
+                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="use-start">开始使用</a></li>
+                    <li><a href="javascript: void(0);" data-id="use-ctxPath">定义ctxPath变量</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript: void(0);" data-id="use-other">其它支持</a></li>&lt;!&ndash;
+                    <li><a href="javascript: void(0);" data-id="use-file">文件说明</a></li>&ndash;&gt;
+                </ul>
+            </div>--><!--使用说明结束-->
+
+            <!--按钮开始-->
+            <div class="btn-group">
+                <button class="btn btn-primary" data-id="btn">按钮</button>
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="btn-style">按钮样式</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-size">按钮大小</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-other">其它支持</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group">按钮组</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group-single">单一按钮组</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group-toolbar">多维按钮组</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group-down-menu">按钮式下拉菜单</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group-down-menu-f">分裂式按钮上、下拉菜单</a></li>
+                    <li><a href="javascript: void(0);" data-id="btn-group-tao">按钮嵌套</a></li>
+                </ul>
+            </div><!--按钮结束-->
+
+            <!--标签页开始-->
+            <div class="btn-group">
+                <button class="btn btn-info" data-id="tag-page">标签页</button>
+            </div><!--标签页结束-->
+
+            <!--分页开始-->
+            <div class="btn-group">
+                <button class="btn btn-success" data-id="part-page">分页</button>
+                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="part-page-default">默认分页样式</a></li>
+                    <li><a href="javascript: void(0);" data-id="part-page-size">分页大小</a></li>
+                </ul>
+            </div><!--分页结束-->
+
+            <!--折叠开始-->
+            <div class="btn-group">
+                <button class="btn btn-warning" data-id="collapse">折叠</button>
+                <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="collapse-simple">简单的折叠</a></li>
+                    <li><a href="javascript: void(0);" data-id="collapse-group">折叠组</a></li>
+                </ul>
+            </div><!--折叠结束-->
+
+            <!--提示工具开始-->
+            <div class="btn-group">
+                <button class="btn btn-danger" data-id="tootip">提示工具</button>
+            </div><!--提示工具结束-->
+
+            <!--弹出框开始-->
+            <div class="btn-group">
+                <button class="btn btn-warning" data-id="popover">弹出框</button>
+                <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="popover-simple">简单的弹出框</a></li>
+                    <li><a href="javascript: void(0);" data-id="popover-auto">可消失的弹出框</a></li>
+                    <li><a href="javascript: void(0);" data-id="popover-address">自定义弹出框位置</a></li>
+                </ul>
+            </div><!--弹出框结束-->
+
+            <!--进度条开始-->
+            <div class="btn-group">
+                <button class="btn btn-success" data-id="schedule">进度条</button>
+                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="schedule-simple">简单的进度条</a></li>
+                    <li><a href="javascript: void(0);" data-id="schedule-per">带百分比的进度条</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript: void(0);" data-id="schedule-color">带颜色的进度条</a></li>
+                    <li><a href="javascript: void(0);" data-id="schedule-stripe">有条纹效果的进度条</a></li>
+                    <li><a href="javascript: void(0);" data-id="schedule-animation">带动画效果的进度条</a></li>
+                </ul>
+            </div><!--进度条结束-->
+
+            <!--输入框开始-->
+            <div class="btn-group">
+                <button class="btn btn-info" data-id="input">输入框</button>
+                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);" data-id="input-simple">基本的输入框</a></li>
+                    <li><a href="javascript: void(0);" data-id="input-prefix">有前缀、后缀的输入框</a></li>
+                    <li><a href="javascript: void(0);" data-id="input-btn">有按钮的输入框</a></li>
+                    <li><a href="javascript: void(0);" data-id="input-btndown">带下拉按钮的输入框</a></li>
+                    <li><a href="javascript: void(0);" data-id="input-status">带验证状态的输入框</a></li>
+                </ul>
+            </div><!--输入框结束-->
+        </div>
+    </header>
+</div>
+<div class="container demo-show">
+    <!--<div class="use-box">
+        <h1 class="h1 has-hr" id="use">使用说明</h1>
+        <div class="use-show">
+            <h4 class="h4 has-hr" id="use-start">开始使用</h4>
+            <p>
+                <a style="display: block; width: 75px; height: 30px; line-height: 30px; color: #ffffff;text-align: center; background-color: #F0AD4E; border-radius: 3px; margin: 10px auto;" href="${ctx}/docs/bootstrap/e_tools.7z">点我下载</a>
+            </p>
+            <ol>
+                <li>使用时需要在根目录放入 <code>e_tools</code> 文件夹，文件夹内已经包含了jquery1.83 和 2.14 版本，也包含了bootstrap 3.35和 2.32版本</li>
+                <p>此外，还包含了一个 <code>flat</code> 主题，用来美化和统一各个浏览器单选框和复选框样式。</p>
+                <li><code>e_tools\js\</code>文件夹中 <code>e_broswer.js</code> 文件是主要的JS文件，请在所有JS之前引入</li>
+                <p><code>e_broswer.js</code>会根据判断如果是IE9以下版本加载 <code>jquery1.83</code>版本 和 <code>bootstrap 2.32</code>版本 </p>
+                <p>需要注意的是，在引入 <code>e_broswer.js</code> 文件后，e_tools文件夹内的所有JS都会自动引入，不需要人为引入。</p>
+            </ol>
+
+            <h4 class="h4 has-hr" id="use-ctxPath" style="margin-top: 20px;">定义ctxPath变量</h4>
+            <ol>
+                <li>注意： 在引入<code>e_broswer.js</code> 之前 先声明一个 <code>ctxPath</code> 全局变量，用来定义根目录路径
+                    <span href="javascript: void(0);"  id="ctx_demo"style="display: inline-block; width: 60px; height: 25px; background-color: #ff6700; color: #ffffff; text-align: center; line-height: 25px; border-radius: 3px; cursor: pointer;">像这样</span>
+                    <a href="javascript: void(0);" style="margin-left: 50px;" data-toggle="popover" data-original-title="为什么要创建ctxPath全局变量？" data-content="由于我们会用到不同的模板，但是文件却又是放在不同的模板下，所以需要设置不同的模板路径。" data-trigger="hover">ctxPath用来干嘛？</a>
+                    <p>比如： <code><span><</span><span>script type="text/javascript">var ctxPath = '${ctx}/themes/b2b2cv2/'</span><<span>/</span>script></code></p>
+                </li>
+                <script type="text/javascript">
+                    $(function(){
+                        $('#ctx_demo').unbind('click').on('click', function(){
+                            var img = '<img src="//7xlo8o.com1.z0.glb.clouddn.com/ctxPath_jt1.png">'
+                            $('#dialogModal').find('.modal-dialog').css({width: '810px'});
+                            $('#dialogModal').find('.modal-content').empty().html(img)/*.find('img').css({width: '100%'})*/;
+                            $('#dialogModal').modal();
+                        });
+                    })
+                </script>
+            </ol>
+
+            <h4 class="h4 has-hr" id="use-other" style="margin-top: 20px; ">其它支持</h4>
+            <ol>
+                <li><code>alert</code> 已被重写为dialog方式弹出，可直接使用，使用方法跟原来一样。 <code>alert('提示内容')</code> <code style="margin-left: 20px; cursor: pointer;" onclick="alert('试试就试试！')">点我试试？</code></li>
+                <li>带 <code>确定</code> 和 <code>取消</code> 按钮的弹出框 采用了新的方式，<code>confirmModal('提示的内容'， function(){})</code> function会在点击确定后被执行。<code style="margin-left: 20px; cursor: pointer;" onclick="confirmModal('你确定要试试？', function(){alert('好吧你赢了！')})">点我试试？</code></li>
+                &lt;!&ndash;<li>提供了一个可以将任何元素内的内容作为dialog弹出的接口 使用方法是
+                    <code>$('被弹出的元素').dialogModal();</code> <code style="margin-left: 20px; cursor: pointer;" id="dialog_demo">点我试试？</code> <code>这是个并没有什么卵用的方法。。。</code>
+                    <script type="text/javascript">
+                        $(function(){
+                            $('#dialog_demo').unbind('click').on('click', function(){
+                                $(this).dialogModal();
+                            })
+                        })
+                    </script>
+                </li>&ndash;&gt;
+            </ol>
+
+            &lt;!&ndash;<h4 class="h4 has-hr" id="use-file" style="margin-top: 20px;">文件说明</h4>
+            <ol>
+                <li><code>e_tools</code>文件夹是主要的文件夹，需要放在项目根目录。跟 index.html 同级目录</li>
+                <li><code>e_tools\css</code>文件夹内存放的是bootstrap的css文件，doc.min.css在生产环境中并不会用到，可以去掉。</li>
+                <li><code>e_tools\flat</code>文件夹内存放的是一套美化单选和多选框的css文件</li>
+                <li><code>e_tools\js</code>文件夹里包含了两个jquery版本，两个bootstrap版本</li>
+                <li><code>e_tools\js\e_base.js</code>文件是一些定义好的方法</li>
+                <li><code>e_tools\js\icheck.min.js</code>文件是美化单选和复选框的插件</li>
+            </ol>&ndash;&gt;
+        </div>
+    </div>-->
+    <div class="btn-box">
+        <h1 class="h1 has-hr" id="btn">按钮</h1>
+        <div class="btn-show">
+            <h4 class="h4" id="btn-style">按钮样式</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <colgroup>
+                        <col class="col-xs-1">
+                        <col class="col-xs-3">
+                        <col class="col-xs-3">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>按钮样式</th>
+                            <th>class属性 在元素标签上添加以下属性【a、input、button等等】</th>
+                            <th>描述【按钮宽度是自适应文字长短的】</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn">没有样式</button>
+                            </th>
+                            <td>
+                                <code>class="btn"</code>
+                            </td>
+                            <td>没有样式的按钮</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-default">default</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-default"</code>
+                            </td>
+                            <td>比起没有样式，要好看些，IE7下没有.default这个类</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-success">Success</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-success"</code>
+                            </td>
+                            <td>标识成功或积极的动作</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-primary">Primary</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-primary"</code>
+                            </td>
+                            <td>提供额外的视觉感, 可在一系列的按钮中指出主要操作</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-info">Info</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-info"></code>
+                            </td>
+                            <td>标识警告或需要用户注意</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-warning">Warning</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-warning"</code>
+                            </td>
+                            <td>标识危险或潜在的带来负面影响的动作</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-danger">Danger</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-danger"</code>
+                            </td>
+                            <td>表示这个动作危险或存在危险</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-inverse">Inverse</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-inverse"</code>
+                            </td>
+                            <td>备用的暗灰色按钮，不依赖于语义和用途【有兼容性问题，不建议使用】</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4 class="h4" id="btn-size">按钮大小</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <colgroup>
+                        <col class="col-xs-1">
+                        <col class="col-xs-3">
+                        <col class="col-xs-3">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>按钮大小</th>
+                            <th>class属性 在元素标签上添加以下属性【a、input、button等等】</th>
+                            <th>描述【按钮宽度是自适应文字长短的】</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-success btn-large btn-lg">大按钮</button>
+                            </th>
+                            <td>
+                                <code>class="btn success btn-large btn-lg"</code>
+                            </td>
+                            <td>为了兼容IE78 <code>btn-large btn-lg</code> 同时使用</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-success btn-small btn-sm">小按钮</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-success btn-small btn-sm"</code>
+                            </td>
+                            <td>为了兼容IE78 <code>btn-small btn-sm</code> 同时使用</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <button class="btn btn-success btn-mini btn-xs">超小按钮</button>
+                            </th>
+                            <td>
+                                <code>class="btn btn-success btn-small btn-sm"</code>
+                            </td>
+                            <td>为了兼容IE78 <code>btn-mini btn-xs</code> 同时使用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4 class="h4" id="btn-other">其它支持</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <colgroup>
+                        <col class="col-xs-1">
+                        <col class="col-xs-3">
+                        <col class="col-xs-3">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>其它支持</th>
+                        <th>在按钮元素上的其它支持 </th>
+                        <th>描述【按钮宽度是自适应文字长短的】</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">
+                            <button class="btn btn-success disabled" disabled="disabled">禁用的按钮</button>
+                        </th>
+                        <td>
+                            <code>class="btn btn-success disabled" disabled="disabled"</code>
+                        </td>
+                        <td>nternet Explorer 9 及更低版本的浏览器将会把按钮中的文本绘制为灰色，并带有恶心的阴影，目前还没有解决办法。</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <button class="btn btn-success active">激活的按钮</button>
+                        </th>
+                        <td>
+                            <code>class="btn btn-success active"</code>
+                        </td>
+                        <td>个人觉得没什么太大用处</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <h1 class="h1 has-hr" id="btn-group">按钮组</h1>
+        <div class="btn-show">
+            <h4 class="h4" id="btn-group-single">单一按钮组</h4>
+            <div class="bs-example" data-example-id="simple-button-group">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-default">Left</button>
+                    <button type="button" class="btn btn-default">Middle</button>
+                    <button type="button" class="btn btn-default">Right</button>
+                </div>
+            </div>
+            <div class="highlight">
+                <pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="nt">&gt;</span>Left<span class="nt">&lt;/button&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="nt">&gt;</span>Middle<span class="nt">&lt;/button&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="nt">&gt;</span>Right<span class="nt">&lt;/button&gt;</span>
+                <span class="nt">&lt;/div&gt;</span></code>
+                </pre>
+            </div>
+        </div>
+
+        <h4 class="h4" id="btn-group-toolbar">多维按钮组</h4>
+        <div class="bs-example" data-example-id="simple-button-toolbar">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-default">1</button>
+                    <button type="button" class="btn btn-default">2</button>
+                    <button type="button" class="btn btn-default">3</button>
+                    <button type="button" class="btn btn-default">4</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-default">5</button>
+                    <button type="button" class="btn btn-default">6</button>
+                    <button type="button" class="btn btn-default">7</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Third group">
+                    <button type="button" class="btn btn-default">8</button>
+                </div>
+            </div>
+        </div>
+        <textarea style="height: 350px;">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-default">1</button>
+                    <button type="button" class="btn btn-default">2</button>
+                    <button type="button" class="btn btn-default">3</button>
+                    <button type="button" class="btn btn-default">4</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-default">5</button>
+                    <button type="button" class="btn btn-default">6</button>
+                    <button type="button" class="btn btn-default">7</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Third group">
+                    <button type="button" class="btn btn-default">8</button>
+                </div>
+            </div>
+        </textarea>
+
+        <h4 class="h4" id="btn-group-down-menu">按钮式下拉菜单</h4>
+        <div class="bs-example" data-example-id="single-button-dropdown">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Default <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Primary <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Success <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Info <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Warning <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Danger <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+        </div>
+        <textarea style="height: 250px;">
+        <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Success <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript: void(0);">Action</a></li>
+                <li><a href="javascript: void(0);">Another action</a></li>
+                <li><a href="javascript: void(0);">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="javascript: void(0);">Separated link</a></li>
+            </ul>
+        </div>
+        </textarea>
+
+        <h4 class="h4" id="btn-group-down-menu-f">分裂式按钮上、下拉菜单</h4>
+        <div class="bs-example" data-example-id="split-button-dropdown">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default">Default</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary">Primary</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">Success</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info">上拉</button>
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning">Warning</button>
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger">Danger</button>
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript: void(0);">Action</a></li>
+                    <li><a href="javascript: void(0);">Another action</a></li>
+                    <li><a href="javascript: void(0);">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript: void(0);">Separated link</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+        </div>
+        <textarea style="height: 600px;">
+            下拉
+        <div class="btn-group">
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript: void(0);">Action</a></li>
+                <li><a href="javascript: void(0);">Another action</a></li>
+                <li><a href="javascript: void(0);">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="javascript: void(0);">Separated link</a></li>
+            </ul>
+        </div>
+            上拉【只需要在btn-group类上添加dropup类】
+        <div class="btn-group dropup">
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript: void(0);">Action</a></li>
+                <li><a href="javascript: void(0);">Another action</a></li>
+                <li><a href="javascript: void(0);">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="javascript: void(0);">Separated link</a></li>
+            </ul>
+        </div>
+        </textarea>
+
+        <h4 class="h4" id="btn-group-tao">按钮嵌套</h4>
+        <div class="bs-example" data-example-id="button-group-nesting">
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <button type="button" class="btn btn-default">1</button>
+                <button type="button" class="btn btn-default">2</button>
+
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        嵌套按钮
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <li><a href="javascript: void(0);">Dropdown link</a></li>
+                        <li><a href="javascript: void(0);">Dropdown link</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <textarea style="height: 330px;">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" class="btn btn-default">1</button>
+            <button type="button" class="btn btn-default">2</button>
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    嵌套按钮
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a href="javascript: void(0);">Dropdown link</a></li>
+                    <li><a href="javascript: void(0);">Dropdown link</a></li>
+                </ul>
+            </div>
+        </div>
+        </textarea>
+    </div>
+    <div class="tag-page">
+        <h1 class="h1 has-hr" id="tag-page">标签页</h1>
+        <div class="tag-page-show">
+            <h4 class="h4" id="tag-page-simple">简单的标签页</h4>
+            <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+                <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">第一个标签页</a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">第二个标签页</a>
+                    </li>
+                    <li role="presentation" class="dropdown">
+                        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">下拉标签页 <span class="caret"></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+                            <li><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1" aria-expanded="false">下拉第一个标签页</a></li>
+                            <li class=""><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2" aria-expanded="false">下拉第二个标签页</a></li>
+                        </ul>
+                    </li>
+                    <span id="see-tag-page-jt1" style="display: block; float: left; margin-left: 50px; width: 80px; height: 30px; background-color: #ff6700; color: #ffffff; text-align: center; line-height: 30px; border-radius: 3px; cursor: pointer;">点我看图片</span>
+                    <script type="text/javascript">
+                        $(function(){
+                            $('#see-tag-page-jt1').unbind('click').on('click', function(){
+                                var img = '<img src="//7xlo8o.com1.z0.glb.clouddn.com/tag_page_jt1.png">'
+                                $('#dialogModal').find('.modal-dialog').css({width: '1266px'});
+                                $('#dialogModal').find('.modal-content').empty().html(img)/*.find('img').css({width: '100%'})*/;
+                                $('#dialogModal').modal();
+                            });
+                        })
+                    </script>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+                        <p>这是第一个标签页</p>
+                        <p>这是第一个标签页</p>
+                        <p>这是第一个标签页</p>
+                        <p>这是第一个标签页</p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+                        <p>这是第二个标签页</p>
+                        <p>这是第二个标签页</p>
+                        <p>这是第二个标签页</p>
+                        <p>这是第二个标签页</p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="dropdown1" aria-labelledby="dropdown1-tab">
+                        <p>下拉第一个标签页</p>
+                        <p>下拉第一个标签页</p>
+                        <p>下拉第一个标签页</p>
+                        <p>下拉第一个标签页</p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="dropdown2" aria-labelledby="dropdown2-tab">
+                        <p>下拉第二个标签页</p>
+                        <p>下拉第二个标签页</p>
+                        <p>下拉第二个标签页</p>
+                        <p>下拉第二个标签页</p>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height: 600px; ">
+
+            让 tab 上的 aria-controls="home"  home对应页面盒子ID
+            <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">第一个标签页</a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">第二个标签页</a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">下拉标签页 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+                        <li><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1" aria-expanded="false">下拉第一个标签页</a></li>
+                        <li class=""><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2" aria-expanded="false">下拉第二个标签页</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+                    <p>这是第一个标签页</p>
+                    <p>这是第一个标签页</p>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+                    <p>这是第二个标签页</p>
+                    <p>这是第二个标签页</p>
+                    <p>这是第二个标签页</p>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="dropdown1" aria-labelledby="dropdown1-tab">
+                    <p>下拉第一个标签页</p>
+                    <p>下拉第一个标签页</p>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="dropdown2" aria-labelledby="dropdown2-tab">
+                    <p>下拉第二个标签页</p>
+                    <p>下拉第二个标签页</p>
+                </div>
+            </div>
+            </textarea>
+        </div>
+    </div>
+    <div class="part-page">
+        <h1 class="h1 has-hr" id="part-page">分页</h1>
+        <div class="part-page-show">
+            <h4 class="h4" id="part-page-default">默认分页样式</h4>
+            <div class="bs-example" data-example-id="simple-pagination">
+                <div class="lteIE8-pagination">
+                    <ul class="gteIE9-pagination">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+            </div>
+            <textarea style="height: 250px;">
+            <div class="lteIE8-pagination">
+                <ul class="gteIE9-pagination">
+                    <li><a href="javascript: void(0);">«</a></li>
+                    <li><a href="javascript: void(0);">1</a></li>
+                    <li><a href="javascript: void(0);">2</a></li>
+                    <li><a href="javascript: void(0);">3</a></li>
+                    <li><a href="javascript: void(0);">4</a></li>
+                    <li><a href="javascript: void(0);">5</a></li>
+                    <li><a href="javascript: void(0);">»</a></li>
+                </ul>
+            </div>
+            </textarea>
+
+            <h4 class="h4" id="part-page-size">分页大小</h4>
+            <div class="bs-example" data-example-id="pagination-sizing">
+                <div class="lteIE8-pagination pagination-large pagination-lg">
+                    <ul class="gteIE9-pagination pagination-large pagination-lg">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+                <div class="lteIE8-pagination">
+                    <ul class="gteIE9-pagination">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+                <div class="lteIE8-pagination pagination-small pagination-sm">
+                    <ul class="gteIE9-pagination pagination-small pagination-sm">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+            </div>
+            <textarea style="height: 600px;">
+                <div class="lteIE8-pagination pagination-large pagination-lg">
+                    <ul class="gteIE9-pagination pagination-large pagination-lg">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+                <div class="lteIE8-pagination">
+                    <ul class="gteIE9-pagination">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+                <div class="lteIE8-pagination pagination-small pagination-sm">
+                    <ul class="gteIE9-pagination pagination-small pagination-sm">
+                        <li><a href="javascript: void(0);">«</a></li>
+                        <li><a href="javascript: void(0);">1</a></li>
+                        <li><a href="javascript: void(0);">2</a></li>
+                        <li><a href="javascript: void(0);">3</a></li>
+                        <li><a href="javascript: void(0);">4</a></li>
+                        <li><a href="javascript: void(0);">5</a></li>
+                        <li><a href="javascript: void(0);">»</a></li>
+                    </ul>
+                </div>
+            </textarea>
+        </div>
+    </div>
+    <div class="collapse-box">
+        <h1 class="h1 has-hr" id="collapse">折叠</h1>
+        <div class="collapse-simple-show">
+            <h4 class="h4" id="collapse-simple">简单的折叠</h4>
+            <div class="bs-example">
+                <p>
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                        通过链接方式
+                    </a>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                        通过data-target方式
+                    </button>
+                </p>
+                <div class="collapse" id="collapseExample" aria-expanded="false">
+                    <div class="well">
+                         <p>你看不见我看不见我！！！</p>
+                         <p>你看不见我看不见我！！！</p>
+                         <p>你看不见我看不见我！！！</p>
+                         <p>你看不见我看不见我！！！</p>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height:390px; ">
+            <p>
+                <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                    通过链接方式
+                </a>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                    通过data-target方式
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample" aria-expanded="false">
+                <div class="well">
+                    <p>你看不见我看不见我！！！</p>
+                    <p>你看不见我看不见我！！！</p>
+                    <p>你看不见我看不见我！！！</p>
+                    <p>你看不见我看不见我！！！</p>
+                </div>
+            </div>
+            如果一开始就想显示出div，那么将div标签设置成这样 <div class="collapse in" id="collapseExample" aria-expanded="true">
+            </textarea>
+
+            <h4 class="h4" id="collapse-group">折叠组</h4>
+            <div class="bs-example" data-example-id="collapse-accordion">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    第一个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第一个折叠</p>
+                                    <p>我是第一个折叠</p>
+                                    <p>我是第一个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    第二个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第二个折叠</p>
+                                    <p>我是第二个折叠</p>
+                                    <p>我是第二个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    第三个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第三个折叠</p>
+                                    <p>我是第三个折叠</p>
+                                    <p>我是第三个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height: 600px;">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    第一个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第一个折叠</p>
+                                    <p>我是第一个折叠</p>
+                                    <p>我是第一个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    第二个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第二个折叠</p>
+                                    <p>我是第二个折叠</p>
+                                    <p>我是第二个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default accordion-group">
+                        <div class="panel-heading accordion-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    第三个折叠
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body accordion-body">
+                                <div class="accordion-inner">
+                                    <p>我是第三个折叠</p>
+                                    <p>我是第三个折叠</p>
+                                    <p>我是第三个折叠</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </textarea>
+        </div>
+    </div>
+    <div class="tootip-box">
+        <h1 class="h1 has-hr" id="tootip">提示工具</h1>
+        <div class="tootip-show">
+            <h4 class="h4">提示工具</h4>
+            <div class="bs-example tooltip-demo">
+                <p>这是一段文字<a href="javascript: void(0);" data-toggle="tooltip" data-original-title="就你特么废话多！">是的！这是一段文字</a>这是一段一段文字，我也知道这是一段文字，但是这段文字问什么会出现在这里呢？<a href="javascript: void(0);" data-toggle="tooltip" title="" data-original-title="我咋知道为什么！">为什么？</a></p>
+                <p><span style="color: red">需要注意的是，是用提示工具必须得手动初始化。</span>这是为了性能。。。<a href="javascript: void(0);" data-toggle="tooltip" data-original-title="看下面一行！">怎么初始化？</a></p>
+                <p>初始化方法就是</p>
+                <code>
+                    $(function () {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;$('[data-toggle="tooltip"]').tooltip()<br>
+                    })
+                </code>
+                <p>HTML代码为：</p>
+                <p>在需要提示的元素标签上加上 <code>data-toggle="tooltip"</code> 和 <code>data-original-title="需要提示的内容"</code></p>
+                <p>如果要改变提示的显示位置，在元素标签上加上 <code>data-placement="left、top、right、bottom"</code> </p>
+
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="" data-original-title="Tooltip on left">Tooltip on left</button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on top</button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Tooltip on right">Tooltip on right</button>
+            </div>
+            <textarea style="height: 230px;">
+                <p>
+                    这是一段文字<a href="javascript: void(0);" data-toggle="tooltip" data-original-title="就你特么废话多！">是的！这是一段文字</a>
+                    这是一段一段文字，我也知道这是一段文字，但是这段文字问什么会出现在这里呢？<a href="javascript: void(0);" data-toggle="tooltip" title="" data-original-title="我咋知道为什么！">为什么？</a>
+                </p>
+                <p>
+                    <span style="color: red">需要注意的是，是用提示工具必须得手动初始化。</span>
+                    这是为了性能。。。
+                    <a href="javascript: void(0);" data-toggle="tooltip" data-original-title="看下面一行！">怎么初始化？</a>
+                </p>
+            </textarea>
+        </div>
+    </div>
+    <div class="popover-box">
+        <h1 class="h1 has-hr" id="popover">弹出框</h1>
+        <div class="popover-show">
+            <h4 class="h4" id="popover-simple">简单的弹出框</h4>
+            <div class="bs-example bs-example-padded-bottom">
+                <button type="button" class="btn btn-danger" data-toggle="popover" data-content="这是一个弹出框的内容！是的，这的确是弹出框的内容！" data-original-title="这是弹出框的标题！">点我弹出/隐藏弹出框</button>
+                <p><span style="color: red;">注意，为了浏览器性能，弹出框同样需要手动初始化！</span>初始化方法如下：</p>
+                <p>
+                    <code>
+                        $(function () {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;$('[data-toggle="popover"]').popover()<br>
+                        })
+                    </code>
+                </p>
+                <p>HTML代码为：</p>
+                <p>在需要弹出框的元素上加入 <code>data-toggle="popover"</code>为这个元素添加弹出框</p>
+                <p>弹出框标题为 <code>data-original-title="这是弹出框的标题！"</code></p>
+                <p>弹出框内容为 <code>data-content="这是一个弹出框的内容！是的，这的确是弹出框的内容！"</code></p>
+                <p>其它用法详见 <a href="//v3.bootcss.com/javascript/#popovers-usage" target="_blank">其它用法</a></p>
+            </div>
+            <textarea style="height: 66px;">
+                <button type="button" class="btn btn-danger" data-toggle="popover" data-content="弹出框的内容！" data-original-title="弹出框的标题！">点我弹出/隐藏弹出框</button>
+            </textarea>
+
+            <h4 class="h4" id="popover-auto">可消失的弹出框</h4>
+            <div class="bs-example bs-example-padded-bottom">
+                <a tabindex="0" class="btn btn-danger" role="button" data-toggle="popover" data-trigger="focus" data-content="这是可消失弹出框的内容！内容内容。。。" data-original-title="可消失弹出框标题！">可消失的弹出框</a>
+                <p>需要在点击其它地方时隐藏弹出框，则需要在元素节点上添加 <code>data-trigger="focus"</code>属性即可</p>
+                <p>其它用法：</p>
+                <p><code>data-trigger="click"</code> 点击触发【默认】</p>
+                <p><code>data-trigger="hover"</code> 鼠标移入移出触发</p>
+                <p><code>data-trigger="focus"</code> 获得和失去焦点触发</p>
+                <p><code>data-trigger="manual"</code> 手动触发触发【目前我还没弄明白怎么用。。】</p>
+                <p>多个触发事件可以同时使用，但是不建议这么做。同时使用用法： <code>data-trigger="click focus"</code></p>
+                <p>只要在中间加上空格就好了，手动触发不能同时使用。</p>
+            </div>
+            <textarea style="height: 66px;">
+                <a tabindex="0" class="btn btn-danger" role="button" data-toggle="popover" data-trigger="focus" data-content="这是可消失弹出框的内容！" data-original-title="可消失弹出框标题！">可消失的弹出框</a>
+            </textarea>
+
+            <h4 class="h4" id="popover-address">自定义弹出框位置</h4>
+            <div class="bs-example popover-demo">
+                <div class="bs-example-popovers">
+                    <button type="button" class="btn btn-success" data-container="body" data-toggle="popover" data-placement="left" data-content="我在元素的左边弹出！" data-original-title="左边弹出框">
+                        Popover on 左侧
+                    </button>
+                    <button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-placement="top" data-content="我在元素的上边弹出！" data-original-title="上边弹出框">
+                        Popover on 顶部
+                    </button>
+                    <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="bottom" data-content="我在元素的下边弹出！" data-original-title="下边弹出框">
+                        Popover on 底部
+                    </button>
+                    <button type="button" class="btn btn-success" data-container="body" data-toggle="popover" data-placement="right" data-content="我在元素的右边弹出！" data-original-title="右边弹出框">
+                        Popover on 右侧
+                    </button>
+                </div>
+                <p>左侧： <code>data-placement="left"</code></p>
+                <p>顶部： <code>data-placement="top"</code></p>
+                <p>底部： <code>data-placement="bottom"</code></p>
+                <p>右侧： <code>data-placement="right"</code></p>
+            </div>
+             <textarea style="height: 350px;">
+                    <button type="button" class="btn btn-success" data-container="body" data-toggle="popover" data-placement="left" data-content="我在元素的左边弹出！" data-original-title="左边弹出框">
+                        Popover on 左侧
+                    </button>
+                    <button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-placement="top" data-content="我在元素的上边弹出！" data-original-title="上边弹出框">
+                        Popover on 顶部
+                    </button>
+                    <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="bottom" data-content="我在元素的下边弹出！" data-original-title="下边弹出框">
+                        Popover on 底部
+                    </button>
+                    <button type="button" class="btn btn-success" data-container="body" data-toggle="popover" data-placement="right" data-content="我在元素的右边弹出！" data-original-title="右边弹出框">
+                        Popover on 右侧
+                    </button>
+                </textarea>
+        </div>
+    </div>
+    <div class="schedule-box">
+        <h1 class="h1 has-hr" id="schedule">进度条</h1>
+        <div class="schedule-show">
+            <h4 class="h4" id="schedule-simple">简单的进度条</h4>
+            <div class="bs-example" data-example-id="simple-progress-bar">
+                <div class="progress">
+                    <div class="bar progress-bar" style="width: 60%;"></div>
+                </div>
+            </div>
+            <textarea style="height: 90px;">
+                <div class="progress">
+                    <div class="bar progress-bar" style="width: 60%;"></div>
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="schedule-per">带百分比的进度条</h4>
+            <div class="bs-example" data-example-id="progress-bar-with-label">
+                <div class="bs-example" data-example-id="simple-progress-bar">
+                    <div class="progress">
+                        <div class="bar progress-bar" style="width: 60%;">60%</div>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height: 100px;">
+                <div class="progress">
+                    <div class="bar progress-bar" style="width: 60%;">60%</div>
+                </div>
+            </textarea>
+            <p>在展示很低的百分比时，如果需要让文本提示能够清晰可见，可以为进度条设置 <code>min-width</code> 属性。</p>
+            <div class="progress">
+                <div class="bar progress-bar" style="min-width: 2em;">
+                    0%
+                </div>
+            </div>
+            <textarea style="height: 100px;">
+                <div class="progress">
+                    <div class="bar progress-bar" style="min-width: 2em;">0%</div>
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="schedule-color">带颜色的进度条</h4>
+            <p>进度条组件使用与按钮和警告框相同的类，根据不同情境展现相应的效果。</p>
+            <div class="bs-example" data-example-id="contextual-progress-bar">
+                <div class="progress progress-success">
+                    <div class="bar progress-bar progress-bar-success" style="width: 40%">
+                        40% Complete (success)
+                        <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                </div>
+                <div class="progress progress-info">
+                    <div class="bar progress-bar progress-bar-info" style="width: 20%">
+                        20% Complete
+                        <span class="sr-only">20% Complete</span>
+                    </div>
+                </div>
+                <div class="progress progress-warning">
+                    <div class="bar progress-bar progress-bar-warning" style="width: 60%">
+                        60% Complete (warning)
+                        <span class="sr-only">60% Complete (warning)</span>
+                    </div>
+                </div>
+                <div class="progress progress-danger">
+                    <div class="bar progress-bar progress-bar-danger" style="width: 80%">
+                        80% Complete (danger)
+                        <span class="sr-only">80% Complete (danger)</span>
+                    </div>
+                </div>
+                <p>改变颜色只需在元素标签上添加 <code>progress-bar-warning</code>【这是警告色】 更换颜色跟按钮颜色一样 都有 <code>success、info、warning、danger</code></p>
+            </div>
+
+            <h4 class="h4" id="schedule-stripe">有条纹效果的进度条</h4>
+            <div class="bs-example" data-example-id="striped-progress-bar">
+                <div class="progress progress-success">
+                    <div class="bar progress-bar progress-bar-success progress-bar-striped" style="width: 40%">
+                        <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                </div>
+                <div class="progress progress-info">
+                    <div class="bar progress-bar progress-bar-info progress-bar-striped" style="width: 20%">
+                        <span class="sr-only">20% Complete</span>
+                    </div>
+                </div>
+                <div class="progress progress-warning">
+                    <div class="bar progress-bar progress-bar-warning progress-bar-striped" style="width: 60%">
+                        <span class="sr-only">60% Complete (warning)</span>
+                    </div>
+                </div>
+                <div class="progress progress-danger">
+                    <div class="bar progress-bar progress-bar-danger progress-bar-striped" style="width: 80%">
+                        <span class="sr-only">80% Complete (danger)</span>
+                    </div>
+                </div>
+                <p><code>需要注意的是：无论bootstrap 2版本还是3版本 都不支持IE6、7、8、9的条纹效果</code></p>
+            </div>
+
+            <h4 class="h4" id="schedule-animation">带动画效果的进度条</h4>
+            <p>为 <code>.progress-bar-striped</code> 添加 <code>.active</code> 类，使其呈现出由右向左运动的动画效果。<span style="color: red;">IE9 及更低版本的浏览器不支持。</span></p>
+            <div class="bs-example" data-example-id="animated-progress-bar">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" style="width: 45%"><span class="sr-only">45% Complete</span></div>
+                </div>
+            </div>
+            <textarea style="height: 90px;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" style="width: 45%"><span class="sr-only">45% Complete</span></div>
+                </div>
+            </textarea>
+
+        </div>
+    </div>
+    <div class="form-box">
+        <h1 class="h1 has-hr" id="input">表单样式</h1>
+        <div class="form-show">
+            <h4 class="h4" id="input-simple">基本的输入框</h4>
+            <div class="bs-example" data-example-id="text-form-control">
+                <div class="input-append input-group">
+                    <label for="expInput">基本输入框</label>
+                    <input type="text" class="form-control" id="expInput" placeholder="基本的输入框">
+                </div>
+            </div>
+            <textarea style="height: 107px;">
+                <div class="input-append input-group">
+                    <label for="expInput">基本输入框</label>
+                    <input type="text" class="form-control" id="expInput" placeholder="基本的输入框">
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="input-prefix">带前缀、后缀的输入框</h4>
+            <div class="bs-example" data-example-id="text-form-control">
+                <div class="input-prepend input-group">
+                    <span class="add-on input-group-addon">前缀</span>
+                    <input class="form-control" type="text" placeholder="Username">
+                    <span class="add-on input-group-addon">后缀</span>
+                </div>
+            </div>
+            <textarea style="height: 126px;">
+                <div class="input-prepend input-group">
+                    <span class="add-on input-group-addon">前缀</span>
+                    <input class="form-control" type="text" placeholder="Username">
+                    <span class="add-on input-group-addon">后缀</span>
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="input-btn">带按钮的输入框</h4>
+            <div class="bs-example" data-example-id="form-inline-with-input-group">
+                <div class="input-append input-group">
+                    <input class="form-control" type="text">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="button">按钮</button>
+                    </span>
+                </div>
+            </div>
+            <textarea style="height: 150px;">
+                <div class="input-append input-group">
+                    <input class="form-control" type="text">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="button">按钮</button>
+                    </span>
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="input-btndown">带下拉按钮的输入框</h4>
+            <div class="bs-example" data-example-id="form-inline-with-input-group">
+                <div class="input-append input-group">
+                    <input type="text" class="form-control">
+                    <div class="btn-group input-group-btn">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">下拉按钮 <span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="javascript: void(0);">Action</a></li>
+                            <li><a href="javascript: void(0);">Another action</a></li>
+                            <li><a href="javascript: void(0);">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript: void(0);">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height: 306px;">
+                <div class="input-append input-group">
+                    <input type="text" class="form-control">
+                    <div class="btn-group input-group-btn">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">下拉按钮 <span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="javascript: void(0);">Action</a></li>
+                            <li><a href="javascript: void(0);">Another action</a></li>
+                            <li><a href="javascript: void(0);">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript: void(0);">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </textarea>
+
+            <h4 class="h4" id="input-status">带验证状态的输入框</h4>
+            <div class="bs-example" data-example-id="form-validation-states">
+                <div class="control-group form-group success has-success">
+                    <label class="control-label" for="inputSuccess1">Input with success</label>
+                    <input type="text" class="form-control" id="inputSuccess1">
+                </div>
+                <div class="control-group form-group warning has-warning">
+                    <label class="control-label" for="inputWarning1">Input with warning</label>
+                    <input type="text" class="form-control" id="inputWarning1">
+                </div>
+                <div class="control-group form-group error has-error">
+                    <label class="control-label" for="inputError1">Input with error</label>
+                    <input type="text" class="form-control" id="inputError1">
+                </div>
+                <p><span style="color: red;">添加状态表现，只需要在input的父级元素【也就是control-group和form-group】上添加</span><code>.success .has-success</code>【以成功状态为例】</p>
+                <p>为什么要同时添加两个class呢？<span style="color: red;">那是因为要考虑到IE7、8使用的是bootstrap 2版本</span></p>
+                <p>--------------------------------------------</p>
+                <p><span style="color: red;">需要注意的是在bootstrap 2版本中 单选和复选框都没有状态</span></p>
+                <p><span style="color: red;">所以考虑到兼容性，不推荐在复选框和单选框上使用状态验证</span></p>
+                <div class="has-success">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxSuccess" value="option1">
+                            Checkbox with success
+                        </label>
+                    </div>
+                </div>
+                <div class="has-warning">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxWarning" value="option1">
+                            Checkbox with warning
+                        </label>
+                    </div>
+                </div>
+                <div class="has-error">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxError" value="option1">
+                            Checkbox with error
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <textarea style="height: 800px;">
+                <div class="control-group form-group success has-success">
+                    <label class="control-label" for="inputSuccess1">Input with success</label>
+                    <input type="text" class="form-control" id="inputSuccess1">
+                </div>
+                <div class="control-group form-group warning has-warning">
+                    <label class="control-label" for="inputWarning1">Input with warning</label>
+                    <input type="text" class="form-control" id="inputWarning1">
+                </div>
+                <div class="control-group form-group error has-error">
+                    <label class="control-label" for="inputError1">Input with error</label>
+                    <input type="text" class="form-control" id="inputError1">
+                </div>
+                <p><span style="color: red;">需要注意的是在bootstrap 2版本中 单选和复选框都没有状态</span></p>
+                <p><span style="color: red;">所以考虑到兼容性，不推荐在复选框和单选框上使用状态验证</span></p>
+                <div class="has-success">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxSuccess" value="option1">
+                            Checkbox with success
+                        </label>
+                    </div>
+                </div>
+                <div class="has-warning">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxWarning" value="option1">
+                            Checkbox with warning
+                        </label>
+                    </div>
+                </div>
+                <div class="has-error">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="checkboxError" value="option1">
+                            Checkbox with error
+                        </label>
+                    </div>
+                </div>
+            </textarea>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $('.btn, a').unbind('click').click(function(){
+            var _this = $(this),
+                dataId = _this.attr('data-id');
+            if(dataId && dataId != undefined){
+                var top = $('#'+dataId).position().top;
+                $('html,body').animate({scrollTop: top-54}, 500);
+            }
+        });
+
+
+        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="popover"]').popover()
+
+    })
+</script>
+</body>
+</html>

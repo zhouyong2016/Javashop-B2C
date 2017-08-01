@@ -1,0 +1,148 @@
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+<div class="form_wrap">
+	<div class="addr_hide_wp">
+		<form id="member_addr" class="validate" action="" method="post">
+					<div class="addr_input_wp">
+						<span>默认收货地址</span> 
+						<label>
+							<input type="radio" value="0" name="def_addr"> 否
+						 </label> 
+						<label>
+							<input type="radio" value="1" name="def_addr"> 是 
+						</label>
+					</div>
+					<div class="addr_input_wp">
+						<span><i>*</i>姓名</span> 
+						<input class="addr_name member_name_title" type="text"  name="name"  maxlength="9" placeholder="收货人姓名，最多9个汉字"/>
+					</div>
+					<div class="addr_input_wp">
+						<span><i>*</i>手机</span> 
+						<input class="addr_mobile input_add" type="text" name="mobile" id="mobile" autocomplete="off" maxlength="11" placeholder="收货人电话"/> 
+					</div>
+					<div class="addr_input_wp">
+						<span><i> &nbsp;</i>固话</span> 
+						<input class="addr_tel input_add" type="text" name="tel" id="tel" autocomplete="off" maxlength="13" placeholder="收货人电话"/>
+					</div>
+					<div class="addr_input_wp" style="overflow:visible;clear:both;width:100%;height:28px;">
+						<span><i>*</i>地区</span> 
+						<div id="selectAddress" class="address-box" style="display:block;float:left;">
+							<script type="text/javascript">
+									$(function() {
+										$('#selectAddress').addressSelect();
+									})
+				           </script>
+						</div>
+					</div>
+					<div class="addr_input_wp">
+						<span><i>*</i>地址</span> 
+						<input  name="addr" isrequired="true" class="input_add addr_ads gray_unable" type="text" value="" maxlength="60" placeholder="收货人地址，最多30个汉字"/>
+					</div>
+					<div class="addr_input_wp">
+						<span><i>*</i>地址别名</span> 
+						<input  name="shipAddressName" isrequired="true" id="alias" class="input_add addr_ads gray_unable" type="text" value="" maxlength="20" placeholder="地址别名，便于标识"/>
+						<!-- <span>建议填写常用名称</span> -->
+                   		<!--  <span style="margin-left: 10px;">例如：</span> -->
+                  	   <span>
+                         <a href="javascript: void(0);" class="example-aliases">家里</a>
+                         <a href="javascript: void(0);" class="example-aliases">公司</a>
+                         <a href="javascript: void(0);" class="example-aliases">学校</a>
+                  	   </span>
+					</div>
+					<div class="btns_info btn-div">
+						<input class="btn_save green-btn" type="button" id="btnSubmit" value="保存地址"/>
+					</div>
+		</form>
+	</div>
+</div>
+<script>
+	$(function(){
+		//收货地址别名
+		$('.example-aliases').on('click', function(){
+			var _val = $(this).html();
+			$("#alias").val(_val);
+		});
+		
+		/*添加用户地址js*/
+		$("#btnSubmit").click(function(){
+			
+			//校验用户名
+			var membername = $(".member_name_title").val();
+			if(membername.indexOf(" ")!=-1){
+				alert("请确保会员名称前、后或名称中有空格");
+				return false;
+			}
+			if($(".addr_name").val() == ""){
+				alert("请输入联系人姓名");
+				return false;
+			}
+			
+			//校验收货地址
+			if($(".addr_mobile").val()==""){
+				alert("手机未填写");
+				return false;
+			}		
+			//判断手机格式
+			 if($(".addr_mobile").val()!=""){
+				 var tel = $(".addr_mobile").val();
+				 var reg = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+				 if(reg.test(tel)==false){
+					 alert("手机格式错误");
+					 return false;
+				 }
+			 }
+			
+			
+			
+			
+			
+			
+			 if($(".addr_tel").val()!=""){
+			 		var tel = $(".addr_tel").val();
+					//var reg = /^\d{3,4}-\d{7,8}$/;
+					var reg = /^([0-9-]+)$/;
+					if(!reg.test(tel)){
+				 		alert("电话格式错误");
+						return false;
+				 	}
+				}
+			//判断收货地址
+			if($("#region_id").val()== "0"){
+				alert("请选择收货地址");
+				 return false;
+			};
+			
+			//判断收货详细地址
+			if($(".addr_ads").val()== ""){
+				alert("请输入详细地址");
+				 return false;
+			};
+			
+			$("#member_addr").ajaxSubmit({
+				url :"${ctx}/api/shop/member-address/add.do",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message)
+					if(data.result==1)
+						location.href = "address.html"
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			})
+		});
+	})
+</script>
+<style>
+	.example-aliases {
+    float: left; 
+    display: block;
+    height: 33px;
+    margin-left: 5px;
+    line-height: 33px;
+    text-align: center;
+    padding:0 10px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+}
+</style>

@@ -1,0 +1,151 @@
+<#assign  title="收货地址" />
+<#include 'member_header.html'/>
+<#-- 创建"会员地址列表"标签 -->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<#-- 调用"会员地址列表"标签 -->
+<#assign  consigneeList= consigneeListTag()>	
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+
+<link rel="stylesheet" href="${ctx}${themes_path}/css/reveal.css" type="text/css" />
+<script src="${ctx}${themes_path}/js/jquery.reveal.js" type="text/javascript"></script>
+    <div class="member-address">
+        <h1>收货地址<span>请认真填写收货地址</span></h1>
+        <div class="member-address-list">
+            <div class="member-address-box">
+                <a href="javascript:void(0)" class="add-address" data-reveal-id="myModal">
+                    添加地址
+                </a>
+            </div>
+            <#list consigneeList as address>
+                <div class="member-address-box">
+                    <dl>
+                        <dt><@substring title="${address.name!''}" length="16" dot="..." /></dt>
+                        <dd>手机：${address.mobile!''}</dd>
+                        <dd>固话：${address.tel!''}</dd>
+                        <dd>${address.province!''}-${address.city!''}-${address.region!''}
+	                    <#if address.town ??>
+	                    <#if address.town!=''>
+	                    -${address.town!''}
+	                    </#if>
+	                    </#if>
+	                    
+                        </dd> 
+                        <dd style="height:66px;overflow:hidden" title="${address.addr!''}"><@substring title="${address.addr!''}" length=50 dot="..." /></dd>
+                    </dl>
+                       
+                    <p class="member-address-tools">  
+                        <a href="javascript:;" rel="${address.addr_id}" class="edit" data-reveal-id="myModal1"
+                           data-animation="fade">修改</a>
+                        <a href="javascript:;" class="address_del" rel="${address.addr_id}">删除</a> 
+                    </p>
+                    <span><#if address.def_addr == 1 >默认地址</#if></span>
+                </div>
+            </#list> 
+        </div>  
+    </div>
+
+<!-- 加载浮动层 -->
+<div id="myModal" class="reveal-modal">
+		<a class="close-reveal-modal">&#215;</a>
+		<div class="member-add-float">
+		</div>
+</div>
+
+<script>
+	$(function(){
+		//鼠标移入显示功能按钮
+		$(".member-address-box").mouseover(function(){
+			$(this).find(".member-address-tools").show();
+		})
+		$(".member-address-box").mouseleave(function(){
+			$(".member-address-tools").hide();
+		})
+		
+		//  显示添加新地址
+
+        //  修复添加地址不能弹出dialog的bug _by: Andste 2016-10-20 23:14:44
+		$(".add-address").click(function(){
+			//$(".member-add-float").load("address_add.html");
+            $.ajax({
+                url    : './address_add.html',
+                type   : 'GET',
+                success: function (html) {
+                    $.dialogModal({
+                        title: '添加地址',
+                        html : html,
+                        btn  : false
+                    })
+                }
+            })
+		})
+		$(".close-reveal-modal").click(function(){
+			$(".btns_info").empty();
+		})
+
+		//  显示修改地址
+        //  修复添加地址不能弹出dialog的bug _by: Andste 2016-10-20 23:17:58
+		$(".edit").click(function(){
+			var addrID = $(this).attr("rel");
+            $.ajax({
+                url    : './address_edit.html?addressid=' + addrID,
+                type   : 'GET',
+                success: function (html) {
+                    $.dialogModal({
+                        title: '修改地址',
+                        html : html,
+                        btn  : false
+                    })
+                }
+            })
+			//$(".member-add-float").load("address_edit.html?addressid="+addrID);
+		})
+		$("#address_edit").click(function(){
+			$(".btns_info").empty();
+		})
+		
+		
+		//校验 用户名
+		function addressName (){
+			if((".addr_name").val() == ""){
+				alert("请输入联系人姓名");
+				return false;
+			}
+		}
+			
+			
+			
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("确定要删除吗")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url :"${ctx}/api/shop/member-address/delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});		
+</script>
+	<!--会员中心首页右侧结束-->
+
+<script>
+otherMenu(6);
+</script>
+
+</div>
+</div>
+</div>
+</div>
+<#include '../common/footer.html'/>

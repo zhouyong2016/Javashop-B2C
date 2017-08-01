@@ -1,0 +1,267 @@
+<!--header-->
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign floorIsOn=checkCmptIsOnTag("{'componentName':'装修组件'}") />
+<#assign exchangeIsOn=checkCmptIsOnTag("{'componentName':'积分兑换组件'}") />
+<div class="header">
+	<div class="logo_area">
+		<div class="logo">
+			<a href="${ctx}/index.html">
+				<@image src="${site.logofile!''}" title="logo"/>
+			</a>
+		</div>
+		<div class="search_area">
+			<div class="search">
+				<div style="border:1px solid #dcdcdc;height:34px;overflow:hidden;float:left;width:300px;border-right:0px none;">
+					<input type="text" class="hunt" id="keyword" placeholder="<#if keyword??>${keyword!''}<#else>请输入产品关键字等...</#if>" />
+				</div>
+				<div  name="s_seek" class="s_seek" id="searchBtn" style="border:1px solid #33a600;height:34px;overflow:hidden;float:left;width:100px;">搜索</div>
+			</div>
+			<div class="hot_keyword">
+				<h1>热门搜索：</h1>
+				<ul>
+					<!-- 获取CMS数据搜索标签， -->
+					<#assign hotKeyWordSearchTag=newTag("hotKeyWordSearchTag") />
+				  	<!-- 调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword表.)“3”表示出现三个关键词。 -->
+					<#assign webPage = hotKeyWordSearchTag("{'catid':1}")  />
+						<#list webPage as data>
+							<#if data_index lte 4>
+								<li <#if !data_has_next>class="last"</#if>><a href="${ctx}/goods_list.html?keyword=${data.hot_searchword!''}" ><@substring title="${data.hot_searchword!''}" length="12" dot="..." /></a></li>
+							</#if>
+						</#list>
+				</ul>
+			</div>
+		</div>
+		<div class="service_tel">
+			<@image src="${ctx}${themes_path}/images/cn.png" alt="承诺图片"/>
+		</div>
+	</div>
+</div>
+<div class="common_menu">
+	<div class="menu">
+		<div class="menu_left">
+					<!-- 导航  start -->
+					<div class="good_list is_goods_list" >
+						<span class="title">所有商品分类</span>
+					</div>
+					<#assign goodsCatListTag=newTag("goodsCatListTag")>
+					<#assign goodsCatList=goodsCatListTag()>
+					<#assign n = 1>
+					<div class="all-sort-list" id="common_goodscat">
+						<#list goodsCatList as gl>
+						<#if gl_index lt 7>
+							<div class="item_box <#if gl_index == 6>last</#if>" rel="${n}">
+								<div class="item">
+									<div class="common_item_title">
+										<!-- <i class="m_icon"><@image src="${gl.image!''}" /></i>-->
+										<a href="${ctx}/goods_list.html?cat=${gl.cat_id}" class="c_item_title">${gl.name}</a>
+									</div>
+									<div class="common_item_list">
+										<#list gl.children as c>
+											<#if c_index<3>
+												<a href="${ctx}/goods_list.html?cat=${c.cat_id}">${c.name}</a>
+											</#if>
+										</#list>
+									</div>
+									<!-- 子菜单 -->
+									
+									
+									<#if gl.children?size!=0 >
+									<div class="item_list clearfix" style="display:none" >
+										<div class="subitem">
+											<#list gl.children as c>
+												<dl>
+													<dt><a href="${ctx}/goods_list.html?cat=${c.cat_id}" style="width:90px;min-width:90px;">${c.name}<i>></i></a></dt>
+													<dd>
+														<#list c.children as cc>
+															<a href="${ctx}/goods_list.html?cat=${cc.cat_id}" style="">${cc.name}</a>
+														</#list>
+													</dd>	
+												</dl>	
+											</#list>
+										</div>	
+									</div>
+									</#if>
+								</div>
+									<div class="index-show-children"></div>
+								</div>
+								<#assign n = n+1>
+							</#if>
+						</#list>
+					</div>
+		<!-- 导航  end -->
+		</div>
+		<div class="menu_right">
+			<ul>
+						<li><a href="${ctx}/index.html">首 页</a></li>
+						<li><a href="${ctx}/goods_list.html?cat=1">零食天地</a></li>
+						<li><a href="${ctx}/goods_list.html?cat=4">进口食品</a></li>
+						<li><a href="${ctx}/goods_list.html?cat=38">个人护理</a></li>
+						<li><a href="${ctx}/goods_list.html?cat=35">箱包钟表</a></li>
+						<#if floorIsOn=="ON" >
+						<li><a href="${ctx}/subject/subject-index.html">专题</a></li>
+						</#if>
+						<#if exchangeIsOn=="ON" >
+						<li><a href="${ctx}/exchange-index.html">积分商城</a></li>
+						</#if>
+					</ul>
+		</div>
+	</div>
+</div>
+<!--header end-->
+
+<script type="text/javascript">
+$(function(){
+	// 添加IE7样式兼容 _by: Andste 2016-9-30 10:39:15
+	if(Sys.ie == 7){
+		$('.search .hunt').css({
+			width: 350,
+			paddingTop: 0,
+			paddingBottom: 0
+		})
+
+		$('.search .s_seek').css({
+			height: 36,
+			lineHeight: '36px'
+		})
+	}
+
+	/* var url_ = "${ctx}/api/shop/goods-words.do";
+	$("#keyword").bigAutocomplete({
+		url:url_, 
+		callback:function(data){
+	 	location.href="${ctx}/search.html?keyword="+data.title;
+
+	}}); */
+	
+	$("#keyword").keypress(function(event){
+		//	$("#keyword").attr("class","seek");
+			if(event.keyCode=="13" ){
+				search();
+			}
+		});
+		$("#keyword").click(function(){
+			if($(this).val() == searchTipText){
+				$(this).val("");
+			}
+		});
+		$("#keyword").blur(function(){
+			if($(this).val() == ''){
+				$(this).val(searchTipText);
+			}
+		});
+		
+		$("#searchBtn").click(function(){
+			search();
+		});
+})
+
+	$('.all-sort-list > .item').hover(function(){
+			var eq = $('.all-sort-list > .item').index(this),				//获取当前滑过是第几个元素
+				h = $('.all-sort-list').offset().top,						//获取当前下拉菜单距离窗口多少像素
+				s = $(window).scrollTop(),									//获取游览器滚动了多少高度
+				i = $(this).offset().top,									//当前元素滑过距离窗口多少像素
+				item = $(this).children('.item-list').height(),				//下拉菜单子类内容容器的高度
+				sort = $('.all-sort-list').height();						//父类分类列表容器的高度
+			
+			$(this).children('.item-list').css('top', 0 );
+
+			$(this).addClass('hover');
+			$(this).children('.item-list').css('display','block');
+		},function(){
+			$(this).removeClass('hover');
+			$(this).children('.item-list').css('display','none');
+		});
+
+		$('.item > .item-list > .close').click(function(){
+			$(this).parent().parent().removeClass('hover');
+			$(this).parent().hide();
+		});
+		
+	<#if !index_type??>
+		$(".all_goods_list").hover(function(){
+			$(".all-sort-list").css('display','block');
+		},function(){
+			$(".all-sort-list").css('display','none');
+		})
+	</#if>
+		
+	var searchTipText = "请输入产品关键字，如品牌、型号等";
+	function search(){
+		var keyword = $.trim( $("#keyword").val());
+		if(keyword == searchTipText){
+			keyword = '';
+		}
+		if(keyword.indexOf('\\')!=-1){
+			alert("请输入正确的关键词");
+			return false;
+		}
+		if(keyword==''){
+			alert("请输入关键字");
+		}else{
+			keyword = keyword.replace(/\//g,"-xie-")
+			location.href="${ctx}/goods_list.html?keyword="+keyword;
+		}
+	}
+	
+	
+	function addfavorite(title,url){
+
+	  if (document.all){
+	     window.external.addFavorite(url,title);
+	  }else if (window.sidebar){
+	     window.sidebar.addPanel(title, url, "");
+	  }
+
+	}
+
+</script>	
+<script type="text/javascript">
+	$(function(){
+		$(".all-sort-list .item_box").mouseover(function(){
+			$(this).find(".item").addClass("children-show");
+			$(this).find(".index-show-children").css("left","195px");
+			$(this).find(".item_list").show();
+			$(this).css("background","#fff");
+		})
+		$(".all-sort-list .item_box").mouseleave(function(){
+			$(this).find(".item").removeClass("children-show");
+			$(this).find(".index-show-children").css("left","190px");
+			$(this).find(".item_list").hide();
+			$(this).css("background","none");
+		})
+
+		$(".menu_left").mouseover(function(){
+			$(".all-sort-list").addClass("is_show");
+
+		});
+		$(".menu_left").mouseleave(function(){
+			$(".all-sort-list").removeClass("is_show");
+
+		})
+
+
+
+
+		<#assign luceneCheckTag = newTag("luceneCheckTag") />
+		<#assign lucene =luceneCheckTag() />
+
+		<#if lucene=='ON' >
+		var url_ = "${ctx}/api/shop/goods-words/list-words.do";
+		 $("#keyword").bigAutocomplete({url:url_, callback:function(data){
+			 location.href="${ctx}/goods_list.html?keyword="+data.title;
+	    }});
+	    </#if>
+
+
+	    <#assign solrCheckTag = newTag("solrCheckTag")/>
+		<#assign solr=solrCheckTag()/>
+
+		<#if solr=='ON' >
+			 var url_ = "${ctx}/api/shop/goods-words.do";
+			 $("#keyword").bigAutocomplete({url:url_, callback:function(data){
+			 location.href="${ctx}/goods_list.html?keyword="+data.title;
+	    }});
+		</#if>
+	})
+</script>
+	

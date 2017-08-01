@@ -1,0 +1,66 @@
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<style>
+.input_text{width: 200px;}
+.left{width:410px;}
+.table-right{width:130px;float:none;}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterEditForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>名称：</th>
+					<td class="left"><input class="input_text easyui-validatebox"  type="text" id="name" maxlength="20"
+						name="name" data-options="required:true" value="${dlyCenter.name!''}"
+						></input>
+					</td>
+					<th>发货人姓名：</th>
+					<td class="table-right"><input class="input_text" type="text" id="url" maxlength="20"
+						name="uname" data-options="required:true" value="${dlyCenter.uname!''}"
+						></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地区：</th>
+					<td class="left">
+						<@regionSelectDirective province_id="${dlyCenter.province_id!''}" city_id="${dlyCenter.city_id!''}" region_id="${dlyCenter.region_id!''}" />
+					</td>
+					<th>手机：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" value="${dlyCenter.cellphone!''}"
+						name="cellphone"  maxlength="11" validType="mobile" data-options="required:true"></input>
+					</td>
+				</tr>
+
+				<tr>
+					<th>邮编：</th>
+					<td class="left"><input name="zip" class="input_text easyui-numberbox" onkeyup="this.value=this.value.replace(/\D/g,'')" data-options="required:true"
+					onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6" style="width: 100px;" value="${dlyCenter.zip!''}">
+					</td>
+					
+					<th>电话：</th>
+					<td class="table-right"><input class="input_text easyui-validatebox" type="text" value="${dlyCenter.phone!''}"
+						name="phone" maxlength="15" validType="tel" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地址：</th>
+					<td class="left"><input class="input_text" type="text" value="${dlyCenter.address!''}" maxlength="30"
+						name="address" ></input>
+					</td>
+					<th>设置为默认地址</th>
+					<td class="table-right">
+						<input type="checkbox" id="is_default_dc"  name="is_default" <#if dlyCenter.choose=='true'>checked</#if> ></input>
+						<input type="hidden" name="choose"  id="dlyCenterDisabled"/>
+					</td>
+				</tr>
+
+				<tr>
+					<th>备注：</th>
+					<td colspan="3"><textarea rows="5" cols="45" class="input_text"  maxlength="100"
+							style="width: 395px;" name="memo">${dlyCenter.memo!''}</textarea></td>
+				</tr>
+			</table>
+			<input type="hidden" name="dly_center_id" value="${dlyCenter.dly_center_id}">
+		</form>
+	</div>
+</div>

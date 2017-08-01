@@ -1,0 +1,252 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"
+			data-options="iconCls:'icon-add',plain:true" onclick="controlCat()">添加分类</a>
+		<a href="javascript:void(0)" class="button" id="submitform">保存排序</a>
+	</div>
+	<form action="" id="catform">
+		<table  id="catdata">
+			
+		</table>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+	function controlCat(id, obj) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "${ctx}/shop/admin/cat/add.do";
+			map["formId"] = "#addForm";
+			map["url"] = "${ctx}/shop/admin/cat/save-add.do?ajax=yes";
+			map["title"] = "添加分类";
+			map["loadshow"] = "正在添加......";
+		} else {
+			if (obj == 1) {
+				map["href"] = "${ctx}/shop/admin/cat/add-children.do?cat_id=" + id;
+				map["formId"] = "#addchildrenForm";
+				map["url"] = "${ctx}/shop/admin/cat/save-add.do?ajax=yes";
+				map["title"] = "添加子列表";
+				map["loadshow"] = "正在添加......";
+			} else {
+				map["href"] = "${ctx}/shop/admin/cat/edit.do?cat_id=" + id;
+				map["formId"] = "#editForm";
+				map["url"] = "${ctx}/shop/admin/cat/save-edit.do?ajax=yes";
+				map["title"] = "修改分类";
+				map["loadshow"] = "正在修改......";
+			}
+
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#catdata";
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 520,
+			height : 380,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+	　　					if($('input[name="parent_id"]').val() == '无' && $("input[name='cattype']:checked").val() == 0){
+	　　						alert("请选择上级分类");
+	　　						return;
+	　　					}
+	　　					if($('input[name="parent_id"]').val() == '无' && $("input[name='cattype']:checked").val() == 1){
+	　　						$('input[name="parent_id"]').val(0);
+	　　					}
+						 submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '取消',
+				handler : function() {
+					$(map["divDialog"]).dialog('close');
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在保存请稍候...");
+			savebtn.linkbutton("disable");	
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						//$(map["gridreload"]).treegrid('reload');
+						location.reload();
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			savebtn.linkbutton("enable");
+			$.Loading.hide();
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatAdd(value, row, index) {
+		var val = "<a href='javascript:void(0);' class='add' onclick='controlCat(" + row.id
+				+ ",1)'><img src='${ctx}/shop/admin/images/transparent.gif'></a>";
+		return val;
+	}
+	function formatEdit(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlCat("
+				+ row.id + ",2)' ></a>";
+		return val;
+	}
+	function formatDelete(value, row, index) {
+		var val = '<a href="javascript:;" class="delete" onclick="del('
+				+ row.id
+				+ ')"><img catid="'+row.cat_id+'" src="${ctx}/shop/admin/images/transparent.gif"></a>';
+		return val;
+	}
+
+	function formatShow(value, row, index){
+		var val = "";
+		if(value == 1){
+			val = "已显示";
+		}else if(value == 0){
+			val = "未显示";
+		}
+		return val;
+	}
+	
+	function formatGoodscount(value, row, index) {
+		var val = '<input type="text" class="receiptsInputText" autocomplete="off" onblur="onlyNumber(this,'+row.cat_order+')" value="'+row.cat_order+'" style="width:70px" name="cat_sorts" maxlength="9">';
+		val+='<input type="hidden" name="cat_ids" value="'+row.id+'" > '
+		return val;
+	}
+
+	//验证排序值是否输入有误 add by DMRain 2016-3-16
+	function onlyNumber(obj,sort){
+		var z = /^[0-9]*$/;
+		if(!z.test(obj.value)){
+		   	alert("排序值输入有误！");
+		   	obj.value = "" + sort;
+	    }else{
+	    	if(obj.value.length > 1){
+	    		if(obj.value.charAt(0) == "0"){
+	    			var s = "";
+	       			for(var i = 0; i < obj.value.length; i++){
+	       				if(obj.value.charAt(i) == "0"){
+	       					s = obj.value.substring(i+1);
+	       				}else{
+	       					break;
+	       				}
+	       			}
+	       			if(s == ""){
+	       				s = 0;
+	       			}
+	       			obj.value = "" + s;
+	    		}
+	    	}
+	    }
+	}
+	
+	function del(catid) {
+		if (!confirm("确定要删除此类别吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		$.ajax({
+			url : "${ctx}/shop/admin/cat/delete.do?cat_id=" + catid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					//$("#catdata").treegrid('reload');
+					location.reload();
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		});
+
+	}
+	
+	
+	$(function(){
+		$("#submitform").click(function(){
+			$.Loading.show('正在保存排序，请稍侯...');
+			var options = {
+					url :"${ctx}/shop/admin/cat/save-sort.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {				
+					 	if(result.result==1){
+					 		$.Loading.success(result.message);
+					 		//$("#catdata").treegrid('reload');
+					 		location.reload();
+					 	}else{
+					 		alert(result.message);
+					 	}
+					},
+					error : function(e) {
+						$.Loading.hide();
+						alert("出错啦:(");
+	 				}
+	 		};
+	 
+			$("#catform").ajaxSubmit(options);
+		})
+		
+		$("#catdata").treegrid({
+			fitColumns:'true',
+		    url:'${ctx}/shop/admin/cat/get-list-by-parentid-json.do?parentid=0',
+		    animate:false,
+		    idField:'id',
+		    treeField:'text',
+		    columns:[[
+		        {field:'id',title:'ID',width:80},
+		        {field:'text',title:'名称',width:200},
+		        {field:'type_text',title:'类型',width:100},
+		        {field:'list_show',title:'是否显示',width:80,formatter:formatShow},
+		        {field:'cat_order',title:'排序',width:80,formatter:formatGoodscount},
+		        {field:'add',title:'添加子',width:38,formatter:formatAdd},
+		        {field:'edit',title:'编辑',width:36,formatter:formatEdit},
+		        {field:'delete',title:'删除',width:36,formatter:formatDelete}
+		    ]],
+		    onBeforeExpand:function(row,param){
+		        if(row){
+		        	$(this).treegrid('options').url="${ctx}/shop/admin/cat/get-list-by-parentid-json.do?parentid="+row.id;
+		    	}
+		    }
+		});
+		
+	})
+</script>
+<#include '/admin/footer.html' >

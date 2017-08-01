@@ -1,0 +1,12 @@
+
+<!--创建"品牌列表"标签-->
+<#assign brandListTag = newTag("brandListTag")>
+<!--调用"品怕列表"标签-->
+<#assign brandList = brandListTag()>
+<!--循环输出-->
+<#list brandList as list>
+	<li>
+		标签名称：${list.name}
+		标签logo：<@image src="${list.logo!''}" alt="${list.name}" />
+	</li>
+</#list>

@@ -1,0 +1,9 @@
+
+<!--创建"商品分类查询"标签-->
+<#assign StoreCatTag= newTag("storeCatTag") >  
+<!--调用"商品分类查询"标签，并传递参数-->            
+<#assign  StoreCat= StoreCatTag("'catid':'1'") >						
+<ul class="gw">
+
+	商品名称：${StoreCat.store_cat_name}</br>
+

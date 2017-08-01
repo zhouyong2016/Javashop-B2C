@@ -1,0 +1,97 @@
+<#assign title= "订单价格实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>OrderPrice  订单价格</h3>
+		<h2>需要简述</h2>
+		<h6>返回订单价格参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>OrderPrice</td>
+						<td>Double</td>
+						<td>原始总价,未经过任何优惠的价格</td>
+					</tr>
+					<tr>
+						<td>goodsPrice</td>
+						<td>Double</td>
+						<td>商品价格，经过优惠过的</td>
+					</tr>
+					<tr>
+						<td>orderPrice</td>
+						<td>Double</td>
+						<td>订单总价，优惠过的，包含商品价格和配置费用</td>
+					</tr>
+					<tr>
+						<td>discountPrice</td>
+						<td>Double</td>
+						<td>优惠的价格</td>
+					</tr>
+					<tr>
+						<td>shippingPrice</td>
+						<td>Double</td>
+						<td>配送费用</td>
+					</tr>
+					<tr>
+						<td>protectPrice</td>
+						<td>Double</td>
+						<td>保价费用</td>
+					</tr>
+					<tr>
+						<td>needPayMoney</td>
+						<td>Double</td>
+						<td>需要支付的金额</td>
+					</tr>
+					<tr>
+						<td>weight</td>
+						<td>Double</td>
+						<td>商品重量</td>
+					</tr>
+					<tr>
+						<td>point</td>
+						<td>Integer</td>
+						<td>可获得积分</td>
+					</tr>
+					<tr>
+						<td>goodsCount</td>
+						<td>int</td>
+						<td>购物商品数</td>
+					</tr>
+					<tr>
+						<td>discountItem</td>
+						<td>Map<String,Object></td>
+						<td>使用优惠的项目</td>
+					</tr>
+
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

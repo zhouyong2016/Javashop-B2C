@@ -1,0 +1,131 @@
+<#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+<style>
+.input_text {
+	width: 200px;
+}
+
+td {
+	text-align: left;
+}
+</style>
+<div style="padding: 10px 0 205px 30px">
+	<form id="editor" method="post">
+		<table width="60%">
+			<tr>
+				<th width="100pxl">用户名：</th>
+				<td><input class="input_text" type="text" readonly="true"
+					name="uname" data-options="required:true"
+					value="${member.uname!''}"></input></td>
+				<th>密码：</th>
+				<td><input class="input_text easyui-validatebox" minlength="6" maxlength="18" data-options="required:false,validType:'minLength[6]'"
+					type="password" name="password" value="" placeholder="不填则为不修改" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"></input>
+				</td>
+			</tr>
+			<tr>
+
+				<th>出生日期：</th>
+				<td><input class="input_text easyui-datebox"
+					data-options="required:true" name="mybirthday" id="birthday"
+					style="height: 28px;"
+					value="<@dateformat time='${(member.birthday)!0}' pattern='yyyy-MM-dd'/>"
+					class="dateinput" /></td>
+				<th>Email：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					maxlength="50" value="${(member.email)!''}" name="email"
+					data-options="required:true,validType:'email'"></input></td>
+			</tr>
+
+			<tr>
+				<th>昵称：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					maxlength="50" name="name" value="${(member.name)!''}"></input></td>
+				<th>性别：</th>
+				<td><select class="easyui-validatebox input_text" name="sex">
+						<option value="1"<#if member.sex==1>selected</#if>
+							>&nbsp;男&nbsp;</option>
+						<option value="0"<#if member.sex==0>selected</#if>
+							>&nbsp;女&nbsp;</option>
+				</select></td>
+			</tr>
+
+			<tr>
+				<th>固定电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					maxlength="50" id="tel" name="tel" validType="tel"
+					value="${(member.tel)!''}"></input></td>
+				<th>移动电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					maxlength="11" id="mobile" name="mobile"
+					data-options="required:false" validType="mobile"
+					value="${(member.mobile)!''}"></input></td>
+
+			</tr>
+			<tr>
+				<#if is_lvmember==1>
+				<th>会员等级：</th>
+				<td><select name="lv_id" class="input_text">
+						<option value="0">--请选择等级--</option> <#if lvlist??> <#list lvlist
+						as lv>
+						<option value="${lv.lv_id }"<#if
+							member.lv_id==lv.lv_id>selected</#if> >${lv.name }</option> </#list>
+						</#if>
+				</select></input></td> </#if>
+
+				<th>邮编：</th>
+				<td><input id="zip" name="zip"
+					onkeyup="this.value=this.value.replace(/\D/g,'')"
+					onafterpaste="this.value=this.value.replace(/\D/g,'')"
+					maxlength="6" value="${(member.zip)!''}" class="input_text">
+				</td>
+			</tr>
+
+			<tr>
+				<th>地区：</th>
+				<td id="selectAddress">
+				<script type="text/javascript">
+					<#if member.province_id ??>
+							$(function() {
+								$('#selectAddress').addressSelect({
+									deData:[   
+								           ${member.province_id!''},
+	                                       ${member.city_id!''},
+	                                       ${member.region_id!''},
+	                                       ${member.town_id!''}
+							         ]
+								});
+							})
+					<#else>
+						$(function() {
+							$('#selectAddress').addressSelect();
+						})
+					</#if>
+				</script>
+				</td>
+				<th>地址：</th>
+				<td><input class="input_text" type="text"
+					value="${(member.address)!''}" name="address" style="width: 200px;"
+					maxlength="58"></input></td>
+			</tr>
+			<tr>
+				<th>安全问题：</th>
+				<td><input class="input_text" type="text" id="pw_question"
+					name="pw_question" data-options="required:true"
+					value="${(member.pw_question)!''}" maxlength="58"></input></td>
+				<th>回答：</th>
+				<td><input class="input_text" type="text" id="pw_answer"
+					value="${(member.pw_answer)!''}" name="pw_answer"
+					data-options="required:true" maxlength="58"></input></td>
+			</tr>
+
+		</table>
+		<input type="hidden" name="member_id" value="${member.member_id}">
+		<input type="hidden" name="point" value="${member.point}">
+	</form>
+
+	<div style="text-align: center;">
+		<a href="javascript:void(0)" class="button blueButton"
+			onclick="editForm()">保存修改</a>
+	</div>
+</div>

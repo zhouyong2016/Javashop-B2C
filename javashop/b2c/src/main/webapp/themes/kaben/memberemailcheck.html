@@ -1,0 +1,18 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/other.css" type="text/css" />
+<#-- 创建会员邮箱验证标签 -->
+<#assign memberEmailCheckTag= newTag("memberEmailCheckTag") >
+<#-- 调用会员邮箱验证信息 -->
+<#assign emailCheck= memberEmailCheckTag() >
+<div id="register_wrapper">
+		<div <#if emailCheck.result==1> class="success" <#else> class="error" </#if>>
+			<div class="span-auto">
+				<h1>${emailCheck.message!''}</h1>
+				<div class="btn-div">
+					<a href="index.html" class="small-green">返回网站首页</a>
+					<a href="member/member.html" class="zhuce_cg2 small-white">去会员中心</a>
+				</div>
+			</div>
+		</div>
+</div>
+<#include 'common/footer.html' />

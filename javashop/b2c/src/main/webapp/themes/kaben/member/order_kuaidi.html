@@ -1,0 +1,20 @@
+ 	<#if kuaidiResult?exists>
+        <#if kuaidiResult.message=='ok'>
+		<table>
+			<tr>
+				<th class="send-title-time">时间</th>
+				<th class="send-tittle-remark">备注</th>
+			</tr>
+			 <#list kuaidiResult.data as kd>
+				<tr>
+					<td class="member-send-time">${kd.time}</td>
+					<td class="member-send-remark">${kd.context}</td>
+				</tr>
+		 	</#list>
+		</table>
+		<#else>
+		<p class="send-message">${kuaidiResult.message}</p>
+		</#if> 
+	<#else>
+		<span style="color: red">快递信息异常！！！！</span>
+  	</#if>

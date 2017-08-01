@@ -1,0 +1,90 @@
+<div class="division">
+	<table cellspacing="0" cellpadding="0" border="0">
+		<tbody>
+			<#if (!order.isCod &&order.payStatus =="已付款"&&order.shipStatus=="未发货")||(order.isCod&&order.orderStatus=="已确认"&&order.shipStatus=="未发货")>
+				<tr>
+					<th style="width: 80px;">物流公司：</th>
+					<td>
+						<select name="logi_id" id="logi"  style="width: 100px;">
+							<#list logiList as logi>
+								<option value="${logi.id}"<#if order.logi_id?? && logi.id==order.logi_id> selected="selected"</#if>>${logi.name}</option>
+							</#list>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>快递单号：</th>
+					<td>
+						<input class="input_text" onkeyup="this.value=this.value.replace(/[^\w\.\/]/ig,'')" onafterpaste="this.value=this.value.replace(/[^\w\.\/]/ig,'')" maxlength="20" type="text" style="width: 200px;"  placeholder="请输入快递单号" name="expressNo" value="${order.ship_no!''}">
+						<a href="#" class="easyui-linkbutton" id="savePressNo">保存</a>
+					</td>
+				</tr>
+			<#else>
+				<tr>
+					<th>物流公司：</th>
+					<td>${order.logi_name!''}</td>
+				</tr>
+				<tr>
+					<th>快递单号：</th>
+					<td>${order.ship_no!''}</td>
+				</tr>
+				
+			</#if>
+			<tr>
+				<th style="width: 80px;">签收状态：</th>
+				<td>
+					<#if order.signing_time?exists && (order.signing_time!=0) &&  (order.status gt ORDER_ROG)>
+						已签收
+					<#else>            	
+						未签收
+					</#if>
+				</td>
+			</tr>
+			<tr>
+				<th style="width: 80px;">签收人：</th>
+				<td>${order.the_sign!'' }</td>
+			</tr>
+			<tr>
+				<th style="width: 80px;">签收时间：</th>
+				<td>
+					<#if order.signing_time?exists  &&order.signing_time!=0>
+					  <@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${( order.signing_time)?c}" />
+					</#if>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#savePressNo").click(function(){
+		$.Loading.show("正在保存请稍候");
+		var expressno=$("input[name='expressNo']").val();
+		if(expressno==""){
+			$.Loading.error("快递单号不能为空");
+			return false;
+		}
+		var logi_id=$("#logi").val();
+		var logi_name=$("#logi").find("option:selected").text();
+		$("#savePressNo").linkbutton("disable");
+		$.ajax({
+			url : "${ctx}/shop/admin/order-print/save-ship-no.do",
+			data:{'order_id':${order.order_id},'expressno':expressno,'logi_id':logi_id,'logi_name':logi_name},
+			dataType: "json", 
+			cache : false,
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+				$("#savePressNo").linkbutton("enable");
+			},
+			error : function() {
+				$.Loading.message("出现错误,请重试！");
+				$("#savePressNo").linkbutton("enable");
+			}
+		});
+	});	
+})
+</script>

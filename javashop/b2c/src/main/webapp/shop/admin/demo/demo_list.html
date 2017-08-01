@@ -1,0 +1,108 @@
+<#include '/admin/header.html' >
+<div>
+	<table class="easyui-datagrid" style="width: width;" title="demo数据"
+		pagination="true" id="dg"
+		data-options="url:'/shop/admin/demoJson!demo.do',pageList: [5,10,15],pageSize:5,toolbar:'#tb',remoteSort:true,onClickRow: onClickRow">
+		<thead>
+			<tr>
+				<th
+					data-options="field:'name',width:100,sortable:true,editor:'text'">姓名</th>
+				<th data-options="field:'sex',width:100,sortable:true,editor:'text'">性别</th>
+				<th data-options="field:'action',width:100" formatter="formatAction">操作</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+ <div id="tb" style="height:auto">
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">Append</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">Remove</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">Accept</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>
+</div>
+<script type="text/javascript">
+	function formatAction(value, row, index) {
+		var e = '<a href="goods.do?goodsid=' + row.sex
+				+ '"  >Edit</a> &nbsp;&nbsp;<a href="goods.do?goodsid='
+				+ row.sex + '"  >Delete</a> ';
+		return e;
+	}
+	var editIndex = undefined;
+	function endEditing() {
+		if (editIndex == undefined) {
+			return true;
+		}
+		if ($('#dg').datagrid('validateRow', editIndex)) {
+			$('#dg').datagrid('getRows', editIndex);
+			$('#dg').datagrid('endEdit', editIndex);
+			editIndex = undefined;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function append() {
+		if (endEditing()) {
+			$('#dg').datagrid('appendRow', {
+				status : 'P'
+			});
+			editIndex = $('#dg').datagrid('getRows').length - 1;
+			$('#dg').datagrid('selectRow', editIndex).datagrid('beginEdit',
+					editIndex);
+		}
+	}
+
+	function onClickRow(index) {
+		if (editIndex != index) {
+			if (endEditing()) {
+				$('#dg').datagrid('selectRow', index).datagrid('beginEdit',
+						index);
+				editIndex = index;
+			} else {
+				$('#dg').datagrid('selectRow', editIndex);
+			}
+		}
+	}
+	var $dg = $("#dg");
+	function accept() {
+		
+		if (endEditing()) {
+			
+			var rows = $dg.datagrid('getRows');
+			for ( var i = 0; i < rows.length; i++) {
+				$dg.datagrid('endEdit', i);
+			}
+			
+			if ($dg.datagrid('getChanges').length) {
+                var inserted = $dg.datagrid('getChanges', "inserted");
+                var deleted = $dg.datagrid('getChanges', "deleted");
+                var updated = $dg.datagrid('getChanges', "updated");
+                alert(JSON.stringify(updated));
+                var effectRow = new Object();
+                if (inserted.length) {
+                    effectRow["inserted"] = JSON.stringify(inserted);
+                }
+                if (deleted.length) {
+                    effectRow["deleted"] = JSON.stringify(deleted);
+                }
+                if (updated.length) {
+                    effectRow["updated"] = JSON.stringify(updated);
+                }
+
+                $.post("servlet/commit", effectRow, function(rsp) {
+                    if(rsp.status){
+                        $.messager.alert("提示", "提交成功！");
+                        $dg.datagrid('acceptChanges');
+                    }
+                }, "JSON").error(function() {
+                    $.messager.alert("提示", "提交错误了！");
+                });
+            }
+		}
+	}
+	 function reject(){
+		 $('#dg').datagrid('rejectChanges');
+		 editIndex = undefined;
+	 }
+</script>
+<#include '/admin/footer.html' >

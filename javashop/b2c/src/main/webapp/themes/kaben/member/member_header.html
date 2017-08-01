@@ -1,0 +1,25 @@
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag")>
+<#assign member = memberLoginCheckTag()>
+<#include '../common/header.html' />
+<#include '../common/reception_header.html'/>
+<!-- 判断会员是否登录 -->
+<#if  !member.member_id?? || member.member_id==0 >
+	<#stop "not login">
+</#if>
+<link rel="stylesheet" href="${ctx}${themes_path}/css/member.css" type="text/css" />
+
+	<div class="member_page">
+		<div id="member_wrapper">
+			<div class="member_page_title">
+				<div class="member_page_title_left">
+					<span class="member_nav"><a href="${ctx}/index.html">首页</a></span>
+					<span class="member_nav"> > </span> <span class="member_nav" ><h1><a href="${ctx}/member/member.html">会员中心</a></h1></span>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="member_content">
+				<!-- 会员中心左侧菜单 -->
+				<#include 'menu.html'/>
+				<!-- 会员中右侧内容 -->
+				<div id="content_wrapper">
+					

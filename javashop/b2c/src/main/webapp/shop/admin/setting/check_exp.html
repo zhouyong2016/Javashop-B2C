@@ -1,0 +1,33 @@
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<td nowrap="" width="70%">配送公式： <input type="text"
+						class="input_text" size="50" value="" id="dlg_expressions">
+					</td>
+				</tr>
+				<tr>
+					<td nowrap="" width="70%">商品重量： <input type="text" value="0"
+						style="width: 200px;" size="8" maxlength="20" class="input_text"
+						name="weight" id="weight"> 克</td>
+					<td nowrap="" width="30%" rowspan="3">
+						<p>
+							<a href="javascript:;" id="calculatePrice" class="easyui-linkbutton">
+								计算</a>
+						</p></td>
+				</tr>
+				<tr>
+					<td nowrap="" width="70%">订单价格： <input type="money"
+						style="width: 200px;" vtype="money" style="" value="0" size="8"
+						maxlength="20" class="input_text" name="orderprice"
+						id="orderprice"></td>
+				</tr>
+				<tr>
+					<td nowrap="" width="70%"><span id="result"></span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

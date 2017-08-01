@@ -1,0 +1,176 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div id="useradmininfo" style="display: none;"></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" id="add_useradmin_button">添加</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="useradminForm">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/core/admin/userAdmin/list-json.do',fitColumns:'true'" width="width" id="useradmindata">
+				<thead>
+				    <tr>
+				   	 	<th  data-options="field:'username',width:100">用户名</th>
+				   	 	<th  data-options="field:'realname',width:100">姓名</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+		</form>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.userid +")'></a><a class='delete' title='修改' href='javascript:void(0);' onclick='del("+row.userid +")'></a>";
+	return val;
+}
+function del(userid){
+	if(!confirm("确认要删除管理员吗？")){	
+		return ;
+	}
+	var options = {
+			url : "${ctx}/core/admin/userAdmin/delete.do?ajax=yes&id="+userid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				
+				if(result.result==1){
+					$('#useradmindata').datagrid('reload');
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#useradminForm').ajaxSubmit(options);	
+}
+$("#add_useradmin_button").click(function(){
+	$("#useradmininfo").show();
+　　	$('#useradmininfo').dialog({
+　　		title: '添加管理员',		
+  		top:60,
+　　		width: 550,
+  		height:450,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/core/admin/userAdmin/add.do', 	
+　　		modal: true,
+　　		buttons: [{					
+　　			 text:'保存',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				  var savebtn = $(this);
+	　　			  var disabled=savebtn.hasClass("l-btn-disabled");
+	　　			  if(!disabled){
+　　				 		 addadminForm(savebtn);	
+　　				  }
+　　			 }
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				 $('#addadminForm')[0].reset() ;
+　　			 }
+　　		}]
+　　	});
+});
+function addadminForm(savebtn){
+	if($("#pwd").val()!=$("#repwd").val()){
+		$.Loading.error("密码不相同");	
+		return ;
+	}
+	var formflag= $("#addAdminForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		var options = {
+			url : "${ctx}/core/admin/userAdmin/add-save.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$("#useradmininfo").dialog('close');
+					$('#useradmindata').datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+		 	},error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+				}
+		};
+		$('#addAdminForm').ajaxSubmit(options);	
+	}
+}
+function edit(userId){
+	 $("#useradmininfo").show();
+	　　	$('#useradmininfo').dialog({
+	　　		title: '修改管理员',			
+	　　		top:60,
+	　　		width: 550,
+	　　		height:450,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/userAdmin/edit.do?id='+userId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				var editbtn = $(this);
+		　　			var disabled=editbtn.hasClass("l-btn-disabled");
+		　　			if(!disabled){
+	　　					editUseradminForm(editbtn);
+	　　				}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editAdminForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function editUseradminForm(editbtn){
+	if($("#pwd").val()!=$("#repwd").val()){
+		$.Loading.error("密码不相同");	
+		return ;
+	}
+	var formflag= $("#editAdminForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");	
+		var options = {
+			url : "${ctx}/core/admin/userAdmin/edit-save.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result == 1){
+					$.Loading.success(result.message);
+				}
+				if(result.result == 0){
+					$.Loading.error(result.message);
+				}
+				$("#useradmininfo").dialog('close');
+				$('#useradmindata').datagrid('reload');
+				editbtn.linkbutton("enable");
+		 	},
+		 	error : function(e) {
+		 		$.Loading.error("出现错误 ，请重试");	
+		 		editbtn.linkbutton("enable");
+			}
+		};
+		$('#editAdminForm').ajaxSubmit(options);
+	}
+}
+
+</script>
+<#include '/admin/footer.html' >

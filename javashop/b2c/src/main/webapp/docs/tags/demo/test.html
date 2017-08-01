@@ -1,0 +1,23 @@
+<#-- 创建购物车标签 -->
+<#assign cartTag= newTag("cartTag")>
+
+<#--通过购物车标签获取购物项列表 -->
+<#assign itemList = cartTag() >	
+
+<div class="cart-wrap">
+<#if (itemList?size>0) >
+<!--循环输出商品列表-->
+<#list itemList as item>
+	<li>
+		<span>${item.name}</span>
+		<span>${item.num}</span>
+		<span>
+<a href="javascript"itemid="${item.id}" class=”del”>删除</a>
+</span>
+	</li>			
+</#list>
+<#else>
+<span>购物车没有商品！</span>
+</#if>
+</div>		
+

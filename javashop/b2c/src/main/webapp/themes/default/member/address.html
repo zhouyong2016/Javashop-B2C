@@ -1,0 +1,168 @@
+<#assign  title="收货地址" /><#include 'member_header.html' />
+<!--创建"会员地址列表"标签-->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<!--调用"会员地址列表"标签-->          
+<#assign  consigneeList= consigneeListTag()>	
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="data">
+	<h2>我的收货地址</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg"/>
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、这里将显示您的收货地址信息</p>
+			<p>2、您还可以管理您的收货地址簿、增加新的收货地址等操作。</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="tab">
+	<ul >
+		<li class="selected"><a href="address.html"><span>收货地址管理</span></a></li>
+		<li><a href="javascript:;" class="add_address"><span>新增收货地址</span></a></li>
+	</ul>
+</div>
+<div class="box">
+	<div class="top grey_top"></div>
+	
+			<!--会员收货地址列表  -->
+			<div class="address_list" style="overflow:hidden;">
+				<div class="body">
+				<#if consigneeList?size gt 0 >
+				<table width="100%" cellspacing="0" cellpadding="3" class="liststyle">
+					<thead>
+						<tr>
+							<th style="width:150px;">收货人</th>
+							<th style="width:200px;">地址</th>
+							<th>电话</th>
+							<th>手机</th>
+							<th>邮编</th>
+							<th>默认</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list consigneeList as address>
+						<tr class="<#if !address_has_next>last</#if>">
+							<td style="width:200px;height:auto;text-align:center;line-height:25px;"><a href="address.html?action=edit&addr_id=${address.addr_id}">${address.name!''}</a></td>
+							<td class="textwrap" style="width:150px;height:auto;text-align:left;line-height:25px;">${address.province!''}-${address.city!''}-${address.region!''}-${address.addr!''}</td>
+							<td>${address.tel!''}</td>
+							<td>${address.mobile!''}</td>
+							<td>${address.zip!''}</td>
+							<td><#if address.def_addr == 0 >否</#if><#if address.def_addr == 1 >是</#if></td>
+							<td><a href="javascript:;" rel="${address.addr_id}" class="edit">修改</a>&nbsp;&nbsp;
+							<a href="javascript:;" class="address_del" rel="${address.addr_id}" >删除</a></td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+				<#else>
+				<div class="empty" >您尚未添加收货地址，<a href="javascript:;" class="addressadd">添加一个</a></div>
+				</#if>
+			</div>	
+			</div>
+			<!--添加会员地址。使用js load方法调用member/address_add.html页面  -->
+			<div class="address_add" style="overflow:hidden;">
+			</div>
+			<!-- 修改会员地址 。使用js load方法调用member/address_edit.html页面 -->
+			<div class="address_edit" style="overflow:hidden;">
+			
+			</div>
+
+	</div>
+</div>
+<div class="rr_bottom"></div></div>
+		<!--会员中心首页右侧结束-->
+	</div>
+
+<script>
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+				$("#btnSubmit").click(function(){
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					$(".validate").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("确定要删除吗")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});		
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+<#include '../common/footer.html'/>

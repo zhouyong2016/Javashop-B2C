@@ -1,0 +1,141 @@
+<#include '/admin/header.html' > 
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div class="main">
+	<!-- 退货申请信息 -->
+	<div class="shadowBoxWhite  whiteBox">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0"  style="width: 99%">
+				<tr>
+					<td>退款单号：</td>
+					<td>${refund.sn!''}</td>
+					<td>创建时间：</th>
+					<td>
+						<@dateformat time="${(refund.create_time!'')?c}" pattern="yyyy-MM-dd"/>
+					</td>
+				</tr>
+				<tr>
+				<td>订单信息：</td>
+					<td><a href='javascript:void(0);' onclick=newTab('订单信息','${ctx}/shop/admin/order/detail.do?orderId=${refund.order_id}')>查看订单</a> </td>
+					<td></td>
+					<td></td>
+					
+				</tr>
+				<tr>
+					<td >退款人：</td>
+					<td>${refund.sndto!''}</td>
+					<#if refund.sellback_id??>
+						<td>
+							退款单申请：
+						</td>
+						<td>
+							<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id=${refund.sellback_id}')>查看</a> 
+						</td>
+					</#if>
+				</tr>
+				
+				<tr>
+					<td>退款状态：</td>
+					<td >
+						<#if refund.status==0>
+							新建
+						<#elseif refund.status==1>
+							已退款
+						</#if>
+					</td>
+					<td >退款金额：</td>
+					<td>${refund.refund_money!''}</td>
+				</tr>
+				<tr>
+					<td>退款方式：</td>
+					<td>${refund.refund_way!''}</td>
+					<td>退款账户：</td>
+					<td>${refund.return_account!'后台操作'}</td>
+				</tr>
+				<#if refund.refund_user?? && refund.refund_user!="">
+					<tr>
+						<td >退款操作人：</td>
+						<td>${refund.refund_user!''}</td>
+						<td>
+							退款时间：
+						</td>
+						<td><@dateformat time="${(refund.refund_time!'')?c}" pattern="yyyy-MM-dd"/>
+						</td>
+					</tr>
+				</#if>
+				<#if refund.status==0>
+					<tr>
+						<td>审核：</td>
+						<td colspan="3">
+							金额：<input type="text"  id="refund_money" name="refund_money" value="${refund.refund_money!''}" class="input_text easyui-numberbox" precision="2" maxlength="15" />&nbsp;&nbsp;
+							<a href="javascript:void(0)"  class="button" onclick="pass(1)">退款</a>
+						</td>
+					</tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+	<br/>
+	<div class="shadowBoxWhite  whiteBox">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+				<tr>
+					<th class="title" colspan="4">退货单商品</th>
+				</tr>
+				<tr>
+					<th>商品名称</th>
+					<th>金额</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+				
+				<#list goodsList as data>
+						<tr>
+							<td>
+								<a target="_blank" href="${ctx}/goods-${data.goods_id}.html">${data.goods_name }${data.spec!''}</a>
+							</td>
+							<td>${data.price?string.currency}</td>
+							<td>${data.ship_num!0 }</td>
+							<td>${data.return_num!0}</td>
+						</tr>
+				</#list>
+				<#if (gift.gift_id)??>
+					<tr>
+						<td>${gift.gift_name!''}<span style="color: red;">（赠品）</span></td>
+						<td>${gift.gift_price?string.currency}</td>
+						<td>1</td>
+						<td>1</td>
+					</tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function pass(status){
+	if($("#refund_money").val() == null || $("#refund_money").val() == ""){
+		alert("金额不能为空");
+		return;
+	}
+
+	$(".button").removeAttr("onclick");
+	if($(this).attr("disabled")=="disabled"){
+		$.Loading.error("操作太频繁，请稍侯");
+	}	
+	
+	$(this).attr("disabled","disabled");
+	var refund_money=$("input[name='refund_money']").val();
+	$.ajax({
+		url:"${ctx}/shop/admin/order-report/edit-refund.do?id=${refund.id}&status="+status+"&refund_money="+refund_money,
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			location.reload();
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	});
+	
+}
+</script>

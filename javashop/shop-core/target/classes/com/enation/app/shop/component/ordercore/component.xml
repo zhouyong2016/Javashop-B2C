@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="订单核心组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+
+	<plugins>
+	
+		<plugin name="订单详细页基本信息插件" id="orderDetailBasePlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+		<plugin name="订单详细页订单日志显示插件" id="orderDetailLogPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>		
+		<plugin name="订单发货库存日志插件" id="shipStoreLogPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="订单状态检测插件" id="orderStateCheckPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="确认收货后添加成交交易" id="transactionRecordPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>  
+		<plugin name="订单设置插件" id="orderSettingPlugin">
+			<bundle id="settingPluginBundle"></bundle>
+		</plugin> 
+		<plugin name="订单评论检测插件" id="commentCheckPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="退货单检测插件" id="sellBackCheckPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="订单快照插件" id="orderSnapshotPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+	
+	<widgets>
+		<widget id="order_meta" name="订单扩展信息挂件"></widget>
+		<widget id="searchorder" name="游客订单查询挂件"></widget>
+	</widgets>
+	
+</component>

@@ -1,0 +1,57 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>add 添加会员地址API</h3>
+		<p>添加一个会员地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/member-address/add.do</p>
+		<h3>输入参数：</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w150">是否必须</span><span class="w100">示例值</span><span class="w100">默认值</span><span class="w150">备注</span></h4>
+			<p><span class="w100 important">name</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">王宏俊</span><span class="w100"></span><span class="w150">收货人姓名</span></p>
+			<p><span class="w100 important">province</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">黑龙江省</span><span class="w100"></span><span class="w150">所在省</span></p>
+			<p><span class="w100 important">province_id</span><span class="w100">int</span><span class="w150">必须</span><span class="w100">1</span><span class="w100"></span><span class="w150">所在省ID</span></p>
+			<p><span class="w100 important">city</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">鸡西市</span><span class="w100"></span><span class="w150">所在城市</span></p>
+			<p><span class="w100 important">city_id</span><span class="w100">int</span><span class="w150">必须</span><span class="w100">1</span><span class="w100"></span><span class="w150">所在市ID</span></p>
+			<p><span class="w100 important">region</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">鸡冠区</span><span class="w100"></span><span class="w150">所在地区</span></p>
+			<p><span class="w100 important">region_id</span><span class="w100">int</span><span class="w150">必须</span><span class="w100">1</span><span class="w100"></span><span class="w150">所在地区ID</span></p>
+			<p><span class="w100 important">addr</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">黑龙江省鸡西市鸡冠区西建委5组</span><span class="w100"></span><span class="w150">详细地址</span></p>
+			<p><span class="w100 important">zip</span><span class="w100">String</span><span class="w150">必须</span><span class="w100">158100</span><span class="w100"></span><span class="w150">邮编</span></p>
+			<p><span class="w100 important">tel</span><span class="w100">String</span><span class="w150">手机和电话必填一项</span><span class="w100">0467-2325125</span><span class="w100"></span><span class="w150">固定电话</span></p>
+			<p><span class="w100 important">mobile</span><span class="w100">String</span><span class="w150">手机和电话必填一项</span><span class="w100">18746789011</span><span class="w100"></span><span class="w150">手机</span></p>
+			<p><span class="w100 important">def_addr</span><span class="w100">Integer</span><span class="w150">选填</span><span class="w100">0</span><span class="w100"></span><span class="w150">1默认地址，0非默认地址</span></p>
+			<p><span class="w100 important">remark</span><span class="w100">String</span><span class="w150">选填</span><span class="w100"></span><span class="w100"></span><span class="w150">备注</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w300">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w300 r-intro">为1表示添加成功，0表示失败 </span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w300 r-intro">返回提示信息</span></p>
+			<p><span class="w100 r_name">addr_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">地址id</span></p>
+			<p><span class="w100 r_name">member_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">会员id</span></p>
+			<p><span class="w100 r_name">name</span><span class="w100 r_type">String</span><span class="w300 r-intro">名字</span></p>
+			<p><span class="w100 r_name">country</span><span class="w100 r_type">String</span><span class="w300 r-intro">国家</span></p>
+			<p><span class="w100 r_name">province_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">省id</span></p>
+			<p><span class="w100 r_name">city_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">城市id</span></p>
+			<p><span class="w100 r_name">region_id</span><span class="w100 r_type">int</span><span class="w300 r-intro">地区id</span></p>
+			<p><span class="w100 r_name">province</span><span class="w100 r_type">String</span><span class="w300 r-intro">省</span></p>
+			<p><span class="w100 r_name">city</span><span class="w100 r_type">String</span><span class="w300 r-intro">城市</span></p>
+			<p><span class="w100 r_name">zip</span><span class="w100 r_type">String</span><span class="w300 r-intro">邮编</span></p>
+			<p><span class="w100 r_name">tel</span><span class="w100 r_type">String</span><span class="w300 r-intro">电话</span></p>
+			<p><span class="w100 r_name">mobile</span><span class="w100 r_type">String</span><span class="w300 r-intro">手机</span></p>
+			<p><span class="w100 r_name">def_addr</span><span class="w100 r_type">String</span><span class="w300 r-intro">默认地址</span></p>
+			<p><span class="w100 r_name">remark</span><span class="w100 r_type">String</span><span class="w300 r-intro">备注</span></p>
+			<p><span class="w100 r_name">isDel</span><span class="w100 r_type">String</span><span class="w300 r-intro">isDel</span></p>
+		</div>
+		<h3>调用结果：</h3>
+		<h5>
+			{"result":1,"message":null,"data":{"addr_id":5,"member_id":3,"name":"王321","country":null,"province_id":2,"city_id":53,"region_id":471,"province":"上海","city":"卢湾区","region":"卢湾区","addr":"上海","zip":"123000","tel":"13811111111","mobile":"13811111111","def_addr":1,"remark":null,"isDel":null}}
+		</h5>
+	</div>
+
+</div>
+
+

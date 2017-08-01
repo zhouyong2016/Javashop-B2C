@@ -1,0 +1,179 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<form id="dly_centerform">
+		<div id="tb" style="height: auto">
+			<a href="javascript:void(0)" class="button blueButton" onclick="controlDly()">添加</a>
+			<!--  
+			<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
+			-->
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/dly-center/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="dly_centerdata">
+				<thead>
+					<tr>
+						<th data-options="field:'dly_center_id',checkbox:true"></th>
+						<th data-options="field:'name',width:100">发货点名称</th>
+						<th data-options="field:'area',width:100" formatter="formatArea">地区</th>
+						<th data-options="field:'address',width:200">地址</th>
+						<th data-options="field:'zip',width:100">邮编</th>
+						<th data-options="field:'cellphone',width:100">手机</th>
+						<th data-options="field:'uname',width:100">发货人姓名</th>
+						<th data-options="field:'choose',width:50" formatter="formatChoo">默认发货点</th>
+						<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+
+	<script type="text/javascript">
+		function controlDly(id) {
+			var map = {}; // Map map = new HashMap();
+			if (!id) {
+				map["href"] = "${ctx}/shop/admin/dly-center/add.do";
+				map["formId"] = "#dlyCenterForm";
+				map["url"] = "${ctx}/shop/admin/dly-center/save-add.do?ajax=yes";
+				map["title"] = "添加发货信息";
+				map["loadshow"] = "正在添加......";
+			} else {
+				map["href"] = "${ctx}/shop/admin/dly-center/edit.do?dlyCenterId=" + id;
+				map["formId"] = "#dlyCenterEditForm";
+				map["url"] = "${ctx}/shop/admin/dly-center/save-edit.do?ajax=yes";
+				map["title"] = "修改发货信息";
+				map["loadshow"] = "正在修改......";
+			}
+			map["divDialog"] = "#divdia";
+			map["gridreload"] = "#dly_centerdata";
+
+			addDialog(map);
+		}
+		function addDialog(map) {
+			$(map["divDialog"]).show();
+			$(map["divDialog"]).dialog({
+				title : map["title"],
+				width : 850,
+				closed : false,
+				cache : false,
+				href : map["href"],
+				modal : true,
+				buttons : [ {
+					text : '保存',
+					iconCls : 'icon-ok',
+					handler : function() {
+						 var savebtn = $(this);
+		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+			　　				 
+							 submitForm(map,savebtn);
+						 }
+					}
+				} , {
+					text : '取消',
+					handler : function() {
+						$(map["divDialog"]).dialog('close');
+					}
+				}]
+			});
+		}
+		function submitForm(map,savebtn) {
+			if($("#is_default_dc").is(":checked")){
+				$("#dlyCenterDisabled").val("true");
+			}else{
+				$("#dlyCenterDisabled").val("false");
+			}
+			
+			var value = $("#region_id").val();
+			if( value == "" || value == "0" ){
+				alert("请选择地区");
+				return false;
+			}
+			
+			var formflag = $(map["formId"]).form('validate');
+			
+			if (formflag) {
+				$.Loading.show("正在保存请稍候...");
+　				 savebtn.linkbutton("disable");	
+　				 
+				var options = {
+					url : map["url"],
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+							$(map["divDialog"]).dialog('close');
+							$(map["gridreload"]).datagrid('reload');
+
+						}
+						if (result.result == 0) {
+							$.Loading.error(result.message);
+						}
+						savebtn.linkbutton("enable");
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						savebtn.linkbutton("enable");
+					}
+				};
+				$(map["formId"]).ajaxSubmit(options);
+			}
+		}
+		function clearForm(map) {
+			$(map["formId"])[0].reset();
+		}
+
+		function formatOperation(value, row, index) {
+			var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlDly("
+					+ row.dly_center_id + ")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.dly_center_id +")'></a>";
+			return val;
+		}
+
+		function formatChoo(value, row, index) {
+			var val = "";
+			if(value == "true"){
+				val = "是";
+			}else if(value == "false"){
+				val = "否";
+			}
+			return val;
+		}
+		
+		function formatArea(value, row, index) {
+			var val = row.province + "-" + row.city + "-" + row.region;
+			return val;
+		}
+		
+		function del(dly_center_id) {
+			
+			if (!confirm("确认要删除发货信息吗？")) {
+				return;
+			}
+
+			$.Loading.show("正在删除...");
+			var options = {
+				url : "${ctx}/shop/admin/dly-center/del.do?dly_center_id="+dly_center_id,
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$.Loading.hide();
+						$('#dly_centerdata').datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+				}
+			};
+			$('#dly_centerform').ajaxSubmit(options);
+		}
+	</script>
+	<#include '/admin/footer.html' >

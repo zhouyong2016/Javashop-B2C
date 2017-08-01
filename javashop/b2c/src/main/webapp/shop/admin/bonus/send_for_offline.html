@@ -1,0 +1,46 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox"
+		style="padding: 10px 0 10px 10px;">
+		<form method="post" class="validate" id="sendForm">
+			<label>发放数量：</label> 
+				<input type="text" name="createnum" class="input_text easyui-numberbox" data-options="required:true" style="ime-mode:disabled" onkeydown="if(event.keyCode==13)event.keyCode=9" onkeypress="if ((event.keyCode<48 || event.keyCode>57)) event.returnValue=false"/> 
+				<input type="hidden" name="typeid" value="${typeid}" />
+				<a href="javascript:void(0)" class="easyui-linkbutton" style="padding-left: 30px;" onclick="submitForm()">确认发放</a>
+		</form>
+	</div>
+</div>
+<script>
+	function submitForm() {
+		var val=$("input[name='createnum']").val();
+		if(val==""){
+			$.Loading.error("请填写 发行量");
+			return ;
+		}
+		if(isNaN(val)){
+			$.Loading.error("请填写正确数字!");
+			return ;
+		}
+		$.Loading.show('正在生成，请稍侯...');
+		$("#sendForm").ajaxSubmit({
+			url : "${ctx}/shop/admin/bonus/send-for-off-line.do?ajax=yes",
+			dataType : "json",
+			success : function(res) {
+				$.Loading.hide();
+				if (res.result == 1) {
+					parent.SelectTable("优惠券列表");
+					parent.refreshCurrentTab();
+					$.Loading.successMessage("成功发放[" + res.count + "]个红包",3000);
+				} else {
+					$.Loading.errorMessage(res.message,3000);
+				}
+			},
+			error : function() {
+				$.Loading.errorMessage("红包发放失败",3000);
+			}
+		});
+			
+	};
+	
+</script>
+<#include '/admin/footer.html' >

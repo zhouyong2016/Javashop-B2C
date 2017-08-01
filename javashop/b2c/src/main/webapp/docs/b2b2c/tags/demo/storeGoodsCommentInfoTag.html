@@ -1,0 +1,6 @@
+<!--创建"店铺评论信息"标签-->
+<#assign StoreGoodsCommentInfoTag= newTag("storeGoodsCommentInfoTag") >  
+<!--调用"店铺评论信息"标签，并传递参数-->            
+<#assign  StoreGoodsCommentInfo= StoreGoodsCommentInfoTag("'goods_id':'1'") >						
+
+	商品的描述度平均值：${StoreGoodsCommentInfo}</br>

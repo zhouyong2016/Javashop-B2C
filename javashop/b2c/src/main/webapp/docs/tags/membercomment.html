@@ -1,0 +1,136 @@
+<#assign title= "商品评论列表实体信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>MemberComment  商品评论列表</h3>
+		<h2>需要简述</h2>
+		<h6>返回所有的商品评论列表参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>lv_id</td>
+						<td>Integer</td>
+						<td>评论会员级别ID</td>
+					</tr>
+					<tr>
+						<td>levelname</td>
+						<td>String</td>
+						<td>评论会员级别名称</td>
+					</tr>
+					<tr>
+						<td>sex</td>
+						<td>int</td>
+						<td>评论会员性别，0女，1男</td>
+					</tr>
+					<tr>
+						<td>uname</td>
+						<td>String</td>
+						<td>评论会员会员名</td>
+					</tr>
+					<tr>
+						<td>nickname</td>
+						<td>String</td>
+						<td>评论会员昵称</td>
+					</tr>
+					<tr>
+						<td>face</td>
+						<td>String</td>
+						<td>评论会员头像</td>
+					</tr>
+					<tr>
+						<td>comment_id</td>
+						<td>int</td>
+						<td>评论id</td>
+					</tr>
+					<tr>
+						<td>goods_id</td>
+						<td>int</td>
+						<td>商品id</td>
+					</tr>
+					<tr>
+						<td>member_id</td>
+						<td>Integer</td>
+						<td>会员id</td>
+					</tr>
+					<tr>
+						<td>content</td>
+						<td>String</td>
+						<td>评论内容</td>
+					</tr>
+					<tr>
+						<td>img</td>
+						<td>String</td>
+						<td>评论图片</td>
+					</tr>
+					<tr>
+						<td>dateline</td>
+						<td>long</td>
+						<td>发表时间</td>
+					</tr>
+					<tr>
+						<td>ip</td>
+						<td>String</td>
+						<td>会员的ip</td>
+					</tr>
+					<tr>
+						<td>reply</td>
+						<td>String</td>
+						<td>管理员的回复</td>
+					</tr>
+					<tr>
+						<td>replytime</td>
+						<td>long</td>
+						<td>回复时间(毫秒数)</td>
+					</tr>
+					<tr>
+						<td>status</td>
+						<td>int</td>
+						<td>状态(1为显示，2为隐藏)</td>
+					</tr>
+					<tr>
+						<td>type</td>
+						<td>int</td>
+						<td>类型（1为评论，2为咨询）</td>
+					</tr>
+					<tr>
+						<td>replystatus</td>
+						<td>int</td>
+						<td>回复状态1为已回复，0为未回复</td>
+					</tr>
+					<tr>
+						<td>grade</td>
+						<td>int</td>
+						<td>评分</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+
+<!-- 请在上面URL参数中添加：returnOrderSn=20140219054419 -->
+<!-- 获取会员退货、换货标签 -->
+<#assign returnDetailTag = newTag("returnDetailTag")>
+<!-- 调用会员退货、换货标签 -->
+<#assign returnDetail=returnDetailTag("{'returnOrderSn':${returnOrderSn}}")>
+<!-- 调用会员订单“orders”集合中的关键字段 -->
+<#assign order= returnDetail.orders>
+<!-- 调用换货订单“returnOrder”集合中的字段 -->
+<#assign orderDetail= returnDetail.returnOrder>
+<!-- 调用换货订单商品List“orderItemsList”集合中的字段 -->
+<#assign orderItems = returnDetail.orderItemsList>
+
+<table style="width:100%">
+	<tr>
+		<td class="label">订单编号</td>
+		<td>${order.sn}</td>
+	</tr>
+	<tr>
+		<td class="label">下单日期</td>
+		<td><@dateformat time="${order.create_time?c}"	pattern="yyyy-MM-dd HH:mm"/></td>
+	</tr>
+	<tr>
+		<td class="label">申请理由</td>
+		<td>${orderDetail.apply_reason!""}</td>
+	</tr>
+	<#list orderItems as item>
+		<tr>
+			<td class="param">
+				<dl>
+					<dt>
+						<a href="goods-${item.goods_id}.html" title="${item.name}">${item.name}</a>
+					</dt>
+					<dd>商品编号：${item.sn}</dd>
+				</dl>	
+			</td>
+		</tr>
+	</#list>
+</table>

@@ -1,0 +1,18 @@
+<#include 'common/header.html' />
+<script src="${ctx}/themes/default/js/jquery.bigautocomplete.js" type="text/javascript"></script>
+<link rel="stylesheet" href="${ctx}/themes/default/css/jquery.bigautocomplete.css" type="text/css" />
+
+<input type="text" id="tt" style="width:300px;margin-left:100px"/>
+
+<script type="text/javascript">
+<!--
+$(function(){
+	 var url_ = "${ctx}/api/shop/goods-words.do";
+	 $("#tt").bigAutocomplete({url:url_, callback:function(data){
+         location.href="${ctx}/search.html?keyword="+data.title;
+     }});   
+})
+//-->
+</script>
+
+<#include 'common/footer.html' />

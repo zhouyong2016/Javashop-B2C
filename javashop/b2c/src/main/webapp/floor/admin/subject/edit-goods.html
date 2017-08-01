@@ -1,0 +1,18 @@
+<form id="editSubjectGoodsForm" >
+<input type="hidden" name="index" value="${index!0}" >
+<div class="edit_subject_goods_selector"></div>
+</form>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.goodsSelector.js" > </script>
+<script type="text/javascript">
+	
+		$(function(){
+			//创建商品选择器
+			var container=$(".edit_subject_goods_selector");
+			var options={
+					goodsid_name:'goods_ids',
+					selected_data_url:'${ctx}/core/admin/subject/get-selected-goods.do?subject_id='+${subject_id!0}+"&index="+${index!0}
+			};
+			container.goodsSelector(options);
+			
+		});
+</script>

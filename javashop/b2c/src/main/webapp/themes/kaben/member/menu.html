@@ -1,0 +1,116 @@
+
+<#--检测组件是否启用 -->
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign distributorIsOn =checkCmptIsOnTag("{'componentName':'分销商组件'}") />
+<#if distributorIsOn=="ON">
+<#if member??>
+<#-- 获取分销商信息 -->
+<#assign distributorTag = newTag("distributorTag")>
+<#assign now_distributor = distributorTag('{"member_id":${member.member_id}}')>
+</#if>
+</#if>
+
+<script>
+	function selectMenu(index){
+		$(".manage li").removeClass("hover");
+		$(".manage li").eq(index).addClass("hover");
+	}
+</script>
+<script>
+	function otherMenu(index){
+		$(".content li").removeClass("hover");
+		$(".content li").eq(index).addClass("hover");
+	}
+</script>
+<div class="left_menu">
+	<div class="manage member-munu">
+		<h2>交易管理</h2>
+		<ul>
+			<li><a href="order.html">我的订单</a></li>
+			<li><a href="point.html">我的积分</a></li>
+			<li><a href="bonus.html">我的优惠券</a></li>
+			<li><a href="return_list.html">退货申请</a></li>
+		</ul>
+	</div>
+	<div class="content member-munu">
+		<h2><a href="member.html">会员中心</a></h2>
+		<ul>
+			<li>
+				<a href="info.html"> 
+					<#if member?exists>
+						<#if member.info_full == 0>
+							完善基本资料(20分) 
+						<#elseif member.info_full == 1>
+							修改个人资料 
+						</#if> 
+					</#if> 
+				</a>
+			</li>
+			<li><a href="comments.html">我的评价</a></li>
+			<li><a href="ask.html">我的咨询</a></li>
+			<li><a href="favorite.html">我的收藏</a></li>		
+			<li><a href="security_center.html">账户安全</a></li>
+			<li><a href="bind-member.html">账户绑定</a></li>
+			<li><a href="address.html">地址管理</a></li>
+			<li><a href="messagefront_list.html">站内消息</a></li>
+		</ul>
+	</div>
+	
+	 
+	<#if distributorIsOn=="ON">
+	<div class="content member-munu">
+			<h2>分销管理</h2>
+			<ul>
+				<#if now_distributor.commission_type == 1 >
+				<li><a href="${ctx}/member/distribution/my_member.html">我推荐的人</a></li> 
+				<#else>
+				<li><a href="${ctx}/member/distribution/my_member.html">我的成员</a></li> 
+				</#if>
+				
+				<!--&lt;!&ndash;创建"当前登陆会员分销申请信息"标签&ndash;&gt;-->
+				<#assign fxCurrentMemberTag = newTag("fxCurrentMemberTag") >  
+				<!--&lt;!&ndash;调用"当前登陆会员分销申请信息"标签&ndash;&gt;          -->
+				<#assign fxCurrentApply = fxCurrentMemberTag()>
+				<#if fxCurrentApply.apply_id??>
+					<#if fxCurrentApply.status == 1>
+						<#if fxCurrentApply.type == 1>
+							<li><a href="${ctx}/member/distribution/store/store.html">我的店铺</a></li>
+							<li><a href ="${ctx}/member/themes.html">模板切换</a></li> 
+							<#assign storeMemberTag = newTag("getStoreMemberTag")>
+							<#assign storemember=storeMemberTag()>
+							<li><a href ="${ctx}../../../store/${storemember.store_id}/index.html">店铺预览</a></li> 
+						</#if>
+					<#else>
+						<li><a href="${ctx}/member/distribution/distribution_apply.html?type=1">店铺申请</a></li>
+						<li><a href="${ctx}/member/distribution/distribution_apply.html?type=2">分销团队申请</a></li>
+					</#if>
+				<#else>
+					<li><a href="${ctx}/member/distribution/distribution_apply.html?type=1">店铺申请</a></li>
+					<li><a href="${ctx}/member/distribution/distribution_apply.html?type=2">分销团队申请</a></li>
+				</#if>
+				
+			</ul>
+		</div>
+		
+	 	<div class="content member-munu">
+			<h2>我的业绩</h2>
+			<ul>
+				<li><a href="${ctx}/member/distribution/bill.html">当前业绩</a></li>
+				<li><a href="${ctx}/member/distribution/bill_member_list.html">历史业绩</a></li>
+			</ul>	
+		</div>
+	
+		<div class="content member-munu">
+			<h2>提现管理</h2>
+			<ul>
+			    <li><a href="${ctx}/member/distribution/setting.html">设置</a></li>
+				<li><a href="${ctx}/member/distribution/withdraw.html">提现</a></li>
+				<li><a href="${ctx}/member/distribution/withdraw_apply.html">提现申请</a></li>
+				<li><a href="${ctx}/member/distribution/withdraw_record.html">提现记录</a></li>
+				<li><a href="${ctx}/member/distribution/withdraw_fail_apply.html">提现失败申请</a></li>	
+			</ul>
+		</div>
+	</#if>
+	 
+</div> 
+	

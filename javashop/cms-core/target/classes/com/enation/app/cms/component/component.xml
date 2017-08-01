@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="CMS核心组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="单行文本框字段插件" id="inputFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>	
+		<plugin name="多行文本框插件" id="textareaFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>		
+		<plugin name="富文本编辑器字段插件" id="richEditFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>		
+		<plugin name="下拉框字段插件" id="selectFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>	
+		<plugin name="单选按钮字段插件" id="radioFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>				
+ 		<plugin name="复选框字段插件" id="checkboxFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>	
+		<plugin name="日期控件字段插件" id="dateFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>
+		<plugin name="图片字段插件" id="imageFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>		
+		<plugin name="多图片上传字段插件" id="multiImageFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>		
+		<plugin name="附件上传字段插件" id="attachmentFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin>	
+ 		<!-- <plugin name="视频字段插件" id="videoFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin> -->						
+ 		<plugin name="自定义参数字段插件" id="paramsFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin> 		 
+		<!-- <plugin name="相关文章插件" id="relatedFieldPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin> -->
+		<plugin name="CMS的sitemap生成插件" id="cmsSitemapPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+			<bundle id="sitemapPluginBundle"></bundle>
+		</plugin>
+ 		<plugin name="SiteMap信息重新生成插件" id="cmsRecreateMapPlugin">
+			<bundle id="sitemapPluginBundle"></bundle>
+		</plugin>
+ 		<!-- <plugin name="cms数据日志记录插件" id="cmsDataLogPlugin">
+			<bundle id="articlePluginBundle"></bundle>
+		</plugin> -->
+							
+	</plugins>
+</component>

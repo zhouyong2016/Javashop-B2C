@@ -1,0 +1,201 @@
+<#assign title="安全中心" />
+<#include 'member_header.html'/>
+<div class="mt">
+	<h3>安全中心</h3>
+</div>
+<div class="u-safe warn-box">
+	<span id="promptInfo" class="ftx-04 ml10">建议您启动全部安全设置，以保障账户及资金安全。</span>
+</div>
+<div class="safe-item">
+	<div class="fore1">
+		<strong>登录密码</strong>
+	</div>
+	<div class="fore2">
+		<span class="ftx-03"></span>
+		<span class="ftx-01">互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span>
+	</div>
+	<div class="fore3">
+		<#if member.mobile?exists && member.mobile != ''>
+			<a class="ftx-05" href="mobile_verification.html?type=1">修改</a>
+		<#else>
+			<a class="ftx-05" href="javascript:void(0)" id="no-mobile">修改</a>
+			<span class="error_msg" style="color: #e4393c;"></span>
+		</#if>
+	</div>
+</div>
+<!--  
+<div class="safe-item">
+	<div class="fore1">
+		<strong>邮箱验证</strong>
+	</div>
+	<div class="fore2">
+		<span class="ftx-03">您验证的邮箱：</span>
+		<strong id="email" class="ftx-06"> ${member.email!''} </strong>
+	</div>
+	<div class="fore3">
+		<a class="ftx-05" href="mobile_verification.html?type=2">修改</a>
+	</div>
+</div>
+-->
+<div class="safe-item">
+	<div class="fore1">
+		<strong>手机验证</strong>
+	</div>
+	<div class="fore2">
+		<#if member.mobile?exists && member.mobile != ''>
+			<span class="ftx-03">您验证的手机：</span>
+			<strong id="mobile" class="ftx-06"> ${member.mobile!''} </strong>
+			<span class="ftx-03">若已丢失或停用，请立即更换，</span>
+		<#else>
+			<span style="color:#cc0000;">您的账户当前还没有绑定手机号，请立即绑定手机号，</span>
+		</#if>
+		<span style="color:#cc0000;">避免账户被盗</span>
+	</div>
+	<div class="fore3">
+		<#if member.mobile?exists && member.mobile != ''>
+			<a class="ftx-05" href="mobile_verification.html?type=3">修改</a>
+		<#else>
+			<a class="ftx-05" href="update_mobile_verification.html?type=3">绑定</a>
+		</#if>
+	</div>
+</div>
+<div class="safety-tips">
+	<div class="mt">
+		<h3>安全服务提示</h3>
+	</div>
+	<div class="mc" style="margin-top: 20px;">
+		<span class="ftx-03">1.确认您登录的是javashop网址，注意防范进入钓鱼网站，不要轻信各种即时通讯工具发送的商品或支付链接，谨防网购诈骗。</span>
+		<br><br>
+		<span class="ftx-03">2.建议您安装杀毒软件，并定期更新操作系统等软件补丁，确保账户及交易安全。</span>
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	var email = $("#email").text();
+	var mobile = $("#mobile").text();
+	
+	//如果邮箱不为空
+	if (email != "") {
+		$("#email").html(email.replace(email.substring(3,8),"*****"));
+	}
+	
+	//如果手机号不为空
+	if (mobile != "") {
+		$("#mobile").html(mobile.replace(mobile.substring(4,9),"*****"));
+	}
+	
+	$("#no-mobile").click(function(){
+		$(".fore3 .error_msg").html("请先绑定手机号");
+	});
+	
+});
+</script>
+<script>
+otherMenu(4);
+</script>
+<style>
+.safety-tips {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+}
+.safety-tips .mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safety-tips .mt {
+    display: block;
+    padding: 10px 0;
+}
+
+div.safety-tips .mc {
+    overflow: hidden;
+}
+.safety-tips .mc {
+    line-height: 20px;
+}
+.safe-item::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safe-item {
+    border-bottom: 1px solid #e6e6e6;
+    display: block;
+    padding: 30px 0;
+}
+.safe-item .fore1 {
+    font-family: 微软雅黑;
+    font-size: 18px;
+    padding-left: 25px;
+    text-align: left;
+    width: 130px;
+}
+
+.safe-item .fore2 {
+    border-left: 1px solid #e6e6e6;
+    height: auto;
+    line-height: 24px;
+    padding: 4px 0 4px 15px;
+    width: 550px;
+}
+.safe-item .fore3 {
+    text-align: center;
+    width: 140px;
+}
+.safe-item .fore1, .safe-item .fore2, .safe-item .fore3 {
+    float: left;
+    height: 32px;
+    line-height: 32px;
+}
+.ftx-03, .ftx03 {
+    color: #999;
+}
+.ftx-01, .ftx01 {
+    color: #e4393c;
+}
+.safe-item .fore3 a {
+    margin: 0 5px;
+}
+.ftx-05, .ftx05 {
+    color: #005ea7;
+}
+.ftx-06, .ftx06 {
+    color: #666;
+}
+.mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.mt {
+    padding: 10px 0;
+}
+.mt {
+    display: block;
+    padding: 10px;
+}
+.warn-box {
+    background: #fffdee none repeat scroll 0 0;
+    padding: 5px;
+}
+.ftx-04, .ftx04 {
+    color: #ff6c00;
+}
+.ml10 {
+    margin-left: 10px;
+}
+</style>
+<#include '../common/footer.html'/>

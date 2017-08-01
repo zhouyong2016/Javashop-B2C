@@ -1,0 +1,65 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+<form id="order_form">
+	<div class="shadowBoxWhite  whiteBox">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata" style="width: 99%">
+				  <tbody>
+					 	<tr>
+						    <th>订单号：</th>
+						    <td>${(payment.order_sn)!''}</td>
+						    <th>支付方式：</th>
+	   						<td>${payment.pay_method}</td>
+					  	</tr>
+					 	<tr> 
+	    					<th>订单金额：</th>
+	    					<td >${ord.order_amount?string('#.##')}</td>
+	    					<th>付款人：</th>
+	   			 			<td>${payment.pay_user}</td>
+	   					</tr>
+					   	<tr>	
+							<th>应付款： </th>
+							<td>${payment.money?string('#.##')}</td>
+							<th>已结算金额：</th>
+							<td>${payment.paymoney?string('#.##')!''}</td>
+	   					</tr>
+				 </tbody>
+			</table>
+		</div>
+	<br>
+	<div class="detail" >
+		<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata" id="paydata" style="width: 99%">
+			<thead>
+				<tr>
+					<th formatter="formatdate">付款日期</th>
+					<th >付款金额</th>
+					<th >操作人</th>
+				</tr>
+			</thead>
+	        <tbody>
+		        <#list paymentList as item>
+			         <tr>
+			         	  <td><@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${item.pay_date?c}" /></td>
+				          <td >${item.pay_money?string('#.##')!''}</td>
+				          <td >${item.admin_user}</td>
+			        </tr>
+				</#list>
+	        </tbody>
+     		</table>
+     		<center>
+	      		<label>本次付款：</label>
+		      	<input type="text" class="easyui-validatebox input_text" data-options="required:true,validType:'money'" id="paymoney" name="paymoney" style="width: 100px; margin-top: 10px;" value="${showMoney?string('#.##')}"<#if showMoney==0>disabled="disabled"</#if> />
+				<input type="hidden" value="${payment_id}" name="payment_id" />
+				<input type="hidden" value="${ord.order_id}" name="orderId"/>
+			</center>
+		</div>
+	</div>
+	</form>
+	
+</div>
+
+<script>
+	function formatdate(value,row,index){
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+</script>

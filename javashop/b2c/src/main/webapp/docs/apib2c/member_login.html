@@ -1,0 +1,30 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>login 会员登录API</h3>
+		<p>会员登录</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/shop/member/login.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w100">默认值</span><span class="w100">备注</span></h4>
+			<p><span class="w100 important">username</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">admin</span><span class="w100"></span><span class="w100">用户名</span></p>
+			<p><span class="w100 important">password</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">123456</span><span class="w100"></span><span class="w100">密码</span></p>
+			<p><span class="w100 important">validcode</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important"></span><span class="w100"></span><span class="w100">验证码</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回结果:</h3>
+		<div class="sample-code">
+			<h3><span class="w100">参数</span><span class="w100">类型</span><span class="w400">备注</span></h3>
+			<p><span class="w100 r_name">result</span><span class="w100 r_type">int</span><span class="w400 r-intro">为1表示登录成功，0表示失败</span></p>
+			<p><span class="w100 r_name">message</span><span class="w100 r_type">String</span><span class="w400 r-intro">提示信息</span></p>
+			<p><span class="w100 r_name">data</span><span class="w100 r_type">String</span><span class="w400 r-intro">返回数据</span></p>
+		</div>
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"登录成功","data":null}
+		</h5>
+	</div>
+</div>

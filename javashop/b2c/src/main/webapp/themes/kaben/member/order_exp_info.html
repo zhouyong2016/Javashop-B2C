@@ -1,0 +1,51 @@
+
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+
+<#if orderDetail?? && orderDetail!=''>
+	<!-- 获取会员订单详细快递信息 -->
+	<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+	<!-- 调用会员订单详细快递信息 -->
+	<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+	<#assign orderSend = orderDelivery.deliveryList>
+	
+	<#assign logi_no ='' >
+	<#assign logi_code ='' >
+	<#assign logi_name ='' >
+	<#if orderDetail.ship_status gt 0>
+	<#list orderSend as delivery>
+		<#if delivery.type ==1 && delivery.logi_no?exists >
+			<#assign logi_no = "${delivery.logi_no!''}">
+			<#assign logi_code = "${delivery.logi_code!''}" >
+			<#assign logi_name = "${delivery.logi_name!''}">
+		</#if>
+		
+		<#if delivery.type ==2 && delivery.logi_no?exists >
+		</#if>
+		
+		<#if delivery.type ==3 && delivery.logi_no?exists >
+		</#if>
+	</#list>
+	</#if>
+	
+	<!--创建“查询订单物流详细”标签-->
+	<#assign OrderExpressInfoTag = newTag("orderExpressInfoTag")>
+	<!--调用“查询订单物流详细”标签，并传递参数-->
+	<#assign kuaidiResult = OrderExpressInfoTag('{"logino":"${logi_no!\"\"}","code":"${logi_code!\"\"}"}')>
+</#if>
+<div class="member-send">
+	<h1>快递查询</h1>
+	<h3><span>物流公司：<i>${logi_name}</i></span><span class="member-send-sn">快递单号：<em>${logi_no}</em></span></h3>
+	<#if logi_no?? && logi_no != ''>
+		<div class="member-send-list">
+			<#include '/member/order_kuaidi.html' />
+		</div>
+	<#else>
+ 		<p class="send-no_blank">暂无符合条件的数据记录</p>
+ 	</#if>
+	
+	
+</div>
+

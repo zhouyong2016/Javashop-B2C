@@ -1,0 +1,73 @@
+
+<div id="containe_pricer"></div>
+ 
+<script type="text/javascript"> 
+$(function () { 
+
+	var transform = "";
+
+	sale_money= new Highcharts.Chart({                                           
+        chart: {
+        	renderTo:'containe_pricer',
+            type: 'bar'                                                    
+        },                                                                 
+        title: {
+			text: '行业下单金额'                    
+        },                                           
+        xAxis: {                                                           
+            categories: [${tree}],
+            title: {                                                       
+                text: null                                                 
+            }                                                              
+        },                                                                 
+        yAxis: {                                                           
+            min: 0,                                                        
+            title: {                                                       
+                text: '单位 (元)',                             
+                align: 'high'                                              
+            },                                                             
+            labels: {                                                      
+                overflow: 'justify'                                        
+            }                                                              
+        },                                                                 
+        tooltip: {                                                         
+            valueSuffix: ' 元'                                       
+        },                                                                 
+        plotOptions: {                                                     
+            bar: {                                                         
+                dataLabels: {                                              
+                    enabled: true                                          
+                }                                                          
+            }                                                              
+        },                                                                 
+        legend: {                                                          
+            layout: 'vertical',                                            
+            align: 'right',                                                
+            verticalAlign: 'top',                                          
+            x: -40,                                                        
+            y: 100,                                                        
+            floating: true,                                                
+            borderWidth: 1,                                                
+            backgroundColor: '#FFFFFF',                                    
+            shadow: true                                                   
+        },                                                                 
+        credits: {                                                         
+            enabled: false                                                 
+        },                                                                 
+        series: [{
+			name: '${date}',
+			data: [${data}]
+        }]                                                                 
+    });    
+
+	$(".highcharts-button").each(function(){
+		if(transform==""){
+			transform=$(this).attr("transform");
+		}
+		$(this).attr("transform",transform);
+	    
+	});
+});           
+
+
+</script> 

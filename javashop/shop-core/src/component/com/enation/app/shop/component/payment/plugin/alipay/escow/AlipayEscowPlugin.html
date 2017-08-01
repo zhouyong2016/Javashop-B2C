@@ -1,0 +1,59 @@
+<tr>
+	 <th>支付宝合作伙伴id ：</th>
+	 <td>
+ 	 <input type="text" name="partner" value="${partner!''}" class="input_text easyui-validatebox"  id="partner" maxlength="50"/>
+	</td>
+</tr>
+<tr>
+	 <th> 支付宝安全校验码：</th>
+	 <td>
+ 	 <input type="text" name="key"  value="${key!''}" class="input_text easyui-validatebox"  id="key" maxlength="50"/>
+	</td>
+</tr>
+<tr>
+	 <th> 卖家支付宝帐户：</th>
+	 <td>
+ 	 <input type="text" name="seller_email"  value="${seller_email!''}" class="easyui-validatebox input_text" id="seller_email" maxlength="50" />
+	</td>
+</tr>
+<tr>
+	 <th>&nbsp;</th>
+	 <td>
+ 	 下面两个参数定义在向支付宝传递的内容如标题和body的编码，以及在校验时对参数的编码<br>
+ 	 如果签名验证失败可以尝试修改相应的编码<br>
+ 	 如果到支付宝页面乱码尝试修改内容编码<br>
+	</td>
+</tr>
+<tr>
+	 <th> 内容编码：</th>
+	 <td>
+ 	 	<select name="content_encoding">
+ 	 		<option value="">不编码</option>
+ 	 		<option value="UTF-8" <#if content_encoding?exists && content_encoding=='UTF-8'>selected</#if>>UTF-8</option>
+ 	 		<option value="GBK" <#if content_encoding?exists && content_encoding=='GBK'>selected</#if>>GBK</option>
+ 	 	</select> 
+	</td>
+</tr>
+<tr>
+	 <th>校验参数编码：</th>
+	 <td>
+ 	 	<select name="param_encoding">
+ 	 		<option value="">不编码</option>
+ 	 		<option value="UTF-8" <#if param_encoding?exists &&  param_encoding=='UTF-8'>selected</#if>>UTF-8</option>
+ 	 		<option value="GBK" <#if  param_encoding?exists && param_encoding=='GBK'>selected</#if>>GBK</option>
+ 	 	</select>
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#seller_email').validatebox({ 
+		required:true 
+		}); 
+	$('#partner').validatebox({ 
+		required:true 
+		}); 
+	$('#key').validatebox({ 
+		required:true 
+		}); 
+})
+</script>

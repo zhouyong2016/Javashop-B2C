@@ -1,0 +1,131 @@
+<#include '/admin/header.html' > 
+<form  method="post" id="theForm" >
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox" >
+		<h1 class="title">基本设置</h1>
+		<table style="padding:10px;">
+			<tr>
+				<td>
+					网站名称:
+				</td>
+				<td><input type="hidden" name="eopSite.id" value="${eopSite.id }" />
+					<input type="text" name="eopSite.sitename" value="${eopSite.sitename }" dataType="string" isrequired="true" class="input_text easyui-validatebox" data-options="required:true"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					网站标题:
+				</td>
+				<td><input type="text" name="eopSite.title" value="${eopSite.title }" dataType="string" isrequired="true" class="input_text easyui-validatebox" data-options="required:true"/>
+				</td>
+			</tr>
+			<tr>
+				<td>网站关键字:</td>
+				<td><input type="text" name="eopSite.keywords" value="${eopSite.keywords!'' }" class="input_text" /></td>
+			</tr>
+			<tr>
+				<td>页面描述:</td>
+				<td><textarea name="eopSite.descript" style="width: 405px" />${eopSite.descript!''}</textarea></td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite  whiteBox">
+		<h1 class="title">显示设置</h1>
+		<table style="padding:10px;">
+			<tr>
+				<td  >网站Logo:</td>
+				<td>
+					<div id="sitelogo" style="float: none; position: static;">
+						<#if eopSite.logofile??>
+								<img style="float: none; position: static;" src="${eopSite.logofile!''}" id="logo" />&nbsp;
+						</#if>
+						<div></div>
+						<input type="button" class="button" value="上传Logo" onclick="openImgDlg(getLogoPath)"/>
+						<input type="hidden" name="logopath" id="logopath" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>网站icon:</td>
+				<td>
+					<div id="sitelogo" style="float: none; position: static;">
+							<img style="float: none; position: static;" src="${eopSite.icofile!'' }"  id="icon"/>&nbsp;
+						<div></div>
+						<input type="button" class="button" value="上传图标" onclick="openImgDlg(getIconpath)"/>
+						<input type="hidden" name="iconpath" id="iconpath" />
+					</div>
+				</td>
+				<td>
+					<p style="color: red">*修改之后需要重启浏览器</p>
+				</td>
+			</tr>
+			<tr>
+				<td>暂时关闭网站:</td>
+				<td>
+					<input type="radio" name="eopSite.siteon" namespace="siteon" id="eopsiteon0" default="0"
+						<#if eopSite.siteon==0>
+							checked="checked"
+						</#if>
+							value="0"><label for="eopsiteon0">是</label>&nbsp;<input type="radio" name="eopSite.siteon" id="eopsiteon1" namespace="siteon" value="1"
+						<#if eopSite.siteon!=0>
+							checked="checked"
+						</#if>>
+					<label for="eopsiteon1">否</label>
+				</td>
+			</tr>
+			<tr>
+				<td>关闭原因:</td>
+				<td><textarea style="width: 519px; height: 120px" name="eopSite.closereson">${eopSite.closereson!'' }</textarea></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td style="text-align: center;">
+					<a href="javascript:;"  id="saveBtn"  class="easyui-linkbutton"  >　保存设置 </a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("#saveBtn").click(function(){
+			var disabled=  $("#saveBtn").hasClass("l-btn-disabled");
+			if( !disabled ){
+				var formflag= $("#theForm").form().form('validate');
+				if(formflag){
+					$.Loading.show("正在保存请稍候...");
+					$("#saveBtn").linkbutton("disable");	
+					var options = {
+							url : "userSite!editSave.do",
+							type : "POST",
+							dataType : "json",
+							success : function(result) {
+								if(result.result==1){
+									$.Loading.success(result.message);
+								}else{
+									$.Loading.error(result.message);
+								}
+								$("#saveBtn").linkbutton("enable");
+						 	},
+						 	error : function(e) {
+						 		$.Loading.error('出现错误，请重试');
+						 		$("#saveBtn").linkbutton("enable");
+							}
+						};
+					$('#theForm').ajaxSubmit(options);	
+				}
+			}
+		});
+	})
+
+function getLogoPath(path){
+	$("#logopath").val(path);
+	$("#logo").attr("src",path);
+}
+function getIconpath(path){
+	$("#iconpath").val(path);
+	$("#icon").attr("src",path);
+}
+</script>
+<#include '/admin/footer.html' >

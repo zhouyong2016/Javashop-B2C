@@ -1,0 +1,7 @@
+
+<!--创建“订单价格”标签-->
+<#assign orderPriceTag = newTag("orderPriceTag")>
+<!--调用“订单价格”标签，并传递参数-->
+<#assign orderPrice = orderPriceTag("{'address_id':1},{'shipping_id':1}")>
+
+${orderPrice.originalPrice}

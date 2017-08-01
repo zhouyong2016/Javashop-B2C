@@ -1,0 +1,9 @@
+
+<!--创建"商品规格标签"标签-->
+<#assign StoreGoodsSpecTag= newTag("storeGoodsSpecTag") >  
+<!--调用"商品规格标签"标签，并传递参数-->            
+<#assign  StoreGoodsSpec= StoreGoodsSpecTag("'goods_id':'1','catid':'1'") >						
+<ul class="gw">
+<#list StoreGoodsSpec as ss>
+	规格id：${ss.spec_id}</br>
+</#list>

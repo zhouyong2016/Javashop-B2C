@@ -1,0 +1,9 @@
+
+
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<!-- 调用发票标签 -->
+<#assign orderreceipt = receiptTag("{'orderid':1}")>
+
+发票抬头:${orderreceipt.title}
+发票抬头:${orderreceipt.content}

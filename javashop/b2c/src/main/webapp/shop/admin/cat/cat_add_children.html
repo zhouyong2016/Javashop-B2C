@@ -1,0 +1,49 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addchildrenForm" method="post" class="validate" enctype="multipart/form-data" >
+			<table>
+				<tr>
+					<th>分类名称</th>
+					<td><input class="input_text" type="text" id="name"
+						name="name" data-options="required:true"  maxlength="60"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>分类图片</th>
+					<td>
+						<input class="easyui-validatebox" type="file" id="file" name="file" data-options="required:false"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>上级分类</th>
+					<td>
+						<input type="hidden" name="cattype" value="0" >
+						<input class="easyui-combotree combo" value="${cat.cat_id}" name="parent_id" data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get',required:false,height:28" style="width:200px;">
+					</td>
+				</tr>
+				<tr>
+					<th>商品类型</th>
+					<td>
+						<input class="easyui-combotree combo" value="" name="type_id" data-options="url:'${ctx}/shop/admin/cat/type-list-json.do',method:'get',required:true,height:28" style="width:200px;">
+					</td>
+				</tr>
+				<tr>
+					<th>排序</th>
+					<td>
+					<input class="input_text easyui-numberbox" type="text" id="order"
+						name="cat_order" data-options="required:true" value="0" maxlength="5"></input>
+					</td>
+				</tr>
+				<tr>
+					<input type="hidden" name="list_show" value="1" checked="checked" />
+					<!--  <th>列表中显示</th>
+					<td>
+						<input type="radio" name="list_show" value="1" checked="checked"/>是&nbsp;
+      				 	<input type="radio" name="list_show" value="0" />否-->
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

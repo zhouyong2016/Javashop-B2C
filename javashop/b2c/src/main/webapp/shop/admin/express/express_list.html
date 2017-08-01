@@ -1,0 +1,153 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<form id="advform">
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'list-json.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true'"
+				pagination="true" id="expdata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'platform_name',width:200">平台名称</th>
+						<th data-options="field:'is_open',width:300" formatter="foropen">是否启用</th>
+						<th data-options="field:'action',width:200,align:'center'"
+							formatter="forAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+
+<script>
+
+function editExpress(code,id) {
+	var map = {}; // Map map = new HashMap();
+	map["href"] = "edit.do?code="+code+"&id="+id;
+	map["formId"] = "#editform";
+	map["url"] = "save-edit.do";
+	map["title"] = "修改参数";
+	map["divDialog"] = "#divdia";
+	map["gridreload"] = "#expdata";
+	addDialog(map);
+}
+function addDialog(map) {
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title : map["title"],
+		width : 600,
+		top:10,
+		height : 400,
+		closed : false,
+		cache : false,
+		href : map["href"],
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				 var savebtn = $(this);
+　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+　　				 if(!disabled){
+					 submitForm(map,savebtn);
+	　　			 }
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				$(map["divDialog"]).dialog('close');
+			}
+		} ]
+	});
+}
+function submitForm(map,savebtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍候...");
+			savebtn.linkbutton("disable");
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$(map["divDialog"]).dialog('close');
+					$(map["gridreload"]).datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+}
+
+	function fortime(value,row,index){
+		var val;
+		if(value==0){
+			val = "";
+		}else{
+			val = getFormatDateByLong(value,"yyyy-MM-dd")
+		}
+		return val;
+	}
+	
+	function forCtime(value,row,index){
+		var val;
+		if(value==0){
+			val = "";
+		}else{
+			val = getFormatDateByLong(value,"yyyy-MM-dd")
+		}
+		return val;
+	}
+	
+	function forAction(value,row,index){
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='editExpress(\""
+			+ row.code + "\","+row.id+")'></a>";
+		return val;
+	}
+	
+	function foropen(value,row,index){
+		var val;
+		if(value==1){
+			val="已启用&nbsp;";
+		}else{
+			val="未启用&nbsp;<a href='javascript:void(0);' onclick='setOpen("+row.id+")'>开启</a>";
+		}
+		return val;
+	}
+	
+	
+	function setOpen(id){
+		$.ajax({
+			url:"set-open.do?id="+id,
+			dataType:"json",
+			cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。           
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success(data.message);
+				}else{
+					$.Loading.error(data.message);
+				}
+				
+				$("#expdata").datagrid('reload');
+			},
+			error:function(){
+				$.Loading.hide();
+				$.Loading.error("出错了，请稍候重试!");
+			}
+		});
+	}
+	
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,9 @@
+
+<!--创建"退货申请"标签-->
+<#assign CheckUrlTag= newTag("checkUrlTag") >  
+<!--调用"退货申请"标签，并传递参数-->            
+<#assign  CheckUrl= CheckUrlTag() >						
+<ul class="gw">
+
+	名称：${CheckUrl}</br>
+	

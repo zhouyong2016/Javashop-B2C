@@ -1,0 +1,13 @@
+
+<!--创建"店铺商品咨询列表"标签-->
+<#assign StoreConsultListTag= newTag("storeConsultListTag") >  
+<!--调用"店铺商品咨询列表"标签，并传递参数-->            
+<#assign  StoreConsultList= StoreConsultListTag() >						
+<ul class="gw">
+
+
+<#list StoreConsultList.cmmentList as dly>
+	  商品id：${dly.goods_id}</br>
+            会员id: ${dly.member_id}</br>
+</#list>
+

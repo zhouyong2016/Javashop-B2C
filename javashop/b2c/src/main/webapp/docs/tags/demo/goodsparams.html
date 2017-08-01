@@ -1,0 +1,31 @@
+
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!--调用"商品基本信息"标签，并传递参数-->
+<#assign goodsBaseData = goodsBaseDataTag("{'goodsid':131}")> 
+<!-- 创建商品参数标签 -->
+<#assign goodsParametersTag= newTag("goodsParametersTag")>
+<!-- 调用标签获取商品参数信息 -->
+<#assign goodsPara= goodsParametersTag()>
+
+<#if goodsPara.hasParam==true>
+	<!-- 获得商品参数的参数组 -->
+	<#assign para = goodsPara.paramList>
+</#if>
+
+<table>
+	<#if goodsPara.hasParam==true>
+		<#list para as parameters>
+		<!-- 获得 paramList下的json数组，使用第二层list循环-->
+		<#list parameters.paramList as gparam>
+			<tr>
+				<th>${gparam.name }:</th>
+				<td>${gparam.value }</td>
+			</tr>
+		</#list>
+		</#list>
+		<#else>
+		此商品无参数数据
+	</#if>
+</table>
+

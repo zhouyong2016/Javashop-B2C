@@ -1,0 +1,11 @@
+
+<!--创建"结算退货申请订单标签"标签-->
+<#assign storeBillSellBackListTag= newTag("storeBillSellBackListTag") >  
+<!--调用"结算退货申请订单标签"标签，并传递参数-->            
+<#assign  storeBillSellBackList= storeBillSellBackListTag("'pageSize':'1','pageCount':'3','sn':'1'") >						
+<ul class="gw">
+<#list storeBillSellBackList as sellBackList>
+	定单id：${sellBackList.order_id}</br>
+	定单编号：${sellBackList.sn}</br>
+	会员id：${sellBackList.member_id}</br>
+</#list>

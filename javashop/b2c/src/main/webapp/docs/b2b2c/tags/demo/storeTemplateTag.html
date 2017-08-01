@@ -1,0 +1,12 @@
+
+<!--创建"店铺模板"标签-->
+<#assign StoreTemplateTag= newTag("storeTemplateTag") >  
+<!--调用"店铺模板"标签-->            
+<#assign  StoreTemplate= StoreTemplateTag() >						
+<ul class="gw">
+<#list StoreTemplate as li>
+
+	店铺id：${li.store_id}</br>
+	名称：${li.name}</br>
+           默认模板id：${li.def_temp}</br>
+</#list>

@@ -1,0 +1,224 @@
+<div>
+<style>
+.markposbox{
+width:350px;
+}
+.markposbox li{
+	width:100px;
+	float:left;
+	border:1px solid #CCC;
+	margin:2px;
+}
+span.zengzhi{
+border-bottom: 1px solid #ccc;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    width: 500px;
+}
+
+</style>
+<div class="main" style="background-color: white;">
+	<table class="form-table">
+		<tr>
+			<th >
+				静态服务器域名:
+			</th>
+			<td>
+				<input type="text" maxlength="100" class="input_text combo" name="system.static_server_domain" style="width:300px" value="${system.static_server_domain!'' }"/>
+			</td>
+		</tr>
+
+		<tr>
+			<th class="label">
+				静态服务器路径:
+			</th>
+			<td>
+				<input type="text" maxlength="255" class="input_text combo" name="system.static_server_path" style="width:300px" value="${system.static_server_path!'' }"/>
+			</td>
+		</tr>
+		<tr>
+			<th class="label">
+				加密密钥:
+			</th>
+			<td>
+				<input type="text" maxlength="100" class="input_text combo" name="system.global_auth_key" style="width:300px" value="${system.global_auth_key!'' }"  onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" onblur="value=value.replace(/[\u4E00-\u9FA5]/g,'')" /><br/>
+				<span class="tip">更改密钥后，会使前的加密信息无法解密，从而导致之前生成的加密信息无法解密：如找回密码、邮件验证连接等。</span>
+			</td>
+		</tr>		
+		<tr>
+			<th class="label">
+				后台分页数:
+			</th>
+			<td>
+				<input type="text" maxlength="3" class="easyui-numberbox input_text" name="system.backend_pagesize" style="width:50px"  value="${system.backend_pagesize!}"/>
+			</td>
+		</tr>
+		<tr>
+			<th class="label">
+				虚拟目录:
+			</th>
+			<td>
+				<input type="text" maxlength="100" class="input_text combo" name="system.context_path" style="width:300px" value="${system.context_path!'' }"/>
+			</td>
+		</tr>
+		
+		<tr>
+			<th class="label">
+				默认图片:
+			</th>
+			<td>
+				<img src="${system.default_img_url!'' }" id="default_img" style='width:100px' /><br/>
+				<input type="hidden" id="default_img_url" name="system.default_img_url" value="${system.default_img_url!'' }" >
+				<input type="button" id="uploadBtn" value="上传" />
+			</td>
+		</tr>
+		
+		<tr>
+			<th class="label">
+				wap站:
+			</th>
+			<td>
+				<input type="radio" name="system.wap_open"  class="wap-opation" value="1" <#if system.wap_open?? && system.wap_open=="1">checked="checked"</#if> />开启 &nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="system.wap_open"  class="wap-opation"  value="0" <#if (!system.wap_open??)|| system.wap_open=="0">checked="checked"</#if> />关闭
+			</td>
+		</tr>
+		
+		<tr class="wap-setting" >
+			<th class="label">
+				wap站域名:
+			</th>
+			<td>
+			<input type="text" class="input_text combo" name="system.wap_domain" style="width:300px" value="${system.wap_domain!'' }"/>
+			<br>
+			<span class="tip">通过此域名访问会解析下面wap模板目录的页面，使用手机访问本站点的其它域名会自动转向此域名</span>
+			</td>
+		</tr>
+		
+		<tr  class="wap-setting">
+			<th class="label">
+				wap站模板目录:
+			</th>
+			<td>
+			<input type="text" class="input_text combo" name="system.wap_folder" style="width:300px" value="${system.wap_folder!'' }"/>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<th class="label">
+				手机短信支持:
+			</th>
+			<td>
+				<label style="float:left;display:inline;"><input type="radio" name="system.sms_reg_open"  value="1" <#if system.sms_reg_open?? && system.sms_reg_open=="1">checked="checked"</#if> />开启</label>
+				<label style="float:left;display:inline;"><input type="radio" name="system.sms_reg_open"  value="0" <#if (!system.sms_reg_open??) ||system.sms_reg_open=="0">checked="checked"</#if> />关闭</label>
+				<span class="tip" style="float:left;display:inline;">开启手机短信功能后，请在"设置->短信网关设置"菜单中设置相关的参数才能正常发送短信。</span>
+			</td>
+		</tr>
+		<tr>
+			<th class="label">
+				测试模式:
+			</th>
+			<td>
+				<label style="float:left;display:inline;"><input type="radio" name="system.test_mode"  value="1" <#if system.test_mode?? && system.test_mode=="1">checked="checked"</#if> />开启</label>
+				<label style="float:left;display:inline;"><input type="radio" name="system.test_mode"  value="0" <#if (!system.test_mode??) ||system.test_mode=="0">checked="checked"</#if> />关闭</label>
+				<span class="tip" style="float:left;display:inline;">开启测试模式后 ，图片验证码和短信验证码锁定为1111</span>
+			</td>
+		</tr>	
+<tr>
+	<td colspan="2" ><span class="zengzhi">增值组件</span></td>
+</tr>
+		<tr>
+			<th class="label" style="vertical-align: top;">
+				静态页生成：
+			</th>
+			<td>
+				<input type="radio" name="system.static_page_open"  class="check"  clz="pageCreatorComponent" value="1" <#if system.static_page_open=="1">checked="checked"</#if> />&nbsp;通过静态页组件生成&nbsp;&nbsp;&nbsp;&nbsp;			
+				<input type="radio" name="system.static_page_open"   value="0"  <#if system.static_page_open=="0">checked="checked"</#if>  />&nbsp;关闭
+			
+				<br>
+				<span class="tip">请确认购买并安装了静态页生成组件再启用，<a href="http://www.javamall.com.cn/component/page-creator.html" target="_blank">点击这里了解此组件的详细情况</a>。
+				<br>
+				第一次安装静态页生成组件需要重新生成所有页面。<a href="javascript:newTab('生成静态页','${ctx}/shop/admin/page-create/input.do')">点击这里去生成所有页面。</a></span>
+			
+						
+			</td>
+		</tr>	
+		
+		<tr>
+			<th class="label" style="vertical-align: top;">
+				全文检索：
+			</th>
+			<td>
+				<input type="radio" name="system.lucene"   class="check" clz="goodsIndexComponent"   value="1" <#if system.lucene=="1">checked="checked"</#if> />&nbsp;通过Lucene全文检索&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="system.lucene"   value="0"  <#if system.lucene=="0">checked="checked"</#if>  />&nbsp;关闭
+				<br>
+				<span class="tip">请确认购买并安装了商品索引组件再启用，<a href="http://www.javamall.com.cn/component/lucene.html" target="_blank">点击这里了解此组件的详细情况</a>。
+				<br>
+				第一次安装商品索引组件需要重新生成所有索引。<a href="javascript:newTab('生成商品索引','${ctx}/shop/admin/goods-index/input.do')">点击这里去生成所有索引。</a></span>
+			
+			</td>
+		</tr>
+		
+
+		
+			
+	</table>
+	</div>
+	
+	<div class="blank" style="width:100%;height:50px;background:#fff;margin:0px;padding:0px;"></div>
+	<script>
+	
+	function getPath(path){
+		$("#default_img").attr("src",path);
+		
+		$("#default_img_url").val(path);
+	}
+	
+	
+	$(function(){
+		
+		$("#uploadBtn").click(function(){
+			openImgDlg(getPath)
+		});
+		
+		
+		$(".check").click(function(){
+			var $this  = $(this);
+			var id =$this.attr("clz");
+			$.ajax({
+				url:'check-component/exist.do',
+				data:'id='+id,
+				dataType:"json",
+				success:function(json){
+					if(json.result==0){
+						alert("此组件不存在，请您购买安装后再启用。");
+						$this.removeAttr("checked");
+						$this.siblings("[value=0]").attr("checked","checked")
+					}
+				},
+				error:function(){
+					alert("出现意外错误");
+				}
+			});
+		});
+		 		
+		<#if system.wap_open?? && system.wap_open=="1">
+			$(".wap-setting").show();
+		<#else>
+			$(".wap-setting").hide();
+		</#if>
+		$(".wap-opation").click(function(){
+		 
+			if(this.value==1    ){
+				$(".wap-setting").show();
+			}else{
+				$(".wap-setting").hide();
+			}
+			
+			
+		});
+		
+	});
+	</script>
+</div>

@@ -1,0 +1,381 @@
+<#include '/admin/header.html' >
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()/> 
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.goodsSelector.js"> </script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.autoFloat.js"> </script>
+<div class="main" style="background-color: white;">
+	<form id="edit_form" class="validate">
+	<input type="hidden" name="activity_id" value="${activity.activity_id}">
+		<div>
+			<h3>活动信息</h3>
+			<div style="margin:10px 0 0 10px;">
+				<div>
+					<em class="required">*</em>
+					<span class="titleName">活动名称：</span>
+					<input class="input_text easyui-validatebox" type="text" placeholder="活动名称最多可填写60个字符" name="activity_name" value="${activity.activity_name!''}" maxlength="60" data-options="required:true" style="width: 500px;">
+				</div>
+			</div>
+			<div style="margin:10px 0 0 10px;">
+				<div>
+					<em class="required">*</em>
+					<span class="titleName">生效时间：</span>
+					<input class="input_text easyui-datetimebox" id="add_time_from_index" name="startTime" value="<@dateformat time='${(activity.start_time)!0}' pattern='yyyy-MM-dd HH:mm:ss'/>" data-options="required:true" style="width: 200px;height: 30px;">
+					<span>至</span>
+					<input class="input_text easyui-datetimebox" id="add_time_to_index" name="endTime" value="<@dateformat time='${(activity.end_time)!0}' pattern='yyyy-MM-dd HH:mm:ss'/>" data-options="required:true" style="width: 200px;height: 30px;">
+				</div>
+			</div>
+			<div style="margin:10px 0 0 10px;">
+				<div>
+					<span class="titleName">活动描述：</span>
+					<script id="editor" name="description" type="text/plain" style="height:200px;width: 99%;">${activity.description!''}</script>
+				</div>
+			</div>
+		</div>
+		<div style="margin:20px 0 0 0;">
+			<h3>优惠设置</h3>
+			<div style="margin:10px 0 0 10px;">
+				<em class="required">*</em>
+				<span class="titleName">优惠条件：</span>
+			</div>
+			<#list detailList as detail>
+				<div style="margin:10px 0 0 10px;border:1px solid #ccc;width: 97%">
+					<input type="hidden" value="1" name="activity_type"/>
+					<input type="hidden" value="${detail.detail_id}" name="detail_id"/>
+					<table style="width:100%;height: 250px;" cellspacing="0" cellpadding="0" >
+						<tr >
+							<th width="50%" align="center" style="border-bottom:1px solid #ccc;">优惠门槛</th>
+							<th width="50%" align="center"  style="border-bottom:1px solid #ccc;">优惠方式(可多选)</th>
+						</tr>
+						<tr>
+							<td rowspan="5" align="center">
+								<span>满</span>
+								<input class="easyui-numberbox input_text" name="full_money" id="fullMoney" data-options="required:true" 
+									type="text" value="${detail.full_money!''}" dataType="float" precision="2" maxlength="10" style="width: 60px"/>
+								<span>元</span>
+							</td>
+							<td align="center">
+								<input class="checked-status" type="checkbox" value="1" name="is_full_minus" <#if detail.is_full_minus == 1>checked="checked"</#if>>
+								<span class="fullMinus" style="display: inline-block;margin-right: 63px;">减现金</span>
+								<span class="minusInput" style="display: none;">
+								减
+								<input class="easyui-numberbox input_text" name="minus_value" id="minusValue" 
+									value="${detail.minus_value!''}" type="text" dataType="float" precision="2" maxlength="10" style="width: 60px"/>
+								元
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<input class="checked-status" type="checkbox" value="1" name="is_send_point" style="margin-left: 11px;" <#if detail.is_send_point == 1>checked="checked"</#if>>
+								<span class="sendPoint" style="display: inline-block;margin-right: 74px;">送积分</span>
+								<span class="pointInput" style="display: none;">
+								送
+								<input class="easyui-numberbox input_text" name="point_value" id="pointValue" 
+									value="${detail.point_value!''}" type="text" maxlength="10" style="width: 60px"/>
+								积分
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<input class="checked-status" type="checkbox" value="1" name="is_free_ship" <#if detail.is_free_ship == 1>checked="checked"</#if>>
+								<span style="margin-right: 63px;">免邮费</span>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<input class="checked-status" type="checkbox" value="1" name="is_send_gift" <#if detail.is_send_gift == 1>checked="checked"</#if>>
+								<span class="sendGift" style="display: inline-block;margin-right: 63px;">送赠品</span>
+								<span class="giftAll" style="display: none;">送
+									<!-- 赠品列表 -->
+									<select class="giftId" name="gift_id" style="width: 150px;">
+										<option value="0">请选择</option>
+										<#if giftList??>
+											<#list giftList as gift>
+												<option value="${gift.gift_id}" <#if detail.gift_id??><#if detail.gift_id == gift.gift_id>selected="selected"</#if></#if>>${gift.gift_name}</option>
+											</#list>
+										</#if>
+									</select>
+									<a href="javascript:;" onclick="newTab('赠品列表','${ctx}/shop/admin/gift/list.do')" style="color: blue;font-weight: bolder;font-size:small; border-bottom: 1px solid blue;margin-left: 10px;">新增</a>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<input class="checked-status" type="checkbox" value="1" name="is_send_bonus" <#if detail.is_send_bonus == 1>checked="checked"</#if>>
+								<span class="sendBonus" style="display: inline-block;margin-right: 52px;">送优惠券</span>
+								<span class="bonusAll" style="display: none;">送
+									<select class="bonusId" name="bonus_id" style="width: 150px;">
+										<option value="0">请选择</option>
+										<#if bonusList??>
+											<#list bonusList as bonus>
+												<option value="${bonus.type_id}" <#if detail.bonus_id??><#if detail.bonus_id == bonus.type_id>selected="selected"</#if></#if>>${bonus.type_name}<#if bonus.send_type == 0> (电子券)</#if><#if bonus.send_type == 3> (实体券)</#if></option>
+											</#list>
+										</#if>
+									</select>
+									<a href="javascript:;" onclick="newTab('优惠券列表','${ctx}/shop/admin/bonus-type/list.do')" style="color: blue;font-weight: bolder;font-size:small; border-bottom: 1px solid blue;margin-left: 10px;">新增</a>
+								</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</#list>
+		</div>
+		<div style="margin:20px 0 0 0;">
+			<h3>选择活动商品</h3>
+			<div style="margin:10px 0 0 10px;">
+				<label >
+					<em class="required">*</em>
+					<span class="titleName">活动商品：</span>
+				</label>
+				<div style="margin:10px 0 0 20px;">
+					<label>
+						<input class="all-status" type="radio" value="1" name="range_type" id="all" <#if activity.range_type == 1>checked="checked"</#if>>
+						<span>全部商品参与</span>
+					</label>
+				</div>
+			</div>
+			<div style="margin:10px 0 0 10px;">
+				<label style="margin:10px 0 0 20px;">
+					<input class="part-status" type="radio" value="2" name="range_type" id="part" <#if activity.range_type == 2>checked="checked"</#if>>
+					<input type="hidden" id="hidInput" <#if activity.range_type == 1>value="0"<#else>value="1"</#if>>
+					<span>部分商品参与</span>
+				</label>
+			</div>
+			<div class="goodsTable" style="display: none;">
+				
+			</div>
+		</div>
+		<div class="divbutton" id="save-auto-float">
+			<a href="javascript:;" onclick="submitForm()" class="button blueButton" id="saveButton" style="margin-left: 50%;">保  存</a>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+var ue = UE.getEditor('editor');
+
+$(function(){
+
+	//设置商品选择器参数
+	var options ={
+
+		selector_data_url : '${ctx}/shop/admin/activity/list-goods-json.do?activity_id=0',
+		selected_data_url : '${ctx}/shop/admin/activity/list-goods-json.do?activity_id='+${activity.activity_id},
+		goodsid_name : 'goods_ids'
+	}
+	
+	//设置保存按钮自动悬浮
+	$("#save-auto-float").autoFloat();
+	
+	//当id=hidInput这个input框的值等于1的时候，就显示商品选择器并加载商品
+	if($("#hidInput").val() == 1){
+		$(".goodsTable").css('display','block');
+		$(".goodsTable").goodsSelector(options);
+	}
+	
+	//如果优惠方式的减现金复选框是选中状态
+	if($("input[name='is_full_minus']").is(":checked")){
+		$(".fullMinus").css('display','none');
+		$("input[name='is_full_minus']").css('margin','0 0 0 0');
+		$(".minusInput").css('display','inline-block');
+	}else{
+		$("#minusValue").val("");
+		$("input[name='minus_value']").val("");
+	}
+	
+	//如果优惠方式的送积分复选框是选中状态
+	if($("input[name='is_send_point']").is(":checked")){
+		$(".sendPoint").css('display','none');
+		$("input[name='is_send_point']").css('margin','0 0 0 10px');
+		$(".pointInput").css('display','inline-block');
+	}else{
+		$("#pointValue").val("");
+		$("input[name='point_value']").val("");
+	}
+	
+	//如果优惠方式的送赠品复选框是选中状态
+	if($("input[name='is_send_gift']").is(":checked")){
+		$(".sendGift").css('display','none');
+		$("input[name='is_send_gift']").css('margin','0 0 0 106px');
+		$(".giftAll").css('display','inline-block');
+	}
+	
+	//如果优惠方式的送优惠券复选框是选中状态
+	if($("input[name='is_send_bonus']").is(":checked")){
+		$(".sendBonus").css('display','none');
+		$("input[name='is_send_bonus']").css('margin','0 0 0 106px');
+		$(".bonusAll").css('display','inline-block');
+	}
+	
+	//优惠方式减现金复选框点击操作
+	$("input[name='is_full_minus']").click(function(){
+		if($(this).is(":checked")){
+			$(".fullMinus").css('display','none');
+			$(".minusInput").css('display','inline-block');
+		}else{
+			$(".minusInput").css('display','none');
+			$(".fullMinus").css('display','inline-block');
+			$("#minusValue").val("");
+			$("input[name='minus_value']").val("");
+		}
+	});
+	
+	//优惠方式送积分复选框点击操作
+	$("input[name='is_send_point']").click(function(){
+		if($(this).is(":checked")){
+			$(".sendPoint").css('display','none');
+			$(".pointInput").css('display','inline-block');
+		}else{
+			$(".pointInput").css('display','none');
+			$(".sendPoint").css('display','inline-block');
+			$("#pointValue").val("");
+			$("input[name='point_value']").val("");
+		}
+	});
+	
+	//优惠方式送赠品复选框点击操作
+	$("input[name='is_send_gift']").click(function(){
+		if($(this).is(":checked")){
+			$(".sendGift").css('display','none');
+			$("input[name='is_send_gift']").css('margin','0 0 0 106px');
+			$(".giftAll").css('display','inline-block');
+		}else{
+			$(".giftAll").css('display','none');
+			$("input[name='is_send_gift']").css('margin','0 0 0 0');
+			$(".sendGift").css('display','inline-block');
+			$(".giftId").val(0);
+		}
+	});
+	
+	//优惠方式送优惠券复选框点击操作
+	$("input[name='is_send_bonus']").click(function(){
+		if($(this).is(":checked")){
+			$(".sendBonus").css('display','none');
+			$("input[name='is_send_bonus']").css('margin','0 0 0 106px');
+			$(".bonusAll").css('display','inline-block');
+		}else{
+			$(".bonusAll").css('display','none');
+			$("input[name='is_send_bonus']").css('margin','0 0 0 0');
+			$(".sendBonus").css('display','inline-block');
+			$(".bonusId").val(0);
+		}
+	});
+	
+	//全部商品参加单选框点击操作
+	$(".all-status").click(function(){
+		$(".goodsTable").css('display','none');
+	});
+	
+	//部分商品参加单选框点击操作
+	$(".part-status").click(function(){
+		$(".goodsTable").css('display','block');
+		if($("#hidInput").val() == 0){
+			$("#hidInput").val(1);
+			$(".goodsTable").goodsSelector(options);
+		}
+	});
+	
+})
+
+function submitForm() {
+	//对表单进行验证
+	var formflag = $("#edit_form").form('validate');
+	
+	if (formflag) {
+		
+		//验证促销活动的开始时间是否大于结束时间
+		var startTime = $("input[name='startTime']").val();
+		var endTime = $("input[name='endTime']").val();
+		if(startTime > endTime){
+			$.Loading.errorMessage("开始时间不能大于结束时间","2000");
+			return false;
+		}
+		
+		//如果优惠方式的所有复选框都没有选中
+		if(!$("input[name='is_full_minus']").is(":checked") && !$("input[name='is_send_point']").is(":checked") 
+				&& !$("input[name='is_free_ship']").is(":checked") && !$("input[name='is_send_gift']").is(":checked") 
+				&& !$("input[name='is_send_bonus']").is(":checked")){
+			$.Loading.errorMessage("请选择优惠方式","2000");
+			return false;
+		}
+		
+		//如果优惠方式减现金活动的复选框是选中状态，那么必须填写减少现金的数值
+		if ($("input[name='is_full_minus']").is(":checked")) {
+			if ($("#minusValue").val() == "") {
+				$.Loading.errorMessage("请填写要减少的现金","2000");
+				return false;
+			} 
+		}
+		
+		//如果优惠方式送积分活动的复选框是选中状态，那么必须填写赠送积分的数值
+		if ($("input[name='is_send_point']").is(":checked")) {
+			if ($("#pointValue").val() == "") {
+				$.Loading.errorMessage("请填写要赠送的积分","2000");
+				return false;
+			}
+		}
+		
+		//如果优惠方式送赠品活动的复选框是选中状态，那么必须选择要赠送的赠品
+		if ($("input[name='is_send_gift']").is(":checked")) {
+			if ($(".giftId").val() == 0) {
+				$.Loading.errorMessage("请选择赠品","2000");
+				return false;
+			}
+		}
+		
+		//如果优惠方式送优惠券活动的复选框是选中状态，那么必须选择要赠送的优惠券
+		if ($("input[name='is_send_bonus']").is(":checked")) {
+			if ($(".bonusId").val() == 0) {
+				$.Loading.errorMessage("请选择优惠券","2000");
+				return false;
+			}
+		}
+		
+		$("#saveButton").removeAttr("onclick");
+		$.Loading.show("正在保存请稍候...");
+		var options = {
+			url : "${ctx}/shop/admin/activity/save-edit.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				if(data.result==1){
+					$.Loading.successMessage(data.message,"2000");
+					location.replace(location);
+				}else{
+					$.Loading.errorMessage(data.message,"2000");
+				}
+				$("#saveButton").attr("onclick","submitForm()");
+			},
+			error : function(e) {
+				$.Loading.errorMessage("出现错误 ，请重试","3000");
+				$("#saveButton").attr("onclick","submitForm()");
+			}
+		};
+		$("#edit_form").ajaxSubmit(options);
+	}
+}
+
+</script>
+<style>
+.required{
+	color: red;
+}
+#add_form h3{
+	font-weight: 900;
+}
+.titleName{
+	font-weight: 800;
+}
+.divbutton{
+	margin:30px 0 0 0;
+	position: relative;
+	background-color: #EEEEEE;
+	width: 99%;
+	height: 30px;
+}
+.goodsTable{
+	margin:20px 0 0 20px;
+	width: 60%;
+	border:1px solid #ccc;
+}
+</style>
+<#include '/admin/footer.html' >

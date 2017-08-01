@@ -1,0 +1,51 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>将一个货品添加到购物车</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/shop/cart/add-product.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">输入参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">goodsid</span><span class="w100">商品id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">productid</span><span class="w100">货品id</span><span class="w380">无</span></p>
+			<p><span class="w100 important">havespec</span><span class="w100">是否有规格</span><span class="w380">因为与pc用的是一个接口，1表示有规格，0表示没有</span></p>
+			<p><span class="w100 important">num</span><span class="w100">添加数量</span><span class="w380">无</span></p>
+			<p><span class="w100 important">store_id</span><span class="w100">店铺ID</span><span class="w380">无</span></p>
+			<p><span class="w100 important">showCartData</span><span class="w100">0</span><span class="w380">是否在返回的json中显示购物车，0表示否，1表示是</span></p>
+			<p><span class="w100 important">activity_id</span><span class="w100">活动ID</span><span class="w380">优惠活动ID，如果没有默认为0</span></p>
+		</div>
+		<!-- <div class="need-parameter">
+			<h4><span class="w100">输出参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">total</span><span class="w100">购物车价格</span><span class="w380">无</span></p>
+			<p><span class="w100 important">count</span><span class="w100">购物项数量</span><span class="w380">无</span></p>
+		</div> -->
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/shop/cart!addProduct.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			data : {productid:407, havespec:1, num : 1, goodsid:401, showCartData:0, activity_id:0, store_id:17},
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em style="height:25px;line-height:25px;">调用结果：</em>
+			<h5>
+			<span style="display:block;">showCartData值为“0”：{"result":1,"message":"添加成功","data":null}</span>
+			<!-- <span style="display:block;">showCartData值为“1”：{"result":1,"message":null,"data":{"total":174.0,"count":1}}</span> -->
+			</h5>
+		</span>	
+	</div>
+
+</div>

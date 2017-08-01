@@ -1,0 +1,31 @@
+	
+	<!-- 获得会员申请退货、换货列表标签 -->
+	<#assign returnOrderListTag = newTag("returnOrderListTag")>
+	<!-- 调用会员申请退货、换货列表标签 -->
+	<#assign return = returnOrderListTag()>
+	<ul>
+	<#list return.returnOrderList as rList>
+	<tr class="hovertr">
+	    <td class="date"><@dateformat time="${ (rList.add_time*1000)?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+	    <td class="orderId">${rList.ordersn!'' }</td>
+	    <td> 
+	    <#if rList.type  == 1>退货</#if>
+	    <#if rList.type  == 2>换货</#if>
+	    </td>
+	    <td class="reasonSum"><p class="reason"><#if rList.apply_reason?exists><@substring title="${rList.apply_reason}" length="30" dot="..." /></#if></p></td>
+	    <td class="status">
+	    <#if rList.state  == 0><span class="status-process">等待处理</span></#if>
+		<#if rList.state  == 1><span class="status-expired">已拒绝</span></#if>
+		<#if rList.state  == 2><span class="status-deliver">审核通过</span></#if>
+		<#if rList.state  == 3><span class="status-used">
+			 <#if rList.type  == 1>退货已收货</#if>
+	   		 <#if rList.type  == 2>换货已收货，新换货物已发出</#if>
+		</span></#if>
+		<#if rList.state  == 4><span class="status-success">完成</span></#if>
+	    </td>
+	    <td class="oper">
+	    <a href="member_returns_order.html?action=goodslist&returnOrderSn=${rList.ordersn}">查看</a></td></tr>
+                                </tr>
+	</#list>
+		</ul>
+		<@pager pageno="${return.page}" pagesize="${return.pageSize}" totalcount="${return.totalCount}" />	

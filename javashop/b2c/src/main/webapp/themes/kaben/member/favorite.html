@@ -1,0 +1,95 @@
+<#assign  title="商品收藏" /><#include 'member_header.html' />
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag("{'goodsnum':6}")>
+<!-- 将调用的结果赋值给变量 -->
+<#assign collectList = collect.result>
+<div class="member-commen">
+	<h1>我的收藏<span>我收藏过的商品</span></h1>
+	 <div class="member-comment-box">
+	 	<div class="member-comment-wait">
+			<#if collectList?size gt 0>	
+			<ul class="member-wait-goods">
+ 			 <#list collectList as favorite>
+ 				<li>
+ 					<div class="wait-goods-img">
+ 						<a href="../goods-${favorite.goods_id}.html" title="${favorite.name}">
+							<@image src="${favorite.thumbnail!''}"/>
+						</a>
+ 					</div>
+ 					<h3><a href="../goods-${favorite.goods_id}.html"><@substring title="${favorite.name}" length="20" dot="..." /></a></h3>
+ 					<h4>￥${favorite.price?string("0.##")}</h4>
+ 					<div class="wait-go-goods btn-div">
+ 						<p rel="${favorite.favorite_id}" style="cursor: pointer" class="del_favorite small-yellow">删除</p>
+ 					</div>
+ 				</li>
+ 			</#list>
+			</ul>
+			<@pager pageno="${page!'1'}" 	pagesize="${collect.pageSize}" totalcount="${collect.totalCount}" />
+			<#else>
+				<p class="member-right-blank">抱歉，暂时没有符合数据</p>
+			</#if>
+	 	</div>
+	 </div>
+</div>
+<script>
+$(function(){
+	otherMenu(3);
+	
+	$(".del_favorite").click(function(){
+		var favoriteid = $(this).attr("rel");
+		$.post("${ctx}/api/shop/favorite/delete.do",{"favorite_id":favoriteid},function(result){
+			if(result.result==1){				
+				alert("删除收藏成功");
+				location.href="favorite.html";
+			}
+			
+			else{				
+				alert(result.message);
+			}			
+		},"json");
+		
+	})
+
+})
+</script>
+
+
+
+</div>
+</div>
+</div>
+</div>
+<script>
+otherMenu(3);
+</script>
+<#include '../common/footer.html'/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

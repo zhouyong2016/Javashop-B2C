@@ -1,0 +1,11 @@
+<!--创建"店铺商品搜索列表"标签-->
+<#assign StoreSearchGoodsListTag= newTag("storeSearchGoodsListTag") >  
+<!--调用"店铺商品搜索列表"标签，并传递参数-->            
+<#assign  StoreSearchGoodsList= StoreSearchGoodsListTag("'page':'1','totalCount':'10','num':'1',") >						
+<ul class="gw">
+<#list StoreSearchGoodsList.storegoods as cat>
+	名称：${cat.name}-
+         
+        价钱：${cat.price}
+</br></#list>
+ 

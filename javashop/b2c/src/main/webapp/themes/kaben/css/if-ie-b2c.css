@@ -1,0 +1,220 @@
+/**
+ * Created by Andste on 2016/9/27.
+ */
+
+/* 首页
+ ============================================================================ */
+body .common_menu .menu .menu_left .good_list {
+	width: auto;
+}
+
+body .common_menu {
+	height: auto;
+}
+
+body .item_list .subitem dl dt a {
+	min-width: 120px;
+}
+
+body .search_area .search .s_seek {
+	height: 34px;
+	line-height: 34px;
+}
+
+body .item_box .item {
+	height: auto;
+}
+
+body .same-box .same-box-left .same-cat a {
+	width: 50%;
+	padding: 0;
+}
+
+body .same-box {
+	width: auto;
+	height: auto;
+}
+
+body .same-box-right ul li {
+	height: auto;
+}
+
+body .menu_right ul li {
+	float: left;
+}
+
+body .search_area .search {
+	width: auto;
+	height: auto;
+}
+
+body .search_area .search .hunt {
+	outline: none;
+}
+
+/* 登陆页
+ ============================================================================ */
+body .main .login_new {
+	height: auto;
+}
+
+body .m_account {
+	height: 45px;
+}
+
+body .m_account input {
+	width: auto;
+	outline: none;
+}
+
+body .m_account input:focus {
+	outline: none;
+}
+
+body .main .login_new .right .login_window {
+	height: auto;
+	margin-bottom: 15px;
+}
+
+body .oauth-wrapper .oauth {
+	margin-top: 15px;
+}
+
+
+/* 注册页
+ ============================================================================ */
+body .right_area {
+	width: 525px;
+}
+
+body .right_area ul li .reg_box {
+	height: auto;
+	padding: 5px 12px;
+}
+
+body .right_area ul li .reg_box img {
+	height: 100%;
+}
+
+body .registration {
+	width: 300px;
+}
+
+body .right_area ul li .reg_box input {
+	outline: none;
+}
+
+/* 购物车
+ ============================================================================ */
+body .Numinput input {
+	width: 60px;
+}
+
+
+/* 个人中心
+ ============================================================================ */
+
+/*我的订单*/
+body .order-list .order-list-all h3 {
+	width: auto;
+}
+
+body .order-goods-list {
+	width: auto;
+}
+
+/*资料完善*/
+body .pre_name {
+	height: 30px;
+}
+
+body .input_add {
+	height: 30px;
+}
+
+body .pre_add {
+	margin-top: 10px;
+}
+
+body .return-intro .return-detail-box {
+	width: auto;
+}
+
+
+/* 商品详情页
+ ============================================================================ */
+body .midden-area-priceArea {
+	height: 80px;
+}
+
+body .ask_question {
+	height: 80px;
+}
+
+body .tab_main {
+	width: auto;
+}
+
+
+/* 结算页
+ ============================================================================ */
+body .h-btm .flow-steps ol li em,
+body .h_btm .flow-steps ol li em {
+	line-height: 15px;
+	top: -8px;
+}
+
+body #checkout_wrapper {
+	width: auto;
+}
+
+body .checkout_addresslist {
+	width: auto;
+	height: 195px;
+}
+
+body .total_box .remark span {
+	width: auto;
+}
+
+body .checkout-bonus-box span {
+	width: auto;
+}
+
+/* 支付页面
+ ============================================================================ */
+body .cashier-order-detail {
+	width: 850px;
+}
+
+body .cashier-order-inside h3 {
+	width: auto;
+}
+
+body .cashier-tools {
+	width: 850px;
+}
+
+body .cashier-tools-title h3 {
+	width: auto;
+}
+
+body .cashier-pay-list li {
+	height: auto;
+}
+
+body .cashier-pay {
+	width: auto;
+}
+
+body .alipay-right {
+	width: 350px;
+}
+
+body .alipay-right p {
+	width: auto;
+}
+
+body .alipay-right .pay-erweima {
+	width: auto;
+}

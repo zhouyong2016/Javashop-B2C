@@ -1,0 +1,232 @@
+<#include '/admin/header.html' >
+
+</style>
+<div class="main">
+	<form id="hotgoodsForm">
+	<div style="display: block;" class="searchAdvanced">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="80px" align="right">
+					商品分类:
+				</td>
+				<td width="200px">
+					<select id="catId" class="easyui-combotree combo" name="cat_id" 
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
+						style="width: 200px;">
+					</select>
+				</td>
+				<td width="80">
+					按订单周期：
+				</td>
+				<td width="70" >
+					<select id="cycle_type" name="cycle_type">
+						<option value="1" <#if cycle_type==1 >selected="selected"  </#if> >按照月统计</option>
+						<option value="0" <#if cycle_type==0 >selected="selected"  </#if> >按照年统计</option>
+					</select>
+				</td>
+				<td width="70" >
+					<select id="year">
+					</select>
+				</td>
+				<td width="70" >
+					<select id="month" <#if cycle_type==0 > style="display: none;" </#if> >
+					</select>
+				</td>
+				<td width="200" style="text-align: center;">
+					<a id="submit_form" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	</form>
+	<div class="clear height10"></div>
+	
+	<div class="input">
+		<div style="display: block;" class="goods_input">
+			<div class="contentTab">
+				<ul class="tab">
+					<li tabid="1"  >下单金额</li> 
+					<li tabid="2" class="contentTabS" >下单量</li> 
+				</ul>
+			</div>
+			
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<div tabid="2"  class="tab-panel">
+							<table class="form-table" style="width: 100%;">
+								<tr>
+									<td>
+										<div id="money_container" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>	
+
+<div class="clear height10"></div>
+<div class="shadowBoxWhite tableDiv">
+	<table class="easyui-datagrid" 
+		data-options="url:'${ctx}/shop/admin/goodsStatis/get-hot-goods-num-json.do?year=${year}&month=${month}&cycle_type=${cycle_type}&cat_id=${cat_id!0}',pageList: [50],pageSize:50,fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
+		pagination="true" width="width" id="moneydata" sortName="order_id" sortOrder="desc">
+		<thead>
+			<tr>
+				<th data-options="field:'order_id',checkbox:true,width:100"></th>
+				<th data-options="field:'oiname',width:150" >名称</th>
+				<th data-options="field:'t_num',width:100" >下单量</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+
+</div>
+
+<input type="hidden" id="this_type" value="1" >
+
+<script type="text/javascript">
+
+var money_chart;
+var num_chart;
+
+var num_data = ${num_json}; 
+
+$(function() {
+	
+	moneyHighcharts(money_container,money_chart,'下单量',num_data);
+	
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	currentYear = ${year};
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	currentmonth = ${month};
+	
+	for(var i=0;i<20;i++){
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected='selected' >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	for(var i=1;i<=12;i++){
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected='selected' >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	$(".goods_input .contentTab>ul>li").click(function() {
+		var tabid = $(this).attr("tabid");
+		$(".goods_input .contentTab>ul>li").removeClass("contentTabS");
+		$(this).addClass("contentTabS");
+		$(".tab-page .tab-panel").hide();
+		$(".tab-panel[tabid=" + tabid + "]").show();
+		if(tabid==1){
+			loadData();
+		}else{
+			loadNumData();
+		}
+	});
+	
+	$("#submit_form").click(function(){
+		loadData();
+	});
+	$("#cycle_type").change(function(){
+		if($(this).val()==1){
+			$("#month").show();
+		}else{
+			$("#month").hide();
+		}
+	});
+});
+
+
+
+//生成图表
+function moneyHighcharts(obj,chart,text,data){
+	chart = new Highcharts.Chart({
+        chart: {
+            type: 'column',
+            renderTo: obj
+        },
+        title: {
+            text: '热卖商品top50'
+        },
+        xAxis: {
+        	tickInterval: 1
+        },
+        yAxis: {
+            title: {
+                text: text
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        credits: {  
+            enabled: false 	// remove high chart logo hyper-link  
+        },
+        series: [{
+        	name: text,
+        	data: data,
+        	pointStart: 1
+        }]
+        // data: [{'color':'#F6BD0F','y':11}, {'color':'#333','y':6.9}]
+    });
+}
+
+//  加载数据
+function loadData(){
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	if(year==null){
+		year=2015;
+		month=4;
+	}
+	var cat_id= $("input[name='cat_id']").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	location.href = "${ctx}/shop/admin/goodsStatis/hot-goods.do?year="+year+"&month="+month+"&cycle_type="+cycle_type+"&cat_id="+cat_id+"&statis_type=1";
+}
+
+//加载数据
+function loadNumData(){
+	var year = $("#year :selected").val();
+	var month = $("#month :selected").val();
+	if(year==null){
+		year=2015;
+		month=4;
+	}
+	var cat_id= $("input[name='cat_id']").val();
+	var cycle_type = $("#cycle_type :selected").val();
+	location.href = "${ctx}/shop/admin/goodsStatis/hot-goods.do?year="+year+"&month="+month+"&cycle_type="+cycle_type+"&cat_id="+cat_id+"&statis_type=0";
+}
+
+// 
+function statistics_mode(mode_value){
+	if(mode_value=="1"){
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+}
+
+</script>
+<#include '/admin/footer.html' >
+

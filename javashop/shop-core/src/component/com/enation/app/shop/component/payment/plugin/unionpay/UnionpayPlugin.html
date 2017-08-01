@@ -1,0 +1,35 @@
+<tr>
+	<th>测试环境：</th>
+	<td>
+		<#if testModel?? && testModel=="yes" >
+			<input type="radio" value="yes" checked="checked" name="testModel"/>是
+			&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="no"   name="testModel"/>否
+		<#else>
+		<input type="radio" value="yes" name="testModel"/>是
+			&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="no" checked="checked"    name="testModel"/>否
+		</#if>
+	</td>
+</tr>
+<tr>
+	<th>中国银联商户代码：</th>
+	<td><input type="text" name="merId" value="${merId!''}" class="input_text easyui-validatebox"  id="merId" data-options="required:true" /></td>
+</tr>
+<tr>
+	<th>签名证书路径：</th>
+	<td><input type="text" name="signCert" value="${signCert!''}" class="input_text easyui-validatebox"    /></td>
+</tr>
+<tr>
+	<th>签名证书密码：</th>
+	<td><input type="text" name="pwd" value="${pwd!''}" class="input_text easyui-validatebox"    /></td>
+</tr>
+<tr>
+	<th>验证签名证书目录：</th>
+	<td><input type="text" name="validateCert" value="${validateCert!''}" class="input_text easyui-validatebox"    /></td>
+</tr>
+<tr>
+	<th>敏感信息加密证书路径：
+	(可选项)
+	</th>
+	<td><input type="text" name="encryptCert" value="${encryptCert!''}" class="input_text easyui-validatebox"   /><br></td>
+</tr>
+

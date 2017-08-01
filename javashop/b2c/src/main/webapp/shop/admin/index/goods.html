@@ -1,0 +1,54 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+      <tbody>      
+          <tr>
+            <th><span>商品总数：</span></th>
+            <td>
+            	<#if product_type=="b2c">
+            	<span ><a <#if (goodsss.allcount > 0)> href="${ctx }/shop/admin/goods/list.do"  class="imp"</#if>>${ goodsss.allcount}</a>个</span>
+           		<#elseif product_type=="b2b2c">
+           		<span ><a <#if (goodsss.allcount > 0)> href="${ctx }/b2b2c/admin/store-goods/list.do"  class="imp"</#if>>${ goodsss.allcount}</a>个</span>
+           		</#if>
+            </td>
+          </tr>
+          <tr>
+            <th><span>回收站商品：</span></th>
+            <td>
+            	<span ><a <#if (goodsss.disabledcount > 0)> href="${ctx }/shop/admin/goods/trash-list.do"  class="imp"</#if>>${ goodsss.disabledcount}</a>个</span>
+            </td>
+          </tr>          
+          <tr>
+            <th><span>上架商品：</span></th>
+            <td>
+            	<#if product_type=="b2c">
+            	<span ><a <#if (goodsss.salecount > 0)> href="${ctx }/shop/admin/goods/list.do?market_enable=1"   class="imp"</#if>>${ goodsss.salecount}</a>个</span>
+            	<#elseif product_type=="b2b2c">
+            	<span ><a <#if (goodsss.salecount > 0)> href="${ctx }/b2b2c/admin/store-goods/list.do?market_enable=1"   class="imp"</#if>>${ goodsss.salecount}</a>个</span>
+           		</#if>
+            </td>
+          </tr>
+          <tr>
+            <th><span>下架商品：</span></th>
+            <td>
+            	<#if product_type=="b2c">
+            	<span><a <#if (goodsss.unsalecount> 0)> href="${ctx }/shop/admin/goods/list.do?market_enable=0"  class="imp"</#if>>${ goodsss.unsalecount}</a>个</span>
+           		<#elseif product_type=="b2b2c">
+            	<span ><a <#if (goodsss.salecount > 0)> href="${ctx }/b2b2c/admin/store-goods/list.do?market_enable=0"   class="imp"</#if>>${ goodsss.unsalecount}</a>个</span>
+           		</#if>
+            </td>
+          </tr>
+          <tr>
+            <th><span>商品评论：</span></th>
+            <td>
+            	<span><a <#if (goodsss.discuss > 0 )> href="${ctx }/shop/admin/comments/list.do?type=1"  class="imp"</#if>>${ goodsss.discuss}</a>条</span>
+            
+            </td>
+          </tr>
+          <tr>
+            <th><span>商品咨询：</span></th>
+            <td>
+            	<span><a <#if (goodsss.ask> 0 )> href="${ctx }/shop/admin/comments/list.do?type=2"  class="imp"</#if>>${ goodsss.ask}</a>条</span>
+            	
+           </td>
+          </tr>          
+        </tbody>            
+ </table>

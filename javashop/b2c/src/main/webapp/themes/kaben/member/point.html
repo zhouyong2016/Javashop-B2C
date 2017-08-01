@@ -1,0 +1,141 @@
+<#assign  title="我的积分" />
+<#include 'member_header.html' />
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 获取关键字“member”会员MAP集合 -->
+<#assign mp = memberPoint.member>
+<!-- 获取关键字“memberLv”会员当前级别MAP集合 -->
+<#assign mplv = memberPoint.memberLv>
+<!-- 获取关键字“nextLv”会员下一等级MAP集合 -->
+<#assign mpnlv = memberPoint.nextLv>
+<!-- 获取会员等级标签 -->
+<#assign memberLvListTag = newTag("memberLvListTag")>
+<!-- 调用会员等级标签 -->
+<#assign memberLvList = memberLvListTag()>
+<div  class="member-point">
+	<h1>我的积分<span>这里说明的有关网站所有关于积分的知识</span></h1>
+	<div class="member-point-tab">
+		<ul>
+			<li style="border:0px none;" class="point-mine selected">我的积分</li>
+			<li class="point-intro">积分明细</li> 
+		</ul>
+	</div>
+	<div class="member-point-box">
+		<div class="member-point-intro">
+			<div class="point-intro-same" >
+				<h2>积分明细</h2>
+				<h3>消费积分：可用积分：
+				<#if mp.mp gt 0>
+					<span>${mp.mp!0}</span>
+				<#else>
+					<span>0</span>
+				</#if>
+				</h3>
+				<h3>等级积分：可用积分：
+				<#if mp.point gt 0>
+					<span>${mp.point!0}</span>
+				<#else>
+					<span>0</span>
+				</#if>
+				</h3>
+				<h3>目前等级：<span style="font-size:14px;">${mplv.name}</span>，等级积分：<span>${mplv.point!'0'}</span></h3>
+			</div>
+			<div class="point-intro-same">
+				<h2 style="color:#999">积分规则</h2>
+				<p>当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。</p>
+				<p>各项回馈项目（包含各项商品、服务或抵用券等）及兑换标准及兑换规则均以兑换当时最新回馈活动公告或目录为准。</p>
+				<p>部分兑换商品有数量限制的，兑完为止。</p>
+				<p>公告或目录如有有效期限的，逾期即不得兑换。</p>
+				<p>积分兑换区的商品为只可用积分兑换的商品(如积分价格：100积分)</p>
+			</div>
+			<div class="point-intro-same">
+				<h2 style="color:#999">积分等级</h2>
+				<#list memberLvList as ml>
+		         	<p>${ml.name}所需积分：<span>${ml.point}</span>，可参与网站指定会员活动，并可享受最低<span>${ml.discount}%</span>优惠</p>		     
+				</#list>  
+				
+			</div>		
+		</div>
+		<div class="member-point-list point-same-table">
+			
+		</div>
+		<div class="member-point-freeze point-same-table">
+		</div>
+		<!-- 箭头指向 -->
+		<em class="point-upward"></em>
+	</div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+$(function(){
+	
+	selectMenu(1);
+	
+	//我的积分
+	$(".point-mine").click(function(){
+		$(".member-point-tab ul li").removeClass("selected");
+		$(this).addClass("selected");
+		$(".member-point-intro").show();
+		$(".member-point-list").hide();
+		$(".member-point-freeze").hide();
+		$(".point-upward").css("left","35px");
+	})
+	
+	//积分明细
+	$(".point-intro").click(function(){
+		$(".member-point-tab ul li").removeClass("selected");
+		$(this).addClass("selected");
+		$(".member-point-intro").hide();
+	//	$(".member-point-list").load("point_list.html?action=list");
+		point_list(1);
+		$(".member-point-list").show();
+		$(".member-point-freeze").hide();
+		$(".point-upward").css("left","140px");
+	})
+	
+	//冻结积分
+	$(".point-freeze").click(function(){
+		$(".member-point-tab ul li").removeClass("selected");
+		$(this).addClass("selected");
+		$(".member-point-intro").hide();
+	//	$(".member-point-freeze").load("point_freeze.html?action=freeze");
+		point_freeze(1)
+		$(".member-point-list").hide();
+		$(".member-point-freeze").show();
+		$(".point-upward").css("left","245px");
+	})
+	
+	
+	
+	//积分明细
+	function point_list(page){
+		$(".member-point-list").load("point_list.html?action=list&page="+page,function(){
+			$(".pager_border .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				point_list(pageno);
+			});
+		});	
+	}
+	
+	//冻结积分
+	function point_freeze(page){
+		$(".member-point-freeze").load("point_freeze.html?action=freeze&page="+page,function(){
+			$(".pager_border .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				point_freeze(pageno);
+			});
+		});	
+	}
+})
+</script>
+
+<#include '../common/footer.html'/>

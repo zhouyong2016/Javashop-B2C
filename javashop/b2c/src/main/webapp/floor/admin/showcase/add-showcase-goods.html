@@ -1,0 +1,19 @@
+<div style="display: block;"
+		class="input shadowBoxWhite wf100 whiteBox">
+	<div class="showcase_goods"></div>
+</div>
+	
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.goodsSelector.js" > </script>
+<script type="text/javascript">
+	
+		$(function(){
+			//创建商品选择器
+			var container=$(".showcase_goods");
+			var options={
+					goodsid_name:'goods_ids',
+			};
+			container.goodsSelector(options);
+			
+			
+		});
+</script>

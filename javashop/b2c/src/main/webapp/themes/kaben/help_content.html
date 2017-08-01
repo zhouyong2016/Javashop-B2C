@@ -1,0 +1,5 @@
+<#assign dataDetailTag=newTag("dataDetailTag")>
+<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+<#assign dataDetail=dataDetailTag("{'catid':${catid!21},'id':${articleid!7}}")>
+<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+${dataDetail.content!''} 

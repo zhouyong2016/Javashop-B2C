@@ -1,0 +1,62 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editTypeForm" method="post" class="validate" >
+			<table>
+				<tr>
+					<td>类型名称</td>
+					<td><input class="easyui-validatebox" type="text" id="name" name="goodsType.name" data-options="required:true"   value="${goodsType.name }"/>
+					</td>
+				</tr>
+				<tr>
+					<td>此类型下商品是否拥有属性：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_prop" data-options="required:true" value="1" <#if goodsType.have_prop==1 > checked </#if> >是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_prop" data-options="required:true" value="0" <#if goodsType.have_prop==0 > checked </#if> >否</input>
+					</td>
+				</tr>
+				<tr>
+					<td>此类型下商品是否拥有参数:</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_parm" data-options="required:true" value="1" <#if goodsType.have_parm==1 > checked </#if> >是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.have_parm" data-options="required:true" value="0" <#if goodsType.have_parm==0 > checked </#if> >否</input>
+					</td>
+				</tr>
+				<tr>
+					<td>此类型是否关联品牌：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_brand" data-options="required:true" value="1" <#if goodsType.join_brand==1 > checked </#if> >是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_brand" data-options="required:true" value="0" <#if goodsType.join_brand==0 > checked </#if> >否</input>
+					</td>
+				</tr>
+				<tr>
+					<td>此类型是否关联规格：</td>
+					<td><input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_spec" data-options="required:true" value="1" <#if goodsType.join_spec==1 > checked </#if> >是</input>
+						<input class="easyui-validatebox" type="radio" id="name" name="goodsType.join_spec" data-options="required:true" value="0" <#if goodsType.join_spec==0 > checked </#if> >否</input>
+					</td>
+				</tr>
+				
+				
+				
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function submitForm(){
+	$(function(){
+		 var options = {
+					url : "type!step2.do?ajax=yes",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						window.location.href="type!list.do";
+				 		},
+				 	error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+				};
+				$('#editTypeForm').ajaxSubmit(options);	
+			});
+}
+function clearForm(){
+	$('#editTypeForm')[0].reset() ;
+}
+
+</script>

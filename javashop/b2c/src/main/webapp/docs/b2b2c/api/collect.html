@@ -1,0 +1,62 @@
+<#assign title= "商品分类api" ><#include '../header.html' />
+<!--头部结束-->
+<!--手册开始-->
+<div id="top_nav">
+	<h1>API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu">
+<#include '../menu_api.html' />
+	</div>
+	<div class="right_list">
+		<h1>商品分类API</h1>
+		<p class="api_intro">提供了获取子类，添加商品分类，修改分类，删除店铺商品，批量删除店铺商品分类的操作功能</p>
+		<h2>API列表</h2>
+		<ul class="list">
+		
+			<li>
+				<div class="api_func"><a href="getStoreGoodsChild.html">getStoreGoodsChildJson</a></div>
+				<span>获取子类别</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="addGoodsCat.html">addGoodsCat</a></div>
+				<span> 添加商品分类</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="editStoreGoodsCat.html">editGoodsCat</a></div>
+				<span> 修改分类</span>
+			</li>
+			<li>
+				<div class="api_func"><a href="deleteStoreGoodsCat.html">delete</a></div>
+				<span> 删除店铺商品分类</span>
+			</li>
+				<li>
+				<div class="api_func"><a href="delAllStoreGoodsCat.html">delAll</a></div>
+				<span> 批量删除店铺商品分类</span>
+			</li>
+			
+		</ul>
+		<h2>数据结构列表</h2>
+		<ul class="list">
+			<li>
+				<div class="api_func"><a href="StoreCartItem.html">storecart</a></div>
+				<span></span>
+			</li>
+		</ul>
+	</div>
+</div><#include '/docs/fooder.html' />
+
+<script>
+setMenu(3);
+</script>
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+

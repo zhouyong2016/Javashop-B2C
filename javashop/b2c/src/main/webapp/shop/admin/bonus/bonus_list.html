@@ -1,0 +1,58 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<script type="text/javascript" src="${ctx}/core/admin/js/Adv.js"></script>
+	<form id="advform">
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/bonus/list-json.do?typeid=${typeid}&send_type=${send_type}',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="bonusdata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'bonus_id',width:150">编号</th>
+						<th data-options="field:'bonus_sn',width:150">红包序号</th>
+						<th data-options="field:'type_name',width:200" formatter="forTypeName">红包类型</th>
+						<th data-options="field:'order_sn',width:200">订单号</th>
+						<th data-options="field:'create_time',width:100" formatter="formatDate">创建时间</th>
+						<th data-options="field:'member_name',width:100">使用会员</th>
+						<th data-options="field:'use_start_date',width:100" formatter="formatDate">使用开始时间</th>
+						<th data-options="field:'use_end_date',width:100" formatter="formatDate">使用结束时间</th>
+						<th data-options="field:'used_time',width:200" formatter="formatDate">使用时间</th> 
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+
+<script>
+	function forTypeName(value,row,index){
+		var val;
+		if (row.bonus_type_id == 4) {
+			val = "按用户发放";
+		}
+		if (row.bonus_type_id == 1) {
+			val = "按商品发放";
+		}
+		if (row.bonus_type_id == 2) {
+			val = "按订单金额发放";
+		}
+		if (row.bonus_type_id == 3) {
+			val = "线下发放的红包";
+		}
+		return val;
+
+	}
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd");
+		}
+		
+	}
+</script>
+
+<#include '/admin/footer.html' >

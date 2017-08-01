@@ -1,0 +1,132 @@
+<#include '/admin/header.html' > 
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion="com.enation.app.base.core.directive.PermssionDirective"?new()>
+
+<div class="main">
+	<!-- 退货申请信息 -->
+	<div class="shadowBoxWhite  whiteBox">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0"  style="width: 150">
+				<tr>
+					<th class="title" colspan="4">退货申请</th>
+				</tr>
+				<tr>
+					<td width="80">退货单号：</td>
+					<td>${sellBackList.tradeno}</td>
+					<td width="80">状态：</th>
+					<td>
+						<#if sellBackList.tradestatus==0>新建
+						<#elseif sellBackList.tradestatus==1>审核通过
+						<#elseif sellBackList.tradestatus==2>审核拒绝
+						<#elseif sellBackList.tradestatus==3>待退款
+						<#elseif sellBackList.tradestatus==6>已退款
+						</#if>
+					</td>
+				</tr>
+				<tr>
+					<td width="80">关联订单号：</td>
+					<td>
+						<a href='javascript:void(0);' onclick=newTab('订单信息','${ctx}/shop/admin/order/detail.do?orderId=${sellBackList.orderid}')>${sellBackList.ordersn}</a>
+					</td>
+					<td width="80">退货人：</td>
+					<td>${sellBackList.sndto!''}</td>
+					
+				</tr>
+				<tr>
+					<td width="80">退款原因：</td>
+					<td >${sellBackList.reason!'' }</td>
+					<td width="100">申请退款金额：</td>
+					<td>${sellBackList.apply_alltotal!''}</td>
+				</tr>
+				<tr>
+					<td width="80">详细描述：</td>
+					<td>${sellBackList.remark!'' }</td>
+						<td >收货状态：</td>
+					<td width="80">
+					
+					
+					<#if sellBackList.ship_status=='0'>未收货
+					<#elseif sellBackList.ship_status=='1'>已收货
+					</#if>
+					</td>
+				</tr>
+				<#if sellBackList.tradestatus?? && sellBackList.tradestatus==0>
+					<tr>
+						<td>备注  ：</td>
+						<td colspan="3">
+							<textarea rows="3" cols="80" style="resize: none;" id="seller_remark" name="seller_remark" maxlength="125" placeholder="您最多可输入125个字" ></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>审核：</td>
+						<td colspan="3" class="pass">
+							<a href="javascript:void(0)" class="button pass1" onclick="pass(1)">审核通过</a>
+							<a href="javascript:void(0)" class="button pass2" onclick="pass(2)">审核不通过</a>
+						</td>
+					</tr>
+				<#else>
+					<tr>
+						<td>备注：</td>
+						<td colspan="3">
+							<textarea rows="3" cols="80" style="resize: none;" disabled="disabled">${sellBackList.seller_remark!''}</textarea>
+						</td>
+					</tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+	<br/>
+	<div class="shadowBoxWhite  whiteBox">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+				<tr>
+					<th class="title" colspan="4">退货单商品</th>
+				</tr>
+				<tr>
+					<th>商品名称</th>
+					<th>金额</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+				
+				<#list goodsList as data>
+						<tr>
+							<td>
+							<a target="_blank" href="${ctx}/goods-${data.goods_id}.html">${data.goods_name }${data.spec!''}</a>
+							</td>
+							<td>${data.price?string.currency}</td>
+							<td>${data.ship_num!0 }</td>
+							<td>${data.return_num!0}</td>
+						</tr>
+				</#list>
+				<!-- 退货赠品信息 add_by DMRain 2016-7-19 -->
+				<#if (gift.gift_id)??>
+					<tr>
+						<td><span style="color: #4287cf;">${gift.gift_name!''}</span><span style="color: red;">(赠品)</span></td>
+						<td>${gift.gift_price?string.currency}</td>
+						<td>1</td>
+						<td>1</td>
+					</tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function pass(status){
+	$(".pass"+status).removeAttr("onclick");
+	 var seller_remark=$("#seller_remark").val();
+	$.ajax({
+		url:"${ctx}/shop/admin/sell-back/auth-refund.do?id=${sellBackList.id}",
+		data:{'status': status,'seller_remark':seller_remark},
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			location.reload();
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	}); 
+}
+</script>

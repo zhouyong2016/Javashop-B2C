@@ -1,0 +1,136 @@
+<#assign  title="打印发货单api" /><#include '../header.html' />
+<!--头部结束-->
+<script>
+$(document).ready(function(){ 
+    
+  $("#aa tr:odd").css("background-color","#B2E0FF")
+  }); 
+</script>
+
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+<#include 'shipScriptMenu.html' />
+	<div class="right_list">
+		<h3>shipScript 打印发货单API</h3>
+		<!--锚点-->
+		<div class="anchor">
+			<ul>
+				<li><a href="#parameter">输入参数</a></li>
+				<li><a href="#finally">返回结果</a></li>
+				<li><a href="#example">返回示例</a></li>
+				<li><a href="#try">API工具</a></li>
+			</ul>
+		</div>
+		<!--锚点结束-->
+		<h6>
+			<p>打印发货单</p>
+
+		</h6>
+		<div class="intro">
+			<div class="same">
+				<h2>API地址：</h2>
+				<table cellspacing="0">
+					 
+					<tr>
+						<td style="text-align:left;padding:10px;font-size:14px">/api/b2b2c/store-order-print/ship-script.do?order_id=1</td>
+						
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0" id="aa">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>示例值</th>
+						<th>默认值</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>order_id</td>
+						<td>int</td>
+						<td>必须</td>
+						<td></td>
+						<td></td>
+						<td>订单ID</td>
+					</tr>
+
+					
+				</table>
+			</div>
+			<div class="same" id="finally">
+				<h2>返回结果</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>是否必须</th>
+						<th>默认值</th>
+						<th class="line">描述</th>
+					</tr>
+					<tr>
+						<td>result</td>
+						<td>int</td>
+						<td></td>
+						<td></td>
+						<td class="line_intro" style="text-align:center">为1表示成功0表示失败</td>
+					</tr>
+				</table>
+			</div>
+			<div class="same" id="example">
+				<h2>返回示例</h2>
+				<textarea>
+LODOP.NEWPAGEA();
+var temphtml ='<style> .temp{height:0px;width:100%;border:0px solid #000}</style><div  class="temp"></div>'
+LODOP.ADD_PRINT_HTML("0","0","200mm","100%",temphtml);
+
+LODOP.ADD_PRINT_BARCODE("2.4mm","150mm","55.1mm","7.8mm","","145224446754");	  
+LODOP.ADD_PRINT_TEXT(7,333,117,25,"销售发货单");
+LODOP.SET_PRINT_STYLEA(0,"FontSize",14);
+LODOP.ADD_PRINT_TEXT(6,"9.3mm",240,20,"时间：2016-01-08 ");
+LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+LODOP.ADD_PRINT_TEXT("11.8mm","9.3mm",138,20,"店铺:食品酒水");
+LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+LODOP.ADD_PRINT_TEXT("11.8mm",221,240,20,"订单号：145224446754");
+LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+LODOP.ADD_PRINT_TEXT("11.8mm",460,180,20,"货运方式：圆通速递");
+LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+
+var userhtml='widget  processor error';
+LODOP.ADD_PRINT_TABLE("20px","0","200mm","100%",userhtml);
+LODOP.SET_PRINT_STYLEA(0,"LinkedItem",1);
+
+LODOP.ADD_PRINT_TABLE("60px","-1","200mm","100%",'<style> tr{height:25px} table.item td{border:1px solid #000;}  table{font-size:12px;}  </style><table style="border-collapse: collapse;" class="item"  width="100%">	<thead>		<tr> 			<td > 序号 </td>			<td > 编号 </td>			<td  >品名</td>			<td  >规格</td>			<td  >数量</td>			<td  >价格</td>		</tr>	</thead><tbody></tbody></table>');LODOP.SET_PRINT_STYLEA(0,"LinkedItem",1);
+
+var tbhtml = '<style> table.inner{width:100%;border-collapse: collapse;font-size:12px} table.inner td{border:0px;} table.inner tr.xuxian td{border-top:1px dotted; #000}</style> 	<table class="inner">	<tr>		<td>数量合计:0</td>		<td>商品金额:0</td>		<td>优惠金额:0</td>		<td>应收邮资:10</td>		<td>应收合计:10</td>	</tr>		<tr class="xuxian">		<td>发货人：食品酒水</td>		<td>结算方式:支付宝</td>		<td colspan="3">客户签字：</td>	</tr></table>';
+LODOP.ADD_PRINT_TABLE("0","0","200mm","100%",tbhtml);
+LODOP.SET_PRINT_STYLEA(0,"LinkedItem",-1);
+</textarea>
+			</div>
+<!-- 			<div class="same" id="try"> -->
+<!-- 				<h2>试一试</h2> -->
+<!-- 				<a href="try.html?api=shipScript" target="_blank">亲自试一试</a> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</div>
+<#include '/docs/fooder.html' />
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

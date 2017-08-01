@@ -1,0 +1,45 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>新增收货地址</p>
+	</div>
+	<div class="same-floor">
+		<h3>API</h3>
+		<p>/api/mobile/address/edit.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">addr_id</span><span class="w100">收货地址id</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">name</span><span class="w100">收货人姓名</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">province_id</span><span class="w100">省份id</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">city_id</span><span class="w100">城市id</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">region_id</span><span class="w100">地区id</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">addr</span><span class="w100">详细地址</span><span class="w380">此api需要会员登录</span></p>
+			<p><span class="w100 important">mobile</span><span class="w100">手机</span><span class="w380">此api需要会员登录</span></p>
+			
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/address/edit.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					alert(JSON.stringify(data));
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("修改失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$("#address_form").submitForm(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+			 {"result":1,"data":{"address":{"addr":"addr","addr_id":18,"city":"海淀区","city_id" :35,"country":"","def_addr":0,"member_id":3,"mobile":"13111111111","name":"myname" ,"province":"北京","province_id":1,"region":"海淀区","region_id":453,"remark":"","te l":"","zip":""}}} 
+			</h5>
+		</span>	
+	</div>
+
+</div>

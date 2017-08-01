@@ -1,0 +1,14 @@
+
+<!--创建"CMS文章模型列表"标签-->
+<#assign modelListTag = newTag("modelListTag")>
+<!--调用"CMS文章模型列表"标签，并传递参数-->
+<#assign modelList = modelListTag()>
+<ul>
+	<#list modelList as model>
+		<li>
+			模型ID：${model.model_id};
+			模型中文名称：${model.china_name};
+			模型备注：${model.brief!''};
+		</li>	
+	</#list>
+</ul>

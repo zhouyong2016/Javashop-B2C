@@ -1,0 +1,237 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/cms/admin/js/cat.js"></script>
+<div id="catinfo" style="display: none;"></div>
+<form id="catForm" >
+	<div class="main">
+	 	<div class="buttonArea">
+			<a href="javascript:void(0)" class="button blueButton"
+				data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		</div>
+		<table class="easyui-treegrid" id="catdata"
+			data-options="url:'${ctx}/cms/admin/cat/list-json.do',fitColumns:'true',idField: 'cat_id',treeField: 'name'">
+			<thead>
+				<tr>
+					<th data-options="field:'cat_id',width:80">ID</th>
+					<th data-options="field:'name',width:200">名称</th>
+					<th data-options="field:'cat_order',width:100">排序</th>
+					<th data-options="field:'add',width:25" formatter="formatAdd">添加子</th>
+					<th data-options="field:'edit',width:25" formatter="formatEdit">编辑</th>
+					<th data-options="field:'delete',width:25" formatter="formatDelete">删除</th>
+					<th data-options="field:'action',width:100" formatter="formatCat">文章列表</th>
+					<th data-options="field:'addaction',width:100"
+						formatter="formaterAddArt">添加文章</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</form>
+<script>
+var flag=false;
+var app_path = "";
+$(function(){
+	Cat.init();
+});
+
+function formatAdd(value, row, index) {
+	var val = "<a href='javascript:void(0);' onclick='appendChildren(" + row.cat_id+ ",1)'><img class='add' src='${ctx}/cms/admin/images/transparent.gif'></a>";
+	return val;
+}
+function formatEdit(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+ row.cat_id + ")' ></a>";
+	return val;
+}
+function formatDelete(value, row, index) {
+	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.cat_id+ ')"><img catid="'+row.cat_id+'" src="${ctx}/cms/admin/images/transparent.gif"></a>';
+	return val;
+}
+function formatCat(value,row,index){
+	var val="<a href='#' onclick=\"newTab('文章列表','${ctx}/cms/admin/data/list.do?catid="+row.cat_id+"')\">文章列表</a>";
+	return val;
+}
+function formaterAddArt(value,row,index){
+	var val="<a href='#' onclick=\"newTab('添加文章','${ctx}/cms/admin/data/add.do?catid="+row.cat_id+"')\">添加文章</a>";
+	return val;
+}
+function append(){
+	 $("#catinfo").show();
+	　　	$('#catinfo').dialog({
+	　　		title: '添加文章',			
+	　　		width: 800,
+	  		height:500,
+	  		top:20,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/cms/admin/cat/add.do', 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+	　　			if(flag){
+					UE.getEditor('editor').destroy();
+				}
+				var ue = UE.getEditor('editor', {
+				    zIndex: 99999
+				});
+				flag = true;
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if($("#model_id").val()==0){
+	　　					 disabled=true;
+	　　					 $.Loading.error("请选择文章模型!");
+	　　				 }
+	　　				 if(!disabled){
+	　　				 	 catinfoForm("add",savebtn);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#catinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function edit(cat_id){
+	 $("#catinfo").show();
+	　　	$('#catinfo').dialog({
+	　　		title: '修改文章',			
+	　　		width: 800,
+	  		height:500,
+	　　		top:20,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/cms/admin/cat/edit.do?cat_id='+cat_id, 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+	　　			if(flag){
+					UE.getEditor('editor').destroy();
+				}
+				var ue = UE.getEditor('editor', {
+				    zIndex: 99999
+				});
+				flag = true;
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 $.Loading.show("正在保存请稍候...");
+		　　				 editbtn.linkbutton("disable");	
+	　　				 	 catinfoForm("edit",editbtn);
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#catinfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function catinfoForm(val,savebtn){
+	var caturl="";
+	if(val=="edit"){caturl="${ctx}/cms/admin/cat/save-edit.do?ajax=yes"}
+	if(val=="add"){caturl="${ctx}/cms/admin/cat/save-add.do?ajax=yes"}
+	
+	var formflag= $("#catinfoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		var options = {
+				url : caturl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#catinfo").dialog('close');
+						$.Loading.success(result.message);
+						$('#catdata').treegrid('reload');
+					}else{
+						$.Loading.error(result.message);		
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#catinfoForm').ajaxSubmit(options);	
+	}else{
+		$.Loading.hide();
+		savebtn.linkbutton("enable");
+	}
+}
+function appendChildren(cat_id){
+	$("#catinfo").show();
+　　	$('#catinfo').dialog({
+　　		title: '添加文章',			
+　　		width: 800,
+  		height:500,
+　　		top:20,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/cms/admin/cat/add.do?cat_id='+cat_id, 	 
+　　		modal: true,
+　　		onLoad : function() {
+　　			if(flag){
+				UE.getEditor('editor').destroy();
+			}
+			var ue = UE.getEditor('editor', {
+			    zIndex: 99999
+			});
+			flag = true;
+		},
+　　		buttons: [{				
+　　			 text:'保存',
+　　			 handler:function(){
+　　				 var savebtn = $(this);
+　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+　　				 if($("#model_id").val()==0){
+　　					 disabled=true;
+　　					 $.Loading.error("请选择文章模型!");
+　　				 }
+　　				 if(!disabled){
+　　				 	 catinfoForm("add",savebtn);
+　　				 }
+　　			 }
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				$('#catinfoForm')[0].reset() ;
+　　			 }
+　　		}]
+　　	});
+	
+}
+function del(cat_id){
+	if(!confirm("确认要删除文章吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除请稍候..");
+	var options = {
+			url : "${ctx}/cms/admin/cat/delete.do?ajax=yes&cat_id="+cat_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#catdata').treegrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#catForm').ajaxSubmit(options);	
+}
+
+
+</script>
+<#include '/admin/footer.html' >

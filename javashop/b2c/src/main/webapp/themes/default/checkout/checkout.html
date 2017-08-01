@@ -1,0 +1,244 @@
+<div id="checkout_wrapper">
+	<div class="pay_warm">请确认以下信息，然后提交订单</div>
+	<div class="pay_frame">
+		<form class="validate" id="checkoutform">
+			<input type="hidden" id="shipAddr" value="<#if defaultAddress?exists>${defaultAddress.addr!''}</#if>" autocomplete="off">
+			<input type="hidden" id="shipName" value="<#if defaultAddress?exists>${defaultAddress.name!''}</#if>" autocomplete="off">
+			<input type="hidden" id="shipTel"  value="<#if defaultAddress?exists>${defaultAddress.tel!''}</#if>" autocomplete="off">
+			<input type="hidden" id="shipZip"  value="<#if defaultAddress?exists>${defaultAddress.zip!''}</#if>" autocomplete="off">
+			<input type="hidden" id="shipMobile"  value="<#if defaultAddress?exists>${defaultAddress.mobile!''}</#if>" autocomplete="off">
+			<div class="box address">
+				<div class="selected" 
+				<#if !defaultAddress?exists>style="display:none"</#if> >
+					<h1>收货人信息[<a href="javascript:;" class="modify_btn">修改</a>]</h1>
+					<#if defaultAddress?exists>
+						<span>
+							${defaultAddress.province}-${defaultAddress.city}-${defaultAddress.region}-${defaultAddress.addr!''}
+							(收货人：${defaultAddress.name!''}，
+							电话：${defaultAddress.tel!''}，
+							邮编：${defaultAddress.zip!''})
+						</span>
+					</#if>
+				</div>
+				<div class="modify" <#if defaultAddress?exists>style="display:none"</#if>>
+					<h1>收货人信息</h1>
+					<#-- 创建会员是否登录标签 -->
+					<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+					<#-- 获取是否登录  -->
+					<#assign isLogin = memberIsLoginTag() >	
+					<#if isLogin >
+						<div class="list"> 
+							<#include 'address_list.html' />
+						</div> 
+					</#if>	
+					<div class="input"> 
+						<#include 'new_address.html' />
+					</div> 
+					<div class="pay_botton btn">
+						<input type="button" class="yellow_btn" id="saveAddrBtn" value="确认收货人信息"/>
+					</div>
+				</div>
+			</div>
+			<div class="box payment" >
+				<div class="selected" style="display:none">
+					<h1>付款方式[<a href="javascript:;" class="modify_btn">修改</a>]</h1>
+				</div>
+				<div class="modify">
+					<h1>付款方式</h1>
+					<div class="list">请先填写收货人信息。</div>
+					<div class="pay_botton btn">
+						<input type="button" class="yellow_btn" id="savePaymentBtn" value="确认付款方式" style="display:none">
+					</div>
+				</div>
+			</div>
+			<div class="box dlytype" >
+				<div class="selected" style="display:none">
+					<h1>配送方式[<a href="javascript:;" class="modify_btn">修改</a>]</h1>
+				</div>
+				<div class="modify">
+					<h1>配送方式</h1>
+					<div class="list">请先选择支付方式。</div>
+					<div class="pay_botton btn">
+						<input type="button" class="yellow_btn" id="saveDlytypeBtn" value="确认配送方式" style="display:none">
+					</div>
+				</div>
+			</div>
+			<div class="goods_wrapper">
+				<#-- 创建购物车标签 -->
+				<#assign cartTag = newTag("cartTag")>
+				<#--通过购物车标签获取购物项列表 -->
+				<#assign itemList = cartTag() >	
+				<h1>商品清单<a href="cart.html"><span>[返回购物车修改]</span></a></h1>
+				<#if itemList?exists && itemList?size gt 0>
+				<input type="hidden" value="1" id="checkIsNull"/>
+				<table cellspacing="0" cellpadding="3" width="100%" >
+					<thead>
+						<tr>
+							<th>图片</th>
+							<th>商品名称</th>
+							<th>商品积分</th>
+							<th>销售价格</th> 
+							<th>优惠价格</th>
+							<th>数量</th>
+							<th>小计</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list itemList as item >
+						<tr itemid="${item.id}" >
+							<td>
+								<a target="_blank" href="goods-${item.goods_id}.html">
+									<span style="display: block; height: 50px;" class="cart-product-img">
+										<@image height="50"  src="${item.image_default!''}"  style="cursor: pointer;" />
+									</span>
+								</a>				
+							</td>
+							<td style="text-align: left;">
+								<a target="_blank" href="goods-${item.goods_id}.html">${item.name}</a>
+								<#if item.others?exists>
+									<#if item.others.specList?exists>
+									<span><#list item.others.specList as spec><#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong></#list></span>
+									</#if>
+								</#if>								
+							</td>
+							<td>${item.point}</td>
+							<td class=" mktprice1">${item.price?string("currency")}</td>
+							<td>${item.coupPrice?string("currency")}</td>
+							<td>
+								${item.num}
+							</td>
+							<td class="itemTotal">${item.subtotal?string("currency")}</td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+				<#else>
+					<input type="hidden" value="0" id="checkIsNull"/>
+				</#if>
+			</div>
+			<div class="order_total">
+				<div class="meta_wrapper">
+					<div class="receipt pucker">
+						<h1><input type="checkbox" name="receipt" value="1"  autocomplete="off">索取发票 </h1>
+						<div class="content" style="display:none">
+							<ul>
+								<li>发票抬头:<input type="radio" name="receiptType" value="1" checked="true" >个人&nbsp;&nbsp;<input  name="receiptType" type="radio" value="2">单位
+									<input type="text" name="receiptTitle" id="receiptTitle" style="display:none" />
+								</li>
+							
+								<li>发票内容：
+									<select name="receiptContent" >
+										<option value="办公用品">办公用品</option>
+										<option value="劳保用品">劳保用品</option>
+										<option value="耗材">耗材</option>
+									</select>
+								</li>
+								<li class="notice">发票在您收到货30天后通过平邮寄出，请注意查收 </li>
+								<li class="warning">注：内容不全默认为不索取发票</li>
+							</ul>
+						</div>
+					</div>
+					<#if isLogin >
+					<div class="coupon pucker">
+						<h1><input type="checkbox"  autocomplete="off">使用优惠券 </h1>
+						<div class="content" style="display:none" id="coupondiv">
+						</div>
+					</div>
+					</#if>
+					<#--检测组件是否启用 -->
+					<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+					<#assign groupbuyIsOn = checkCmptIsOnTag("{'componentName':'余额支付组件'}") />
+					<#if groupbuyIsOn=="ON">
+						<div class="credit pucker">
+						<h1><label><input type="checkbox" name="isUseCredit" id="selectOrderBalance" value="1" />使用余额 <strong>（账户当前余额：<span class="ftx-01">${member.advance}</span>元）</strong></label></h1>
+						<input type="hidden" id="usedCreditNum" name = "usedCreditNum" value="0.00" />
+						<input type="hidden" id="c_advance" value="${member.advance}" />
+					</div>
+					</#if>
+					<div class="remark pucker"> 
+						<h1><input type="checkbox" autocomplete="off">订单备注 </h1>
+						<div class="content" style="display:none">
+							<ul>
+								<li><input type="text" name="remark" style="width:300px;height:24px"/></li>
+								<li>*请勿填写有关支付/收货/发票方面的信息，如有特殊需要请联系客服人员。</li>
+							</ul>
+						</div>
+					</div>	
+				</div>
+				
+				<div class="total_wrapper">
+				</div>
+				
+				<div class="button_wrapper btn" >
+					<input type="button" value="提交订单" id="createBtn" class="blue_btn" />
+				</div>
+				<div class="clear"></div>
+			</div>
+		</form>	
+	</div>
+</div>
+
+<script>
+$(function(){
+	
+	//如果结算页面中没有商品信息，直接跳转至购物车页面
+	//add by DMRain 2016-4-22
+	var goodsExist = $("#checkIsNull").val();
+	if(goodsExist == 0){
+		location.href = "cart.html";
+	}
+	
+	<#if defaultAddress?exists>
+		RegionsSelect.load(${defaultAddress.province_id},${defaultAddress.city_id},${defaultAddress.region_id});
+		CheckOut.showModifyUI();
+	</#if>
+	
+	//是否使用余额
+	$('#selectOrderBalance').bind('change',function(){
+		if (this.checked) {
+			calPrice(true);
+		}else{
+			calPrice(false);
+		}
+		
+	});
+	
+});
+
+//计算价格
+function calPrice(isUse){
+	//是否使用了余额
+	if (isUse) {
+		//获得总价 和 剩余余额
+		var total = $("#needPayVal").val();
+		var advance = $("#c_advance").val();
+		var total = isNaN(parseFloat(total)) ? 0 : parseFloat(total);
+		advance = isNaN(parseFloat(advance)) ? 0 : parseFloat(advance);
+		var price;
+		var	deduction;
+		//如果总价比余额大
+		if (total > advance) {
+			price = (total - advance).toFixed(2);
+			deduction = (advance).toFixed(2);
+		} else {
+			price = (0).toFixed(2);
+			deduction = total.toFixed(2);
+		}
+		
+		//得到结果开始赋值
+		$("#oldNeedPay").val(total);
+		$("#needPayVal").val(price);
+		$("#needPay").html("￥" + price);
+		$("#usedCreditNum").val(deduction);
+		$("#credit_h2").html("余额抵扣：<span id=\"discount_Pay\">￥" + deduction + "</span>");
+	}else{
+		//得到使用余额前的总价
+		var total = $("#oldNeedPay").val();
+		total = isNaN(parseFloat(total)) ? 0 : parseFloat(total);
+		$("#needPayVal").val(total);
+		total = (total).toFixed(2);
+		$("#needPay").html("￥" + total);
+		$("#credit_h2").html("");
+	}
+}
+</script>

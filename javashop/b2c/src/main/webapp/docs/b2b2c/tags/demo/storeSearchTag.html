@@ -1,0 +1,12 @@
+
+<!--创建"店铺地区"标签-->
+<#assign StoreSearchTag= newTag("storeSearchTag") >  
+<!--调用"店铺地区"标签-->            
+<#assign  StoreSearch= StoreSearchTag() >						
+<ul class="gw">
+<#list StoreSearch.list.result as li>
+
+	店铺名称：${li.store_name}</br>
+	店铺id：${li.store_id}</br>
+
+</#list>

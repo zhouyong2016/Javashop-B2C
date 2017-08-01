@@ -1,0 +1,8 @@
+
+<!--创建"文章列表"标签-->
+<#assign goodsDefaultParamesTag = newTag("goodsDefaultParamesTag")>
+<!--调用“文章列表”标签-->
+<#assign goodsDefaultParames = goodsDefaultParamesTag("'type_id':'1'")>
+<#list goodsDefaultParames as list>
+参数组名： ${list.name}
+</#list>

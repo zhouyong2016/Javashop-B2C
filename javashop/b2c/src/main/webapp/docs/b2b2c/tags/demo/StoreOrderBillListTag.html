@@ -1,0 +1,11 @@
+
+<!--创建"店铺结算订单列表"标签-->
+<#assign storeOrderBillListTag= newTag("storeOrderBillListTag") >  
+<!--调用"店铺结算订单列表"标签，并传递参数-->            
+<#assign  storeOrderBillList= storeOrderBillListTag("'pageSize':'1','pageCount':'3'") >						
+<ul class="gw">
+<#list storeOrderBillList as order>
+	定单id：${order.order_id}</br>
+	定单编号：${order.sn}</br>
+	会员id：${order.member_id}</br>
+</#list>

@@ -1,0 +1,80 @@
+<#include '/admin/header.html' >
+<script type="text/javascript">
+	$(function() {
+		$(".seeting_input .contentTab>ul>li").click(function() {
+			var tabid = $(this).attr("tabid");
+			$(".seeting_input .contentTab>ul>li").removeClass("contentTabS");
+			$(this).addClass("contentTabS");
+			$(".tab-page .tab-panel").hide();
+			$(".tab-panel[tabid=" + tabid + "]").show();
+		});
+		$("#saveSetting").click(function() {
+			var buygoods_num_mp = $("#buygoods_num_mp").val()
+			if(buygoods_num_mp == null || buygoods_num_mp == ""){
+				$.Loading.error("购买商品消费积分不能为空");
+				return false;
+			}
+			
+			$.Loading.show("正在保存，请稍候");
+			var savebtn = $("#saveSetting");
+			var disabled = savebtn.hasClass("l-btn-disabled");
+			if (!disabled) {
+				$("#saveSetting").linkbutton("disable");
+				var options = {
+					url : "save.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+							
+						}else{
+							$.Loading.error(result.message);
+						}
+						$("#saveSetting").linkbutton("enable");
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						$("#saveSetting").linkbutton("enable");
+					}
+				};
+				$('#settingForm').ajaxSubmit(options);
+			}else{
+				$.Loading.hide();
+				$("#saveSetting").linkbutton("enable");
+			}
+		});
+	});
+</script>
+
+<div class="main">
+		<form method="post" name="theForm" id="settingForm" >
+			<div style="display: block;" class="seeting_input">
+				<div class="tab-bar" style="position: relative;">
+					<div class="contentTab" style="background-color: transparent;">
+						<ul class="tab">
+							<#list tabs as tab>
+							<li tabid="${tab.order}"<#if tab.order==0> class="contentTabS"</#if> >
+								${tab.tabTitle}
+								</li> 
+							</#list>
+						</ul>
+					</div>
+				</div>
+				<div >
+					<div class="tab-page" style="background-color: white;">
+						<#list tabs as html>
+						<div tabid="${html.order}"<#if html.order!=0> style="display:none"</#if> class="tab-panel">
+							${html.tabHtml}
+						</div>
+						</#list>
+					</div>
+				</div>
+				
+			</div>
+		</form>
+		<div class="buttonWrap" align="center" style="background-color: white;padding-bottom: 10px;">
+			<a href="javascript:;" id="saveSetting" class="easyui-linkbutton">保存 </a>
+		</div>
+</div>
+<#include '/admin/footer.html' >

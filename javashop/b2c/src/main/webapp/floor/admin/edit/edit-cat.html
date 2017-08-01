@@ -1,0 +1,117 @@
+<style type="text/css">
+.tag-box {
+	width: 400px;
+	height: 80px;
+	border-radius: 3px;
+	position: relative;
+	margin: 20px auto;
+	border:1px solid #dddddd;
+}
+
+</style>
+
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editCatForm" method="post" class="validate"
+			enctype="multipart/form-data">
+			<input type="hidden" id="floor_id" name="floor_id" value="${floor_id}" />
+			<table>
+				<tr>
+					<th>左侧分类</th>
+					<td>
+						<div class="tag-box" id="cat_text">
+							<#if catList?? && catList?size gt 0>
+								<#list catList as cat>
+									<#if cat.hasChildren>
+										<#assign children2=cat.children /> 
+										<#list children2 as cat2>
+											<#if cat2_index lt 3>
+												<a href="${ctx}/goods_list.html?cat=${cat2.cat_id}" title="${cat2.name }">${cat2.name }</a>
+											</#if>
+										</#list>
+									</#if>
+								</#list>
+							</#if>
+						</div>
+						<p>添加商品分类最多显示5个</p>
+					</td>
+				</tr>
+				<tr>
+					<th>分类选择</th>
+					<td width="200px"><select id="catId" onchange="changeSelect()"
+						name="cat_id" " 
+						style="width: 200px;">
+					</select></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+		$(function(){
+			var cat_id=${cat_id!'0'};
+			if(cat_id!=0){
+				$("#catId").combotree({
+					url:"${ctx}/shop/admin/cat/add-list-json.do",
+					required:false,
+					height:28,
+					value:cat_id,
+					onChange: function () {
+						var tree=$("#catId").combotree("tree");
+						//var node = $("#catId").combotree("options");
+						var node=tree.tree("getSelected");
+						var childNode=tree.tree("getChildren",node.target);
+						$("#cat_text").html('');
+						$("#cat_text").val('');
+						for(var i= 0;i<childNode.length;i++){
+							 var parent=tree.tree("getParent",childNode[i].target);
+							 if(parent.text==node.text){//判断是否为亲子节点
+								 var childNode2=tree.tree("getChildren",childNode[i].target);
+						    	 var length;
+						    	 if(childNode2.length>3){
+						    		 length=3;
+						    	 }else{
+						    		 length=childNode2.length;
+						    	 }
+								 for(var j=0;j<length;j++){
+									 $("#cat_text").html($("#cat_text").html()+"<a href='${ctx}/goods_list.html?cat="+childNode2[j].id+" title='"+childNode2[j].text+"' >"+childNode2[j].text+"</a>");
+							 	}
+								 							 
+							 }
+		            	}
+					}
+				});
+			}else{
+				$("#catId").combotree({
+					url:"${ctx}/shop/admin/cat/add-list-json.do",
+					required:false,
+					height:28,
+					onChange: function () {
+						var tree=$("#catId").combotree("tree");
+						//var node = $("#catId").combotree("options");
+						var node=tree.tree("getSelected");
+						var childNode=tree.tree("getChildren",node.target);
+						$("#cat_text").html('');
+						$("#cat_text").val('');
+						for(var i= 0;i<childNode.length;i++){
+							 var parent=tree.tree("getParent",childNode[i].target);
+							 if(parent.text==node.text){//判断是否为亲子节点
+								 var childNode2=tree.tree("getChildren",childNode[i].target);
+						    	 var length;
+						    	 if(childNode2.length>3){
+						    		 length=3;
+						    	 }else{
+						    		 length=childNode2.length;
+						    	 }
+								 for(var j=0;j<length;j++){
+									 $("#cat_text").html($("#cat_text").html()+"<a href='${ctx}/goods_list.html?cat="+childNode2[j].id+" title='"+childNode2[j].text+"' >"+childNode2[j].text+"</a>");
+							 	}
+								 							 
+							 }
+		            	}
+					}
+				});
+			}
+		});
+	
+</script>

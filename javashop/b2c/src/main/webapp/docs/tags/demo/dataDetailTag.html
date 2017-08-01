@@ -1,0 +1,9 @@
+
+<!-- 调用CMS文章详细标签 -->
+<#assign dataDetailTag=newTag("dataDetailTag")>
+<!-- 调用 CMS文章消息标签，并传递文章分类ID及文章ID-->
+<#assign dataDetail=dataDetailTag("{'catid':2,'id':34}")>
+
+
+${dataDetail.title}
+${dataDetail.content!''}

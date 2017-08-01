@@ -1,0 +1,11 @@
+
+<!-- 本标签必须要在ul后获得参数，所以，请在上方的url参数栏中输入"orderid=17" -->
+<!-- 获取会员订单日志标签 -->
+<#assign orderDetailLogTag = newTag("orderDetailLogTag")>
+<!-- 调用订单日志标签 -->
+<#assign orderDetailLog = orderDetailLogTag("{'orderid':${orderid}}")>
+<ol>
+	<#list orderDetailLog as log>
+		<li><span class="date"><@dateformat time="${log.op_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>${log.message}</li>
+	</#list>
+</ol>

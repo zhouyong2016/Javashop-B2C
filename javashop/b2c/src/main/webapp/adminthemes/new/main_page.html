@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<link rel="shortcut icon" href=" ../favicon.ico" /> 
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/>  
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/main.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.loading.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-Slider.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.timers-1.2.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/short-msg.js"></script>
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+<!--PNG透明-->
+<!--[if lte IE 6]>
+<script src="../adminthemes/new/js/DD_belatedPNG_0.0.8a.js" type="text/javascript"></script>
+<script type="text/javascript">
+    DD_belatedPNG.fix('*');
+</script>
+<![endif]-->
+<script>
+var referer = undefined;
+<#if referer?exists >
+referere='${referer}';
+</#if>
+</script>
+</head>
+<body class="easyui-layout layout">
+	<input type="hidden" id="hidout" value="0" />
+    <div region="north" border="true" class="cs-north">
+		<div class="header">
+            <div class="lineOne">
+                <div class="logo"></div>
+                <div class="downArrow">
+                    <div class="downArrowIcon"></div>
+                    <div class="downArrowContent">
+                        <span id="mm-tabupdate">刷新当前页</span>
+                        <span id="mm-tabcloseall">关闭全部</span>
+                        <span id="mm-tabcloseother">关闭其他</span>
+                    </div>
+                </div>
+                <div class="info">
+                	<div class="sysmenu">  
+                		<ul>
+                			<li class="message">
+								<a href="javascript:;">消息
+									<span class="num"></span> 
+								</a>
+								 <div class="msglist" >
+								 	<div class="triangle"></div>
+								 	 <ul>
+								 	 </ul>
+								 </div>
+							</li>
+							<li class="logout">
+								<a href='javascript:;' id='logout_btn'><div class="icon"></div>退出</a>
+							</li>
+							<li class="website">
+								<a href="../" title="浏览网站" target="_blank"><div class="icon"></div> 浏览网站</a> 
+							</li>
+							<!-- 
+								<li class="website">
+									<a href="http://tongji.baidu.com/web/welcome/login" title="浏览网站" target="_blank"><div class="icon"></div>浏览统计</a> 
+								</li>
+							 -->
+                		</ul>
+                	</div>
+                </div>
+            </div>
+        </div>
+	</div>
+	<!-- header end -->
+    <div region="west" border="true" split="true" class="cs-west" >
+    	<input type="hidden" value="" class="upHeight">
+    	<div class="leftMenu" style="width:110px;margin-right:9px;height:100%;" id="leftMenu" >
+	        <div class="lmenuPrev">
+	             <a href="javascript:;" id="btnUp">向上</a>
+	        </div>
+	        <div class="lmenu fl">
+	        	<#assign count = 1>
+				<ul class="roll_ul">
+					<#list menuList as menu>
+						<#if menu.hasChildren >
+							<li id="parent${menu.id}" class="parentMenu" rel="${menu.id}" islast="<#if ((menuList?size)-count) lte 3>last</#if>">
+									<a style="cursor: pointer">
+					                     <div class="cover"></div>
+					                     <div class="icon" >
+					                     	<#if menu.icon??>
+					                     		<#if menu.icon?contains('http')>
+					                     			<img src="${menu.icon!''}" />
+					                     			<#else>
+					                     			<img src="${ctx}${menu.icon!''}" />
+					                     		</#if>
+					                     	<#else>
+					                     		<img src="${ctx}adminthemes/new/images/menu_default.gif" />
+					                     	</#if>
+					                     </div>
+					                     <div index="tfun2" style="display:none;" class="newFunction"></div>
+					                     <div topvalue="2" topname="" class="text">${menu.title!''}</div>
+									</a>
+									<div id="${menu.id}" class="secondFloat secondFLoat${menu_index+1} <#if (menu.children?size gt 4) > secondFloatBig </#if>">
+										<div class="second">
+											<ul class="child_width">
+												<#list menu.children as child>
+													<#if child.hasChildren >
+														<li>
+															<div class="title">${child.title}</div>
+															<ul>
+																<#list child.children as son>
+																	<li>
+																		<div class="newFunction" style="margin-top: 10px; *margin-left: -20px;display:none;" index="tfun${son.id}"></div>
+																		<a onclick="OpenWindow(this)" style="cursor:pointer" index="${son.id}" src="${ctx}${son.url}" class="cs-navi-tab">${son.title}</a>
+																	</li>
+																</#list>
+															</ul>
+														</li>
+													</#if>
+												</#list>
+												
+											</ul>
+										</div>
+										<!-- second -->
+									</div>
+							</li>
+						</#if>
+						<#assign count = count+1>
+					</#list>	
+				</ul>
+			</div>
+			<div class="lmenuNext">
+	             <a href="javascript:;" id="btnDown">向下</a>
+	        </div>
+        </div>
+	</div>
+	<div id="mainPanle" region="center" border="true" border="false" style="overflow: hidden;">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false" style="overflow: hidden;">
+            <div title="Home" style="overflow: hidden;">
+                <div class="cs-home-remark">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mm" class="easyui-menu cs-tab-menu">
+    </div>
+ 
+ 
+	<script type="text/javascript">
+		var index = 0;
+		$(function(){
+			$(".lmenu").Scroll();
+			$(".sysmenu .msglist").hide();
+			
+			$(".sysmenu .message").mouseover(function(){
+				if($(".sysmenu .msglist ul>li").length>0){
+				    $(".sysmenu .msglist").show();
+				};
+			});
+			
+			$(".sysmenu .message").mouseout(function(){
+			    $(".sysmenu .msglist").hide();
+			});
+			
+			
+			/**
+			 * 点击退出按钮
+			 */
+			$("#logout_btn").click(function(){
+				
+				if( !confirm("确认退出吗？") ){
+					return false;	
+				}
+				
+				var options = {
+					url : "../core/admin/admin-user/logout.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {				
+						if(result.result==1){
+							var url = "${ctx}/admin/login.do";
+							location.href=url;
+						}else{
+							$.Loading.error(result.message);
+						}
+					},
+					error : function(e) {
+						$.Loading.error("出现错误，请重试");
+					}
+				};
+				$.ajax(options);		
+			})
+			
+			
+		/* 	//计算偏移量
+			$(".lmenu li").mouseover(function(){
+				var selfid = $(this).attr("rel");
+				var islast = $(this).attr("islast");
+				var top_height = $(this).position().top;
+				if(islast=="last"){
+					if(top_height < 800){
+						$("#"+selfid).css({"top":top_height/6,"bottom":"auto"});
+					}
+					else{
+						$("#"+selfid).css({"top":top_height/2,"bottom":"auto"});
+					}
+				}
+				else{
+					$("#"+selfid).css({"top":top_height,"bottom":"auto"});
+				}
+			
+			})
+			
+			 */
+		});   
+		
+		 function reloadTabGrid(title){
+	          if ($("#tabs" ).tabs('exists', title)) {
+	               $('#tabs').tabs('select' , title);
+	             window.top.reload_Abnormal_Monitor.call();
+	         }
+	     }
+
+		(function(){
+			var Sys = {}, ua = navigator.userAgent.toLowerCase(), s;
+			(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1]
+					: (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1]
+					: (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1]
+					: (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1]
+					: (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+			if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) {
+				Sys.ie = 11.0
+			};
+
+			if((Sys.ie < 11) && (($.cookie('app_up_message') == undefined) || ($.cookie('app_up_message') != 0))){
+				$(document).ready(function(){
+					setTimeout(show, 1000);
+					function show(){
+						var html = '<div id="upBrowserMessage" style="position: fixed; height: 30px; width: 100%; color: #333; background-color: #ff6700; z-index: 1000; top: -30px; font-size: 12px; line-height: 30px; text-align: center">'
+								+ '您的浏览器版本过低，为了更好的体验，避免出现兼容问题，建议您升级浏览器！'
+								+ '<a href="//cdn.dmeng.net/upgrade-your-browser.html" style="color: #0a89c7;">升级浏览器</a>'
+								+ '<a id="closeBrowserMessage" href="javascript: void(0);" class="icomoon" style="color: #dddddd; position: absolute; float: right; right: 20px; top: 0;">x</a>'
+								+ '</div>';
+						$(html).appendTo($('body'));
+						var b = $('#upBrowserMessage'),
+								c = $('#closeBrowserMessage');
+						b.animate({top: 0}, 500);
+						$('body').animate({marginTop: '30px'}, 500).css({position: 'relative'});
+						if(Sys.ie == 10){
+							c.css({right: 30});
+						};
+						c.hover(function(){
+							$(this).css({color: '#ffffff'});
+						}, function(){
+							$(this).css({color: '#dddddd'});
+						});
+						c.unbind('click').on('click', function(){
+							$.cookie('app_up_message', '0', { expires: 7, path: '/'});
+							b.animate({top: -30}, 500);
+							$('body').animate({marginTop: 0}, 500).css({position: ''});
+						});
+					};
+				});
+			};
+		})()
+
+	</script>
+</body>
+
+</html>

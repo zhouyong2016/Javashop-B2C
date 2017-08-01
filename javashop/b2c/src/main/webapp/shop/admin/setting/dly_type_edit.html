@@ -1,0 +1,481 @@
+<#include '/admin/header.html' >
+<style>
+	.fixed{z-index:999}
+</style>
+<div class="main">
+	<form id="dlytype">
+		<input type="hidden" name="type_id" value="${type.type_id }" />
+		<div class="shadowBoxWhite whiteBox">
+			<table cellpadding="5" width="100%">
+				<tr>
+					<th class="title" colspan="4">基本信息</th>
+				</tr>
+				<tr>
+					<th width="100px;">配送方式名称:</th>
+					<td><input type="text" value="${type.name}" name="name" maxlength="10"  class="input_text easyui-validatebox" data-options="required:true" placeholder="快递名称10个汉字内">
+					</td>
+
+					<th width="100px;" align="right">默认物流公司:</th>
+					<td><select id="corp_id" name="corp_id"
+						class="input_text">
+							<option value="0">请选择物流公司</option>
+							<#list logiList as logi>
+							<option value="${logi.id }" <#if type.corp_id?? &&type.corp_id==logi.id>selected</#if> >${logi.name }</option> </#list>
+					</select></td>
+				</tr>
+				<tr>
+					<th>重量设置:</th>
+
+					<td width="300px;">首重重量&nbsp;<select id="firstunit"
+						name="firstunit" class="input_text" style="width: 25%">
+							<option value="500" label="500克">500克</option>
+							<option selected="selected" value="1000" label="1公斤">1公斤</option>
+							<option value="1200" label="1.2公斤">1.2公斤</option>
+							<option value="2000" label="2公斤">2公斤</option>
+							<option value="5000" label="5公斤">5公斤</option>
+							<option value="10000" label="10公斤">10公斤</option>
+							<option value="20000" label="20公斤">20公斤</option>
+							<option value="50000" label="50公斤">50公斤</option>
+					</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;续重单位&nbsp;
+						<select id="continueunit" name="continueunit" class="input_text" style="width: 25%">
+							<option value="500" label="500克">500克</option>
+							<option selected="selected" value="1000" label="1公斤">1公斤</option>
+							<option value="1200" label="1.2公斤">1.2公斤</option>
+							<option value="2000" label="2公斤">2公斤</option>
+							<option value="5000" label="5公斤">5公斤</option>
+							<option value="10000" label="10公斤">10公斤</option>
+							<option value="20000" label="20公斤">20公斤</option>
+							<option value="50000" label="50公斤">50公斤</option>
+					</select></td>
+
+					<th width="100px;" align="right">是否启动:</th>
+					<td>启用&nbsp;
+					<input type="radio" value="0" name="disabled" <#if type.disabled==0>checked</#if> > 
+					&nbsp;&nbsp;&nbsp;&nbsp; 
+					关闭&nbsp;
+					<input type="radio" value="1" name="disabled" <#if type.disabled==1>checked</#if>></td>
+				</tr>
+
+				<tr>
+					<th>地区费用类型:</th>
+					<td><input type="radio" value="1" <#if type.is_same==1>checked</#if>
+						name="is_same" class="area_type">统一设置
+						&nbsp;&nbsp;&nbsp;&nbsp; 
+						<input type="radio" value="0" <#if type.is_same==0>checked</#if>
+						name="is_same" class="area_type">指定配送地区和费用</td>
+				</tr>
+			</table>
+		</div>
+
+		<br />
+
+		<!-- 统一配置 -->
+		<div class="shadowBoxWhite whiteBox" id="totle_set">
+			<table cellpadding="5" width="100%">
+				<tr>
+					<th class="title" colspan="4">统一设置</th>
+				</tr>
+				<tr>
+					<#assign t_first=type.typeConfig.firstprice >
+					<#assign t_cont=type.typeConfig.continueprice >
+					<#assign t_expression=type.typeConfig.expression >
+					<th width="100px">地区费用设置</th>
+					<td><#include 'dlyprice.html' ></td>
+					<#assign t_first="" >
+					<#assign t_cont="" >
+					<#assign t_expression="" >
+				</tr>
+			</table>
+		</div>
+
+		<!-- 指定地区配置 -->
+		<div class="shadowBoxWhite whiteBox" id="the_area_set"
+			style="display: none">
+			<table cellpadding="5" width="100%">
+				<tr>
+					<th class="title" colspan="4">指定地区设置</th>
+				</tr>
+				<tr id="def_price" >
+					<#assign check_first=type.typeConfig.firstprice >
+					<#assign check_cont=type.typeConfig.continueprice >
+					<#assign expression=type.typeConfig.expression >
+					<th><input type="hidden" value="1" id="defAreaFee" name="defAreaFee">默认费用</th>
+					<td><#include 'dlyprice.html' ></td>
+					<#assign check_first="" >
+					<#assign check_cont="" >
+					<#assign expression="" >
+				</tr>
+				<tr>
+					<th width="100px;">支持配送的地区：</th>
+					<td class="deliveryArea">
+						<ol style="list-style: decimal outside none; width: 600px;" id="sele_area">
+						
+							<#assign areacount=1 >
+							<#if (type.typeAreaList)??>
+							<#list type.typeAreaList as tlist>
+							<#assign areaUseexp=tlist.typeAreaConfig.useexp >
+								<li style="padding: 7px">
+									
+									<div class="deliverycity">
+										<span class="delCfgBtn1" style="float: right;"> 
+											<img border="none" title="删除" alt="删除"
+											style="width: 16px; height: 16px; background-image: url('${ctx}/shop/admin/images/ImageBundle.gif'); background-repeat: no-repeat; background-position: 0pt -91px; cursor: pointer;"
+											src="${ctx}/shop/admin/images/transparent.gif"> 
+										</span> 配送地区 
+										<input class="combo input_text" name="areas${areacount}" style="width: 300px;" value="${tlist.area_name_group}"> 
+										<input type="hidden"  name="totle_areas${areacount}" class="totle_areas" value="${tlist.area_id_group}" >
+										<input type="hidden"  name="totle_regions${areacount}" class="totle_regions" >
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<label><input type="hidden" name="has_cod" value="0" /></label>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									</div>
+									
+									<div class="deliveryexpbox" style="line-height: 30px;">
+										<#include 'dlyprice.html' >
+									</div>
+									</li>
+									<#assign areacount=areacount+1 >
+							</#list>
+							</#if>
+
+						</ol>
+						<input type="hidden" id="areacount" name="areacount" value="${arealistsize}"> 
+						<input type="button" id="addCfgBtn" class="sysbtn button"
+						value="为指定的地区设置运费" />
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<br />
+
+		<div class="shadowBoxWhite whiteBox">
+			<table cellpadding="5" width="100%">
+				<tr>
+					<th class="title"  colspan="4" >更多信息</th>
+				</tr>
+				<tr>
+					<th width="100px;">排序:</th>
+					<td><input type="text" size="5" id="ordernum" value="${type.ordernum!''}" name="ordernum" dataType="int" isrequired="true"       
+					   	 maxlength="5" class="input_text easyui-numberbox">
+					</td>
+				</tr>
+				<tr>
+					<th>详细介绍:</th>
+					<td>
+						<script id="editor" name="detail" type="text/plain" style="height:200px;width: 99%;">${type.detail!''}</script>
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;&nbsp;&nbsp;</th>
+					<td>
+						&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+	
+	<div class="buttonWrap">
+		<a href="javascript:;" id="saveformBtn" class="easyui-linkbutton"> 保存 </a>
+	</div>
+	
+	<#assign areacount="" >
+	<div class="the_area" style="display: none;">
+		<li style="padding: 7px">
+			<div class="deliverycity">
+				<span class="delCfgBtn" style="float: right;"> 
+					<img border="none" title="删除" alt="删除"
+					style="width: 16px; height: 16px; background-image: url('${ctx}/shop/admin/images/ImageBundle.gif'); background-repeat: no-repeat; background-position: 0pt -91px; cursor: pointer;"
+					src="${ctx}/shop/admin/images/transparent.gif"> 
+				</span> 配送地区 
+				<input class="combo input_text" id="regionId" name="" style="width: 300px;"> 
+				<input type="hidden"  name="totle_areas" class="totle_areas" >
+				<input type="hidden"  name="totle_regions" class="totle_regions" >
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<label><input type="hidden" name="has_cod" value="0" /></label>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
+			<div class="deliveryexpbox" style="line-height: 30px;">
+				<#include 'dlyprice.html' >
+			</div>
+		</li>
+	</div>
+	<div id="divdia"></div>
+</div>
+
+
+<script>
+	
+	$(function() {
+		
+		Dlytype.init();
+		
+		//点击弹出选择配送地区的dialog
+		$("#sele_area .combo").unbind("click").bind("click",function(){
+			var $this = $(this);
+			Dlytype.optdlytype($this);
+		});
+		
+		//富文本
+		var ue = UE.getEditor('editor');
+		
+		$(".checkexp").unbind("click").bind("click", function() {
+			var btn = $(this);
+			Dlytype.checkExp(btn);
+		});
+
+		//切换统一和指定地区设置
+		$(".area_type").click(function() {
+			if ($(this).val() == 1) { //1为统一设置
+				Dlytype.area_set($("#totle_set"), $("#the_area_set"), 1);
+				$("#defAreaFee").val("");
+			} else {
+				Dlytype.area_set($("#the_area_set"), $("#totle_set"), 0);
+				$("#defAreaFee").val(1);
+			}
+		});
+
+		//指定地区—启用默认费用
+		$("#defAreaFee").click(function() {
+			if ($(this).attr("checked") != null) {
+				Dlytype.area_set($("#def_price"), null, 1);
+			} else {
+				Dlytype.area_set(null, $("#def_price"), 0);
+			}
+		})
+
+		$(".delCfgBtn1").unbind("click").bind("click",function() {
+			$(this).parents("li").remove();
+		});
+		
+		//添加指定地区
+		$("#addCfgBtn").click(function() {
+				var newArea = $(".the_area li").clone().appendTo(
+						$(".deliveryArea ol")).show();
+
+				var areacount = $("#areacount").val();
+				$("#areacount").val(Number(areacount) + Number(1));
+
+				newArea.find(".combo").attr("name","areas"+ (Number(areacount) + Number(1)));
+				newArea.find(".totle_areas").attr("name","totle_areas"+ (Number(areacount) + Number(1)));
+				newArea.find(".totle_regions").attr("name","totle_regions"+ (Number(areacount) + Number(1)));
+				
+				//点击弹出选择配送地区的dialog
+				$(".combo").unbind("click").bind("click",function(){
+					var $this = $(this);
+					Dlytype.optdlytype($this);
+				});
+				
+				Dlytype.area_set(newArea, null, 1);
+
+				$(".delCfgBtn").unbind("click").bind("click",function() {
+						$(this).parents("li").remove();
+				});
+
+				$(".deliveryArea .checkexp").unbind("click").bind("click", function() {
+					var btn = $(this);
+					Dlytype.checkExp(btn);
+				});
+
+				newArea.find(".price input").each(function() {
+					$(this).attr("name",$(this).attr("numberboxname")+ (Number(areacount) + Number(1))).validatebox({
+								required : true
+					});
+				});
+				
+				$(".price input").remove("input[name='NaN']");
+				
+				newArea.find("input[name=expressions]").attr("name","expressions"+ (Number(areacount) + Number(1)));
+				newArea.find("input[name=useexp]").attr("name",
+						"useexp" + (Number(areacount) + Number(1)));
+
+			});
+		
+		$("#saveformBtn").click(function() {
+			
+			var formflag = $("#dlytype").form('validate');
+			if (formflag) {
+				
+				var dlyType = $('input[name="is_same"]:checked').val();  //判断是统一配送还是指定地区配送
+				if(dlyType == 0){
+					if($("#regionId").val() == ""){
+						alert("请选择支持配送的地区");
+						return false;
+					}
+				}
+				
+				$.Loading.show("正在保存.......");
+				$("#saveBtn").linkbutton("disable")
+				var options = {
+					url : "save-edit.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(date) {
+						if (date.result == 1) {
+							$.Loading.success(date.message);
+							parent.reloadTabGrid("配送方式");
+							parent.CloseTabByTitle("修改配送方式");
+						}
+						if (date.result == 0) {
+							$.Loading.error(date.message);
+						}
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+					}
+				};
+				$("#dlytype").ajaxSubmit(options);
+			}
+			$("#saveBtn").linkbutton("enable");
+		});
+	});
+
+	var Dlytype = Dlytype || {}
+	Dlytype = {
+		init : function() {
+			
+			var type = ${type.json};
+			$("#firstunit").val(type.typeConfig.firstunit);
+			$("#continueunit").val(type.typeConfig.continueunit);
+			
+			if("${type.is_same}"==1){
+				$("#totle_set").show();
+				if(type.typeConfig.useexp==0){
+					Dlytype.area_set($("#totle_set"),null,1);
+				}else{
+					Dlytype.price_set($("#totle_set .price"),".expressions",".formula_input");
+					$("#totle_set .despac .expressions").val("${type.expressions}");
+					
+				}
+				
+				$("#def_price input").each(function() {
+					$(this).val("");
+				})
+			};
+			
+			if("${type.is_same}"==0){
+				$("#totle_set").hide();
+				$("#the_area_set").show();
+				if(${type.typeConfig.defAreaFee}==1){
+					$("#defAreaFee").attr("checked",true);
+					Dlytype.area_set($("#def_price"), null, 1);
+					if(type.typeConfig.useexp==0){
+					}else{
+						Dlytype.price_set($("#def_price .price"),".expressions",".formula_input");
+						$("#def_price .despac .expressions").val(type.typeConfig.expression);
+					}
+				}
+				$("#totle_set input").each(function() {
+					$(this).val("");
+				})
+				//Dlytype.area_set($("#the_area_set"),null,1);
+			};
+		},
+		area_set : function(showId, hideId, is_true) {
+			if (hideId != null) {
+				hideId.hide();
+				hideId.find(".formula_input").validatebox({
+					required : false
+				});
+			}
+			if (showId != null) {
+				showId.show();
+				if (is_true == 1) {
+					showId.find(".price .formula_input").validatebox({
+						required : true
+					});
+				}
+			}
+		},
+		price_set : function(objdiv, showClass, hideClass) {
+			objdiv.hide().find(hideClass).validatebox({
+				required : false
+			});
+			objdiv.siblings(".deliveryexp").show().find(showClass).validatebox({
+				required : true
+			});
+		},
+		checkExp : function(btn) {
+			var exps=$("#input_text_expression").val();
+			
+			$("#divdia").dialog({
+				title : "公式验证",
+				width : 500,
+				height : 300,
+				closed : false,
+				cache : false,
+				href : "check-exp.do",
+				modal : true,
+				onLoad : function() {
+					$("#dlg_expressions").val(exps);
+					$("#saveBtn").click(function() {
+						function tint(value) {
+							return value < 0 ? 0 : value;
+						}
+						var w = parseFloat($("#weight").val());
+						var p = parseFloat($("#orderprice").val());
+						
+						var exp = $("#dlg_expressions").val();
+						var result = "";
+						try {
+							result = "计算结果：" + eval(exp);
+						} catch (e) {
+							result = "公式错误";
+						}
+						$("#result").html(result);
+					});
+				},
+				buttons : [ {
+					text : '保存',
+					handler : function() {
+						btn.siblings(".expressions").val($("#dlg_expressions").val());
+						$("#divdia").dialog('close');
+					}
+				} ]
+			});
+		},
+		optdlytype : function(obj) {
+			checkout_areaids = $(obj).parent().find(".totle_areas").val();
+			
+			$("#divdia").dialog({
+				title : "选择地区",
+				width : 580,
+				height : 400,
+				closed : false,
+				cache : false,
+				href : "${ctx}/shop/admin/area/get-regions-list.do?regionid=0",
+				modal : true,
+				onLoad : function() {
+				},
+				buttons : [ {
+					text : '保存',
+					handler : function() {
+						
+						var local_names="";
+						var tpl_areaids="";
+						var regionids="";
+						var areaids=new Array();
+						
+						$("#areas").find(".area:checked").each(function(){
+							local_names += $(this).attr("local_name")+",";
+							tpl_areaids+=$(this).val()+",";
+						});
+						
+						$("#areas").find(".region:checked").each(function(){
+							regionids+=$(this).val()+",";
+						});
+						
+						$(obj).parent().find(".totle_areas").val(tpl_areaids);
+						$(obj).parent().find(".totle_regions").val(regionids);
+						$(obj).val(local_names);
+						
+						$("#divdia").dialog('close');
+					}
+				}]
+			});
+		}
+	}
+</script>
+
+<#include '/admin/footer.html' >

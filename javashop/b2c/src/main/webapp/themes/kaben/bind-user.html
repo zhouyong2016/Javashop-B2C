@@ -1,0 +1,189 @@
+<#if nickname??>
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/bind_user.css" type="text/css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/placeholder.js"></script>
+	<div class="login_box">
+		<div  class="login_content">
+			<div class="content_box">
+				<div class="content_txt">
+				<!-- 左侧表单填写会员信息部分 -->
+					<div class="content_left">
+						<div clsss="form_list">
+							<form class="validate" id="login_form" method="post">
+								<h1 class="login_title">
+									欢迎登录Javashop网站
+								</h1>
+								<div class="text_body">
+									<div class="phone_box">
+										<label class="phone_num">手机号：</label>
+										<input type="text" class="phone_txt" name="mobile" placeholder="请输入手机号" isrequired="true" dataType="mobile"  >
+										<span id="mobile-code-error" class="error_tips"></span>
+									</div>
+									<div class="phone_box">
+										<label class="phone_num phone_code">短信验证码：</label>
+										<div class="code-input">
+											<input type="text" class="codes phone_txt" name="validcode" placeholder="请输入验证码" style="border:none;" >
+											
+											<span class="code-box">
+												<a class="get-code red-txt" id="send-code" href="javascript:void(0);">获取验证码</a>
+												<span class="code-txt">
+													<span class="code-time">60</span>秒后重新获得
+												</span>
+											</span>											
+										</div>
+										<span id="sms-code-error" class="error_tips"></span>
+									</div>
+								</div>
+								<div class="bind-box">
+									<a class="btn-div btn-green bind-btn" href="javascript:void(0);" id="bind-btn">绑定</a>
+								</div>
+								<input type="hidden" id="forward" value="${forward!''}" />
+							</form>
+						</div>
+					</div>
+					<!-- 中间分割线部分 -->
+					<div class="middle_line">
+						
+					</div>
+					<!-- 右侧会员头像信息部分 -->
+					<div class="content_right">
+						<div class="member_info">
+							<p class="login_way">
+								您正在使用<span class="orange-txt">${account_name!''}</span>登录
+							</p>
+							<p class="member_head ">
+								<@image src="${face_url!''}" class="pngFix" style="width:70px;height:70px;" />
+							</p>
+							<p class="user-name">${nickname!''}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="clear"></div>
+		<div class="login_footer">
+		
+		</div>
+	</div>
+	<script>
+		$(function(){
+			
+			var i = 60;
+			var t1; 
+			
+			//重新发送短信
+			function aginSend(){
+				if(i == 0) {
+					$(".code-time").text(i);
+					$(".code-txt").hide();
+					$("#send-code").show();
+					window.clearInterval(t1);
+					i = 60;
+				} else {
+					$(".code-time").text(i);
+					i--;
+				}
+				
+			}
+			
+			// 发送短信校验
+			$("#send-code").click(function(){
+				var $this = $(this);
+				
+				var mobileNum = $.trim($("input[name='mobile']").val());
+				if(!mobileNum){
+					$.message.error("手机号不能为空");
+					return false;
+				}else if (!/^1[3|4|5|7|8]\d{9}$/.test(mobileNum)) {
+					$.message.error("请填写正确的手机号");
+					return false;
+				}
+				
+				
+				var options = {
+					url : ctx + "/api/shop/sms/send-sms-code.do?mobile=" + mobileNum + "&key=check",
+					dataType:"json",
+					success:function(result) {
+
+						if(result.result == 1) {
+							$this.hide();
+							$(".code-time").text(60);
+							$(".code-txt").show();
+							$("#sms-code-error").text("发送成功");
+							t1 = window.setInterval(aginSend,1000)
+						} else {
+							$.message.error(result.message);
+						}
+					},
+					error : function(){
+						$.message.error("系统出错，请稍候重试");
+					}
+				}
+				$.ajax(options);
+				
+			});
+			
+			$("#bind-btn").click(function(){
+				
+				// 自动校验
+				if (!$("form.validate").checkall()) {
+					return false;
+				}
+				
+				var code = $("input[name='validcode']").val();
+				
+				// 手动校验
+				var reg = new RegExp("^\\d{6}$");
+				if(!reg.test(code)){
+			    	$.message.error("请输入6位数字验证码");
+			    	return false;
+			    }
+				
+				// 此处为提交表单代码
+				submitForm();
+			    
+			});
+		});
+		
+		function submitForm(){
+			var options = {
+				url : "${ctx}/api/shop/member/sms-login.do",
+				dataType : 'json',
+				success : function(data) {
+					if(data.result==1){
+						// 如果校验返回结果是注册
+						if (data.data && data.data.check_type !=undefined && data.data.check_type=="register") {
+							
+							//  跳转到用户信息页面
+							location.href = '${ctx}/register.html';
+						} else {
+							var forward=$("#forward").val();
+							if(forward || forward==""){
+								location.href ="${ctx}/index.html";
+							} else if(forward=="checkout.html"){
+								location.href ="${ctx}/cart.html";
+							}
+							else{
+								location.href=forward;
+							}
+						}
+					}else{
+						$.message.error(data.message);
+						$.Loading.hide();
+					}
+				},
+				error : function(e) {
+					$.message.error("出现错误 ，请重试");
+				}
+			};
+			$.Loading.show("正在登录，请稍候...");
+			$('#login_form').ajaxSubmit(options);
+		}
+	</script>
+<#include 'common/footer.html'/>
+<#else>
+<script>
+location.href = '${ctx}/login.html';
+</script>
+</#if>

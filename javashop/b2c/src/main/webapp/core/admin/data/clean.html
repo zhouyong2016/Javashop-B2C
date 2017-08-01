@@ -1,0 +1,74 @@
+<#include '/admin/header.html' >
+<div class="main">
+		<form method="post" name="theForm" id="exform" action="${ctx}/core/admin/example-data-clean/clean.do">
+		
+			<div style="display: block;" class="seeting_input">
+		请选择要清除的模块：<br>
+				 <input  type="checkbox" name="moudels" value="goodstype" links="goodscat,goods,order">商品类型&nbsp;&nbsp;&nbsp;&nbsp;
+				<input  type="checkbox" name="moudels" value="goodscat" links="goods,order">商品分类&nbsp;&nbsp;&nbsp;&nbsp;
+				 <input  type="checkbox" name="moudels" value="goods">商品&nbsp;&nbsp;&nbsp;&nbsp;
+				<input  type="checkbox" name="moudels" value="brand">品牌&nbsp;&nbsp;&nbsp;&nbsp;
+				<input  type="checkbox" name="moudels" value="member" links="order">会员&nbsp;&nbsp;&nbsp;&nbsp;
+				<input  type="checkbox" name="moudels" value="order" >订单&nbsp;&nbsp;&nbsp;&nbsp;
+			 	 <input  type="checkbox" name="moudels" value="decorate">装修&nbsp;&nbsp;&nbsp;&nbsp;
+				<br>
+				 
+				 <input  type="checkbox" name="moudels" value="store" links="order">店铺&nbsp;&nbsp;&nbsp;&nbsp;此项仅对b2b2c产品有效
+			</div>
+		
+			<div class="buttonWrap" align="center" style="background-color: white;padding-bottom: 10px;">
+				<input type="button" class="button" id="okBtn" value="确认">
+			</div>
+		
+		</form>
+</div>
+<script type="text/javascript">
+$(function(){
+	
+	$("#okBtn").click(function(){
+		
+		if(!confirm("确定要清除示例数据吗？")){	
+			return ;
+		}
+		
+		$.Loading.show("请稍候...");
+		$("#exform").ajaxSubmit({
+			dataType:"json",
+			success:function(json){
+				if(json.result==1){
+					$.Loading.success('清除成功');
+				}else{
+					$.Loading.error('清除失败');
+				}
+			},
+			error:function(){
+				alert("出现意外错误");
+			}
+		});
+	});
+	
+	
+	$("[name=moudels]").click(function(){
+		var $this = $(this);
+	 
+			var links = $this.attr("links");
+			if(links ){
+				 
+				var ar = links.split(",");
+				for( i=0;i<ar.length;i++){
+					if( this.checked ){
+						$("[value='"+ar[i]+"']").attr("checked","checked")
+					}else{
+						$("[value='"+ar[i]+"']").removeAttr("checked");
+						
+					}
+				}
+				
+			}
+			
+		 
+		
+	});
+});
+</script>
+<#include '/admin/footer.html' >

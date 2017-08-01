@@ -1,0 +1,30 @@
+<#assign subjectListTag=newTag("subjectListTag") >
+<#assign subjectList=subjectListTag() >
+<#assign  title="专题首页" />
+<#assign  index_type=1 />
+<#include '/common/header.html'/>
+<#include '/common/reception_header.html'/>
+<link rel="stylesheet" href="${ctx}/themes/kaben/css/index.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/decorate.css" />
+<script src="${ctx}/themes/kaben/js/slider.js" type="text/javascript"></script>
+
+<div class="index-main index-subject-main">
+	<div class="subject-main">
+		<#if subjectList?size lt 1>
+			<div class="subjectTitle">
+				<span class="subjectTitle" style="text-align: center">暂时没有专题</span>
+			</div>
+		</#if>
+		<#list subjectList as subject>
+			<div class="subjectTitle">
+				<span class="subjectTitle">${subject.title!''}</span>
+			</div>
+			<div class="subject-img">
+				<a href="${ctx}/subject-${subject.id}.html" target="_blank">
+					<@image class="scrollLoading" alt="${subject.title!''}" src="${subject.banner!''}" />
+				</a>
+			</div>
+		</#list>
+	</div>
+</div>
+<#include '/common/footer.html'/>

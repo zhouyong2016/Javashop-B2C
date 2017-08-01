@@ -1,0 +1,171 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<script type="text/javascript" src="${ctx}/core/admin/js/Auth.js"></script>
+<div class="main">
+	<div id="roleinfo"></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" id="add_role_button">添加</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="rolefrom">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/core/admin/role/list-json.do',fitColumns:'true'" width="width" id="roledata">
+				<thead>
+				    <tr>
+				   	 	<th  data-options="field:'rolename',width:100">角色名称</th>
+				   	 	<th  data-options="field:'rolememo',width:100">描述</th>
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+		</form>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+		var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.roleid +")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.roleid +")'></a>";
+		return val;
+		
+}
+function del(roleid){
+	if(!confirm("确认要删除角色吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+	var options = {
+			url : "${ctx}/core/admin/role/delete.do?ajax=yes&roleid="+roleid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$('#roledata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#rolefrom').ajaxSubmit(options);	
+} 
+$("#add_role_button").click(function(){
+	$("#roleinfo").show();
+　　	$('#roleinfo').dialog({
+　　		title: '添加角色',			
+　　		width: 550,
+  		top:30,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/core/admin/role/add.do', 	
+　　		modal: true,
+　　		buttons: [{					
+　　			 text:'保存',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				 var savebtn = $(this);
+	　　			  var disabled=savebtn.hasClass("l-btn-disabled");
+	　　			  if(!disabled){
+		　　				 $.Loading.show("正在保存请稍候...");
+		　　				 savebtn.linkbutton("disable");	
+　　				 		addroleForm(savebtn);	
+　　				 		}
+　　			 }
+　　			 },{
+　　			 text:'还原',
+　　			 handler:function(){
+　　				 $('#addroleForm')[0].reset() ;
+　　			 }
+　　		}]
+　　	});
+});
+function addroleForm(savebtn){
+	var formflag= $("#addroleForm").form().form('validate');
+	if(formflag){
+	 	var options = {
+			url : "${ctx}/core/admin/role/save-add.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result == 1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+				$("#roleinfo").dialog('close');
+				$('#roledata').datagrid('reload');
+		 	},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		};
+		$('#addroleForm').ajaxSubmit(options);	
+	}else{
+		$.Loading.hide();
+		savebtn.linkbutton("enable");
+	}
+}
+function edit(roleId){
+	 $("#roleinfo").show();
+	　　	$('#roleinfo').dialog({
+	　　		title: '修改角色',			
+	　　		width: 550,
+	　　		top:30,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/role/edit.do?roleid='+roleId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+		　　			  var disabled=editbtn.hasClass("l-btn-disabled");
+		　　			  if(!disabled){
+			　　				 $.Loading.show("正在保存请稍候...");
+			　　				 editbtn.linkbutton("disable");	
+	　　				 		 editroleForm();	
+	　　				 }
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editroleForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function editroleForm(editbtn){
+	var formflag= $("#editroleForm").form().form('validate');
+	if(formflag){
+		var options = {
+			url : "${ctx}/core/admin/role/save-edit.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result == 1){
+					$.Loading.success(result.message);
+				}else{
+					$.Loading.error(result.message);
+				}
+				$("#roleinfo").dialog('close');
+				$('#roledata').datagrid('reload');
+			},
+		 	error : function(e) {
+		 		$.Loading.error("出现错误 ，请重试");	
+		 		editbtn.linkbutton("enable");
+			}
+		};
+		$('#editroleForm').ajaxSubmit(options);
+	}else{
+		$.Loading.hide();
+		editbtn.linkbutton("enable");
+	}
+}
+</script>
+
+	   	 

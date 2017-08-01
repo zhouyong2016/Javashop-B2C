@@ -1,0 +1,35 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/floor/admin/js/showcase.js"></script>
+<div class="main">
+		<div class='buttonArea'>
+			<span id="add_showcase_button" style="float:left;display:block">	
+				<a href="javascript:void(0)" class="button blueButton"  onclick="newTab('添加橱窗','${ctx}/core/admin/showcase/add-showcase.do')">添加</a>
+			</span>
+			<span id="save_showcasesort_button" style="float:left;display:block">	
+				<a href="javascript:void(0)" class="button" >保存排序</a>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+		<form id="gridform" method="post">
+			<table class="easyui-datagrid"  url="${ctx}/core/admin/showcase/list-json.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="showcasedata"
+				sortName="sort" sortOrder="asc" remoteSort="false" >
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sort',sortable:'true',width:100" formatter="formatSort">排序</th>
+						<th data-options="field:'title',width:200" >橱窗名称</th>
+						<th data-options="field:'flag',width:500" >橱窗标识</th>
+						<th data-options="field:'is_display',width:500" formatter="formatIsDisplay">显示</th>
+						<th data-options="field:'edit',align:'center',width:100" formatter="formatEdit">编辑</th>
+						<th data-options="field:'delete',align:'center',width:100" formatter="formatDelete">删除</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+</div>
+<script type="text/javascript" >
+	var ctx="${ctx}";
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,303 @@
+<#assign title="安全中心" />
+<#include 'member_header.html'/>
+<#if member.mobile?exists && member.mobile != ''> 
+<#assign memberSecurityCenterTag = newTag("memberSecurityCenterTag") >
+<#assign security = memberSecurityCenterTag()>
+</#if>
+<div class="safety-tips">
+	<div class="mt">
+			<h3 class="mt-h3">手机验证</h3>
+	</div>
+	<div class="mc">
+		<div class="form">
+			<div class="item">
+				<span class="label">我的手机号：</span>
+				<div class="fl">
+					<input type="text" value=""  id="mobileInput" class="itxt" maxlength="11" placeholder="请输入正确的手机号"/>
+					<span class="error_msg" style="color: #e4393c;"></span>
+				</div>
+			</div>
+			<div class="item">
+				<span class="label">请填写手机校验码：</span>
+				<div class="fl">
+					<input id="code" class="itxt" type="text"  maxlength="6" disabled="disabled" tabindex="1" name="code">
+					<button id="sendMobileCode" href="javascript:void(0)" onclick="sendCode();">
+						<a href="javascript:void(0)">
+							<s></s>
+							获取短信校验码
+						</a>
+					</button>
+					<div class="clr-mobile-code" style="color: #999;"></div>
+				</div>
+			</div>
+			<div class="item">
+				<span class="label">验证码：</span>
+				<div class="fl">
+					<input id="authCode" class="itxt" type="text" maxlength="6" name="authCode" tabindex="2" placeholder="请输入正确的验证码">
+					<label>
+						<img src="${ctx}/validcode.do?vtype=membervalid" alt="验证码" id="code-img" class="ml10" style="cursor: pointer;height: 34px;width: 100px;border: 0 none;vertical-align: middle;">
+						看不清？
+						<a class="ftx-05" href="javascript:;" id="change-code">换一张</a>
+					</label>
+					<div class="clr"></div>
+					<div id="authCode_error" class="msg-error"></div>
+				</div>
+				<div class="clr"></div>
+			</div>
+			<div class="btn-div">
+				<input class="yellow-btn" type="button" id="submit-form" value="提交" style="margin-left: 19%;width: 187px;"/>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="safety-tips" style="border-top: 1px solid #e6e6e6;">
+	<div class="mt">
+		<h3>为什么要验证手机？</h3>
+	</div>
+	<div class="mc" style="margin-top: 20px;">
+		<span class="ftx-03">1. 验证手机可加强账户安全，您可以使用已验证手机快速找回密码或支付密码。</span>
+		<br><br>
+		<span class="ftx-03">2. 已验证手机可用于接收账户余额变动提醒。</span>
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#mobileInput").blur(function(){
+		va=$(this).val();
+		if(/^1[3|4|5|7|8]\d{9}$/.test(va)){
+			$(".item .error_msg").html("");
+		}else{
+			$(this).siblings('span').html('手机号格式不正确');
+		}
+	});
+	$("#change-code").click(function(){
+		$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+	});
+	$("#code-img").click(function(){
+		$(this).attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+	});
+	
+	$("#submit-form").click(function(){
+		//手机号不能为空
+		if($("#mobileInput").val() == ""){
+			$(".item .error_msg").html("请填写手机号");
+			return false;
+		}else{
+			$(".item .error_msg").html("");
+		}
+		
+		//手机校验码不能为空
+		if($("#code").val() == ""){
+			alert("请填写手机校验码");
+			return false;
+		}
+		
+		//验证码不能为空
+		if($("#authCode").val() == ""){
+			alert("请填写验证码");
+			return false;
+		}
+		
+		$.ajax({
+			url : ctx + "/api/shop/member/member-mobile-validate.do?ajax=yes",
+			type : "POST",
+			data : "mobileCode=" + $("#code").val() + "&validcode=" + $("#authCode").val() + "&mobile=" + $("#mobileInput").val() + "&key=binding",
+			dataType : "json",
+			success : function(data){
+				if (data.result == 1) {
+					location.href = "verification_success.html?type=3";
+				} else {
+					alert(data.message); 
+					$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+				}
+			},
+			error : function(){
+				alert("出现错误，请重试！");
+				$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
+			}
+		});	
+	});
+});
+
+var InterValObj; //timer变量，控制时间
+var count = 60; //间隔函数，1秒执行
+var curCount;//当前剩余秒数
+
+
+//timer处理函数
+function SetRemainTime() {
+    if (curCount == 0) {                
+        window.clearInterval(InterValObj);//停止计时器
+        $("#sendMobileCode").removeAttr("disabled");//启用按钮
+        $(".regis_same .from-line button").css("background-color","#03a9f4");
+        $("#sendMobileCode").html("重新发送验证码");
+    }
+    else {
+        curCount--;
+        $(".clr-mobile-code").html("校验码已发出，请注意查收短信，如果没有收到，你可以在<p style='color:red;display:inline-block;'>" + curCount + "</p>秒后要求系统重新发送");
+    }
+}
+
+//发送验证码
+function sendCode(){
+	var mobile = $("#mobileInput").val();
+	
+	if(mobile == ""){
+		$(".item .error_msg").html("请填写手机号");
+		return false;
+	}else{
+		$(".item .error_msg").html("");
+	}
+	
+	$("#code").removeAttr("disabled");
+	
+	$.ajax({
+		url:ctx + "/api/shop/sms/send-sms-code.do",
+		type:"POST",
+		data:"mobile=" + mobile + "&key=binding",
+		dataType:"json",
+		success:function(data){
+			if(data.result==0){
+				alert(data.message);
+				$("#sendMobileCode").html("重新发送验证码");
+			}else{
+				 curCount = count;
+			     $("#sendMobileCode").attr("disabled", "disabled");
+			     $(".clr-mobile-code").html("校验码已发出，请注意查收短信，如果没有收到，你可以在<p style='color:red;display:inline-block;'>" + curCount + "</p>秒后要求系统重新发送");
+			     InterValObj = window.setInterval(SetRemainTime, 1000);  //启动计时器，1秒执行一次
+			     $(".form_param .from-line button").css("background-color","#9D9D9D");
+			}
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	});	
+}
+</script>
+<script>
+otherMenu(4);
+</script>
+<style>
+.item #sendMobileCode {
+	width: 150px;
+	height:36px;
+	margin-left: 9px;
+	background-color: #f7f7f7;
+	background-image: linear-gradient(to bottom, #f7f7f7 0px, #f3f2f2 100%);
+	border: 1px solid #ddd;
+	border-radius: 2px;
+	display: inline-block;
+}
+.safety-tips {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+}
+.safety-tips .mt::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.safety-tips .mt {
+    display: block;
+    padding: 10px 0;
+}
+
+div.safety-tips .mc {
+    overflow: hidden;
+}
+.safety-tips .mc {
+    line-height: 20px;
+}
+.form {
+    margin-left: 100px;
+}
+.form .item::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.form .item {
+    display: block;
+    line-height: 30px;
+    margin-bottom: 20px;
+}
+.form .item span.label {
+    color: #999;
+    font-size: 14px;
+    padding: 8px 0;
+    width: 150px;
+    float: left;
+    height: 18px;
+    line-height: 18px;
+    text-align: right;
+}
+.fl {
+    float: left;
+}
+.ftx-un {
+    font-size: 16px;
+    line-height: 25px;
+    margin-right: 10px;
+}
+.form .itxt {
+	width: 157px;
+    padding: 8px 23px 8px 5px;
+    height: 18px;
+    border: 1px solid #ccc;
+    float: none;
+    font-family: "Microsoft YaHei";
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.form label {
+    float: none;
+}
+.btn-10:link, .btn-10:visited {
+    color: #323333;
+    text-decoration: none;
+}
+.btn-10{
+    background-color: #f7f7f7;
+    background-image: linear-gradient(to bottom, #f7f7f7 0px, #f3f2f2 100%);
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    font-size: 14px;
+    display: inline-block;
+    height: 18px;
+    line-height: 18px;
+    padding: 8px 14px;
+}
+.ml10 {
+    margin-left: 10px;
+}
+.clr {
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+}
+.ftx-05, .ftx05 {
+    color: #005ea7;
+}
+.ftx-03, .ftx03 {
+    color: #999;
+}
+
+.safety-tips .item{width:100%;height:30px;clear:both;}
+.safety-tips .item span{background:none;}
+.safety-tips .item .itxt{height:auto;float:left;}
+</style>
+<#include '../common/footer.html'/>

@@ -1,0 +1,9 @@
+
+<!-- 获取配送方式列表标签 -->
+<#assign shopDlyTypeListTag = newTag("shopDlyTypeListTag")>
+<!-- 调用配送方式列表标签 -->
+<#assign shopDlyTypeList = shopDlyTypeListTag('{"regionid":1}')>
+
+<#list shopDlyTypeList as shoplist>
+	${shoplist.name}
+</#list>

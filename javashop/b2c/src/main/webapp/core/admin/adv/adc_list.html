@@ -1,0 +1,191 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/core/admin/js/AdColumn.js"></script>
+<div class="main">
+	<form id='adcform'>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlAdc()">新增广告位置</a>
+		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+		<span style="float: right;height:28px;"> 
+			<a href="javascript:void(0)" class="button b_fr" onclick="searchAdc()">搜索</a>
+			<input id="cname" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="请输入模糊关键字" name="cname"> 
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid" 
+				data-options="url:'${ctx}/core/admin/adColumn/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'" 
+				pagination="true" id="adcdata">
+				    <thead>
+					    <tr>
+					    	<th  data-options="field:'acid',checkbox:true"></th>
+					    	<th  data-options="field:'show_id'" formatter="formatShowId">ID</th>
+					    	<th  data-options="field:'cname',width:200">标题</th>
+					   	 	<th  data-options="field:'atype',width:200" formatter="formatAtype">广告类型</th>
+					    	<th  data-options="field:'width',width:300" >宽度</th>
+					    	<th  data-options="field:'height',width:200">高度</th>
+					    	<th  data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
+					    </tr>
+				    </thead>
+			 </table>
+		<div id="divdia" style="display: none;"></div>
+	</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function controlAdc(id){
+	var map = {}; // Map map = new HashMap();
+	if(!id){
+		map["href"] ="${ctx}/core/admin/adColumn/add.do";
+		map["formId"] ="#addForm";
+		map["url"] ="${ctx}/core/admin/adColumn/add-save.do?ajax=yes";
+		map["title"]="添加广告位置";
+		map["loadshow"]="正在添加......";
+	}else{
+		map["href"] ="${ctx}/core/admin/adColumn/edit.do?ac_id="+id;
+		map["formId"] ="#editForms";
+		map["url"] ="${ctx}/core/admin/adColumn/edit-save.do?ajax=yes";
+		map["title"]="修改广告位置";
+		map["loadshow"]="正在修改......";
+	}
+	map["divDialog"]="#divdia";
+	map["gridreload"]="#adcdata";
+	
+	//需要验证的参数
+	map["nameId"]="#name";
+	map["urlId"]="#acwidth";
+	
+	addDialog(map);
+}
+function addDialog(map){
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title: map["title"],
+		width: 600,
+		height: 300,
+		closed: false,
+		cache: false,
+		href: map["href"],
+		modal: true,
+		buttons: [{
+			 text:'保存',
+			 iconCls:'icon-ok',
+			 handler:function(){
+			 	var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					submitForm(map,savebtn);
+				}
+　　			}
+		},{
+			 text:'取消',
+			 handler:function(){
+				 $(map["divDialog"]).dialog('close');
+			 }
+		}]
+	});
+}
+function submitForm(map,saveBtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if(formflag){
+		$.Loading.show(map["loadshow"]);
+		saveBtn.linkbutton("disable"); //禁用	
+		var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result){
+					$.Loading.hide();
+					if(result.result==1){
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if(result.result==0){ 
+						$.Loading.error(result.message);
+					}
+					saveBtn.linkbutton("enable"); //禁用	
+				
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					saveBtn.linkbutton("enable"); //禁用	
+				}
+			};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+	saveBtn.linkbutton("enable"); 
+}
+function clearForm(map) {
+	$(map["formId"]).form('clear');
+}
+
+
+function formatOperation(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='controlAdc("+row.acid+")' ></a>";
+	val+="<a class='view' title='查看广告列表' href='javascript:void(0);' onclick='newTab(\""+row.cname+"-广告列表\",\"${ctx}/core/admin/adv/tlist.do?acid="+row.acid+"\")' ></a>"
+	return val;
+}
+function formatShowId(value,row,index){
+	return row.acid;
+}
+function formatAtype(value,row,index){
+	var val;
+	if(value==0){
+		val="图片";
+	}else if(value==1){
+		val="Flash";
+	}
+	return val;
+}
+
+function del(){
+	var rows = $('#adcdata').datagrid("getSelections"); 
+	if (rows.length < 1) {
+		$.Loading.error("请选择删除广告位");
+		return;
+	}
+	
+	if (!confirm("确认删除？")) {	
+		return ;
+	}
+	
+	$.Loading.show("正在删除......");
+ 	var options = {
+		url : "${ctx}/core/admin/adColumn/delete.do?ajax=yes",
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				$.Loading.success(result.message);
+				var rows = $('#adcdata').datagrid("getSelections"); 
+				for(var i =0;i<rows.length;i++){      
+		 			var index = $('#adcdata').datagrid('getRowIndex',rows[i]); 
+		 			$('#adcdata').datagrid('deleteRow',index);    
+		 		}
+			}
+			if(result.result==0){
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	};
+ 	
+	$('#adcform').ajaxSubmit(options);
+};
+
+//搜索
+function searchAdc(){
+	var formflag= $("#adcform").form().form('validate');
+	if(formflag){
+		var cname = $.trim($("#cname").val());
+		$('#adcdata').datagrid('load', {
+			 cname:cname,
+			 page:1
+	    }); 
+	}
+}
+</script>
+<#include '/admin/footer.html' >
+ 

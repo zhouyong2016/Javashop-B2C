@@ -1,0 +1,11 @@
+
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag("{'orderid':10003}")>
+<!-- 
+<!--使用订单号作为参数，请取消注释-->
+<!--调用“订单详细”标签，并传递订单号参数，订单号与订单详细都可以得到订单详细实体-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"20140811034218"}')>
+ -->
+商品重量：${orderDetail.weight!''}

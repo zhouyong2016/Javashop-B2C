@@ -1,0 +1,9 @@
+
+<!-- 获得商品META（快递、运费）信息 -->
+<#assign orderMetaTag = newTag("orderMetaTag")>
+<!-- 盗用商品META（快递、运费）信息 -->
+<#assign orderMeta = orderMetaTag("{'orderid':${orderid}}")>
+<#if orderMeta.couponprice?exists>
+	<th>优惠券抵扣:</th>
+	<td>${orderMeta.couponprice}</td>
+</#if>	

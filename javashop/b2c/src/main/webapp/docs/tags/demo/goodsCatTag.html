@@ -1,0 +1,17 @@
+
+<!-- 创建商品分类标签 -->
+<#assign goodsCatTag= newTag("goodsCatTag")>
+<!-- 调用商品分类信息 -->
+<#assign goodsCat = goodsCatTag("'parentid':1,'catimage':'on'")!'' >
+<ul>
+	<#list goodsCat.cat_tree as cat>
+	<li<#if cat.hasChildren >class="haschild"</#if>>
+		<#if cat.hasChildren>
+		<span>
+			<img alt="" src="${cat.image!''}" height="20px;">
+		</span>
+		</#if>
+		<a href="search-cat-${cat.cat_id}.html" class="menu">${cat.name }</a><br/>
+	</li>
+	 </#list>
+</ul>

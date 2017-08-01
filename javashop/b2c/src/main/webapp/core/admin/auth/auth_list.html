@@ -1,0 +1,187 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div id="authinfo" style="display: none;"overflow:scroll;></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"
+			data-options="iconCls:'icon-add',plain:true" id="add_auth_button">添加</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" id="authdata"
+			data-options="url:'${ctx}/core/admin/auth/list-json.do',fitColumns:'true',idField: 'actid',treeField: 'name'">
+			<thead>
+				<tr>
+					<th data-options="field:'actid',width:100">编号</th>
+					<th data-options="field:'name',width:100">权限点名称</th>
+					<th data-options="field:'choose',width:100"
+						formatter="formatChoose">系统权限</th>
+					<th data-options="field:'update',width:100"
+						formatter="formatUpdate">修改</th>
+					<th data-options="field:'delete',width:100"
+						formatter="formatDelete">删除</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+function formatChoose(value,row,index){
+	var val="";
+	if(row.choose==1){val="是";}
+	if(row.choose==0){val="否";}
+	return val;
+}
+function formatUpdate(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.actid+","+row.choose+")'></a>";
+	return val;
+}
+function formatDelete(value,row,index){
+	var val="<a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.actid+","+row.choose+")'></a>";
+	return val;
+}
+function edit(authid,choose){
+	 $("#authinfo").show();
+	　　	$('#authinfo').dialog({
+	　　		title: '修改权限点',			
+	　　		width: 550,
+	  		height:550,
+	  		top:10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/auth/edit.do?authid='+authid, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				  var editbtn = $(this);
+		　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+				　　			editForm(editbtn);
+				　　		}
+	　　			}
+			 }]
+	　　	});
+}
+
+function del(authid,choose){ 
+	if(choose==1){alert("此为系统默认权限点,不能删除");return;}
+	if (!confirm("确定要删除此权限点吗？")) {
+		return;
+	}
+	$.ajax({
+		url : "${ctx}/core/admin/auth/delete.do?ajax=yes&authid=" + authid,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				$.Loading.success(result.message);
+				$("#authdata").datagrid('reload');
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+}
+$("#add_auth_button").click(function(){
+	 $("#authinfo").show();
+	　　	$('#authinfo').dialog({
+	　　		title: '添加权限点',			
+	　　		width: 550,
+	  		height:550,
+	  		top:10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/core/admin/auth/add.do', 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				  	 var savebtn = $(this);
+		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+				　　			addForm(savebtn);
+				　　		}
+	　　			}
+			 }]
+	　　});
+});
+function addForm(savebtn){
+	var formflag= $("#authForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		savebtn.linkbutton("disable");	
+		var options = {
+				url : "${ctx}/core/admin/auth/save-add.do?menuids="+getNode(),
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#authinfo").dialog('close');
+						$('#authdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#authForm').ajaxSubmit(options);	
+	}
+}
+function editForm(editbtn){
+	var formflag= $("#authForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");	
+		var options = {
+				url : '${ctx}/core/admin/auth/save-edit.do?menuids='+getNode(),
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#authinfo").dialog('close');
+						$('#authdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		editbtn.linkbutton("enable");
+				}
+			};
+		$('#authForm').ajaxSubmit(options);	
+	}
+}
+function getNode(type){
+	var menuid="";
+	var parentnodes = $('#tt').tree('getChecked','indeterminate');
+	for (var i = 0; i < parentnodes.length; i++) {
+		if (menuid != ''){
+			menuid += ',';
+		}
+		menuid += parentnodes[i].id;
+	}
+	//获取选中对象
+	var nodes = $('#tt').tree('getChecked');
+	for (var i = 0; i < nodes.length; i++) {
+		if (menuid != ''){
+			menuid += ',';
+		}
+		menuid += nodes[i].id;
+	}
+	return menuid;
+};
+</script>
+<#include '/admin/footer.html' >

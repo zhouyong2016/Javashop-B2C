@@ -1,0 +1,49 @@
+<div>
+	<div class="main" style="background-color: white;">
+		<table class="form-table">
+			<tr>
+				<th style="width: 230px;">取消订单超时天数：</th>
+				<td>
+					<input type="text" name="order.cancel_order_day"   value="${order.cancel_order_day!1}" class="input_text validnum" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="5"  onblur="this.value=this.value.replace(/\D/g,'')">
+				</td>
+			</tr> 
+			<tr>
+				<th>收货超时，自动收货天数：</th>
+				<td>
+					<input type="text" name="order.rog_order_day"   value="${order.rog_order_day!1}" class="input_text validnum" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="5"  onblur="this.value=this.value.replace(/\D/g,'')">
+				</td>
+			</tr>
+			<tr>
+				<th>超时评价，自动评价天数：</th>
+				<td>
+					<input type="text" name="order.comment_order_day"   value="${order.comment_order_day!1}" class="input_text validnum" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="5" onblur="this.value=this.value.replace(/\D/g,'')">
+				</td>
+			</tr>
+			<tr>
+				<th>超时未入库，自动取消退货天数：</th>
+				<td>
+					<input type="text" name="order.cancel_sellback_day"   value="${order.cancel_sellback_day!1}" class="input_text validnum" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="5"  onblur="this.value=this.value.replace(/\D/g,'')">
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$(".validnum").blur(function(){
+			var _self=$(this);
+			var val=_self.val();
+			if(isNaN(parseInt(val))){
+				alert("您输入的不是数字");
+				_self.val(1);
+			}else if(parseInt(val)<1){
+				alert("设定的时间不能小于1");
+				_self.val(1);
+			}else{
+				_self.val(parseInt(val));
+			}
+		});
+	})
+
+</script>
+

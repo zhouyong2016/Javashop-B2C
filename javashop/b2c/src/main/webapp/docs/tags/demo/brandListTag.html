@@ -1,0 +1,8 @@
+
+<!--创建"文章列表"标签-->
+<#assign DataListTag = newTag("dataListTag")>
+<!--调用“文章列表”标签-->
+<#assign DataList = DataListTag("'modelid':'1'")>
+<#list DataList as list>
+${list.result.id}
+</#list>

@@ -1,0 +1,23 @@
+
+<!--创建"会员地址列表"标签-->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<!--调用"会员地址列表"标签-->          
+<#assign  consigneeList= consigneeListTag()>						
+<ul class="gw">
+
+<#list consigneeList as list>
+
+
+
+
+	<li>
+	收货人姓名${list.name}</br>
+	收货人所在城市${list.city}
+	收货人收货地址ID${list.addr_id}
+	</li>
+</#list>
+
+</ul>
+
+
+

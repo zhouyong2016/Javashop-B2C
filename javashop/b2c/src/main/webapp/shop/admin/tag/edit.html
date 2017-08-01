@@ -1,0 +1,17 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editTagForm" method="post" class="validate" >
+		<input type="hidden" name="tag_id" value="${tag.tag_id }"/>
+			<table>
+				<tr>
+					<td>标签名称</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="tag_name" id="name" maxlength="30" data-options="required:true"  dataType="string"   value="${tag.tag_name}" isrequired="true"/>
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+</div>
+	
+

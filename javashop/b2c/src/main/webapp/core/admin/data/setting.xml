@@ -1,0 +1,12 @@
+<action>
+		<command>insert</command>
+		<table>es_settings</table>
+		<fields>cfg_value,cfg_group</fields>
+		<values>'{"tiny_pic_height":"60"!comma;"tiny_pic_width":"60"!comma;"small_pic_height":"310"!comma;"watermark":"off"!comma;"thumbnail_pic_height":"180"!comma;"big_pic_height":"800"!comma;"markcolor":"#000000"!comma;"thumbnail_pic_width":"180"!comma;"markpos":"5"!comma;"big_pic_width":"800"!comma;"marksize":"25"!comma;"small_pic_width":"310"}','photo'</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_settings</table>
+		<fields>cfg_value,cfg_group</fields>
+		<values>'{"email_check":"1"!comma;"onlinepay_num_mp":"10"!comma;"finish_profile":"1"!comma;"email_check_num":"20"!comma;"first_comment":"1"!comma;"register_link_num":"0"!comma;"email_check_num_mp":"20"!comma;"register_num":"50"!comma;"register_link":"1"!comma;"finish_profile_num":"20"!comma;"login":"1"!comma;"login_num_mp":"5"!comma;"buygoods_num":"1"!comma;"buygoods_num_mp":"1"!comma;"onlinepay":"1"!comma;"register_num_mp":"50"!comma;"register_link_num_mp":"50"!comma;"comment_img_num_mp":"30"!comma;"comment_img":"1"!comma;"finish_profile_num_mp":"20"!comma;"register":"1"!comma;"onlinepay_num":"10"!comma;"comment_img_num":"30"!comma;"first_comment_num":"50"!comma;"first_comment_num_mp":"50"!comma;"login_num":"5"!comma;"comment_num":"10"!comma;"comment_num_mp":"10"!comma;"comment":"1"!comma;"buygoods":"1"}','point'</values>
+	</action>

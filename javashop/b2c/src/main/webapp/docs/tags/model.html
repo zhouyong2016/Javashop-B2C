@@ -1,0 +1,66 @@
+<#assign title= "文章模型信息" ><#include '../header.html' />
+<!--手册开始-->
+<div id="top_nav">
+	<h1>标签、API使用手册</h1>
+</div>
+<!--手册结束-->
+<!--正文-->
+<div id="main">
+	<div class="menu_list">
+<#include 'tags_menu.html' />
+	</div>
+	<div class="right_list">
+		<h3>model  文章模型</h3>
+		<h2>需要简述</h2>
+		<h6>返回所有的CMS文章模型列表参数</h6>
+		<div class="intro">	
+			<div class="same" id="parameter">
+				<h2>输入参数</h2>
+				<table cellspacing="0">
+					<tr>
+						<th>名称</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>model_id</td>
+						<td>int</td>
+						<td>文章模型ID</td>
+					</tr>
+					<tr>
+						<td>china_name</td>
+						<td>string</td>
+						<td>文章模型中文名称</td>
+					</tr>
+					<tr>
+						<td>english_name</td>
+						<td>string</td>
+						<td>文章模型英文名称</td>
+					</tr>
+					<tr>
+						<td>add_time</td>
+						<td>long</td>
+						<td>文章模型添加时间</td>
+					</tr>
+					<tr>
+						<td>brief</td>
+						<td>string</td>
+						<td>备注</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+</div>
+<#include '../fooder.html'>
+
+<!--正文结束-->
+</body>
+</html>
+
+
+
+
+
+
+
+

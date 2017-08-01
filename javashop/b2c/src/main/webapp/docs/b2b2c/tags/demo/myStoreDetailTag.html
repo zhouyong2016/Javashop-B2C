@@ -1,0 +1,9 @@
+
+<!--创建"我的店铺信息"标签-->
+<#assign myStoreDetailTag= newTag("myStoreDetailTag") >  
+<!--调用"我的店铺信息"标签，并传递参数-->            
+<#assign  myStoreDetail= myStoreDetailTag("'store_id':'15','type':'1'") >						
+<ul class="gw">
+
+   店铺全部订单：${myStoreDetail.store_name}</br>
+   未付款订单：${myStoreDetail.store_id}</br>

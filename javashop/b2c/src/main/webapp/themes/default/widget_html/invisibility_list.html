@@ -1,0 +1,11 @@
+<ul>
+<#list goodsList as goods>
+	<li>
+		<a href="goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+		<h2>${goods.name}</h2>
+		<p>市场价：<del>${goods.mktprice?string.currency}</del></p>
+		<h3>美睛价：<span>${goods.price?string.currency}</span>元</h3>
+	</li>
+</#list>
+</ul>
+

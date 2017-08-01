@@ -1,0 +1,47 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form method="post" name="editForm" id="editForm" enctype="multipart/form-data">
+			<table>
+				<input type="hidden" name="id" value="${subject.id}" >
+				<tbody>
+					<tr>
+						<th>标题:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="20" isrequired="true" datatype="string" value="${subject.title}"
+							data-options="required:true" name="title" autocomplete="off" title="" >
+						</td>
+					</tr>
+					<tr>
+						<th>排序:</th>
+						<td>
+							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
+							type="text"	maxlength="5" isrequired="true" datatype="string" value="${subject.sort}"
+							data-options="required:true" name="sort" autocomplete="off" title="" onkeyup="this.value=this.value.replace(/[^\d]/g,'') ">
+						控制专题横幅的显示顺序
+						</td>
+					</tr>
+					
+					<tr>
+						<th>显示:</th>
+						<td>
+							<input type="radio" name="is_display" value="0" <#if subject.is_display?? && subject.is_display==0>checked="checked"</#if>>显示
+							<input type="radio" name="is_display" value="1" <#if subject.is_display?? && subject.is_display==1>checked="checked"</#if>>不显示 
+						</td>
+					</tr>
+					<tr>
+						<th>横幅:</th>
+						<td>
+							<input type="hidden" name="banner" value="${subject.banner!''}">
+							<input class="easyui-validatebox validatebox-text validatebox-invalid" 
+							type="file"	maxlength="50" isrequired="true" datatype="string" 
+							data-options="required:false" name="file" autocomplete="off" title="" >
+						在专题页面显示的图片横幅 建议大小 1200px*300px
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>

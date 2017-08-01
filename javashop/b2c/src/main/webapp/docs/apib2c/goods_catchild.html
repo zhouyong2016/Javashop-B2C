@@ -1,0 +1,99 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获取商品分类子分类列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/goodscat!goodsCatList.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">parentid</span><span class="w100">父分类ID</span><span class="w380">int型，父分类ID可为空</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>	var param = e$.getParam();</b>
+			<b>	var url = getFullUrl('/api/mobile/goodscat!goodsCatList.do');</b>
+			<b>	var options = {</b>
+			<b><i></i>		url : url,</b>
+			<b><i></i>		data : {parentid:param.catid},</b>
+			<b>	<i></i>	success : function(data) {</b>
+			<b>	<i></i><i></i>		if (data.result == 1) {</b>
+			<b>	<i></i><i></i><i></i>			var viewData = data.data;</b>
+			<b>	<i></i><i></i><i></i>			classifyData = viewData;</b>
+			<b>	<i></i><i></i><i></i>			initTpl(viewData, $("#classify_html_templet"), $("#classify_html_view"), bind);</b>
+			<b>	<i></i><i></i>		} else {</b>
+			<b>	<i></i><i></i><i></i>			e$.alert("获取资源失败，请稍后重试。");</b>
+			<b>	<i></i><i></i>		}</b>
+			<b>	<i></i>	}</b>
+			<b>	};</b>
+			<b>e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+ {
+    "result": 1,
+    "data": {
+        "cat_tree": [
+            {
+                "cat_id": 4,
+                "cat_order": 0,
+                "cat_path": "0|1|2|4|",
+                "children": [],
+                "goods_count": 0,
+                "hasChildren": false,
+                "image": "",
+                "list_show": "1",
+                "name": "单鞋",
+                "parent_id": 2,
+                "state": "",
+                "totle_num": 0,
+                "type_id": 50,
+                "type_name": "鞋子"
+            },
+            {
+                "cat_id": 5,
+                "cat_order": 0,
+                "cat_path": "0|1|2|5|",
+                "children": [],
+                "goods_count": 0,
+                "hasChildren": false,
+                "image": "",
+                "list_show": "1",
+                "name": "休闲鞋",
+                "parent_id": 2,
+                "state": "",
+                "totle_num": 0,
+                "type_id": 50,
+                "type_name": "鞋子"
+            },
+            {
+                "cat_id": 6,
+                "cat_order": 0,
+                "cat_path": "0|1|2|6|",
+                "children": [],
+                "goods_count": 0,
+                "hasChildren": false,
+                "image": "",
+                "list_show": "1",
+                "name": "马丁鞋",
+                "parent_id": 2,
+                "state": "",
+                "totle_num": 0,
+                "type_id": 50,
+                "type_name": "鞋子"
+            }
+        ],
+        "showimg": false
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>
+
+

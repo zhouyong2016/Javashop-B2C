@@ -1,0 +1,76 @@
+<#-- 创建结算订单金额标签 -->
+<#assign checkoutOrderTotalTag = newTag("checkoutOrderTotalTag") />
+<#-- 调用结算订单金额标签, 需要传递参数regionId(地区id)及typeId(配送方式id) -->
+<#assign orderPrice = checkoutOrderTotalTag("{'regionId':${regionId},'typeId':${typeId}}") />
+<!-- <ul>
+	
+	<li>
+		<h2>商品价格总计：</h2>
+		<p>${orderPrice.goodsPrice?string("currency")}</p>
+	</li>
+	
+	<li>
+		<h2>运费总计：</h2>
+		<p>${orderPrice.shippingPrice?string("currency")}</p>
+	</li>
+	<#if orderPrice.point?exists && orderPrice.point!=0 >
+	<li>
+		<h2>订单获得积分：</h2>
+		<p>${orderPrice.point!0}</p>
+	</li>
+	</#if>
+	<li>
+		<h2>订单总价：</h2>
+		<p>${orderPrice.orderPrice?string("currency")}</p>
+	</li>
+	<#if orderPrice.discountPrice?exists && orderPrice.discountPrice!=0>
+	<li>
+		<h2>优惠抵扣：</h2>
+		<p>${orderPrice.discountPrice?string("currency")}</p>
+	</li>
+	</#if>	
+	
+	<input type="hidden" id="needPayVal" value="${orderPrice.needPayMoney}" />
+	<input type="hidden" id="oldNeedPay" value="${orderPrice.needPayMoney}" />
+	<h2 id="credit_h2" class="c_price2"></h2>
+	<li>
+		<h3>应付支付：</h3>
+		<h4>${orderPrice.needPayMoney?string("currency")}</h4>
+	</li>
+</ul> -->
+<style>
+.chechout1{
+	margin-top:10px;
+	height:150px;
+	width:200px;
+}
+.c_price1{
+	 color: #37839a;
+	 font-weight:normal;
+    font-size:14px;
+}
+.c_price2{
+	 color: #999;
+	 font-weight:normal;
+    font-size:14px;
+}
+.c_price3{
+	  font: 16px/32px "microsoft yahei",Arial;
+}
+.c_price3 span{
+	     color: #d93600;
+    font-size: 22px;
+    font-style: normal;
+}
+</style>
+<div class="chechout1">
+	<h2 class="c_price1">商品价格总计：<span id="goodsPay">${orderPrice.goodsPrice?string("currency")}</span></h2>
+	<h2 class="c_price2">运费总计：<span id="shippingPay">${orderPrice.shippingPrice?string("currency")}</span></h2>
+	<h2 class="c_price2">优惠券总抵扣：<span id="discount_Pay">${orderPrice.discountPrice?string("currency")}</span></h2>
+	
+	<input type="hidden" id="needPayVal" value="${orderPrice.needPayMoney}" />
+	<input type="hidden" id="oldNeedPay" value="${orderPrice.needPayMoney}" />
+	<h2 id="credit_h2" class="c_price2"></h2>
+	
+	<h3 class="c_price3">应付支付：<span id="needPay">${orderPrice.needPayMoney?string("currency")}</span></h3>
+</div>

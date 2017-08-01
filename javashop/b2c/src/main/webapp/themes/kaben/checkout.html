@@ -1,0 +1,45 @@
+<#assign  title="核对订单信息" />
+<#assign  index_type=2 />
+<#include 'common/header.html'/>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag")>
+<#assign memberIsLogion = memberLoginCheckTag()>
+<link rel="stylesheet" href="${ctx}${themes_path}/css/checkout.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/reveal.css" type="text/css" />
+
+<script src="${ctx}${themes_path}/js/Checkout.js" type="text/javascript"></script>
+<script src="${ctx}${themes_path}/js/checkout_address.js" type="text/javascript"></script>
+<script src="${ctx}${themes_path}/js/jquery.reveal.js" type="text/javascript"></script>
+<style>
+.good_list .title{color:#fff;}
+</style>
+<div class="h_btm">
+	<div class="logo">
+		<a href="${ctx}/index.html">
+				<@image src="${site.logofile!''}" title="logo"/>
+			</a>
+	</div>
+	<div class="flow-steps">
+		<ol class="cur1">
+			<li class="num1">
+				<span>我的购物车</span>
+				<em>1</em>
+			</li>
+			<li class="num2">
+				<span>核对订单信息</span>
+				<em>2</em>
+			</li>
+			<li class="num3">
+				<span>成功提交订单</span>
+				<em>3</em>
+			</li>
+			<li class="clear"></li>
+		</ol>
+	</div>
+</div>
+<div class="my_checkout_box checkout_box">
+	<div class="my_checkout">
+		<#include 'checkout/checkout.html'/>
+	</div>
+</div>
+
+<#include 'common/footer.html'/>

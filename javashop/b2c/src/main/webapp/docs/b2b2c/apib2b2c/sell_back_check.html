@@ -1,0 +1,23 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>save-auth 审核退货单申请API</h3>
+		<p>审核退货单申请</p>
+	</div>
+	<div class="same-floor">
+		<h3>API地址：</h3>
+		<p>/api/store/store-sell-back/save-auth.do</p>
+		<h3>输入参数:</h3>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">类型</span><span class="w100">是否必须</span><span class="w100">示例值</span><span class="w200">备注</span></h4>
+			<p><span class="w100 important">id</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">审核退货单id</span></p>
+			<p><span class="w100 important">seller_remark</span><span class="w100 important">String</span><span class="w100 important">必须</span><span class="w100 important">恩，可以退货</span><span class="w200">审核备注</span></p>
+			<p><span class="w100 important">status</span><span class="w100 important">int</span><span class="w100 important">必须</span><span class="w100 important">1</span><span class="w200">审核状态：1通过，2不通过</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>返回示例：</h3>
+		<h5>
+			{"result":1,"message":"操作成功","data":null}
+		</h5>
+	</div>
+</div>

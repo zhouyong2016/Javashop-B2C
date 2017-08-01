@@ -1,0 +1,70 @@
+<!--创建"收货人详细"标签-->
+<#assign consigneeDetailTag = newTag("consigneeDetailTag")>
+<!--调用“收货人详细”标签-->
+<#assign consigneeDetail = consigneeDetailTag('{"addressid":"${addressid}"}')>
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="form_wrap white_box">
+	<div class="box" >
+		<div class="top"></div>
+		<div class="body">
+		<form class="validate"  action="" method="post">
+			<input type="hidden" name="addr_id" value="${consigneeDetail.addr_id}"/>
+			<table   cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th>默认收货地址：</th>
+					<td>
+					<label><input type="radio"   <#if consigneeDetail.def_addr == 0>checked</#if> value="0" name="def_addr">否</label>
+					<label><input type="radio"  value="1" <#if consigneeDetail.def_addr == 1>checked</#if> name="def_addr">是</label>
+					</td>
+				</tr>
+				<tr>
+					<th><em></em>姓名：</th>
+					<td>
+					<input type="text"  value="${consigneeDetail.name!''}" isrequired="true" name="name" class="input_text" >
+					</td>
+				</tr>
+				<tr>
+					<th>手机：</th>
+					<td><input type="text" value="${consigneeDetail.mobile!''}" class="input_text" name="mobile" id="mobile" 
+					onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11"></td>
+				</tr>	
+				<tr>
+					<th>电话：</th>
+					<td>
+					<input type="text" dataType="tel_num" value="${consigneeDetail.tel!''}" class="input_text" name="tel" id="tel" 
+					onkeyup="this.value=this.value.replace(/[^\d-]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="13" >
+					<span class="infotips">其中联系电话和联系手机必须填写一项</span>
+					</td>
+				</tr>
+				<tr>
+					<th><em></em>地区：</th>
+					<td>
+					 <@regionSelect province_id="${ consigneeDetail.province_id }" city_id="${ consigneeDetail.city_id }" region_id="${ consigneeDetail.region_id }" />
+					</td>
+				</tr>
+				<tr>
+					<th><em></em>地址：</th>
+					<td><textarea   rows="3" cols="30" name="addr"
+						isrequired="true" type="textarea" >${consigneeDetail.addr!''}</textarea></td>
+				</tr>
+				<tr>
+					<th><em></em>邮编：</th>
+					<td><input value="${consigneeDetail.zip!''}" isrequired="true" name="zip" class="input_text" dataType="post_code"
+					onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="6" ></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div class="btn"><input type="button" class="yellow_btn" value="保存并返回" id="address_edit"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+ 
+	</form>
+	</div>
+	<div class="bottom"></div>
+	</div>
+	</div>
+

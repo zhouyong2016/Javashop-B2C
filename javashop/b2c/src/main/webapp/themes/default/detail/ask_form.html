@@ -1,0 +1,41 @@
+<div id="ask_form_wrapper">
+	<form method="post" id="askForm">
+		<input type="hidden" name="goods_id" value="${goods.goods_id}" />
+		<input type="hidden" name="commenttype" value="2" />
+		<div class="ask_issue">
+			<div>
+				<h2>请输入您的问题</h2>
+				<textarea  name="content" id="ask_content" >请在此处输入您的问题</textarea>
+		 		<div class="btn" style="height:50px;">
+					<a href="javascript:;" class="blue_btn" id="askBtn" >提交咨询</a>
+				</div>
+			</div>
+		</div>	
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){	
+	$("#ask_content").focus(function(){
+		if(this.value=="请在此处输入您的问题"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="请在此处输入您的问题";
+		}
+	});
+	$("#askBtn").click(function(){
+		var cval = $('#ask_content').val();
+		if(cval == '' ||cval=='请在此处输入您的问题' ){
+			alert("请输入您的咨询内容！");
+			return;
+		}
+		else if(cval.length>1000){
+			alert("请您输入1000字以内的文字");
+			return;
+		}
+		CommentForm.formSubmit($(this),$("#askForm"));
+	});
+});
+</script>

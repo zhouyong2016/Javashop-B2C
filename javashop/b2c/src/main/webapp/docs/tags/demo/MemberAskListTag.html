@@ -1,0 +1,16 @@
+
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<!-- 使用Map关键字获得相关内容 -->
+<ul>
+	<#list memberAskList.commentsList as memberComment>
+	<li>
+		我的咨询内容：${memberComment.content}</br>
+		我的咨询回复：${memberComment.reply!''}</br>
+		我咨询的商品：${memberComment.name}</br>
+	</li>
+</#list>
+</ul>
+<@pager pageno="${memberAskList.page}" pagesize="${memberAskList.pageSize}" totalcount="${memberAskList.totalCount}" />

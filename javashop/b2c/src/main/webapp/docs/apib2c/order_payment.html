@@ -1,0 +1,85 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>获得支付方式列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/order!payment.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100"></span><span class="w380"></span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/order!payment.do');</b>
+			<b>		var options = {</b>
+			<b>	<i></i>		url : url,</b>
+			<b>	<i></i>		success : function(data) {</b>
+			<b>	<i></i><i></i>			if (data.result == 1) {</b>
+			<b>	<i></i><i></i><i></i>				var viewData = data.data;</b>
+			<b>	<i></i><i></i><i></i>				initTpl(viewData, $("#payment_html_templet"), $("#payment_html_view"), closeLoad);</b>
+			<b>	<i></i><i></i>			} else {</b>
+			<b>	<i></i><i></i><i></i>				e$.alert("获取资源失败，请稍后重试。");</b>
+			<b>	<i></i><i></i>			}</b>
+			<b>	<i></i>		}</b>
+			<b>		};</b>
+			<b>		e$.ajax(options);</b>
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    "result": 1,
+    "data": {
+        "payment": [
+            {
+                "biref": "
+
+\n\t相关参数请到后台修改<\/p>\n",
+                "config": "{\"callback_encoding\":\"UTF-8\",\"ajax\":\"yes\",\"return_encoding\":\"UTF-8\",\"partner\":\"test\",\"seller_email\":\"test\",\"key\":\"test\"}",
+                "id": 1,
+                "name": "支付宝",
+                "pay_fee": 0,
+                "type": "alipayDirectPlugin"
+            },
+            {
+                "biref": "
+
+\n\t请到后台修改相关参数<\/p>\n",
+                "config": "{\"callback_encoding\":\"\",\"return_encoding\":\"\",\"partner\":\"test\",\"key\":\"test\"}",
+                "id": 2,
+                "name": "快钱",
+                "pay_fee": 0,
+                "type": "billPlugin"
+            },
+            {
+                "biref": "
+
+\n\t请到后台修改相应参数<\/p>\n",
+                "config": "{}",
+                "id": 3,
+                "name": "货到付款",
+                "pay_fee": 0,
+                "type": "cod"
+            },
+            {
+                "biref": "
+
+\n\t工商银行：8888888，户名test<\/p>\n",
+                "config": "{}",
+                "id": 4,
+                "name": "银行汇款",
+                "pay_fee": 0,
+                "type": "offline"
+            }
+        ]
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

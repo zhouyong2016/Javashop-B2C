@@ -1,0 +1,6 @@
+
+<!--创建“会员订单数”标签-->
+<#assign orderNumberTag = newTag("orderNumberTag")>
+<!--调用“会员订单数”标签-->
+<#assign orderNumber = orderNumberTag()>
+${orderNumber['0']!'0'}

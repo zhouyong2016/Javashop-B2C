@@ -1,0 +1,102 @@
+<div class="right-box">
+	<div class="same-floor">
+		<h3>说明</h3>
+		<p>订单列表</p>
+	</div>
+	<div class="same-floor">
+		<h3>方法</h3>
+		<p>/api/mobile/order!list.do</p>
+		<div class="need-parameter">
+			<h4><span class="w100">参数</span><span class="w100">说明</span><span class="w380">备注</span></h4>
+			<p><span class="w100 important">无</span><span class="w100">无</span><span class="w380">需会员登录，订单列表中可查看该订单货物列表</span></p>
+		</div>
+	</div>
+	<div class="same-floor">
+		<h3>示例代码</h3>
+		<div class="sample-code">
+			<b>		var url = getFullUrl('/api/mobile/order!list.do');
+			<b>		var options = {
+			<b><i></i>			url : url,
+			<b><i></i>			success : function(data) {
+			<b><i></i><i></i>				if (data.result == 1) {
+			<b><i></i><i></i><i></i>					var viewData = data.data;
+			<b><i></i><i></i><i></i>					initTpl(viewData, $("#list_html_templet"), $("#list_html_view"), bindEvent);
+			<b><i></i><i></i>				} else {
+			<b><i></i><i></i><i></i>					e$.alert("获取资源失败，请稍后重试。");
+			<b><i></i><i></i>				}
+			<b><i></i>			}
+			<b>		};
+			<b>		e$.ajax(options);
+		</div>
+		<span class="result-intro">
+			<em>调用结果：</em>
+			<h5>
+				{
+    result: 1,
+    data: {
+        "page": "1",
+        "totalCount": 1,
+        "ordersList": {
+            "pageSize": 20,
+            "start": 0,
+            "data": [
+                {
+                    "order_id": 3,
+                    "sn": "146148922036-1",
+                    "member_id": 4,
+                    "status": 0,
+                    "pay_status": 0,
+                    "ship_status": 2,
+                    "shipping_id": 0,
+                    "shipping_type": "",
+                    "shipping_area": "北京-海淀区-海淀区",
+                    "create_time": 1461489220,
+                    "ship_name": "王子木",
+                    "ship_addr": "黑龙江省鸡西市",
+                    "ship_zip": "",
+                    "ship_mobile": "17052720733",
+                    "ship_tel": "",
+                    "is_protect": 0,
+                    "protect_price": 0.0,
+                    "goods_amount": 86.0,
+                    "shipping_amount": 0.0,
+                    "discount": 0.0,
+                    "order_amount": 86.0,
+                    "weight": 50.0,
+                    "paymoney": 0.0,
+                    "remark": "",
+                    "disabled": 0,
+                    "payment_id": 1,
+                    "payment_name": "支付宝",
+                    "payment_type": "alipayDirectPlugin",
+                    "goods_num": 0,
+                    "gainedpoint": 0,
+                    "consumepoint": 0,
+                    "depotid": 1,
+                    "sale_cmpl": 0,
+                    "sale_cmpl_time": 0,
+                    "ship_provinceid": 1,
+                    "ship_cityid": 35,
+                    "ship_regionid": 453,
+                    "signing_time": 0,
+                    "allocation_time": 0,
+                    "address_id": 1,
+                    "need_pay_money": 86.0,
+                    "items_json": "[{\"addon\":\"\",\"cat_id\":0,\"change_goods_id\":0,\"change_goods_name\":\"\",\"depotId\":\"\",\"gainedpoint\":0,\"goods_id\":310,\"image\":\"http://static.b2b2cv2.javamall.com.cn/attachment/store/7/goods/201505251641021367_thumbnail.jpg\",\"item_id\":1,\"name\":\"蜜丝佛陀（Max Factor）柔滑粉饼55号\",\"num\":1,\"order_id\":3,\"other\":\"\",\"price\":86,\"product_id\":273,\"ship_num\":0,\"sn\":\"287416\",\"state\":0,\"store\":0,\"unit\":\"\"}]",
+                    "logi_id": 0,
+                    "fields": {
+                        
+                    }
+                }
+            ],
+            "totalCount": 1,
+            "currentPageNo": 1
+        },
+        "pageSize": 20
+    }
+}
+			</h5>
+		</span>	
+	</div>
+
+</div>

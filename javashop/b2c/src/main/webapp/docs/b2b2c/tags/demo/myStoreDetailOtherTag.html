@@ -1,0 +1,10 @@
+
+<!--创建"我的店铺其他信息"标签-->
+<#assign myStoreDetailOtherTag= newTag("myStoreDetailOtherTag") >  
+<!--调用"我的店铺其他信息"标签，并传递参数-->            
+<#assign  myStoreDetailOther= myStoreDetailOtherTag() >						
+<ul class="gw">
+
+   店铺全部订单：${myStoreDetailOther.storeAllOrder}</br>
+   未付款订单：${myStoreDetailOther.orderNotPay}</br>
+   等待收款：${myStoreDetailOther.orderPay}</br>
