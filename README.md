@@ -1,6 +1,11 @@
 #Javashop-B2C
 Javashop是基于Java技术构建的开源电子商务平台，采用EOP(Enation Open Platform易族开放平台)框架体系，更具人性化的操作体验，内置库存管理系统，完备的订单流程，丰富的统计功能，多种支付方式，适合搭建稳定、高效的B2C电子商务平台。 同时Javashop的模板引擎及组件机制让扩展变得简单，更有大量第三方组件可供选择，极大的降低二次开发成本。
 
+#开源计划
+8月15日：开源 WAP 端
+8月20日：开源微信相关代码
+9月01日：开源6.2.2版本（现在版本是6.2.1）
+
 #Maven环境及Javashop产品部署
 （备注：javashop提供集成好maven和svn插件的eclipse ,请自行下载相应的版本  链接: https://pan.baidu.com/s/1i5fw9E1 密码: i9nk）
 
@@ -71,7 +76,6 @@ extension=do
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0802/181706_41d83bf2_1173911.png "图片15.png")
 
  **注意：相关配置修改完成后，需要重新启动项目。** 
-
 
 
 
