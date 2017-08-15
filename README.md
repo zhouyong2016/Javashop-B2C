@@ -3,7 +3,7 @@ Javashop是基于Java技术构建的开源电子商务平台，采用EOP(Enation
 
 #开源计划
 
-- 8月15日：开源 WAP 端。
+- 8月15日：WAP配置请参考:http://git.oschina.net/javashop/Javashop-B2C/blob/master/docs/%E5%8D%95%E5%BA%97Wap%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E7%AE%80%E8%BF%B0.docx
 - 8月20日：开源微信相关代码。
 - 9月01日：开源6.2.2版本（现在版本是6.2.1）。
 
