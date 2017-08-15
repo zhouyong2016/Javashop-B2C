@@ -1,0 +1,123 @@
+<#assign  title="我的评论" />
+<#include 'common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />	
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<#assign commentsList = memberCommentListTag()>
+
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1)"></a>
+	</div>
+	<div class="common-title">
+		我的评论列表
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<div class="my-comment-lsit-box">
+	<#if commentsList?exists && commentsList?size gt 0>
+		<ul class="my-comment-lsit">
+		<#list commentsList.commentsList as comment>
+			<li>
+				<h3>
+				<@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/>
+				<span>(
+					<#if comment.status == 1> 
+						审核通过
+					<#elseif comment.status == 2>
+						审核拒绝
+					<#else>
+						待审核
+					</#if> 
+				)</span>
+				<i>
+					<#if comment.grade ==1>
+						差评
+					<#elseif comment.grade ==2>
+						中评
+					<#else>
+						好评
+					</#if>
+				</i>
+				</h3>
+				
+				<div class="comment-same"><span>商品名称：</span><p><a  href="${ctx}/goods-${comment.goods_id}.html?type=5">${comment.name}</a></p></div>
+				<div class="comment-same"><span>我的评论：</span><p class="my-content">${comment.content}</p></div>
+				<#if comment.replystatus == 1>
+					<div class="comment-same"><span>商城回复：</span><p class="my-reply">${comment.reply}</p></div>
+				</#if>
+			</li>
+		
+		</#list>
+		<div class="loadimg" style="display:none;"></div>
+		</ul>
+	<#else>
+		<div class="bonus_empty">
+				抱歉，您暂时未对任何商品进行评价
+			</div>	
+	</#if>
+</div>	
+<input type="hidden" rel="${commentsList.totalCount}" class="goods-list-num">
+<!-- 回到顶部 -->
+<div class="go-top" style="display:none;">
+	<a href="javascript:;viod(0)"></a>
+</div>
+
+
+<script>
+	$(function(){
+		
+		
+		//滚动加载
+		function loaata(){ 
+		    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+		    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+		    { 
+				$(".loadimg").show();
+		    	$.get("${ctx}/commentlist_page.html?page="+page, function(data){
+		    		$(data).appendTo(".my-comment-lsit");
+		    		});
+		    	$(".loadimg").hide();
+		    	page++;
+		    } 
+		}
+		
+		//触发滚动动作
+		var prevTop = 0,
+   		currTop = 0;
+		
+		var page =2;
+		$(window).scroll( function() {
+			
+			 currTop = $(window).scrollTop();  //滚动值
+			//判断是否是向下滚动
+			if(currTop > prevTop){
+				var num = $(".goods-list-num").attr("rel");  //获得商品总数
+				if(num > 5){
+					$(".go-top").fadeIn(500);
+					loaata();
+				}
+			}else{
+				$(".go-top").fadeOut(500);
+			}
+		});
+		
+		 //返回顶部
+		$(".go-top").click(function(){
+			  $('body,html').animate({
+                  scrollTop: 0
+              },
+              500);
+              return false;
+		})
+		
+	})
+</script>
+
+
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

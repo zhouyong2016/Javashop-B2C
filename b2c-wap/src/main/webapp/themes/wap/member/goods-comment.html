@@ -1,0 +1,86 @@
+<#assign  title="评论商品" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <#assign memberOrderIsCommentTag= newTag("memberOrderIsCommentTag") />
+    <#assign isComment = memberOrderIsCommentTag("{'product_id':${product_id},'orderid':${orderid}}") />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/goods-comment.css"/>
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/goods-comment.js"></script>
+    <div class="goods-comment">
+        <div class="score-comment">
+            <h2 class="score-comment-title">商品动态评分</h2>
+            <div class="item-content score-comment-content">
+                <div class="item">
+                    <div class="title-item">描述相符</div>
+                    <div class="content-item">
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <input type="hidden" name="store_desccredit" value="5">
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="title-item">服务态度</div>
+                    <div class="content-item">
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <input type="hidden" name="store_servicecredit" value="5">
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="title-item">发货速度</div>
+                    <div class="content-item">
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <i class="comment-star on"></i>
+                        <input type="hidden" name="store_deliverycredit" value="5">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grade-comment">
+            <h2 class="grade-comment-title">评分</h2>
+            <div class="item-content grade-comment-content">
+                <div class="comment-grade praise selected" data-rel="3">
+                    <i class="icon-grade"></i>
+                    <span>好评</span>
+                </div>
+                <div class="comment-grade average" data-rel="2">
+                    <i class="icon-grade"></i>
+                    <span>中评</span>
+                </div>
+                <div class="comment-grade bad" data-rel="1">
+                    <i class="icon-grade"></i>
+                    <span>差评</span>
+                </div>
+                <input type="hidden" name="grade" value="3">
+            </div>
+        </div>
+
+        <div class="content-comment">
+            <h2 class="content-comment-title">评论</h2>
+            <div class="item-content content-comment-content">
+                <textarea class="comemnt-text" name="content" maxlength="200" placeholder="最多可以输入200个字哦"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="eui-save-button">
+        <#if isComment.isCommented>
+            <button type="button" style="background-color: #999;">您已评论</button>
+        <#else/>
+            <button type="button" id="save-btn">提交评论</button>
+        </#if>
+
+    </div>
+</#if>
+</body>
+</html>

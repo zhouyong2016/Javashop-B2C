@@ -1,0 +1,115 @@
+<#assign checkGoodsPartActTag = newTag("checkGoodsPartActTag") />
+<#assign goodsPartAct = checkGoodsPartActTag("{'goods_id':${goods_id}}")!'' />
+<#if goodsPartAct.activity??>
+    <!-- 促销 -->
+    <#assign activitySalesDetailTag= newTag("activitySalesDetailTag") />
+    <#assign activityDetail = activitySalesDetailTag("'pageSize':9") />
+    <#assign activity = activityDetail.activity />
+    <#assign detail = activityDetail.detail />
+    <style type="text/css">
+        .goods-activity {
+            display: flex;
+            position: relative;
+        }
+
+        .title-activity {
+            margin-top: 5px;
+            width: 30px;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .content-activity {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 28px;
+            overflow: hidden;
+            -webkit-transition: all 200ms ease-out;
+            transition: all 200ms ease-out;
+        }
+
+        .content-activity .item-activity {
+            margin: 5px 0;
+        }
+
+        .icon-activity {
+            border: 1px solid #ff6700;
+            padding: 2px;
+            text-align: center;
+            line-height: 15px;
+            font-size: 12px;
+            color: #ff6700;
+        }
+
+        .detail-activity {
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .icon-content-activity {
+            display: block;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            right: 15px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAxElEQVRYR+2U0Q2CQBBEHx3YiXaglmDFWoJ2YglmyJ0x5ITbgYSf3R8+CLx3A7MDO8+wM58UyAQygTUJHIA78AZu5RputStQ4adCfAJXR8IR+IW/isARsCSiAlP4pQg8AEsiItCC6/trdM+S6BWYg9cfz5LoEeiB2xJLAhG4JTEn4MDDEv8E1sBDEi2BLeDdEi0B1ekMaMmo57Vq4TXbqKjerY35nZaANppmC/g0CR2mLq/x3lIL3FN3P5cCmUAmkAlkAh9VREIhITp8eQAAAABJRU5ErkJggg==') no-repeat center;
+            background-size: 70%;
+        }
+
+        .icon-content-activity.show {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA7klEQVRYR+2VsQnDMBBF/9VuMoJ6G0wmSDJCJkhGySgZxSO4ud7ZIAG7viCIwRBZOskCN1J74t7jizsRdj60Mx9FoCRQEigJ/CXQNM0DwGkcx+swDO9ci6qu6yeAlpmPy54ugc4KiEg/TdMlh4SFE9FNRF7MbLwCxphDVVUdEbU5JGY4gI+InJm59wrYYi6JENyyVqdgq4QG7hXYkoQWHhRIkYiBqwRiJGLhagGNRAo8SsAnkQqPFnBJAOiJ6L4256FNmvQZLUf0B3AumRA8KYG56ULCuDacBr5JQAsI3Ut6glDTmHoRKAmUBHZP4AtFJ+ch+j4RigAAAABJRU5ErkJggg==') no-repeat center;
+            background-size: 70%;
+        }
+    </style>
+    <div class="goods-activity">
+        <div class="title-activity">促销</div>
+        <div class="content-activity">
+            <#if detail.is_full_minus == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">满减</span>
+                    <span class="detail-activity">满${detail.full_money!''} 减${detail.minus_value!''}元</span>
+                </div>
+            </#if>
+            <#if detail.is_send_point == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">送积分</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送${detail.point_value!''}积分</span>
+                </div>
+            </#if>
+            <#if detail.is_free_ship  == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">免邮</span>
+                    <span class="detail-activity">满${detail.full_money!''} 免邮费</span>
+                </div>
+            </#if>
+            <#if detail.is_send_gift  == 1>
+            <#assign activityGift = activityDetail.activityGift />
+                <div class="item-activity">
+                    <span class="icon-activity">赠品</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送赠品</span>&nbsp;<#if activityGift.enable_store == 0><span style="color: red">已赠完</span></#if>
+                </div>
+            </#if>
+            <#if detail.is_send_bonus == 1>
+                <div class="item-activity">
+                    <span class="icon-activity">送优惠券</span>
+                    <span class="detail-activity">满${detail.full_money!''} 送优惠券</span>
+                </div>
+            </#if>
+        </div>
+        <i class="icon-content-activity show"></i>
+    </div>
+</#if>
+<script type="text/javascript">
+    $(function () {
+        //  显示促销信息
+        $('.icon-content-activity').on('click', function () {
+            var $this = $(this),
+                _show = $this.is('.show');
+            _show ? $this.removeClass('show') : $this.addClass('show');
+            _show ? $('.content-activity').css({height: $('.item-activity').length * 28}) : $('.content-activity').css({height: 28});
+        })
+
+        if($('.item-activity').length == 1){$('.icon-content-activity').css('display', 'none')}
+    })
+</script>

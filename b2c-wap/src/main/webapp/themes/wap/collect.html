@@ -1,0 +1,145 @@
+<#assign  title="我的收藏" />
+<#include 'common/header.html'>
+<script src="themes/wap/js/Order.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />	
+<#if memberInfo ??>
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+
+<!-- 将调用的结果赋值给变量 -->
+<#assign collectList = collect.result>
+
+<style>
+	body{background:#F5F5F5;}
+</style>
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1)"></a>
+	</div>
+	<div class="common-title">
+		我的收藏
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<div class="collect_list">
+		<#if collectList?exists && collectList?size gt 0>
+			<ul>
+	 		<#list collectList as favorite>
+	 			<li>
+	 				<div class="c_list">
+	 					<div class="c_left">
+	 						<a href="goods-${favorite.goods_id}.html?type=3" class="collect_intro">
+	 							<img src="${favorite.thumbnail!''}" class="mistake">
+	 						</a>
+	 					</div>
+	 					<div class="c_right">
+	 						<h3>
+		 						<a href="goods-${favorite.goods_id}.html?type=3" class="collect_intro">
+		 							<@substring	title="${favorite.name}" length="30" dot="..." />
+		 						</a>
+	 						</h3>
+	 						<p>￥${favorite.price?string("0.##")}</p>
+	 					</div>
+	 				</div>
+	 				<div class="c_tools">
+	 					<!-- <a href="javascript:;" class="go_cart" rel="${favorite.goods_id}" >加入购物车</a>
+	 					<a href="goods-${favorite.goods_id}.html">查看详细</a> -->
+	 					<a href="javascript:;" class="collect_del" rel="${favorite.favorite_id}" style="border:0px none;">删除收藏</a>
+	 				</div>
+	 			</li>
+		 	</#list>
+		 	<div class="loadimg" style="display:none;"></div>
+		 	</ul>
+		<#else>
+			<div class="bonus_empty">
+				抱歉，您暂时没有收藏商品
+			</div>	
+		</#if>	
+</div>
+
+<input type="hidden" rel="${collect.totalCount}" class="goods-list-num">
+
+<!-- 回到顶部 -->
+<div class="go-top" style="display:none;">
+<a href="#common-top"></a>
+</div>
+	<script>
+$(function(){
+	//删除收藏
+	$(".collect_del").click(function(){
+		var favoriteid = $(this).attr("rel");
+		$.post("${ctx}"+"/api/shop/collect/cancel-collect.do",{"favorite_id":favoriteid},function(result){
+			if(result.result==1){				
+				alert("删除收藏成功");
+				location.href="collect.html";
+			}
+			
+			else{				
+				alert(result.message);
+			}			
+		},"json");
+		
+	})
+	//加入购物车
+	$(".go_cart").click(function(){
+		var goodsid = $(this).attr("rel");
+		$.ajax({
+			url:ctx+"api/shop/cart/addGoods.do?goodsid="+goodsid+"&num=1",
+			dataType:"json",
+			success : function(data) {	
+				if(data.result==1){																
+					location.href="cart.html"
+				}
+				else{							
+					alert(data.message)
+				}
+			}
+		})
+	})
+	
+	
+	//滚动加载
+	function loaata(){ 
+	    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+	    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+	    { 
+			$(".loadimg").show();
+	    	$.get("${ctx}/collect_page.html?page="+page, function(data){
+	    		$(data).appendTo(".collect_list ul");
+	    		});
+	    	$(".loadimg").hide();
+	    	page++;
+	    } 
+	}
+	
+	
+	//触发滚动动作
+	var page =1;
+	$(window).scroll( function() {
+		
+		var rollNum = $(document).scrollTop();  //滚动值
+		//判断是否是向下滚动
+		if(rollNum > 0){
+			var num = $(".goods-list-num").attr("rel");  //获得商品总数
+			if(num > 10){
+				$(".go-top").fadeIn(500);
+				loaata();
+				
+				
+			}
+		}else{
+			$(".go-top").fadeOut(500);
+		}
+	});
+})
+</script>
+
+<#include 'common/float_footer.html'/>
+</#if>
+<#include 'common/footer.html'/>

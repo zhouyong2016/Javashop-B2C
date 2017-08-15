@@ -1,0 +1,72 @@
+<#assign  title="商品结算" />
+<#include 'common/header.html'>
+
+    <#-- 创建会员默认支付方式和配送方式和送货日期标签 -->
+        <#assign orderPaymentDlytypeTag= newTag("orderPaymentDlytypeTag")>
+            <#-- 获取会员默认支付方式和配送方式和送货日期  -->
+                <#assign pd = orderPaymentDlytypeTag() >
+
+                    ${pd.paymentId!'0'}<br>
+
+                    ${pd.dlytype.type_id}---${pd.dlytype.name}<br>
+
+                    ${pd.shipDay}
+
+                    <a href="javascript:void(0);" class="setPay" >保存支付方式配送方式</a>
+
+                    <hr>
+
+                    <#-- 创建会员默认支付方式和配送方式和送货日期标签 -->
+                        <#assign checkoutReceiptTag= newTag("checkoutReceiptTag")>
+                            <#-- 获取会员默认支付方式和配送方式和送货日期  -->
+                                <#assign receipt = checkoutReceiptTag() >
+
+                                    <#if receipt.is_have==0>
+                                        session 中是空的
+                                        <#else>
+                                            ${receipt.receiptType}
+                                            ${receipt.receiptTitle}
+                                            ${receipt.receiptContent}
+                                    </#if>
+
+                                    <a href="javascript:void(0);" class="setReceipt" >保存发票</a>
+
+
+                                    <script>
+
+                                        $(function(){
+                                            $(".setPay").click(function(){
+
+                                                $.ajax({
+                                                    type: "post",
+                                                    url: "${ctx}/api/shop/checkout/set-pay-dlytype.do",
+                                                    data: {paymentId:1,dlyTypeId:2,shipDay:'周一到周五'},
+                                                    dataType: "json",
+                                                    success: function (data) {
+                                                        alert(data.message);
+                                                    },
+                                                    error: function (msg) {
+                                                        alert(msg);
+                                                    }
+                                                });
+                                            });
+
+                                            $(".setReceipt").click(function(){
+                                                $.ajax({
+                                                    type: "post",
+                                                    url: "${ctx}/api/shop/checkout/set-receipt.do",
+                                                    data: {receiptType:2,receiptContent:'办公用品',receiptTitle:'XXXXX公司',is_have:0},
+                                                    dataType: "json",
+                                                    success: function (data) {
+                                                        alert(data.message);
+                                                    },
+                                                    error: function (msg) {
+                                                        alert(msg);
+                                                    }
+                                                });
+                                            });
+                                        })
+
+                                    </script>
+
+                                    <#include 'common/footer.html'/>

@@ -1,0 +1,79 @@
+<#assign  title="支付配送" />
+<#include '/common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<#if member??>
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout-pay-ship.js"></script>
+    <#-- 创建会员默认支付方式和配送方式和送货日期标签 -->
+    <#assign orderPaymentDlytypeTag= newTag("orderPaymentDlytypeTag") />
+    <#-- 获取会员默认支付方式和配送方式和送货日期  -->
+    <#assign pd = orderPaymentDlytypeTag() />
+    <div class="checkout-pay-ship">
+        <!--支付方式-->
+        <div class="pay-way">
+            <div class="pay-way-title">
+                <div class="pay-way-pic"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABkklEQVRoQ+2Z603EQAyEv6sAqADoADqgA6ACoDOoAKiAEqAEqACoADSnTZQLyS6S95Ho7H/RZm3PzF7im2xYeWxW3j8OoLWCroArYGQgdoQugTNj/lzb34DnqWRTANT0I3CSq3qmPO/ANSAwfYwBqOlX4DBT0dxpvoBzQGC2MQZwD9yEtW9A19rUMkTmLXAQmngI15MAPgfsC+mOXA1RXAAvob4IPZpT4CdyvBr2vy092dv4CDmAgjLttwJ6vHZPp4Ik76TW06Z/XFp/A0p0XKvzUEc1Twc1TUeoBYCP0TRgAqAjpJdJzdBLNNsRqtn4XC2TAg4gAwOuQAYSTSlcARN9GTa7AhlINKVwBUz0ZdhsUmBunNasorG3RpgAxKbRu+BelAax3wDmxmkpo7G3RpgUqNFgqsa/AMg06hywpRpbcgx76zNmLQrMkqzFrumotaizLjuxUyEla+11sS/3fNbcVUO64amBC5EiQ3/yr1L2+jCJbl7SBw6R+if8I19K99LrrkBphlP5XYEUQ6XXV6/ALxC1YjFI+/KwAAAAAElFTkSuQmCC"></div>
+                <h2>支付方式</h2>
+            </div>
+            <#-- 创建购物车标签 -->
+            <#assign cartTag = newTag("cartCheckTag") />
+            <#assign itemList = cartTag() />
+            <div class="pay-way-goods">
+                <div class="pay-way-goods-box">
+                    <div class="goods-box">
+                        <ul class="goods-box-list">
+                            <#list itemList as item>
+                                <li>
+                                    <img src="${item.image_default!'${ctx}/statics/e_tools/images/beifang/beifang-no_img.png'}">
+                                </li>
+                            </#list>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pay-way-checkbox">
+                    <a href="javascript:;" class="eui-checkbox-btn<#if pd.paymentId == 0> checked</#if>" rel="0">在线支付</a>
+                    <a href="javascript:;" class="eui-checkbox-btn<#if pd.paymentId == 3> checked</#if>" rel="3">货到付款</a>
+                </div>
+                <p></p>
+            </div>
+        </div>
+        <!--配送方式-->
+        <div class="ship-way">
+            <div class="pay-way-title">
+                <div class="pay-way-pic"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAC2klEQVRoQ+2Z8bFNMRDGv1cBKkAHVIAKUAEqQAWogA5QgacCVIAK0AEVML+Zs3f2ruQkeUnuO3fm5p87c07O5vt2N5sve8905OPsyPHrROCyIzgqArck3Z9I5rOk75J+xzVGEPgg6cFE8GYa8E8knfu1egm8lPTiAOD9ErclfbMHvQR+SLqxGPvoDQ8m9VjSdbfOLuK9BP46oL221jjjJJzF+Cnp5qgIHIoAeJNr9XrtRKBhrwyPgM9LcPRGs8RlGAGAUzqpDCNL8nQCOeAs/EoSZ8LMceEIrAF/vwCntM0ezQS2Atwc00TgtaRnCZd+WZ7vjvLZbnf2qwm8kfQ0AAM4OY4q9MO00Gb2wF1JnxzCHPDVsE6KSlUE3kl6tABAnJVk8uZOYlLkzkJgT7ZmvLo5Aq2AWuf3ZFdVCrUCap1/aQRqbl6b0EI5j/rnOS9umkApAps5Bw6Z0637YcombgXRM/9EoMd7I74dFgFkNm1EZAbdMpQpmikKvRJoa0fye3X5nvtF7m4xhMBaNaLlR+vvv/5lYAJY5Hq8kto01PDzBPtuAimZHdchGvcKJCBaagQjKnGGH10EosymUwwhvE0qmYJlwbUzgUsS3reB4gUsUSEiJiR5jyN8WnYR8DKbfIeQHx4YpK5lNgD5bT3OFFEfnSjnuwj4haNnDKufU9rAfxavx3lrvaYuAjUntL9LlAikomjf1Oixne6KAsw2agyf9+7D+CfDsjKpc6WE3L0nzWLFoqR+XebEKCXv37UK0legVKXx73+5/wwiHx+lWGnYyNzHIcHgTMiV2p3dWgIxN/EcAKwK2aIYpvzxLjViNSOyVoWoZvZnCd/WXGmbGrJ4420hRWq85itaztyaE/a+qY2AfYSXSBcrhfacfOV5bX+UssvcuGewg6P2/shbc1orAU/E0oY9QW6XJETEQc5jw84U7FQDN2MXJdBQbOZOPRGY69+y9aOPwD8RELcxQVaNjAAAAABJRU5ErkJggg=="></div>
+                <h2>配送方式</h2>
+            </div>
+            <#-- 创建配送列表标签-->
+            <#assign shopDlyTypeListTag = newTag("shopDlyTypeListTag") />
+            <#-- 调用配送列表标签-->
+            <#assign dlyTypeList = shopDlyTypeListTag("{'regionid':${region_id}}") />
+            <div class="ship-way-box">
+                <#list dlyTypeList as dlyType>
+                    <#if dlyType.name!="虚拟商品自动发货">
+                        <a href="javascript:;" class="eui-checkbox-btn<#if pd.dlytype.type_id == dlyType.type_id> checked</#if>" rel="${dlyType.type_id!'0'}">${dlyType.name!''}${dlyType.price?string("currency")}</a>
+                    </#if>
+                </#list>
+            </div>
+        </div>
+        <!--送货日期-->
+        <div class="time-way">
+            <div class="pay-way-title">
+                <div class="pay-way-pic">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADeElEQVRoQ+2Zj5HNQQzHcxWgAypABagAFaACVIAKUAEqOCpABehAB6iA+ZjNm/zydn+b3c3dzM1cZt7Mu3v7J9/km2w2eyIXXE4uuP5yCcB48I6I3C2fqyJyy3n3u4j8FpEv5fM1w/urHkDJpyLyQERQekQA81FE3ooI4KZkFgCKvy7WntrYTcIrz2eAzABA8WcVrf8Ui2JVrMtHLQtgPHS9gMZjVyprvClAwkYZAcDmpxVuw2U2RvERAQSGIHasAPqhiPyMLBYFgAU/O56j+MsSkJG9WmMIfNaxQPDevQilIgBqysNXrJ4peAN6qoRA9ABAm2/G8vD88QRdokCh1XsTH4C4vUenHgCU13yO8rh7OuUFUbAfWUmDnP0AUZU9AFCEHK9CYEUDFU6/EJFXhd9B3Q/D8AQJQ4Wzopb5mqUEVsD6KqOc/2vm9rzcAudjAi8ceb+1OBkHuiBkG/0etWQGAPaCSpqd+E5m2kgNgLc+k5g8IlkAMBzGVLnhA7oGgCzwaMH6TM0C4L3woWTBA6IagF8mbY4ErvVQJgAb0KTVa3YjD8C6jLQ5WmHq2pkAWBPFNa1uKO0BaPpj0pG7BoIgG4Cl9SY1ewA26mfpkx0DrMfp/64Y8FO5f/z/0wOwJ+9M9jkrCllqb05mD8C6vnpwBGmUTSGfTg967wGYPUHPgkLNNc8DQM9p0Xqp6tXzoFAPQC0W/ZwwhQiQm2X2ShDbdNwDEPGABfDDXmv30uiTcrnoKXAev4fTaNZBlg0qfJBZVx3VHdlaDaxn67PdUsLXHSun8YB+u0NtMXdUn/XK6eolIkuz4Dr2chUqpzMuNEHdusOmLjSs2r3KdbfOGdC92rbKhdVLfYb6S5d6FFhpq6wC8G2V5mHXK9jsyRxq9a1qXk5Z24fdnLx+/R4AWouA0OscIDihow2uUTxYnouLXmVJm9C52anuAUAB3+rjf/CTblmm0AW0DeNQKzMCoAWCTAU3R3tGtUqTNqRtnoWUZ6EoAMZCJ6ij1aoqAgAsx111RO4XT/quH5yHSqkPHFYxn530N320A5Buri+R2h60T0y1lk2ktN4YacQDdiJxARD/PDTiATsWoMTVcOt+FoBujkUpwVuPdnuA9FGQ+SG61BZbBWDX1EduvAMwHytwG0Wxsj52z3rsMC8TwLIyMwtcApixWuacfy0ryzHCT+kiAAAAAElFTkSuQmCC">
+                </div>
+                <h2>送货日期</h2>
+            </div>
+            <div class="pay-way-time">
+                <a href="javascript:;" class="eui-checkbox-btn<#if pd.shipDay == '任意日期'> checked</#if>" rel="任意日期">任意日期</a>
+                <a href="javascript:;" class="eui-checkbox-btn<#if pd.shipDay == '双休日'> checked</#if>" rel="双休日">双休日</a>
+                <a href="javascript:;" class="eui-checkbox-btn<#if pd.shipDay == '工作日'> checked</#if>" rel="工作日">工作日</a>
+            </div>
+        </div>
+
+        <div class="eui-save-button">
+            <button type="button" id="save-btn">保存修改</button>
+        </div>
+    </div>
+</#if>
+<#include '/common/footer.html' />

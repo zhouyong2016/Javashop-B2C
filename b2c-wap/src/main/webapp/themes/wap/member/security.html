@@ -1,0 +1,70 @@
+<#assign  title=" 账户安全" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <#if member.mobile?? && member.mobile != ''>
+        <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/security.css"/>
+        <script type="text/javascript" src="${ctx}${themes_path}/js/page/member-security.js"></script>
+        <div class="member-info security">
+            <div class="info-box-same">
+                <p>已绑定手机：</p>
+                <input type="text" id="bind-mobile" class="input_text" value="${member.mobile?substring(0,3)}****${member.mobile?substring(7,11)}" readonly/>
+                <input type="hidden" id="num-mobile" value="${member.mobile!''}">
+            </div>
+
+            <div class="info-box-same">
+                <p>短信验证码：</p>
+                <input type="tel" name="sms-validate" class="input_text" maxlength="6"/>
+                <button type="button" class="send-mobile-validate">发送验证码</button>
+            </div>
+
+            <div class="info-box-same">
+                <p>图片验证码：</p>
+                <input type="text" name="img-validate" class="input_text" maxlength="4"/>
+                <img src="" class="img-validate-img">
+            </div>
+
+            <div class="validate-button">
+                <button type="button" class="validate-submit">提交</button>
+            </div>
+        </div>
+        <div class="form-hide" style="display: none;">
+            <div class="security-navigator">
+                <div class="security-navigator-left">
+                    <div class="item dark"></div>
+                </div>
+                <div class="security-navigator-middle">修改密码</div>
+                <div class="security-navigator-right"></div>
+            </div>
+
+            <form class="validate">
+
+                <div class="info-box-same">
+                    <p>新的密码：</p>
+                    <input type="password" name="newpassword" class="input_text" placeholder="6-20位不包含中文字符" maxlength="20" />
+                </div>
+                <div class="info-box-same">
+                    <p>确认新密码：</p>
+                    <input type="password" name="re_passwd" class="input_text" placeholder="请再次输入新密码" maxlength="20" />
+                </div>
+
+                <div class="info-box-same">
+                    <p>图片验证码：</p>
+                    <input type="text" name="form-validate-img" class="input_text" placeholder="请输入图片验证码" maxlength="4"/>
+                    <img class="img-validate-form">
+                </div>
+
+            </form>
+            <div class="eui-save-button">
+                <button type="button" class="form-save-btn">确认修改</button>
+            </div>
+        </div>
+    <#else/>
+        <script type="text/javascript">
+            location.replace('./bind-mobile.html');
+        </script>
+    </#if>
+</#if>
+</body>
+</html>

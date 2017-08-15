@@ -1,0 +1,183 @@
+<#assign  title="修改地址" />
+<#include 'common/header.html'>
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		修改地址
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#assign consigneeDetailTag = newTag("consigneeDetailTag")>
+<!--调用“收货人详细”标签-->
+<#assign consigneeDetail = consigneeDetailTag('{"addressid":"${addressid}"}')>
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/easyui.css" />
+<script src="themes/wap/js/jquery.easyui.min.js" ></script>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+
+<div class="add_adress">
+<form id="member_addr"  class="validate"   action="" method="post">
+	<div class="newadress">
+		<ul>
+			<li>
+				
+					<input type="text" name="name" class="membername same" value="${consigneeDetail.name!''}"></input>
+					<span class="a_border"></span>
+			</li>
+			<li>
+				
+					<input type="text" name="mobile" class="membermobile same" value="${consigneeDetail.mobile!''}" maxlength="11"></input>
+					<span class="a_border"></span>
+			</li>
+			<li class="site">
+					 <@regionSelect province_id="${ consigneeDetail.province_id }" city_id="${ consigneeDetail.city_id }" region_id="${ consigneeDetail.region_id }" />
+			</li>
+			<li>
+					<input type="text" name="addr" class="adrintro same" value="${consigneeDetail.addr!''}"></input>
+					<span class="a_border"></span>
+			</li>
+			<li>
+				
+					<input type="text" name="zip" class="memberezip same" value="${consigneeDetail.zip!''}" maxlength="6"></input>
+					<span class="a_border"></span>
+			</li>
+		</ul>
+	</div>	
+	<div class="a_outside">
+			<h2>是否默认：</h2>
+			<div class="is_default">
+				<label <#if consigneeDetail.def_addr == 0>class="selected"</#if>><input type="radio"  <#if consigneeDetail.def_addr == 0>checked</#if> value="0" name="def_addr"  class="address_default" style="display:none"><p>否</p></label> 
+				<label <#if consigneeDetail.def_addr == 1>class="selected"</#if>><input type="radio"  <#if consigneeDetail.def_addr == 1>checked</#if> value="1"  name="def_addr" class="address_default" style="display:none"><p>是</p></label>
+			</div>
+		</div>			
+	<div class="save_address address_button" rel="${consigneeDetail.addr_id}">
+		保存修改
+	</div>
+	<div class="address_back address_button">
+		<a href="addresslist.html?back=${back}">取消</a>
+	</div>
+</form>
+</div>
+
+<script>
+//订单提交页-验证邮政编码  
+function is_postcode(postcode) {  
+    if ( postcode == "") {  
+        return false;  
+    } else {  
+        if (! /^[0-9][0-9]{5}$/.test(postcode)) {  
+            return false;  
+        }  
+    }  
+    return true;  
+}  
+  
+
+$(function(){
+	//根据参数名称获得参数值（地址函数）
+	function getUrlParam(strname) {  
+	    var hrefstr, pos, parastr, para, tempstr;  
+	    hrefstr = window.location.href;  
+	    pos = hrefstr.indexOf("?");  
+	    parastr = hrefstr.substring(pos + 1);  
+	    para = parastr.split("&");  
+	    tempstr = "";  
+	    for (i = 0; i < para.length; i++) {  
+	        tempstr = para[i];  
+	        pos = tempstr.indexOf("=");  
+	        if (tempstr.substring(0, pos) == strname) {  
+	            return tempstr.substring(pos + 1).replace("#", "");  
+	        }  
+	    }  
+	    return null;  
+	} 
+	$(".save_address").click(function(){
+		var editid = $(this).attr("rel");
+		var postcode=$(".memberezip").val();  
+        if(is_postcode(postcode)){  
+        }else{  
+            alert("邮编格式不正确");  
+            return false;  
+        }  
+		$(".validate").ajaxSubmit({
+			url : "${ctx}/api/shop/member-address/edit.do?addr_id="+editid,
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message)
+				if(data.result==1){
+					//调用地址函数,如果地址参数back是1，那么说明是在会员中心下的地址列表中进行修改，如果是2，说明是在结算页调转，根据back参数觉得跳转回那里。
+					var goReturn=  getUrlParam("back");
+					if(goReturn==1||goReturn==null){
+						location.href="addresslist.html?back="+goReturn;
+					}
+					else if(goReturn==2){
+						location.href="checkout.html"
+					}
+			}
+				else{
+					alert(data.message);
+				}
+			}
+		})
+	});
+	
+
+	
+	//input获得失去焦点时间
+	$(".same").focus(function(){
+		$(this).val("");
+	})
+	$(".same").blur(function(){
+	    var membername= $(".membername").val(); 
+	    var membermobile= $(".membermobile").val(); 
+	    var adrintro= $(".adrintro").val(); 
+	    if(membername.length==0){  
+	        $(this).val("收货人姓名");
+	    }  
+	    if(membermobile.length==0){  
+	        $(this).val("电话");
+	    } 
+	    if(adrintro.length==0){  
+	        $(this).val("详细地址");
+	    }
+	})
+	
+	//更换默认
+		$(".address_default").click(function(){
+			$(".is_no").removeClass("selected");
+			var istools=$('input:radio[name="def_addr"]:checked').val();
+			 if(istools==null){
+				 $(this).nextAll(".is_no").removeClass("selected");
+	         }
+			 else{
+				 $(this).nextAll(".is_no").addClass("selected");
+			 }
+		})
+		
+	//更换默认
+		$(".is_default label").click(function(){
+			$(".is_default label").removeClass("selected");
+			$(this).addClass("selected");
+		})
+	 
+	 
+		$(".go_back").click(function(){
+			var go_back=getUrlParam("back");
+			if(go_back==1||go_back==null){
+				location.href="addresslist.html?back=1";
+			}
+			else if(go_back==2){
+				location.href="addresslist.html?back=2";
+			}
+		})
+		
+});
+</script>
+</body>
+</html>
+

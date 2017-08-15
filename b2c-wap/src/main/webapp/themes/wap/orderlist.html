@@ -1,0 +1,129 @@
+<#assign  title="会员中心" />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />	
+<#if  !memberInfo.member_id?? || memberInfo.member_id==0 >
+	<#stop "not login">
+</#if>
+
+<#include 'common/header.html'>
+
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderListTag = newTag("memberOrderListTag")>
+<#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")>
+<#assign order = memberOrderList.ordersList>
+<#assign orderstatus= "com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<#assign orderstatus= "com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+<script src="themes/wap/js/Order.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		订单列表
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<div class="order-list-box">
+	<ul class="order-list-ul">
+		<#if order?exists && order?size gt 0>
+			<#list order as orders>
+				<li sn="${orders.sn}" class="order-same-list">
+					<div class="order-list-tittle">
+						<p>订单编号：<em>${orders.sn}</em></p>
+						<span>下单日期：<@dateformat time="${orders.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+						<i><@orderstatus status="${orders.status}" type="order"/></i>
+					</div>
+					<div class="order-goods-list-box">
+						<!--创建“订单货物列表”标签-->
+						<#assign orderItemListTag = newTag("orderItemListTag")>
+						<#assign orderItemList = orderItemListTag("{'orderid':${orders.order_id}}")>
+						<ul>
+							<#list orderItemList as item>
+								<li class="go-order-detail-list">
+									<div class="o_left">
+										<a  href="goods-${item.goods_id}.html?type=4">
+											<img src="${item.image}" />
+										</a>
+									</div>
+									<div class="o_right">
+										<a  href="goods-${item.goods_id}.html?type=4">${item.name}<span>X${item.num}</span></a>
+										<!-- <p>${(item.num * item.price)?string.currency}</p>
+										<span>数量：${item.num}</span> -->
+									</div>
+								</li>
+							</#list>
+						</ul>
+					</div>
+					<div class="order-price"><a href="order_detail.html?ordersn=${orders.sn}">查看详情</a>订单总价：<span>${orders.order_amount?string.currency}</span>元</div>
+				</li>
+			</#list>
+			<div class="loadimg" style="display:none;"></div>
+		<#else>
+			<li id="wap_no">暂无订单</li>
+		</#if>
+	</ul>
+</div>
+
+<input type="hidden" rel="${memberOrderList.totalCount}" class="goods-list-num">
+<div class="go-top" style="display:none;">
+<a href="javascript:;viod(0)"></a>
+</div>
+
+<script>
+	Order.init();
+	
+	//滚动加载
+	function loaata(){ 
+	    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+	    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+	    { 
+			$(".loadimg").show();
+	    	$.get("${ctx}/orderlist_page.html?page="+page, function(data){
+	    		$(data).appendTo(".order-list-ul");
+	    		});
+	    	$(".loadimg").hide();
+	    	page++;
+	    } 
+	}
+	
+	
+	
+	//触发滚动动作
+	var page =1;
+	$(window).scroll( function() {
+		
+		var rollNum = $(document).scrollTop();  //滚动值
+		//判断是否是向下滚动
+		if(rollNum > 0){
+			var num = $(".goods-list-num").attr("rel");  //获得商品总数
+			if(num > 10){
+				$(".go-top").fadeIn(500);
+				loaata();
+				
+			}
+		}else{
+			$(".go-top").fadeOut(500);
+		}
+	});
+	
+	
+	 //返回顶部
+	$(".go-top").click(function(){
+		  $('body,html').animate({
+              scrollTop: 0
+          },
+          500);
+          return false;
+	}) 
+	
+</script>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

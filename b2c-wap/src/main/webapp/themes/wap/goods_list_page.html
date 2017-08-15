@@ -1,0 +1,21 @@
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":10}') >
+<ul class="list">
+    	<#list webpage.result as goods>
+			<li>
+				<div class="index-goods-img">
+					<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+						<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+					</a>
+				</div>
+				<div class="index-goods-name">
+					<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+						<p>${goods.name}</p>
+						<span class="index-goods-price"><i>${goods.price?string.currency}</i>元</span>
+					</a>
+				</div>
+			</li>
+ 		</#list>
+	</ul>

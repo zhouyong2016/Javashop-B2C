@@ -1,0 +1,55 @@
+<#assign  title="优惠券列表" />
+<#include 'common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+
+<!-- 获得会员优惠券列表标签 -->
+<#assign myBonusListTag= newTag("myBonusListTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign memberBonus = myBonusListTag('{"page":"${page!1}"}')>
+
+<#assign bonuslist = memberBonus.bonusList>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1)"></a>
+	</div>
+	<div class="common-title">
+		优惠券列表
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+	<!-- 优惠券列表 -->
+	<div class="bonus_list">
+		<#if bonuslist?size gt 0 >
+			<#list bonuslist as mb>
+				<div class="bonus_box">
+					<p><span>红包类型：</span><strong>${mb.type_name}</strong></p>
+					<p><span>红包金额：</span><strong>${mb.type_money}</strong></p>
+					<p><span>最小订单金额：</span><strong>${mb.min_goods_amount}</strong></p>
+					<p><span>到期时间：</span><strong><@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/></strong></p>
+					<p>
+						<span>使用状态：</span>
+						<strong>
+							<#if mb.order_sn??>
+								已使用
+							<#else>
+								未使用
+							</#if>
+						</strong>
+					</p>
+				</div>
+			</#list>	
+			
+		<!-- 	<@pager pageno="${memberBonus.page}" pagesize="${memberBonus.pageSize}" totalcount="${memberBonus.totalCount}" /> -->
+		<#else>
+			<div class="bonus_empty">
+				抱歉，您暂时没有任何优惠券
+			</div>		
+		</#if>		
+				
+	</div>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>
+	

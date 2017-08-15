@@ -1,0 +1,34 @@
+<div class="discuss_list_wrapper">
+
+<!-- 获取商品评论标签 -->
+<#assign askListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign askPage = askListTag("{'goods_id':${goods_id},'type':2}")>
+
+
+<#list askPage.result as comment>  
+					<li <#if !comment_has_next >class="last"</#if>>
+
+						<div class="problem_right">
+						<div class="problem_time">
+							<span class="name"> 
+						     	<#if comment.member_id != 0>
+					            	${comment.uname!''}
+					            <#else>
+					            	匿名
+					            </#if>
+					         </span>
+							<p>
+							</p>
+							<span><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd"/></span>
+						</div>
+						<p style="word-wrap: break-word;">${comment.content!''}</p>
+						 <#if comment.replystatus==1>
+							<div class="problem_answer">
+								<p style="word-wrap: break-word;">${comment.reply}</p>
+							</div>
+						</#if>
+						<div class="clear"></div>
+					</div>
+					</li>
+				</#list>

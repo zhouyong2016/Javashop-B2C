@@ -1,0 +1,54 @@
+<style type="text/css">
+    .layui-m-layersection .layui-m-layercont {
+        padding: 0px;
+    }
+
+    .title-remark {
+        width: 100%;
+        height: 40px;
+        background-color: #ff6700;
+        color: #fff;
+        font-size: 14px;
+        line-height: 40px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .cheakout-remark-page {
+        position: relative;
+        height: 100px;
+    }
+
+    .input-remark {
+        width: 87%;
+        height: 45px;
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        resize: none;
+        border-radius: 3px;
+        padding: 5px 30px 5px 5px;
+        margin-top: 24.5px;
+        outline: none;
+        -webkit-appearance: none;
+        font-size: 16px;
+    }
+
+    .clean-remark {
+        position: absolute;
+        top: 50%;
+        right: 2%;
+        margin-top: -24.5px;
+        font-style: normal;
+        width: 10%;
+        height: 55px;
+        border-radius: 100%;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACTUlEQVRYR81X3XHUMBDevdE76YDczK1euauAXAUJHYQKgAqADtIBdECoAKeChFfJM5d0cHm/mWVWIwvZlmX5HObQoy3p+3b32x8hnHjhifFhEgFjzBoRLwHggpnPEHEtBjDzAyLuAaBi5p9a64dSw4oIGGOuAeAzIp6XXMzMj4vF4tNqtbod258lsNvtzg+HwzexeOyigf+VUur9crl8HDo/SMC7+xcAnB0J3hzbM/N2KCxJAh78fiZw6zgzb1IkegS82wV8ruVd/nul1KYbjh4Ba20FAG9f0vroroqItvHdLQKidkQU0f2zhYjv4uxoEbDWilpfD6BvmXmPiOKhVwN7npn5AhElfCLg3pIU1Vovmx+BQIHwtkRU+X0pEg5chGatlbRNEvCFKwgyELDWfpFik/F9SKcEiQBemL5fiUjw/pbiQvGlSEgpdpYXggvuHRG54haHQOr5mwL1tUjI/ongrndorTddD3ABeLK6TbA8QBCRMz7WwBQCIeZySUaYgzb1CBhjSkPQElwnBLkUDWSY+bfW2rXy2AMlFTCldompazYTPNEXYV3XN8z8IaODXKrlUjR1ZT8NxwpR080yggskjipEQnOsFHtTfmQ6pSORK8UA8EREYbL6v5qR90KJGCeUjNbWIL5eM2o++IFEptqhjncs+LNSaj06kESF5TQjWWPehJwe80iranY3l4zl32eMaHdKqeujxvKYaV3XV8x8k5mWuoY9IeLH2Q+T7q0+LFfR08y1b6nt0dPs9sWfZmNBnvO/6G04B2Ds7B+xn3swDCEs2AAAAABJRU5ErkJggg==') no-repeat center;
+        background-size: 20px 20px;
+    }
+</style>
+<div class="title-remark">备注信息</div>
+<div class="cheakout-remark-page">
+    <textarea class="input-remark" id="input-remark" maxlength="30" placeholder="超过30个字符我就记不住了哦！">
+    </textarea>
+    <i class="clean-remark" id="clean-remark"></i>
+</div>

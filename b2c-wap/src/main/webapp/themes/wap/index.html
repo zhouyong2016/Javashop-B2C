@@ -1,0 +1,107 @@
+<#assign  title="商城首页" />
+<#include 'common/header.html'/>
+<!-- 获取广告列表 -->
+<#assign advListTag= newTag("advListTag")>
+<#assign adv = advListTag("'acid':'1'")!'' >
+<#assign advList = adv.advList /> 
+
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/wap/css/index.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/statics/e_tools/mobile/library/swiper/swiper-3.3.1.min.css" />
+<script type="text/javascript" src="${ctx}/statics/e_tools/mobile/library/swiper/swiper-3.3.1.jquery.min.js"></script>
+<!-- 搜索 -->
+<div class="index-search-box">
+	<a href="${ctx}/search.html" class="go-search">
+		<i class="search-glass"></i>搜索商品名称
+	</a>
+	<div class="search_bottom"></div>
+</div>
+	<style type="text/css">
+		.swiper-container {
+			width: 100%;
+			height: 10rem;
+		}
+		.swiper-container img {
+			width: 100%;
+			height: 100%;
+			border: none;
+		}
+	</style>
+<!-- 广告 -->
+	<div class="">
+		<div class="swiper-container">
+			<ul class="swiper-wrapper">
+			<#list advList as adv>
+                <li class="swiper-slide">
+                    <a href="${ctx}${adv.url}">
+                        <img class="swiper-lazy" data-src="${adv.atturl!''}">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
+                    </a>
+                </li>
+			</#list>
+			</ul>
+			<!-- 分页器 -->
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+	<!-- 产品展示一 -->
+	<div class="index-goods-list-box">
+		<#assign goodsList=goodsListTag("'tagid':'5','goodsnum':'6'")>
+		<#assign n = 1>
+		<ul class="index-goods-list-top">
+			<#list goodsList as goods>
+				<li class="index-goods-list">
+					<div class="index-goods-name">
+						<a href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goods.name}" length="20" dot="..." /></a>
+					</div>
+					<div class="index-goods-img">
+						<a href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+						</a>
+					</div>
+					<div class="index-goods-price-backdrop">
+						<a href="${ctx}/goods-${goods.goods_id}.html"><span class="index-goods-price">${goods.price?string.currency}</span></a>
+					</div>
+				</li>
+				<#assign n = n+1>
+			</#list>
+		</ul>
+	</div>
+	<!-- 商品展示2 -->
+	<div class="index-goods-more">
+		<#assign goodsList=goodsListTag("'tagid':'7','goodsnum':'14'")>
+		<ul>
+			<#list goodsList as goods>
+				<li>
+					<div class="index-goods-img">
+						<a href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+						</a>
+					</div>
+					<div class="index-goods-name">
+						<a href="${ctx}/goods-${goods.goods_id}.html">
+							<p>${goods.name}</p>
+							<span class="index-goods-price"><i>${goods.price?string.currency}</i>元</span>
+						</a>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	</div>
+<script type="text/javascript">
+$(function(){
+	var mySwiper = new Swiper ('.swiper-container', {
+		loop: true,
+		autoplayDisableOnInteraction : false,
+		autoplay: 3000,
+		pagination: '.swiper-pagination',
+        lazyLoading : true,
+        lazyLoadingInPrevNext : true,
+        lazyLoadingInPrevNextAmount : 1,
+	})
+});
+</script>
+
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

@@ -1,0 +1,51 @@
+.search-box .header-tools{background:#f2f2f2;border-bottom: 1px solid #eee;}
+.classify{width:100%;overflow:hidden;}
+.classify .classify_list{
+    width:90%;
+    padding:0.6rem 5%;
+    background:#f2f2f2;
+}
+.classify .classify_list .c_list{   
+	border: 1px solid #ECECEC;
+	background:#fff;
+	padding:1rem;
+	margin:0px 0px 0.5rem 0px;
+	
+}
+.classify .classify_list .c_list h2{
+	width:100%;overflow:hidden;clear:both;padding:0.6rem 0px;
+}
+.classify .classify_list .c_list h2 a{
+	display:block;width:100%;height:1rem;line-height:1rem;text-align:center;font-size:0.9rem;color:#333;
+}
+.classify .classify_list .c_list .list_children{
+	overflow:hidden;
+	width:100%;
+	display:block;
+}
+.classify .classify_list .c_list .list_children p a{
+	float: left;
+    text-align:left;
+    display:block;
+    padding:0px 0.3rem;
+    margin:0.4rem;
+    height: 1.6rem;
+    line-height:1.6rem;
+    overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

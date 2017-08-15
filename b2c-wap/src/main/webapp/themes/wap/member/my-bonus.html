@@ -1,0 +1,36 @@
+<#assign  title="我的优惠券" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/member.css"/>
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/my-bonus.js"></script>
+
+    <#assign myBonusListTag = newTag("myBonusListTag") />
+    <#assign canBonusList = myBonusListTag("{'is_usable':1}") />
+    
+    <#assign myBonusListTag = newTag("myBonusListTag") />
+    <#assign noCanBonusList = myBonusListTag("{'is_usable':0}") />
+	
+    <div class="my-buons">
+        <div class="buons-nav">
+            <span class="nav-item nav-goods active" data-type="available">
+                <a href="javascript:;">可用优惠券(${canBonusList.bonusList?size!'0'})</a>
+            </span>
+            <span class="nav-item nav-store" data-type="unavailable">
+                <a href="javascript:;">不可用优惠券(${noCanBonusList.bonusList?size!'0'})</a>
+            </span>
+            <i class="nav-hr"></i>
+        </div>
+        <div class="bouns-content">
+            <div class="content-item content-available show">
+                <#include './my-bonus-can-use.html' />
+            </div>
+            <div class="content-item content-unavailable">
+                <#include './my-bonus-cant-use.html' />
+            </div>
+        </div>
+    </div>
+</#if>
+</body>
+</html>

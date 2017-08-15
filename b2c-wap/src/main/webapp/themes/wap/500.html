@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<#assign headerTag = newTag("headerTag") />
+<#assign header = headerTag() />
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="apple-touch-fullscreen">
+<meta content="telephone=no" name="format-detection">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="#ffffff" name="msapplication-TileColor">
+
+<meta content="width=device-width,user-scalable=no" name="viewport" id="viewport" initial-scale="1.0," maximum-scale="1.0;">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/common.css" />
+</head>
+<body id="common-top">
+
+<style>
+	.header-tools{border-bottom:1px solid #ccc;}
+	.server-no{width:10rem;height:10rem;margin:5rem auto;}
+	.server-no img{width:100%;}
+</style>
+
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		服务器错误
+	</div>
+</div>
+	
+<div class="server-no">
+	<img src="themes/wap/images/500.png" alt="服务器错误"/>
+</div>
+
+
+</body>
+</html>

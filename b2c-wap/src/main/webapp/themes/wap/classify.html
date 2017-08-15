@@ -1,0 +1,61 @@
+<#assign  title="分类" />
+<#include 'common/header.html'/>
+<#-- 调用商品分类信息 -->
+<#assign goodsCatTag= newTag("goodsCatTag")>
+<#assign goodsCat = goodsCatTag("'catimage':'on'}") >
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/classify.css" />
+<script src="${ctx}/statics/e_tools/mobile/library/iscroll/iscroll.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/classify.js"></script>
+
+<div class="classify" id="classify">
+    <!--分类左侧 开始-->
+    <div class="cat-wrapper" id="cat-wrapper">
+        <ul>
+            <#list goodsCat.cat_tree as cat>
+                <li class="item<#if cat_index==0> focus</#if>" rel="${cat_index}">
+                    <a href="javascript:;">${cat.name}</a>
+                </li>
+            </#list>
+        </ul>
+    </div>
+    <!--分类左侧 结束-->
+
+    <!--分类内容 开始-->
+    <div class="con-wrapper" id="con-wrapper">
+        <div class="content">
+            <div class="inner-content show">
+
+            </div>
+        </div>
+    </div>
+    <!--分类内容 结束-->
+
+    <div style="display: none;" id="conts">
+        <#list goodsCat.cat_tree as cat>
+            <div class="cont item-${cat_index}">
+                <#assign _children = cat.children />
+                <#list _children as _cat>
+                    <div class="item">
+                        <div class="title-item">${_cat.name!''}</div>
+                        <div class="content-item">
+                            <#list _cat.children as cc>
+                                <div class="cat-item">
+                                    <div class="img-cat-item" cat_id="${cc.cat_id}">
+                                        <#if cat_index == 0>
+                                            <img src="${cc.image!'${ctx}/statics/e_tools/images/beifang/beifang-no_img.png'}" alt="">
+                                        <#else />
+                                            <img data-src="<@imgurl pic="${cc.image!'${ctx}/statics/e_tools/images/beifang/beifang-no_img.png'}" />" alt="">
+                                        </#if>
+                                    </div>
+                                    <div class="name-cat-item">${cc.name}</div>
+                                </div>
+                            </#list>
+                        </div>
+                    </div>
+                </#list>
+            </div>
+        </#list>
+    </div>
+</div>
+</body>
+</html>

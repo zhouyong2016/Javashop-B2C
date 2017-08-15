@@ -1,0 +1,87 @@
+<#assign  title="会员中心" />
+<#include 'common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+
+<div class="member-box">
+	<div class="member-center-tittle">
+	
+		<#if member??>
+			<h1>${member.uname!''}</h1>
+			<div class="member-center-img">
+				<#if member.face?exists && member.face != ''>
+	    			<p><img src="<@imgurl pic='${member.face}'/>" /></p>
+	    		<#else>
+	     			<p><@image src="${ctx}/themes/wap/images/default-img.jpg"  /></p>
+	     		</#if>
+			</div>
+		<#else>
+			
+			<h1>会员登录</h1>
+			<div class="member-center-img">
+				<p><a href="${ctx}/login.html?forward=${ctx}/member.html">+</a></p>
+			</div>
+		</#if>
+	</div>
+	<div class="member-tools-btn-box">
+		<div class="member-tools-btn member-btn1">
+			<a href="orderlist.html">
+				<i></i>
+				<p>全部订单</p>
+			</a>
+		</div>
+		<div class="member-tools-btn member-btn2">
+			<a href="orderlist.html?status=1">
+				<i></i>
+				<p>待付款</p>
+			</a>
+			
+		</div>
+		<div class="member-tools-btn member-btn3" style="border:0px none">
+			<a href="orderlist.html?status=3">
+				<i></i>
+				<p>待收货</p>
+			</a>
+			
+		</div>
+	</div>
+
+	<div class="go-member-other-box">
+		<ul>
+			<li><a href="collect.html" class="member_collec">我的收藏</a></li>
+			<li><a href="./member/address-list.html?back=member" class="member_address">我的地址</a></li>
+			<li><a href="${ctx}/member/my-bonus.html" class="member_address">我的优惠券</a></li>
+			<li><a href="commentlist.html" class="member_address">我的评价</a></li>
+			<li><a href="info.html" class="member_address">我的信息</a></li>
+			<li><a href="./member/security.html" class="member_address">账户安全</a></li>
+			<li><a href="return_list.html" class="member_address">售后列表</a></li>
+		</ul>
+	</div>
+	<div class="member-logout-box">
+		<input type="button" class="member-logout" value="注销/退出" <#if member??><#else>disabled="disabled"</#if>/>
+	</div>
+</div>
+
+<script>
+	$(function(){
+		$(".member-logout").click(function(){
+			$.ajax({
+				url:"${ctx}/api/shop/member/logout.do",
+				dataType:"json",
+				success : function(data) {	
+					if(data.result==1){
+						alert("退出成功")
+						location.href="index.html"
+					}
+					else{
+						alert(data.message)
+					}
+				}
+			})
+		})
+	})
+</script>
+
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

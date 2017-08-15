@@ -1,0 +1,38 @@
+<!-- 浮动菜单 -->
+<div class="float-footer">
+	<ul>
+		<li>
+			<a href="${ctx}/index.html">
+				<i class="float-go-home"></i>
+				<span>首页</span>
+			</a>
+		</li>
+		<li>
+			<a href="${ctx}/classify.html">
+				<i class="float-go-classify"></i>
+				<span>分类</span>
+			</a>
+		</li>
+		<li>
+			<a href="${ctx}/cart.html">
+				<i class="float-go-cart"></i>
+				<span>购物车</span>
+			</a>
+		</li>
+		<li>
+			<a href="${ctx}/member.html">
+				<i class="float-go-member"></i>
+				<span>会员</span>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="foat-blank">
+</div>
+<script>
+	$(function(){
+		//动态获得空白位置高度
+		var blankHieght = parseInt($(".float-footer").height());
+		$(".foat-blank").css("height",blankHieght+"px");
+	})
+</script>

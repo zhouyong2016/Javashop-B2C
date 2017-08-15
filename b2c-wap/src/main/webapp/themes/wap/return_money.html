@@ -1,0 +1,167 @@
+<#assign  title="退货申请" />
+<#include 'common/header.html'>
+<#--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<#--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag()>
+<#--创建“订单货物列表”标签-->
+<#assign orderChildItemListTag = newTag("orderChildItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign map = orderChildItemListTag("{'orderid':${order_id}}")>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+<#assign orderChildItemListTag = newTag("orderItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderChildItemListTag("{'orderid':${order_id}}")>
+
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		退款申请
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<form id="returnForm">
+	<div class="return_detail">
+		<input type="hidden" name="orderid" value="${order_id}" />
+		<input type = "hidden" id = "packDetailJson" name = "packDetailJson" />
+		<h2>是否已收货</h2>
+		<input type="radio" value="0" name="ship_status" checked="checked"/>未收货
+		<input type="radio" value="1" name="ship_status"/>已收货
+	</div>
+	<div class="return-apply">
+		<h4>请选择退款原因</h4>
+		<select name="reason" id="ship_status0" disabled="disabled" style="display: none;">
+			<option value="商品质量有问题">商品质量有问题</option>
+			<option value="不喜欢/不想要">不喜欢/不想要</option>
+			<option value="收到商品与描述不符">收到商品与描述不符</option>
+			<option value="发票问题">发票问题</option>
+			<option value="其他">其他</option>
+		</select>
+		<select name="reason" id="ship_status1" >
+			<option value="买错/不想要">买错/不想要</option>
+			<option value="未按照时间发货">空包裹</option>
+			<option value="快递一直没有收到">快递一直没有收到</option>
+			<option value="快递无记录">快递无记录</option>
+		</select>
+		<h4>请选择退款方式</h4>
+		<select name="refund_way"> 
+			<option value="0">-- 请选择退款方式 --</option>
+			<#list paymentList as payment  >
+				<#if payment.type!="cod">
+					<option value="${payment.name}"> ${payment.name} </option>
+				</#if>
+			</#list>
+		</select>
+		<h4>请选择退款账户</h4>
+			<input type="text" name="return_account" class="return-way-name" maxlength="30"/>
+		<h4>请填写退款金额</h4>
+			<input type="text" name="apply_alltotal" class="return-way-name" value="${orderDetail.paymoney}" dataType="float" id="price" isrequired="true" maxlength="15"/>
+			<input type="hidden"  id="payprice" value="${orderDetail.paymoney!''}"/>
+		<h4>问题描述</h4>
+		<div class="return-word">
+			<textarea name="remark" maxlength="100"></textarea>
+		</div>
+		<div class="return-tools btn">
+			<input type="button" name="btnSubmit" value="申请退款" id="btnSubmit" class="save-info" />
+		</div>
+	</div>
+</form>
+
+
+<!--会员中心首页右侧结束-->
+<script type="text/javascript">
+
+$(".store-goods-ch").click(function(){
+	if($(this).find("input").is(':checked')){
+		$(this).addClass("selected");
+	}else{
+		$(this).removeClass("selected");
+	}
+})
+
+$(function(){
+	
+	$("input[name='goodsId']").click(function(){
+		var checked = this.checked;
+		var goodsid  = $(this).val();
+		if(checked){
+			$(".need_sync[goods_id="+goodsid+"]").attr("checked","checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").removeAttr("disabled");
+		}else{
+			$(".need_sync[goods_id="+goodsid+"]").removeAttr("checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").attr("disabled","disabled");
+		}
+	});
+	
+	$("input[name='ship_status']").click(function(){
+		var status=$('input[name="ship_status"]:checked').val();
+		$("select[name='reason']").hide();
+		$("#ship_status"+status).show();
+		$("#ship_status"+status).removeAttr("disabled");
+	});
+
+	$("#btnSubmit").click(function(){
+		
+		var status = $('input[name="ship_status"]:checked').val();
+		 
+		if($("select[name='refund_way']").val()=="0"){
+			alert("请选择支付方式");
+			return false;
+			
+		}
+		if($("input[name='return_account']").val()==""){
+			alert("请填写退款账号");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		
+		if(Number($("input[name='apply_alltotal']").val()) > Number($("#payprice").val())){
+			alert('退款金额不能大于实付金额');
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		
+		if(status==0){
+			if($("#ship_status0").val()==0){
+				alert("请选择退款原因");
+				return false;
+			}
+		}else if($('input[name="ship_status"]:checked').val()==null){
+			alert("请选择是否收货");
+			return false;
+		}else if($("input[name='alltotal_pay']").val() < 0){
+			alert('退款金额不能为负');
+			return false;
+		}
+		
+		$("#btnSubmit").attr("disabled",true); 
+		var options = {
+				url : "${ctx}/api/shop/sell-back/return-money.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						alert(result.message);
+						location.href="return_list.html"
+					}else{
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#returnForm').ajaxSubmit(options);
+	});
+	 
+})
+</script>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>	

@@ -1,0 +1,76 @@
+<#assign  title="退货列表" />
+<#include 'common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />	
+<#if memberInfo ??>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<!-- 获得会员申请退货、换货列表标签 -->
+<#assign sellBackListTag = newTag("sellBackListTag")>
+<!-- 调用会员申请退货、换货列表标签 -->
+<#assign result = sellBackListTag()!''>
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		售后列表
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+
+
+<div class="member-return-list">
+	<#if result?size gt 0 >
+		<#list result.resultList as sellback>
+				<div class="member-return-table">
+					<p><em>申请时间：</em><span><@dateformat time="${ sellback.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></span></p>
+					<p><em>订单号：</em><span>${sellback.ordersn!'' }</span></p>
+
+                    <#if sellback.type == 1>
+                        <p>
+                            <em>退款状态：</em>
+
+                            <#if sellback.tradestatus  == 0>
+                                <span>申请退款</span>
+                            <#elseif sellback.tradestatus  == 1>
+                                <span>审核通过</span>
+                            <#elseif sellback.tradestatus  == 2>
+                                <span>审核拒绝</span>
+                            <#elseif sellback.tradestatus  == 6>
+                                <span>已退款</span>
+                            </#if>
+                        </p>
+                    <#else/>
+                        <p>
+                            <em>退货状态：</em>
+
+                            <#if sellback.tradestatus  == 0>
+                                <span>申请退货</span>
+                            <#elseif sellback.tradestatus  == 1>
+                                <span>审核通过</span>
+                            <#elseif sellback.tradestatus  == 2>
+                                <span>审核拒绝</span>
+                            <#elseif sellback.tradestatus  == 4>
+                                <span>已入库</span>
+                            <#elseif sellback.tradestatus  == 5>
+                                <span>部分入库</span>
+                            <#elseif sellback.tradestatus  == 6>
+                                <span>已退款</span>
+                            </#if>
+                        </p>
+                    </#if>
+					<p><em>操作：</em><span><a href="return_detail.html?id=${sellback.id}&sn=${sellback.ordersn}"  class="small-white">查看</a></span></p>
+				</div>
+			</#list>
+			<#else>
+			<div class="bonus_empty">
+				抱歉，您暂时没有数据
+			</div>
+		</#if>
+		
+</div>
+
+<#include 'common/float_footer.html'/>
+</#if>
+<#include 'common/footer.html'/>	

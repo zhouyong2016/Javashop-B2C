@@ -1,0 +1,20 @@
+<#assign bc_list = canBonusList.bonusList />
+
+<#if ( bc_list?size gt 0) >
+    <#list  bc_list as bonus >
+        <div class="eui-bonus eui-bonus01" data-id="${bonus.bonus_id}">
+            <div class="par">
+                <p>${bonus.type_name!''}</p>
+                <sub class="sign">￥</sub><span>${bonus.type_money?string("0.00")}</span>
+                <p>订单满${bonus.min_goods_amount?string("0.00")}元</p>
+            </div>
+            <div class="copy">副券<p><@dateformat time="${bonus.use_start_date?c}" pattern="yyyy-MM-dd"/><br><@dateformat
+                time="${bonus.use_end_date?c}" pattern="yyyy-MM-dd"/></p></div>
+            <i></i>
+        </div>
+    </#list>
+<#else/>
+    <div class="eui-nodata">
+        <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_data.png">
+    </div>
+</#if>

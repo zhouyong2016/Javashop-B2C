@@ -1,0 +1,110 @@
+
+<div class="discuss_list_wrapper">
+<!-- 获取商品评论标签 -->
+<#assign commentGradeListTag = newTag("commentGradeListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentGradeList = commentGradeListTag("{'goods_id':${goods_id},'grade':${grade},'type':1}")>
+
+	<div class="grade_list">
+	<#if commentGradeList.totalCount != 0 >
+		<ul class="list">
+			<#list commentGradeList.result as comment>  
+				<li <#if !comment_has_next >class="last"</#if>>
+
+					<div class="problem_right">
+						<div class="problem_time">
+							<span class="name"> 
+						     	<#if comment.member_id != 0>
+					            	${comment.uname!''}
+					            <#else>
+					            	匿名
+					            </#if>
+					         </span>
+							<p>(
+							<#if comment.grade=3>
+								好评
+							<#elseif comment.grade=2>
+								中评
+							<#else>
+								差评	
+							</#if>)
+							</p>
+							<span><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd"/></span>
+						</div>
+						<p style="word-wrap: break-word;">${comment.content!''}</p>
+						 <#if comment.replystatus==1>
+							<div class="problem_answer">
+								<p style="word-wrap: break-word;">${comment.reply}</p>
+							</div>
+						</#if>
+						<div class="clear"></div>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	<#else>
+		<p class="no-word">暂无评论，抢沙发，赢取更多积分。 </p>
+	</#if>
+	</div>
+	<div class="page">
+		<input type="hidden" rel="${commentGradeList.totalCount}" class="goods-list-num">
+		<!--  暂时无
+		<@pager pageno="${page!'1'}" pagesize="${commentGradeList.pageSize}" totalcount="${commentGradeList.totalCount}" />
+		-->
+	</div>	
+</div>
+
+<!-- 回到顶部 -->
+<div class="go-top" style="display:none;">
+	<a href="javascript:;viod(0)"></a>
+</div>
+<script>
+	$(function(){
+		//滚动加载
+		function loaata(){ 
+		    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+		    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+		    { 
+				$(".loadimg").show();
+		    	$.get("${ctx}/goods_comment_list_page.html?goods_id="+${goods_id}+"&grade="+${grade}+"&page="+page+"&type=1", function(data){
+		    		$(data).appendTo(".list");
+		    		});
+		    	$(".loadimg").hide();
+		    	page++;
+		    } 
+		}
+		
+		
+		//触发滚动动作
+		var prevTop = 0,
+   		currTop = 0;
+		
+		var page =2;
+		$(window).scroll( function() {
+			
+			 currTop = $(window).scrollTop();  //滚动值
+			//判断是否是向下滚动
+			if(currTop > prevTop){
+				var num = $(".goods-list-num").attr("rel");  //获得商品总数
+				if(num > 10){
+					$(".go-top").fadeIn(500);
+					loaata();
+					
+				}
+			}else{
+				$(".go-top").fadeOut(500);
+			}
+		});
+		
+		
+		 //返回顶部
+		$(".go-top").click(function(){
+			  $('body,html').animate({
+                  scrollTop: 0
+              },
+              500);
+              return false;
+		}) 
+	})
+</script>

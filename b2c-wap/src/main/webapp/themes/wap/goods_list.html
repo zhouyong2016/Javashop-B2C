@@ -1,0 +1,142 @@
+<#assign  title="商品分类" />
+<#include 'common/header.html'/>
+<#-- 创建选择器标签 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+
+<#-- 获取选择器 -->
+<#assign goodsSelector = searchSelectorTag() >
+
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":10}') >
+
+<#-- 各种选中的选择器 -->
+<#assign selected_cat= goodsSelector.selected_cat >
+<#assign selected_brand= goodsSelector.selected_brand >
+<#assign selected_price= goodsSelector.selected_price![] >
+
+<#-- 各种未选中的选择器 -->
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+<link rel="stylesheet" type="text/css" href="themes/wap/css/goods_list.css" />
+<div class="goods-list-box">
+	<div class="header-tools">
+		<div class="go-back">
+			<a href="javascript:" onclick="window.history.go(-1);"></a>
+		</div>
+		<div class="common-title">
+			<#list selected_cat as selector >
+				<p class="have_chosen_goods_list <#if selector_index == 0>cur</#if><#if !selector_has_next> last</#if>" rel="<#if !selector_has_next> last</#if>">${selector.name}</p>
+			</#list>
+		</div>
+		<div class="go-search">
+		</div>
+	</div>
+
+<div class="sort">
+	<ul>
+		<#list sortList as selector >
+			<li <#if selector.isSelected>class="selected"</#if>><a href="${selector.url!''}" <#if selector.isSelected>class="${selector.value}"</#if> >${selector.name}</a></li>
+		</#list>
+	</ul>
+</div>
+ <#if webpage.result ?size gt 0>
+<div class="goodslist">
+	<ul class="list">
+    	<#list webpage.result as goods>
+			<li>
+				<div class="index-goods-img">
+				<a href="${ctx}/goods-${goods.goods_id}.html">	
+						<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+					</a>
+				</div>
+				<div class="index-goods-name">
+						<a href="${ctx}/goods-${goods.goods_id}.html">	
+						<p>${goods.name}</p>
+						<span class="index-goods-price"><i>${(goods.price?number)?string("currency")}</i>元</span>
+					</a>
+				</div>
+			</li>
+ 		</#list>
+	</ul>
+	<div class="loadimg" style="display:none;"></div>
+</div>
+<#else>
+	<div class="no-goodslist">抱歉，未找到符合条件商品</div>
+</#if>
+</div>
+<input type="hidden" rel="${webpage.totalCount}" class="goods-list-num">
+<!-- 回到顶部 -->
+<div class="go-top" style="display:none;">
+	<a href="javascript:;viod(0)"></a>
+</div>
+<script>
+	$(function(){
+		function parseUrl(){
+            var url=location.href;
+            var i=url.indexOf('?');
+            if(i==-1)return;
+            var querystr=url.substr(i+1);
+            var arr1=querystr.split('&');
+            var arr2=new Object();
+            for  (i in arr1){
+                var ta=arr1[i].split('=');
+                arr2[ta[0]]=ta[1];
+            }
+            return arr2;
+        }
+     var v = parseUrl();//解析所有参数
+     var cat_id=v['cat'];//获取cat_id
+
+       //滚动加载
+		function loaata(){ 
+		    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+		    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+		    { 
+				$(".loadimg").show();
+		    	$.get("${ctx}/goods_list_page.html?cat="+cat_id+"&page="+page, function(data){
+		    		$(data).appendTo(".goodslist");
+		    		});
+		    	$(".loadimg").hide();
+		    	page++;
+		    } 
+		}
+		
+		//触发滚动动作
+		var prevTop = 0,
+   		currTop = 0;
+		
+		var page =2;
+		$(window).scroll( function() {
+			
+			 currTop = $(window).scrollTop();  //滚动值
+			//判断是否是向下滚动
+			if(currTop > prevTop){
+				var totalnum = $(".goods-list-num").attr("rel");  //获得商品总数
+				var num=totalnum-(page-1)*10;   //获得剩余的商品总数
+				if(num > 0){
+					$(".go-top").fadeIn(500);
+					loaata();
+				}
+			}else{
+				$(".go-top").fadeOut(500);
+			}
+		});
+		
+		 //返回顶部
+		$(".go-top").click(function(){
+			  $('body,html').animate({
+                  scrollTop: 0
+              },
+              500);
+              return false;
+		})
+		
+	})
+</script>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

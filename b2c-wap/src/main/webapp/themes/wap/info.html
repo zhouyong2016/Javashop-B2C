@@ -1,0 +1,151 @@
+<#assign  title="个人信息" />
+<#include 'common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#assign regionSelect = "com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<script type="text/javascript" src="${ctx}/statics/e_tools/mobile/js/jquery.addressSelect-mobile.js"></script>
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1)"></a>
+	</div>
+	<div class="common-title">
+		个人信息
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+	<div class="member-info">
+		<form id="form_saveMember" method="post" class="validate" enctype="multipart/form-data">
+			<div class="info-box-same">
+				<p>真实姓名：</p>
+				<input type="text" isrequired="true" name="truename" value="${member.name!''}" class="input_text member_t" placeholder="真实信息以便核对信息"/>
+			</div>
+			<div class="info-box-same">
+				<p>性别：</p>
+				<label class="gender">
+					<input type="radio" name="sex" <#if member.sex!=0>checked</#if> value="1"  class="info-choice" />
+					<em>男</em>
+				</label>
+				<label class="gender" id="lgender">
+					<input type="radio" value="0"  name="sex" <#if member.sex==0>checked</#if> class="info-choice"/>
+					<em>女</em>
+				</label>
+			</div>
+            <div class="info-box-same member-info-address">
+                <p>居住地：</p>
+                <span id="selectedAddress"><#if member.province_id?? >${member.province!''}${member.city!''}${member.region!''}${member.town!''}<#else>--请选择--</#if></span>
+                <input type="hidden" name="province" value="${member.province!''}">
+                <input type="hidden" name="province_id" value="${member.province_id!''}">
+                <input type="hidden" name="city" value="${member.city!''}">
+                <input type="hidden" name="city_id" value="${member.city_id!''}">
+                <input type="hidden" name="region" value="${member.region!''}">
+                <input type="hidden" name="region_id" value="${member.region_id!''}">
+                <input type="hidden" name="town" value="${member.town!''}">
+                <input type="hidden" name="town_id" value="${member.town_id!''}">
+            </div>
+			<div class="info-box-same">
+				<p>详细地址：</p>
+				<input name="address" type="text" value="${member.address!''}" class="input_text"  placeholder="详细地址" maxlength="50"/>
+			</div>
+			<!--<div class="info-box-same">
+				<p>邮编：</p>
+				<input name="zip" type="text" value="${member.zip!''}" id="zipcode" class="input_text"  placeholder="请输入邮编信息">
+			</div>-->
+			<!--<div class="info-box-same">
+				<p>移动电话：</p>
+				<#if member.mobile?? && member.mobile!=''>
+					<input id="cellphone" name="mobile" type="text" value="${member.mobile!''}" class="input_text" disabled="disabled" placeholder="收货电话" maxlength="11"/>
+				<#else>
+					<input id="cellphone" name="mobile" type="text" value="${member.mobile!''}" class="input_text"  placeholder="收货电话" maxlength="11"/>
+				</#if>
+			</div>-->
+			<input type="button" name="btnSubmit" value="保存资料" id="btnSubmit" class="save-info" />
+		</form>
+	</div>
+
+
+<script type="text/javascript">
+$(function(){
+	<#if member.province_id?? >var deData = [${member.province_id!''}, ${member.city_id!''}, ${member.region_id!''}, ${member.town_id!''}]<#else/> var deData = null</#if>
+	$('#selectedAddress').addressSelect({
+        deData  : deData,
+        apiPath : ctx,
+        callBack: function (res) {
+            $('#selectedAddress').html(res.string);
+            if(res.province){
+                $("input[name='province']").val(res.province.name);
+                $("input[name='province_id']").val(res.province.id);
+            }
+            if(res.city){
+                $("input[name='city']").val(res.city.name);
+                $("input[name='city_id']").val(res.city.id);
+            }
+            if(res.region){
+                $("input[name='region']").val(res.region.name);
+                $("input[name='region_id']").val(res.region.id);
+            }
+            if(res.town){
+                $("input[name='town']").val(res.town.name);
+                $("input[name='town_id']").val(res.town.id);
+            }
+        }
+    })
+	
+	//保存会员信息	
+	$("#btnSubmit").click(function(result){
+		
+		if($("#tel").val()==""&& $("#cellphone").val()==""){
+			alert("手机与固定电话至少填写一项");
+			return false;
+		}	
+		
+		//判断所在地区三级信息是否完整
+		if($('#region_id').val() == 0){
+			alert('所在地不完整，请核对！');
+			return false;
+		}
+		
+		if(!$("input[name='province_id']").val()){
+			alert("居住地不为空");
+			return false;
+		}
+		
+		if($("input[name='address']").val() ==null || $("input[name='address']").val() == ""){
+			alert("详细地址不能为空");
+			return false;
+		}
+		/*//判断手机格式
+		 if($("#cellphone").val()!=""){
+			 var tel = $("#cellphone").val();
+			 var reg = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+			 if(reg.test(tel)==false){
+				 alert("手机格式错误");
+				 return false;
+			 }
+		 }*/
+		//判断真是姓名
+		if($(".member_t").val()==""){
+			alert("真是姓名不能为空");
+			return false;
+		}
+		var options = {
+			url: "${ctx}/api/shop/member/save-info.do",
+			success: function (data) {
+				if (data.result == 1) {
+					alert("保存成功");
+					location.href = "member.html"
+				}
+				else {
+					alert(data.message);
+				}
+			}
+		};
+
+		$('#form_saveMember').ajaxSubmit(options);
+
+	});
+});
+</script>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

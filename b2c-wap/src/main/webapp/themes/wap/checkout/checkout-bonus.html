@@ -1,0 +1,71 @@
+<#assign  title="优惠券" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css"/>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/library/jquery.cookie.min-1.4.1.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout-bonus.js"></script>
+<#if member??>
+    <#--读取可用优惠券标签 -->
+    <#assign myBonusByUsableTag= newTag("myBonusByUsableTag")>
+    <#--返回可用优惠券列表 -->
+    <#assign usableBonus = myBonusByUsableTag() >
+    
+    <#--读取不可用优惠券标签 -->
+    <#assign myBonusByNotUsableTag= newTag("myBonusByNotUsableTag")>
+    <#--返回不可用优惠券列表 -->
+    <#assign notUsableBonus = myBonusByNotUsableTag() >
+    
+    <div class="bonus-wapper">
+        <div class="nav-checkout-bonus">
+            <div class="item available selected">
+                <a href="javascript:;">可用优惠券 (${usableBonus.useBonusList?size})</a>
+            </div>
+            <div class="item unavailable">
+                <a href="javascript:;">不可用优惠券 (${notUsableBonus.noUseBonusList?size})</a>
+            </div>
+        </div>
+        <div class="content-bonus">
+            <div class="items available show">
+                <#if (usableBonus.useBonusList?size gt 0) >
+                    <#list usableBonus.useBonusList as useBonus>
+                        <div class="eui-bonus eui-bonus01" rel="${useBonus.bonus_id}">
+                            <div class="par">
+                                <p>${useBonus.type_name}</p>
+                                <sub class="sign">￥</sub><span>${useBonus.type_money?string('0.00')}</span>
+                                <p>订单满${useBonus.min_goods_amount?string('0.00')}元</p>
+                            </div>
+                            <div class="copy">副券<p><@dateformat time="${useBonus.use_start_date?c}" pattern="yyyy-MM-dd"/><br><@dateformat time="${useBonus.use_end_date?c}" pattern="yyyy-MM-dd"/></p></div>
+                            <i></i>
+                        </div>
+                    </#list>
+                <#else/>
+                    <div class="eui-nodata">
+                        <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_data.png">
+                    </div>
+                </#if>
+            </div>
+            <div class="items unavailable">
+                <#if (notUsableBonus.noUseBonusList?size gt 0) >
+                    <#list notUsableBonus.noUseBonusList as noBonus>
+                        <div class="eui-bonus unavailable">
+                            <div class="par">
+                                <p>${noBonus.type_name}</p>
+                                <sub class="sign">￥</sub><span>${noBonus.type_money?string('0.00')}</span>
+                                <p class="min-goods-amount">订单满${noBonus.min_goods_amount?string('0.00')}元</p>
+                            </div>
+                            <div class="copy">副券<p><@dateformat time="${noBonus.use_start_date?c}" pattern="yyyy-MM-dd"/><br><@dateformat time="${noBonus.use_end_date?c}" pattern="yyyy-MM-dd"/></p></div>
+                            <i></i>
+                        </div>
+                    </#list>
+                    <#else/>
+                        <div class="eui-nodata">
+                            <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_data.png">
+                        </div>
+                </#if>
+            </div>
+        </div>
+    </div>
+</#if>
+<#include '/common/footer.html' />

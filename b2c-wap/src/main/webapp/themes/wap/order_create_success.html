@@ -1,0 +1,42 @@
+<#assign  title="订单创建成功" />
+<#include 'common/header.html' />
+<#-- 创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#-- 获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag('{"ordersn":"${ordersn}"}') />
+<#-- 创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#-- 获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+<style type="text/css">
+    body {background-color: #fff;}
+</style>
+<div class="order-success-box">
+	<div class="order-success-box-word">
+		<img src="themes/wap/images/xiaolian.png" alt="计算单生成" />
+		<p><em>订单号：</em><span>${order.sn}</span> </p>
+		<p><em>应付金额：</em><span>${order.need_pay_money?string("currency")}</span>元</p>
+		<p><em>收货人：</em><i>${order.ship_name}/<#if order.ship_mobile??>${order.ship_mobile!''}<#else>${order.ship_tel!''}</#if></i></p>
+		<p><em>收货地址：</em><i>${order.shipping_area}-${order.ship_addr}</i></p>
+	</div>
+	<div class="order-success-box-tools">
+		<#if order.member_id?exists  >
+			<a href="orderlist.html" class="go_order">查看订单</a>
+		<#else>
+			<a href="orderlist.html" class="go_order">查看订单</a>	
+		</#if>
+		<#if order.status==orderStauts.ORDER_NOT_PAY||order.status==orderStauts.ORDER_CONFIRM && !order.isCod >
+			<#if order.isOnlinePay >
+				<a class="btn_payment" href='api/shop/payment/execute.do?orderid=${order.order_id}'>去付款</a>
+			</#if>
+		</#if>
+	</div>
+</div>
+<script type="text/javascript">
+    var module = new Module();
+    module.navigator.init('完成订单');
+</script>
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

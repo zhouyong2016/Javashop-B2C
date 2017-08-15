@@ -1,0 +1,179 @@
+<#assign  title="订单详细" />
+<#include 'common/header.html'>
+<#-- 创建会员登录标签 -->
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#--调用会员登录标签-->
+<#assign memberInfo = memberLoginCheckTag() />
+<#if memberInfo ??>
+<script src="${ctx}${themes_path}/js/Order.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/member.css" />
+
+	<#-- 订单详情 -->
+	<#--创建“订单详细”标签-->
+	<#assign orderDetailTag = newTag("orderDetailTag")>
+	<#--调用“订单详细”标签，并传递参数-->
+	<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+	<#-- 获取订单状态标签 -->
+	<#assign orderStautsTag = newTag("orderStautsTag")>
+	<#-- 调用订单状态标签 -->
+	<#assign orderState = orderStautsTag()>
+	<#-- 获取会员订单日志标签 -->
+	<#assign orderDetailLogTag = newTag("orderDetailLogTag")>
+	<#-- 调用订单日志标签 -->
+	<#assign orderDetailLog = orderDetailLogTag("{'orderid':${orderDetail.order_id}}")>
+	<#-- 获取会员订单详细快递信息 -->
+	<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+	<#-- 调用会员订单详细快递信息 -->
+	<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+	<#-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+	<#assign orderSend = orderDelivery.deliveryList>
+	<#--创建“订单货物列表”标签-->
+	<#assign orderItemListTag = newTag("orderItemListTag")>
+	<#--调用“订单货物列表”标签，并传递参数-->
+	<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+	<#-- 获得商品META（快递、运费）信息 -->
+	<#assign orderMetaTag = newTag("orderMetaTag")>
+	<#-- 调用商品META（快递、运费）信息 -->
+	<#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+	<#-- 创建“发票标签” -->
+	<#assign receiptTag = newTag("receiptTag")>
+	<#-- 调用发票标签 -->
+	<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+	<#assign orderstatus= "com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
+    <#assign memberOrderIsCommentTag= newTag("memberOrderIsCommentTag") />
+	<div class="header-tools">
+		<div class="go-back">
+			<a href="javascript:" onclick="window.history.go(-1);"></a>
+		</div>
+		<div class="common-title">
+			订单详细
+		</div>
+		<div class="go-search">
+		</div>
+	</div>
+	<div class="order-detail-box">
+		<div class="order-detail-tittle">
+			<p>订单编号：${orderDetail.sn}</p>
+			<p>订单状态：<span><@orderstatus status="${orderDetail.status}" type="order"/></span></p>
+		</div>
+		<div class="order-detail-goodslist">
+			<ul class="detail_same_list">
+				<#list orderItemList as item>
+					<li <#if !item_has_next>class="last"</#if>>
+						<div class="detail_list_img">
+							<a  href="${ctx}/goods-${item.goods_id}.html?type=${orderDetail.sn}">
+								<img src="${item.image!''}" />
+							</a>
+						</div>
+						<div class="detail_list_intro">
+							<p class="detail_intro_title"><a  href="${ctx}/goods-${item.goods_id}.html?type=${orderDetail.sn}">${item.name}</a></p>
+							<p class="detail_intro_price">
+                                ${item.price?string.currency}
+                                <span>x${item.num}</span>
+                                <#if orderDetail.status == orderState.ORDER_COMPLETE>
+                                    <#assign isComment = memberOrderIsCommentTag("{'orderid':${orderDetail.order_id},'product_id':${item.product_id}}") />
+                                    <#if isComment.isCommented>
+                                        <#else/>
+                                        <span class="tools-btn tap" data-href="${ctx}/member/goods-comment.html?goods_id=${item.goods_id}&product_id=${item.product_id}&orderid=${orderDetail.order_id}" style="color: #333; border: 1px solid #e2e2e2; padding: 1px 5px; float: right;">立即评论</span>
+                                    </#if>
+                                </#if>
+                            </p>
+						</div>
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<div class="order-detail-other">
+			<p><em>下单日期：</em><span><@dateformat time="${orderDetail.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span></p>
+			<p class="detail_same_h1"><em>收货人：</em><span>${orderDetail.ship_name!''}/${orderDetail.ship_mobile!''}</span></p>
+			<p class="detail_same_address"><em>收货地址：</em><span>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}</span></p>
+			<p class="detail_same_h1"><em>付款方式：</em><span>${orderDetail.payment_name!''}</span></p>
+			<p class="detail_same_other"><em>发票抬头：</em><span>${orderreceipt.title!'无'}</span></p>
+			<p class="detail_same_other"><em>发票内容：</em><span>${orderreceipt.content!'无'}</span></p>
+		</div>
+		<div class="order-detail-other">
+			<p class="detail_same_other"><em>商品总价：</em><span>${orderDetail.goods_amount?string.currency}</span></p>
+			<p class="detail_same_other"><em>运费：</em><span>${orderDetail.shipping_amount?string.currency}</span></p>
+			<p class="detail_same_other"><em>优惠券折扣：</em><span>${orderDetail.discount?string.currency}</span></p>
+			<#if orderDetail.act_discount?exists && orderDetail.act_discount != 0 >
+				<p class="detail_same_other"><em>促销减免：</em><span>-${(orderDetail.act_discount!0)?string.currency}</span></p>
+			</#if>
+			<p class="detail_same_other"><em>应付金额：</em><span>${(orderDetail.need_pay_money!0)?string.currency}</span></p>
+		</div>
+		<div class="order-detail-tools">
+			<#if orderDetail.ship_status != orderState.SHIP_NO>
+				<a href="${ctx}/order_kuaidi.html?ordersn=${orderDetail.sn!''}" class="green_btn small-white"   rel="${orderDetail.sn!''}" style="background:#dedede">查看物流</a>
+			</#if>
+			
+			<#-- fenjiexian -->
+			<#if orderDetail.status == orderState.ORDER_CONFIRM && orderDetail.is_cancel==0 && orderDetail.payment_type!="cod">
+				<a href="${ctx}/checkout/checkout-success.html?ordersn=${orderDetail.sn}" class="green_btn small-white">立即付款</a>
+			</#if>
+			<#-- 在线支付付款前、可取消订单，货到付款确认后可取消订单 -->
+			<#if orderDetail.status == orderState.ORDER_NOT_PAY || orderDetail.status == orderState.ORDER_CONFIRM>
+				<#if orderDetail.is_cancel==0>
+					<a href='javascript:;' class="cancelBtn small-white" orderid="${orderDetail.order_id}" rel="${orderDetail.order_id}" >取消订单</a>
+				<#else/>
+					<a href="javascript:void(0);" class="small-white">等待审核</a>
+				</#if>
+			</#if>
+			<#if orderDetail.status == orderState.ORDER_SHIP >
+				<a href="javascript:;"   class="rogBtn small-white" orderid="${orderDetail.order_id}">确认收货</a>
+			<#elseif orderDetail.status == orderState.ORDER_COMPLETE || orderDetail.status == orderState.ORDER_ROG >
+				<a href="${ctx}/return_goods.html?order_id=${orderDetail.order_id}"  class="small-white" >申请退货</a>
+				<a href="${ctx}/return_money.html?order_id=${orderDetail.order_id}"  class="small-white" >申请退款</a>
+			<#elseif orderDetail.status == orderState.ORDER_MAINTENANCE>
+				<a href="${ctx}/return_detail.html?order_id=${orderDetail.order_id}&sn=${orderDetail.sn}" class="small-white" >查看售后</a>
+			</#if>
+		</div>
+	</div>
+	
+	
+	
+	<div id="cancelForm" style="display:none">
+		<div class="ui_content">
+			<h1>请输入取消原因</h1>
+			<textarea class="order_reason" style="line-height: 15px;" name="reason" type="text"></textarea>
+			<input class="orderno" value="取消订单" type="button"/>
+		</div>	
+	</div>
+	
+	<script type="text/javascript">
+		$(function(){
+			Order.init();
+			//取消订单
+            $(".cancelBtn").on('click', function () {
+                var $this = $(this),
+                    order_id = $this.attr('orderid');
+                var reason = prompt('请输入取消原因');
+                if(reason && reason !== ''){
+                	if(reason.length>50){
+                		alert("取消原因过长，不能超过50字");
+                	}else{
+	                    $.ajax({
+	                        url : ctx + '/api/shop/order/cancel.do',
+	                        data: {
+	                            order_id: order_id,
+	                            reason: reason
+	                        },
+	                        type: 'POST',
+	                        success: function (res) {
+	                            if(res.result == 1){
+	                                alert(res.message);
+	                                location.reload();
+	                            }else {
+	                                alert(res.message);
+	                            }
+	                        },
+	                        error: function () {
+	                            alert('出现错误，请重试！');
+	                        }
+	                    })
+                	}
+                }
+            })
+		})
+	</script>
+<#include 'common/float_footer.html'/>
+</#if>
+<#include 'common/footer.html'/>	

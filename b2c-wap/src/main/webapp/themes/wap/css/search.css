@@ -1,0 +1,78 @@
+.search-box{
+	display: box;
+    display: -webkit-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height:2.7rem;
+    box-align: center;
+    -webkit-box-align: center;
+    z-index: 10;
+    background: #F5F5F5;
+    padding: 0 .2rem;
+   	border-bottom: 1px solid #eee;
+}
+.search-box .search-go-index span{
+	font-family: iconfont!important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height:1rem;
+    -webkit-font-smoothing: antialiased;
+	background:url(../images/foot-iocn.png);
+    background-repeat: no-repeat;
+    background-size: 105%;
+    background-position: 1px 0px;
+    width:1.3rem;
+    height:1.2rem;
+	display:block;
+	margin:0px 1rem;
+	
+}
+.search-word-box{
+	-webkit-box-flex: 1;
+    box-flex: 1;
+    width: 100%;
+    margin-left: .2rem;
+    border: 1px solid #ccc;
+    padding: .3rem .6rem;
+    background: #FFF;
+    position:relative;
+}
+.search-word-box .search_waord{
+	width: 100%;
+    border: 0 none;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+.search_button{
+	padding: .3rem .6rem;
+    margin-left: -1px;
+    font-size: .46rem;
+    line-height: 1.5rem;
+    color: #999;
+    width:1.2rem;
+    height:1.5rem;
+    background:url(../images/index_small_icon.png);
+    background-size: 500%;
+    background-repeat: no-repeat;
+    background-position: -10px -12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

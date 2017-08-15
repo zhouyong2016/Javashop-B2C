@@ -1,0 +1,37 @@
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<#assign commentsList = memberCommentListTag()>
+
+
+		<#list commentsList.commentsList as comment>
+			<li>
+				<h3>
+				<@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/>
+				<span>(
+					<#if comment.status == 1> 
+						审核通过
+					<#elseif comment.status == 2>
+						审核拒绝
+					<#else>
+						待审核
+					</#if> 
+				)</span>
+				<i>
+					<#if comment.grade ==1>
+						差评
+					<#elseif comment.grade ==2>
+						中评
+					<#else>
+						好评
+					</#if>
+				</i>
+				</h3>
+				
+				<div class="comment-same"><span>商品名称：</span><p><a  href="${ctx}/goods-${comment.goods_id}.html?type=5">${comment.name}</a></p></div>
+				<div class="comment-same"><span>我的评论：</span><p class="my-content">${comment.content}</p></div>
+				<#if comment.replystatus == 1>
+					<div class="comment-same"><span>商城回复：</span><p class="my-reply">${comment.reply}</p></div>
+				</#if>
+			</li>
+		
+		</#list>

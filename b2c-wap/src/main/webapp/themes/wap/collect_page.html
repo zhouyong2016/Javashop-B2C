@@ -1,0 +1,32 @@
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 将调用的结果赋值给变量 -->
+<#assign collectList = collect.result>
+
+
+	 		<#list collectList as favorite>
+	 			<li>
+	 				<div class="c_list">
+	 					<div class="c_left">
+	 						<a href="goods-${favorite.goods_id}.html?type=3" class="collect_intro">
+	 							<img src="${favorite.thumbnail!''}" class="mistake">
+	 						</a>
+	 					</div>
+	 					<div class="c_right">
+	 						<h3>
+		 						<a href="goods-${favorite.goods_id}.html?type=3" class="collect_intro">
+		 							<@substring	title="${favorite.name}" length="30" dot="..." />
+		 						</a>
+	 						</h3>
+	 						<p>￥${favorite.price?string("0.##")}</p>
+	 					</div>
+	 				</div>
+	 				<div class="c_tools">
+	 					<!-- <a href="javascript:;" class="go_cart" rel="${favorite.goods_id}" >加入购物车</a>
+	 					<a href="goods-${favorite.goods_id}.html">查看详细</a> -->
+	 					<a href="javascript:;" class="collect_del" rel="${favorite.favorite_id}" style="border:0px none;">删除收藏</a>
+	 				</div>
+	 			</li>
+		 	</#list>

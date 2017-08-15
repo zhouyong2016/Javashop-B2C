@@ -1,0 +1,232 @@
+<#assign memberBonusListTag=newTag("memberBonusListTag")/> 
+<#assign bonusList = memberBonusListTag("'type':0") /> 
+<#assign memberUsedBonusListTag = newTag("memberUsedBonusListTag") /> 
+<#assign memberUsedBonusList = memberUsedBonusListTag() /> 
+<#macro bonusTypeName type> 
+	<#if type=="0"> 会员发放
+		<#elseif type=="1"> 商品发放 
+		<#elseif type=="2"> 订单发放 
+		<#elseif type=="3"> 线下发放的红包 
+	</#if> 
+</#macro>
+
+<div class="cartPop" style="display:none">
+	<div class="popDemo">
+			<b>
+				实体券：
+				<a class="bonusADD" href="javascript:;">再用一张</a>
+			</b>
+		<table cellspacing="0" class="trun-bouns">
+			<tbody>
+				<tr>
+					<td align="left" class="bonusSPAN">
+						<#list memberUsedBonusList as bonus>
+	                	 <div>
+	                        <input type="text" value="${bonus.bonus_sn}" disabled="disabled" >
+	                        <a class="userY" href="javascript:;" style="display:none">使用</a>
+	                        <a class="userQ" href="javascript:;">取消</a>
+	                    </div>
+	                	 </#list>
+						<div class="bonusC01">
+							<input type="text" value="" class="bonus_sn01"> 
+							<a class="userY" href="javascript:;" style="display:block;">使用</a> 
+							<a class="userQ" href="javascript:;">取消</a>
+						</div>
+						
+						<div class="bonuscopy" style="display:none;">
+							<input type="text" value="" class="bonus_sn01"> 
+							<a class="userY" href="javascript:;" style="display:block;">使用</a> 
+							<a class="userQ" href="javascript:;">取消</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table  cellspacing="0" class="electronic-list">
+			<tbody>
+				<tr>
+					<td >电子券：</td>
+				</tr>
+				<tr>	
+					<td style="text-align: left;">
+					<select id="electronic"  name="bonus">
+							<option value="0">不使用优惠券</option>
+							<#list bonusList.bonusList as bonus>
+								<option value="${bonus.bonus_id}"
+									<#if bonus.used?exists&& bonus.used==1>selected="selected"</#if> >
+									${bonus.type_name}（<@bonusTypeName type="${bonus.send_type}"/>）[${bonus.type_money}]</option> 
+							</#list>
+					</select>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- <script>
+	$(function(){
+		var regionid = $(".c_addr7").val();
+		var typeid = $('input:radio[name="typeId"]:checked').val();
+		//添加优惠券
+		 $(".bonusADD").click(function(){
+			 if($(".bonusSPAN>div").size()>=3){
+				 alert("最多使用3个红包");
+				 return false;
+			 }
+			 var newInput = $(".bonusSPAN>div:first").clone();
+			 newInput.removeAttr("id").find("input").removeAttr("disabled").val("");
+			 newInput.find(".userY").show();
+			 $(".bonusSPAN").append(newInput);
+			 bindUseEvent();
+		 })
+		
+		 
+		//使用实体券 
+		 bindUseEvent();
+		 
+		 //取消优惠券
+		 $(".userQ").click(function(){
+			var ipt =  $(this).siblings("input");
+			var sn  = ipt.val();
+			var box = $(this).parent();
+			cancelBonus(sn,box);
+				
+		 })
+		
+		 //使用实体券
+		function bindUseEvent(){
+			$(".bonusSPAN .userY").unbind("click").bind("click",function(){
+				var ipt = $(this).prev("input");
+				var sn  = ipt.val();
+				if(sn==""){
+					alert( "请输入优惠券号码" );
+					return ;
+				}
+				var count =0; 
+				$(".bonusSPAN input").each(function(i,v){
+					if(v.value== sn){
+						count++;
+					}
+				});
+				
+				if(count>1 ){
+					alert("输入的号码重复");
+					ipt.select();
+					return ;
+				}
+				
+				useBonus(sn,ipt);
+			});
+			
+			$(".bonusSPAN .userQ").unbind("click").bind("click",function(){
+				var ipt =  $(this).siblings("input");
+				var sn  = ipt.val();
+				var box = $(this).parent();
+				cancelBonus(sn,box);
+			});
+		}
+		 
+		 
+		 //电子券
+		 $("#electronic").change(function(){
+			var bonusid = $(this).val();
+				if(regionid==null){
+					regionid=0;
+				}
+				if(typeid==null){
+					typeid=0;
+				}
+				$.ajax({
+					url:"api/shop/bonus!useOne.do?bonusid="+bonusid+"&regionid="+regionid+"&typeid="+typeid,
+					dataType:"json",
+					success:function(res){
+						if(res.result==1){
+							refreshTotal();
+						}else{
+							alert(res.message);
+						}
+					},
+					error:function(){
+						alert("糟糕，使用优惠券发生意外错误");
+					}
+				});
+		 })
+		 
+		//取消订单
+		function cancelBonus(sn,box){
+			if(sn==""){
+				if($(".bonusSPAN>div").size()>1){
+					box.remove();
+				}else{
+					box.find("input").removeAttr("disabled").val("");
+					box.find(".userY").show();
+				}
+				return false;
+			}
+				
+			$.ajax({
+				url:"api/shop/bonus!cancelSn.do?sn="+sn,
+				dataType:"json",
+				success:function(res){
+					if(res.result==1){
+						if($(".bonusSPAN>div").size()>1){
+							box.remove();
+						}else{
+							box.find("input").removeAttr("disabled").val("");
+							box.find(".userY").show();
+						}
+						 refreshTotal();
+					}else{
+						alert(res.message);
+					}
+				},
+				error:function(){
+					alert("糟糕，使用优惠券发生意外错误");
+				}
+			});
+			
+		}
+			
+			//使用实体券
+		function useBonus(sn,ipt){
+		if(regionid==null){
+			regionid=0;
+		}
+		if(typeid==null){
+			typeid=0;
+		}
+		$.ajax({
+			url:"api/shop/bonus!useSn.do?sn="+sn+"&regionid="+regionid+"&typeid="+typeid,
+			dataType:"json",
+			success:function(res){
+				if(res.result==1){
+					 ipt.attr("disabled",true);
+					 ipt.next().hide();
+					refreshTotal();
+				}else{
+					alert(res.message);
+				}
+			},
+			error:function(){
+				alert("糟糕，使用优惠券发生意外错误");
+			}
+		});
+	}
+			
+	//加载价格
+	function refreshTotal(){
+		var dlytype = $("[name=typeId]:checked");
+ 	 	if( dlytype.size()== 0 ){
+ 			$.alert("请选择配送方式");
+ 			return false;
+ 		}
+ 		$(".total").empty();
+ 		$(".total").load("checkout/checkout_total.html?regionId="+regionid+"&typeId="+typeid);    //加载购物车价格 
+	}
+	})
+	
+</script> -->
+
+
+

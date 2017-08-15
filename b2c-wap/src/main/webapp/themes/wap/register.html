@@ -1,0 +1,55 @@
+<#assign  title="会员注册" />
+<#include 'common/header.html'/>
+<script type="text/javascript">var forward = '${forward!''}'</script>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/login.css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/register.js"></script>
+<div class="register-form">
+    <div class="form ordinary-form show">
+        <div class="inner-form">
+            <div class="item ordinary username" id="username">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-username" maxlength="20" placeholder="4-20位不包含特殊字符">
+                </div>
+            </div>
+            <div class="item email" id="email">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-email" maxlength="30" placeholder="请输入邮箱">
+                </div>
+            </div>
+            <div class="item password">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-password" maxlength="20" placeholder="6-20位不包含中文字符">
+                    <div class="operate pwd"></div>
+                </div>
+            </div>
+            <div class="item password">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-password-again" maxlength="20" placeholder="请确认密码">
+                </div>
+            </div>
+            <div class="item validcode">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-validcode" maxlength="4" placeholder="请输入图片验证码">
+                    <img class="validcode-img" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="warm-tips show">
+    <div class="inner">
+        温馨提示: 注册本站即代表您已同意<a href="javascript:;" class="show-user-agreement" style="color: #0a89c7;">《用户服务协议》</a>
+    </div>
+</div>
+
+<div class="login">
+    <button type="button" class="register-btn" id="register-btn">立即注册</button>
+</div>
+
+<div id="demo"></div>

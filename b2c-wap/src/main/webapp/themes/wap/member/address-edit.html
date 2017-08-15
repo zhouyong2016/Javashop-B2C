@@ -1,0 +1,83 @@
+<#assign  title="编辑地址" />
+<#include '../common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/address.css"/>
+<script src="${ctx}/statics/e_tools/js/library/jquery.form.min.js"></script>
+<script src="${ctx}/statics/e_tools/mobile/js/jquery.addressSelect-mobile.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/page/address-add-edit.js"></script>
+<#if member??>
+    <#-- 创建收货人详细标签 -->
+    <#assign consigneeDetailTag = newTag("consigneeDetailTag")>
+    <#-- 调用收货人详细标签 -->
+    <#assign consigneeDetail = consigneeDetailTag('{"addressid":"${address_id}"}')>
+    <div class="address-add-edit">
+        <form id="address-form">
+            <input type="hidden" name="addr_id" value="${consigneeDetail.addr_id}">
+            <!--收货人-->
+            <div class="eui-item eui-hr-bottom">
+                <div class="eui-inner-item">
+                    <div class="title">收货人：</div>
+                    <div class="content">
+                        <input type="text" name="name" value="${consigneeDetail.name!''}" maxlength="20">
+                    </div>
+                </div>
+            </div>
+            <!--手机号-->
+            <div class="eui-item eui-hr-bottom">
+                <div class="eui-inner-item">
+                    <div class="title">手机号码：</div>
+                    <div class="content">
+                        <input type="tel" name="mobile" value="${consigneeDetail.mobile!''}" maxlength="11">
+                    </div>
+                </div>
+            </div>
+            <!--所在地区-->
+            <div class="eui-item eui-hr-bottom">
+                <div class="eui-inner-item">
+                    <input type="hidden" id="deData" value="${consigneeDetail.province_id},${consigneeDetail.city_id},${consigneeDetail.region_id},${consigneeDetail.town_id}">
+                    <div class="title">所在地区：</div>
+                    <div class="content select-address">
+                        <span></span>
+                    </div>
+                </div>
+                <i class="eui-item-point"></i>
+            </div>
+            <!--详细地址-->
+            <div class="eui-item eui-hr-bottom">
+                <div class="eui-inner-item">
+                    <div class="title">详细地址：</div>
+                    <div class="content">
+                        <input type="text" name="addr" value="${consigneeDetail.addr!''}" maxlength="30">
+                    </div>
+                </div>
+            </div>
+            <!--地址别名-->
+            <div class="eui-item eui-hr-bottom">
+                <div class="eui-inner-item">
+                    <div class="title">地址别名：</div>
+                    <div class="content">
+                        <input type="text" name="shipAddressName" value="${consigneeDetail.shipAddressName!''}" class="alias-input" maxlength="5">
+                        <div class="alias-items">
+                            <sapn class="alias-item">家里</sapn>
+                            <sapn class="alias-item">公司</sapn>
+                            <sapn class="alias-item">学校</sapn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--设为默认地址-->
+            <div class="eui-item">
+                <div class="eui-inner-item">
+                    <div class="set-def">设为默认地址</div>
+                    <div class="operate"></div>
+                    <input type="hidden" id="set-def-addr" name="def_addr" value="${consigneeDetail.def_addr}">
+                </div>
+            </div>
+            <div class="eui-save-button">
+                <button type="button" id="save-btn">保存修改</button>
+            </div>
+        </form>
+    </div>
+</#if>
+<#include '../common/footer.html'/>

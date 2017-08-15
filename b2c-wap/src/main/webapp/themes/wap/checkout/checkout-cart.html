@@ -1,0 +1,47 @@
+<#-- 创建购物车标签 -->
+<#assign cartTag = newTag("cartCheckTag") />
+<#assign itemList = cartTag() />
+    <#if itemList?exists && itemList?size == 1>
+        <#list itemList as item >
+            <div class="sigle-item">
+                <div class="img-sigle-item">
+                    <div class="inner-img-sigle-item">
+                        <img src="${item.image_default!''}">
+                    </div>
+                </div>
+                <div class="content-sigle-item">
+                    <div class="name-sigle-item">${item.name}</div>
+                    <div class="price-sigle-item">
+                        <div class="sitem-sam-l cf">
+                    <span class="price-box">
+                        <#assign price = item.price?string('0.00') />
+                        <#assign _length = price?length />
+                        <em>￥</em><span class="price">${price?substring(0, _length - 3)}</span><em>${price?substring(_length - 3, _length)}</em>
+                    </span>
+                        </div>
+                        <span class="sam-num">×${item.num!'1'}</span>
+                    </div>
+                </div>
+            </div>
+        </#list>
+    <#else />
+        <a href="./checkout-cart-list.html" class="eui-block">
+            <div class="more-item">
+                <div class="more-item-list">
+                    <#assign itemCount = 0 />
+                    <#list itemList as item >
+                        <#assign itemCount = itemCount + item.num />
+                        <#if (item_index < 4)>
+                            <div class="img-more-item-list">
+                                <img src="${item.image_default!''}">
+                                <p>×${item.num!'1'}</p>
+                            </div>
+                        </#if>
+                    </#list>
+                </div>
+                <div class="more-item-count">共${itemCount}件</div>
+                <div style="clear: both;"></div>
+            </div>
+            <i class="eui-item-point"></i>
+        </a>
+    </#if>

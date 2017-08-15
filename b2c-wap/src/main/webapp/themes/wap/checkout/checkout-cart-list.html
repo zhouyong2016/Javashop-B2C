@@ -1,0 +1,44 @@
+<#assign  title="购物清单" />
+<#include '../common/header.html'>
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+<#-- 创建购物车标签 -->
+<#assign cartTag = newTag("cartCheckTag")>
+<#assign itemList = cartTag() >
+<div class="checkout-cart-list">
+    <#list itemList as item >
+        <div class="list-item">
+            <div class="container-item">
+                <div class="img-container-item">
+                    <div class="box-img">
+                        <img src="${item.image_default!'${ctx}/statics/e_tools/images/beifang/beifang-no_img.png'}">
+                    </div>
+                </div>
+                <div class="title-container-item">
+                    <div class="name-container-item">${item.name}</div>
+                    <div class="detail-container-item">
+                        <div class="price-box">
+                            <#assign price = item.price?string('0.00') />
+                            <#assign _length = price?length />
+                            <span class="price-box-span"><em>￥</em><span class="price">${price?substring(0, _length - 3)}</span><em>${price?substring(_length - 3, _length)}</em></span>
+                        </div>
+                        <span class="sam-num">×${item.num!'1'}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="gift-item">
+                <div>
+                </div>
+            </div>
+        </div>
+
+
+    </#list>
+</div>
+<style type="text/css">body{background-color: #fff;}</style>
+<script type="text/javascript">
+    $(function () {
+        var module = new Module();
+        module.navigator.init('购物清单');
+    })
+</script>
+<#include '../common/footer.html'/>

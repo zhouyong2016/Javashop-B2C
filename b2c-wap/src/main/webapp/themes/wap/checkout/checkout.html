@@ -1,0 +1,283 @@
+<#assign  title="商品结算" />
+<#include '/common/header.html'>
+<#-- 创建会员登录标签 -->
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<#if member??>
+	<#-- 创建订单结算检测标签 -->
+	<#assign orderSettleCheckTag= newTag("orderSettleCheckTag") />
+	<#-- 获取订单检测结果地址  -->
+	<#assign checkResult = orderSettleCheckTag() />
+
+    <#assign region_id = 0 >
+    <#assign defaultConsigneeTag= newTag("defaultConsigneeTag") />
+    <#assign defAddress = defaultConsigneeTag()!'none' />
+    <#if defAddress!='none'><#assign region_id = defAddress.region_id /></#if>
+
+    <#-- 创建会员默认支付方式和配送方式和送货日期标签 -->
+    <#assign orderPaymentDlytypeTag= newTag("orderPaymentDlytypeTag") />
+    <#-- 获取会员默认支付方式和配送方式和送货日期  -->
+    <#assign pd = orderPaymentDlytypeTag() />
+    <#assign type_id = pd.dlytype.type_id />
+
+    <#assign activityCurrDetailTag = newTag("activityCurrDetailTag") />
+    <#assign activity = activityCurrDetailTag() />
+    <#if activity?exists && activity?size gt 0>
+        <#list activity as act>
+            <#assign activity_id = act.activity_id />
+            <#assign is_send_gift = act.is_send_gift />
+            <#assign is_send_bonus = act.is_send_bonus />
+            <#assign is_send_point = act.is_send_point />
+            <#assign full_money = act.full_money />
+            <#assign gift_id = act.gift_id />
+            <#assign bonus_id = act.bonus_id />
+            <#assign point_value = act.point_value!0 />
+            
+            
+        </#list>
+    </#if>
+
+    <#-- 创建结算订单金额标签 -->
+    <#assign checkoutOrderTotalTag = newTag("checkoutOrderTotalTag") />
+    <#-- 调用结算订单金额标签, 需要传递参数regionId(地区id)及typeId(配送方式id)及activity_id(促销活动id，没有就传递0) -->
+    <#assign orderPrice = checkoutOrderTotalTag("{'regionId':${region_id},'typeId':${type_id},'activity_id':${activity_id!0}}") />
+
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+    <script type="text/javascript" src="${ctx}/statics/e_tools/js/library/jquery.cookie.min-1.4.1.js"></script>
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout.js"></script>
+    <!-- 商品结算 -->
+    <div class="checkout">
+        <!--收货地址-->
+        <div class="eui-item address-list">
+            <div class="eui-inner-item">
+                <#if defAddress!='none'>
+                    <a href="javascript:location.replace('../member/address-list.html?back=checkout');" class="eui-block">
+                        <div class="title-def-address">
+                            <div class="title-def-address-name">${defAddress.name!''}</div>
+                            <div class="title-def-address-phone">${defAddress.mobile?substring(0,3)}****${defAddress.mobile?substring(7,11)}</div>
+                            <div class="title-def-address-default" id="address-default">
+                                默认
+                            </div>
+                        </div>
+                        <div class="contnet-def-address">
+                            <i class="location-icon"></i>
+                            <span class="address-where">${defAddress.province!''} ${defAddress.city!''} ${defAddress.region!''} ${defAddress.town!''} ${defAddress.addr!''}</span>
+                            <span style="display: none;">
+                                <input type="hidden" name="addressId" value="${defAddress.addr_id}">
+                                <input type="hidden" name="shipName" value="${defAddress.name!''}">
+                                <input type="hidden" name="shipMobile" value="${defAddress.mobile!''}">
+                                <input type="hidden" name="shipAddr" value="${defAddress.addr!''}">
+                                <input type="hidden" name="province" value="${defAddress.province!''}">
+                                <input type="hidden" name="city" value="${defAddress.city!''}">
+                                <input type="hidden" name="region" value="${defAddress.region!''}">
+                                <input type="hidden" name="town" value="${defAddress.town!''}">
+                                <input type="hidden" name="province_id" value="${defAddress.province_id!''}">
+                                <input type="hidden" name="city_id" value="${defAddress.city_id!''}">
+                                <input type="hidden" name="region_id" value="${defAddress.region_id!''}">
+                                <input type="hidden" name="town_id" value="${defAddress.town_id!''}">
+                            </span>
+                        </div>
+                    </a>
+                <#else/>
+                    <div class="no-address">新建收货地址以确保商品顺利送达</div>
+                </#if>
+            </div>
+            <#if defAddress!='none'>
+                <i class="eui-item-point"></i>
+            </#if>
+        </div>
+        <div class="address-list-hr"></div>
+
+        <!--商品清单-->
+        <div class="eui-item checkout-cart">
+            <div class="eui-inner-item">
+            <!--商品条目-->
+                <#include './checkout-cart.html'/>
+            </div>
+        </div>
+ 		
+        <!--支付配送-->
+        <div class="eui-item checkout-pay">
+            <div class="eui-inner-item">
+                <!--支付配送-->
+                <div class="pay-ship">
+                    <a href="javascript:location.replace('./checkout-pay-ship.html?back=checkout&region_id=${region_id}');" class="eui-block">
+                        <div class="potive">
+                            <span class="pay-item">
+                                <p class="pay-title">支付配送</p>
+                                <p class="pay-way-box">
+                                    <span class="pay-way"><#if pd.paymentId == 0>在线支付<#elseif pd.paymentId == 3>货到付款</#if></span>
+                                    <input type="hidden" name="paymentId" value="${pd.paymentId!'0'}">
+                                    <span class="ship-way">${pd.dlytype.name}</span>
+                                    <input type="hidden" name="typeId" value="${type_id}">
+                                </p>
+                            </span>
+                            <span class="point-left"></span>
+                        </div>
+                        <span class="ship-time">
+                            <span><i class="clock-pic"></i>配送时间： ${pd.shipDay!'任意时间'}</span>
+                            <input type="hidden" name="shipDay" value="${pd.shipDay!'任意时间'}">
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <i class="eui-item-point"></i>
+        </div>
+        <!--发票信息-->
+        <div class="eui-item checkout-receipt">
+            <div class="eui-inner-item">
+             	<#-- 创建结算页发票信息标签 -->
+                <#assign checkoutReceiptTag= newTag("checkoutReceiptTag")>
+                <#-- 获取结算页发票信息标签  -->
+                <#assign receipt = checkoutReceiptTag() >
+                <a href="javascript:location.replace('./checkout-receipt.html?back=checkout');" class="eui-block">
+                    <div class="receipt">
+                        <div class="receipt-box">
+                            <#if receipt.is_have == 0>
+                                <span class="title-receipt">发票信息</span>
+                                <div class="receipt-info">
+                                    <div class="dont-need-receipt">不开具发票</div>
+                                </div>
+                                <input type="hidden" name="receipt" value="0">
+                            <#else>
+                                <span class="title-receipt have-receipt">发票信息</span>
+                                <div class="receipt-info">
+                                    <div class="content-receipt">纸质发票-${receipt.receiptTitle!''}</div>
+                                    <div class="mc re-info02"></div>
+                                    <div class="head-receipt">${receipt.receiptContent!''}</div>
+                                </div>
+                                <input type="hidden" name="receipt" value="1">
+                                <input type="hidden" name="receiptType" value="${receipt.receiptType!''}">
+                                <input type="hidden" name="receiptTitle" value="${receipt.receiptTitle!''}">
+                                <input type="hidden" name="receiptContent" value="${receipt.receiptContent!''}">
+                            </#if>
+                            <span class="s-point"></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <i class="eui-item-point"></i>
+        </div>
+
+        <!--优惠券-->
+        <div class="eui-item checkout-bonus">
+            <div class="eui-inner-item">
+            	<#--读取可用优惠券标签 -->
+                <#assign myBonusByUsableTag= newTag("myBonusByUsableTag")>
+                <#--返回可用优惠券列表 -->
+                <#assign bonus = myBonusByUsableTag() >
+                <a href="javascript:location.replace('./checkout-bonus.html?back=checkout&type_id=${pd.dlytype.type_id}&region_id=${region_id}');" class="eui-block">
+                    <div class="title-bonus">
+                        优惠券
+                        <i class="num-bonus">${bonus.totalCount!'0'}张可用</i>
+                    </div>
+                    <div class="use-bonus">
+                        <#if orderPrice.discountPrice != 0>
+                            <span style="color: #ff6700;">-￥${orderPrice.discountPrice?string('0.00')}</span>
+                            <input type="hidden" name="bonus" id="bonusId">
+                        <#else/>
+                            未使用
+                        </#if>
+                    </div>
+                    <div style="clear: both;"></div>
+                </a>
+            </div>
+            <i class="eui-item-point"></i>
+        </div>
+
+        <!--备注信息-->
+        <div class="eui-item checkout-remark">
+            <div class="eui-inner-item eui-hr-top">
+                <a href="javascript:;" class="eui-block" id="open-remark">
+                    <div class="title-bonus">
+                        备注信息：
+                    </div>
+                    <div class="use-bonus view-remark" id="view-remark">
+                        未填写
+                    </div>
+                    <input type="hidden" name="remark" id="data-remark" value="">
+                    <div style="clear: both;"></div>
+                </a>
+            </div>
+            <i class="eui-item-point"></i>
+        </div>
+        <#if activity?exists && activity?size gt 0>
+	        <#if activity_id != 0 && orderPrice.goodsPrice gte full_money>
+		         <#if is_send_point == 1>
+		         	<input type="hidden" name="activity_point" value="${point_value}">
+		         </#if>
+		         <#if is_send_gift == 1>
+		         	<input type="hidden" name="gift_id" value="${gift_id}">
+		         </#if>
+		         <#if is_send_bonus == 1>
+		         	<input type="hidden" name="bonus_id" value="${bonus_id}">
+		         </#if>
+			</#if>
+		</#if>
+        <!--金额统计-->
+        <div class="eui-item checkout-count">
+            <div class="eui-inner-item">
+                <div class="count-item">
+                    <div class="title-count-item">商品金额</div>
+                    <div class="value-count-item">￥${orderPrice.goodsPrice?string('0.00')}</div>
+                </div>
+
+                <div class="count-item">
+                    <div class="title-count-item">运费</div>
+                    <div class="value-count-item">￥${orderPrice.shippingPrice?string('0.00')}</div>
+                </div>
+				<input type="hidden" name="activity_id" value="${activity_id!0}">
+                <#if orderPrice.is_free_ship == 1>
+                    <div class="count-item">
+                        <div class="title-count-item">促销活动免运费</div>
+                        <div class="value-count-item">-￥${orderPrice.shippingPrice?string('0.00')}</div>
+                        <input type="hidden" name="freeShip" value="${orderPrice.shippingPrice?string('0.00')}">
+                    </div>
+                </#if>
+
+                <#if orderPrice.discountPrice != 0>
+                    <div class="count-item">
+                        <div class="title-count-item">优惠金额</div>
+                        <div class="value-count-item">-￥${orderPrice.discountPrice?string('0.00')}</div>
+                    </div>
+                </#if>
+
+                <#if orderPrice.actDiscount != 0>
+                    <div class="count-item">
+                        <div class="title-count-item">促销减价</div>
+                        <div class="value-count-item">-￥${orderPrice.actDiscount?string('0.00')}</div>
+                         <input type="hidden" name="act_discount" value="${orderPrice.actDiscount?string('0.00')}">
+                    </div>
+                </#if>
+            </div>
+        </div>
+
+        <div style="height: 50px; clear: both;"></div>
+
+        <!--提交订单浮动-->
+        <div class="submit-order">
+            <div class="left-submit-order">
+                <#assign needPayMoney = orderPrice.needPayMoney?string('0.00') />
+                <#assign _length = needPayMoney?length />
+                <div class="inner-left">
+                    应付款：
+                    <span>￥ <span class="big-price">${needPayMoney?substring(0, _length - 3)}</span>${needPayMoney?substring(_length - 3, _length)}</span>
+                </div>
+            </div>
+            <div class="right-submit-order" id="cerate-order">
+                提交订单
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    
+    <#-- 检测结果 -->
+	<#if checkResult.result == 1 >
+		alert("${checkResult.errorMessage!''}");
+	</#if>
+    
+    </script>
+    
+</#if>
+<#include '/common/footer.html'/>

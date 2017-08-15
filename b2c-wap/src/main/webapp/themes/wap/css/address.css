@@ -1,0 +1,183 @@
+/* address-list
+ ============================================================================ */
+.address-list {
+    background-color: #fff;
+    padding: 10px;
+}
+
+.address-list .item {
+    display: flex;
+    position: relative;
+    padding-right: 50px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.address-list .select {
+    float: left;
+    display: none;
+    width: 30px;
+    overflow: hidden;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACAUlEQVRoQ+2Y4U3CQBiGn9NIQkkM/jPREkZwBEZgA3ACdQIdAScAJzBMwAjqBoZq4k+MARKMnqkE21RK73ottMn1b+++e5/3/Vq+Iij5JUquHwuw6wRtAjYBQwdsCxkaaLzdJmBsoWEBm4ChgcbbC52ApF6fc9gRLIZV3p7X0RYWwBc/43Ak4EzCpMb4qDQAYfG+aAnvNcb1UgBExfuiBfK8ijcoBcAMdwSitRK7SfwSrkDXFLcvEF1V8YUCiIoHrhzGvSR/C5FAVLxE3tXw/pLYBLFzgCmNGwHXK5E64nfeQnPcrkT004rfKUBUPMihg9dO6vno/dgWWh5AR8Bd3DtY97DV+jXOPzl8tASTiW7NWIAZDRkUkz0H70q3+Lr1U9y2QNyH2ia1+I0tNMUdCEQndNCghnduArHg5OyTfX+++R0LJNJIfOIzkCVEHuITAfwFWUD8F8/7AV+tCq+PJokqAZhCzDluflN5CNomO/HKAGkh1o3FWTkfzEsaGeq00zbEayWw4lSB0J3pNTz8tzTVLLQJYpviUyWQlESamX7rCcRBAP4/B83gAYv/FDQRHd6bqoXCBaLtFNz7vnV4ucxKaFwdY4CYV6zyB4kpYCYAvogZpz3Yu4DtOJ/qd8DUrTz2Z5ZAHuJUaloAFZfyXGMTyNNdldo2ARWX8lxT+gR+AL+26TF1bjuTAAAAAElFTkSuQmCC') no-repeat left;
+    background-size: 20px 20px;
+}
+
+.address-list .item.selected .select {
+    display: block;
+}
+
+.address-list .content {
+    float: left;
+    width: 100%;
+}
+
+.address-list .info-address {
+
+}
+
+.address-list .name-address {
+    min-width: 60px;
+    overflow: hidden;
+}
+
+.address-list .alias-address {
+    display: inline-block;
+    height: 13px;
+    font-size: 12px;
+    border: 1px solid #686868;
+    line-height: 15px;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.address-list .name-address,
+.address-list .mobile-address{
+    display: inline-block;
+    font-size: 14px;
+    line-height: 15px;
+    margin-right: 15px;
+    overflow: hidden;
+}
+
+.address-list .item.selected .name-address,
+.address-list .item.selected .mobile-address {
+    color: #ff6700;
+}
+
+.address-list .content-address {
+    color: #666;
+    font-size: 13px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.address-list .def-address-icon {
+    padding: 1px 7px;
+    background: #f23030;
+    color: #fff;
+    font-size: 12px;
+    font-style: normal;
+    margin-right: 5px;
+}
+
+.address-list .edit-icon {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 38px;
+    height: 36px;
+    margin-top: -23px;
+    border-left: 1px solid #cbcacf;
+    background-size: 0 0;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
+
+.address-list .edit-icon.edit {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABoElEQVRoQ+2Z/U3DMBDFXyeCDWAERmCExwS0E/A2AEZgg3YCYBM2AJ1kI6v5sJ3EiSP5pP7T+uP37s5uLnfAzu2wc340AWtFkOQjgBcAb5Ke/L67iABJA6eHlvTPXb0Akq8AzPvePiQ9JEeA5DOAe/cpkTEnSce+hXvg3yWFYsYPMclPALclqMM1w5Tw36fA29jBFCJpXjHvl7ZOBFLhYwJC7w+GeWl1OfAxAb99p35p4HC9XPiqBEyBr0bAVPgqBMyB31zAXPhNBaTAB1f54C049j9Q7BZKgTfvkowyrC4gFb5KATnw1QnIha9KwBT4agRMha9CwBz4zQWQtBLQSkFvnWIk9mC46TXqinArB82y4TePgAOw2vVH0jnm7b7fN43AFODrOU3A2hVZi8BVfRp9Elwiz8fWaGegnYGZOdZSqKVQS6EKi/qcoLRDvPdD/AXgxok4SjrlhH/uWNfa8q2niyRrc3Wshg5Nitb8V4uuogqjkLJRiTHfkgb7dNE2q3vBauG7K0E3suYFwHmog+nnRQWsDJ29XROQ7bKFJ/wBBH2EQIpU6mQAAAAASUVORK5CYII=') no-repeat center;
+    background-size: 20px 20px;
+}
+
+.address-list .edit-icon.delete {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAB2klEQVRoQ+2Z21XCQBCGv6ECOxArECvQDixBXwx2AXQh8UU70A6kArACsQI7cDyEa4Dg7G4W5Lh7Tt4m/8w/t2xmhCM/cuT2838JaEYH4QqKx/8oI+BFcno+IF4R0IwhQstHYeU7ykhyLlwxnQloRheh46rIJK/0JKdrkp0J+RBYet9D4bpxJYcoA8ndUtKdQBudGyH9epqABmAmAi75WiVbWwT0nibf3Ow0SlaKTN0KrhLXBbPBszwwXqTxKqi2+QCadXg1IsZY+pxtJ5AxRjiNqDwcWvmUfOnkUhHPUug2XEtEhAZPlSkUUW00aOc2Gs0ST2ATAb2jhXCN8iqPxeVr4yw62FqXKDWJeZcLlFnFtBHI+EI4AUodoKKDRZdxJ2D41Fs+RnXJJAJba2CPUUoRSBEAqv4lLIWeUiilUEqhZQ7YrhJ77PGpiA9doCkCKQKBLTKlkHcKzafWOwa+i0HuLhlDy45yF/L8J9/8t04Etk0cHL0SEo2DFXGI0WvTDaf9Q213ob9OYDLMOi+MVLq+G8XfSM42n9MdmXHdZItAzMVeFSvj/s1EoHBIuxgpTqMQ/7xL37bGNRMoSEwiMVlsC5dROCgD4M1l1epEIIrRgaCJQKADg1//AZKJekBHCJf/AAAAAElFTkSuQmCC') no-repeat center;
+    background-size: 20px 20px;
+}
+
+
+.address-delete-icon {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABl0lEQVRoQ+2Z4U0DMQyFv27ABsAEwAR0A0aATYBNYAPYoJ0AmACYgBGoLCVVer1LHd+lyoEj9Vcd5z372U3jBTNfi5nj518TuAeW4TMmke/AC/BocWLNwBtwaTkws0eIXJX6tBB4ACT6NZZkQfyrl4VAGv3iA3uQpQFZl0rSQuA3AWHZ3xdds08LAPNhGV2Yff45AmfA7YEKSousqOAyfkt8PgNf0Vc3A5+AkGh5CfjzIQLy5WnL6IHvNMjdDEj07xon8JSTUOPY9+FZulBTJLUE5N5zA7wCcmfpW7GD7XSJjuFUNlu3WgI/wEnQ3rYDdMDFDrbTJSrZFBPQ/FIe08YJWC9kU2XJM+AZgMEHBY3MXEIuIZdQ0ID2KqEprGPaeBF7EXsRexHvV8Hsu1B8pM09+GpsNIGo0kan+rPvBKw93jMQIuAS6pOCPGZdhC+kk5gmigqNyewtPrWrxk3a22jNwd4QL9X8TUtADkmzoAjmKJMP7Ri3hIAgkkzIcPt6FLzhzSKbVcmotZRAJdx2t07AHrtpdm4ADbqKMXIDrEsAAAAASUVORK5CYII=') no-repeat center;
+    background-size: 20px 20px;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+/* address-add-edit
+ ============================================================================ */
+
+.address-add-edit .eui-item {
+    position: relative;
+}
+
+.address-add-edit .eui-inner-item {
+    padding: 10px 10px 10px 0;
+}
+
+.address-add-edit .title {
+    float: left;
+    width: 25%;
+    font-size: 14px;
+    line-height: 30px;
+}
+
+.address-add-edit .content {
+    position: relative;
+    float: left;
+    width: 75%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+}
+
+.address-add-edit .content .alias-input {
+    max-width: 80px;
+    overflow: hidden;
+}
+
+.address-add-edit .content .alias-items {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.address-add-edit .content .alias-item {
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 5px;
+    width: 50px;
+    height: 20px;
+    border: 1px solid #686868;
+    text-align: center;
+    line-height: 20px;
+}
+
+.address-add-edit .content input {
+    width: 100%;
+    border: none;
+    height: 30px;
+}
+
+.address-add-edit .set-def {
+    float: left;
+    font-size: 14px;
+    line-height: 28px;
+}
+
+.address-add-edit .operate {
+    float: right;
+}

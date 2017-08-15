@@ -1,0 +1,68 @@
+<#assign  title="发票信息" />
+<#include '../common/header.html'>
+<#-- 创建会员登录标签 -->
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<#if member??>
+    <link rel="stylesheet" type="text/css" href="${ctx}/statics/e_tools/mobile/library/icheck/skins/flat/red.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css"/>
+    <script type="text/javascript" src="${ctx}/statics/e_tools/mobile/library/icheck/icheck.min.js"></script>
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout-receipt.js"></script>
+    <#-- 创建结算页发票信息标签 -->
+    <#assign checkoutReceiptTag= newTag("checkoutReceiptTag")>
+    <#-- 获取结算页发票信息标签  -->
+    <#assign receipt = checkoutReceiptTag() >
+    <div class="checkout-receipt">
+        <!--发票类型-->
+        <div class="item receipt-type">
+            <div class="title-receipt">
+                <h2>发票类型</h2>
+            </div>
+            <div class="type-receipt-type">
+                <a href="javascript:;" id="dont-need-receipt" class="eui-checkbox-btn<#if receipt.is_have == 0> checked</#if>">不开具发票</a>
+                <a href="javascript:;" class="eui-checkbox-btn<#if receipt.is_have == 1> checked</#if>">纸质发票</a>
+            </div>
+        </div>
+        <!--发票抬头-->
+        <div class="item receipt-head">
+            <div class="title-receipt">
+                <h2>发票抬头</h2>
+                <span>可输入个人/单位名称</span>
+            </div>
+            <div class="head-receipt">
+                <div class="input-receipt">
+                    <input type="text" id="receiptTitle" placeholder="请输入个人或单位名称" value="${receipt.receiptTitle!''}" maxlength="30">
+                </div>
+            </div>
+        </div>
+        <!--发票内容-->
+        <div class="item receipt-content">
+            <div class="title-receipt">
+                <h2>发票内容</h2>
+            </div>
+            <div class="content-receipt">
+                <#assign receiptContent = receipt.receiptContent!'明细'>
+                <label for="detail">
+                    <input type="radio" class="icheck" id="detail" name="iCheck" value="明细" <#if receiptContent == '明细'>checked</#if>>
+                    <span class="item-content">明细</span>
+                </label>
+                <label for="supplies">
+                    <input type="radio" class="icheck" id="supplies" name="iCheck" value="耗材" <#if receiptContent == '耗材'>checked</#if>>
+                    <span class="item-content">耗材</span>
+                </label>
+                <label for="office">
+                    <input type="radio" class="icheck" id="office" name="iCheck" value="办公用品" <#if receiptContent == '办公用品'>checked</#if>>
+                    <span class="item-content">办公用品</span>
+                </label>
+                <label for="pc">
+                    <input type="radio" class="icheck" id="pc" name="iCheck" value="电脑配件" <#if receiptContent == '电脑配件'>checked</#if>>
+                    <span class="item-content">电脑配件</span>
+                </label>
+            </div>
+        </div>
+        <div class="eui-save-button">
+            <button type="button" id="save-btn">保存修改</button>
+        </div>
+    </div>
+</#if>
+<#include '../common/footer.html'/>

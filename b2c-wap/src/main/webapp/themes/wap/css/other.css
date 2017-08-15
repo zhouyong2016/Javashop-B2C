@@ -1,0 +1,276 @@
+.register-box h1{
+	padding: 23px 0 20px;
+	font-size: 1.1rem;
+	    color: #333;
+    line-height: 1.5;
+    widht:100%;
+    text-align:center;
+    font-weight:200;
+}
+.logn{width:100%;overflow:hidden;}
+.logn .m_account{
+	padding:0px 0px 15px 0px;height:2.6rem;
+}
+
+
+
+.logn .m_account .same-input{
+	    width: 90%;
+    height: 44px;
+    line-height: normal;
+    padding:0px 5%;
+    border: 1px solid #d7d7d7;
+    border-radius: 3px;
+    background: #fff;
+    color: #252525;
+    -webkit-appearance: none;
+}
+.reg-code{
+    height: 44px;
+    line-height: normal;
+    border: 1px solid #d7d7d7;
+    border-radius: 3px;
+    background: #fff;
+    font-size:1rem;
+    color: #252525;
+    position:relative;
+    -webkit-appearance: none;
+    
+     display: box;
+    display: -webkit-box;
+    text-align: center;
+    
+    
+}
+.reg-code input{
+	width:9rem;height:44px;border:0px none;margin:0px 0px 0px 1rem;
+}
+.reg-code img{
+	position:absolute;right:0px;top:0px;height:44px;
+}
+.register_agree{margin:1rem 0px;}
+.register_ok{width:100%;height:3rem;line-height:3rem;text-align:center;background:#51c422;border:0px none;border-radius:5px;color:#fff;font-size:1rem;}
+.go-login{margin:0.5rem 0px;}
+.go-login i{color:#4287cf;margin:0px 0px 0px 5px;text-decoration:underline}
+.login-img{
+	    padding: 50px 10% 22px 10%;width:80%;text-align:center
+}
+h3{
+	width:80%;
+	font-size: 1.2rem;
+    color: #424242;
+    font-weight: normal;
+    padding: 0px 10% 0px 10%;
+    text-align:center;
+    font-family: arial,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei","微軟正黑體","儷黑 Pro",sans-serif;
+}
+.logn{
+	width:80%;padding:0.4rem 10%;
+}
+.logn .login-box input{
+	width:90%;
+	border:0px none;
+	padding: .3rem 5%;
+    line-height: normal;
+    display: block;
+    border-radius:0px;
+    height:1.8rem;
+    font-family: arial,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+    box-shadow:0 none;
+}
+.logn .login-box .definition_small{
+	border-bottom:1px solid #ddd;   border-radius:10px 10px 0px 0px; 
+}
+.login_code{
+	width:100%;height:2.4rem;background:#fff;
+	 border-radius:0px 0px 10px 10px;border-top:1px solid #ddd;
+	-webkit-appearance: none;
+    display: box;
+    display: -webkit-box;
+    text-align: center;
+    overflow:hidden;
+}
+.login_code input{
+	width:9rem;height:2.4rem;border:0px none;margin:0px 0px 0px 1rem;
+	  display: block;
+}
+.login_code img{
+	height:2.4rem;border-radius: 0px 0px 10px 0px;
+    display: block;
+    width: 100%;
+    -webkit-box-flex: 1;
+    box-flex: 1;}
+.login-ok{
+	    width:100%;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    background: #51c422;
+    border: 0px none;
+    border-radius: 5px;
+    margin: 2rem 0px 0.8rem 0px;
+    color: #fff;
+    font-size: 1rem;
+}
+.login-go-register{width:100%;padding:-2px 0px 3rem 0px;}
+.login-go-register i{color:#4287cf}
+
+
+
+
+/***********找回密码********/
+.find-title{width:100%;overflow:hidden;}
+.find-title ul{
+	    background-color: #ffffff;
+    border-bottom: 1px solid #e2e2e2;
+    display: flex;
+    height: 44px;
+    justify-content: space-between;
+    width: 100%;
+}
+.find-title ul li{
+	  text-align: center;
+    width: 50%;
+    color: #333;
+    display: inline-block;
+    font-size: 14px;
+    height: 42px;
+    line-height: 42px;
+text-align:center;    
+}
+.find-title ul .selected{
+	 border-bottom: 2px solid #ff6700;
+    color: #ff6700;
+}
+.find-by-email{width:100%;overlfow:hidden;}
+.find-by-email .find-way{width:100%;overflow:hidden;text-align:center;margin:1rem 0 0 0;}
+.find-by-email .find-way span{float:left;overflow:hidden;height:1.5rem;line-height:1.5rem;width:25%;font-weight:200;margin:0 5% 0 3%;}
+.find-by-email .find-way label{float:left;height:1.5rem;line-height:1.5rem;text-align:center;margin:0 0 0 2%;width:30%;}
+.find-by-email .find-way label input{display:inline-block;margin:0  0.2rem 0 0;float:left;height:1.5rem;line-height:1.5rem;}
+.find-by-email .find-way label p{display:inline-block;text-align:left;float:left;height:1.5rem;line-height:1.5rem;}
+.find-word{width:88%;margin:1rem auto;border:0px none;border-bottom: 1px solid #e2e2e2;padding:0 0 0 2%;height:2rem;line-height:2rem;display:block;}
+.find-password{width:100%;overlfow:hidden;}
+.find-password a{
+		width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #9bc45e;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    display:block;
+    margin:0.5rem auto 0 auto;
+}
+.find-password .btn-default{
+	background-color:#c2c2c2;
+}
+.same-find-phone{
+	    border-bottom: 1px solid #e2e2e2;    
+	    height: 1rem;
+    	padding: 12px 0;
+    	width:90%;
+    	margin:0 auto 0.2rem auto;
+    	position:relative;
+    	
+}
+
+.same-find-phone i{
+	    display: inline-block;
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACHUlEQVRoQ+2aS1LbQBCGv3ZVCnbhBoETQG6QnABugLzAZhdugLlBssNmYR0BThDfIHACxAlCdlSlyk1pPOJhnExLyLKgRtuZ+af/fmmme4Q3/kkZ+TVhgw9sI3wps848V5nwlytJubWuMRPQHnvAGGHDCl5pnjrhuzLi3LLeREAP2KHDLwtgbXOmfJYzLkN4NgJ9p41dB6bcAGkIuOJ4gvDJr72QobP6fz8bgR6/H1xH2JJTshBwlXE9ZBPl2q/NZMhWCMdGoI8WQDJE/EY/gc3QBsbxDOFrrhid2yu0vhqBHgOE4xB4qXHlREYMIoFFWpvXij61gNdcKW37yYtwmrdAJOBjaWUxEC0QLRDOHzEL/UNHMY0Crz9KxCwUs1DMQu4YHFbDyxkxC8UsNLvkRxfy1Y4VXSmjBeKPLJzB3/dxGibkVeUq36zKPat0r+xOXEXwhbWbJgtbhyQo47pkdzhCV05JG6kLOYvnJKY11UY7ZLnwDreJ2mitmp8Daw0Bf9Lc9wGayogTC/FWEHh2TC6kNv6x20Igr/cXnZaCgqlh0RYCtwgfn7mMciOjcNC3g0Cf78C3OZ//IUOOQnHQDgJ5P3mNAUric3xqEX55abTHo0s01eQzupy1sPXYZoUMXVKbVZzFisZhjW3Wt97odr45e2qQvsguoagsO678AZJanxo8/Ivy4Fxnh+mSHnt0mHDH5VIee5RVZFPz7wFz3TxPfni4bQAAAABJRU5ErkJggg==') no-repeat center;
+    background-size: 20px 20px;
+}
+.find-code-box i{
+	
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAE60lEQVRoQ+1ZS3LTQBB94wWwI5yAcALICUhOgHMCzAI5O8IJMCfA2cVigXMCfAOSE+CcAOcE2DvsKtxUz4ykGc1IM/qEKqpQVRaxpXa//rx53RL4xy/xj/uP/wA4g3SGQ+zxEsALCLwAcKj/zASvAKxAWAJYYoAbcQn+rNPVOgM0wgEe4jUII+10c0cYjMAcW1yJOdbNDaB5CWnHPwEYtfnBymcIU+zwsSmQRhmgMd6BMIHAgceRWxAWGOBaf7fKSkSWmCorgDAEcAzguWODsIbARMxwERucKAA66l/1Dxe2CXcYYIJfWDSNnLT5CEPsZUCelhy+xhanMTaDAOitbMxvpahztCcixSI2UnX3UYIhR97KCmeDcCI+y6avvGoBVDh/IWY478Nx04bOMoN4l38eAaISgKbG73nkCRsMMBSXeY33jUG1yBmOsccCAo91z6wxwFEV5VYDSMDOM6dz421AOA6lsy9EOvPXBoilSHHks+8FQIlsrA/5A3sc3ZfzlOAcAlRmHgligO9GOX0UqewT63IAeErH+2Af0aYEcwi81ll+L1JMrb4wA8n94CklF8BYGska6VbMdBn14bFhw3Jelempj9VoLFkoOzMcAnEBJPhpNK7XaFcsHuevROo/2TXF8hnEINcixRPz9y0ApZvvRKpPz64e10e+0vnsMUqwyg+7UqZsAHb59M73TuRVVJfY4aTu1KUav8oZYOpiWcwy76QN59MZRtjLmmXtk8nma6/zeYjrQcizgfBNl9GNSKWW0m6a6R2D8n8bAtC0x7WqRJt9se4vPidcSdFH+JLfRnBYKMdnAuDYzgoVXS6hHIB5U6gFKiSH/zFCXvMyWxmIQMDICG7/AOwm28ghRWAJkhRcaBvAoWUttRGazuIAJFKPKw2yxZMYOVtiLkdyWPWreutZyNly6so2qjOQoHETl2SHl7mohV0TRJMmNk/hKBq1ABC8soPGcm54pVmkslmreq0JjfJgoU49YCVmeBZsYCXGeEZmTl+IFKdOCZg90pDdpNkadeCTEkUfCLwRl5jXgZBNSPhh3HOeKUtnAUDYiNQ7T1f+RLnHys/7AJhSOjYLharU2dM7IB5HiwVARYnVBsicS4AIMcfD9gOpPbKJKCindaR5G+FuGvLTqOD/UFnmj9hyeoMdDsvMWDXQFHWtqC9cSgo4z8r8rAKv+mIDyAWApfVDIFoPNAb6glLVMHEaq40k7fH1G+s2k5znZK+cS6pnYrU6tMsiIhOhyIa+10P9V2uZ4CmdzE54rTKQLGTW9lzM8CbkSNPvZR89wAcIY2UTsUwIL7b+QiYokXMx947agqjeueM1ZKgEgwCkLRWdaT6AtziMyhnRNl/pjZwtwQk32GEYo8WiAORB4VUHk1Jg3ec4y4fdbzzFAAe8X5I7VjPaHRirEQDHsbEcSFjTT0WK9+b3zm6prikU1fJ6fRoTddNUVwDeAcgaVOq7mZfEc+wwb+p4FAuFmMQ3ZMh3CBxN92Jn+S0MUzPPysumc4HPn9YZsE5K9Z6Al7KfIOQLjOy6xRbHbaMbCqDsx5ibfPdYGl1Flq2Zb27u3fmuAFhC+zYQbPcCW0zuM/KdesDS6Bb1yFIaxWqmttnvzEIORep3ZaHhpw+HyzZa9YBewfPWmFVqq5d8fYFpBaCvH+/Dzn8AfUSxi40/VOE1T8azE70AAAAASUVORK5CYII=') no-repeat center;
+    background-size: 20px 20px;
+}
+.find-code-box .find-code{width:50%;font-size: 14px;height:1rem;line-height:1rem;marign:0 0 0 0.2rem}
+.find-code-box .get-message{
+	    display: block;
+    float: right;
+    right: 0;
+    color: #333333;
+    border: 0;
+    height:1rem;
+    line-height:1rem;
+    margin:0 0.1rem 0 0;
+    background-color: #ffffff;
+}
+
+.from-line{width:100%;overlfow:hidden;}
+.from-line a{
+		width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #9bc45e;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    display:block;
+    margin:0.5rem auto 0 auto;
+}
+.from-line .btn-default{
+	background-color:#c2c2c2;
+}
+
+
+
+.back-password-same{
+	 border-bottom: 1px solid #e2e2e2;    
+	    height: 1rem;
+    	padding: 12px 0;
+    	width:90%;
+    	margin:0 auto 0.2rem auto;
+    	position:relative;
+}
+.back-password-same span{float:left;height:1rem;line-height:1rem;margin:0 0.5rem 0 0;}
+.back-password-same input{float:left;height:1rem;line-height:1rem;margin:0;padding:0;border:0px none;}
+.find-phones{
+	width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #9bc45e;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    display:block;
+    margin:0.5rem auto 0 auto;
+}
+.find-no{width:100%;height:5rem;line-height:5rem;text-align:center;font-size:1.1rem;font-weight:200;display:block;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

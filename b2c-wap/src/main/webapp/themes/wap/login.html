@@ -1,0 +1,76 @@
+<#assign  title="会员登录" />
+<#include '/common/header.html'/>
+<script type="text/javascript">var forward = '${forward!''}'</script>
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/login.css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/login.js"></script>
+<div class="login-tab">
+    <div class="item mobile selected">
+        <a href="javascript:;">手机登录</a>
+    </div>
+    <div class="item ordinary">
+        <a href="javascript:;">普通登录</a>
+    </div>
+</div>
+<div class="login-form">
+    <div class="form mobile-form show">
+        <div class="inner-form">
+            <div class="item mobile" id="mobile">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="tel" id="input-mobile" maxlength="11" placeholder="请输入11位手机号">
+                </div>
+            </div>
+            <div class="item validcode">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="tel" id="validcode-mobile" maxlength="6" placeholder="请输入验证码">
+                    <button type="button" class="get-validcode-mobile">获取手机验证码</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form ordinary-form">
+        <div class="inner-form">
+            <div class="item ordinary" id="ordinary">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="input-ordinary" maxlength="30" placeholder="请输入邮箱/用户名/手机号">
+                </div>
+            </div>
+            <div class="item password">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="password-ordinary" maxlength="16" placeholder="请输入密码">
+                    <div class="operate"></div>
+                </div>
+            </div>
+            <div class="item validcode">
+                <div class="inner-item">
+                    <i></i>
+                    <input type="text" id="validcode-ordinary" maxlength="6" placeholder="请输入图片验证码">
+                    <img class="validcode-img" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="other">
+    <a href="javascript:;">找回密码</a>
+</div>-->
+
+<div class="warm-tips">
+    <div class="inner">
+        温馨提示: 未注册本站的手机号码，登录时将自动注册。且代表您已同意<a href="javascript:;" class="show-user-agreement" style="color: #0a89c7;">《用户服务协议》</a>
+    </div>
+</div>
+
+<div class="login">
+    <button type="button" class="login-btn" id="login-btn">立即登录</button>
+     <a href="${ctx}/findpasswordByEmail.html" class="found_password">找回密码</a>
+</div>
+
+<div id="demo"></div>
+</body>
+</html>

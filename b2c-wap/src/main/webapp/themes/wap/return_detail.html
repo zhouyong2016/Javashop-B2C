@@ -1,0 +1,92 @@
+<#assign  title="退货详细" />
+<#include 'common/header.html'>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'order_id':${order_id!'0'} ,'id':${id!'0'}}")>
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':${sellBack.id},'sn':${sn} }")>
+<#assign goodsList = sellBackGoodsList.goodsList> 
+
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		售后详细
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+
+
+<div class="return-intro">
+	<div class="return-intro-tittle">
+		<p>订单编号：${sellBack.ordersn}</p>
+		<p>申请时间：<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></p>
+		<p>
+            <#if sellBack.type == 1>
+                退款状态：
+                <span>
+                    <#if sellBack.tradestatus  == 0>
+                            申请退款
+                    <#elseif sellBack.tradestatus  == 1>
+                        审核通过
+                    <#elseif sellBack.tradestatus  == 2>
+                        审核拒绝
+                    <#elseif sellBack.tradestatus  == 6>
+                        已退款
+                    </#if>
+			    </span>
+            <#else/>
+                退货状态：
+                <span>
+                    <#if sellBack.tradestatus  == 0>
+                        申请退货
+                    <#elseif sellBack.tradestatus  == 1>
+                        审核通过
+                    <#elseif sellBack.tradestatus  == 2>
+                        审核拒绝
+                    <#elseif sellBack.tradestatus  == 4>
+                        已入库
+                    <#elseif sellBack.tradestatus  == 5>
+                        部分入库
+                    <#elseif sellBack.tradestatus  == 6>
+                        已退款
+                    </#if>
+			    </span>
+            </#if>
+		</p>
+		<p>售后申请原因：${sellBack.reason!''}</p>
+	</div>
+	<div class="return-intro-goodslist">
+		<ul>
+			<#list goodsList as data>
+				<li>
+					<div class="return-intro-img">
+						<a href="${ctx}/goods-${data.goods_id}.html"> 
+							<img  src="${data.goods_image!''}" />
+						</a>
+					</div>
+					<div class="return-goodslist">
+						<p class="detail_intro_name"><a href="${ctx}/goods-${data.goods_id}.html"><@substring	title="${data.goods_name}" length="50" dot="..." /></a></p>
+						<p class="detail_intro_price"><span>购买数量:<i>${data.ship_num!'' }</i></span><em>退货数量：<i>x${data.return_num!0}</i></em></p>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	</div>
+	<div class="return-intro-box">
+		<h4>申请理由：</h4>
+		<p>${sellBack.remark!''}</p>
+		<#if sellBack.seller_remark??>
+			<h4>客服回复：</h4>
+			<p class="return-derail-reply">${sellBack.seller_remark!''}</p>
+		</#if>
+	</div>
+</div>
+
+
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>	

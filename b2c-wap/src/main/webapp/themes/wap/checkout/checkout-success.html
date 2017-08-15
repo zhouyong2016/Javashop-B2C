@@ -1,0 +1,93 @@
+<#assign title="订单创建成功" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#assign order = orderDetailTag('{"ordersn":"${ordersn}"}') />
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#assign orderStauts= orderStautsTag() />
+<#if member??>
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout-success.js"></script>
+    <style type="text/css">
+        body {background-color: #fff;}
+    </style>
+    <div class="checkout-success">
+        <#if order.isCod && (order.status == orderStauts.ORDER_NOT_PAY || order.status==orderStauts.ORDER_CONFIRM) >
+            <!--货到付款-->
+            <div class="success-item delivery show">
+                <div class="inner-delivery">
+                    <img src="data:image/png;base64,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" alt="">
+                    <div class="content-delivery">
+                        <p>支付方式：<span style="color: #ff6700;">货到付款</span></p>
+                        <p>订单金额：<span style="color: #ff6700;">￥${order.need_pay_money?string('0.00')}</span></p>
+                    </div>
+                </div>
+                <div class="btns-delivery">
+                    <button type="button" class="btns-item tap" data-href="${ctx}/order_detail.html?ordersn=${order.sn}">查看订单</button>
+                    <button type="button" class="btns-item tap" data-href="${ctx}/index.html">返回首页</button>
+                </div>
+            </div>
+        <#else/>
+            <#if order.isOnlinePay >
+                <#assign paymentListTag = newTag("wapPaymentListTag") />
+                <#assign paymentList = paymentListTag() />
+                <div class="success-item online">
+                    <div class="need-pay">
+                        <span class="need-pay-item">订单金额</span>
+                        <span class="need-pay-item" style="color: #ff6700;">￥${order.needPayMoney?string('0.00')}</span>
+                    </div>
+                    <div class="payment-online">
+                        <#list paymentList as payment>
+                            <#if (payment.type == "alipayDirectPlugin") || (payment.type == "alipayWapPlugin") >
+                                <div class="eui-item-vh icon hr-bottom to-pay" order-id="${order.order_id}" payment-id="${payment.id}" plugin-id="${payment.type}" >
+                                    <i class="eui-item-vh-icon alipay-icon">
+                                        <img src="${ctx}${themes_path}/images/alipay-icon.jpeg" alt="">
+                                    </i>
+                                    <div class="inner-eui-item-vh">
+                                        <div class="title-eui-item">
+                                            支付宝支付
+                                            <p style="color: #ff6700;">现在支付，立享免单机会！快来支付宝支付吧！</p>
+                                        </div>
+                                        <div class="sub-eui-item"></div>
+                                    </div>
+                                    <i class="eui-item-vh-point"></i>
+                                    <hr>
+                                </div>
+                            <#elseif payment.type=="weixinPayPlugin" />
+                                <div class="eui-item-vh icon hr-bottom to-pay" order-id="${order.order_id}" payment-id="${payment.id}" plugin-id="${payment.type}" >
+                                    <i class="eui-item-vh-icon wxpay-icon">
+                                        <img src="${ctx}${themes_path}/images/wxpay-icon.jpg" alt="">
+                                    </i>
+                                    <div class="inner-eui-item-vh">
+                                        <div class="title-eui-item">
+                                            微信支付
+                                            <p style="color: #7a7a7a;">微信支付最高帮您付款50%，快来微信支付吧！</p>
+                                        </div>
+                                        <div class="sub-eui-item"></div>
+                                    </div>
+                                    <i class="eui-item-vh-point"></i>
+                                    <hr>
+                                </div>
+                            <#else/>
+                                <div class="eui-item-vh icon hr-bottom to-pay" order-id="${order.order_id}" payment-id="${payment.id}" plugin-id="${payment.type}" >
+                                    <i class="eui-item-vh-icon all-order-icon">
+                                        <@image src="${payment.pay_img!''}" width="50" />
+                                    </i>
+                                    <div class="inner-eui-item-vh">
+                                        <div class="title-eui-item">${payment.name}</div>
+                                        <div class="sub-eui-item"></div>
+                                    </div>
+                                    <i class="eui-item-vh-point"></i>
+                                    <hr>
+                                </div>
+                            </#if>
+                        </#list>
+                    </div>
+                </div>
+            </#if>
+        </#if>
+    </div>
+</#if>
+</body>
+</html>

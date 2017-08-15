@@ -1,0 +1,114 @@
+.goods-list-box .header-tools .common-title p{font-size:1rem;}
+.sort{
+	width:100%;overflow:hidden;
+}
+.sort ul{
+	display: box;
+    display: -webkit-box;
+}
+.sort ul li{
+	    -webkit-box-flex: 1;
+    box-flex: 1;
+    text-align: center;
+    padding: .9rem 0px;
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+}
+.sort ul li a{
+	border-right: 1px solid #E5E5E5;
+    line-height: 1.2rem;
+    font-size: 0.78rem;
+    display: block;
+}
+.sort ul li .asc{
+	 background:url(../images/up.png);
+    background-size: 13%;
+    background-repeat: no-repeat;
+    background-position: 85% 0.3rem;
+}
+.sort ul li .desc{
+	 background:url(../images/down.png);
+    background-size: 13%;
+    background-repeat: no-repeat;
+    background-position: 85% 0.3rem;
+}
+.goodslist{width:100%;overflow:hidden;}
+.goodslist ul{width:100%;overflow:hidden;} 
+
+.goodslist ul li{
+	padding:0.4rem 0px;
+	display: box;
+    display: -webkit-box;
+    box-align: center;
+    -webkit-box-align: center;
+    border-bottom: 1px solid #F2F2F2;
+}
+.goodslist ul li .index-goods-img{
+    position: relative;
+    width:35%;
+    text-align:center;
+}
+.goodslist ul li .index-goods-img img{width:105px;height:105px;margin:0px auto;}
+.goodslist ul li .index-goods-name{width:60%;}
+.goodslist ul li .index-goods-name p{width:100%;height:3.3rem;line-height: 1.1rem;text-align:justify;font-weight:200}
+.goodslist ul li .index-goods-name span{color:#FE4900;}
+.goodslist ul li .index-goods-name span i{font-size:0.97rem;font-weight:200;margin-right:3px;line-height:1.1rem}
+
+
+.no-goodslist{ 
+	border: 1px dashed #ccc;
+    border-radius: 10rem;
+    height: 12rem;
+    line-height: 12rem;
+    margin: 5rem auto;
+    padding: 1rem;
+    text-align: center;
+    width: 12rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

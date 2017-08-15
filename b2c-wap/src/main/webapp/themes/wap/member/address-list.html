@@ -1,0 +1,48 @@
+<#assign  title="收货地址" />
+<#include '../common/header.html'>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/address.css"/>
+<script type="text/javascript" src="${ctx}${themes_path}/js/page/address-list.js"></script>
+<#if member??>
+    <#assign consigneeListTag= newTag("consigneeListTag") >
+    <#assign  consigneeList= consigneeListTag()>
+    <div class="address-list" style="margin-bottom: 10vw;">
+        <#if consigneeList?size gt 0>
+            <#list consigneeList as address>
+                <div class="item">
+                    <div class="select"></div>
+                    <div class="content" address_id="${address.addr_id}">
+                        <div class="info-address">
+                            <div class="name-address">
+                                ${address.name!''}
+                            </div>
+                            <div class="mobile-address">
+                                ${address.mobile?substring(0,3)}****${address.mobile?substring(7,11)}
+                            </div>
+                        </div>
+                        <div class="content-address">
+                            <#if address.def_addr == 1 >
+                                <span class="def-address-icon">默认</span>
+                            </#if>
+                            ${(address.province)!''} ${address.city!''} ${address.region!''} ${address.town!''} ${address.addr!''}
+                           
+                            <#if (address.shipAddressName)!=''>
+                                <span class="alias-address">${address.shipAddressName}</span>
+                            </#if>
+                        </div>
+                    </div>
+                    <div class="edit-icon edit" address_id="${address.addr_id}"></div>
+                </div>
+            </#list>
+        <#else />
+            <div class="eui-nodata">
+                <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_address.png">
+            </div>
+        </#if>
+    </div>
+    <div class="eui-save-button">
+        <button type="button" id="add-btn">新建地址</button>
+    </div>
+</#if>
+<#include '../common/footer.html'/>

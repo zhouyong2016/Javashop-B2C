@@ -1,0 +1,130 @@
+/* 【修改资料、修改密码】 */
+.member-info {
+    width: 100%;
+    border-top: 1px solid #f6f6f6;
+    padding: 1rem 0px 0px 0px;
+}
+
+.info-box-same {
+    position: relative;
+    padding: 0.5rem 0rem;
+    margin: 0.5rem 5%;
+    display: -webkit-box;
+    box-align: center;
+    -webkit-box-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 90%;
+    overflow: hidden;
+}
+.info-box-same p {
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    width: 50%;
+    display: block;
+    font-size: 14px;
+}
+.info-box-same .input_text {
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    width: 100%;
+    display: block;
+    border: 0px none;
+}
+
+.security .send-mobile-validate {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 88%;
+    padding: 0;
+    background-color: #ff6700;
+    outline: none;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+}
+.security .send-mobile-validate.disabled {
+    background-color: #ccc;
+}
+.security .img-validate-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-height: 100%;
+    width: 70px;
+    height: 88%;
+}
+.security .validate-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+.security .validate-button button {
+    width: 80vw;
+    height: 7vh;
+    background-color: #ff6700;
+    color: #fff;
+    text-align: center;
+    line-height: 7vh;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+.security-navigator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 16px;
+    color: #333;
+    width: 100%;
+    height: 43px;
+    line-height: 43px;
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.security-navigator-left,
+.security-navigator-right {
+    width: 25%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.security-navigator-left .item {
+    width: 100%;
+    height: 100%;
+}
+.security-navigator-left .item.dark {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABRklEQVRYR+2WwQ2DMAxF7TMcukG5g9Ru0DJCN+wGHaF0g1byAIzQAzm7CgIJIUJsQ8UFjgHlv/x8GyNs/ODG+rAD7A4EHcjz/I6Ix6ZpbnVdfy1hzbLskKbpAwC+RHSb2iMIUBRFBQAXZn4750othBdPkuSJiGcAeBHRVQXQbVAh4kkLMRRn5o9z7ho6wGwILRAace9ItAo0EFpxEYD/SAJhERcDxCCs4iqAEIRf79MeC5yqCkJ1P76O9hSIZ4u42oEeagjh16ziSwH6JuMBTM3KBDAOXHcF6mbVuxntA8MsTKW9C6GpY6ocmCs1SZ8IhVrkgKTOrRBRAIn4VHVIgyn5GbVpl5aa1okggObk4/vVQEgGktn/uaRjAkBFRKWqFfuJiJkPc8NEbEwbOOFHMt1EFNt8rffRKlhLaFEf+CfE7sDmDvwAeP+PMCwEJrIAAAAASUVORK5CYII=") no-repeat center;
+    background-size: 20px 20px;
+    background-position-x: 5px;
+}
+
+.security-navigator-middle {
+    width: 70%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.security-navigator-right {
+    position: relative;
+    font-size: 14px;
+    line-height: 43px;
+    text-align: center;
+}
+
+.img-validate-form {
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-height: 100%;
+    width: 70px;
+    height: 88%;
+}

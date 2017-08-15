@@ -1,0 +1,79 @@
+<#assign  title="查看物流" />
+<#include 'common/header.html'>
+<link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
+<style>
+	body{background:#F5F5F5;}
+</style>
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		查看物流
+	</div>
+</div>
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+
+<#if orderDetail?? && orderDetail!=''>
+	<!-- 获取会员订单详细快递信息 -->
+	<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+	<!-- 调用会员订单详细快递信息 -->
+	<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+	<#assign orderSend = orderDelivery.deliveryList>
+	
+	<#assign logi_no ='' >
+	<#assign logi_code ='' >
+	<#assign logi_name ='' >
+	<#if orderDetail.status gte 3 >
+		<#list orderSend as delivery>
+			<#if delivery.type ==1 && delivery.logi_no?exists >
+				<#assign logi_no = "${delivery.logi_no!''}">
+				<#assign logi_code = "${delivery.logi_code!''}" >
+				<#assign logi_name = "${delivery.logi_name!''}">
+			</#if>
+			
+			<#if delivery.type ==2 && delivery.logi_no?exists >
+			</#if>
+			
+			<#if delivery.type ==3 && delivery.logi_no?exists >
+			</#if>
+		</#list>
+	</#if>
+	
+	<!--创建“查询订单物流详细”标签-->
+	<#assign OrderExpressInfoTag = newTag("orderExpressInfoTag")>
+	<!--调用“查询订单物流详细”标签，并传递参数-->
+	<#assign kuaidiResult = OrderExpressInfoTag('{"logino":"${logi_no!\"\"}","code":"${logi_code!\"\"}"}')>
+</#if>
+<div class="member-send">
+<#if logi_no?? && logi_no != ''>
+<p class="member-send-title">物流公司：<span>${logi_name}</span></p>
+<p class="member-send-title">快递单号：<span>${logi_no}</span></p>
+		<div class="member-send-list">
+			<#if kuaidiResult?exists>
+        		<#if kuaidiResult.message=='ok'>
+			<ul>
+				
+				<#list kuaidiResult.data as kd>
+					<li class="<#if kd_index == 0>frist</#if>">	
+						<em <#if !kd_has_next>class="last-list"</#if>></em>
+						<i>${kd.time}</i><span>${kd.context}</span>
+					</li>
+				</#list>
+				
+			</ul>
+			<#else>
+			<p class="send-message">${kuaidiResult.message}</p>
+			</#if> 
+		<#else>
+			<span style="color: red">快递信息异常！！！！</span>
+	  	</#if>
+		</div>
+	<#else>
+ 		<p class="send-no-blank">暂无符合条件的数据记录</p>
+ 	</#if>
+	
+</div>

@@ -1,0 +1,43 @@
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderListTag = newTag("memberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")>
+<#assign order = memberOrderList.ordersList>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+
+
+			<#list order as orders>
+				<li sn="${orders.sn}" class="order-same-list">
+					<div class="order-list-tittle">
+						<p>订单编号：<em>${orders.sn}</em></p>
+						<span>下单日期：<@dateformat time="${orders.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+						<i><@orderstatus status="${orders.status}" type="order"/></i>
+					</div>
+					<div class="order-goods-list-box">
+						<!--创建“订单货物列表”标签-->
+						<#assign orderItemListTag = newTag("orderItemListTag")>
+						<#assign orderItemList = orderItemListTag("{'orderid':${orders.order_id}}")>
+						<ul>
+							<#list orderItemList as item>
+								<li class="go-order-detail-list">
+									<div class="o_left">
+										<a  href="goods-${item.goods_id}.html?type=4">
+											<img src="${item.image}" />
+										</a>
+									</div>
+									<div class="o_right">
+										<a  href="goods-${item.goods_id}.html?type=4">${item.name}<span>X${item.num}</span></a>
+										<!-- <p>${(item.num * item.price)?string.currency}</p>
+										<span>数量：${item.num}</span> -->
+									</div>
+								</li>
+							</#list>
+						</ul>
+					</div>
+					<div class="order-price"><a href="order_detail.html?ordersn=${orders.sn}">查看详情</a>订单总价：<span>${orders.order_amount?string.currency}</span>元</div>
+				</li>
+			</#list>

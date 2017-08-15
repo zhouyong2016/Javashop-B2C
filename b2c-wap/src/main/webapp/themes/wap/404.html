@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<#assign headerTag = newTag("headerTag") />
+<#assign header = headerTag() />
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="apple-touch-fullscreen">
+<meta content="telephone=no" name="format-detection">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="#ffffff" name="msapplication-TileColor">
+
+<meta content="width=device-width,user-scalable=no" name="viewport" id="viewport" initial-scale="1.0," maximum-scale="1.0;">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/common.css" />
+</head>
+<body id="common-top">
+
+<style>
+	.header-tools{border-bottom:1px solid #ccc;}
+	.page-no{width:10rem;height:10rem;margin:5rem auto;text-align:center;border:1px dashed #ddd;border-radius:10rem;}
+	.page-no h1{width:10rem;height:5.5rem;line-height:6rem;font-size:2.5rem;font-weight:200;overflow:hidden;}
+	.page-no p{width:10rem;text-aling:center;height:3rem;line-height:1rem;}
+	.page-no p a{color:#67c0ff;font-weight:200;}
+</style>
+
+
+<div class="header-tools">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		哎呀！出错了...
+	</div>
+</div>
+	
+<div class="page-no">
+	<h1>404</h1>
+	<p>页面找不到了...<a href="${ctx}${themes_path}/index.html">返回首页</a></p>
+</div>
+
+
+</body>
+</html>

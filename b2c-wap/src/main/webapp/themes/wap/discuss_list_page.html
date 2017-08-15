@@ -1,0 +1,38 @@
+<#assign commentListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentPage = commentListTag("{'goods_id':${goods_id},'type':1}")>
+
+<#list commentPage.result as comment>  
+				<li <#if !comment_has_next >class="last"</#if>>
+					<div class="problem_right">
+						<div class="problem_time">
+							<span class="name"> 
+						     <#if comment.member_id != 0>
+					            	${comment.uname!''}
+					            <#else>
+					            	匿名
+					            </#if>
+					         </span>
+							<p>
+							(
+							<#if comment.grade=3>
+								好评
+							<#elseif comment.grade=2>
+								中评
+							<#else>
+								差评	
+							</#if>
+							)
+							</p>
+							<span class="comment_time"><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd"/></span>
+						</div>
+						<p class="comment_word" style="word-wrap: break-word;">${comment.content!''}</p>
+						 <#if comment.replystatus==1>
+						<div class="problem_answer">
+								<p style="word-wrap: break-word;">${comment.reply}</p>
+						</div>
+						</#if>
+						<div class="left_point"></div>
+					</div>
+				</li>
+			</#list>

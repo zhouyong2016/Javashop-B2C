@@ -1,0 +1,9 @@
+<#assign cartTag= newTag("cartTag")>
+<#assign itemList = cartTag() >	
+
+<#-- 创建订单价格标签 -->
+<#assign orderPiceTag= newTag("orderSelectPriceTag") >
+<#assign orderPrice = orderPiceTag() >	
+<input type="hidden" value="${orderPrice.goodsPrice}" id="bonded_price">
+			<p>金额</p>
+			<p><span>${orderPrice.goodsPrice?string("currency")}</span></p>

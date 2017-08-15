@@ -1,0 +1,91 @@
+<#assign  title="购物车" />
+<#include '/common/header.html'>
+<#assign cartTag= newTag("cartTag") />
+<#assign itemList = cartTag() />
+
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/cart.css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/cart.js"></script>
+<!-- 公共头部 -->
+<div class="header-tools cart-title">
+	<div class="go-back">
+		<a href="javascript:" onclick="window.history.go(-1);"></a>
+	</div>
+	<div class="common-title">
+		购物车
+	</div>
+	<div class="all-selected">
+		<label class="all-selected-box">
+			<p>全选</p>
+			<input type="checkbox" name="select_all"/>
+		</label>
+	</div>
+</div>
+<div class="cart-list-box">
+	<#if itemList?exists && itemList?size gt 0>
+		<ul>
+			<#list itemList as item >
+				<li itemid="${item.id}" productid="${item.product_id}" price="${item.coupPrice}">
+					<div class="cart_img">
+						<@image  src="${item.image_default!''}" style="cursor: pointer;" />
+					</div>
+					
+					<div class="cart_intro">
+						<p class="cart-name"><@substring	title="${item.name!''}" length="26" dot="..." /></p>
+						<p class="cart-goods-spec">
+						<#if item.others?exists>
+							<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if>${spec.name}:${spec.value}
+									</#list>
+								</span>
+							</#if>
+							<#if item.others.gys_name?exists>
+								供应商：${item.others.gys_name!''}
+							</#if>
+						</#if>
+						</p>
+						<p class="cart-goods-price">优惠价：${item.coupPrice?string("currency")}</p>
+						<div class="cart-num-box">
+							<div id="num" class="Numinput" value="${item.num}" itemid="${item.id}" productid="${item.product_id}" >
+								<span class="numadjust decrease">-</span>
+								<input size="5" name="num" autocomplete="off" type="text" value="${item.num}">
+								<span class="numadjust increase">+</span>
+							</div>
+							<div class="del_cart" rel="${item.id}"></div>
+							<label class="noselect_cartlist <#if item.is_check?? && item.is_check==1> selected </#if>" >
+								<input type="checkbox" name="product_id" value="${item.product_id}"  <#if item.is_check?? && item.is_check==1> checked="checked" </#if> />
+							</label>
+						</div>
+					</div>
+				</li>
+			</#list>
+		</ul>
+	<#else />
+		<#include '/cart/no_cart.html'/>
+	</#if>	
+</div>
+<div class="float-blank"></div>
+<!-- 浮动 -->
+<div class="cart-float">
+	<div class="cart-float-price">
+		
+	</div>
+	<div class="cart-float-same"><a href="${ctx}/classify.html" class="cart-classify">继续购物</a></div>
+	<div class="cart-float-same"><a href="javascript:;void(0)" class="go-checkout">去结算</a></div>
+</div>
+<script>
+	$(function(){
+		//删除购车列表
+		$(".del_cart").click(function(){
+			var caerid= $(this).attr("rel");
+			Cart.deleteGoodsItem(caerid);
+		})
+		//加载购物车价格
+		Cart.refreshTotal();
+	})
+</script>
+
+
+<#include '/common/footer.html'/>
+

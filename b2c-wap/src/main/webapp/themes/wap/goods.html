@@ -1,0 +1,284 @@
+<#--检测组件是否启用 -->
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'团购组件'}") />
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods = goodsBaseDataTag() >
+<#assign goods_id = goods.goods_id />
+<#assign  title="${goods.name}" />
+
+<#include '/common/header.html' />
+<#-- 创建商品相册标签 -->
+<#assign goodsGalleryTag= newTag("goodsGalleryTag") />
+<#-- 调用标签获取商品相册信息 -->
+<#assign galleryList= goodsGalleryTag()!'' />
+
+<#-- 创建商品属性标签 -->
+<#assign goodsAttributeListTag= newTag("goodsAttributeListTag") />
+<#-- 调用标签获取商品属性信息 -->
+<#assign attrList= goodsAttributeListTag("'goodsid':${goods.goods_id!''}")!'' />
+
+<#-- 创建商品参数标签 -->
+<#assign goodsParametersTag= newTag("goodsParametersTag") />
+<#-- 调用标签获取商品参数信息 -->
+<#assign goodsPara= goodsParametersTag("'goodsid':${goods.goods_id!''}")!'' />
+
+<#-- 获得商品参数的参数组 -->
+<#if goodsPara.hasParam==true>
+	<#assign para = goodsPara.paramList />
+</#if>
+
+<#if groupbuyIsOn=="ON">
+	<#-- 团购标签 -->
+	<#if goods.is_groupbuy??&&goods.is_groupbuy==1>
+	   <#assign groupBuyTag=newTag("groupBuyTag")>
+	   <#assign groupBuy=groupBuyTag("{'goodsid':${goods.goods_id} }")>
+	</#if>
+</#if>
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/goods.css" />
+<script type="text/javascript" src="${ctx}${themes_path}/js/touchslider.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/goods.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/spec.js"></script>
+<!-- 商品详细头部 -->
+<div class="header-tools">
+	<div class="go-back" onclick="window.history.go(-1);">
+		<input type="hidden" rel="${type!''}" cat="${cat!''}" />
+	</div>
+	<div class="common-title">
+		
+	</div>
+	<div class="go-search">
+	</div>
+</div>
+<!-- 商品图片 -->
+<div class="goods-photo-box" id="slider">
+	<ul class="goods_images">
+		<#list galleryList as gallery>
+			<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> <@image src="${gallery.big}"  big="${gallery.big}" small="${gallery.small}"/></li>
+		</#list>
+	</ul>
+	<div class="goods_circle"></div>
+</div>
+<!-- 商品详细 -->
+<div class="goods-detail-box">
+	<h1 class="goods-name">${goods.name}</h1>
+	<#if groupbuyIsOn=="ON">
+    	<#if goods.is_groupbuy??&&goods.is_groupbuy==1>
+			<h2 class="goods-this-price">团购价格：<span>￥${groupBuy.price}</span>元</h2>
+		<#else>
+			<h2 class="goods-this-price">商城价：<span>￥${goods.price!''}</span>元</h2>
+		</#if>
+	<#else>
+		<h2 class="goods-this-price">商城价：<span>￥${goods.price!''}</span>元</h2>
+	</#if>
+</div>
+<div class="goods-detail-box activity">
+<#include 'goods-activity.html' />
+</div>
+<!-- 商品规格 -->
+ <#if goods.have_spec?exists && goods.have_spec==1 >
+<div class="godos-spac">
+		<#if goods.isvirtual?exists && goods.isvirtual==1>
+		<form action="virtual_checkout.html" id="goodsform" method="post">
+		<#else/>
+		<form action="cart.html" id="goodsform" method="post">
+		</#if>
+		<div class="goods_spec" id="goods_spec">
+	    <input type="hidden" name="showCartData" value="0"/>
+		<input type="hidden" name="productid" id="productid"  />
+		<input type="hidden" value="1" name="havespec" />
+		<input type="hidden" name="action" value="addProduct" />
+		<h4 class="spec_tip"></h4>
+		<#if goods.have_spec?exists && goods.have_spec==1 >
+		<!-- 创建商品规格标签 -->
+		<#assign goodsSpecTag = newTag("goodsSpecTag") />
+		<!-- 调用商品规格标签 -->
+		<#assign goodsSpace = goodsSpecTag("'goods_id':${goods.goods_id}")!'' />
+		<!-- 规格列表 -->
+		<#list goodsSpace.specList as spec >
+		<div width="100%" class="spec_item">
+			<h3>${spec.spec_name}</h3>
+			<ul>
+				<#list spec.valueList as val >
+					<!-- 规格尺寸 -->
+					<#if spec.spec_type==0>
+						<li class="spec_word same-spec-li">
+							<a specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="" title="${val.spec_value}">
+								<span>${val.spec_value}</span>
+							</a>
+						</li>
+					</#if>
+					<!-- 规格颜色 -->
+					<#if spec.spec_type==1>
+						<li class="spec_img same-spec-li">
+							<a specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="" title="${val.spec_value}" >
+								<span>${val.spec_value}</span>
+								<!-- <@image height="30" width="30" title="${val.spec_value}" alt="${val.spec_value}" src="${val.spec_image}" /> -->
+							</a>
+						</li>
+					</#if>				
+				</#list>
+			</ul>
+		</div>
+		</#list>
+		</#if>
+	</div>
+	</form>
+</div>
+</#if>
+<!-- 评论收藏 -->
+<div class="goods-other-box">
+	<div class="goods-other">
+		<a href="${ctx}/comment.html?goods_id=${goods.goods_id}" >查看商品评论<i class="goods-sn">货号：${goods.sn}</i></a>
+	</div>
+</div>
+<!-- 商品详细、规格 -->
+<div class="goods-intro-box">
+	<div class="goods-tab">
+		<ul>
+			<li class="selected" rel="1"><span rel="${goods.goods_id!1}">商品介绍</span></li>
+			<li rel="2"><span rel="${goods.goods_id!1}">商品属性</span></li>
+		</ul>
+	</div>
+	<div class="goods-intro">
+		${goods.intro!''}
+	</div>
+	<div class="goods-param-list" style="display:none;">
+		<div class="rer_para">
+			<table cellspacing="0" cellpadding="0" width="100%" class="liststyle data">
+				<tbody>
+					<#list attrList as goodsattr>
+						<tr>
+							<th>${goodsattr.attrName!''}：</th>
+							<td>${goodsattr.attrValue!''}</td>
+						</tr>
+					</#list>
+					<#if goodsPara.hasParam==true>
+					<#list para as parameters>
+						<#list parameters.paramList as gparam>
+							<tr>
+								<th>${gparam.name!'' }:</th>
+								<td>${gparam.value!'' }</td>
+							</tr>
+						</#list>
+					</#list>
+					</#if>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 加入购物车 -->
+<div class="goods-in-cart-box">
+	<div class="goods-go-index"><a href="${ctx}/index.html"></a></div>
+	<div class="goods_collect" rel="${goods.goods_id}"></div>
+	<#if goods.store!=0>
+		<div class="buy_now" rel="${goods.goods_id}" inventory="${goods.store!0}">立即购买</div>
+		<div class="in_cart" rel="${goods.goods_id}" inventory="${goods.store!0}"></div>
+	<#else/>
+		<div class="no-store">暂时缺货^_^</div>
+		<div class="no-in_cart" rel="${goods.goods_id}" inventory="${goods.store!0}"></div>
+	</#if>
+	<div class="cart_way" style="display:none">
+	 <#if goods.have_spec?exists && goods.have_spec==1 >
+	 	<input type="hidden" value="1" name="havespec" />
+		<input type="hidden" name="productid" id="productid"  />
+		<input type="hidden" name="action" value="add-product" />
+	<#else/>
+	
+	<input type="hidden" name="goodsid" value="${goods.goods_id}" />
+		<input type="hidden" name="action" value="add-goods" />
+	</#if>
+	</div>
+	
+</div>
+<div class="goods-detail-blank">
+</div>
+<script>
+$(function(){
+	
+	//改变图片大小
+	$(".goods-intro img").css({"width":"100%","height":"auto","max-width":"640px"})
+	//浮动留空
+	var folatHeight = parseInt($(".goods-in-cart-box").height())+parseInt(20);
+	$(".goods-detail-blank").css("height",folatHeight+"px");
+	//返回上一页
+	$(".go-back").click(function(){
+		/*var historyID = $(this).find("input").attr("rel");  //得到是哪一页跳转到商品详细页  1、首页  3、会员收藏 4、订单列表。5、会员我的评论。如果是一串数字，那表示是订单详细页
+		var catID = $(this).find("input").attr("cat");      //如果cat有值，说明是从商品分类进行的跳转。暂时没有从品牌跳转的页面
+		
+		//根据historyID 跳转到哪一页 1、首页  3、会员收藏 4、订单列表。5、会员我的评论。如果是一串数字，那表示是订单详细页
+		if(historyID == "1"){
+			location.href="${ctx}/index.html"
+		}
+		else if(historyID == "3"){
+			location.href="${ctx}/collect.html"
+		}
+		else if(historyID == "4"){
+			location.href="${ctx}/orderlist.html"
+		}
+		else if(historyID == "5"){
+			location.href="${ctx}/orderlist.html"
+		}
+		else{
+			location.href="${ctx}/order_detail.html?ordersn="+historyID;
+		}
+		
+		//如果cat有值，跳转到商品列表页
+		if(catID != ""){
+			location.href="${ctx}/goods_list.html?cat="+catID;
+		}*/
+		//window.history.back()
+		
+	})
+
+	//立即购买
+	goodsjs.buy();
+	//加入收藏
+	goodsjs.goodscollect();
+	//图片滚动
+	goodsjs.goodsimg();
+	//加入购物车
+	goodsjs.incart();
+	
+	//内容切换（商品详细、商品属性）
+	$(".goods-tab ul li").click(function(){
+		var changeID = $(this).attr("rel");
+		$(".goods-tab ul li").removeClass("selected");
+		$(this).addClass("selected");
+		if(changeID=="2"){
+			var goodsId = $(this).find("span").attr("rel");
+			$(".goods-intro").hide();
+			$(".goods-param-list").show();
+		}else{
+			$(".goods-param-list").hide();
+			$(".goods-intro").show();
+		}
+	})
+	
+})
+</script>
+<#if goods.have_spec?exists && goods.have_spec==1 >
+<!-- 商品规格 -->
+<script type="text/javascript">
+var Products=
+	[
+	<#list goodsSpace.productList as product>	
+	  {'product_id':${product.product_id},'goods_id':${product.goods_id},'sn':'${product.sn}','store':${product.store!0},
+		'price':${product.price},
+	   'specs':${product.specsvIdJson}
+	  }
+	  <#if product_has_next >,</#if>
+	</#list>
+	];
+$(function(){
+	Eop.Spec.init(1);
+});
+</#if>
+</script>
+
+<#include 'common/footer.html'/>
+
+
+

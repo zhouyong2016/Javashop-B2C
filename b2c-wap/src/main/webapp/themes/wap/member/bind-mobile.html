@@ -1,0 +1,40 @@
+<#assign  title="绑定手机号" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <#if member.mobile?? && member.mobile != ''>
+        <script type="text/javascript">
+            new Module().navigator.init('绑定手机');
+        </script>
+
+        <p style="width: 200px; margin: 50px auto; ">然而您已经绑定手机号了</p>
+    <#else/>
+        <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/security.css"/>
+        <script type="text/javascript" src="${ctx}${themes_path}/js/page/bind-mobile.js"></script>
+        <div class="member-info security">
+            <div class="info-box-same">
+                <p>您的手机号：</p>
+                <input type="tel" id="mobile" class="input_text" maxlength="11"/>
+            </div>
+
+            <div class="info-box-same">
+                <p>短信验证码：</p>
+                <input type="tel" name="sms-validate" id="sms-validate" class="input_text" maxlength="6"/>
+                <button type="button" class="send-mobile-validate">发送验证码</button>
+            </div>
+
+            <div class="info-box-same">
+                <p>图片验证码：</p>
+                <input type="text" name="img-validate" id="img-validate" class="input_text" maxlength="4"/>
+                <img src="" class="img-validate-img">
+            </div>
+
+            <div class="validate-button">
+                <button type="button" class="validate-submit">提交</button>
+            </div>
+        </div>
+    </#if>
+</#if>
+</body>
+</html>
