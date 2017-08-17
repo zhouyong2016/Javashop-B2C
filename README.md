@@ -1,6 +1,9 @@
 #Javashop-B2C
 Javashop是基于Java技术构建的开源电子商务平台，采用EOP(Enation Open Platform易族开放平台)框架体系，更具人性化的操作体验，内置库存管理系统，完备的订单流程，丰富的统计功能，多种支付方式，适合搭建稳定、高效的B2C电子商务平台。 同时Javashop的模板引擎及组件机制让扩展变得简单，更有大量第三方组件可供选择，极大的降低二次开发成本。
 
+#关于数据库
+默认会自动进入安装程序，安装后会在install目录下增加install.lock文件。若第一次已安装，后续不想要重新安装的话，则可以手动增加install.lock 文件，同时修改jdbc配置为已安装数据库，即可。
+
 #开源计划
 
 - 8月15日：WAP配置请参考:http://t.cn/RCPYspW
@@ -39,7 +42,7 @@ Javashop是基于Java技术构建的开源电子商务平台，采用EOP(Enation
 到这一步直接完成。
  **说明：点击add选择准备好的tomcat** 
 
-8.修改tomcat编码格式为UTF-8，打开server.xml,
+8.修改tomcat编码格式为UTF-8，否则搜索会出现乱码，打开server.xml,
 ```
 <Connector URIEncoding="UTF-8" connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
 
