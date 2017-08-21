@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<!-- 创建es_page页面表 -->
+	<action>
+		<command>create</command>
+		<table>page</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>path</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>page_html</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field><name>type</name><type>int</type><size>11</size><option>00</option></field>
+	</action>
+	<!-- 创建es_style风格表 -->
+	<action>
+		<command>create</command>
+		<table>style</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>style</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>path</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>is_top_style</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>is_default_style</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>page_id</name><type>int</type><size>11</size><option>00</option></field>
+	</action>
+	<!-- 创建es_floor楼层表 -->
+	<action>
+		<command>create</command>
+		<table>floor</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>page_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>title</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>parent_id</name><type>int</type><size>11</size><option>00</option><default>0</default></field>
+		<field><name>type</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>style</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>logo</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>is_display</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>sort</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>cat_id</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>guid_cat_id</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>goods_ids</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field><name>props</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field><name>brand_ids</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field><name>adv_ids</name><type>memo</type><size>715827882</size><option>00</option></field>
+	</action>
+	<!-- 创建es_showcase橱窗表 -->
+	<action>
+		<command>create</command>
+		<table>showcase</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>title</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>flag</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>content</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>is_display</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>sort</name><type>int</type><size>11</size><option>00</option></field>
+	</action>
+	
+	<!-- 创建es_subject橱窗表 -->
+	<action>
+		<command>create</command>
+		<table>subject</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>title</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>sort</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>is_display</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>banner</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>goods_ids</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field><name>picture_path</name><type>memo</type><size>715827882</size><option>00</option></field>
+	</action>
+</dbsolution>

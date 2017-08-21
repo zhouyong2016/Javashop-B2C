@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="红包组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="红包订单打折插件" id="bonusOrderDiscountPlugin"> 
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+	
+</component>

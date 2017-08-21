@@ -1,0 +1,34 @@
+<div class="detail" style="margin-left: 10px;">
+	<table cellspacing="0" cellpadding="0" border="0">
+			<thead>
+				<tr>
+					<th width="100px;">是否选择</th>
+					<th>标签名称</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list tagList as tag> 
+					<#if (tag.store_id)??>
+					<#else>
+						<tr>
+							<td><input type="checkbox" name="tag_id" value="${tag.tag_id }" id="tag_${tag.tag_id }" /></td>
+							<td style="text-align: left;">
+							${tag.tag_name}
+							</td>
+						</tr>
+					</#if>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+ 
+$( function() {
+	<#if tagRelList?exists >
+		<#list 	tagRelList as tr>
+			$("#tag_${tr.tag_id}").attr("checked",true);
+		</#list>
+	</#if> 
+});
+
+</script>

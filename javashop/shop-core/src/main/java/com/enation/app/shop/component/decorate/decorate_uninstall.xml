@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>drop</command>
+		<table>floor</table>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>style</table>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>showcase</table>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>page</table>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>subject</table>
+	</action>
+</dbsolution>

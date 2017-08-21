@@ -1,0 +1,36 @@
+<div class="input">
+	<form>
+		<div align="center" class="submitlist">
+			<table>
+				<tbody>
+					<tr>
+						<td><input type="button" class="submitBtn" value="执行转换" onclick="doImport();"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function doImport(){
+	
+	$("form").ajaxSubmit({
+		url:"galleryImport!imported.do?ajax=yes",
+		type:"POST",
+		dataType:"json",
+		success:function(result){
+			if(result.result==1){
+				alert("转换成功")
+			}else{
+			 	alert("error");
+			}
+			
+		},
+		error:function(){
+		 
+			alert("导入错误");
+		}
+	});	
+}
+</script>

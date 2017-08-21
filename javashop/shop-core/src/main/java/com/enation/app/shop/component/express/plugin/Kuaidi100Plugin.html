@@ -1,0 +1,49 @@
+<tr>
+	<td>
+	</td>
+	<td>
+		<span>
+			请到<a target="_blank" href="http://www.kuaidi100.com/openapi/applyapi.shtml"> 快递100 </a>申请身份key
+		</span>
+	</td>
+</tr>
+<tr>
+	<td width="80px">用户</td>
+	<td>
+		<select name="user" id="user" class="inputSelect">
+			<option value="0" <#if user == '0'>selected</#if>>普通用户</option>
+			<option value="1" <#if user == '1'>selected</#if>>企业用户</option>
+		</select>
+	</td>
+</tr>
+
+<tr id="discode">
+	<td width="80px">公司代码</td>
+	<td>
+		<input class="input_text easyui-validatebox" data-options="required:true" type="text" id="code" maxlength="40"
+		name="code" 
+		value="${code!''}">
+	</td>
+</tr>
+<tr>
+	<td width="80px">id</td>
+	<td><input class="input_text easyui-validatebox" type="text" id="keyid" maxlength="30"
+		name="keyid" data-options="required:true"
+		value="${keyid!''}"></input>
+	</td>
+</tr>
+<script>
+	$(function() {
+		if($("#user").val() == 0){
+			$("#discode").hide(); 
+		}
+		
+		$("#user").change(function(){
+			if($("#user").val() == 0){
+				$("#discode").hide(); 
+			}else{
+				$("#discode").show();
+			}
+		})
+	})
+</script>

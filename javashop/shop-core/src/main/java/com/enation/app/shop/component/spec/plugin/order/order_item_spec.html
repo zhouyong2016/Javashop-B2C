@@ -1,0 +1,3 @@
+<#if specList?exists>
+	<span><#list specList as spec><#if spec_index!=0>,</#if>${spec.name}:<em style="color:#ED7108">${spec.value}</em></#list></span>
+</#if>

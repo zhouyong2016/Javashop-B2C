@@ -1,0 +1,8 @@
+<script type="text/javascript">
+$(function(){
+	$(".order_detail .tab li[tabid=11]").click(function(){
+		$("#receipt_wrapper").load(${request.contextPath}+"/admin/plugin?beanid=orderDetailReceiptPlugin&orderid=${orderid}",{cache:true});
+	});
+});
+</script>
+<div id="receipt_wrapper">加载中...</div>

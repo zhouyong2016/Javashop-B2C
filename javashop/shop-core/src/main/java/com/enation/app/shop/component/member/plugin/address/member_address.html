@@ -1,0 +1,33 @@
+<div class="detail">
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<thead>
+			<tr>
+				<th>收货人</th>
+				<th>所在地区</th>
+				<th>街道地址</th>
+				<th>电话</th>
+				<th>手机</th>
+				<th>邮编</th>
+				<th>默认</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list addressList as address>
+				<tr>
+					<td>${address.name!''}</td>
+					<td>${address.province!''}-${address.city!''}-${address.region!''}
+					    <#if address.town ??>
+	                    <#if address.town!=''>
+	                    -${address.town!''}
+	                    </#if>
+	                    </#if></td>
+					<td>${address.addr!''}</td>
+					<td>${address.tel!''}</td>
+					<td>${address.mobile!''}</td>
+					<td>${address.zip!''}</td>
+					<td><#if address.def_addr == 0 >否</#if><#if address.def_addr == 1 >是</#if></td>
+				</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>

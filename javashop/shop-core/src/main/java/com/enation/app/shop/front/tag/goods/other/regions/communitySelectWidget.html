@@ -1,0 +1,238 @@
+<span>
+<select 
+	<#if province_name??>
+		name="${province_name}_id" id="${province_name}_id"
+	<#else>
+		name="province_id" id="province_id"
+	</#if> >
+	<option value="0">请选择</option>
+	<#if provinceList??>
+		<#list provinceList as province>
+			<option value='${(province.region_id)?c}' >${province.local_name}</option>
+		</#list>
+	</#if>
+</select>&nbsp;
+<input type="hidden" 
+	<#if province_name??>
+		name="${province_name}" id="${province_name}"
+	<#else>
+		name="province" id="province"
+	</#if>  />
+
+<select 
+	<#if city_name??>
+		name="${city_name}_id" id="${city_name}_id"
+	<#else>
+		name="city_id" id="city_id"
+	</#if> ><option value="0">请选择</option></select>&nbsp;
+<input type="hidden" 
+	<#if city_name??>
+		name="${city_name}" id="${city_name}"
+	<#else>
+		name="city" id="city"
+	</#if> />
+<select 
+	<#if region_name??>
+		name="${region_name}_id" id="${region_name}_id" 
+	<#else>
+		name="region_id" id="region_id" 
+	</#if> ><option value="0">请选择</option></select>&nbsp;
+<input type="hidden" 
+	<#if region_name??>
+		name="${region_name}" id="${region_name}"
+	<#else>
+		name="region" id="region"
+	</#if> />	
+	
+	<select name="community_id" id="community_id"  >
+		<option value="0">请选择</option>
+	</select>&nbsp;
+	<input type="hidden" name="community" id="community"  />
+</span>
+	
+<script>
+<#if !province_name??>
+var RegionsSelect={
+	init:function(){
+		var self  = this;
+		$("#province_id").change(function(){
+				var province = $(this).val();
+				$("#province").val(  $("#province_id option:selected").text() );
+				if( "0"  ==  province ){
+					$("#city_id").html("<option value='0'>请选择</option>");
+					$("#region_id").html("<option value='0'>请选择</option>");
+					return }
+				$("#region_id").empty().html("<option value='0'>请选择</option>");
+				//$("#region_id").hide();
+				self.loadRegions(province,$("#city_id"));
+		});
+
+		$("#city_id").change(function(){
+			$("#city").val(  $("#city_id option:selected").text() );
+			var city = $(this).val();
+			if( "0"  ==  city ){
+				$("#region_id").html("<option value='0'>请选择</option>");
+				return }
+			//$("#region_id").show();
+			self.loadRegions(city,$("#region_id"));
+
+		});
+		$("#region_id").change(function(){
+			$("#region").val($("#region_id option:selected").text());
+			var region = $(this).val();//当前选中的区id
+			if( "0"  ==  city ){
+				$("#community_id").html("<option value='0'>请选择</option>");
+				return }
+			self.loadRegions(region ,$("#community_id"));
+		});
+		$("#community_id").change(function(){
+			$("#community").val(  $("#community_id option:selected").text() );
+			var community = $(this).val();
+		});
+		
+	},
+	regionChange:function(name,zipcode){},
+	load:function(provinceid,cityid,regionid,community_id){
+		$("#province_id").val( provinceid );
+		$("#province").val(  $("#province_id option:selected").text() );
+		
+		this.loadRegions(provinceid, $("#city_id"), cityid);
+		$("#city").val(  $("#city_id option:selected").text() );
+		
+		this.loadRegions(cityid, $("#region_id"), regionid);
+		$("#region").val($("#region_id option:selected").text());
+		
+		this.loadRegions(regionid, $("#community_id"), community_id);
+		$("#community").val($("#community_id option:selected").text());
+	},
+	loadRegions:function(regionid,selectEl,currentid){
+		$.ajax({
+			url:"${ctx}/api/base/region/get-children.do?ajax=yes&regionid="+regionid,
+			dataType:"json",
+			success:function(regionJson){
+				if(regionJson){
+					var html ="<option value='0'>请选择</option>";
+					$.each(regionJson,function(i,region){
+						html+="<option value='"+region.region_id+"'";
+						
+						if( currentid== region.region_id ){
+							html += "selected='true'";
+						}
+						
+						if(selectEl.attr("id") == "region_id"){
+							html += "zipcode='"+ region.zipcode + "'";
+						}
+						
+						html += ">"+ region.local_name +"</option>";
+					});
+					selectEl.empty().append(html);
+					selectEl.next("input").val(selectEl.find("option:selected").text());
+				}
+			},
+			error:function(){
+				alert("非常抱歉,加载地区出错");
+			}
+		});
+	}
+	
+}
+
+
+$(function(){
+	RegionsSelect.init();
+});
+<#else>
+var ${province_name}RegionsSelect={
+		init:function(){
+			var self  = this;
+			$("#${province_name}_id").change(function(){
+					var province = $(this).val();
+					$("#${province_name}").val(  $("#${province_name}_id option:selected").text() );
+					if( "0"  ==  province ){
+						$("#${city_name}_id").html("<option value='0'>请选择</option>");
+						$("#${region_name}_id").html("<option value='0'>请选择</option>");
+						return }
+					$("#${region_name}_id").empty().html("<option value='0'>请选择</option>");
+					//$("#region_id").hide();
+					self.loadRegions(province,$("#${city_name}_id"));
+			});
+
+			$("#${city_name}_id").change(function(){
+				$("#${city_name}").val(  $("#${city_name}_id option:selected").text() );
+				var city = $(this).val();
+				if( "0"  ==  city ){
+					$("#${city_name}_id").html("<option value='0'>请选择</option>");
+					return }
+				//$("#region_id").show();
+				self.loadRegions(city,$("#${region_name}_id"));
+
+			});
+			$("#${region_name}_id").change(function(){
+				var regionid = $(this).val();//当前选中的区id
+				var name = $("#${region_name}_id option:selected").text();
+				$("#${region_name}").val(name);
+				if( "0"  ==  regionid ){
+					$("#community_id").html("<option value='0'>请选择</option>");
+					return }
+				self.loadRegions(regionid ,$("#community_id"));
+			});
+			$("#community_id").change(function(){
+				$("#community").val(  $("#community_id option:selected").text() );
+				var community = $(this).val();
+			});
+			
+		},
+		regionChange:function(name,zipcode){
+			
+		},load:function(provinceid,cityid,regionid,community_id){
+			$("#${province_name}_id").val( provinceid );
+			$("#${province_name}").val(  $("#${province_name}_id option:selected").text() );
+			
+			this.loadRegions(provinceid, $("#${city_name}_id"), cityid);
+			$("#${city_name}").val(  $("#${city_name}_id option:selected").text() );
+			
+			this.loadRegions(cityid, $("#${region_name}_id"), regionid);
+			$("#${region_name}").val($("#${region_name}_id option:selected").text());
+			
+			this.loadRegions(regionid, $("#community_id"), community_id);
+			$("#community").val($("#community_id option:selected").text());
+			$("#community").val();
+		},
+		loadRegions:function(regionid,selectEl,currentid){
+			$.ajax({
+				url:"${ctx}/api/base/region/get-children.do?ajax=yes&regionid="+regionid,
+				dataType:"json",
+				success:function(regionJson){
+					if(regionJson){
+						var html ="<option value='0'>请选择</option>";
+						$.each(regionJson,function(i,region){
+							html+="<option value='"+region.region_id+"'";
+							
+							if( currentid== region.region_id ){
+								html += "selected='true'";
+							}
+							
+							if(selectEl.attr("id") == "region_id"){
+								html += "zipcode='"+ region.zipcode + "'";
+							}
+							
+							html += ">"+ region.local_name +"</option>";
+						});
+						selectEl.empty().append(html);
+						selectEl.next("input").val(selectEl.find("option:selected").text());
+					}
+				},
+				error:function(){
+					alert("非常抱歉,加载地区出错");
+				}
+			});
+		}
+		
+	}
+
+
+	$(function(){
+		${province_name}RegionsSelect.init();
+	});
+</#if>
+</script>

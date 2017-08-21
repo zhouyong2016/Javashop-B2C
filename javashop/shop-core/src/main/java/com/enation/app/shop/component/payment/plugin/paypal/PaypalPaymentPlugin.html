@@ -1,0 +1,53 @@
+<tr>
+	 <th>service.EndPoint：</th>
+	 <td>
+ 	 <input type="text" name="service" value="${service!''}" class="input_text easyui-validatebox"  id="service" /><br>
+ 	  	 沙箱请填写：https://api.sandbox.paypal.com<br>
+ 	 正式环境请填写：https://api.paypal.com
+	</td>
+</tr>
+<tr>
+	 <th>ipn.EndPoint：</th>
+	 <td>
+ 	 <input type="text" name="ipn" value="${ipn!''}" class="input_text easyui-validatebox"  id="ipn" /><br>
+ 	 沙箱请填写：https://www.sandbox.paypal.com/cgi-bin/webscr<br>
+ 	 正式环境请填写：https://www.paypal.com/cgi-bin/webscr
+ 	 
+	</td>
+</tr>
+
+<tr>
+	 <th> clientId：</th>
+	 <td>
+ 	 <input type="text" name="clientId"  value="${clientId!''}" class="input_text easyui-validatebox"  id="clientId" style="width:500px"  />
+	</td>
+</tr>
+<tr>
+	 <th> clientSecret：</th>
+	 <td>
+ 	 <input type="text" name="clientSecret"  value="${clientSecret!''}" class="input_text easyui-validatebox"  id="clientSecret" style="width:500px"  />
+	</td>
+</tr>
+ 
+<tr><th>  说明</th>
+	 
+	 <td >
+ 	   请参考这里的教程申请clientId和clientSecret:<a href="http://www.javamall.com.cn/blog/archives/194" target="_blank">Paypal教程</a>
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#ipn').validatebox({ 
+		required:true 
+		}); 
+	$('#service').validatebox({ 
+		required:true 
+		}); 
+	$('#clientId').validatebox({ 
+		required:true 
+		}); 
+	$('#clientSecret').validatebox({ 
+		required:true 
+		}); 
+})
+</script>

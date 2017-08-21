@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>drop</command>
+		<table>es_specification</table>
+	</action>
+	<action>
+		<command>drop</command>
+		<table>es_spec_values</table>
+	</action>	
+</dbsolution>
