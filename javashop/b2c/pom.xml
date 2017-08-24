@@ -110,17 +110,7 @@
 		<!-- Javashop 工程依赖 -->
 		<dependency>
 			<groupId>com.enation.app.javashop</groupId>
-			<artifactId>core</artifactId>
-			<version>6.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.enation.app.javashop</groupId>
 			<artifactId>shop-core</artifactId>
-			<version>6.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.enation.app.javashop</groupId>
-			<artifactId>cms-core</artifactId>
 			<version>6.2.1</version>
 		</dependency>
 	 	

@@ -35,8 +35,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>src/eop</source>
-								<source>src/base</source>
+								<source>src/main/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -50,15 +49,7 @@
 						<configuration>
 							<resources>
 								<resource>
-									<directory>src/base</directory>
-									<includes>
-										<include>**/*.xml</include>
-										<include>**/*.html</include>
-										<include>**/*.css</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>src/eop</directory>
+									<directory>src/main/java</directory>
 									<includes>
 										<include>**/*.xml</include>
 										<include>**/*.html</include>
