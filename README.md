@@ -5,10 +5,10 @@ Javashop是基于Java技术构建的开源电子商务平台，采用EOP(Enation
 
 默认会自动进入安装程序，安装后会在install目录下增加install.lock文件。若第一次已安装，后续不想要重新安装的话，则可以手动增加install.lock 文件，同时修改jdbc配置为已安装数据库，即可。
 
-#开源计划
+#WAP手机页面
 
-- 8月15日：WAP配置请参考:http://t.cn/RCPYspW
-- 8月20日：不好意思，原定20号开源微信的代码，因内部产生异议，推迟3天。
+#开源计划
+暂无其他计划
 
 #Maven环境及Javashop产品部署
 （备注：javashop提供集成好maven和svn插件的eclipse ,请自行下载相应的版本  链接: https://pan.baidu.com/s/1i5fw9E1 密码: i9nk）
