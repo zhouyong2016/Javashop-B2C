@@ -1,4 +1,5 @@
 ##ignore this file##
+.gitignore
 /target/ 
 .classpath
 .project

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script type="text/javascript" src=" http://www.javamall.com.cn/version5/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="api/shop/weixin!configScript.do?pagename=/api_test.html"></script>
+
+</head>
+
+<body>
+ 
+<input type="button" id="scan" value="扫一扫">
+
+<script>
+wx.ready(function(){
+	 
+});
+
+wx.error(function(res){
+alert("验证失败")
+
+});
+
+$(function(){
+	$("#scan").click(function(){
+		wx.scanQRCode({
+		    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+		    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+		    success: function (res) {
+		    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+		    alert(result)
+		}
+		});
+	});
+});
+
+</script>
+
+</body>
+</html>
