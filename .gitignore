@@ -1,6 +1,6 @@
 ##ignore this file##
 .gitignore
-/target/ 
+*/target/*
 .classpath
 .project
 .settings      
