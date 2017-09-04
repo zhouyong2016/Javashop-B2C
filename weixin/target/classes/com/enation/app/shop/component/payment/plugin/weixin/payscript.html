@@ -1,0 +1,25 @@
+<h1>正在使用微信支付...</h1>
+<script>
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+	 
+	    if( document.addEventListener ){
+	        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+	    }else if (document.attachEvent){
+	        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+	        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+	    }
+	}else{
+	    jsApiCall();
+	}
+}
+
+function jsApiCall(){
+	${payStr}
+}
+window.onload=function(){
+	callpay();
+}
+
+</script>

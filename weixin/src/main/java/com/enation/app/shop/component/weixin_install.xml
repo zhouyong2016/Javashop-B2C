@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>member</table>
+		<field type="add"><name>wx_openid</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>wx_unionid</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+</dbsolution>

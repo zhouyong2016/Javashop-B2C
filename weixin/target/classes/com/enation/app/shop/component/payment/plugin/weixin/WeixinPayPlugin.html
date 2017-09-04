@@ -1,0 +1,32 @@
+
+
+<tr>
+	 <th>商户号MCHID ：</th>
+	 <td>
+ 	 <input type="text" name="mchid" value="${mchid!''}" class="input_text easyui-validatebox"   />
+	</td>
+</tr>
+<tr>
+	 <th> APPID：</th>
+	 <td>
+ 	 <input type="text" name="appid"  value="${appid!''}" class="input_text easyui-validatebox"    />
+	</td>
+</tr>
+<tr>
+	 <th>API密钥(key)：</th>
+	 <td>
+ 	 <input type="text"  name="key" id="key"  value="${key!''}" class="input_text easyui-validatebox"   />
+ 	
+ 	 <script src="${ctx}/resource/com/enation/app/shop/component/payment/plugin/weixin/md5.js"></script>
+ 
+ 	 <a href="javascript:;" onclick="javascript:var hash = hex_md5( 't'+new Date().getTime() ); $('#key').val(hash); ">点击生成</a>
+	</td>
+</tr>
+<tr>
+	 <th>应用密钥(AppSecret)：</th>
+	 <td>
+ 	 <input type="text"name="appsecret"  value="${appsecret!''}" class="input_text easyui-validatebox"   />
+	</td>
+</tr>
+<!-- 默认开启 -->
+<input type="hidden" name="autoreg"  value="yes"  />
