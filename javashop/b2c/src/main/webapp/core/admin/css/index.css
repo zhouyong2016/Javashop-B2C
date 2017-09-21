@@ -1,0 +1,105 @@
+.admin-main{
+	margin:0px!important;
+	background:none;
+	
+	}
+	.layui-tab-content .layui-tab-item iframe{
+		height: 1300px;
+	}
+	.box{
+	 float:left;
+  	background:rgba(255,255,255,0.7);
+	border:1px solid white;
+	
+	border-radius:7px;
+    box-shadow: 0px 0px 9px rgba(155,152,152,0.6);
+	}
+	.box-a{
+	 width:60%;
+	 margin:40px 20px;
+	height:500px;
+	}
+	.box-a h1{
+	margin:10px;
+	font-size:20px;
+	}
+	.box-b{
+	 width:30%;	
+	 margin:40px 0px;
+	height:500px;	
+	}
+	.box-c{
+	 width:60%;
+	 margin:0px 20px;
+	height:300px;
+	}
+	.box-c h1{
+	margin:10px;
+	font-size:20px;
+	}
+	.box-d{
+	 width:30%;
+	 margin:0px 0px;
+	height:300px;
+	}
+	.tubiao1{
+	width:100%;
+	height:230px;
+	text-align:center;
+	margin-top:15px;
+	}
+	.box-b h2{
+	font-size:20px;
+	margin:10px 10px;
+	}
+	.box-b>span{
+	font-size:16px;
+	margin-left:10px;
+	}
+	.lily p{
+	font-size:20px;
+	}
+	.ulliy li{
+	    width: 88%;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin: 0px auto;
+	}
+	.ulliy li span{
+	float:right;
+	}
+	.anniu{
+	background:#B2B1E8;
+	width:170px;
+	text-align:center;
+	margin:20px 87px;
+	}
+	.box-d p{
+	font-size:20px;
+	margin:10px 10px;
+	}
+	.anniu-one{
+	    background: #7ABCE5;
+    margin: 20px 70px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+	}
+	.anniu-two{
+	background:#72C6A5;
+	  margin: 20px 70px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+	}
+	.anniu-three{
+	background:#D797F3;
+  margin: 20px 70px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+	}

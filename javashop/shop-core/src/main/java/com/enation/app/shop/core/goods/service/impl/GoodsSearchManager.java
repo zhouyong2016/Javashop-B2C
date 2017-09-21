@@ -85,7 +85,7 @@ public class GoodsSearchManager  implements IGoodsSearchManager{
 		String uri = request.getServletPath();
 		List list  = this.list(pageNo,pageSize);
 		int count = this.count();
-		Page webPage = new Page(pageNo, count, pageSize, list);
+		Page webPage = new Page(0, count, pageSize, list);
 		return webPage;
 	}
 	

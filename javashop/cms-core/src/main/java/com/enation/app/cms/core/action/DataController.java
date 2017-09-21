@@ -1,7 +1,10 @@
 package com.enation.app.cms.core.action;
 
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,10 +19,12 @@ import com.enation.app.cms.core.plugin.ArticlePluginBundle;
 import com.enation.app.cms.core.service.IDataCatManager;
 import com.enation.app.cms.core.service.IDataFieldManager;
 import com.enation.app.cms.core.service.IDataManager;
+import com.enation.app.cms.core.service.IDataModelManager;
 import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
 import com.enation.framework.util.JsonResultUtil;
+import com.enation.framework.util.StringUtil;
 
 /**
  * 后台文章管理
@@ -44,6 +49,8 @@ public class DataController extends GridController{
 	@Autowired
 	private ArticlePluginBundle articlePluginBundle;
 	
+	@Autowired
+	private IDataModelManager dataModelManager;
 	/**
 	 * 跳转至帮助中心页面
 	 * @return
@@ -53,6 +60,32 @@ public class DataController extends GridController{
 		return "/cms/admin/article/help_list";
 	}
 
+	
+	
+	/**
+	 * 跳转至修改文章分类页面
+	 * @return
+	 */
+	@RequestMapping(value="/help-edit")
+	public ModelAndView helpEdit() { 
+		ModelAndView view = new ModelAndView();
+		view.addObject("modelList", this.dataModelManager.list());
+		view.setViewName("/cms/admin/article/help_edit");
+		return view;
+	}
+	
+	/**
+	 * 跳转至管理文章分类页面
+	 * @return
+	 */
+	@RequestMapping(value="/manage-cat")
+	public ModelAndView manageCat() { 
+		ModelAndView view = new ModelAndView();
+		view.addObject("modelList", this.dataModelManager.list());
+		view.setViewName("/cms/admin/cat/manage_cat");
+		return view;
+	}
+	
 	/**
 	 * 跳转至热门关键字列表页面
 	 * @param catid 文章分类id
@@ -81,13 +114,12 @@ public class DataController extends GridController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/list-json")
-	public GridJsonResult listJson(String searchText, String searchField, Integer catid){
+	public GridJsonResult listJson(String searchText,String searchField, Integer catid){
+		catid = (catid==null?1:catid);
 		String term = null;
-		
-		if (searchText != null) {
+		if (!StringUtil.isEmpty(searchText)) {
 			term = "and " + searchField + " like '%" + searchText + "%'";
 		}
-		
 		this.webpage = this.dataManager.listAll(catid, term, null, false, this.getPage(), this.getPageSize());
 		return JsonResultUtil.getGridJson(webpage);
 	}
@@ -219,14 +251,15 @@ public class DataController extends GridController{
 	@ResponseBody
 	@RequestMapping(value="/delete")
 	public JsonResult delete(Integer catid, Integer dataid) {
+		
 		Map article = this.dataManager.get(dataid, catid, false);
 		
 		if (article.get("sys_lock") != null && article.get("sys_lock").toString().equals("1")) {
-			return JsonResultUtil.getErrorJson("此文章为系统文章，不能删除！");
+			return JsonResultUtil.getErrorJson("不能删除！");
 		} else {
 			if (owner(article.get("site_code"))) {
 				this.dataManager.delete(catid, dataid);
-				return JsonResultUtil.getSuccessJson("文章删除成功");
+				return JsonResultUtil.getSuccessJson("删除成功");
 			} else {
 				return JsonResultUtil.getErrorJson("非本站内容，不能删除！");
 			}

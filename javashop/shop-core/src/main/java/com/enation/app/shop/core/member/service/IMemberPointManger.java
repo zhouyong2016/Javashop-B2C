@@ -45,6 +45,7 @@ public interface IMemberPointManger {
 	 * 为会员增加积分
 	 * @param point
 	 * @param itemname
+	 * @param pointType 新增的会员积分类型 0为等级积分，1为消费积分
 	 */
 	public void add(Member member,int point,String itemname,Integer relatedId, int mp,int pointType);
 	

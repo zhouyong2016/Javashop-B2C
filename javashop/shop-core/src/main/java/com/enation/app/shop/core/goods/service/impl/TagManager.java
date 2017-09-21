@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.enation.app.shop.core.goods.model.Tag;
 import com.enation.app.shop.core.goods.service.ITagManager;
 import com.enation.framework.annotation.Log;
@@ -138,10 +137,10 @@ public class TagManager implements ITagManager {
 	 */
 	@Override
 	public List<Tag> list() {
-		String sql  ="select * from es_tags";
+		String sql  ="select * from es_tags ";
 		return this.daoSupport.queryForList(sql,Tag.class);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.ITagManager#saveRels(java.lang.Integer, java.lang.Integer[])
@@ -178,7 +177,7 @@ public class TagManager implements ITagManager {
 	 */
 	@Override
 	public List<Map> listMap() {
-		String sql  ="select * from es_tags";
+		String sql  ="select * from es_tags ";
 		return this.daoSupport.queryForList(sql);
 	}
 

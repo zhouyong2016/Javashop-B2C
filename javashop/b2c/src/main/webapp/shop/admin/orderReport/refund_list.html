@@ -1,52 +1,165 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<div class="shadowBoxWhite tableDiv">
-		<table  id="dg" class="easyui-datagrid" 
-		data-options="url:'${ctx}/shop/admin/order-report/refund-list-json.do?state=${state!-1}',pageList: [10,15,20,30],pageSize:20,fitColumns:'true'" 
-		pagination="true" width="width">
-			    <thead>
-				    <tr>
-				   	 	<th  data-options="field:'sn',width:100" >流水号</th>
-				    	<th  data-options="field:'refund_way',width:100" >退款方式</th>
-				    	<th  data-options="field:'create_time',width:100" formatter="formatTime" >创建日期</th>
-				    	<th  data-options="field:'refund_money',width:100" formatter="formatMoney">退款金额</th>
-				    	<th  data-options="field:'refund_user',width:100" >退款人</th>
-				    	<th  data-options="field:'refund_time',width:100" formatter="formatTime" >退款时间</th>
-				    	<th  data-options="field:'status',width:100" formatter="formatStatus" >退款状态</th>
-				    	<th data-options="field:'operation',width:100" formatter="formatOperation">操作</th>
-				    </tr>
-			    </thead>
-		 </table>
-	</div>
+<style>
+.page_explain ul li{
+height:40px;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>退款状态分为：新建、已退款、退款中、退款失败两种状态。</li>
+                <li><span>·</span>在未退款的情况下，操作为退款，点击退款，可以查看退款申请详情，也可以点击退款完成审核，退款完毕之后，列表中操作会自动变成查看。</li>
+                <li><span>·</span>微信、支付宝、中国银联退款为原支付方式退款，点击退款后向第三方支付平台提交退款申请，申请结果由定时任务查询成功后更改退款单状态、如查询结果为退款失败需要到第三方支付平台手动退款，退款完成后许点击手动退款按钮改变退款单状态</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+              <!--条件筛选  -->
+            <div class="table_search">
+				<select id="returnState" style="height: 30px;margin-right:10px;margin-top: 8px;display:inline-block">
+					<option value="">请选择</option>
+					<option value="0">新建</option>
+					<option value="1">已退款</option>
+					<option value="2">退款中</option>
+					<option value="3">退款失败</option>
+				</select> 
+				<a  href="javascript:void(0)" type="button" class="layui-btn layui-btn-primary layui-btn-small" id="searchReturned">筛选</a>
+			</div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+    <table id="dg" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+        <tr>
+            <th>退款单号</th>
+            <th>订单号</th>
+            <th>支付方式</th>
+            <th>退款方式</th>
+            <th>创建日期</th>
+            <th>退款金额</th>
+            <th>退款人</th>
+            <th>退款时间</th>
+            <th>退款状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
 </div>
-<script type="text/javascript">
 
-function formatMoney(value,row,index){
-	var val="￥"+value;
-	return val;
-}
-
-function formatTime(value,row,index){
-	if(value!=""&&value!=null){
-		return getFormatDateByLong(value, "yyyy-MM-dd");
-	}else{
-		return "";
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#dg').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/order-report/refund-list-json.do?state=${state!-1}',
+	    },
+	    columns: [ //定义列
+	        {data: "sn"},
+	        {data: "ordersn"},
+	        {data: "payment_name"},
+	        {data: "refund_way"},
+	        {data: null,"render":function(data,type,row){
+	        	if(data.create_time==null){
+	        		return " ";
+	        	}
+	        	return getFormatDateByLong(data.create_time, "yyyy-MM-dd");
+	        }},
+	        {data: "refund_money"},
+	        {data: "refund_user"},
+	        {data: null,"render":function(data,type,row){
+	        	if(data.refund_time==null){
+	        		return " ";
+	        	}
+	        	return getFormatDateByLong(data.refund_time, "yyyy-MM-dd");
+	        }},
+	        {data: null,"render":function(data,row,index){
+	        	return formatStatus(data.status,row,index)
+	        }},
+	        {data: null,"render": function(row) {
+	        	var val;
+	    		if(row.status==0){
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退款单详细','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >退款</a>";
+	    		}if(row.status == 3){
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退款单详细','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >查看</a>";
+	    			val += "&nbsp;&nbsp;&nbsp;<a class='layui-btn layui-btn-small layui-btn-warm' onclick=manualRefund("+row.id+"); >手动退款</a>";
+	    		}else{
+	    			
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退款单详细','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >查看</a>";
+	    		}
+	    		return val;		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+});
+//手动退款
+function manualRefund(id){
+	if (!confirm("确定此退款单已经退款到账？")) {
+		return;
 	}
+	
+	$.ajax({
+        url: "${ctx}/shop/admin/order-report/manual-refund.do",
+        data: {id:id},
+        dataType: "json",
+        success: function(data){
+			if(data.result == 1){
+				  $.Loading.success("手动退款成功");
+				  table.ajax.url(ctx+"/shop/admin/order-report/refund-list-json.do?state=${state!-1}").load();
+			}else{
+				$.Loading.error('手动退款失败');
+			}
+        }
+    });
+	
+	
 }
+//退款状态
 function formatStatus(value,row,index){
 	if(value==0){
 		return "新建";
 	}else if(value==1){
 		return "已退款";
+	}else if(value==2){
+		return "退款中";
+	}else if(value==3){
+		return "退款失败";
 	}
 }
-function formatOperation(value, row, index) {
-	if(row.status==0){
-		return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >退款</a>";
-	}
-	return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/order-report/refund-detail.do?id="+row.id+"'); >查看</a>";
-}
-</script>
 
+//筛选
+$("#searchReturned").click(function(){
+	_searchReturned(table);
+});
+
+function _searchReturned(table){
+var state = $("#returnState").val();
+var url = table.ajax.url("${ctx}/shop/admin/order-report/refund-list-json.do?state="+state);
+url.load();
+}
+
+
+
+</script>
 <#include '/admin/footer.html' >

@@ -26,7 +26,7 @@ public class Activity {
 	/** 参加促销活动商品形式 1：全部参加，2：部分参加 */
 	private Integer range_type;
 	
-	/** 促销活动类型 1：普通优惠(一级优惠)，2：多级优惠 */
+	/** 促销活动类型 1：满优惠(一级优惠)，2：多级优惠，3：单品立减优惠，4：第二件半价优惠 */
 	private Integer activity_type;
 
 	/** 是否禁用 0：否，1：是 */

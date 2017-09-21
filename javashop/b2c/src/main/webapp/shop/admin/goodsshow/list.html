@@ -1,22 +1,35 @@
 <#include '/admin/header.html' > 
 <#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
+<style>
+.receiptsInputText{
+    width: 35px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+ 	text-align:center;
+}
+</style>
+<div class="admin-main">
+<div class="table_control">
 	<div class="buttonArea">
-		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="newTab('添加标签','${ctx}/shop/admin/goods-show/search.do?tagid=${tagid}')">添加</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" id="saveOrdernum" onclick="saveOrdernum()">保存排序</a>
+		<div class="table_opera">
+		 	<button type="button" id="addtag" title="添加" class="layui-btn layui-btn-primary " onclick="newTab('添加标签','${ctx}/shop/admin/goods-show/search.do?tagid=${tagid}')"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+		 	<button type="button" title="保存排序" class="layui-btn layui-btn-primary " id="saveOrdernum" onclick="saveOrdernum()"><i class="icon iconfont icon-xuanze"></i></button>
+		</div>
 	</div>
+</div>
+<div class="clear height10"></div>
 	<div class="shadowBoxWhite tableDiv">
 		<input type="hidden" name="tagid" value="${tagid }" id="tagid"/>
 		<input type="hidden" name="catid" value="${catid!''}" id="catid"/>
 		<form id="goodsShowform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/goods-show/list-json.do?ajax=yes&tagid=${tagid}',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" width="width" id="goodsShowData">
+			<!--表格区域  -->	 
+			<table class="layui-table site-table table-hover" id="goodsShowData" width="100%" lay-skin="line" >
 				<thead>
 					<tr>
-						<th data-options="field:'name',width:100" formatter="formatGoodsName">商品名称</th>
-						<th data-options="field:'ordernum',width:100" formatter="formatOrdernum">排序</th>
-						<th data-options="field:'delete',width:100" formatter="formatDelete">操作</th>
+						<th>商品名称</th>
+						<th>排序</th>
+						<th>操作</th>
 					</tr>
 				</thead>
 			</table>
@@ -26,12 +39,43 @@
 </div>
 
 <script type="text/javascript">
+var table;
+$(function(){
+	table = $('#goodsShowData').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goods-show/list-json.do?ajax=yes&tagid=${tagid}',
+	    },
+	    columns: [ //定义列	   
+	        {data: null,"render":function(data, type, row) {
+	        	return formatGoodsName(data,row,type);		
+	       	}},
+	       	{data: null,"render":function(data, type, row) {
+	       		
+	        	return formatOrdernum(data,row,type);		
+	       	}},
+	       	{data: null,"render":function(data, type, row) {
+	        	return formatDelete(data,row,type);		
+	       	}}	        
+	     ]
+	});
+});
+
 function formatGoodsName(value,row,index){
 	var val="<a href=\"../../../goods-"+row.goods_id+".html\" target=\"_blank\">"+row.name+"</a><input type=\"hidden\" value=\""+row.goods_id+"\" name=\"goods_id\"/>";
 	return val;
 }
 function formatOrdernum(value,row,index){
-	var val="<input type=\"text\" maxlength=\"10\" class=\"input_text\" value=\"";
+	var val="<input type=\"text\" maxlength=\"10\" class=\"input_text receiptsInputText\" value=\"";
 	if(row.ordernum==null){ val+=0;}else{val+=row.ordernum;}
 	val+="\" name=\"ordernum\"/>"
 	val+="<input type=\"hidden\" name=\"id\" value=\""+row.goods_id+"\" />"
@@ -39,7 +83,7 @@ function formatOrdernum(value,row,index){
 	return val;
 }
 function formatDelete(value,row,index){
-	var val="<a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.goods_id+","+row.tag_id+")'></a>";
+	var val="<a class='layui-btn layui-btn-small delete' title='删除' href='javascript:void(0);' onclick='del("+row.goods_id+","+row.tag_id+")'>删除</a>";
 	return val;
 }
 function del(goods_id,tag_id){
@@ -51,13 +95,13 @@ function del(goods_id,tag_id){
 			success : function(result) {
 				if(result.result==1){
 					$.Loading.success(result.message);
-					$('#goodsShowData').datagrid('reload');
+					table.ajax.url("${ctx}/shop/admin/goods-show/list-json.do?ajax=yes&tagid=${tagid}").load();
 				}else{
 					$.Loading.error(result.message);				
 				}
 			},
 			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
+				layer.msg("出现错误 ，请重试");
 			}
 		};
 		$('#goodsShowform').ajaxSubmit(options);	
@@ -73,9 +117,7 @@ function saveOrdernum(){
 			   is_num=false;
 		   }
 		}
-		
 		if(is_num){
-		$("#saveOrdernum").linkbutton("disable");
 		var options = {
 				url : "${ctx}/shop/admin/goods-show/save-ordernum.do?ajax=yes",
 				type : "POST",
@@ -83,19 +125,18 @@ function saveOrdernum(){
 				success : function(result) {
 					if(result.result==1){
 						$.Loading.success(result.message);
+						table.ajax.url("${ctx}/shop/admin/goods-show/list-json.do?ajax=yes&tagid=${tagid}").load();
 					}else{
 						$.Loading.error(result.message);				
 					}
-					$("#saveOrdernum").linkbutton("enable"); 
 				},
 				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-					$("#saveOrdernum").linkbutton("enable"); 
+					layer.msg("出现错误 ，请重试");
 				}
 			};
 			$('#goodsShowform').ajaxSubmit(options);	
 		}else{
-			$.Loading.error("您输入的排序不是数字,并且不能为空");
+			layer.msg("您输入的排序不是数字,并且不能为空");
 		} 
 	}
 }

@@ -18,12 +18,15 @@ public interface IRefundManager {
 	public void addRefund(Refund refund);
 	
 	/**
+	 * 
 	 * 修改退款单状态
 	 * @param id 退款单id
 	 * @param status 退款单状态
 	 * @param refund_money 退款金额
+	 * @param username 操作人
+	 * @return
 	 */
-	public void editRefund(Integer id,Integer status,Double refund_money);
+	public String editRefund(Integer id,Integer status,Double refund_money,String username);
 	
 	/**
 	 * 获取退款单
@@ -45,5 +48,24 @@ public interface IRefundManager {
 	 * @return
 	 */
 	public Refund getRefundBySellbackId(Integer id);
-
+	/**
+	 * 获取退款单
+	 * @param id
+	 */
+	public Refund getRefundByOrderId(Integer orderId);
+	/**
+	 * 手动修改退款单状态
+	 * @param id	退款单id
+	 * @param refund_money	退款金额
+	 * @param username		用户信息
+	 */	
+	public void manualRefundStatus(Integer id,String username);
+	
+	/**
+	 * 添加退款发起时间
+	* @param id	退款单id
+	 * @param txn_time	发起退款时间
+	 */
+	public void addRefundTxntime(Integer id,String txn_time);
+	
 }

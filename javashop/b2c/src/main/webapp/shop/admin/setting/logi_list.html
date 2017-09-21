@@ -1,176 +1,130 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" id="add_logi_button">添加</a>
-		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="logiform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/logi/list-logi-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true'" pagination="true" width="width" id="logidata">
-				<thead>
-				    <tr>
-				    	<th  data-options="field:'id',checkbox:true,width:100" ></th>
-				   	 	<th  data-options="field:'name',width:100">公司名称</th>
-				   	 	<th  data-options="field:'code',width:100">代码</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			 </table>
-			<div id="dlytype_info" style="display: none;"></div>
-		</form>
-		<div id="logiinfo" style="display: none;"></div>
-	</div>
+<style>
+td .layui-btn-small{
+background:#1E9FFF;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>商城包括前台所用到的物流公司，由此列表进行查看和修改。</li>
+                <li><span>·</span>在添加或者修改的时候，物流公司名字是不可以重复的。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_logi_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary" title="删除" onclick="del()"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="logiform">
+    <table id="logidata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>公司名称</th>
+            <th>代码</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
 
- <script type="text/javascript">
-function formatAction(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'></a>";
-	return val;
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#logidata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/logi/list-logi-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="id" class="fly-checkbox" value=' + obj.id + '>';
+            		}},
+	        {data: "name"},
+	        {data: "code"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa'  onclick='edit("+data["id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#add_logi_button").click(function(){
+	   	 layer.open({
+	            title:"添加物流公司",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/shop/admin/logi/add-logi.do",//内容的URL
+	            area:['550px','320px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
+});
+
+//修改
+function edit(cid){
+	 layer.open({
+         title:"修改物流公司",//标题
+         maxmin :true,//右上角可否放大缩小
+         type:2,//弹框的类型
+         shade: [0.3, '#000'],//黑色背景
+         shadeClose:false,//黑色背景是否可以点击关闭
+         content:ctx+"/shop/admin/logi/edit-logi.do?cid="+cid,//内容的URL
+         area:['550px','320px'],//弹框大小
+         scrollbar: false//是否允许浏览器出现滚动条
+     });
 }
-function del(){ 
-	var rows = $('#logidata').datagrid("getSelections"); 
-	if(rows.length<1){
-		$.Loading.error("请选择要删除的物流公司");
+
+//删除
+function del(){
+	var check = $("input[name='id']").is("input:checked");
+	if(check == false){
+		alert("请选择需要删除的物流公司！！！");
+		return false;
+	}
+	if(!confirm("确认要删除物流公司吗？")){
 		return;
 	}
-	if(!confirm("确认要将这些物流公司删除吗？")){	
-		return;
-	}
-	 var options = {
-			url : "${ctx}/shop/admin/logi/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					var rows = $('#logidata').datagrid("getSelections");
-					for(var i =0;i<rows.length;i++){
-			 			var index = $('#logidata').datagrid('getRowIndex',rows[i]);
-			 			$('#logidata').datagrid('deleteRow',index);
-			 		}
-					location.reload();
+	var options = {
+			url:ctx+"/shop/admin/logi/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result == 1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/logi/list-logi-json.do").load();
 				}
-				if(result.result==0){
-					$.Loading.error(result.message);
+				if(data.result==0){
+					$.Loading.error(data.message);
 				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误，请重试");
 			}
 	};
-	$('#logiform').ajaxSubmit(options);	
+	$("#logiform").ajaxSubmit(options);
 }
-$("#add_logi_button").click(function(){
-	 $("#logiinfo").show();
-	　　	$('#logiinfo').dialog({
-	　　		title: '添加物流公司',			
-	　　		width: 550,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/shop/admin/logi/add-logi.do', 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				 var savebtn = $(this);
-	　　				 var disabled=  savebtn.hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-		　　				 addLogiForm(savebtn);
-		　　			}
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#addLogiForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
-});
-function edit(logiId){
-	 $("#logiinfo").show();
-	　　	$('#logiinfo').dialog({
-	　　		title: '修改物流公司',			
-	　　		width: 550,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/shop/admin/logi/edit-logi.do?cid='+logiId, 	
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				 var editbtn = $(this);
-	　　				 var disabled=  editbtn.hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-		　　				 editLogiForm(editbtn);
-		　　			}
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#editLogiForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	}); 
-}
-function addLogiForm(savebtn){
-	var formflag= $("#addLogiForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		savebtn.linkbutton("disable");	
-	 	var options = {
-			url : "${ctx}/shop/admin/logi/save-add.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$("#logiinfo").dialog('close');
-					$('#logidata').datagrid('reload');
-				}else{
-					$.Loading.error(result.message);
-				}
-				savebtn.linkbutton("enable");
-			},
-			 error : function(e) {
-				 $.Loading.error("出现错误 ，请重试");	
-				 savebtn.linkbutton("enable");
-			}
-		};
-		$('#addLogiForm').ajaxSubmit(options);	
-	}
-}
-function editLogiForm(editbtn){
-	var formflag= $("#editLogiForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		editbtn.linkbutton("disable");	
-		var options = {
-			url : "${ctx}/shop/admin/logi/save-edit.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$("#logiinfo").dialog('close');
-					$('#logidata').datagrid('reload');
-					editbtn.linkbutton("enable");
-				}else{
-					$.Loading.error(result.message);
-					editbtn.linkbutton("enable");
-				}
-		 	},
-		 	error : function(e) {
-		 		$.Loading.error("出现错误 ，请重试");	
-		 		editbtn.linkbutton("enable");
-			}
-		};
-		$('#editLogiForm').ajaxSubmit(options);
-	}
-}
- 
 </script>
 <#include '/admin/footer.html' >

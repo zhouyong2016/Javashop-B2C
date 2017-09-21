@@ -1,24 +1,23 @@
-<div class="deliveryexp price" <#if areaUseexp??&&areaUseexp==1 >style="display: none;"</#if>> 首重费用 
-	<input type="text"  maxlength="6"  name="firstprice${areacount!''}" style="width: 60px;" value="${t_first!''}${check_first!''}${(tlist.typeAreaConfig.firstprice)!''}" class="input_text formula_input easyui-numberbox" <#if areacount??>data-options="required:true"</#if> />
+<div class="deliveryexp price" <#if areaUseexp??&&areaUseexp==1 >style="display: none;"</#if>> 
+	首重费用 <input type="text"  maxlength="6"  name="firstprice${areacount!''}" style="width: 60px;display: inline;" value="${t_first!''}${check_first!''}${(tlist.typeAreaConfig.firstprice)!''}" class="layui-input" <#if areacount??>data-options="required:true"</#if> />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		续重费用 <input type="text" maxlength="6"  name="continueprice${areacount!''}" value="${t_cont!''}${check_cont!''}${(tlist.typeAreaConfig.continueprice)!''}" style="width: 60px;" class="input_text formula_input easyui-numberbox"  <#if areacount??>data-options="required:true"</#if> />
+	续重费用 <input type="text" maxlength="6"  name="continueprice${areacount!''}" value="${t_cont!''}${check_cont!''}${(tlist.typeAreaConfig.continueprice)!''}" style="width: 60px;display: inline;" class="layui-input"  <#if areacount??>data-options="required:true"</#if> />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-			<a href="javascript:;" class="easyui-linkbutton showexp">使用公式</a> 
+		  <a href="javascript:;" class="layui-btn layui-btn-small layui-btn-normal showexp">使用公式</a> 
 </div>
 <#if areaUseexp??&&areaUseexp==1 >
 	<input type="hidden" value="1" name="useexp${areacount!''}">
 	<#else>
 	<input type="hidden" value="0" name="useexp${areacount!''}">
 </#if>
-<div class="deliveryexp despac" <#if !areaUseexp??||areaUseexp==0 >style="display: none;"</#if> >配送公式
-	<input type="text" id="input_text_expression" name="expressions${areacount!''}" style="width: 200px;" value="${t_expression!''}${expression!''}${(tlist.typeAreaConfig.expression)!''}" class="input_text formula_input expressions" <#if !areaUseexp??||areaUseexp==0 >style="display: none;"</#if> />
-	<a href="javascript:;" class="checkexp sysbtn easyui-linkbutton">验证</a>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="javascript:;" class="hideexp easyui-linkbutton">取消公式</a> 
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="http://kefu.javamall.com.cn/hc/kb/article/105986/" target="_blank" class="hideexp easyui-linkbutton">公式帮助</a> 
+<div class="deliveryexp despac" <#if !areaUseexp??||areaUseexp==0 >style="display: none;"</#if> >
+	配送公式<input type="text" id="input_text_expression" name="expressions${areacount!''}" style="width: 200px;display: inline;" value="${t_expression!''}${expression!''}${(tlist.typeAreaConfig.expression)!''}" class="layui-input formula_input expressions" <#if !areaUseexp??||areaUseexp==0 >style="display: none;"</#if> />
+		 <a href="javascript:;" class="checkexp sysbtn layui-btn-small layui-btn">验证</a>
+		 &nbsp;&nbsp;&nbsp;
+		 <a href="javascript:;" class="hideexp layui-btn layui-btn-small layui-btn-danger">取消公式</a> 
+		 &nbsp;&nbsp;&nbsp;
+		 <a href="http://kefu.javamall.com.cn/hc/kb/article/105986/" target="_blank" class="hideexp layui-btn layui-btn-small layui-btn-normal">公式帮助</a> 
 </div>
-
 <script type="text/javascript">
 	$(function() {
 		$(".showexp").click(function() {
@@ -31,7 +30,10 @@
 			Dlytype.price_set(parent, ".formula_input", ".expressions");
 			parent.siblings("input").val(0);
 		});
-
+		
+		$(".checkexp").bind("click", function() {
+			var btn = $(this);
+			Dlytype.checkExp(btn);
+		});
 	});
 </script>
-

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>drop</command>
+		<table>receipt</table>
+	</action>
+</dbsolution>

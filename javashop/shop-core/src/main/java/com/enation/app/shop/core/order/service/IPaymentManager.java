@@ -72,10 +72,11 @@ public interface IPaymentManager {
 	 * @param biref 支付方式描述，可为空
 	 * @param pay_img 支付方式图片	,	xulipeng新增，2016年07月25日
 	 * @param configParmas  支付方式配置参数名称和参数值对照map
+	 * @param isRetrace  是否需要愿支付方式退款
 	 * @throws IllegalArgumentException 如果name、type或configParmas其中一项为空时抛出此异常。
 	 * @see PaymentTest#testAdd
 	 */
-	public Integer add(String name,String type,String biref,String pay_img,Integer isOnline,Map<String,String> configParmas);
+	public Integer add(String name,String type,String biref,String pay_img,Integer isOnline,Map<String,String> configParmas,Integer isRetrace);
 	
 	
 	
@@ -87,10 +88,11 @@ public interface IPaymentManager {
 	 * @param biref 支付方式描述，可为空
 	 * @param pay_img 支付方式图片	,	xulipeng新增，2016年07月25日
 	 * @param configParmas  支付方式配置参数名称和参数值对照map
+	 * @param isRetrace  是否需要愿支付方式退款
 	 * @throws IllegalArgumentException 如果name、type或configParmas其中一项为空时抛出此异常。
 	 * @see PaymentTest#testEdit
 	 */
-	public void edit(Integer paymentId,String name,String type,String biref,String pay_img,Integer isOnline,Map<String,String> configParmas);
+	public void edit(Integer paymentId,String name,String type,String biref,String pay_img,Integer isOnline,Map<String,String> configParmas,Integer isRetrace);
 	
 	
 	

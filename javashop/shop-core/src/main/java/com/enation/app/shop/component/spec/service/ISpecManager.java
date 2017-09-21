@@ -28,7 +28,7 @@ public interface ISpecManager {
 	/**
 	 * 检测某个规格值 是否被使用
 	 * @param valueid
-	 * @return
+	 * @return true已被使用，false未被使用
 	 */
 	public boolean checkUsed(Integer valueid);
 	
@@ -53,7 +53,7 @@ public interface ISpecManager {
 	 * @param goodsTypeId	商品类型id
 	 * @return
 	 */
-	public List<Specification> listSpecAndValueByType(int goodsTypeId);
+	public List<Specification> listSpecAndValueByType(int goodsTypeId,int goodsId);
 	
 	
 	

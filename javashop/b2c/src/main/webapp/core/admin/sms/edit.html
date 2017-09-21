@@ -1,12 +1,43 @@
-<div class="main" style="background-color: white;" >
-	<div class="easyui-panel" style="border-style: none;">
-		<div style="padding: 10px 0 10px 20px">
-			<form id="editform" method="post" class="validate">
-				<table>
+<#include '/admin/sonheader.html' >
+<div class="admin-main" >
+			<form id="editform" class="layui-form layui-form-pane">
+				<table id="smsdata" class="layui-table site-table table-hover" width="30%">
 					${param_html!''}
 				</table>
 				<input type="hidden" name="smsid" value="${platform.id!''}">
+				<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000; position: fixed;left: 1px;width: 96%;height: 30px; background:rgba(230,230,230,0.8)"> 
+	  			<a class="layui-layer-btn0" type="submit" style="margin: 0px 0px 0px 100px;" lay-submit="" lay-filter="edit">保存</a>
+  		</div>
 			</form>
-		</div>
-	</div>
+	
+		
 </div>
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    layui.form().render();
+    //监听提交
+    form.on('submit(edit)', function(data){
+    	var options = {
+    			url: "save-edit.do",
+    			type: "post",
+    			dataType: "json",
+    			success:function(result){
+    				if(result.result==1){
+    					alert("修改成功");
+    					parent.layer.close(index);
+    					parent.table.ajax.reload();
+    				}
+    			}
+    	};
+   		$("#editform").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>

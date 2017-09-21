@@ -1,45 +1,98 @@
-<#include '/admin/header.html' >
-<form id="uriInfoForm">
-	<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-		
-		<tr>
-			<th><label class="text">URL：</label></th>
-			<td>
-			<input type="hidden" name="id" value="${themeUri.id}"/>
-			<input type="text" name="uri" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.uri}" dataType="string" id="uri" isrequired="true" data-options="required:true" />
-			</td>
-		</tr>
-		<tr>
-			<th><label class="text">模板文件：</label></th>
-			<td><input type="text" name="path" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.path}" dataType="string" id="path" isrequired="true" data-options="required:true" /> </td>
-		</tr>
-		<tr>
-			<th><label class="text">http缓存： </label></th>
-			<td>
-			<input type="radio" name="httpcache" value="1" <#if themeUri.httpcache==1>checked</#if>  >是&nbsp;&nbsp;
-			<input type="radio" name="httpcache" value="0" <#if themeUri.httpcache==0>checked</#if>  >否
-			</td>
-		</tr>	
-		<tr>
-			<th><label class="text">页面名称：</label></th>
-			<td><input type="text" name="pagename" maxlength="60" class="input_text easyui-validatebox" value="${themeUri.pagename}"  dataType="string" id="pagename" isrequired="true" data-options="required:true" /> 
-			</td>
-		</tr>
-		<tr>
-			<th><label class="text">积分</label></th>
-			<td><input type="text" name="point" maxlength="9" class="input_text" value="${themeUri.point}"  dataType="string" id="point" required="int" value="0"/> </td>
-		</tr>
-		<tr>
-			<th><label class="text">关键字：</label></th>
-			<td><input type="text" name="keywords" maxlength="60" class="input_text" value="${themeUri.keywords!''}" dataType="string" isrequired="true"/> 
-			</td>
-		</tr>
-		<tr>
-			<th><label class="text">描述：</label></th>
-			<td> 
-				<textarea name="description" class="input_text" id="description" style="width:300px;height:100px"  >${themeUri.description!''}</textarea>
-			</td>
-		</tr>	
-	</table>
-</form>
-<#include '/admin/footer.html' >
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-input{
+    width: 75%;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="editUriForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">URL：</label>
+    		<div class="layui-input-block">
+    			<input type="hidden" name="id" value="${themeUri.id}"/>
+      			<input type="text" name="uri" id="uri" maxlength="60" value="${themeUri.uri}" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">模板文件：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="path" id="path" maxlength="60" value="${themeUri.path}" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">http缓存：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="httpcache" value="1" title="是" <#if themeUri.httpcache==1>checked</#if>>
+      			<input type="radio" name="httpcache" value="0" title="否" <#if themeUri.httpcache==0>checked</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">页面名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="pagename" id="pagename" maxlength="60" value="${themeUri.pagename}" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">积分</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="point" id="point" maxlength="9" value="${themeUri.point}" value="0" dataType="string" lay-verify="" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">关键字：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="keywords" id="keywords" maxlength="60" value="${themeUri.keywords!''}" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">描述：</label>
+    		<div class="layui-input-block">
+      			<textarea name="description" id="description" style="height:100px" placeholder="请输入内容" class="layui-textarea">${themeUri.description!''}</textarea>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a style=" margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="edit_uri">保存</a>
+  			<button class="layui-btn layui-btn-primary layui-btn-small" type="reset">还原</button>
+  		</div>
+  	</form>
+</div>
+<script>
+var index = parent.layer.getFrameIndex(window.name);
+
+function checkLength(){
+	if($("#rolememo").val().length>100){
+		$("#rolememo").val($("#rolememo").val().substring(0,100));
+	}
+}
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form(),
+    layedit = layui.layedit,
+    laydate = layui.laydate;
+    
+	form.on('submit(edit_uri)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/themeUri/save-edit.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/themeUri/list-json.do").load();
+   				}
+   			}
+   		};
+   		$("#editUriForm").ajaxSubmit(options);
+       return false;
+    });
+   
+});
+</script>

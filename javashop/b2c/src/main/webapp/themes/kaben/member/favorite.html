@@ -40,16 +40,12 @@ $(function(){
 	$(".del_favorite").click(function(){
 		var favoriteid = $(this).attr("rel");
 		$.post("${ctx}/api/shop/favorite/delete.do",{"favorite_id":favoriteid},function(result){
-			if(result.result==1){				
-				alert("删除收藏成功");
-				location.href="favorite.html";
-			}
-			
-			else{				
-				alert(result.message);
+			if(result.result == 1){
+				$.message.success("删除收藏成功", 'reload');
+			}else{
+				$.message.error(result.message);
 			}			
 		},"json");
-		
 	})
 
 })

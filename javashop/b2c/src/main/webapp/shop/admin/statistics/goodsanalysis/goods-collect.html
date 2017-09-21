@@ -1,34 +1,16 @@
 <#include '/admin/header.html' >
 
-<div class="main">
-	
-	<div class="shadowBoxWhite wf100 whiteBox">
-		<div class="text">
-			<div class="tab-page">
-				<div tabid="2"  class="tab-panel">
-					<table class="form-table" style="width: 100%;">
-						<tr>
-							<td>
-								<div id="collect_container" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="admin-main">
+	<div id="main" style="height: 300px;"></div>
 	
 	<div class="clear height10"></div>
 	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid" 
-			data-options="url:'${ctx}/shop/admin/goodsStatis/get-collect-json.do',pageList: [50],pageSize:50,fitColumns:'true'"
-			pagination="true" width="width" id="data" sortName="goods_id" sortOrder="desc">
+		<table id="data" class="layui-table site-table table-hover">
 			<thead>
 				<tr>
-					<th data-options="field:'goods_id',checkbox:true,width:100"></th>
-					<th data-options="field:'name',width:150" formatter="formatName" >商品名称</th>
-					<th data-options="field:'price',width:150" >商品价格</th>
-					<th data-options="field:'y',width:100" >收藏量</th>
+					<th>商品名称</th>
+					<th>商品价格</th>
+					<th>收藏量</th>
 				</tr>
 			</thead>
 		</table>
@@ -39,59 +21,110 @@
 
 <script>
 
-var collect_data = ${collectJosn}; 
+var collect_data = ${collectJosn};
 
 $(function(){
-	//加载甘特图
-	loadHighcharts(collect_container,"",collect_data);
+	
+	var table = $('#data').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goodsStatis/get-collect-json.do',
+	    },
+	    columns: [ //定义列    
+	        {data: "name"},
+	        {data: "price"},
+	        {data: "y"} 
+	     ]
+	});
 });
 
-//格式化商品名称
-function formatName(value,row,index){
-	var val = "<a target='_blank' title='"+value+"' href='${ctx}/goods-"+row.goods_id+".html' >"+value+"</a>";
-	return val;
-}
-
-
-//生成图表
-function loadHighcharts(obj,text,data){
-	var chart = new Highcharts.Chart({
-        chart: {
-            type: 'column',
-            renderTo: obj
-        },
-        title: {
+var myChart = echarts.init(document.getElementById('main'));
+var option = {
+		
+		title: {
+        	x: 'center',
             text: '收藏商品排行Top50'
         },
-        xAxis: {
-        	tickInterval: 1
+        tooltip: {
+            trigger: 'item',
+            formatter: function(params){
+            	var dataname = collect_data[params.dataIndex].name;
+            	return dataname + '<br/>' + params.seriesName + ' : ' +params.value +'次';
+            }
+        },
+        legend: {
+        	bottom : 20,
+            data:['收藏数']
+        },
+        toolbox: {
+	        show : true,
+	        feature : {
+	            mark : {show: true},
+	            magicType : {show: true, type: ['line', 'bar']},
+	            restore : {show: true},
+	            saveAsImage : {show: true}
+	        }
+	    },
+        grid: {  
+            top: 80,  
+            right:100,  
+            bottom:70  
+        }, 
+        xAxis:{
+        	type: 'category',
+            axisTick: {
+                alignWithLabel: true
+            },
+            data: function (){
+                var list = [];
+                	for (var i = 1;i<=collect_data.length; i++) {
+                        list.push(i);
+                    }
+                	return list;
+            }()
         },
         yAxis: {
-            title: {
-                text: "收藏数"
+            type: 'value',
+            name: '收藏数',
+            position: 'left',
+            axisLabel: {
+                formatter: '{value} 次'
             }
         },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: false
-            }
-        },
-        credits: {  
-            enabled: false 	// remove high chart logo hyper-link  
-        },
-        series: [{
-        	name: "收藏数",
-        	colorByPoint: true,
-            data: data,
-            showInLegend: false,
-        	pointStart: 1
-        }]
-        // data: [{'color':'#F6BD0F','y':11}, {'color':'#333','y':6.9}]
-    });
-}
+    	series: [{
+	        name: ['收藏数'],
+	        type: 'bar',
+	        data: function (){
+	            var list = [];
+	            	for(var i=0;i<collect_data.length;i++){
+	            		list.push(collect_data[i].y);
+	            		}
+	            	return list;
+	        }(),
+	        itemStyle: {
+	            normal: {
+	                color:'#7cb5ec',
+	                label: {
+	                    show: true,
+	                    position: 'top',
+	                    formatter: '{c}'
+	                }
+	            }
+	        },
+    	}]
+};
+/** 使用刚指定的配置项和数据显示图表。*/
+myChart.setOption(option);
+
 
 </script>
 

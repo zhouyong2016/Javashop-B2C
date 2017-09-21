@@ -93,10 +93,11 @@ function initFlowStatistics(dateWhere) {
 				}
 				
 				// 1.获取到统计图相关配置
-				var conf = getFlowConfig(data.data);
 				
+				var conf = getFlowConfig(data.data);
 				// 2.初始化统计图
-				initHistogram("flow_statistics",conf);
+				initHistogram(conf);
+				
 
 			} else {
 				alert("调用action出错：" + data.message);
@@ -173,7 +174,6 @@ function getDateWhere(){
 function getFlowConfig(json){
 	
 	var conf = {};			//配置
-	var colors = Highcharts.getOptions().colors;	// 颜色
 
 	var data = [];	// Y轴 排名数据
 	var categories = []; //X轴 名次数据
@@ -184,61 +184,86 @@ function getFlowConfig(json){
 		
 		//添加到数组
 		data.push(order.num);
-		categories.push("" + order.day_num);
+		categories.push(" " +order.day_num);
 	}
 	
 	var conf = {
-		title : "访问量统计" ,		//统计图标题
-		yDesc : "访问量（次）" ,			//y轴 描述
-										//X 轴数据 [数组]
-		categories : categories,				
-            							//Y轴数据 [数组]
-		series : [
-			{
-				name : '访问量', 
-				data: data
-			}
-		]						
-
+		title : "访问量统计" ,		//统计图标题									
+		categories : categories,	//X 轴数据 [数组]			
+        data: data                 //Y轴数据 [数组]
 	};
 	return conf;
+	
 };
 
-/**
- * 初始化曲线图
- * @param id	html 初始化div的id
- * @param conf	相关配置
- */
-function initHistogram(id,conf){
 
-	var options = {
-			credits: {
-	             //text: 'Javashop',
-	             //href: 'http://www.javamall.com.cn'
-				enabled:false
+function initHistogram(conf){
+	var myChart = echarts.init(document.getElementById('main'));
+	option = {
+			color: ['#7cb5ec'],
+		    title: {
+		    	x:'center',
+		        text: conf.title  //统计图标题
+		    },
+		    tooltip: {
+		        trigger: 'axis'
+		    },
+		    toolbox: {
+		        show : true,
+		        feature : {
+		            mark : {show: true},
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    legend: {
+		    	x:'center',y:'bottom',
+	            data:['访问量']   // y轴数据所代表的意思
 	        },
-	        chart: {
-	            type: 'line'
+		    xAxis:  {
+		        type: 'category',
+		        boundaryGap: true,
+		        data: conf.categories
+		    },
+		    yAxis: {
+		        type: 'value',
+		        name:'访问量（次）',
+		    	axisLabel : {
+	            formatter: '{value} 次'
 	        },
-	        title: {
-	            text: conf.title
-	        },
-	        xAxis: {
-	            categories: conf.categories
-	        },
-	        yAxis: {
-	            title: {
-	                text: conf.yDesc
-	            }
-	        },
-	        plotOptions: {
-	            line: {
-	                dataLabels: {
-	                    enabled: true
-	                }
-	            }
-	        },
-	        series: conf.series
-	    };
-	$("#" + id).highcharts(options);
-};
+	        	boundaryGap : true
+	    
+		    },
+		    series: [
+		        {
+		            name:'访问量',   //点击悬浮框中的内容
+		            type:'line',
+		            data:conf.data,
+		            markPoint: {
+		                data: [
+		                    {type: 'max', name: '最大值'},   //最大值和最小值的设置
+		                    {type: 'min', name: '最小值'}
+		                ]
+		            },
+		            markLine: {
+		                data: [
+		                    {type: 'average', name: '平均值'}   //平均值的设置
+		                ]
+		            }
+		        },
+		    ]
+		};
+
+	myChart.setOption(option);
+
+	}
+
+
+
+
+
+
+
+
+

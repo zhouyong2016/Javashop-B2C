@@ -1,187 +1,124 @@
 <#include '/admin/header.html' >
-<div class="main">
-	<div id="authinfo" style="display: none;"overflow:scroll;></div>
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton"
-			data-options="iconCls:'icon-add',plain:true" id="add_auth_button">添加</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid" id="authdata"
-			data-options="url:'${ctx}/core/admin/auth/list-json.do',fitColumns:'true',idField: 'actid',treeField: 'name'">
-			<thead>
-				<tr>
-					<th data-options="field:'actid',width:100">编号</th>
-					<th data-options="field:'name',width:100">权限点名称</th>
-					<th data-options="field:'choose',width:100"
-						formatter="formatChoose">系统权限</th>
-					<th data-options="field:'update',width:100"
-						formatter="formatUpdate">修改</th>
-					<th data-options="field:'delete',width:100"
-						formatter="formatDelete">删除</th>
-				</tr>
-			</thead>
-		</table>
-	</div>
-</div>
-<script type="text/javascript">
-function formatChoose(value,row,index){
-	var val="";
-	if(row.choose==1){val="是";}
-	if(row.choose==0){val="否";}
-	return val;
-}
-function formatUpdate(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.actid+","+row.choose+")'></a>";
-	return val;
-}
-function formatDelete(value,row,index){
-	var val="<a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.actid+","+row.choose+")'></a>";
-	return val;
-}
-function edit(authid,choose){
-	 $("#authinfo").show();
-	　　	$('#authinfo').dialog({
-	　　		title: '修改权限点',			
-	　　		width: 550,
-	  		height:550,
-	  		top:10,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/core/admin/auth/edit.do?authid='+authid, 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				  var editbtn = $(this);
-		　　				 var disabled=editbtn.hasClass("l-btn-disabled");
-		　　				 if(!disabled){
-				　　			editForm(editbtn);
-				　　		}
-	　　			}
-			 }]
-	　　	});
-}
 
-function del(authid,choose){ 
-	if(choose==1){alert("此为系统默认权限点,不能删除");return;}
-	if (!confirm("确定要删除此权限点吗？")) {
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li style="height:40px;"><span>.</span>注意：库存是敏感而慎重的权限，只有超级管理员和系统内置的库管有权限操作。如果出现权限报错，请将es_auth_action表中库管的choose字段改为1。</li>
+             
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_auth_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+    <table id="authdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>权限点名称</th>
+            <th>系统权限</th>
+            <th>修改</th>
+            <th>删除</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+</div>
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#authdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/core/admin/auth/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "actid"},
+	        {data: "name"},
+	        {"data": function (obj) {
+	    		if(obj.choose==0){
+	    			return '否';
+	    		}
+	    		if(obj.choose==1){
+	    			return '是';
+	    		}
+            }},
+	        {data: null,"render": function(data, type, row) {
+	        	return	"<a class='layui-btn layui-btn-small layui-btn-normal' onclick='edit("+row.actid+","+row.choose+")'>修改</a>";
+	       	}},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("+row.actid+","+row.choose+")'>删除</a>";	
+	       	}}
+	     ]
+	});
+	
+	$("#add_auth_button").click(function(){
+	   	 layer.open({
+	            title:"添加权限点",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/core/admin/auth/add.do",//内容的URL
+	            area:['500px','560px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	           
+	        });
+		});
+});
+//修改
+function edit(authid,choose){
+	layer.open({
+        title:"修改角色",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:"${ctx}/core/admin/auth/edit.do?authid="+authid,//内容的URL
+        area:['500px','560px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
+}
+function del(authid,choose){
+	if(!confirm("确认要删除吗？")){
 		return;
 	}
 	$.ajax({
-		url : "${ctx}/core/admin/auth/delete.do?ajax=yes&authid=" + authid,
-		type : "POST",
-		dataType : 'json',
-		success : function(result) {
-			if (result.result == 1) {
-				$.Loading.success(result.message);
-				$("#authdata").datagrid('reload');
+		url:"${ctx}/core/admin/auth/delete.do?authid="+authid,
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result == 1){
+				$.Loading.success(data.message);
+				table.ajax.url("${ctx}/core/admin/auth/list-json.do").load();
 			}
-			if (result.result == 0) {
-				$.Loading.error(result.message);
+			if(data.result==0){
+				$.Loading.error(data.message);
 			}
-		},
-		error : function(e) {
-			$.Loading.error("出现错误 ，请重试");
 		}
 	});
 }
-$("#add_auth_button").click(function(){
-	 $("#authinfo").show();
-	　　	$('#authinfo').dialog({
-	　　		title: '添加权限点',			
-	　　		width: 550,
-	  		height:550,
-	  		top:10,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/core/admin/auth/add.do', 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				  	 var savebtn = $(this);
-		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-		　　				 if(!disabled){
-				　　			addForm(savebtn);
-				　　		}
-	　　			}
-			 }]
-	　　});
-});
-function addForm(savebtn){
-	var formflag= $("#authForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		savebtn.linkbutton("disable");	
-		var options = {
-				url : "${ctx}/core/admin/auth/save-add.do?menuids="+getNode(),
-				type : "POST",
-				dataType : "json",
-				success : function(result) {
-					if(result.result==1){
-						$.Loading.success(result.message);
-						$("#authinfo").dialog('close');
-						$('#authdata').datagrid('reload');
-					}else{
-						$.Loading.error(result.message);
-					}
-					savebtn.linkbutton("enable");
-			 	},
-			 	error : function(e) {
-			 		$.Loading.error('出现错误，请重试');
-			 		savebtn.linkbutton("enable");
-				}
-			};
-		$('#authForm').ajaxSubmit(options);	
-	}
-}
-function editForm(editbtn){
-	var formflag= $("#authForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		editbtn.linkbutton("disable");	
-		var options = {
-				url : '${ctx}/core/admin/auth/save-edit.do?menuids='+getNode(),
-				type : "POST",
-				dataType : "json",
-				success : function(result) {
-					if(result.result==1){
-						$.Loading.success(result.message);
-						$("#authinfo").dialog('close');
-						$('#authdata').datagrid('reload');
-					}else{
-						$.Loading.error(result.message);
-					}
-					editbtn.linkbutton("enable");
-			 	},
-			 	error : function(e) {
-			 		$.Loading.error('出现错误，请重试');
-			 		editbtn.linkbutton("enable");
-				}
-			};
-		$('#authForm').ajaxSubmit(options);	
-	}
-}
-function getNode(type){
-	var menuid="";
-	var parentnodes = $('#tt').tree('getChecked','indeterminate');
-	for (var i = 0; i < parentnodes.length; i++) {
-		if (menuid != ''){
-			menuid += ',';
-		}
-		menuid += parentnodes[i].id;
-	}
-	//获取选中对象
-	var nodes = $('#tt').tree('getChecked');
-	for (var i = 0; i < nodes.length; i++) {
-		if (menuid != ''){
-			menuid += ',';
-		}
-		menuid += nodes[i].id;
-	}
-	return menuid;
-};
 </script>
 <#include '/admin/footer.html' >

@@ -1,85 +1,76 @@
-<div class="main" style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-		<form id="editForm" method="post" class="validate" enctype="multipart/form-data" >
-			<table>
-				<tr>
-					<th>分类名称</th>
-					<td>
-						<input class="input_text easyui-validatebox" type="text" id="name" value="${cat.name}" name="name"  maxlength="60" data-options="required:true"></input>
-					</td>
-				</tr>
-				<tr>
-					<th>分类图片</th>
-					<td>
-						<input class="easyui-validatebox" type="file" id="image"  style="width:300px" name="file"></input>
-						<input type="hidden" value="${cat.image!''}" name="image">
-					</td>
-				</tr>
-				<#if imgPath??>
-					<tr>
-						<th></th>
-						<td><img alt="" src="${imgPath!''}" style="width:300px">
-						</td>
-					</tr>
-				</#if>
-				<#assign x=cat.parent_id>
-				<tr>
-					<th>是否为顶级分类</th>
-					<td><input type="radio" name="cattype" class="cattype"
-						value="0"<#if x!=0>checked</#if> >否
-						&nbsp;&nbsp;&nbsp;&nbsp; 
-						<input type="radio" name="cattype"
-						class="cattype" value="1"<#if x==0>checked</#if> >是</td>
-				</tr>
-				<tr class="addtr"
-					<#if x==0>style="display: none;"</#if>>
-					<th>上级分类</th>
-						<td>
-							 <#if "${cat.parent_id!''}" == "0">  	
-							<input class="easyui-combotree combo" value="无" name="parent_id" data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get',required:true,height:28" style="width: 200px;">
-							<#else>
-							<input class="easyui-combotree combo" value="${cat.parent_id!''}" name="parent_id" data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get',required:true,height:28" style="width: 200px;">
-							 </#if> 
-						</td>
-					</tr>
-				<tr>
-					<th>商品类型</th>
-					<td>
-						<input class="easyui-combotree combo" value="${cat.type_id!''}" name="type_id" data-options="url:'${ctx}/shop/admin/cat/type-list-json.do',method:'get',required:true,height:28" style="width: 200px;">
-					</td>
-				</tr>
-				<tr>
-					<th>排序</th>
-					<td><input class="input_text easyui-numberbox" type="text" id="order" value="${cat.cat_order}" name="cat_order"
-							maxlength="5" data-options="required:true"></input>
-					</td>
-				</tr>
-				<tr>
-					<input type="hidden" name="list_show" value="1" checked="checked" />
-					<!-- <th>列表中显示</th>
-					<td><input type="radio" class="listshow"  name="list_show" value="1" />是&nbsp; 
-						<input type="radio" class="listshow"  name="list_show" value="0" />否</td> -->
-				</tr>
-			</table>
-			<input type="hidden" name="cat_id" value="${cat.cat_id}">
-		</form>
-	</div>
-</div>
+<style>
+.layui-form-pane .layui-input-block{
+margin-left:140px;
+}
+.layui-form-pane .layui-form-label{
+width:140px;
+}
+.layui-input, .layui-textarea{
+width:77%
+}
+</style>
+<div class="main">
+    <!--表单区域  -->
+    <link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/css/layerform.css"/>
+    <script type="text/javascript" src="${ctx}/adminthemes/version3/plugins/layui/lay/modules/form.js"></script>
+    <form id="editForm" class="layui-form layui-form-pane" enctype="multipart/form-data">
+        <input type="hidden" name="cat_id" value="${cat.cat_id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">分类名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" class="layui-input" id="name" value="${cat.name}" lay-verify="required" autocomplete="off" maxlength="15">
+            </div>
+        </div>
 
-<script>
-	$(function() {
-		$(".cattype").click(function() {
-			if ($(this).val() == 1) {
-				$(".addtr").hide();
-			}
-			if ($(this).val() == 0) {
-				$(".addtr").show();
-			}
-		})
-		$(".listshow").each(function(){
-			if($(this).val() ==  '${cat.list_show!''}' ){
-				$(this).attr("checked",true);
-			}
-		});
-	});
-</script>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类图片</label>
+            <div class="layui-input-block">
+                <input type="file" id="file" name="file" autocomplete="off" class="_upfile">
+                <input type="hidden" value="${cat.image!''}" name="image">
+                <#if imgPath??>
+                    <img alt="" src="${imgPath!''}" style="width: 50px; height: 50px;">
+                </#if>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" >是否为顶级分类</label>
+            <div class="layui-input-block">
+                <#assign x = cat.parent_id />
+                <input type="radio" name="cattype" value="1" <#if (x == 0) >checked</#if> title="是">
+                <input type="radio" name="cattype" value="0" <#if (x != 0) >checked</#if> title="否">
+            </div>
+        </div>
+
+        <div class="layui-form-item" <#if (x == 0) >style="display: none;"</#if> >
+            <label class="layui-form-label">上级分类</label>
+            <div class="layui-input-block">
+                <input type="text" name="parent_id" id="cat_parent" autocomplete="off" placeholder="选择上级分类" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="type_id" id="goods_type" value="${cat.type_id!''}" placeholder="选择商品类型" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="text" id="sort" name="cat_order" autocomplete="off" value="${cat.cat_order}" class="layui-input" value="0" maxlength="5">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+        	<input type="hidden" name="list_show" value="1" checked="checked"/>
+            <!--  <label class="layui-form-label">列表中显示</label>
+            <div class="layui-input-block">
+                <input type="radio" name="list_show" value="1" checked="checked" title="是">
+                <input type="radio" name="list_show" value="0"  title="否">
+            </div>-->
+        </div>
+    </form>
+    <script>layui.use('form', function(){ var form = layui.form() });</script>
+</div>

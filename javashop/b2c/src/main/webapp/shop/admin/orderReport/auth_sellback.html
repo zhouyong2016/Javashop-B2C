@@ -6,136 +6,86 @@
 	if(${sellBackList.tradestatus}>0){
 		location.href = "${ctx}/shop/admin/sell-back/returned.do?id=${sellBackList.id}";
 	}
-	
 </script>
 
-<div class="main">
-	<div class="input">
-	<form method="post" id="theForm">
-		<input type="hidden" value="${sellBackList.id}" name="id"/>
-		<div class="shadowBoxWhite  whiteBox">
-			<div class="detail">
-				<table cellspacing="0" cellpadding="0" border="0" id="data" style="width: 99%">
+
+<style>
+.info{
+	background-color: white;
+	margin-top: 10px;
+	padding: 10px;
+	margin-bottom: 60px;
+}
+.layui-elem-field legend{
+	margin-left: 0px;
+	padding:  0px 30px;
+	margin: 0px;
+}
+
+.sellback-info .table-info td:nth-child(1),.sellback-info .table-info td:nth-child(3){
+	background-color: #eeeeee;
+	width: 150px;
+	text-align: center;
+}
+
+.sellback-info .layui-form-item{
+	display:inline;
+}
+
+</style>
+
+<div class="admin-main">
+	<form class="layui-form layui-form-pane" id="theForm" >
+	<input type="hidden" value="${sellBackList.id}" name="id"/>
+		<div class="info sellback-info">
+			<fieldset>
+				<legend>退货单详情</legend>
+			</fieldset>
+			
+			<table class="layui-table table-info" >
+				<thead>
 					<tr>
-						<th class="title" colspan="2">退货单基本信息</th>
+						<th class="title" colspan="4" style="color: #FF5722;" >申请退货信息</th>
 					</tr>
+				</thead>
+				<tbody>
 					<tr>
+						<td>关联订单号：</td>
+						<td><a href='javascript:void(0);' onclick="newTab('订单信息','${ctx}/shop/admin/order/detail.do?orderId=${orderinfo.order_id}')">${orderinfo.sn }</a></td>
 						<td>退货单号：</td>
-						<td >
-							${sellBackList.tradeno }
-							
-						</td>
-					</tr>
-					<tr>	
-						<td width="90">关联订单号：</td>
-						<td>
-							<a href='javascript:void(0);' onclick=newTab('订单信息','${ctx}/shop/admin/order/detail.do?orderId=${orderinfo.order_id}')>${orderinfo.sn }</a>
-						</td>
+						<td>${sellBackList.tradeno }</td>
 					</tr>
 					<tr>
-						<td>已支付：</td>
-						<td>
-							￥${orderinfo.paymoney}
-						</td>
+						<td>已支付金额</td>
+						<td>￥${orderinfo.paymoney}</td>
+						<td>商品金额</td>
+						<td>￥${orderinfo.goods_amount}</td>
+						<input type="hidden"  id="paypricereturn" value="${orderinfo.paymoney!''}"/>
 					</tr>
 					<tr>
-						<td>商品金额：</td>
-						<td>
-							￥${orderinfo.goods_amount}
-						</td>
+						<td>运费</td>
+						<td>￥${orderinfo.shipping_amount}</td>
+						<td>申请退款金额</td>
+						<td>${sellBackList.apply_alltotal!'0'}</td>
 					</tr>
 					<tr>
-						<td>运费：</td>
-						<td>
-							￥${orderinfo.shipping_amount}
-						</td>
+						<td>退货人</td>
+						<td>${orderinfo.ship_name }</td>
+						
 					</tr>
 					<tr>
-						<td width="90">申请退款金额：</td>
-						<td>
-							${sellBackList.apply_alltotal!'0'}
-						</td>
+						<td>退货原因</td>
+						<td>${sellBackList.reason!''}</td>
+						<td>退货描述</td>
+						<td>${sellBackList.remark!''}</td>
 					</tr>
+				</tbody>
+			</table>
+			
+			<table  class="layui-table"  cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+				<thead>
 					<tr>
-						<td>退款金额：</td>
-						<td>
-							 <input type="text" class="input_text" value="${sellBackList.apply_alltotal!'0'}"  name="alltotal_pay" data-options="required:true" maxlength="10"/> 
-						</td>
-					</tr>										
-					<tr>
-						<td >退货人：</td>
-						<td>
-							${orderinfo.ship_name }
-						</td>
-					</tr>
-					<tr>
-						<td >是否收货：</td>
-						<td>
-							<#if sellBackList.ship_status=="0">
-								未收货
-							<#elseif sellBackList.ship_status=="1">
-								已收货
-							</#if>
-						</td>
-					</tr>
-					
-					<tr>
-						<td >退货仓库：</td>
-						<td>
-						<select id="depotid" name="depotid" class="input_text" >
-							<option value="0">请选择退货仓库</option>
-							<#list depotlist as dl >
-								<#if depotid?? && depotid == dl.id >
-									<option value="${dl.id }" selected="selected" >${dl.name }</option>
-								<#else>
-									<option value="${dl.id }" >${dl.name }</option>
-								</#if>
-							</#list>
-						</select>
-						</td>
-					</tr>	
-					<tr>
-						<td>退货原因：</td>
-						<td >
-							${sellBackList.reason!''}
-						</td>
-					</tr>
-					<tr>
-						<td>退货描述：</td>
-						<td >
-							${sellBackList.remark!''}
-						</td>
-					</tr>
-					<tr>
-						<td >操作备注：</td>
-						<td colspan="3">
-							<textarea rows="5" id="remark" onKeyDown="checkLength()"  onKeyUp="checkLength()" onPaste="checkLength()"  cols="30" name="seller_remark" style="resize: none;"></textarea>
-							还可以输入<span id="validNum">120</span>字</td>
-						</td>
-					</tr>
-					<tr>
-						<td>审核</td>
-						<td>
-							<input type="radio" name="status" value="1" checked="checked"/>通过
-							<input type="radio" name="status" value="2"/>不通过 
-						</td>
-					</tr>
-					<tr>
-						<td>操作</td>
-						<td>
-							<a href="javascript:;" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		</form>
-		<br/>
-		<div class="shadowBoxWhite  whiteBox">
-			<div class="detail">
-				<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
-					<tr>
-						<th class="title" colspan="5">退货单商品</th>
+						<th class="title" colspan="5" style="color: #FF5722;" >退货单商品</th>
 					</tr>
 					<tr>
 						<th>商品名称</th>
@@ -144,94 +94,140 @@
 						<th>购买数量</th>
 						<th>退货数量</th>
 					</tr>
-					
-					<#list goodsList as data>
-							<tr>
-								<td>
-								
-								<a target="_blank" href="${ctx}/goods-${data.goods_id}.html">${data.goods_name }${data.spec!''}</a> 
-								
-								</td>
-								<td>${data.goods_sn!0 }</td>
-								<td>${data.price?string.currency}</td>
-								<td>${data.ship_num!0 }</td>
-								<td>${data.return_num!0}</td>
-							</tr>
-					</#list>
-					<!-- 退货赠品信息 add_by DMRain 2016-7-19 -->
-					<#if (gift.gift_id)??>
-						<tr>
-							<td><span style="color: #4287cf;">${gift.gift_name!''}</span><span style="color: red;">(赠品)</span></td>
-							<td></td>
-							<td>${gift.gift_price?string.currency}</td>
-							<td>1</td>
-							<td>1</td>
-						</tr>
-					</#if>
-				</table>
+				</thead>
+				
+				<#list goodsList as data>
+					<tr>
+						<td>
+							<a target="_blank" href="${ctx}/goods-${data.goods_id}.html">${data.goods_name }${data.spec!''}</a> 
+						</td>
+						<td>${data.goods_sn!0 }</td>
+						<td>${data.price?string.currency}</td>
+						<td>${data.ship_num!0 }</td>
+						<td>${data.return_num!0}</td>
+					</tr>
+				</#list>
+				<!-- 退货赠品信息 add_by DMRain 2016-7-19 -->
+				<#if (gift.gift_id)??>
+					<tr>
+						<td><span style="color: #4287cf;">${gift.gift_name!''}</span><span style="color: red;">(赠品)</span></td>
+						<td></td>
+						<td>${gift.gift_price?string.currency}</td>
+						<td>1</td>
+						<td>1</td>
+					</tr>
+				</#if>
+			</table>
+			<br>
+			<hr>
+			
+			<div class="layui-form-item w400">
+				<label class="layui-form-label">退款金额</label>
+				<div class="layui-input-block">
+				<input type="hidden" value="${payCfg.is_retrace}" class="refund_way">
+					<input type="text" name="alltotal_pay" lay-verify="required|money" class="layui-input" value="${sellBackList.apply_alltotal!'0'}" >
+				</div>
 			</div>
-		</div>
-	<br/>
-	<!--<div class="buttonWrap">-->
+			
+			<div class="layui-form-item w400">
+				<label class="layui-form-label">退款仓库</label>
+				<div class="layui-input-block">
+					<select id="depotid" name="depotid" class="input_text" lay-verify="required" >
+						<option value="0">请选择退货仓库</option>
+						<#list depotlist as dl >
+							<#if depotid?? && depotid == dl.id >
+								<option value="${dl.id }" selected="selected" >${dl.name }</option>
+							<#else>
+								<option value="${dl.id }" >${dl.name }</option>
+							</#if>
+						</#list>
+					</select>
+				</div>
+			</div>
+			
+			<div class="layui-form-item w400">
+				<label class="layui-form-label">退款审核</label>
+				<div class="layui-input-block">
+					<input type="radio" name="status" value="1" checked="checked" title="通过" />
+					<input type="radio" name="status" value="2" title="不通过" />
+				</div>
+			</div>
+			
+			<div class="layui-form-item w400">
+				<label class="layui-form-label">操作备注</label>
+				<div class="layui-input-block">
+					<textarea name="seller_remark"  placeholder="请输入" class="layui-textarea"></textarea>
+				</div>
+			</div>
 
-	<!--</div>-->
-	</div>
+			
+			<div class="save-div">
+				<a class="layui-btn layui-btn-normal" lay-submit lay-filter="sellbackBtn">立即保存</a>
+			</div>
+
+		</div>	
+	</form>	
 </div>
 
-<script type="text/javascript">
-/**
- * 检查备注是否超出限制，如果超出限制截取字符串
- */
-function checkLength(){
-    var val = $("#remark").val();
-	if(val.length>120){
-		$("#validNum").css("color","red");
-        $("#remark").val($("#remark").val().substr(0, 120));
-    }else{
-    	$("#validNum").css("color","black");
-     	$("#validNum").html(120 - val.length)
-    }
-}
 
-function submitForm() {
-	var formflag= $("#theForm").form().form('validate');
-	var disabled= $("#saveBtn").hasClass("l-btn-disabled");
-	if(formflag){
-		var status = $("input[name='status']:checked").val();
-		if( $("#depotid").val()==0 && status==1){//通过仓库必选
-			alert("请选择退货仓库");
-			return false;
-		}
-		
-		if( disabled ){
-			return false;
-		}
-		
-		$("#saveBtn").linkbutton("disable"); 
-		$.Loading.show("正在提交");
-		var options = {
-				url : "${ctx}/shop/admin/sell-back/save-auth.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result){
-					$ ("#saveBtn").linkbutton("enable");  
-					if(result.result==1){
-						$.Loading.success(result.message);
-						location.href="${ctx}/shop/admin/order-report/returned-list.do";
-					}
-					if(result.result==0){ 
-						$.Loading.error(result.message);
-					}
-				},
-				error : function(e) {
-					$.Loading.hide();
-					$ ("#saveBtn").linkbutton("enable");  
-					alert("出现错误 ，请重试");
+<script>
+
+
+//获取支付方式
+var pay_way=$(".refund_way").val();
+
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+layui.use(['element','upload','form'], function() {
+	var element = layui.element();
+	var upload = layui.upload();
+	var form = layui.form();
+
+	form.verify({  
+		 money: function(value){  
+			 if(pay_way == 1){
+				 if(Number(value) == 0){  
+		        	  return "退款金额不能为0";
+		          } 
 				}
-			};
+	          if(Number(value) < 0){  
+	        	  return "退款金额不能为负数";
+	          } 
+	          if(Number(value) > Number($("#paypricereturn").val())){  
+	        	  return "退款金额不能大于已支付金额";
+	          }
+	          if (isNaN(value)) {
+	        	  return "退款金额格式有误！";
+			}
+	        }
+	 });
+	//监听提交
+	form.on('submit(sellbackBtn)', function(data){
+		
+		var options = {
+			url : "${ctx}/shop/admin/sell-back/save-auth.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result){
+				
+				if(result.result==1){
+					$.Loading.success(result.message);
+					location.href="${ctx}/shop/admin/order-report/returned-list.do";
+				}
+				if(result.result==0){ 
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$ ("#saveBtn").linkbutton("enable");  
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
 		$("#theForm").ajaxSubmit(options); 
-	}		
-}
+		return false;
+	});
+	
+});
+
 </script>
 
 <#include '/admin/footer.html' >

@@ -1,0 +1,102 @@
+<#assign scroll="false" />
+<#if galleryList?size gt 4><#assign scroll="true" /></#if>
+<#list galleryList as gallery>
+	<#if gallery.isdefault==1>
+		<#assign big="${gallery.big!''}" />
+		<#assign small="${gallery.small!''}" />
+	</#if>
+</#list>
+<!--获取VIP价格标签-->
+<#assign vipPriceTag = newTag("goodsVipPriceTag")>
+<!--调用VIP价格标签-->
+<#assign vipPrice =vipPriceTag()!''>
+<!-- 商品相册 -->
+<div id="detail_wrapper">
+	<!-- 商品相册 -->
+	<div class="gallery">	
+		<div class="preview">
+			 <a href="${big!''}"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+			 	<img   src="${big!''}" />
+			 </a>
+		</div>
+		<div class="control_bar">
+			<div class="control left-control"></div>
+			<div class="thumblist">
+				<ul>
+				<#list galleryList as gallery>
+					<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> <@image src="${gallery.tiny!''}"  big="${gallery.big}" small="${gallery.small}"/></li>
+				</#list>	
+				</ul>
+			</div>
+			<div class="control right-control "></div>
+		</div>
+	</div>
+	<!-- 商品详细 -->
+	<div class="base">
+		<!-- 商品基本信息 -->
+		<div class="summary">	
+			<h2>${goods.name}</h2>	
+			<ul>
+				<li class="sn"><span>商品货号： <label>${goods.sn}</label></span></li>								
+				<li class="unit"><span>计价单位：${goods.unit!''}</span></li>										
+				<li class="unit weight"><span>重量：${goods.weight!''}g</span></li>				
+				<li class="price"><span >销售价：</span><b>${goods.price!''}</b></li>
+				<li class="mkt_price"><span >市场价：</span> <em>${goods.mktprice!''}</em></li>			
+				<li class="vip_price">
+					<span >vip价：</span>
+					<strong>
+						<#if member??>
+							<#list vipPrice.memberLvList as vipPricegoods>
+								<#if member.lv_id==vipPricegoods.lv_id>
+									${vipPricegoods.lvPrice?string("currency")}
+								</#if>
+							</#list>
+						<#else>
+							${goods.price!''}
+						</#if>
+					</strong>
+				</li>								
+				<!-- <li class="point"><span >赠送积分：<strong>${goods.point!''}</strong></span> </li>	 -->
+			</ul>
+		</div>
+		<#if goods.isvirtual?exists && goods.isvirtual==1>
+		<form action="virtual_checkout.html" id="goodsform" method="post">
+		<#else>
+		<form action="cart.html" id="goodsform" method="post">
+		</#if>
+			<div class="choose">
+				
+			 <#include 'spec.html' />
+			
+			</div>
+			<div style="clear:both;" ></div>
+		</form>
+		<!-- 分享及收藏 -->
+		<div class="rer_partake">
+			<!--分享-->
+			<#include 'sns.html' />
+			<!-- 收藏按钮 -->
+			<a href="javascript:;" class="favorite" goodsid="${goods.goods_id}">加入收藏</a>
+		</div>
+	</div>	
+</div>
+<div class="add_success_msg" style="display:none">
+	<div >
+		<div class="message">
+			恭喜，该商品已添加到您的购物车！
+		</div>
+		<div class="button_wrapper">
+			<div class="btn"><input type="button" class="returnbuy_btn" value="继续购物"></div>
+			<div class="btn"><input type="button" class="checkout_btn" value="去结算"></div>
+		</div>
+	</div>	
+</div>
+<script>
+var goodsid = ${goods.goods_id};
+$(function(){
+	Spec.init();
+	Goods.init(${scroll});
+	CommentList.init();
+	CommentForm.init();	
+});	
+</script>

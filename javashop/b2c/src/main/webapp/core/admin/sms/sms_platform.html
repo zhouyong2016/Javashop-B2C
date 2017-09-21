@@ -1,152 +1,113 @@
-<#include '/admin/header.html' >
-<div class="main">
-	<form id="advform">
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"
-				data-options="url:'sms-listJson.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true'"
-				pagination="true" id="smsdata">
-				<thead>
-					<tr>
-						<th data-options="field:'id',checkbox:true"></th>
-						<th data-options="field:'platform_name',width:200">平台名称</th>
-						<th data-options="field:'is_open',width:300" formatter="foropen">是否启用</th>
-						<th data-options="field:'action',width:200,align:'center'"
-							formatter="forAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</form>
-	<div id="divdia" style="display: none;"></div>
+<#include '/admin/header.html' > 
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <ul>
+			    <li><span>.</span>测试环境必须是线上环境。</li>
+                <li><span>.</span>如果此处显示“没有匹配结果”，可能是项目里没有关联sms项目或者没有购买短信组件或者没有安装启用组件。</li>
+                <li><span>.</span>APIKEY：申请参数中的key；用户名：申请参数中的账号；产品ID：676767。请根据您实际的短信组件填写。</li>
+            </ul>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+		<div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+   </div>
+   <!--表格区域  -->
+   <form id="smsform">
+    <table id="smsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>平台名称</th>
+            <th>是否启用</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+   </form>
 </div>
 
+<!--js区域  -->
 <script>
+var table;
+$(function(){
+	
+	table = $('#smsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: 'sms-listJson.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="checklist"  class="fly-checkbox" data-id=' + obj.id + '>';
+            		}},
+	        {data: "platform_name"},
+	        {data: null,"render": function(data, type, row) {
+	        	if(data.is_open ==1){
+	        		return "已启用&nbsp;";
+	        	}else{
+	        		return "未启用&nbsp;<a href='javascript:void(0);' style='color: #00F' onclick='setOpen("+data.id+")'>开启</a>";
+	        	}
+	       	}},
+	       	{data: null,"render": function(data, type, row) {
+	        	return 	"<a class='layui-btn layui-btn-small layui-btn-danger' title='修改' onclick=edit("+data.id+",'"+data.code+"')>操作</a>";
+	       	}}
+	     ]
+	});
+});
 
-function append(code,id) {
-	var map = {}; // Map map = new HashMap();
-	map["href"] = "get-html.do?pluginid="+code+"&smsid="+id;
-	map["formId"] = "#editform";
-	map["url"] = "save-edit.do";
-	map["title"] = "修改参数";
-	map["divDialog"] = "#divdia";
-	map["gridreload"] = "#smsdata";
-	addDialog(map);
+
+function edit(id,code){
+	layer.open({
+        title:"修改参数",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:"get-html.do?smsid="+id+"&pluginid="+code,//内容的URL
+        area:['500px','285px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
 }
-function addDialog(map) {
-	$(map["divDialog"]).show();
-	$(map["divDialog"]).dialog({
-		title : map["title"],
-		width : 600,
-		top:10,
-		height : 400,
-		closed : false,
-		cache : false,
-		href : map["href"],
-		modal : true,
-		buttons : [ {
-			text : '保存',
-			iconCls : 'icon-ok',
-			handler : function() {
-				 var savebtn = $(this);
-　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-　　				 if(!disabled){
-					 submitForm(map,savebtn);
-	　　			 }
-			}
-		}, {
-			text : '取消',
-			handler : function() {
-				$(map["divDialog"]).dialog('close');
-			}
-		} ]
+
+	
+
+
+function setOpen(id){
+	$.ajax({
+		url:"set-open.do?smsid="+id,
+		dataType:"json",
+		cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。           
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success(data.message);
+				table.ajax.reload();
+			}else{
+				$.Loading.error(data.message);
+			}	
+		},
+		error:function(){
+			$.Loading.hide();
+			$.Loading.error("出错了，请稍候重试!");
+		}
 	});
 }
-function submitForm(map,savebtn) {
-	var formflag = $(map["formId"]).form().form('validate');
-	if (formflag) {
-		$.Loading.show("正在保存请稍候...");
-			savebtn.linkbutton("disable");
-		var options = {
-			url : map["url"],
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if (result.result == 1) {
-					$.Loading.success(result.message);
-					$(map["divDialog"]).dialog('close');
-					$(map["gridreload"]).datagrid('reload');
-				}
-				if (result.result == 0) {
-					$.Loading.error(result.message);
-				}
-				savebtn.linkbutton("enable");
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
-				savebtn.linkbutton("enable");
-			}
-		};
-		$(map["formId"]).ajaxSubmit(options);
-	}
-}
 
-	function fortime(value,row,index){
-		var val;
-		if(value==0){
-			val = "";
-		}else{
-			val = getFormatDateByLong(value,"yyyy-MM-dd")
-		}
-		return val;
-	}
-	
-	function forCtime(value,row,index){
-		var val;
-		if(value==0){
-			val = "";
-		}else{
-			val = getFormatDateByLong(value,"yyyy-MM-dd")
-		}
-		return val;
-	}
-	
-	function forAction(value,row,index){
-		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append(\""
-			+ row.code + "\","+row.id+")'></a>";
-		return val;
-	}
-	
-	function foropen(value,row,index){
-		var val;
-		if(value==1){
-			val="已启用&nbsp;";
-		}else{
-			val="未启用&nbsp;<a href='javascript:void(0);' onclick='setOpen("+row.id+")'>开启</a>";
-		}
-		return val;
-	}
-	
-	
-	function setOpen(id){
-		$.ajax({
-			url:"set-open.do?smsid="+id,
-			dataType:"json",
-			cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。           
-			success:function(data){
-				if(data.result==1){
-					$.Loading.success(data.message);
-				}else{
-					$.Loading.error(data.message);
-				}	
-				$("#smsdata").datagrid('reload');
-			},
-			error:function(){
-				$.Loading.hide();
-				$.Loading.error("出错了，请稍候重试!");
-			}
-		});
-	}
-	
 </script>
-
 <#include '/admin/footer.html' >

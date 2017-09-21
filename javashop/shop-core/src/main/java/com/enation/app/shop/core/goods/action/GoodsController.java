@@ -113,7 +113,6 @@ public class GoodsController extends GridController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list() {
-		
 		ModelAndView view=this.getGridModelAndView();
 		String market_enable=ThreadContextHolder.getHttpRequest().getParameter("market_enable");
 		view.addObject("tagList", tagManager.listMap());
@@ -281,9 +280,9 @@ public class GoodsController extends GridController {
 	public ModelAndView add() {
 		
 		ModelAndView view=new ModelAndView();
+		
 		view.addObject("actionName","goods!saveAdd.do");
 		view.addObject("is_edit", false);
-		
 		view.addObject("pluginTabs", this.goodsPluginBundle.onFillAddInputData());
 		
 		view.setViewName("/shop/admin/goods/goods_input");
@@ -338,7 +337,7 @@ public class GoodsController extends GridController {
 
 			JsonResult jsonRetult=new JsonResult();
 			jsonRetult.setData(goods.getGoods_id());
-			jsonRetult.setMessage("商品添加成功！已经为跳转至修改页面，您可以继续修改此商品。");
+			jsonRetult.setMessage("商品添加成功！");
 			jsonRetult.setResult(1);
 			return jsonRetult;
 
@@ -419,6 +418,7 @@ public class GoodsController extends GridController {
 			return JsonResultUtil.getObjectJson(map);
 
 		} catch (RuntimeException e) {
+			this.logger.error("添加商品出错", e);
 			return JsonResultUtil.getErrorJson("添加商品出错" + e.getMessage());
 		}
 	}
@@ -460,8 +460,33 @@ public class GoodsController extends GridController {
 			return JsonResultUtil.getObjectJson(map);
 			
 		} catch (RuntimeException e) {
+			this.logger.error("修改商品出错", e);
 			return JsonResultUtil.getErrorJson("修改商品出错" + e.getMessage());
 			
 		}
 	}
+	/**
+	 * 根据sn获取商品信息
+	 * @param sn 商品sn
+	 * @return 商品信息
+	 */
+	@ResponseBody
+	@RequestMapping(value="/search-goods-by-sn")
+	public JsonResult searchGoodsBySn() {
+		try {
+			HttpServletRequest request = ThreadContextHolder.getHttpRequest();
+			String sn = request.getParameter("sn");
+			/**进行必要判断*/
+			if(sn==null||sn==""){
+				return JsonResultUtil.getErrorJson("商品sn为空");
+			}
+			/**通过sn获取商品信息*/
+			Goods goodBySn = goodsManager.getGoodBySn(sn);
+			return JsonResultUtil.getObjectJson(goodBySn);
+		} catch (Exception e) {
+			return JsonResultUtil.getErrorJson("获取商品信息出错" + e.getMessage());
+		}
+		
+	}
+	
 }

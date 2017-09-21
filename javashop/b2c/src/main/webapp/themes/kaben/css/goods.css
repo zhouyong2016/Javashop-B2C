@@ -1026,7 +1026,7 @@
 	float: left;
 	padding: 10px 15px 15px 20px;
 	position: relative;
-	
+	width: 733px;
 	margin-left: 30px;
 }
 
@@ -1464,73 +1464,3 @@
 .icon-content-activity.show {
     display: block;
 }
-
-
-/***********关联商品样式**********/
-.linkgoods-box{background: #ffffff none repeat scroll 0 0;box-shadow: 0 2px 5px #ccc;margin: 30px auto 0 auto;height:270px;overflow: hidden;width: 1200px;}
-.linkgoods-box h3{width:1200px;height:40px;border-bottom:1px solid #33a600;}
-.linkgoods-box h3 span{width:150px;height:40px;text-align:center;line-height:40px;font-size:16px;color:#fff;background:#33a600;display:block;}
-.linkgoods{width:1200px;overlfow:hidden;height:220px;}
-.linkgoods .link-left{
-	background:url("../images/hyzztp.png") no-repeat -14px -12px;
-    cursor: pointer;
-    display: inline;
-    float: left;
-    height: 16px;
-    margin: 105px 20px 0 25px;
-    width: 9px;
-}
-
-.linkgoods .link-right{
-	  background:url("../images/hyzztp.png") no-repeat -14px -48px;
-    cursor: pointer;
-    display: inline;
-    float: right;
-    height: 16px;
-    margin: 105px 25px 0 20px;
-    width: 9px;
-}
-
-.linkgoods .link-middel{
-	width:1080px;
-	float:left;
-	overflow:hidden;
-}
-.linkgoods .link-middel ul{width:100%;overflow:hidden;margin:40px 0 0 0;}
-.linkgoods .link-middel ul li{
-	display: inline;
-    float: left;
-    height: 245px;
-    text-align: center;
-    width: 180px;
-}
-.linkgoods .link-middel ul li img{
-	 height:150px;
-    width: 150px;
-}
-.linkgoods .link-middel ul li p{width:150px;text-align:left;height:20px;line-height:20px;font-size:12px;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

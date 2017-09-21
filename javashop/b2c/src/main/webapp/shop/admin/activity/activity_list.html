@@ -1,212 +1,382 @@
 <#include '/admin/header.html' >
-<div class="main">
-	<form id="activityform">
-		<div class='buttonArea'>
-			<div style="float:left">
-				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="newTab('新增促销活动','${ctx}/shop/admin/activity/add.do')">添加</a>
-			</div>
-			<span style="float: right;"> 
-				<span id="advancedSearch" style="float: right;">
-					<a href="javascript:void(0)" class="button" id="aAdvanced">高级搜索</a>
-				</span>
-				<span id="simpleSearch">
-					<a href="javascript:void(0)" class="button b_fr" data-options="plain:true" onclick="searchActivity()" style="margin-right: 10px;">筛选</a>
-					<select name="status" class="inputSelect valid" id="activity_status" style="margin-right: 10px;width: 100px;height: 30px;">
+<style type="text/css">
+	.table_search button{
+		margin-top:0px!important; 
+	}
+	#start_time_one{
+  height:25px;
+  }
+  #end_time_one{
+  height:25px;
+  }
+  ._inline{
+  margin-right:16px!important;
+  margin-top:5px;
+  height:25px;
+  }
+  .search_conditions{
+   display:block
+}
+.page_explain ul li{
+height:40px;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>商城促销活动的发布，添加和修改，都是在此列表中操作的。</li>
+                <li><span>·</span>活动类型分为，普通促销和多级促销两种活动类型，但相同类型的促销活动，同一时间段不可以重复添加。</li>
+                <li><span>·</span>添加或者修改促销活动时，有多种优惠方式，可以灵活选择，里面显示的赠品和优惠券，可在赠品列表和优惠券列表中查看详细和进行相应操作。</li>
+                <li><span>·</span>优惠方式不能大于优惠门槛，比如：优惠门槛 满（10）元， 那么优惠方式减现金不能大于10元。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+            	<button type="button" class="layui-btn layui-btn-primary " title="添加" onclick='newTab("新增促销活动","${ctx}/shop/admin/activity/add.do");'><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+            <!--筛选条件  -->
+            <div class="table_search" style="line-height: 47px;">
+				<select name="status" class="inputSelect valid" id="activity_status" style="margin-right: 10px;width: 100px;height: 30px;">
 						<option value="0">全部</option>
 						<option value="1">进行中</option>
 						<option value="2">未开始</option>
 						<option value="3">已结束</option>
-					</select>
-				</span>
-			</span>
-		</div>
-		<div style="display: block;" class="searchAdvanced" >
-			<input id="Advanced" name="Advanced" type="hidden" value="0" />
-			<table width="98%" border="0" cellspacing="0" cellpadding="8">
-				<tr>
-					<th width="70" align="right">活动名称</th>
-					<td style="width: 400px;">
-						<input type="text" value="${activity_name!''}" id="activity_name"  class="input_text">
-					</td>
-					<th width="70" align="right">活动类型</th>
-					<td>
-						<select name="activity_type" class="inputSelect valid" id="activity_type" >
-							<option value="0">--请选择--</option>
-							<option value="1">--普通促销活动--</option>
-							<option value="2">--多级促销活动--</option>
-						</select>
-					</td>
-					<th width="80" align="right">商品参加形式</th>
-					<td>
-						<select name="range_type" class="inputSelect valid" id="range_type" >
-							<option value="0">--请选择--</option>
-							<option value="1">--全部参加--</option>
-							<option value="2">--部分参加--</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th width="70" align="right">开始时间</th>
-					<td>
-						<input class="easyui-datetimebox" style="width: 240px;height: 28px;" id="start_time" />
-					</td>
-					<th width="70" align="right">结束时间</th>
-					<td>
-                        <input class="easyui-datetimebox" style="width: 240px;height: 28px;" id="end_time" />
-					</td>
-				</tr>
-				<tr>
-					<td width="60" align="right"></td>
-					<td colspan="7" align="center">
-						<a id="searchAdvance" class="button blueButton" onclick="searchActivity()" href="javascript:;">开始搜索</a>
-						<a class="button blueButton" id="resetInput" href="javascript:;">还原搜索</a>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/activity/list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" id="activitydata">
-				<thead>
-					<tr>
-						<th data-options="field:'activity_id',checkbox:true,width:100"></th>
-						<th data-options="field:'activity_name',width:300">促销活动名称</th>
-						<th data-options="field:'start_time',width:150" formatter="formatDate">开始时间</th>
-						<th data-options="field:'end_time',width:150" formatter="formatDate">结束时间</th>
-						<th data-options="field:'activity_type',width:100" formatter="formatType">活动类型</th>
-						<th data-options="field:'status',width:100">活动状态</th>
-						<th data-options="field:'action',width:60" formatter="formatAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</form>
-	<div id="addBrand" ></div>
+				</select>
+				<button href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-small" id="search_activity_status">筛选</button>
+				<button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="high_search">高级搜索</button>
+				<!--高级搜索  -->
+                <div class="high_searchcontent">
+                    <div class="content_title"><span>高级搜索</span></div>
+                    <form id="search_form" class="layui-form" action="post">
+                    <!-- <input id="Advanced" name="Advanced" type="hidden" value="0" /> -->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">活动名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="activity_name" lay-verify="" autocomplete="off" placeholder="活动名称" class="layui-input">
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >活动类型</label>
+                            <div class="layui-input-block">
+                                <select id="activity_type" name="activity_type" lay-filter="">
+                                    <option value="0">--请选择--</option>
+									<option value="1">--普通促销活动--</option>
+									<option value="2">--多级促销活动--</option>
+                                </select>
+                            </div>
+                        </div>
+                         
+                         <div class="layui-form-item">
+                            <label class="layui-form-label" >参加形式</label>
+                            <div class="layui-input-block">
+                                <select id="range_type" name="range_type" lay-filter="">
+                                    <option value="0">--请选择--</option>
+									<option value="1">--全部参加--</option>
+									<option value="2">--部分参加--</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item" style="width:100%;">
+   							 	<label class="layui-form-label" >活动时间</label>
+    						<div class="layui-input-inline" >
+      							<input class="layui-input"  placeholder="开始时间" id="start_time" >
+    						</div>
+    						<div class="layui-input-inline">
+    						<input class="layui-input" placeholder="结束时间" id="end_time" >
+    						</div>
+  						</div>
+                       
+                        <ul>
+                            <li class="reset">
+                                <button type="reset" id="reset_btn" class="layui-btn  layui-btn-primary">重置</button>
+                            </li>
+                            <li class="submit">
+                                <button type="button" id="submit_btn" class="layui-btn layui-btn-primary"  onclick="highSearchActivity()"  lay-submit="" lay-filter="highsearch">开始搜索</button>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+			</div>
+        </div>
+   </div>
+   <!--高级搜索生成区域  -->
+   <div class="high_search">
+   <form action="" class="layui-form layui-form-one" action="">
+   		</form> 	
+   </div>
+   
+     <!-- //高级搜索区克隆区域 -->
+      <div class="kelong" style="display:none;">
+   		<ul  class="search_conditions " style="width:98%; ">
+ 			<li>
+ 				 <div class="layui-form-item _select">
+                       <label class="layui-form-label  _label" >活动名称</label>
+                  <div class="layui-input-block _layui-input-block">
+                        <input type="text" id="activity_name_one" readonly="true" class="layui-input">
+                  </div>
+                  </div>
+                  <span>
+                  	<a class="closeSelf" href="javascript:void (0)">
+                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+                 	</a>
+                  </span>
+ 			</li>
+	
+ 			<li>
+ 			    <div class="layui-form-item  _select">
+                            <label class="layui-form-label _label">活动类型</label>
+                            <div class="layui-input-block _layui-input-block">
+                              <input type="text" id="activity_type_one"  readonly="true" class="layui-input">
+                            </div>
+                   </div>
+              	 	<span>
+                  	<a class="closeSelf" href="javascript:void (0)">
+                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+                 	</a>
+                  </span>
+ 			</li>
+ 				<li>
+ 			    <div class="layui-form-item  _select">
+                            <label class="layui-form-label _label">参加形式</label>
+                            <div class="layui-input-block _layui-input-block">
+                              <input type="text" id="range_type_one"  readonly="true" class="layui-input">
+                            </div>
+                   </div>
+              	 	<span>
+                  	<a class="closeSelf" href="javascript:void (0)">
+                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+                 	</a>
+                  </span>
+ 			</li>
+ 			<li>
+ 			    <div class="layui-form-item  _select">
+                     <label class="layui-form-label _label">下单开始时间</label>
+                     <div class="layui-input-block _layui-input-block">
+                       	<input type="text" id="start_time_one"  readonly="true" class="layui-input">
+                     </div>
+                  </div>
+              	 	<span>
+	                  	<a class="closeSelf" href="javascript:void (0)">
+	                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	                 	</a>
+                  </span>
+ 			</li>
+ 				<li>
+	 			    <div class="layui-form-item  _select">
+	                     <label class="layui-form-label _label">下单截至时间</label>
+	                     <div class="layui-input-block _layui-input-block">
+	                       	<input type="text" id="end_time_one" readonly="true" class="layui-input">
+	                     </div>
+                   </div>
+              	 	<span>
+	                  	<a class="closeSelf" href="javascript:void (0)">
+	                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	                 	</a>
+                  </span>
+ 			</li>
+ 		</ul>
+   </div>
+   
+   <!--表格区域  -->
+   <form id="activityform">
+     <table id="activitydata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>促销活动名称</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>活动类型</th>
+            <th>活动状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+     </table>
+   </form>
 </div>
-<script type="text/javascript">
-function formatDate(value, row, index){
-	if (value == null || value == 0) {
-		return "";
-	} else {
-		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
-	}
-}
 
-function formatType(value, row, index){
-	var val = "";
-	
-	if (value == 1) {
-		val = "普通促销";
-	} else if (value == 2) {
-		val = "多级促销";
-	}
-	
-	return val;
-}
+<!--js区域  -->
+<script>
 
-//操作
-function formatAction(value, row, index) {
-	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\"修改促销活动\",\"${ctx}/shop/admin/activity/edit.do?activity_id="
-		+ row.activity_id + "\")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del(" + row.activity_id + ")'></a>";
-	return val;
-}
+var index = parent.layer.getFrameIndex(window.name);
 
-$(function() {
-	$(".searchAdvanced").hide();
-	//高级查询按钮
-	$("#aAdvanced").click(function() {
-		if ($("#Advanced").val() == "0") {
-			$("#Advanced").val(1);
-			$("#activity_status").val(0);
-			$("#simpleSearch").hide();
-			$("#aAdvanced").addClass("searchAdvancedS");
-		} else {
-			reset();
-			$("#Advanced").val(0);
-			$("#simpleSearch").show();
-			$("#aAdvanced").removeClass("searchAdvancedS");
-		}
-		$(".searchAdvanced").slideToggle("slow");
-	});
-	
-	$("#resetInput").click(function(){
-		reset();
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+	form.on('submit(highsearch)', function(data){
+		 $(".layui-form-one>ul").remove();
+			$(".high_search").css("display","block");
+			var kelo=$(".kelong ul").clone();
+			kelo.appendTo($(".high_search form"));
+			/* 赋值 */
+			var gjacti=$("#activity_name").val();
+			$("#activity_name_one").val(gjacti);
+			
+			var gjactiv=$("#activity_type").find("option:selected").text();
+		       $("#activity_type_one").val(gjactiv);
+		       
+		       var gjrange=$("#range_type").find("option:selected").text();
+		       $("#range_type_one").val(gjrange);
+		       var gjstart=$("#start_time").val();
+		       $("#start_time_one").val(gjstart);
+		       var gjend=$("#end_time").val();
+		       $("#end_time_one").val(gjend);
+		   	$(".closeSelf").click(function(){
+				$(this).parent().parent().detach();
+				})
 	});
 });
+var table
+$(function(){
+	
+	//高级搜索框的显示隐藏
+    $("#high_search").on("click",function(event){
+    	event.stopPropagation();
+     	event.stopImmediatePropagation();
+        $(".high_searchcontent").toggle();
+    })
+    
+	 table = $('#activitydata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/activity/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {"data": function (obj) {
+	              return '<input type="checkbox" name="activity_id" class="fly-checkbox" value=' + obj.activity_id + '>';
+	               }},
+	        {data: "activity_name"},
+	        {data: null,"render":function(data,type,row){
+	        		return getFormatDateByLong(data.start_time, "yyyy-MM-dd hh:mm:ss");
+	        }},
+	        {data: null,"render":function(data,type,row){
+	        	    return getFormatDateByLong(data.end_time, "yyyy-MM-dd hh:mm:ss");
+	        }},
+	        {data: null,"render":function(data, type, row){
+	        	var val = "";
+	        	if (data.activity_type == 1) {
+	        		val = "普通促销";
+	        	} else if (data.activity_type == 2) {
+	        		val = "多级促销";
+	        	}
+	        	return val;
+	        }},
+	        {data: "status"},
+	        {data: null,"render": function(data, type, row) {
+	        	return  "<a class='layui-btn layui-btn-small _aa'  name='change_btn' onclick='newTab(\"修改促销活动\",\"${ctx}/shop/admin/activity/edit.do?activity_id="
+	    		+ data.activity_id + "\")'>修改</a>  &nbsp<a class='layui-btn layui-btn-small _aa' onclick='del(" + data.activity_id + ")'>删除</a>";
+	       	}}
+	     ]
+	});
+	//普通搜索
+	$("#search_activity_status").click(function(){
+		_searchActivity(table);
+	});
+	//普通搜索
+	$("#submit_btn").click(function(){
+		highSearchActivity();
+	});
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	    form.render(); //更新全部
+		  var start = {
+		    min: '2014-01-01 23:59:59'
+		    ,max: '2099-06-16 23:59:59'
+		    ,istoday: false
+		    ,choose: function(datas){
+		      end.min = datas; //开始日选好后，重置结束日的最小日期
+		      end.start = datas //将结束日的初始值设定为开始日
+		    }
+		  };
+		  
+		  var end = {
+		    min: '2014-01-01 23:59:59'
+		    ,max: '2099-06-16 23:59:59'
+		    ,istoday: false
+		    ,choose: function(datas){
+		      start.max = datas; //结束日选好后，重置开始日的最大日期
+		    }
+		  };
+		  
+		  document.getElementById('start_time').onclick = function(){
+		    start.elem = this;
+		    laydate(start);
+		  }
+		  document.getElementById('end_time').onclick = function(){
+		    end.elem = this
+		    laydate(end);
+		  }
+		  
+		});
+});
 
-//搜索
-function searchActivity() {
-
-	var searchtype = $("#Advanced").val();
+function _searchActivity(table){
 	var status = $("#activity_status").val();
-
+	var param = "status="+status+"&stype="+0;
+	var url = table.ajax.url("${ctx}/shop/admin/activity/list-json.do?"+param);
+	url.load();
+}
+//搜索
+function highSearchActivity(){
+	var status = $("#activity_status").val();
 	var activity_name = $.trim($("#activity_name").val());
 	var activity_type = $("#activity_type").val();
 	var range_type = $("#range_type").val();
-	var start_time = $('#start_time').datetimebox('getValue');
-	var end_time = $('#end_time').datetimebox('getValue');
+	var start_time = $('#start_time').val();
+	var end_time = $('#end_time').val();
 	if (start_time != "" && end_time != "") {
 		if (end_time <= start_time) {
-			$.Loading.errorMessage("注意：开始时间不能大于结束时间","1500");
+			alert("注意：开始时间不能大于结束时间","1500");
 			return false;
 		}
 	}
-	$("#activitydata").datagrid('load', {
-		stype : searchtype,
-		status : status,
-
-		activity_name : activity_name,
-		activity_type : activity_type,
-		range_type : range_type,
-		start_time : start_time,
-		end_time : end_time,
-		page : 1
-	});
+	var param = "status="+status+"&activity_name="+activity_name+"&activity_type="+activity_type+"&range_type="+range_type+"&start_time="+start_time+"&end_time="+end_time+"&stype="+1;
+	table.ajax.url("${ctx}/shop/admin/activity/list-json.do?"+param).load();
+	
+	
 }
-
 //删除
 function del(activityId){
 	if (!confirm("促销活动删除后不可恢复，确认要删除吗？")) {	
 		return false;
 	}
-	
-	$(".delete").removeAttr("onclick");
-	$.Loading.show("正在删除请稍候...");
 	var options = {
-		url : "${ctx}/shop/admin/activity/delete.do?ajax=yes&activity_id="+activityId,
-		type : "POST",
-		dataType : 'json',
-		success : function(result) {
-			if(result.result==1){
-				$('#activitydata').datagrid('reload');
-				$.Loading.successMessage(result.message, "2000");
-			}else{
-				$.Loading.errorMessage(result.message, "2000");
+		url:ctx+"/shop/admin/activity/delete.do?activity_id="+activityId,
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success(data.message);
+				table.ajax.url(ctx+"/shop/admin/activity/list-json.do").load();
 			}
-			$(".delete").attr("onclick","del("+activityId+")");
-		},
-		error : function(e) {
-			$.Loading.error("出现错误 ，请重试");
-			$(".delete").attr("onclick","del("+activityId+")");
+			if(data.result==0){
+				$.Loading.error(data.message);
+			}
 		}
 	};
 	$('#activityform').ajaxSubmit(options);	
-} 
-
-//定义一个刷新datagrid的方法，将其保存到window.top中
-window.top["reload_Abnormal_Monitor"]=function(){
-    $("#activitydata").datagrid("reload");
-};
-
-//初始化高级搜索条件
-function reset(){
-	$("#activity_name").val("");
-	$("#activity_type").val(0);
-	$("#range_type").val(0);
-	$('#start_time').datetimebox('setValue', '');
-	$('#end_time').datetimebox('setValue', '');
 }
 </script>
 <#include '/admin/footer.html' >

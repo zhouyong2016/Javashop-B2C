@@ -36,44 +36,51 @@
 				<div class="login_content">
 					<!-- 用户名登录 -->
 					<form method="post" class="validate" id="normal_login_form">
-                        <div class="m_account" >
-                            <label for="username" style="height:24px;line-height:24px;">用户名：</label>
-                            <input type="text" maxlength="18" tabindex="1"  name="username"  class="definition_small" id="username" placeholder="请输入会员名称"/>
-                        </div>
-
-                        <div class="m_account" >
-                            <label for="password" style="height:24px;line-height:24px;">密码：</label>
-                            <input type="password"  maxlength="18" vtype="password" tabindex="2"  name="password" id="password"  class="definition_small" placeholder="请输入密码"/>
-                        </div>
-
-                        <div class="m_account login_account" >
-                            <div class="m_input">
-                                <label for="validcode" style="height:24px;line-height:24px;">验证码：</label>
-                                <input type="text" tabindex="3" name="validcode"  size="8"  class="m_small" id="validcode" placeholder="请输入验证码" style="width:150px;"/>
-                            </div>
-                            <img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" id="LoginimgVerifyCode" style="cursor: pointer" >
-                            <!--
-                            <div class="m_forget"><a href="javascript:;">看不清楚？换个图片</a></div>
-                             -->
-                        </div>
+						<label class="normal-item" >
+							<div class="m_account" style="height:24px;line-height:24px;">
+								<label style="height:24px;line-height:24px;">用户名：</label>
+								<input type="text" maxlength="18" tabindex="1"  name="username"  class="definition_small" id="username" placeholder="请输入会员名称"/>
+							</div>
+						</label>
+						<label class="normal-item" >
+							<div class="m_account" style="height:24px;line-height:24px;">
+								<label style="height:24px;line-height:24px;">密码：</label>
+								<input type="password"  maxlength="20" vtype="password" tabindex="2"  name="password" id="password"  class="definition_small" placeholder="请输入密码"/>
+							</div>
+						</label>
+						<label class="normal-item" >
+							<div class="m_account login_account" style="height:24px;line-height:24px;">
+								<div class="m_input">
+									<label style="height:24px;line-height:24px;">验证码：</label>
+									<input type="text" tabindex="3" name="validcode"  size="8"  class="m_small" id="validcode" placeholder="请输入验证码" style="width:150px;"/>
+								</div>
+								<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" id="LoginimgVerifyCode" >
+								<!-- 
+								<div class="m_forget"><a href="javascript:;">看不清楚？换个图片</a></div>
+								 -->
+							</div>
+						</label>
 					</form>
 				
 					<!-- 手机号码登录 -->
-					<form method="post" class="validate" id="mobile_login_form" style="display: none">
-						<input type="hidden" name="action" value="login" />
-                        <div class="m_account" style="margin:0 auto">
-                            <label for="mobile" style="height:24px;line-height:24px;">手机：</label>
-                            <input type="text" tabindex="1" name="mobile" class="definition_small same_input" maxlength="11" placeholder="手机号" id="mobile"/>
-                        </div>
-
-                        <div class="m_account" style="margin:0 auto; border: none; height: inherit">
-                            <button type="button" class="btn-dynamic-code" style="margin: 0">免费获取手机动态码</button>
-                        </div>
-
-                        <div class="m_account">
-                            <label for="dynamic-code" style="height:24px;line-height:24px;">动态码：</label>
-                            <input type="text" id="dynamic-code" class="definition_small same_input" maxlength="6"  name="validcode" placeholder="短信验证码" tabindex="2" />
-                        </div>
+					<form method="post" class="validate" id="mobile_login_form">
+						<input type="hidden" name="action" value="login" /> 
+						<label class="mobile-item">
+							<div class="m_account" style="margin:0 auto">
+								手机号：
+								<input type="text" tabindex="1" name="mobile" class="definition_small same_input" maxlength="11" placeholder="手机号" id="mobile"/>
+							</div>
+						</label>
+						<label class="mobile-item">
+							<a  class="btn-dynamic-code" tabindex="2" />免费获取手机动态码</a>
+						</label>
+						<label class="mobile-item" >
+							<div class="m_account">
+								动态码：
+								<input type="text" id="dynamic-code" class="definition_small same_input" maxlength="6"  name="validcode" placeholder="短信验证码" tabindex="2" />
+							</div>
+						</label>
+						
 					</form>
 				</div>
 				<!--  
@@ -122,12 +129,6 @@ $(function(){
 			lineHeight: 24
 		})
 	}
-	
-	var url = window.location.href;
-	forward = url.split("forward=")[1];
-	
-	$("#go_register").attr("href","${ctx}/member/register/fill_mobile.html?forward="+forward);
-	$("#forward").val(forward);
 
 	$(".m_forget a").click(function(){
 		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
@@ -141,16 +142,19 @@ $(function(){
 	 	$mobileLoginForm = $('#mobile_login_form');
 	$('.type-toggle').click(function (){
 		var	ACTIVE_KEY = 'active',
-			$this = $(this);
+			$this = $(this),
+			mobileElements = $mobileLoginForm.find('.mobile-item'),
+			normalElements = $normalLoginForm.find('.normal-item');
 		// 如果当前是手机 就切换为普通
 		if ($this.data(ACTIVE_KEY) === 'mobile') {
+			
 			$this.html('手机动态码登录<i class="login-icon mobile-icon"></i>').data(ACTIVE_KEY, 'normal');
-            $normalLoginForm.show().find('input').prop('disabled', false);
-            $mobileLoginForm.hide().find('input').prop('disabled', true);
+			normalElements.show().find('input').prop('disabled', false);
+			mobileElements.hide().find('input').prop('disabled', true);
 		} else {
 			$this.html('普通方式登录<i class="login-icon normal-icon"></i>').data(ACTIVE_KEY, 'mobile');
-            $normalLoginForm.hide().find('input').prop('disabled', true);
-            $mobileLoginForm.show().find('input').prop('disabled', false);
+			normalElements.hide().find('input').prop('disabled', true);
+			mobileElements.show().find('input').prop('disabled', false);
 		}
 		
 	});
@@ -174,7 +178,7 @@ $(function(){
 	$(".m_account input").focus(function(){
 		$(this).parents(".m_account").addClass("selected");
 	})
-	
+
 	//获取手机动态码
 	$mobileLoginForm.find('.btn-dynamic-code').click(function (){
 		var mobileNumber =  $("#mobile").val();
@@ -187,12 +191,23 @@ $(function(){
 			$.message.error('手机号格式有误');
 			return false;
 		}
+		var text = "重新获取验证码";
 		var options = {
 			url : ctx + "/api/shop/sms/send-sms-code.do?mobile=" + mobileNumber + "&key=check",
 			dataType:"json",
 			success:function(result) {
-				if(result.result === 1) {
-					$.countDown({ elem: $this });
+				if(result.result == 1) {
+					$this.val(text).attr("disabled",true); 
+					var i = 60, timer;
+					timer = window.setInterval(function (){
+						if(i == 0) {
+							$this.val(text).prop("disabled",false);
+							window.clearInterval(timer); 
+						} else {
+							$this.val(text + i);
+							i--;
+						}
+					}, 1000);
 					$.message.success(result.message);
 				} else {
 					$.message.error(result.message);

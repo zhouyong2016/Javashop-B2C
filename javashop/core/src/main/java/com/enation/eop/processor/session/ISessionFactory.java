@@ -24,7 +24,7 @@ public class ISessionFactory {
 		int session_open=ClusterSetting.getSession_open();
 		if(session_open==1){
 			HttpSession session =(HttpSession)SpringContextHolder.getBean("clusterHttpSession");	
-			ISessionManager sessionManager =(ISessionManager)SpringContextHolder.getBean("clusterSessionManager");
+			ISessionManager sessionManager =(ISessionManager)SpringContextHolder.getBean("iSessionManager");
 			//创建session
 			session=sessionManager.createSession(safeHttpRequest, httpResponse, requestEventSubject, true);
 			return session;

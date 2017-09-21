@@ -88,6 +88,7 @@ public class MemberPointPlugin extends AutoRegisterPlugin implements
 				//添加会员的等级积分和消费积分 dongxin改
 				memberPointManger.add(member, point, DateUtil.toString(today, "yyyy年MM月dd日")+"登录", null,0,0);
 				memberPointManger.add(member, 0, DateUtil.toString(today, "yyyy年MM月dd日")+"登录", null,mp,1);
+				
 			}
 		}
 		

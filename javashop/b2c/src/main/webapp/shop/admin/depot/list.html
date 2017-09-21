@@ -1,176 +1,147 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<div id="depotinfo" style="display: none;"></div>
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlDept()">添加</a>
+<div class="admin-main">
+	<div>
+		<!--提示区域  -->
+		<div class="page_explain">
+		 <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>自营店可设定多个仓库，但是默认发货仓库只能是一个。</li>
+                <li><span>.</span>设置多个仓库，相应的每个商品在每个仓库中都可以有库存，这样可以随时的了解和掌控货物的实际库存量，以备对库存进行调整</li>
+                <li><span>.</span>设置每个商品的库存，请在商品-商品管理-进货/库存维护中设置。</li>
+            </ul>
+		</div>
+		<!--按钮操作  -->
+		<div class="table_control">
+			<div class="table_opera">
+				<button type="button" class="layui-btn layui-btn-primary "
+					title="添加" id="add_dept_button">
+					<i class="icon iconfont icon-llalbumshopselectorcreate"></i>
+				</button>
+				<button type="button" class="layui-btn layui-btn-primary "
+					title="提示" id="explain">
+					<i class="icon iconfont icon-tishi1"></i>
+				</button>
+			</div>
+
+		</div>
 	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="depotForm">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/depot/list-json.do',fitColumns:'true'" width="width" id="depotdata">
-				<thead>
-				    <tr>
-				   	 	<th  data-options="field:'name',width:100">仓库名称</th>
-				   	 	<th  data-options="field:'choose',width:100" formatter="formatChoose">是否为默认发货仓库</th> 
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			 </table>
-		</form>
-	</div>
+
+	<!--表格区域  -->
+	<form id="depotForm">
+		<table id="depotdata" class="layui-table site-table table-hover"
+			width="100%" lay-skin="line">
+			<thead>
+				<tr>
+					<th>仓库名称</th>
+					<th>是否为默认发货仓库</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+		<!--传值等操作  -->
+		<div id="addBrand"></div>
+	</form>
 </div>
 
+<!--js区域  -->
+<script>
+	var table;
+	$(function() {
 
- <script type="text/javascript">
-function formatAction(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id +")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.id +")'></a>";
-	return val;
-}
-function formatChoose(value,row,index){
-	var val="";
-	if(row.choose==0){val="否";}
-	if(row.choose==1){val="是";}
-	return val;
-}
-function del(depotId){
-	if(!confirm("确认要删除仓库吗？")){	
-		return ;
+		table = $('#depotdata')
+				.DataTable(
+						{
+							"language" : {
+								"url" : "${staticserver}/media/zh_CN.txt"
+							},
+							"processing" : true,
+							"serverSide" : true,
+							"ordering" : false,
+							"searching" : false,
+							"lengthChange" : false,
+							ajax : {
+								//指定数据源
+								type : "post",
+								url : '${ctx}/shop/admin/depot/list-json.do',
+							},
+							columns : [ //定义列
+									{
+										data : "name"
+									},
+									{
+										"data" : function(obj) {
+											if (obj.choose == 0) {
+												return '否';
+											}
+											if (obj.choose == 1) {
+												return '是';
+											}
+										}
+									},
+									{
+										data : null,
+										"render" : function(data, type, row) {
+											return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='editDepot("
+													+ data["id"]
+													+ ")' >修改</a>"
+													+ "&nbsp"
+													+ "<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("
+													+ data["id"] + ")'>删除</a>"; //获取值:data["brand_id"]
+										}
+									} ]
+						});
+
+		$("#add_dept_button").click(function() {
+			layer.open({
+				title : "添加仓库",//标题
+				maxmin : true,//右上角可否放大缩小
+				type : 2,//弹框的类型
+				shade : [ 0.3, '#000' ],//黑色背景
+				shadeClose : false,//黑色背景是否可以点击关闭
+				content : "${ctx}/shop/admin/depot/add.do",//内容的URL
+				area : [ '550px', '300px' ],//弹框大小
+				scrollbar : false
+			//是否允许浏览器出现滚动条
+			});
+		});
+	});
+
+	//修改
+	function editDepot(id) {
+		layer.open({
+			title : "修改仓库",//标题
+			maxmin : true,//右上角可否放大缩小
+			type : 2,//弹框的类型
+			shade : [ 0.3, '#000' ],//黑色背景
+			shadeClose : false,//黑色背景是否可以点击关闭
+			content : ctx + "/shop/admin/depot/edit.do?id=" + id,//内容的URL
+			area : [ '550px', '300px' ],//弹框大小
+			scrollbar : false
+		//是否允许浏览器出现滚动条
+		});
 	}
-	var options = {
-			url : "${ctx}/shop/admin/depot/delete.do?id="+depotId,
+
+	//删除
+	function del(depotId) {
+		if (!confirm("确认要删除仓库吗？")) {
+			return;
+		}
+		var options = {
+			url : ctx + "/shop/admin/depot/delete.do?id=" + depotId,
 			type : "POST",
 			dataType : 'json',
 			success : function(result) {
-				if(result.result==1){
+				if (result.result == 1) {
 					$.Loading.success(result.message);
-					$('#depotdata').datagrid('reload');
-				}else{
+					table.ajax.url(ctx + "/shop/admin/depot/list-json.do")
+							.load();
+				}
+				if (result.result == 0) {
 					$.Loading.error(result.message);
 				}
-				
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
-			}
-	};
-	$('#depotForm').ajaxSubmit(options);	
-}
-function controlDept(){
-	$("#depotinfo").show();
-　　	$('#depotinfo').dialog({
-　　		title: '添加仓库',			
-　　		width: 550,
-　　		closed: false,
-　　		cache: false,
-　　		href: '${ctx}/shop/admin/depot/add.do', 
-　　		modal: true,
-　　		buttons: [{					
-　　			 text:'保存',
-　　			 handler:function(){
-　　				  var savebtn = $(this);
-	　　			  var disabled=savebtn.hasClass("l-btn-disabled");
-	　　			  if(!disabled){
-　　					 addDepotForm(savebtn);
-　　				  }
-　　			 }
-　　			 },{
-　　			 text:'还原',
-　　			 handler:function(){
-　　				 $('#addDepotForm')[0].reset() ;
-　　			 }
-　　		}]
-　　	});
-}
-function addDepotForm(savebtn){
-	var formflag= $("#addDepotForm").form().form('validate');
-	
-	if($("#is_default").is(":checked")){
-		$("#choose").val("1");}
-	else{
-		$("#choose").val("0");}
-	
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		savebtn.linkbutton("disable");	
-		 var options = {
-			url : "${ctx}/shop/admin/depot/save-add.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				$.Loading.success(result.message);
-				$("#depotinfo").dialog('close');
-				$('#depotdata').datagrid('reload');
-				savebtn.linkbutton("enable");
-		 	},
-			 error : function(e) {
-				 $.Loading.error("出现错误 ，请重试");	
-			     savebtn.linkbutton("enable");
 			}
 		};
-		$('#addDepotForm').ajaxSubmit(options);	
+		$("#depotForm").ajaxSubmit(options);
 	}
-}
-function edit(depotId){
-	
-	if($("#is_default").is(":checked")){
-		$("#choose").val("1");}
-	else{
-		$("#choose").val("0");}
-	
-	 $("#depotinfo").show();
-	　　	$('#depotinfo').dialog({
-	　　		title: '修改仓库',			
-	　　		width: 550,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/shop/admin/depot/edit.do?id='+depotId, 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 handler:function(){
-	　　				  var editbtn = $(this);
-		　　			  var disabled=editbtn.hasClass("l-btn-disabled");
-		　　			  if(!disabled){
-	　　				   		 editDepotForm(editbtn);		
-	　　					}
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#editDepotForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	}); 
-}
-function editDepotForm(editbtn){
-	if($("#is_default").is(":checked")){
-		$("#choose").val("1");}
-	else{
-		$("#choose").val("0");}
-	
-	var formflag= $("#editDepotForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		editbtn.linkbutton("disable");	
-		var options = {
-			url : "${ctx}/shop/admin/depot/save-edit.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				$.Loading.success(result.message);
-				$("#depotinfo").dialog('close');
-				$('#depotdata').datagrid('reload');
-				editbtn.linkbutton("enable");
-		 	},
-		 	error : function(e) {
-		 		$.Loading.error("出现错误 ，请重试");
-		 		editbtn.linkbutton("enable");
-			}
-		};
-		$('#editDepotForm').ajaxSubmit(options);
-	}
-}
 </script>
 <#include '/admin/footer.html' >
-	   	 

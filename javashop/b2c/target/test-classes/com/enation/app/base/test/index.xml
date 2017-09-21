@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+
+<!-- 商品表索引 -->
+	<action>
+		<command>index</command>
+		<table>es_my_test</table>
+		<index name="ind_field1">
+			<field><name>field1</name></field>
+		</index>
+ 
+		<index name="ind_field2">
+			<field><name>field2</name></field>
+		</index>
+	</action>
+	 
+			
+</dbsolution>	

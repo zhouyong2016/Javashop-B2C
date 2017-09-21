@@ -22,7 +22,7 @@ import com.enation.framework.util.JsonResultUtil;
 /**
  * 
  * (预警商品库存管理) 
- * @author zjp
+ * @author zjplist-goods-warningstore
  * @version v1.0
  * @since v6.2
  * 2016年12月12日 下午5:23:30

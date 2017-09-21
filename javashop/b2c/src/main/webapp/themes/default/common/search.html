@@ -1,0 +1,73 @@
+<!--搜索板块-->
+<div class="search">
+	<input type="text"  class="hunt"  id="keyword" type="text" value="请输入产品关键字，如品牌、型号等"  title="请输入产品关键字，如品牌、型号等" >
+	<input type="button" name="s_seek" class="s_seek" value="搜索" id="searchBtn">	
+</div>
+<!--搜索板块结束-->
+<!--搜索导航-->
+<div class="hot_keyword">
+	<h1>热门搜索：</h1>
+	<ul>
+	<!-- 获取CMS数据搜索标签， -->
+	<#assign dataSearchTag=newTag("dataSearchTag") />
+  	<!-- 调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword表.)“3”表示出现三个关键词。 -->
+		<#assign webPage = dataSearchTag('{"modelid":1,"pageSize":3}') />
+		<#list webPage.result as data>
+		<li><a href="${ctx}/goods_list.html?keyword=${data.keyword}">${data.keyword}</a></li>
+		</#list></div>
+<!--搜索导航结束-->
+
+<script type="text/javascript">
+var searchTipText = "请输入产品关键字，如品牌、型号等";
+function search(){
+	var keyword = $.trim( $("#keyword").val());
+	if(keyword == searchTipText){
+		keyword = '';
+	}
+	if(keyword.indexOf('\\')!=-1){
+		alert("请输入正确的关键词");
+		return false;
+	}
+	if(keyword==''){
+		alert("请输入关键字");
+	}else{
+		keyword = keyword.replace(/\//g,"-xie-")
+		var url = "goods_list.html?keyword=" + keyword;
+		//var url =  encodeURIComponent("search-keyword-"+keyword+".html");
+		location.href="${ctx}/"+url;
+	}
+}
+
+$(function(){	
+	$("#keyword").keypress(function(event){
+	//	$("#keyword").attr("class","seek");
+		if(event.keyCode=="13" ){
+			search();
+		}
+	});
+	$("#keyword").click(function(){
+		if($(this).val() == searchTipText){
+			$(this).val("");
+		}
+	});
+	$("#keyword").blur(function(){
+		if($(this).val() == ''){
+			$(this).val(searchTipText);
+		}
+	});
+	
+	$("#searchBtn").click(function(){
+		search();
+	});
+	
+	<#assign luceneCheckTag = newTag("luceneCheckTag") /> 
+	<#assign lucene =luceneCheckTag() />
+	
+	<#if lucene=='ON' >
+		var url_ = "${ctx}/api/shop/goods-words/list-words.do";
+		 $("#keyword").bigAutocomplete({url:url_, callback:function(data){
+			 location.href="${ctx}/goods_list.html?keyword="+data.title;
+	    }}); 
+	</#if>
+});
+</script>

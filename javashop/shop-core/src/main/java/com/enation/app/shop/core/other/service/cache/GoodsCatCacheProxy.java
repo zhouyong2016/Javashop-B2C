@@ -173,4 +173,14 @@ public class GoodsCatCacheProxy  implements
 		}
 		return list;
 	}
+
+	@Override
+	public List getGoodsParentsType() {
+		return goodsCatManager.getGoodsParentsType();
+	}
+
+	@Override
+	public List<Cat> getGoodsParentsType(Integer cat_id) {
+		return goodsCatManager.getGoodsParentsType(cat_id);
+	}
 }

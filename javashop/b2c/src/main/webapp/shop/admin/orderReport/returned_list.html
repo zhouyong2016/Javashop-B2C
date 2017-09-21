@@ -1,13 +1,29 @@
-<#include '/admin/header.html' > <#assign
-dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<#if !state??>
-	<div class="buttonArea">
-		<span style="float: right;"> 
-			<span id="simpleSearch">
-				<a href="javascript:void(0)" class="button b_fr" 
-				data-options="plain:true" onclick="searchKeyword()">筛选</a>
-				<select id="returnState" style="height: 28px;margin-right:10px;margin-top: 1px;">
+<#include '/admin/header.html' >
+<style>
+.page_explain ul li{
+height:30px;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>退货状态分为：新建、待入库、已入库、已退款、已取消、部分入库六种状态。</li>
+                <li><span>·</span>在未审核通过的情况下，操作为退货审核，您可以拒绝审核，也可以通过审核，想通过审核必须选择退货仓库，如果审核通过，</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退回审核会变成退货入库按钮。</li>
+                <li><span>·</span>退货入库可以对审核通过的退款单，进行商品入库，可以选择部分与全部商品，全部入库之后，退货状态会变成已入库。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+            <!--条件筛选  -->
+            <div class="table_search">
+				<select id="returnState" style="height: 30px;margin-right:10px;margin-top: 8px;display:inline-block">
 					<option value="">请选择</option>
 					<option value="0">新建</option>
 					<option value="1">待入库</option>
@@ -16,83 +32,116 @@ dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
 					<option value="2">已取消</option>
 					<option value="5">部分入库</option>
 				</select> 
-			</span>
-		</span>
-	</div>
-	</#if>
-	<div class="shadowBoxWhite tableDiv">
-		<table id="orderReturndata" class="easyui-datagrid"
-			data-options="url:'${ctx}/shop/admin/order-report/returned-list-json.do?type=2',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
-			pagination="true" width="width">
-			<thead>
-				<tr>
-					<th data-options="field:'id',width:35">退货ID</th>
-					<th data-options="field:'tradeno',width:100">退货单号</th>
-					<th data-options="field:'tradestatus',width:100" formatter="formatType">退货状态</th>
-					<th data-options="field:'ordersn',width:100">退货订单号</th>
-					<th data-options="field:'regoperator',width:100">业务员</th>
-					<th data-options="field:'regtime',width:100" formatter="formatTime">操作时间</th>
-					<th data-options="field:'apply_alltotal',width:100">申请退货金额</th>
-					<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
-				</tr>
-			</thead>
-		</table>
-		<div id="pay_detail"></div>
-	</div>
+				<a  href="javascript:void(0)" type="button" class="layui-btn layui-btn-primary layui-btn-small" id="searchReturned">筛选</a>
+			</div>
+        </div>
+   </div>
+   
+   <!--表格区域  -->
+    <table id="orderReturndata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>退货ID</th>
+            <th>退货单号</th>
+            <th>退货状态</th>
+            <th>退货订单号</th>
+            <th>业务员</th>
+            <th>操作时间</th>
+            <th>申请退货金额</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
 </div>
-<script type="text/javascript">
-	function formatType(value, row, index) {
-		var val;
-		if (value == 0) {
-			val = "新建";
-		}
-		if (value == 1) {
-			val = "审核通过待入库";
-		}
-		if (value == 2) {
-			val = "已取消";
-		}
-		if (value == 6) {
-			val = "已退款";
-		}
-		if (value == 4) {
-			val = "已入库";
-		}
-		if (value == 5) {
-			val = "部分入库";
-		}
-		
-		return val;
-	}
 
-	function formatTime(value, row, index) {
-		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
-	}
-	function formatOperation(value, row, index) {
-		var val;
-		if(row.tradestatus==0){
-			val = "<a href='javascript:void(0);' onclick=newTab('退货单审核','${ctx}/shop/admin/sell-back/auth.do?id="+row.id+"'); >查看</a>";
-		}else{
-			val = "<a href='javascript:void(0);' onclick=newTab('退货入库','${ctx}/shop/admin/sell-back/returned.do?id="+row.id+"'); >查看</a>";
-		}
-		return val;
-	}
+<!--js区域  -->
+<script>
+$(function(){
 	
-	//定义一个刷新datagrid的方法，将其保存到window.top中
-	window.top["reload_Abnormal_Monitor"]=function(){
-        $("#orderReturndata").datagrid("reload");
-    };
-    
-  	//筛选退货单 add by DMRain 2016-4-28
-    function searchKeyword(){
-   	var returnState = $("#returnState").val();
+	var table = $('#orderReturndata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/order-report/returned-list-json.do?type=2',
+	    },
+	    columns: [ //定义列
+	        {data: "id"},
+	        {data: "tradeno"},
+	        {data: null,"render":function(data,type,row){
+	        	var val;
+	    		if (data.tradestatus == 0) {
+	    			val = "新建";
+	    		}
+	    		if (data.tradestatus == 1) {
+	    			val = "待入库";
+	    		}
+	    		if (data.tradestatus == 2) {
+	    			val = "已取消";
+	    		}
+	    		if (data.tradestatus == 6) {
+	    			val = "已退款";
+	    		}
+	    		if (data.tradestatus == 4) {
+	    			val = "已入库";
+	    		}
+	    		if (data.tradestatus == 5) {
+	    			val = "部分入库";
+	    		}
+	    		if (data.tradestatus == 7) {
+	    			val = "退款中";
+	    		}
+	    		if (data.tradestatus == 8) {
+	    			val = "退款失败";
+	    		}
+	    		return val;
+	        }},
+	        {data: "ordersn"},
+	        {data: "regoperator"},
+	        {data: null,"render": function(data,type,row){
+	        	if(data.regtime==null){
+	        		return " ";
+	        	}else{
+	        		return getFormatDateByLong(data.regtime, "yyyy-MM-dd hh:mm:ss");
+	        	}
+	        }},
+	        {data: "apply_alltotal"},
+	        {data: function(row) {
+	        	var val;
+	    		if(row.tradestatus==0){
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退货单审核','${ctx}/shop/admin/sell-back/auth.do?id="+row.id+"'); >退货审核</a>";
+	    		}else if(row.tradestatus==4 || row.tradestatus==7 ||row.tradestatus==8 || row.tradestatus==6){
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('查看退货入库','${ctx}/shop/admin/sell-back/returned.do?id="+row.id+"'); >查看</a>";
+	    		}else if(row.tradestatus==2){
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退货入库','${ctx}/shop/admin/sell-back/returned.do?id="+row.id+"'); >查看</a>";
+	    		}else{
+	    			val = "<a class='layui-btn layui-btn-small _aa' href='javascript:void(0);' onclick=newTab('退货入库','${ctx}/shop/admin/sell-back/returned.do?id="+row.id+"'); >退货入库</a>";
+	    		}
+	    		return val;
+	       	}}
+	     ]
+	});
+	
+	//筛选
+	$("#searchReturned").click(function(){
+		_searchReturned(table);
+	});
+});
 
-   	$("#orderReturndata").datagrid('load', {
-   		state:returnState
-       });
-    }
-    
+function _searchReturned(table){
+	var state = $("#returnState").val();
+	var url = table.ajax.url("${ctx}/shop/admin/order-report/returned-list-json.do?type=2&state="+state);
+	url.load();
+}
+
 </script>
-<div id="log"></div>
-
 <#include '/admin/footer.html' >

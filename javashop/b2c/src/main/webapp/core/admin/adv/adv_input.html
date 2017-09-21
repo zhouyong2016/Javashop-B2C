@@ -1,48 +1,120 @@
+<#include '/admin/sonheader.html' >
 <style>
-.input_text {
-	width: 200px;
-}
+ .layui-select-title input{
+  width:100%;
+ }
+ .layui-unselect {
+  width:50%;
+ }
+ .layui-form-radio {
+  display: inline;
+ }
+ .layui-form-select dl{
+ z-index:2000;
+ max-height:200px;
+ }
+  .layui-form-pane .layui-input-block{
+ 	margin-left:130px;
+ }
+ .layui-form-pane .layui-form-label{
+ width:130px
+ }
 </style>
-<div class="main" style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-	
-		<form id="addForm" method="post" class="validate" enctype="multipart/form-data">
-				<input type="hidden" name="mstartdate" value="2015-01-01"/>
+<div class="main">
+    <!--表单区域  -->
+	<form id="advForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+		<input type="hidden" name="mstartdate" value="2015-01-01"/>
 		<input type="hidden" name="menddate" value="2015-01-01"/>
-			<table width="100%">
-				<tr>
-					<th>广告名称：</th>
-					<td><input class="easyui-validatebox input_text" type="text"
-						id="advname" name="aname" data-options="required:true" maxlength="30"></input>
-					</td>
-					<th>广告位置：</th>
-					<td><select class="easyui-validatebox input_text" name="acid">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">广告名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="advname" name="aname"  maxlength="30" lay-verify="aname" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+			<label class="layui-form-label _stration">广告位置：</label>
+    		<div class="layui-input-block">
+      			<select  name="acid">
 							<#list adColumnList as adc>
 							<option value="${adc.acid }">${adc.cname }</option> </#list>
-					</select></td>
-				</tr>
-				<tr>
-					<th>广告链接：</th>
-					<td  colspan="3">
-						<input maxlength="50" class="easyui-validatebox input_text" type="text" name="url" data-options="required:true" style="width:300px" placeholder="请输入符合规范的站内链接，前面不要加'/'"></input>
-						<br/>
-						<span style="color: red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/search-cat-86.html，只需填写search-cat-86.html即可！</span>
-					</td>
-				</tr>
-				<tr>
-					<th>上传广告文件：</th>
-					<td colspan="3"><input class="easyui-validatebox" type="file" accept="image/*,.swf"
-						name="pic"></input></td>
-				</tr>
-				<tr>
-				 
-					<th>是否开启：</th>
-					<td  colspan="3">
-					<input class="easyui-validatebox input_text" type="radio" style="width: 10px;" name="isclose" value="0" checked />
-						开启&nbsp;&nbsp; <input type="radio" name="isclose" value="1" />
-						关闭</td>
-				</tr>
-			</table>
-		</form>
-	</div>
+					</select>
+   			</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">广告链接：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="url"  maxlength="50"  lay-verify="url" autocomplete="off" class="layui-input">
+    		</div>
+    		<div class="layui-form-mid layui-word-aux" style="color:red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/search-cat-86.html，只需填写search-cat-86.html即可！</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">上传广告文件：</label>
+    		<div class="layui-input-block">
+      			<input type="file" id="file" name="pic" accept="image/*,.swf" lay-verify="" autocomplete="off" class="_upfile">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">是否开启：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="isclose" value="0" checked="checked" title="开启">
+      			<input type="radio" name="isclose" value="1" title="关闭">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 98%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_adv">保存</a>
+  			<a class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    
+    form.verify({
+    	aname:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入广告名称";
+    		}
+    	},
+    	url:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入广告链接";
+    		}
+    	}
+    });
+    
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+    //监听提交
+    form.on('submit(save_adv)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/adv/add-save.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				debugger;
+   				if(data.result==1){	
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/adv/list-json.do?acid=${acid!''}").load();
+   				}
+   			}
+   		};
+   		$("#advForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>

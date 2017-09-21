@@ -1,35 +1,257 @@
 <#include '/admin/header.html' >
-<script type="text/javascript" src="${ctx}/floor/admin/js/subject.js"></script>
-<div class="main">
-		<div class='buttonArea'>
-			<span id="add-subject-button" style="float:left;display:block">	
-				<a href="javascript:void(0)" class="button blueButton" >添加</a>
-			</span>
-			<span id="save-subject-sort" style="float:left;display:block">	
-				<a href="javascript:void(0)" class="button" >保存排序</a>
-			</span>
-		</div>
-		<div class="clear height10"></div>
-		<form id="gridform" method="post">
-			<table class="easyui-datagrid"  url="${ctx}/core/admin/subject/list-json.do" 
-				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="subjectdata"
-				sortName="sort" sortOrder="asc" remoteSort="false" >
-				<thead>
-					<tr>
-						<th data-options="field:'id',checkbox:true,width:100" ></th>
-						<th data-options="field:'title',width:200" >标题</th>
-						<th data-options="field:'sort',sortable:'true',width:100" formatter="formatSort">排序</th>
-						<th data-options="field:'is_display',width:500" formatter="formatIsDisplay">显示</th>
-						<th data-options="field:'edit',align:'center',width:100" formatter="formatEdit">编辑</th>
-						<th data-options="field:'delete',align:'center',width:100" formatter="formatDelete">删除</th>
-						<th data-options="field:'design',align:'center',width:100" formatter="formatDesign">专题设计</th>
-					</tr>
-				</thead>
-			</table>
-		</form>
-		<div id="divdia" style="display: none;"></div>
-</div>
-<script type="text/javascript">
-var ctx="${ctx}";
+<style>
+.receiptsInputText{
+    width: 55px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+   	text-align:center;
+}
+</style>
+	<div class="admin-main">
+    	<div>
+    		<!-- 提示区域 -->
+        	<div class="page_explain">
+            	<h2>操作提示</h2>
+		            <ul>
+		                <li><span>·</span>专题列表中，可以添加、删除、排序、编辑、显示、设计专题等功能。</li>
+		                <li><span>·</span>多个专题，想要更改先后顺序，您可以用排序来实现。</li>
+		                <li><span>·</span>列表中“显示” 菜单中，您可以直接点击显示，与未显示来切换显示状态，前台刷新即生效。</li>
+		                <li><span>·</span>设计专题，可以上传图片，或者上传商品来丰富专题。</li>
+		            </ul>
+        	</div>
+        	<!-- 按钮操作 -->
+        	<div class="table_control">
+            	<div class="table_opera">
+                	<button type="button" id="add-subject-button" title="添加" class="layui-btn layui-btn-primary "><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                	<button type="button" id="save-subject-sort" title="保存排序" class="layui-btn layui-btn-primary " onclick="saveSort()"><i class="icon iconfont icon-xuanze"></i></button>
+                	<button type="button"  title="提示" class="layui-btn layui-btn-primary " id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            		
+            	</div>
+        	</div>
+    	</div>
+    	<!-- 表格区域 -->
+    	<form action="" id="gridform">
+    	
+			<table id="subjectdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        		<thead>
+        			<tr>
+        			<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            		<th>标题</th>
+            		<th>排序</th>
+            		<th>显示</th>
+            		<th>编辑</th>
+            		<th>删除</th>
+            		<th>专题设计</th>
+        			</tr>
+        		</thead>
+   		 	</table>
+    	</form>
+	</div>
+
+<!-- js区域 -->
+<script>
+
+var table;
+$(function(){
+	table = $('#subjectdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        dataType : 'json',
+	        url: "${ctx}/core/admin/subject/list-json.do",
+	    },
+	    columns: [ //定义列
+	             {"data": function (obj) {
+	                   return '<input type="checkbox" name="id" class="fly-checkbox" value='+ obj.id + '>';
+	               	}},
+	             {data: "title"},
+	             {data: null,"render": function(obj) {
+		 	        	return '<input type="text" class="receiptsInputText" name="subject_sorts" value="'+obj.sort+'" id="sorts" style="height:25px;">';		
+		 	       	}},
+	             {data: null,"render": function(obj) {
+	               	 	var val = "";
+	               	 	if(obj.is_display == 0){
+	               		 val = '<p id="subjectstatus'+obj.id+'" style="display:inline;margin:0px 10px">已显示</p>'
+	            			+'<input class="stop button layui-btn layui-btn-danger layui-btn-small" type="button" value="停用" floorid="'+obj.id+'" id=subjectimg'+obj.id+' onclick="changeshow('+obj.id+')" showvalue="0" changevalue="1" >';
+	               		}else if(obj.is_display == 1){
+	               			val = '<p id="subjectstatus'+obj.id+'" style="display:inline;margin:0px 10px">未显示</p>'
+	               			+'<input class="start button layui-btn layui-btn-normal layui-btn-small" type="button" value="启用" floorid="'+obj.id+'" id=subjectimg'+obj.id+' onclick="changeshow('+obj.id+')" showvalue="1" changevalue="0" >';
+	               		}
+	               	 	return val;
+	    	 	 }},
+	             {data: null,"render": function(obj) {
+		 	        	return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='editSubject("+obj["id"]+")' >编辑</a>";		
+		 	       	}},
+	             {data: null,"render": function(obj) {
+	 	        	return "<a class='layui-btn layui-btn-small layui-btn-danger'  onclick='delSubject("+obj["id"]+")'>删除</a>";		
+	 	       	}},
+	             {data: null,"render": function(obj) {
+	 	        	return "<a class='layui-btn layui-btn-small '  onclick='design(" +obj.id+ ")'  >专题设计</a>";		
+	 	       	}}
+	     ]
+	});
+	
+	$("#add-subject-button").click(function(){
+   	 layer.open({
+            title:"添加专题",//标题
+            maxmin :true,//右上角可否放大缩小
+            offset: '60px',
+            type:2,//弹框的类型
+            shade: [0.3, '#000'],//黑色背景
+            shadeClose:false,//黑色背景是否可以点击关闭
+            content:ctx+"/core/admin/subject/add-subject.do",//内容的URL
+            area:['550px','470px'],//弹框大小
+            scrollbar: false//是否允许浏览器出现滚动条
+        });
+	});
+});
+$(window).load(function(){
+	$(".changenum").on("click",function(){
+	   	 toReplace(this)  
+	   })
+	});
+
+//编辑
+function editSubject(id){
+	 layer.open({
+         title:"编辑",//标题
+         maxmin :true,//右上角可否放大缩小
+         offset: '60px',
+         type:2,//弹框的类型
+         shade: [0.3, '#000'],//黑色背景
+         shadeClose:false,//黑色背景是否可以点击关闭
+         content:ctx+"/core/admin/subject/edit-subject.do?id="+id,//内容的URL
+         area:['550px','470px'],//弹框大小
+         scrollbar: false//是否允许浏览器出现滚动条
+     });
+}
+
+//删除
+function delSubject(id){
+	if (!confirm("确认要删除此专题？")) {
+		return;
+	}
+	$.ajax({
+		url : ctx+"/core/admin/subject/delete.do?id=" + id,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				$.Loading.success(result.message);
+				table.ajax.url(ctx+"/core/admin/subject/list-json.do").load();
+			}
+		}
+	});
+}
+
+//显示.停用的状态切换
+function changeshow(id){
+	var value=$("#subjectimg"+id).attr("showvalue");
+	var changevalue=$("#subjectimg"+id).attr("changevalue");
+	$.ajax({
+		url:ctx+"/core/admin/subject/save-display.do?id=" + id+"&is_display="+changevalue,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				if(changevalue==1){
+						$("#subjectimg"+id).removeClass("stop layui-btn-danger");
+						$("#subjectimg"+id).addClass("start layui-btn-normal");
+						$("#subjectimg"+id).val("启用");
+						$("#subjectstatus"+id).html("未显示");
+						$("#subjectimg"+id).attr("showvalue",changevalue);
+						$("#subjectimg"+id).attr("changevalue",value);
+					
+				}else{
+						$("#subjectimg"+id).removeClass("start layui-btn-normal");
+						$("#subjectimg"+id).addClass("stop layui-btn-danger");
+						$("#subjectimg"+id).val("停用");
+						$("#subjectstatus"+id).html("已显示");
+						$("#subjectimg"+id).attr("showvalue",changevalue);
+						$("#subjectimg"+id).attr("changevalue",value);
+				}
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+}
+
+//专题设计
+function design(id){
+	parent.newTab("专题设计",ctx+"/core/admin/subject/design.do?id="+id);
+
+}
+//保存排序  
+function saveSort(){
+	//var check = $("input[name='id']").is("input:checked");
+	
+	var obj = document.getElementsByName("id");
+    var check_val = [];
+    var check_sorts =[]; 
+    for(k in obj){
+        if(obj[k].checked){
+        	check_val.push(obj[k].value);
+        	var sorts=$(obj[k]).parent().parent().find("input[name='subject_sorts']").val();
+        	check_sorts.push(sorts);
+        	if(sorts == "" || sorts == null){
+        		$.Loading.error("保存失败！保存的排序不能为空！！");
+            	return false;
+        	} 
+        }
+   	}
+    if(check_val.length == 0){
+    	$.Loading.error("保存失败！请选择您要保存的排序！！");
+    	return false;
+    }
+	$.ajax({
+		url:"${ctx}/core/admin/subject/save-sort.do?subject_ids="+check_val+"&subject_sorts="+check_sorts,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {	
+			if (result.result == 1) {	
+				$.Loading.success("保存成功！！")
+				table.ajax.reload();
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+}
+function toReplace(divElement) {  
+    // 创建一个input元素  
+    var _input = document.createElement("input");  
+    _input.value = divElement.innerHTML;  
+  
+    divElement.parentNode.replaceChild(_input, divElement);  
+    _input.focus();
+    _input.onblur = function() {  
+        divElement.innerHTML = _input.value;  
+        _input.parentNode.replaceChild(divElement, _input);  
+    }  
+}  
+window.onload=function(){
+	$(".changenum").click(function(){
+		toReplace(this);
+	})
+}
+
 </script>
 <#include '/admin/footer.html' >

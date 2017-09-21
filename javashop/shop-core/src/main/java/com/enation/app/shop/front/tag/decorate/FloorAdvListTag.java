@@ -13,6 +13,7 @@ import com.enation.eop.sdk.context.EopSetting;
 import com.enation.framework.database.IDaoSupport;
 import com.enation.framework.taglib.BaseFreeMarkerTag;
 import com.enation.framework.util.JsonUtil;
+import com.enation.framework.util.StringUtil;
 
 import freemarker.template.TemplateModelException;
 /**
@@ -35,6 +36,9 @@ public class FloorAdvListTag extends BaseFreeMarkerTag{
 
 		String aid_json=params.get("aid").toString();
 		String position=params.get("position").toString();
+		if(StringUtil.isEmpty(aid_json)){
+			return new ArrayList();
+		}
 		Map<String,Object> aid_json_Map1=JsonUtil.toMap(aid_json);
 		Map<String,Object> aid_json_Map=(Map<String, Object>) aid_json_Map1.get(position);
 		if(aid_json_Map==null||aid_json_Map.size()==0){

@@ -1,0 +1,78 @@
+[
+ {
+		"title": "商品管理",
+		"icon": "&#x1002;",
+		"spread": true,
+		"children": [
+			{
+				"title": "商品列表",
+				"icon": "fa-check-square-o",
+				"href": "https:www.baidu.com"
+			},{
+				"title": "商品库存",
+				"icon": "fa-check-square-o",
+				"href": "level.html"
+			}
+		]
+	},
+    {
+        "title": "订单管理",
+        "icon": "&#x1002;",
+        "spread": false,
+        "children": [
+            {
+                "title": "订单查询",
+                "icon": "fa-check-square-o",
+                "href": "https:www.baidu.com"
+            },{
+                "title": "待结算订单",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            },{
+                "title": "待发货订单",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            },{
+                "title": "退货订单",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            }
+        ]
+    },
+    {
+        "title": "设置",
+        "icon": "&#x1002;",
+        "spread":false ,
+        "children": [
+            {
+                "title": "配送方式",
+                "icon": "fa-check-square-o",
+                "href": "https:www.baidu.com"
+            },{
+                "title": "仓库设置",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            },{
+                "title": "发货点管理",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            }
+        ]
+    },
+    {
+        "title": "评论咨询管理",
+        "icon": "&#x1002;",
+        "spread":false ,
+        "children": [
+            {
+                "title": "自营商品评论列表",
+                "icon": "fa-check-square-o",
+                "href": "https:www.baidu.com"
+            },{
+                "title": "自营商品咨询列表",
+                "icon": "fa-check-square-o",
+                "href": "level.html"
+            }
+        ]
+    }
+ ]

@@ -28,6 +28,10 @@
 						<span>审核拒绝</span>
 					<#elseif sellback.tradestatus  == 6>
 						<span>已退款</span>
+					<#elseif sellback.tradestatus  == 7>
+						<span>退款中</span>
+					<#elseif sellback.tradestatus  == 8>
+						<span>退款失败</span>
 					</#if>
 				<#elseif sellback.type==2>
 					<#if sellback.tradestatus  == 0>
@@ -44,6 +48,10 @@
 						<span>部分入库</span>
 					<#elseif sellback.tradestatus  == 6>
 						<span>已退款</span>
+					<#elseif sellback.tradestatus  == 7>
+						<span>退款中</span>
+					<#elseif sellback.tradestatus  == 8>
+						<span>退款失败</span>
 					</#if>
 				</#if>
 					</td>

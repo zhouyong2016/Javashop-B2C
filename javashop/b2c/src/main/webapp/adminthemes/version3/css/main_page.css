@@ -1,0 +1,95 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{background:#ebedf3;}
+.main-blank-top{width:100%;background:#3385e3;height:45px;overflow:hidden;height:45px;background-image:linear-gradient(to right, #1278f6, #00b4aa);}
+.layui-layout-admin{width:100%;overflow:hidden;}
+.main-left{width:70px;float:left;background:#313641;bottom: 0px;position: fixed;top:0px;z-index: 2;}
+.main-left-search{width:70px;height:70px;line-height:70px;text-align:center;position:relative;z-index:100;}
+.main-left-search i{color:#fff;font-size:26px;}
+
+.layui-layout-admin .main-left .layui-side{
+	position:relative;width:70px;top:3px;
+}
+.layui-layout-admin .main-left .layui-side ul{width:70px;}
+#menu .layui-nav-item{width:70px;padding:0;text-align:center;height:45px;height:50px;line-height:auto;}
+#menu .layui-nav-item i{display:inline-block;height:25px;line-height:25px;top:0;}
+#menu .layui-nav-item cite{display:block;height:50px;line-height:50px;}
+.layui-nav-tree .layui-nav-item a{height:50px;line-hight:50px;}
+.layui-nav{background:none;}
+/* #top-nav{border-bottom:1px solid #1e2026} */
+.beg-layout-side-left{border-bottom:1px solid #3a3c44}
+
+.main-left-user{z-index:2000;width:70px;height:60px;border-top:1px solid #1e2026;position: fixed;left:0px;bottom:10px;}
+.user-border{width:70px;border-top:1px solid #3a3c44;position:relative;height:69px;position:absolute;left:0px;top:0px;z-index:1200;background:#2f313a;}
+.person-admin-img{width:40px;height:40px;border-radius:20px;cursor: pointer;position:absolute;z-index:1200;top:15px;left:15px;}
+.user-tools{width:100px;height:70px;position:absolute;top:0px;left:-30px;z-index:1000;}
+.user-tools ul{width:100px;height:70px;background:#2f313a;text-align:left;}
+.user-tools ul li{display:block;width:90px;height:34px;line-height:34px;border-bottom:1px solid #1e2026;margin:0 0 0 10px;}
+.user-tools ul li a{color:#fff;font-size:16px;float:left;font-weight:200;float:none;}
+.user-tools ul li b{font-weight:100;color:#fff;font-size:12px;}
+.user-tools ul .last{border-top:1px solid #3a3c44;}
+
+.layui-tab-brief{width:100%;padding:0 0 0 70px;margin:0;position:relative;}
+.main-logo{width:150px;height:70px;text-align:center;position:absolute;top:0px;left:70px;z-index:100;background:#fff;}
+.main-logo img{max-width:130px;}
+.tab-background{width:100%;height:70px;background:#fff;box-shadow: 0 0px 4px #ccc;}
+
+.tools-other{width:70px;height:70px;line-height:70px;text-align:center;background:#5f97fb;position:absolute;top:0px;right:70px;z-index:201;}
+.tools-other i{color:#fff;font-size:26px;}
+
+.layui-tab-title{position:absolute;top:27px;left:220px;width:30000px;z-index:200;}
+.layui-tab-title  li{height:43px;line-height:43px;padding:0 30px 0 15px;float:left;position:relative;font-size:14px;transition:all 0s ease 0s;font-style:normal;}
+.layui-tab-brief > .layui-tab-more li.layui-this::after, .layui-tab-brief > .layui-tab-title .layui-this::after{border:0px none;}
+
+.layui-tab-title .layui-this{background:#ebedf3;height:43px;border-radius:3px 0 0 0;-moz-box-shadow:-1px 2px 1px #d8d5d5 inset;-webkit-box-shadow:-1px 2px 1px #d8d5d5 inset;box-shadow:-1px 2px 1px #d8d5d5 inset;}
+.layui-tab-title .layui-this span{width:25px;height:43px;background:url(../images/tabbj1.jpg) no-repeat left top;position:absolute;top:0px;right:-1px;display:block;}
+
+
+#side{width:150px;position:fixed;top:53px;float:left;margin:20px 0 0 0;clear:both;box-shadow: 0 0 4px #ccc;background-color: white;}
+#side .layui-nav{width:150px;position: relative;}
+#side .layui-nav li{position:relative;width:110px;overflow:hidden;padding:0 0px 0 25px;}
+
+#side .layui-nav li h2{width:110px;line-height:40px;color:#5f97fb;font-size:14px;cursor: pointer;position:relative;}
+#side .layui-nav li h2 i{transition: all 0.2s ease-in 0s;position:absolute;top:1px;left:-20px;font-size:12px;color:#333;}
+#side .layui-nav li h2 .up{
+transform:rotate(180deg);
+-ms-transform:rotate(180deg); 	/* IE 9 */
+-moz-transform:rotate(180deg); 	/* Firefox */
+-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+-o-transform:rotate(180deg); 	
+}
+#side .layui-nav li .layui-nav-child a{height:40px;line-height:40px;color: #8492a6;transition:none;}
+#side .layui-nav-child{left: 0px;}
+.layui-nav .layui-nav-item a{
+	padding:0px 0px;
+}
+.left-nav ul li cite{
+	font-size:12px;
+}
+.parent-box-item .child-box{width:100px;}
+.parent-box-item .child-box span{width:100px;margin:0 0 0 10px;display:block;overrflow:hidden;font-size:12px;height:30px;line-height:30px;color:#86899d;cursor: pointer;}
+.parent-box-item .child-box .selected{color:#000;font-size:14px;font-weight:600;}
+.layui-tab-content{margin-left: 150px;}
+
+#top-nav .layui-this a{background:#FF4C1B;}
+
+#top-nav .layui-nav-bar{background:#5f97fb}
+
+#side .layui-nav li .layui-nav-child a:hover{color:#000;}
+
+#side .layui-nav li .layui-nav-child .layui-this a{background:#ebedf3;color:#1F2D3D;font-weight: 400px; }
+
+.layui-tab-content .layui-tab-item iframe{width: 100%; border: 0px none;}
+
+
+/********0621新增消息列表*********/
+.message-center{width:240px;height:50px;padding:20px 0 0 0;position:relative;cursor: pointer;z-index:100;background: #fff}
+.message-center .message-title{width:130px;padding:0 0 0 20px;height:50px;line-height:50px;text-align:center;background:url(../images/message.png) no-repeat 15px center;background-size:20%;font-size:16px;font-weight:300;color:#333;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
+.message-center i{width:20px;height:20px;background:#5f97fb;border-radius:10px;color:#fff;position:absolute;line-height:20px;font-style:normal;text-align:center;top:20px;left:116px;font-weight:300;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12px;}
+.message-list{position:absolute;top:-300px;left:0px;width:230px;z-index:3}
+.message-list ul{width:190px;padding: 10px 15px;background:#fff;border:1px solid #5f97fb;}
+.message-list ul li{width:190px;height:30px;text-align:left;line-height:30px;overflow:hidden;font-size:14px;font-weight:350;color:#333;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
+.up-img{height:15px;width:222px;background:url(../images/xs.png) no-repeat 80px bottom;background-size:20px 11px;position:absolute;top:-14px;left:0px;}
+.message-list-box{position:relative;}

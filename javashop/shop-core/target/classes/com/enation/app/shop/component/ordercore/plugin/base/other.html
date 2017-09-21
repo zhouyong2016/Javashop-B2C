@@ -1,0 +1,112 @@
+<div class="division">
+    <table cellspacing="0" cellpadding="0" borderer="0">
+      
+      <tbody>
+      <#if eop_product!="b2b2c" || self_store?? >
+	      <tr>
+	        <th style="width: 80px;">配送方式：</th>
+	        <td  style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	        	<span  id="dlyType_span">
+			    	${order.shipping_type!''}
+			    </span>
+			     <div id="dlyType" style="display: none">
+		        	<select id="tplselectshipping_id">
+		        		<#list dlyTypeList as dlyType>
+		        			<option value="${dlyType.type_id}" <#if dlyType.type_id==order.shipping_id> selected="selected"</#if> >${dlyType.name}</option>
+		        		</#list>
+		        	</select>	
+		        </div>
+	        </td>
+	      </tr>
+      </#if>
+      <tr>
+        <th style="width: 80px;">配送保价：</th>
+        <td>
+        <#if order.is_protect==1>是
+        <#else>
+      		  否
+        </#if>
+		</td>
+      </tr>
+      <tr>
+        <th style="width: 80px;">商品重量：</th>
+        
+        <td>
+         	<#if order.shipping_type??>
+         		${order.weight }g
+        	<#else>
+      			0g
+        	</#if>
+        </td>
+      </tr>
+      <tr>
+        <th style="width: 80px;">支付方式：</th>
+        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+        	<span  id="payment_span">
+		    	${order.payment_name }
+		    </span>
+		    <div id="payment" style="display: none">
+	        	<select id="tplselectpaytypeid">
+	        		<#list payCfgList as payinfo>
+	        			<option value="${payinfo.id}" <#if payinfo.id==order.payment_id> selected="selected"</#if> >${payinfo.name}</option>
+	        		</#list>
+	        	</select>	
+	        </div>
+	    </td>
+        		
+      </tr>
+      <#if eop_product!="b2b2c" || self_store??>
+		  <tr>
+		   <th style="width: 80px;">库房：</th>
+	       <td  style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+		        <span  id="depotinfo_span1" depot="${depot.name}" >
+			        ${depot.name }
+			    </span>
+			   	<div id="depot" style="display: none">
+			   		<select id="tplselectdepotid">
+			   		  	<#list depotList as depotinfo>
+			        		<option value="${depotinfo.id}" <#if depotinfo.id==depot.id> selected="selected"</#if> >${depotinfo.name}</option>
+			        	</#list>
+			   		</select>
+			   	</div>
+	        </td>
+		  </tr>
+	  </#if>
+     <tr>
+        <th style="width: 80px;">可得积分：</th>
+        <td>${order.gainedpoint + order.activity_point}</td>
+      </tr>
+    </tbody></table>
+</div>
+<script type="text/javascript">
+<#if order.ship_status==SHIP_NO>
+	<@permssion actid="order">
+	$(function(){
+		
+		var tpl='<div class="edit-panel"><span class="num"><span class="txt"></span><a href="javascript:;">编辑</a></span><span class="set">';
+			tpl+=$("#depot").html();
+			tpl+='<a  class="save no-enable" href="javascript:;">保存</a><a  class="cancel" href="javascript:;">保存</a></span></div>';
+		$("#depotinfo_span1").SelectEditor(tpl,'${ctx}/shop/admin/order/save-depot.do?orderId='+$("#orderid").val(),"depotid",function(oldvalue,newvalue){
+				return true;
+		});
+		
+		if(${order.status} == 1){
+			tpl='<div class="edit-panel"><span class="num"><span class="txt"></span><a href="javascript:;">编辑</a></span><span class="set">';
+			tpl+=$("#payment").html();
+			tpl+='<a  class="save no-enable" href="javascript:;">保存</a><a  class="cancel" href="javascript:;">保存</a></span></div>';
+			$("#payment_span").SelectEditor(tpl,'${ctx}/shop/admin/order/save-pay-type.do?orderId='+$("#orderid").val(),"paytypeid",function(oldvalue,newvalue){
+				return true;
+			});
+		}
+		
+		tpl='<div class="edit-panel"><span class="num"><span class="txt"></span><a href="javascript:;">编辑</a></span><span class="set">';
+		tpl+=$("#dlyType").html();
+		tpl+='<a class="save no-enable" href="javascript:;">保存</a><a  class="cancel" href="javascript:;">保存</a></span></div>';
+		$("#dlyType_span").SelectEditor(tpl,'${ctx}/shop/admin/order/save-ship-type.do?orderId='+$("#orderid").val(),"shipping_id",function(oldvalue,newvalue){
+			return true;
+		});
+		
+	});
+	</@permssion>
+	</#if>
+	</script>

@@ -1,4 +1,9 @@
 <#include 'member_header.html' />
+<!--创建“获取退款方式”标签-->
+<#assign refundWayTag = newTag("refundWayTag")>
+<!--调用“获取退款方式”标签，并传递参数-->
+<#assign refundWayTag = refundWayTag()>
+
 <!--创建“订单详细”标签-->
 <#assign orderDetailTag = newTag("orderDetailTag")>
 <!--调用“订单详细”标签，并传递参数-->
@@ -20,11 +25,12 @@
 			 <div class="member-comment-tab">
 			 	<ul>
 			 		<li class="mine-comment selected" type="1" style="border: none">退款申请</li>
-			 		<#if orderDetail.ship_status != orderState.SHIP_NO  >
-						<#if orderDetail.pay_status == orderState.PAY_YES  >
-					<li class="mine-wait-comment" type="2">退货申请</li>
+					<#if orderDetail.ship_status != orderState.SHIP_NO  >
+					<#if orderDetail.pay_status == orderState.PAY_YES  >
+						<li class="mine-wait-comment" type="2">退货申请</li>
 					</#if>
 					</#if>
+					
 			 		
 			 	</ul>
 			 </div>
@@ -32,40 +38,37 @@
 		 	<div class="return_detail" id="type_1">
 				<form id="returnForm" class="validate">
 					<input type="hidden" name="orderid" value="${order_id}" />
+					<input type = "hidden" value = "${refundWayTag}" name = "refundWay">
 					
-					<h3>是否已收货</h3>
-					<#if orderDetail.ship_status == orderState.SHIP_NO  >
-						<input type="radio" value="0" name="ship_status" checked="checked"/>未收货
-					</#if>
-					<#if orderDetail.ship_status != orderState.SHIP_NO  >
-						<#if orderDetail.pay_status == orderState.PAY_YES  >
-						<input type="radio" value="1" name="ship_status" checked="checked"/>已收货
-					</#if>
-					</#if>
 					<h3>退款方式</h3>
 					<div class="return-way">
-						<h4>退款方式：${orderDetail.payment_name}</h4>
-						<h4>退款账户</h4>
-						<input type="text" name="return_account" id="payment_account" class="return-way-name" maxlength="255" />
+						<input type="hidden" name = "paymenttype" value = "${orderDetail.payment_type}">
+							<#if refundWayTag == 0>
+								<h4>退款方式：${orderDetail.payment_name}
+									<input type = "hidden" name="refund_way" id="refund_way" value = "${orderDetail.payment_name}">
+								</h4>
+								<h4>退款账户</h4>
+								<input type="text" name="return_account" id="payment_account" class="return-way-name" maxlength="255" />
+							<#else>
+								<h4>退款方式：原支付方式返回
+									<input type = "hidden" name="refund_way" id="original_way" value = "原支付方式退款">
+								</h4>
+							</#if>
 					</div>
 					
 					<h3>退款原因</h3>
 					<div class="return-way">
-						<select name="reason" id="ship_status0">
-							<option value="0">请选择退款原因</option>
-							<option value="买错/不想要">买错/不想要</option>
-							<option value="未按照时间发货">未按照时间发货</option>
-							<option value="快递一直没有收到">快递一直没有收到</option>
-							<option value="快递无记录">快递无记录</option>
-							<option value="其他">其他</option>
-						</select>
-						<select id="ship_status1" style="display: none;">
+						<select id="reasonone" name="reason">
 							<option value="0">请选择退货原因</option>
 							<option value="商品质量有问题">商品质量有问题</option>
 							<option value="收到商品与描述不符">收到商品与描述不符</option>
 							<option value="不喜欢/不想要">不喜欢/不想要</option>
 							<option value="发票问题">发票问题</option>
 							<option value="空包裹">空包裹</option>
+							<option value="快递无记录">快递无记录</option>
+							<option value="快递一直没有收到">快递一直没有收到</option>
+							<option value="买错/不想要">买错/不想要</option>
+							<option value="未按照时间发货">未按照时间发货</option>
 							<option value="其他">其他</option>
 						</select>
 					</div>
@@ -78,7 +81,7 @@
 					</div>
 					<h3>问题描述</h3>
 					<div class="return-word">
-						<textarea name="remark" maxlength="100"   isrequired="true" class="return-word-detail"></textarea>
+						<textarea name="remark" maxlength="100"  class="return-word-detail"></textarea>
 					</div>
 					<div class="return-tools btn-div">
 						<input type="button" name="btnSubmit" value="申请退款" id="btnSubmit" class="yellow-btn" />
@@ -100,16 +103,16 @@
 </div>
 <script type="text/javascript">
 $(function(){
-
-	$("input[name='ship_status']").click(function(){
-		var status = $('input[name="ship_status"]:checked').val();
-		var uncheckstatus = $('input[name="ship_status"]').not("input:checked").val();
-		$("#ship_status"+uncheckstatus).removeAttr('name').hide();
-		$("#ship_status"+status).attr('name', 'reason').show();
+	//获取退款方式
+	var refund_way=$("input[name = refundWay]").val();
+	
+	$(".member-comment-tab ul li").click(function(){
+		var status = $(".member-comment-tab ul li").attr("type");
+		
 		if(status == 1){
-			$('#btnSubmit').val('申请退货');
-		}else {
 			$('#btnSubmit').val('申请退款');
+		}else {
+			$('#btnSubmit').val('申请退货');
 		};
 	})
 
@@ -132,26 +135,50 @@ $(function(){
 	})
 
 	$("#btnSubmit").click(function(){
-		var status = $('input[name="ship_status"]:checked').val();
-		if($("#ship_status0").val()==0){
+		var status = $(".member-comment-tab ul li").attr("type");
+		if($("#reasonone").val()==0){
 			alert("请选择退款原因");
 			return false;
 		}
-		if(!$("#returnForm").checkall()){
-			return false;
-		}else if($('input[name="ship_status"]:checked').val()==null){
-			alert("请选择是否收货");
-			return false;
-		}else if($("input[name='apply_alltotal']").val() < 0){
-			alert('退款金额不能为负');
-			return false;
-		}else if(Number($("input[name='apply_alltotal']").val()) > Number($("#payprice").val())){
-			alert('退款金额不能大于实付金额');
-			return false;
-		}else if($("input#payment_account").val() == ""){
-			alert("退款账号不能为空");
+		//退款账号的验证
+		if(refund_way != 1){
+			if($("input#payment_account").val() == ""){
+				alert("退款账号不能为空");
+				return false;
+			}
+		}
+		
+		//退款金额
+		var return_money=$("input[name='apply_alltotal']")[0].value;
+		if(refund_way == 1){
+			if( Number(return_money) == "0"){
+				alert("退款金额不能为零");
+				$("#btnSub").removeAttr("disabled");
+				return false;
+			}
+		}
+		
+		if(isNaN(return_money)){
+			alert("退款金额必须是浮点型数字，例如1.00");
+			$("#btnSub").removeAttr("disabled");
 			return false;
 		}
+		if( return_money == ""){
+			alert("退款金额不能为空");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		if( Number(return_money) < "0"){
+			alert("退款金额不能为负数");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		if( Number(return_money) > Number($("#paypricereturn").val())){
+			alert("退款金额不能大于实付金额");
+			$("#btnSub").removeAttr("disabled");
+			return false;
+		}
+		
 		if($(".return-word-detail").val().length > 100){
 			alert("问题描述不能超过100字");
 			return false;

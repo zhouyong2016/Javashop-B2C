@@ -57,12 +57,14 @@ public abstract class ParamsUtils {
 		Map<String,String> map = new HashMap<String,String>();
 		HttpServletRequest request  = ThreadContextHolder.getHttpRequest();
 		Enumeration<String> paramNames = request.getParameterNames();
-		while (paramNames.hasMoreElements()) {
-			
-			String name = paramNames.nextElement();
-	
-			String value = request.getParameter(name);
-			map.put(name, value);
+		if(paramNames!=null){
+			while (paramNames.hasMoreElements()) {
+				
+				String name = paramNames.nextElement();
+		
+				String value = request.getParameter(name);
+				map.put(name, value);
+			}
 		}
 		
 		return map;

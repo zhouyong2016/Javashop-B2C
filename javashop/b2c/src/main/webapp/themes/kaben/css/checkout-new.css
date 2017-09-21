@@ -808,28 +808,83 @@
     cursor: pointer;
 }
 
+/***** 2017-07-01新增发票样式 ******/
 
+.invoice-dialog {
+    width: auto;
+    font-size: 12px;
+}
 
+.ckt-checkbox.head-invoice {
+    position: relative;
+}
 
+.company-invoice-input {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 0;
+}
 
+.ckt-checkbox.content-invoice {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
 
+.ckt-checkbox.head-invoice.selected .company-invoice-input {
+    height: 26px;
+    line-height: 26px;
+}
 
+.duty-invoice-input {
+    padding-left: 10px;
+    height: 28px;
+    line-height: 28px;
+    width: 230px;
+    outline: none;
+    margin: 10px;
+    border: 1px solid #ddd;
+}
 
+.title-invoice-head {
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    clear: both;
+    text-align: right;
+    margin: 0;
+}
 
+.items-invoice-head {
+    color: #666;
+    margin-left: 10px;
+}
 
+.items-invoice-head .__btns__ {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
 
+.items-invoice-head .__editing__ .__btns__ {
+    display: block;
+}
 
+.items-invoice-head .__btns__.show {
+    display: block;
+}
 
+.items-invoice-head .__btns__ .__update__ {
+    display: none;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+.items-invoice-head .__btns__ a {
+    color: #005ea7;
+    margin-right: 10px;
+}
+.items-invoice-head .__btns__ a:hover {
+    color: #C81623;
+}

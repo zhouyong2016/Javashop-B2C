@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tools.ant.types.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import com.enation.app.shop.core.decorate.DecoratePluginsBundle;
@@ -133,9 +135,9 @@ public class ShowCaseManager implements IShowCaseManager{
 		if(!StringUtil.isEmpty(content)){
 			String sql="";
 			if("1".equals(EopSetting.DBTYPE)||"2".equals(EopSetting.DBTYPE)){
-				sql="select * from es_goods where goods_id in ("+content+") order by instr('"+content+"',goods_id)";
+				sql="select * from es_goods  where goods_id in ("+content+") order by instr('"+content+"',goods_id)";
 			}else{
-				sql="select * from es_goods where goods_id in ("+content+") order by charindex(','+convert(varchar,goods_id)+',',',"+content+",')";
+				sql="select * from es_goods  where goods_id in ("+content+") order by charindex(','+convert(varchar,goods_id)+',',',"+content+",')";
 			}
 			return this.daoSupport.queryForList(sql,Goods.class);
 		}else{
@@ -148,5 +150,23 @@ public class ShowCaseManager implements IShowCaseManager{
 		// TODO Auto-generated method stub
 		String sql="select * from es_showcase where flag=? and is_display=0 order by sort";
 		return this.daoSupport.queryForList(sql, flag);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.decorate.service.IShowCaseManager#getSelectGoodsMap(java.lang.String)
+	 */
+	@Override
+	public List<Map> getSelectGoodsMap(String content) {
+		if(!StringUtil.isEmpty(content)){
+			String sql="";
+			if("1".equals(EopSetting.DBTYPE)||"2".equals(EopSetting.DBTYPE)){
+				sql="select g.*,c.name as cat_name from es_goods g left join es_goods_cat c on g.cat_id=c.cat_id where goods_id in ("+content+") order by instr('"+content+"',goods_id)";
+			}else{
+				sql="select g.* ,c.name as cat_name from es_goods g left join es_goods_cat c on g.cat_id=c.cat_id where goods_id in ("+content+") order by charindex(','+convert(varchar,goods_id)+',',',"+content+",')";
+			}
+			return this.daoSupport.queryForList(sql);
+		}else{
+			return new ArrayList<Map>();
+		}
 	}
 }

@@ -10,6 +10,8 @@ import com.enation.app.shop.component.payment.plugin.bill.util.Pkipair;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.app.shop.core.order.service.IPaymentManager;
@@ -391,5 +393,12 @@ public class BillPlugin extends AbstractPaymentPlugin implements IPaymentEvent {
 	public void setPaymentManager(IPaymentManager paymentManager) {
 		this.paymentManager = paymentManager;
 	}
+
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

@@ -1,26 +1,225 @@
-<!-- 下单金额统计js -->
-
-<script src="${ctx}/shop/admin/statistics/member/js/order_price_statistics.js" type="text/javascript" ></script>
 
 <!-- 用户记录当前tab页是否是最新数据 是否需要刷新 0表示不需要 1表示需要 -->
 <input type="hidden" class="now_tab_data_hid" tab_id ="3" value="0" />
 
 <!-- 统计图div -->
-<div id="order_price_statistics">
+<div id="order_price_statistics" style="height: 300px; margin: 0px 0px 100px 0px; top: 30px;">
 	
 </div>
-<div class="tableDiv">
 
-	<!-- dataGrid -->
-	<table id="order_price_dg" class="easyui-datagrid" 
-		data-options="pagination:false,rownumbers:true, fitColumns:'true'">
-		<thead>
-			<tr>
-				<th data-options="field:'member_id',checkbox:true,width:100"></th>
-				<th data-options="field:'name',width:150" >昵称</th>
-				<th data-options="field:'nickname',width:100" >用户名</th>
-				<th data-options="field:'price',width:100,sortable:'true'" >下单总金额</th>
-			</tr>
-		</thead>
+<div class="tableDiv">
+	<table id="order_price_dg" class="layui-table site-table table-hover" width="100%" lay-skin="line">
 	</table>
 </div> 
+
+<script>
+/**
+ * 会员下单金额统计js
+ * 
+ * @author Sylow
+ * @version v1.0,2015-09-24
+ * @since v4.0
+ */
+
+var topNum = 10;	//排行数
+
+$(function() {
+	
+	getOrderPrice();
+	
+	var type = $("#cycle_type").val();
+	
+	// 如果统计类型 是按年统计
+	if(type == "2") {
+		$("#month").hide();
+	} else {
+		$("#month").show();
+	}
+	
+	// 统计类型变更事件
+	$("#cycle_type").change(function(){
+		
+		var type = $(this).val();
+		
+		// 如果统计类型 是按年统计
+		if(type == "2") {
+			$("#month").hide();
+		} else {
+			$("#month").show();
+		}
+		
+	});
+});
+
+
+/**
+ * 获取json数据
+ * @param startDate 开始时间
+ * @param endDate 结束时间
+ */
+function getOrderPrice(){
+	
+	var dateWhere = getDateWhere();
+	
+	// ajax配置
+	var options = {
+		url : ctx + "/shop/admin/memberStatistics/get-order-price-top.do",
+		data : {"top_num" : topNum, 'start_date' : dateWhere[0], 'end_date' : dateWhere[1]},
+		type : "post",
+		dataType:"json",
+		success:function(data){
+			
+			//如果获得正确的数据
+			if (data.result == 1) {
+				
+				if(data.data && data.data.length < 1) {
+					//alert("当前条件下没有统计数据");
+				}
+				
+				// 1.获取到统计图相关配置
+				var conf = getOrderPriceConfig(data.data);
+				
+				// 2.初始化统计图
+				initHistogram_price(conf);
+				
+				//3.加载表格数据
+				$("#order_price_dg").dataTable({
+					"language": {
+				        "url": staticserver+"/media/zh_CN.txt"
+				    },
+				    "destroy": true,
+				    "ordering": false,
+				    "searching": false,
+				    "lengthChange": false,
+			        "data": data.data,
+			        "columns": [
+			            {data: "name","title": "昵称"},
+			            {data: "nickname","title": "用户名"},
+			            {data: "price","title": "下单总金额"},
+			        ]
+			    });
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+}
+
+/**
+ * 根据服务返回的数据 生成统计图所需要的配置
+ * @param json 数据
+ * @returns json格式的配置
+ */
+function getOrderPriceConfig(json){
+	var conf = {};			//配置
+	var num = topNum;								// top几
+
+	var data = [];	// Y轴 排名数据
+	var categories = []; //X轴 名次数据
+	var name = [];
+	
+	// 遍历生成 data,categories
+	for(var i in json) {
+		var member = json[i];
+		var temp = {
+			name:member.name,
+			
+	      //  y: member.price	
+		};
+		
+		//添加到数组
+		data.push(member.price);
+		name.push(temp);
+		categories.push(parseInt(i) + 1);
+	}
+	
+	var conf = {
+		title : "买家排行Top" + num ,		//统计图标题
+		
+										//X 轴数据 [数组]
+		categories : categories,				
+            							//Y轴数据 [数组]
+		data: data,
+		name : name			
+
+	};
+	return conf;
+}
+
+/**
+ * 初始化柱状图
+ * @param id	html 初始化div的id
+ * @param conf	相关配置
+ */
+function initHistogram_price(conf){
+	var myChart = echarts.init(document.getElementById('order_price_statistics'));
+	var options = {
+			color: ['#3398DB'],
+			title: {			//图表上方标题
+				x : 'center',
+                text: conf.title
+            },
+            tooltip : {
+                trigger: 'item',		//触发类型
+                formatter : function(params){     //鼠标放到图表上触发提示内容
+                	var dataname = conf.name[params.dataIndex].name;
+                	return dataname + '<br/>' +params.seriesName + ':' + params.value;
+                }
+ 
+            },
+            toolbox: {   //图形右边工具栏
+		        show : true,
+		        feature : {
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+            legend : {
+            	bottom : '10',
+            	data : ['总金额']
+            },
+            xAxis : [					//x坐标
+                     {
+                         type : 'category',
+                         data : conf.categories,
+                         min : 0,
+                         
+                         nameLocation : 'middle',
+         				 nameGap : '30',
+         				 nameTextStyle : {
+         					fontWeight : 'bold'
+         				 }
+                     }
+                 ],
+            yAxis : [						//y坐标
+                     {
+                         type : 'value',
+                       	 name : '订单总金额（个）',
+                       	 nameLocation : 'middle',	//name字体显示的位置
+                       	 nameGap : '30'				//name字体与坐标的距离
+                     }
+                 ],
+            series : [					//图表显示类型
+                      {
+                         name: '总金额',
+                         type: 'bar',
+                         data: conf.data,
+                         itemStyle: {
+                             normal: {			//图形上方的文本标签
+                                 label: {
+                                     show: true,
+                                     position: 'top',
+                                 }
+                             }
+                         }   
+                    }
+			]
+		};
+	myChart.setOption(options);
+}
+</script>

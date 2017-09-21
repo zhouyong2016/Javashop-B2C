@@ -1,0 +1,38 @@
+
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<th class="orId">待付款订单号</th>
+		<th class="date">下单时间</th>
+		<th class="consignee">收货人</th>
+		<th class="price">总价</th>
+		<th class="status">状态</th>
+		<th class="payment">付款方式</th>
+		<th class="oper">操作</th>
+	</tr>
+	<#list order as orderList>
+	<tr class="hovertr">
+		<td>${orderList.sn}</td>
+		<td><@dateformat time="${orderList.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+		<td>${orderList.ship_name!'' }</td>
+		<td>￥${orderList.order_amount?string("0.##")}</td>
+		<td><strong><@orderstatus status="${orderList.status}" type="order" /></strong></td>
+		<td>${orderList.payment_name}</td>
+		<td class="oper"><span> 
+		<#if orderList.status == ORDER_NOT_PAY && !orderList.isCod> 
+			<#if orderList.isOnlinePay> 
+				<a href='orderpay.html?sn=${order.sn}'>立即支付</a> 
+			<#else> 
+				<a href='orderpay.html?sn=${order.sn}'>提交凭证</a> 
+			</#if> 
+		</#if>
+		</span><span>
+		<a class="check" href="member_orderdetail_${order.sn}.html">查看</a></span></td>
+	</tr>
+	</#list>
+</table>
+<p class="oper clearfix">
+	<a class="checkAll" href="member_order.html">查看所有<strong>${ordersList.totalCount}</strong>笔订单
+	</a>
+
+</p>
+<div class="clear"></div>

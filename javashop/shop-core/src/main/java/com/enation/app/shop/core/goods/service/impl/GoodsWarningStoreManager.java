@@ -102,7 +102,11 @@ public class GoodsWarningStoreManager  implements IGoodsWarningStoreManager {
 			sql.append(" and g.sn like '%"+sn+"%'");
 		}
 		String countsql = "select count(*) from ("+sql+") temp_table";
-		sql.append("order by g."+sort+" "+order);
+		
+		if(!StringUtil.isEmpty(sort)){
+			sql.append("order by g."+sort+" "+order);
+		}
+		
 		Page webPage = this.daoSupport.queryForPage(sql.toString(), countsql, page, pageSize,inventory_warning_count);
 		return webPage;
 	}

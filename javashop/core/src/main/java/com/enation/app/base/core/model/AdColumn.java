@@ -1,5 +1,6 @@
 package com.enation.app.base.core.model;
 
+import com.enation.framework.database.NotDbField;
 import com.enation.framework.database.PrimaryKeyField;
 
 /**
@@ -111,6 +112,15 @@ public class AdColumn {
 
 	public void setDisabled(String disabled) {
 		this.disabled = disabled;
+	}
+	@NotDbField
+	public String getWidth_num() {
+		return width.replace("px", "");
+	}
+	
+	@NotDbField
+	public String getHeight_num() {
+		return height.replace("px", "");
 	}
 
 }

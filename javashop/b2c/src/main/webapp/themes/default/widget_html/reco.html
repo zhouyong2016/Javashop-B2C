@@ -1,0 +1,11 @@
+<ul>
+	<#list goodsList as goods>
+		<li>
+			<a href="goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+			<div class="q_intro">
+				<div><h2>${goods.name}</h2></div>
+				<p>美晶价：${goods.price?string.currency}</p>
+			</div>
+		</li>
+	</#list>
+</ul>

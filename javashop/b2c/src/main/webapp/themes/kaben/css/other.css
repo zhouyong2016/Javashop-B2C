@@ -169,7 +169,8 @@ color: #a7a7a7;
 .same-find label i{width:14px;height:14px;position:absolute;left:15px;top:8px;background:url(../images/icon_tip.png) no-repeat 0px -101px;}
 .same-find label .selected{background-position: 0 -85px;z-index:1;}
 .same-find .find-word{
-    line-height: 12px;
+	height: 20px;
+    line-height: 20px;
     width:210px;
     display:block;
     padding: 5px 10px;
@@ -194,17 +195,17 @@ color: #a7a7a7;
     margin:10px auto;
 }
 .find-by-phone .find-code-box{
-	height: 28px;
-    line-height: 27px;
+	height: 24px;
+    line-height: 24px;
     width:214px;
     display:block;
-    padding: 0px 10px;
+    padding: 5px 10px;
     margin:10px auto;
+    position:relative;
     border: 1px solid #e0e0e0;
-    overflow: hidden;
 }
-.find-by-phone .find-code-box .find-code{border:0px none;float:left;width:90px;height:28px;line-height:28px;}
-.find-by-phone .find-code-box .get-message{border:0px none;border-left:1px solid #e0e0e0; float:right;background:#fff;cursor: pointer;padding:0px 0px 0px 10px;}
+.find-by-phone .find-code-box .find-code{border:0px none;position:absolute;left:10px;top:10px;}
+.find-by-phone .find-code-box .get-message{border:0px none;border-left:1px solid #e0e0e0; position:absolute;right:10px;top:8px;background:#fff;cursor: pointer;padding:0px 0px 0px 10px;}
 
 /*********找回密码结果**************/
 .back-password-blank{width:100%;height:30px;border-top: 1px solid #e0e0e0;margin:30px 0px 0px 0px;padding:20px 0px 0px 0px;}

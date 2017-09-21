@@ -4,6 +4,64 @@
 .express{
 	width: 120px; 
 	float: left;
+	
+}
+.styleone{
+    width: 95%;
+    height: 36px;
+    margin: 10px 10px;
+    background: white;
+    line-height: 36px;
+    padding-left: 10px;
+    font-size: 15px;
+        box-shadow: 2px 3px 2px #CCC;
+}
+.styletwo{
+	background: white;
+    margin-left: 10px;
+    font-size: 12px;
+    box-shadow: 2px 3px 2px #CCC;
+}
+.styletwo th{
+	font-size:15px;
+	border-bottom:1px solid #ccc;
+	padding-left: 10px;
+}
+.styletwo tbody tr{
+	line-height:30px;
+}
+.styletwo tbody tr td{
+   padding-left:3px;
+}
+.stylethree{
+	background: white;
+    margin-left: 10px;
+    font-size: 12px;
+    margin-bottom:50px;
+        box-shadow: 2px 3px 2px #CCC;
+}
+.stylethree th{
+	font-size:15px;
+	border-bottom:1px solid #ccc;
+	padding-left: 10px;
+	
+}
+.stylethree tbody tr{
+	line-height:30px;
+}
+.stylethree tbody tr td{
+ 	 font-size:11px;
+      line-height: 17px;
+      padding-left:2px;
+}
+.buttonWrap{
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    background: #f2f2f2;
+    position: fixed;
+    bottom: 2px;
+    width: 99%;
 }
 </style>
 <script type="text/javascript">
@@ -13,24 +71,37 @@ $(function(){
 	})
 })
 function openImgeDlg(fun) {
-	$("#photoDiv").dialog({
-		title : "上传图片",
-		top : 130,
-		width : 350,
-		left:0,
-		height : 160,
-		closed : false,
-		cache : false,
-		href : "${ctx}/eop/upload/file.do?subFolder=printTmpl",
-		modal : true,
-		buttons : [ {
-			text : '保存',
-			handler : function() {
-				imgSubmit(fun);
-				$("#photoDiv").dialog('close');
-			}
-		}]
-	});
+	layer.open({
+        title:"上传图片",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:"${ctx}/eop/upload/file.do?subFolder=spec",//内容的URL
+        area:['350px','190px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+        offset: ['150px', '100px'],
+	    btn: ['确定'],
+	    yes: function(index, layero){
+	    	var upForm = layero.find("iframe").contents().find(".uploadForm");
+	    	var options ={
+					url:"${ctx}/eop/upload/upload-file.do?ajax=1",
+					dataType:"json",
+					success:function(data){
+						if(data.result==1){
+							path=data.path;
+							fun(path)
+							alert("上传成功!");
+							layer.close(index);
+						}
+					},
+					error:function(){
+						alert("上传错误，请重试");
+					}
+				};
+	    	upForm.ajaxSubmit(options);
+	 	 }
+    });
 	
 };
 	var LODOP; //声明为全局变量
@@ -121,28 +192,24 @@ function openImgeDlg(fun) {
 				return false;
 			}
 			$("#xmldata").val(saveDesign());
-			$.Loading.show("正在保存请稍候..");
-			$("#printTmplinput").button("disable");
 			var options = {
 					url : "${ctx}/shop/admin/print-tmpl/save-add.do?ajax=yes",
 					type : "POST",
 					dataType : 'json',
 					success : function(result) {
 						if(result.result==1){
-							$.Loading.success(result.message);
+							alert("保存成功!")
 							location.href="${ctx}/shop/admin/print-tmpl/list.do";
 						}
 						if(result.result==0){ 
-							$.Loading.error(result.message);
-							$("#printTmplinput").button("enable");
+							alert("保存失败!")
 						}
 					},
 					error : function(e) {
-						$.Loading.error("出现错误 ，请重试");
-						$("#printTmplinput").button("enable");
+						alert("出现错误 ，请重试");
 					}
 				};
-			$('#theForm').ajaxSubmit(options);	
+			$('#theForm').ajaxSubmit(options);		
 		}
 	}
 	function preview(){
@@ -176,14 +243,14 @@ $(function(){
 <form method="post" class="validate" name="theForm" id="theForm">
 	<div class="main">
 			<input type="hidden" name="prt_tmpl_data" id="xmldata" />
-			<div class="shadowBoxWhite  whiteBox" style="width: 100%">
+			<div class="shadowBoxWhite  whiteBox styleone" style="width: 97%">
 				<table style="width: 100%;">
 					<tr><th class="title">设计</th> </tr>
 				</table>
 			</div>
 					<div style="width: 100%;">
-					<div style="width: 28%; float: left; margin-top: 20px;">
-						<div class="shadowBoxWhite  whiteBox">
+					<div style="width: 29%; float: left; margin-top: 20px;">
+						<div class="shadowBoxWhite  whiteBox styletwo">
 							<table style="width: 100%;">
 								<tr>
 									<th class="title">基本信息</th>
@@ -191,7 +258,7 @@ $(function(){
 								</tr>
 								<tr>
 									<td>物流公司名称：</td>
-									<td><select id="corp_id" name="prt_tmpl_title" >
+									<td><select id="corp_id" name="prt_tmpl_title" style="height:22px;" >
 											<option value="0">请选择物流公司</option>
 											<#list logiList as logi>
 												<option value="${logi.name }" >${logi.name }</option>
@@ -202,18 +269,18 @@ $(function(){
 								</tr>
 								<tr>
 									<td>单据尺寸：</td>
-									<td>宽<input type="text" id="width" name="prt_tmpl_width" class="input_text" style="width: 50px;" value="2300"onchange="resizeDesign('width',this)" />*高<input type="text"  name="prt_tmpl_height" class="input_text" id="hight" style="width: 50px;" value="1250" onchange="resizeDesign('height',this)" />mm</td>
+									<td>宽<input type="text" id="width" name="prt_tmpl_width" class="input_text" style="width: 50px;height:18px;border:1px solid #ccc;border-radius:3px;" value="2300"onchange="resizeDesign('width',this)" />*高<input type="text"  name="prt_tmpl_height" class="input_text" id="hight" style="width: 50px;height:18px;border:1px solid #ccc;border-radius:3px;" value="1250" onchange="resizeDesign('height',this)" />mm</td>
 								</tr>
 								<tr>
 									<td>单据背景:</td>
 									<td><input type="checkbox" id="lockbgel"  />锁定
-									<input type="button" id="uploadBtn" onclick="openImgeDlg(getPath)" value="上传背景图" class="button"/>
+									<input type="button" id="uploadBtn" onclick="openImgeDlg(getPath)" value="上传背景图" class="button" style=";height:22px;width: 78px; border-radius: 3px;border: 1px solid #ccc;"/>
 									<input type="hidden"  id="imagefile"  name="bgimage"  size="40" ></td>
 								</tr>
 							</table>
 						</div>
 						<br/>
-						<div class="shadowBoxWhite  whiteBox">
+						<div class="shadowBoxWhite  whiteBox stylethree">
 							<table style="width: 100%;">
 								<tr>
 									<th class="title">单据打印项</th>
@@ -278,8 +345,8 @@ $(function(){
 								</table>
 								<table>
 									<tr>
-										<td>设置打印项目:
-											<select onchange="setFontSize(this);" >
+										<td style="padding-top:10px;">设置打印项目:
+											<select onchange="setFontSize(this);" style="height:22px;">
 												<option value="--">大小</option>
 												<option value="10">10</option>
 												<option value="12">12</option>
@@ -295,8 +362,8 @@ $(function(){
 										</td>
 									</tr>
 									<tr>
-										<td>字体:
-											<select onchange="setFont(this);" >
+										<td style="padding-top:10px;">字体:
+											<select onchange="setFont(this);" style="height:22px; >
 												<option value="--">字体</option>
 												<option value="宋体">宋体</option>
 												<option value="黑体">黑体</option>
@@ -310,8 +377,8 @@ $(function(){
 										</td>
 										<td>
 											字体样式:
-											<a href="javascript:;"  onclick="setFontBold()"  class="easyui-linkbutton"  >B</a>
-											<a href="javascript:;"  onclick="setFontItalic()"  class="easyui-linkbutton"  >I </a>
+											<a href="javascript:;"  onclick="setFontBold()"  class="easyui-linkbutton layui-btn layui-btn-primary layui-btn-small"  >B</a>
+											<a href="javascript:;"  onclick="setFontItalic()"  class="easyui-linkbutton layui-btn layui-btn-primary layui-btn-small"  >I </a>
 										</td>
 									</tr>
 									<tr>
@@ -331,9 +398,9 @@ $(function(){
 				</div>
 		<div id="upload" style="clear: both;"></div>
 		<div class="buttonWrap">
-			<a href="javascript:;" id="printTmplinput" onclick="savetmp()" class="button blueButton">保 存</a>
-			<a href="javascript:;" id="printBtn" onclick="preview()" class="button blueButton">打印预览</a>
-			<a href="javascript:;" id="delBtn" onclick="delItem()" class="button blueButton">删除</a>
+			<a href="javascript:;" id="printTmplinput" onclick="savetmp()" class="button blueButton layui-btn layui-btn-normal layui-btn-small">保 存</a>
+			<a href="javascript:;" id="printBtn" onclick="preview()" class="button blueButton layui-btn layui-btn-normal layui-btn-small">打印预览</a>
+			<a href="javascript:;" id="delBtn" onclick="delItem()" class="button blueButton layui-btn layui-btn-normal layui-btn-small">删除</a>
 		</div>	
 	</div>
 </form>

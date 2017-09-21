@@ -26,7 +26,7 @@ public class JsonResultUtil {
 	
 
 	/**
-	 * 获取 适用于 easy grid 的json Map
+	 * 获取 适用于 datatables 的json Map
 	 * @param page 用于grid的page对象
 	 * @return 符合easy grid 规范的json map: {"total":1,"rows":""}
 	 */
@@ -37,9 +37,9 @@ public class JsonResultUtil {
 	}
 	
 	/**
-	 * 获取 适用于 easy grid 的json Map
+	 * 获取 适用于 datatables 的json Map
 	 * @param list 用于grid的list对象
-	 * @return 符合easy grid 规范的json map: {"total":1,"rows":""}
+	 * @return 符合datatables 规范的json map: {"total":1,"rows":""}
 	 */
 	public static GridJsonResult getGridJson(List list){
 		  
@@ -57,6 +57,22 @@ public class JsonResultUtil {
 	 
 		JsonResult result = new JsonResult();
 		result.setResult(1);
+		result.setData(object);
+	  
+		return result;
+		
+	}
+	/**
+	 * 获取对象 json
+	 * @param object	数据
+	 * @param message	消息
+	 * @return
+	 */
+	public static JsonResult getObjectMessageJson(Object object,String message){
+		 
+		JsonResult result = new JsonResult();
+		result.setResult(1);
+		result.setMessage(message);
 		result.setData(object);
 	  
 		return result;

@@ -1,0 +1,152 @@
+/*帮助中心（引导页）*/
+.content{width:980px;margin:0 auto;}
+#widget_guide{ width:100%; margin-bottom:10px; float:left;}
+#help_wh{ width:978px; display:block; overflow:hidden; float:left; border:#b7b7b7 1px solid; padding-bottom:17px;}
+.help_bg_top{ background:url(../images/help/help_tp_21.jpg) no-repeat; width:809px; height:29px; display:block; overflow:hidden; float:left;}
+.help_bg_color{ width:715px; display:block; overflow:hidden; float:left; background:#FFFFFF; border:1px solid #d8d8d8; margin-left:42px;_margin-left:21px; margin-bottom:20px;}
+.help_bg_color li{width:809px; height:35px; display:block; overflow:hidden; float:left;}
+.help_bg_color li img{width:26px; height:26px; display:block; overflow:hidden; float:left; margin-left:143px;_margin-left:71px;}
+.help_bg_bottom{ background:url(../images/help/help_tp_26.jpg) no-repeat; width:809px; height:14px; display:block; overflow:hidden; float:left;}
+.help_bg_middle{background:url(../images/help/help_tp_24.jpg) repeat-y;width:809px;float:left; margin-left:76px;_margin-left:38px; display:block; overflow:hidden;}
+.help_img_wh2{margin-top:20px;}
+.help_text_wh{height:26px; display:block; overflow:hidden; float:left; line-height:32px; margin-left:10px;}
+.help_text_wh a{ color:#000000; margin-right:2px; margin-left:2px;}
+.help_text_wh a:hover{ color:#a90000;}
+
+
+#help_navigation{ width:980px; height:45px; display:block; overflow:hidden; float:left; margin-top:30px; margin-bottom:10px; }
+#help_navigation ul{float:left; height:45px; line-height:74px; color:#3f3e3e;}
+#help_navigation ul span{font-weight:bold;}
+#help_navigation ul a{ margin-left:2px; margin-right:2px; color:#3f3e3e;}
+
+
+#help_navigation_top11{height:20px; line-height:20px; float:left; margin-left:30px;_margin-left:15px; margin-top:10px; color:#5b5b5b; font-size:14px;}
+#help_navigation_middle22{background:url(../images/help/help_line.jpg) 28px 0 no-repeat;height:2px; float:left; margin-bottom:15px; display:block; overflow:hidden;}
+.help_bg_menu{height:36px; display:block; overflow:hidden; float:left; background:url(../images/help/help_bg_menu.jpg) no-repeat; margin-left:28px;_margin-left:14px;}
+.help_bg_menu span{width:128px; height:36px; display:block; overflow:hidden; line-height:38px; float:left;}
+
+.help_bg_menu2{height:36px; display:block; overflow:hidden; float:left; background:url(../images/help/help_bg_menu.jpg) 0 -36px no-repeat; margin-left:28px;_margin-left:14px;}
+.help_bg_menu2 span{width:128px; height:36px; display:block; overflow:hidden; line-height:38px; float:left;}
+
+.help_bg_menu3{height:36px; display:block; overflow:hidden; float:left; background:url(../images/help/help_bg_menu.jpg)0 -72px no-repeat; margin-left:28px;_margin-left:14px;}
+.help_bg_menu3 span{width:128px; height:36px; display:block; overflow:hidden; line-height:38px; float:left;}
+
+.help_bg_menu4{height:36px; display:block; overflow:hidden; float:left; background:url(../images/help/help_bg_menu.jpg) 0 -108px no-repeat; margin-left:28px;_margin-left:14px;}
+.help_bg_menu4 span{width:128px; height:36px; display:block; overflow:hidden; line-height:38px; float:left;}
+
+.help_bg_menu5{height:36px; display:block; overflow:hidden; float:left; background:url(../images/help/help_bg_menu.jpg) 0 -144px no-repeat; margin-left:28px;_margin-left:14px;}
+.help_bg_menu5 span{width:128px; height:36px; display:block; overflow:hidden; line-height:38px; float:left;}
+
+
+
+
+
+.help_menu{ width:809px; height:54px; display:block; overflow:hidden; float:left; margin-left:76px;_margin-left:38px;}
+.help_menu li{ width:104px; height:37px; display:block; overflow:hidden; float:left; margin-right:2px; margin-top:17px;}
+
+
+
+.help_h{ color:#FFFFFF; margin-left:35px; _margin-left:17px;}
+.help_h a{ color:#ffffff;}
+.help_hh{ color:#000000;}
+.help_hh a{ color:#000000;}
+.help_h2{ margin-right:8px;}
+
+
+
+/*帮助中心 Top Menu*/
+
+
+.help_menu li a{ width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top1 a{ background:url(../images/help/help_menu_top.jpg) no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top1 a:hover{ background:url(../images/help/help_menu_top.jpg) 0 -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top1on a{ background:url(../images/help/help_menu_top.jpg) 0 -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+.help_menu_top2 a{ background:url(../images/help/help_menu_top.jpg) -106px 0 no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top2 a:hover{ background:url(../images/help/help_menu_top.jpg) -106px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top2on a{ background:url(../images/help/help_menu_top.jpg) -106px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+
+.help_menu_top3 a{ background:url(../images/help/help_menu_top.jpg) -212px 0 no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top3 a:hover{ background:url(../images/help/help_menu_top.jpg) -212px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top3on a{ background:url(../images/help/help_menu_top.jpg) -212px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+
+.help_menu_top4 a{ background:url(../images/help/help_menu_top.jpg) -318px 0 no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top4 a:hover{ background:url(../images/help/help_menu_top.jpg) -318px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top4on a{ background:url(../images/help/help_menu_top.jpg) -318px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+
+.help_menu_top5 a{ background:url(../images/help/help_menu_top.jpg) -424px 0 no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top5 a:hover{ background:url(../images/help/help_menu_top.jpg) -424px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top5on a{ background:url(../images/help/help_menu_top.jpg) -424px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+
+.help_menu_top6 a{ background:url(../images/help/help_menu_top.jpg) -530px 0 no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top6 a:hover{ background:url(../images/help/help_menu_top.jpg) -530px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+.help_menu_top6on a{ background:url(../images/help/help_menu_top.jpg) -530px -43px no-repeat; width:104px; height:37px; display:block; overflow:hidden; float:left;}
+
+
+/*帮助中心*/
+
+
+
+#help2_wh{ width:193px; float:left; display:block; overflow:hidden; background:url(../images/help/help_bj.jpg) repeat-y; margin-bottom:20px; margin-top:10px;}
+#help2_wh{ width:193px; display:block; overflow:hidden; float:left;}
+#help2_wh li.help_img{ width:193px; height:58px; display:block; overflow:hidden; float:left; padding-left:0px;}
+#help2_wh li.help_img a{ background:none; padding-left:0px;}
+#help2_wh li.help_img a:hover{background:none; padding-left:0px;}
+#help2_wh li.help_li1{ background:url(../images/help/help_icon.jpg) 45px 6px no-repeat; width:183px; height:20px; float:left; overflow:hidden; font-weight:bold; font-size:14px; text-align:center; margin-top:5px;}
+#help2_wh li{ width:173px; height:20px; display:block; overflow:hidden; float:left;line-height:24px;}
+#help2_wh li span.help_spans{ margin-left:50px;}
+#help2_wh ul li.help_li1{ background:url(../images/help/help_icon.jpg) 33px 6px no-repeat; margin-bottom:5px; width:163px; height:20px; float:left; overflow:hidden; font-weight:bold; font-size:14px; text-align:center; margin-top:5px; padding-left:0px;}
+#help2_wh ul ul{width:193px; display:block; overflow:hidden; float:left;}
+#help2_wh ul li a{ color:#5c5c5c; background:url(../images/help/help_a_bj2.jpg) 0px 5px no-repeat;padding-left:10px;}
+#help2_wh ul li a:hover{ background:url(../images/help/help_a_bj.jpg) 0px 5px  no-repeat; color:#b04242;padding-left:10px;}
+#help2_wh ul li span.help_spanson a{ background:url(../images/help/help_a_bj.jpg) 0px 5px  no-repeat; color:#b04242;padding-left:10px; margin-left:50px;}
+#help2_wh ul li a{ color:#5c5c5c; background:url(../images/help/help_a_bj2.jpg) 0px 5px no-repeat;padding-left:10px; }
+#help2_wh ul li a:hover{ background:url(../images/help/help_a_bj.jpg) 0px 5px  no-repeat; color:#b04242;padding-left:10px;}
+#help2_wh ul li.help2_li2{height:2px; margin-top:15px; margin-bottom:5px; padding-left:0px; width:193px;}
+.help2_ul6{ background:url(../images/help/help_bottom_05.jpg) no-repeat; width:193px; height:11px; display:block; overflow:hidden; float:left;}
+
+
+
+#help2_right_wh{ width:787px; float:left; display:block; overflow:hidden; background:url(../images/help/help2_right_bj_05.jpg) repeat-y; line-height:1.8em; color:#333333}
+.help2_right_ul{ width:787px; height:57px; display:block; overflow:hidden; float:left; background:url(../images/help/help2_right_bj_03.jpg) no-repeat;}
+.help2_right_ul li b{ color:#3f3e3e;}
+.help2_right_ul li{ margin-top:30px; width:777px; height:20px; display:block; overflow:hidden; float:left; margin-left:10px;}
+.help2_right_ul li a{ color:#3d3d3d;}
+.help2_right_ul2{ width:787px; height:27px; display:block; overflow:hidden; float:left; margin-bottom:40px;}
+.help2_right_ul2 li{ padding-left:15px; padding-right:15px;  height:29px; display:block; overflow:hidden; float:left; background:#db5656; line-height:27px; text-align:center; font-weight:bold; font-size:14px; color:#fff; margin-left:10px; margin-top:2px;}
+.help2_right_ul3{ width:687px; float:left; display:inline; overflow:hidden; margin-left:47px;_margin-left:23px; margin-bottom:20px;}
+.help2_right_ul3 li.help2_right_b{ width:687px; height:22px; line-height:20px; padding-left:4px; margin-bottom:0px;}
+.help2_right_ul3 li.help2_right_bj{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) no-repeat; margin-bottom:10px;}
+.help2_right_ul3 li.help2_right_bj2{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) 0 -3px no-repeat; margin-bottom:10px;}
+.help2_right_ul3 li.help2_right_bj3{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) 0 -6px no-repeat; margin-bottom:10px;}
+.help2_right_ul3 li.help2_right_bj4{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) 0 -9px no-repeat; margin-bottom:10px;}
+.help2_right_ul3 li.help2_right_bj5{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) 0 -12px no-repeat; margin-bottom:10px;}
+.help2_right_ul3 li{ width:687px; margin-bottom:20px; float:left;}
+.help2_right_div{height:6px; float:left; width:787px; margin-top:5px;}
+.help2_right_bj2{ width:687px; height:2px; display:block; overflow:hidden; float:left; background:url(../images/help/help_right_line.jpg) 0 -3px no-repeat; margin-bottom:10px;}
+
+
+/*-------------以下为配送范围样式表-----------------*/
+.help2_right_ul4{  display: inline;
+    float: left;
+    margin-bottom: 20px;
+    margin-left: 47px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 688px;
+	color:#333}
+.help2_right_ul4 td{ border:#CCC 1px solid;  line-height:22px; padding:5px 8px }
+.help2_right_ul4 h3{ line-height:30px; font-size:14px; width:100%; clear:both; height:30px; overflow:hidden; font-weight:bold}
+.help_tr1 td{ background:#FFF4F4; line-height:30px; font-weight:bold;}
+
+.help2_right_ul4 table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+#remarkDiv{ width:540px; background:#FFF; overflow:hidden; line-height:20px; text-align:left; padding: 10px 30px; margin-bottom: 10px;}

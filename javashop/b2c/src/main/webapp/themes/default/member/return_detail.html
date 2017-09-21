@@ -1,0 +1,95 @@
+<#include 'member_header.html' />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'id':${id} }")>
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':${id!0} } }")>
+<#assign goodsList = sellBackGoodsList.goodsList>
+<div class="box" style="top:0">
+	<div class="top"></div>
+	<div class="order_detail_wrapper">
+		<div class="title">
+			<h1>订单号：<span>${sellBack.tradeno}</span></h1> 
+		</div>
+		<div class="receiver">
+			<table cellspacing="0" cellpadding="0" width="100%">
+				<tr>
+					<th>订单编号：</th>
+					<td> ${sellBack.ordersn}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th>
+					<td> <@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+				</tr>
+				<tr>
+					<th>状态：</th>
+					<td>  
+						<#if sellBack.tradestatus  == 0>
+					    	<span>等待处理</span>
+						<#elseif sellBack.tradestatus  == 1>
+							<span>审核通过</span>
+						<#elseif sellBack.tradestatus  == 2>
+							<span>已入库</span>
+						<#elseif sellBack.tradestatus  == 3>
+							<span>已完成</span>
+						<#elseif sellBack.tradestatus  == 4>
+							<span>已拒绝</span>
+						<#elseif sellBack.tradestatus  == 5>
+							<span>部分入库</span>
+						</#if>
+					</td>
+				</tr>
+				<tr>
+					<th>申请理由：</th>
+					<td >${sellBack.remark!''}</td>
+				</tr>
+				<tr>
+					<th>客服回复：</th>
+					<td> ${sellBack.seller_remark!''}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="goodslist">
+			<h1>退货商品清单</h1>
+			<table cellspacing="0" cellpadding="0" width="100%">
+				<thead>
+					<tr>
+						<th>图片</th>
+						<th>商品名称</th>
+						<th>单价</th>
+						<th>购买数量</th>
+						<th>退货数量</th>
+					</tr>
+				</thead>
+				<tbody>
+				<#list goodsList as data>
+				<tr>
+					<td><a target="_blank" href="../goods-${data.goods_id}.html"> <span
+							style="display: block; height: 50px;" class="cart-product-img">
+								<img height="50" src="${data.goods_image!''}"
+								style="cursor: pointer;" />
+						</span>
+					</a></td>
+					<td><a href="${ctx}/goods-${data.goods_id}.html">${data.goods_name!''}
+						<#if data.spec?? >
+							${data.spec}
+						</#if>
+						</a>
+					</td>
+					<td>${data.price?string.currency}</td>
+					<td>${data.ship_num }</td> 
+					<td>${data.return_num!0}</td>
+				</tr>
+			  </#list>
+			</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<div class="rr_bottom"></div>
+	<!--会员中心首页右侧结束-->
+	</div>
+	</div>
+<#include '../common/footer.html'/>

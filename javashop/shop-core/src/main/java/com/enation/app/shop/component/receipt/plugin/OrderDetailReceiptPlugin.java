@@ -39,9 +39,9 @@ IOrderTabShowEvent,IShowOrderDetailHtmlEvent,  IAjaxExecuteEnable{
 		FreeMarkerPaser freeMarkerPaser =FreeMarkerPaser.getInstance();
 		freeMarkerPaser.setClz(this.getClass());
 		
-		Receipt receipt = this.receiptManager.getByOrderid(order.getOrder_id());
+//		Receipt receipt = this.receiptManager.getById(order.getReceipt_id());
 		
-		freeMarkerPaser.putData("receipt",receipt);
+		freeMarkerPaser.putData("order",order);
 		freeMarkerPaser.setPageName("receipt_detail");
 		return freeMarkerPaser.proessPageContent();
 //		

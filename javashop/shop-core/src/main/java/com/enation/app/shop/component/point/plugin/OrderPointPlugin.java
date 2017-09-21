@@ -60,10 +60,8 @@ public class OrderPointPlugin extends AutoRegisterPlugin
 			// 如果是货到付款
 			if (order.getPayment_type().equals(OrderPaymentType.cod.getValue())) {
 				//添加会员的等级积分和消费积分 dongxin改
-				memberPointManger.add(memberManager.get(order.getMember_id()), getPoint(price), "货到付款，确认收款获取积分",
-						order.getMember_id(),0,0);
-				memberPointManger.add(memberManager.get(order.getMember_id()), 0, "货到付款，确认收款获取积分",
-						order.getMember_id(), getPointmp(price),1);
+				memberPointManger.add(memberManager.get(order.getMember_id()), getPoint(price), "货到付款，确认收款获取积分",order.getMember_id(),0,0);
+				memberPointManger.add(memberManager.get(order.getMember_id()), 0, "货到付款，确认收款获取积分",order.getMember_id(), getPointmp(price),1);
 			}
 
 			// 如果当前订单中促销活动赠与积分不为零，就将此积分添加到会员冻结积分中 add_by DMRain 2016-7-22
@@ -119,17 +117,23 @@ public class OrderPointPlugin extends AutoRegisterPlugin
 		// 获取当前会员的积分
 		int mp_num = memberManager.get(order.getMember_id()).getMp();
 		// 如果当前积分小于需要退货的积分那么是当前用户的消费积分
+		//添加会员的等级积分和消费积分 dongxin改
 		if (mp_num < getPointmp(price)) {
-			//添加会员的等级积分和消费积分 dongxin改
+			memberPointManger.add(memberManager.get(order.getMember_id()), 0, "退货退还积分",
+					order.getMember_id(), -mp_num,1);
 			memberPointManger.add(memberManager.get(order.getMember_id()), -getPoint(price), "退货退还积分",
-					order.getMember_id(), -mp_num,0);
-		} else {
-			memberPointManger.add(memberManager.get(order.getMember_id()), -getPoint(price), "退货退还积分",
-					order.getMember_id(), -getPointmp(price),1);
-		}
+					order.getMember_id(),0,0);
 
-		// 如果是网上支付
-		if (order.getPayment_type().equals("onlinePay")) {
+		} else {
+			memberPointManger.add(memberManager.get(order.getMember_id()),0, "退货退还积分",
+					order.getMember_id(), -getPointmp(price),1);
+			memberPointManger.add(memberManager.get(order.getMember_id()),-getPoint(price), "退货退还积分",
+					order.getMember_id(), 0,0);
+		}
+		
+
+		// 如果是网上支付并且是已发货状态的话，因为已发货之后表示获得了网上支付的积分
+		if (!order.getPayment_type().equals("offline") && order.getShip_status()!=0) {
 			int point = memberPointManger.getItemPoint(IMemberPointManger.TYPE_ONLINEPAY + "_num");
 			int mp = memberPointManger.getItemPoint(IMemberPointManger.TYPE_ONLINEPAY + "_num_mp");
 			//添加会员的等级积分和消费积分 dongxin改
@@ -143,7 +147,6 @@ public class OrderPointPlugin extends AutoRegisterPlugin
 		if (order.getActivity_point() != 0) {
 			//添加会员的消费积分 dongxin改
 			this.memberPointManger.add(this.memberManager.get(order.getMember_id()), 0, "退货退还促销活动赠送的积分", order.getMember_id(), -order.getActivity_point(),1);
-			
 		}
 
 	}

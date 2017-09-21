@@ -21,7 +21,6 @@ var Comments=$.extend({
 			return ;
 		}
 		
-		$.Loading.show("正在删除...");
 		
 		this.deletePost(ctx+"/shop/admin/comments/delete.do");
 			
@@ -46,13 +45,13 @@ var Comments=$.extend({
 	 
 		this.deletePost("comments!revert.do","选择的评论已被成功还原至赠品列表中");		
 	},
+	//拒绝
 	doHide:function(comment_id){
 
 		if (!confirm("确认要拒绝通过审核吗？")) {
 			return false;
 		}
-		
-	    $.Loading.show('正在设置信息，请稍侯...');
+		var type=$(".type").val();
 		var that =this;
 		var options = {
 			url : ctx+"/shop/admin/comments/hide.do?commentId="+comment_id,
@@ -61,27 +60,26 @@ var Comments=$.extend({
 			success : function(date) {
 				if(date.result==1){
 					$.Loading.success(date.message);
-					location.reload();
+					parent.layer.close(index);
+					parent.table.ajax.url(ctx+"/shop/admin/comments/list-json.do?type="+type).load();
 				}else{
 					$.Loading.error(date.message);
 				}
-				$("#divdia").dialog('close');
 			},
 			error : function(e) {
-				$.Loading.hide();
-				alert("出现错误 ，请重试");
+				$.Loading.error("出现错误 ，请重试");
 			}
 		};
 		$.ajax(options);
 	},
+	//通过
 	doShow:function(comment_id){
 		
 		if (!confirm("确认要同意通过审核吗？")) {
 			return false;
 		}
-		
+		var typel=$(".type").val();
 		var that =this;
-		$.Loading.show('正在设置信息，请稍侯...');
 		var options = {
 			url : ctx+"/shop/admin/comments/show.do?commentId="+comment_id,
 			type : "POST",
@@ -89,16 +87,14 @@ var Comments=$.extend({
 			success : function(date) {	
 				if(date.result==1){
 					$.Loading.success(date.message);
-				}else{
-					$.Loading.error(date.message);
+					parent.layer.close(index);
+					parent.table.ajax.url(ctx+"/shop/admin/comments/list-json.do?type="+typel).load();
+				}else{  
+					$.Loading.error(date.message); 
 				}
-				$("#divdia").dialog('close');
-				$("#comments_gmdata").datagrid('reload');
-				$("#commentsdata").datagrid('reload');
 			},
 			error : function(e) {
-				$.Loading.hide();
-				alert("出现错误 ，请重试");
+				$.Loading.error("出现错误 ，请重试"); 
 			}
 		};
 		$.ajax(options);

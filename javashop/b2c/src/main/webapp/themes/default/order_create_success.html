@@ -1,0 +1,55 @@
+<#assign  title="成功提交订单" />
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/checkout.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/button.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/dialog.css" type="text/css" />
+
+<script src="${ctx}/themes/default/js/shop.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/LoginDialog.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DropDownMenu.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/ui.datepicker.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/DatePicker.js" type="text/javascript"></script>
+
+<!--正文-->
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#--获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag("'orderid':${orderid}") />
+<#--创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#--获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+<div id="main">
+	<!--上部填写信息单、购买流程-->
+	<div class="checkout_step2">
+		<@image src="${ctx}/themes/default/images/pay.jpg" alt="结算流程第二步" />
+	</div>
+	<!--上不填写信息单、购买流程结束-->
+	<div id="checkout_wrapper">
+		<div class="encircle">
+			<h1>订单确认提交</h1>
+			<div class="deliver">
+				<@image src="${ctx}/themes/default/images/jstj.jpg" alt="结算提交凭证正确对号图片" />
+				<div>
+					<p>订单已提交成功，订单号：${order.sn} 应付金额：<b>${order.need_pay_money?string("currency")}</b></p>
+					<#if order.status==orderStauts.ORDER_NOT_PAY||order.status==orderStauts.ORDER_NOT_CONFIRM && !order.isCod >
+						<#if order.isOnlinePay >
+							<a class="yellow_btn" href='api/shop/payment.do?orderid=${order.order_id}' target="_blank">去付款</a>
+						<#else>
+							
+						</#if>
+					</#if>
+					<a href=" ${ctx}/">继续购物</a>
+					<#if order.member_id?exists  >
+						<a href="member/order_detail.html?ordersn=${order.sn}">查看订单状态</a>
+					<#else>
+						<a href="orderdetail.html?ordersn=${order.sn}">查看订单状态</a>	
+					</#if>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<!--正文结束-->
+<#include 'common/footer.html' />

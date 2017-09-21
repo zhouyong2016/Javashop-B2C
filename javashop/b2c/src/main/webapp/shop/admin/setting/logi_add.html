@@ -1,20 +1,69 @@
-<div class="easyui-panel" style="border-style:none;" >
-	<div style="padding: 10px 0 10px 60px">
-		<form id="addLogiForm" method="post" class="validate" >
-			<table>
-				<tr>
-					<td align="right">物流公司名称</td>
-					<td><input class="easyui-validatebox input_text" maxlength="12" type="text" name="name" id="name" maxlength="60" data-options="required:true" dataType="string" isrequired="true"/>
-					</td>
-				</tr>
-				<tr>
-					<td align="right">代码</td>
-					<td><input class="easyui-validatebox input_text" type="text" name="code" id="code" maxlength="60" data-options="required:true" dataType="string" isrequired="true"/>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-</div>
-	
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-form-item label{
+    width:120px!important;
+  }
+  .layui-form-item input{
+    width: 90%;
+  }
 
+
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addLogiForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">物流公司名称</label>
+    		<div class="layui-input-block">
+      			<input type="text" size="50"  name="name" id="name" maxlength="60" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">代码</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="code" id="code" maxlength="60" lay-verify="required" autocomplete="off" class="layui-input" style="width: 50%">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 96%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_logi" id ="add">保存</a>
+  			<a type="reset" class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
+</div>
+<script type="text/javascript">	
+
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+   
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+    form.on('submit(save_logi)', function(data){
+    	var options = {
+   			url:ctx+"/shop/admin/logi/save-add.do?",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					$.Loading.success("添加成功");
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/shop/admin/logi/list-logi-json.do").load();
+   				}else{
+   					$.Loading.error("添加失败");
+   				}
+   			}
+   		};
+   		$("#addLogiForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>

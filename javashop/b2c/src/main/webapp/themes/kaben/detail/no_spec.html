@@ -1,6 +1,15 @@
 <div class="rer-quantity" style="margin-top:10px;">
 	<label>订购数量：</label>
-	<div class="Numinput" id="num"></div>								
+	<div class="count-num">
+         <input type="hidden" id="stock" value="${goods.enable_store}">
+     </div>
+         <span class="delivery last-pro-duct-num">仅剩 <span class="enable_store">${goods.enable_store}</span> 件，抓紧时间购买哦！</span>
+	
+	<div class="Numinput" id="num"></div>	
+	
+	
+	
+								
 </div>
 <div class="btn-box">
 	<input type="hidden" name="goodsid" value="${goods.goods_id}" />

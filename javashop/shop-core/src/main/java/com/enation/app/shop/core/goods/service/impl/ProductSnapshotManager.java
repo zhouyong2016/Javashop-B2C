@@ -159,6 +159,7 @@ public class ProductSnapshotManager implements IProductSnapshotManager {
 			value.setSpec_value(map.get("spec_value").toString());
 			value.setSpec_value_id(Integer.valueOf( map.get("spec_value_id").toString() ));
 			String spec_img  = (String)map.get("spec_image");
+			value.setSpec_type(Integer.parseInt(map.get("spec_type").toString()) );
 			
 			//将本地中径替换为静态资源服务器地址
 			if( spec_img!=null ){

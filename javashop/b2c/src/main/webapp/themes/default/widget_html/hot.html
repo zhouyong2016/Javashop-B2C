@@ -1,0 +1,12 @@
+<ul>
+	  <#list goodsList as goods>
+		<li <#if !goods_has_next>class="last"</#if> >
+			<a href="#"><@image src="${goods.thumbnail!''}" alt="首页示例图片2" /></a>
+			<div class="h_intro">
+				<div><h2>${goods.name}</h2></div>
+				<p>美晶价：${goods.price}</p>
+			</div>
+		</li>
+	</#list>
+</ul>
+

@@ -56,14 +56,29 @@
 				<dt>配送时间：</dt>
 				<dd>${orderDetail.ship_day!''}</dd>
 			</dl>
-			<dl>
-				<dt>发票抬头：</dt>
-				<dd>${orderreceipt.title!'无'}</dd>
-			</dl>
-			<dl>	
-				<dt>发票内容：</dt>
-				<dd>${orderreceipt.content!'无'}</dd>
-			</dl>
+				<#if orderDetail.receipt == 1>
+					<dl>
+						<dt>发票抬头：</dt>
+						<dd>${orderDetail.receipt_title!'无'}</dd>
+					</dl>
+					<dl>	
+						<dt>发票内容：</dt>
+						<dd>${orderDetail.receipt_content!'无'}</dd>
+					</dl>
+					
+					<#if orderDetail.receipt_type?? && orderDetail.receipt_type == 2>
+						<dl>	
+							<dt>发票税号：</dt>
+							<dd>${orderDetail.receipt_duty!'无'}</dd>
+						</dl>
+					</#if>
+				<#else>
+					<dl>
+						<dt>发票信息：</dt>
+						<dd>无</dd>
+					</dl>
+				</#if>
+			
 			<#else>
 				<h5>${paymentResult.error!''}</h5>
 			</#if>	

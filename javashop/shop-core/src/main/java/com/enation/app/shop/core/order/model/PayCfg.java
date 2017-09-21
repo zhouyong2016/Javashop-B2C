@@ -29,6 +29,8 @@ public class PayCfg  implements java.io.Serializable {
 	protected String pay_img;
 	//是否是在线支付  1为是，0为不是
 	protected Integer is_online;
+	/**是否支持远路返回*/
+	protected Integer is_retrace;  //0不支持 1 支持
 
 	public String getBiref() {
 		return biref;
@@ -85,4 +87,13 @@ public class PayCfg  implements java.io.Serializable {
 		this.is_online = is_online;
 	}
 
+	public Integer getIs_retrace() {
+		return is_retrace;
+	}
+
+	public void setIs_retrace(Integer is_retrace) {
+		this.is_retrace = is_retrace;
+	}
+	
+	
 }

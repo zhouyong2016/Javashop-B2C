@@ -16,8 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.enation.app.base.core.model.Member;
 import com.enation.app.base.core.service.IRegionsManager;
+import com.enation.app.shop.component.receipt.Receipt;
+import com.enation.app.shop.component.receipt.service.IReceiptManager;
 import com.enation.app.shop.core.member.model.MemberAddress;
 import com.enation.app.shop.core.member.service.IMemberAddressManager;
+import com.enation.app.shop.core.member.service.IMemberReceiptManager;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.support.CartItem;
 import com.enation.app.shop.core.order.model.support.OrderPrice;
@@ -62,6 +65,8 @@ public class OrderApiController {
 	private IPaymentManager paymentManager;
 	@Autowired
 	private IRegionsManager regionsManager;
+	@Autowired
+	private IMemberReceiptManager memberReceiptManager;
 	
 	private Logger logger = Logger.getLogger(getClass());
 	
@@ -190,7 +195,7 @@ public class OrderApiController {
 		if(EopSetting.PRODUCT.equals("b2c")){
 			view.setViewName("/themes/kaben/member/order_kuaidi");
 		}else{
-			view.setViewName("/themes/b2b2cv2/member/order_kuaidi");
+			view.setViewName("/themes/b2b2cv4/member/order_kuaidi");
 		}
 		return view;
 	}
@@ -269,8 +274,8 @@ public class OrderApiController {
 		}
 		
 		Integer addressId = StringUtil.toInt(request.getParameter("addressId"), false);
+		
 		MemberAddress address = new MemberAddress();
-
 		address = this.createAddress();	
 		if ("cod".equals(payType)) {
 			// 如果用户选择的收货地区不支持货到付款(对省、市、区三级都要做判断)
@@ -318,6 +323,23 @@ public class OrderApiController {
 		order.setShip_time(request.getParameter("shipTime"));
 		order.setRemark(request.getParameter("remark"));
 		order.setAddress_id(address.getAddr_id());//保存本订单的会员id
+
+		/**发票*/
+
+		Integer receipt = Integer.parseInt(request.getParameter("receipt").toString());
+		order.setReceipt(receipt);
+		/**判断是否需要发票*/
+		if(receipt==1){
+			String receipt_title = request.getParameter("receiptTitle");
+			String receipt_content = request.getParameter("receiptContent");
+			String receipt_duty = request.getParameter("receiptDuty");
+			Integer receipt_type = Integer.parseInt(request.getParameter("receiptType"));
+			order.setReceipt_content(receipt_content);
+			order.setReceipt_title(receipt_title);
+			order.setReceipt_duty(receipt_duty);
+			order.setReceipt_type(receipt_type);
+		}
+
 		String sessionid =request.getSession().getId();
 		List<CartItem> itemList  = this.cartManager.selectListGoods(sessionid);
 		if(itemList==null||itemList.size()==0){
@@ -448,5 +470,22 @@ public class OrderApiController {
 		address.setZip(zip);
 	
 		return address;
+	}
+	/**
+	 * @param title 抬头 【必填】
+	 * @param content 类别 【选填】
+	 */
+	private Receipt createReceipt(){
+		HttpServletRequest request  = ThreadContextHolder.getHttpRequest();
+		
+		Receipt receipt = new Receipt();
+		
+		String title = request.getParameter("titlee");
+		receipt.setTitle(title);
+
+		String content = request.getParameter("contente");
+		receipt.setContent(content);
+
+		return receipt;
 	}
 }

@@ -1,0 +1,13 @@
+<#if cat?exists>
+${fieldMap.tag!''}${fieldMap.brand!''}
+${cat.name!''}
+${fieldMap.price!''}
+</#if>
+
+
+
+<#if fieldMap.keyword?exists>
+${fieldMap.keyword!''}
+</#if>
+
+${fieldMap.price!''}- ${sitename}

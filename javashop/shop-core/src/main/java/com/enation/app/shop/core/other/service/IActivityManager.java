@@ -110,4 +110,12 @@ public interface IActivityManager {
 	 * @return result 0：有效，1：无效
 	 */
 	public int checkActivity(Integer activity_id);
+	/**
+	 * 获取所有有效的商品列表
+	 * @param keyword 搜索关键字
+	 * @param page 页数 
+	 * @param pageSize 每页记录数
+	 * @return
+	 */
+	public  List<Map> listGoods(String keyword, Integer activity_id);
 }

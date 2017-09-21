@@ -1,6 +1,8 @@
 package com.enation.app.shop.core.goods.action;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +199,9 @@ public class TypeController extends GridController {
 		ModelAndView view=new ModelAndView();
 		view.addObject("goodsType", goodsTypeManager.get(typeId));
 		if(otherType==2){
+			GoodsTypeDTO goodsType = this.goodsTypeManager.get(typeId);
+			view.addObject("proplist", goodsType.getPropList());
+			
 			view.setViewName("/shop/admin/type/type_props");
 			return view;
 		}
@@ -248,7 +253,6 @@ public class TypeController extends GridController {
 
 	/**
 	 * 保存属性信息
-	 * 
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
@@ -258,100 +262,49 @@ public class TypeController extends GridController {
 		HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		//设置请求编码
 		req.setCharacterEncoding("UTF-8");
-		//获取编辑数据 这里获取到的是json字符串
-		String inserted = req.getParameter("inserted");
-		String deleted = req.getParameter("deleted");
-		String updated = req.getParameter("updated");
+		
+		//接收参数
+		String [] name = req.getParameterValues("name");
+		String [] type = req.getParameterValues("type");
+		String [] options = req.getParameterValues("options");
+		String [] unit = req.getParameterValues("unit");
+		String [] required = req.getParameterValues("required");
+		String [] datatype = req.getParameterValues("datatype");
 		
 		try {
-			if(inserted != null){
-				//把json字符串转换成对象
-				GoodsType inprop= this.goodsTypeManager.getById(typeId);
+			GoodsType inprop= this.goodsTypeManager.getById(typeId);
+			
+			List<Attribute> list = new ArrayList<Attribute>();
+			if(name!=null){
+				for (int i = 0; i < name.length; i++) {
+					Attribute attribute = new Attribute();
+					attribute.setName(name[i]);
+					attribute.setType(Integer.parseInt(type[i]+"") );
+					attribute.setOptions(options[i].replace("，", ","));
+					attribute.setUnit(unit[i]);
+					attribute.setRequired(Integer.parseInt(required[i]+""));
+					attribute.setDatatype(datatype[i]);
+					list.add(attribute);
+				}
 				
-				JSONArray json = JSONArray.fromObject(inserted);
-				List<Attribute> list = (List) JSONArray.toCollection(json,Attribute.class);
-				String str=null;
-				if(inprop.getProps()!=null&&!StringUtil.isEmpty(inprop.getProps())){				
-					JSONArray propjson = JSONArray.fromObject(inprop.getProps());
-					List<Attribute> proplist = (List) JSONArray.toCollection(propjson,Attribute.class);
-					proplist.addAll(list);
-					str = JSONArray.fromObject(proplist).toString();
-				}else{
-					str=JSONArray.fromObject(list).toString();
-				}
-				inprop.setProps(str);
-				this.goodsTypeManager.save(inprop);
 			}
 			
-			if(deleted != null){
-				GoodsType dataprop= this.goodsTypeManager.getById(typeId);
-				String datastr=dataprop.getProps();
-				JSONArray datajson=JSONArray.fromObject(datastr);
-				Object[] dataobj= datajson.toArray();
-				int i=0;
-				for (Object daobj : dataobj) {
-					JSONObject obj= (JSONObject)daobj;
-					obj.put("id", i);
-					i++;
-				}
-				JSONArray detejson = JSONArray.fromObject(deleted);
-				Object[] detobj= detejson.toArray();
-				for(Object dobj : dataobj){
-					for (Object uobj : detobj) {
-						JSONObject d_obj= (JSONObject)dobj;
-						JSONObject u_obj= (JSONObject)uobj;
-						if(d_obj.get("id").equals(u_obj.get("id"))){				
-							datajson.remove(dobj);
-						}
-					}
-				}
-				Object[] dedatajson = datajson.toArray();
-				for (Object object : dedatajson) {
-					JSONObject updata_obj= (JSONObject)object;
-					updata_obj.remove("id");
-				}
-				dataprop.setProps(JSONArray.fromObject(dedatajson).toString());
-				this.goodsTypeManager.save(dataprop);
+			
+			String str=JSONArray.fromObject(list).toString();
+			inprop.setProps(str);
+			this.goodsTypeManager.save(inprop);
+			if(name==null){
+				return JsonResultUtil.getErrorJson("没有可保存的记录");
+			}else{
+				return JsonResultUtil.getSuccessJson("保存成功");
 			}
 			
-			if(updated != null){
-				GoodsType dataprop= this.goodsTypeManager.getById(typeId);
-				String datastr=dataprop.getProps();
-				JSONArray datajson=JSONArray.fromObject(datastr);
-				Object[] dataobj= datajson.toArray();
-				int i=0;
-				for (Object daobj : dataobj) {
-					JSONObject obj= (JSONObject)daobj;
-					obj.put("id", i);
-					i++;
-				}
-				JSONArray upjson = JSONArray.fromObject(updated);
-				Object[] upobj= upjson.toArray();
-				for(Object dobj : dataobj){
-					for (Object uobj : upobj) {
-						JSONObject d_obj= (JSONObject)dobj;
-						JSONObject u_obj= (JSONObject)uobj;
-						if(d_obj.get("id").equals(u_obj.get("id"))){				
-							datajson.remove(dobj);
-							datajson.add((Integer) u_obj.get("id"),u_obj);
-						}
-					}
-				}
-				Object[] updatajson = datajson.toArray();
-				for (Object object : updatajson) {
-					JSONObject updata_obj= (JSONObject)object;
-					updata_obj.remove("id");
-				}
-				dataprop.setProps(JSONArray.fromObject(updatajson).toString());
-				this.goodsTypeManager.save(dataprop);
-			}
-			
-			return JsonResultUtil.getSuccessJson("操作成功");
 		} catch (Exception e) {
 			this.logger.error("操作失败：", e);
 			return JsonResultUtil.getErrorJson("操作失败");
+			
 		}
-		
+
 	}
 
 	/**.

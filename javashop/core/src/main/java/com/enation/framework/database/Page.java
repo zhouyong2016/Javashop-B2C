@@ -18,6 +18,9 @@ public class Page  implements Serializable {
 
 	private long totalCount; // 总记录数
 	private long  currentPageNo=1;
+	
+	private long draw;	//datatables 所需要的参数
+	
 	/**
 	 * 构造方法，只构造空页.
 	 */
@@ -103,4 +106,14 @@ public class Page  implements Serializable {
 	public void setCurrentPageNo(long pageNo){
 		this.currentPageNo = pageNo;
 	}
+
+	public long getDraw() {
+		return draw;
+	}
+
+	public void setDraw(long draw) {
+		this.draw = draw;
+	}
+	
+	
 }

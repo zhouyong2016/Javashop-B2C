@@ -58,12 +58,14 @@ public class ShopShortMsgPlugin extends AutoRegisterPlugin implements IShortMess
 				ShortMsg discuss= this.getDiscussMessage();
 				ShortMsg ask= this.getAskMessage();
 				ShortMsg confirm = this.getOrderConfirm();
+				
 				if(discuss!=null){
 					msgList.add(discuss);
 				}
 				if(ask!=null){
 					msgList.add(ask);
 				}
+				
 				if(confirm!=null){
 					//msgList.add(confirm);
 				}
@@ -209,4 +211,7 @@ public class ShopShortMsgPlugin extends AutoRegisterPlugin implements IShortMess
 		}
 		return null;
 	}
+	
+	
+		
 }

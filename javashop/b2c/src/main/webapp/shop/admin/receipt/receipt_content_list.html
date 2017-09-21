@@ -1,0 +1,115 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.page_explain ul li {
+height:50px;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_receiptContent_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="contentForm">
+    <table id="contentdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>发票内容</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
+</div>
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#contentdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/receipt/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "receipt_content"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='edit("+data["contentid"]+")'>修改</a>"+"&nbsp"+"<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("+data["contentid"]+")'>删除</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#add_receiptContent_button").click(function(){
+		//判断如果发票信息超出了5个则提示无法再次添加
+		if(table.rows().count() >=5){
+			$.Loading.error("最多可添加5个发票内容!");
+			return;
+		}
+	   	 layer.open({
+	            title:"添加发票内容",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/shop/admin/receipt/add.do",//内容的URL
+	            area:['650px','170px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
+});
+
+//修改
+function edit(contentid){
+	
+	layer.open({
+        title:"修改发票内容",//标题
+        maxmin :true,//右上角可否放大缩小
+        offset: '100px',//弹框位置
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/receipt/edit.do?contentid="+contentid,//内容的URL
+        area:['650px','170px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+    });
+}
+
+//删除
+function del(contentid){
+	if(!confirm("确认要删除发票信息吗？")){
+		return;
+	}
+	$.ajax({
+		url:ctx+"/shop/admin/receipt/delete.do?contentid="+contentid,
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result == 1){
+				$.Loading.success(data.message);
+				table.ajax.url(ctx+"/shop/admin/receipt/list-json.do").load();
+			}else{
+				$.Loading.error(data.message);
+			}
+		}
+	});
+}
+</script>
+<#include '/admin/footer.html' >

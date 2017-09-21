@@ -1,137 +1,165 @@
-<#include '/admin/header.html' > <#assign dateformat=
-"com.enation.framework.directive.DateformateDirective"?new()>
+<#include '/admin/sonheader.html' >
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
 <script type="text/javascript" src="${ctx}/shop/admin/js/Comments.js"></script>
-<div class="main"  style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-		<div style="padding: 5px 0 0 10px">
-			<table>
-				<tr>
-					<td>
-						<#if memberComment.type == 1>
-							<h3>评论人： <#if member??>${member.uname}<#else>游客</#if></h3>
-							<h3>评论时间：[<@dateformat time='${memberComment.dateline}' pattern='yyyy-MM-dd'/>]</h3>
-						<#else>
-							<h3>咨询人： <#if member??>${member.uname}<#else>游客</#if></h3>
-							<h3>咨询时间：[<@dateformat time='${memberComment.dateline}' pattern='yyyy-MM-dd'/>]</h3>
-						</#if>
-						<h3>当前状态：
-							<#if memberComment.status == 0>未审核</#if> 
-							<#if memberComment.status == 1>审核通过</#if> 
-							<#if memberComment.status == 2>审核拒绝</#if>
-						</h3>
-						
-						<br />
-						<#if memberComment.type == 1>
-							<h3>评论内容:</h3>
-						<#else>
-							<h3>咨询内容:</h3>
-						</#if>
-						<div class="division" style="border:1px solid #BEBEBE;min-height: 130px;width: 565px;word-wrap: break-word;">
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							${memberComment.content } 
-						</div>
-						<#if galleryList?size != 0 >
-							<h3>评论图片：</h3> 
-							<#list galleryList as gallery>
-								<a href="${gallery.original!''}" target="_blank">
-									<img src="${gallery.original!''}" width="100px;" height="100px;"/> 
-								</a> 
-							</#list>
-						</#if>
-						<br />
-						<h3 align="center">
-							<#if memberComment.status == 0> 
-								<a href="javascript:;" id="cshow" comment_id="${memberComment.comment_id }" class="easyui-linkbutton">通过</a>
-								<a href="javascript:;" id="chide" comment_id="${memberComment.comment_id }" class="easyui-linkbutton">拒绝</a>
+<div class="main">
+    <input type="hidden" name="type" class="type" value="${memberComment.type }" />
+	<div class="easyui-panel" style="width:95%;margin:10px auto;padding:0;">
+		<#if memberComment.type == 1>
+			<div class="layui-form-item">
+	    		<label class="layui-form-label">评论人：</label>
+	    		<div class="layui-input-block">
+	      			<input type="text" disabled="disabled" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input" value="<#if member??>${member.uname}<#else>游客</#if>">
+	    		</div>
+	  		</div>
+	  	<#else>
+	  		<div class="layui-form-item">
+	    		<label class="layui-form-label">咨询人： </label>
+	    		<div class="layui-input-block">
+	      			<input type="text" disabled="disabled" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input" value="<#if member??>${member.uname}<#else>游客</#if>">
+	    		</div>
+	  		</div>
+		</#if>
+		
+		<#if memberComment.type == 1>
+			<div class="layui-form-item">
+	    		<label class="layui-form-label">评论时间：</label>
+	    		<div class="layui-input-block">
+	      			<input type="text" disabled="disabled" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input" value="<@dateformat time='${memberComment.dateline}' pattern='yyyy-MM-dd'/>">
+	    		</div>
+	  		</div>
+	  	<#else>
+	  		<div class="layui-form-item">
+	    		<label class="layui-form-label">咨询时间： </label>
+	    		<div class="layui-input-block">
+	      			<input type="text" disabled="disabled" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input" value="<@dateformat time='${memberComment.dateline}' pattern='yyyy-MM-dd'/>">
+	    		</div>
+	  		</div>
+		</#if>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">
+				<#if memberComment.type == 1>
+					评论内容:
+				<#else>
+					咨询内容:
+				</#if>
+			</label>
+		    <div class="layui-input-block">
+		      <textarea placeholder="请输入内容" class="layui-textarea" disabled="disabled">${memberComment.content } </textarea>
+		    </div>
+		 </div>
+		 
+		 <#if galleryList?size != 0 >
+			 <div class="layui-form-item">
+			 	<label class="layui-form-label">评论图片：</label>
+	    		<div class="layui-input-block">
+	    		<#list galleryList as gallery>
+					<a href="${gallery.original!''}" target="_blank">
+						<img src="${gallery.original!''}" width="100px;" height="100px;"/> 
+					</a> 
+					</#list>
+	    		</div>
+	  		</div>
+		</#if>
+		<#if memberComment.status==0 >
+			<div class="layui-form-item" >
+			    <div class="layui-input-block">
+			      <a class="layui-btn" lay-submit="" lay-filter="cshow" id="cshow" comment_id="${memberComment.comment_id }">通过审核</a>
+			      <a class="layui-btn  layui-btn-danger" lay-submit="" lay-filter="chide" id="chide" comment_id="${memberComment.comment_id }">拒绝审核</a>
+			    </div>
+			  </div>
+			    </#if>
+		<#if memberComment.replystatus==0 >
+			 <form class="layui-form" method="post" action="${ctx}/shop/admin/comments/add.do" id="addcomment">
+			 		<input type="hidden" name="comment_id" value="${memberComment.comment_id }" />
+			 		<div class="layui-form-item layui-form-text" style="border-top:1px solid #e6e6e6;marign:10px 0 0 0;padding:20px 0 0 0;">
+						<label class="layui-form-label">
+							<#if memberComment.type == 1>
+								回复评论:
+							<#else>
+								回复咨询:
 							</#if>
-						</h3>
-						
-						<#if memberComment.replystatus==0 >
-							<div style="margin: 20px 0 0 0;">
-								<#if memberComment.type == 1>
-									<h3>回复用户评论:</h3>
-								<#else>
-									<h3>回复用户咨询:</h3>
-								</#if>
-								<form method="post" action="${ctx}/shop/admin/comments/add.do" class="validate" id="addcomment" style="float: left;">
-									<table>
-										<tr>
-											<th>
-												<input type="hidden" name="comment_id" value="${memberComment.comment_id }" />
-												<textarea rows="7" cols="70" id="recomment" name="reply" style="border: solid #069 1px;"></textarea>
-											</th>
-										</tr>
-									</table>
-									<div class="submitlist" align="center">
-										<table>
-											<tr>
-												<td><a href="javascript:;" class="button" comment_id="${memberComment.comment_id }" id="comments_commit">回复</a></td>
-											</tr>
-										</table>
-									</div>
-								</form>
-							</div>
-						</#if> 
-						<#if memberComment.replystatus==1 >
-							<div class="tableform" style="margin: 20px 0 0 0;">
-								<h3>管理员于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]回复：</h3>
-								<div class="division" style="border:1px solid #BEBEBE;width: 565px;min-height: 130px;word-wrap: break-word;">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									${memberComment.reply!''}
-								</div>
-							</div> 
-						</#if>
-					</td>
-				</tr>
-			</table>
-		</div>
+						</label>
+					    <div class="layui-input-block">
+					      <input type="hidden" name="comment_id" class="comment_id" value="${memberComment.comment_id }" />
+					      <textarea placeholder="请输入内容" class="layui-textarea" rows="7" cols="70" id="recomment" name="reply"></textarea>
+					    </div>
+					 </div>
+					 <div class="layui-form-item">
+					    <div class="layui-input-block">
+					      <a class="layui-btn"  id="comments_commit" >回复</a>
+					    </div>
+					  </div>
+			 </form>
+			 </#if> 
+		<#if memberComment.replystatus==1 >
+			<div class="layui-form-item" style="border-top:1px solid #e6e6e6;marign:10px 0 0 0;padding:10px 0 0 0;">
+	    		<label class="layui-form-label">管理回复时间：</label>
+	    		<div class="layui-input-block">
+	      			<input type="text" disabled="disabled" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input" value="<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>">
+	    		</div>
+	  		</div>
+	  		
+	  		
+	  		<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">回复内容：</label>
+			    <div class="layui-input-block">
+			      <textarea class="layui-textarea" disabled="disabled">${memberComment.reply!''}</textarea>
+			    </div>
+			 </div>
+		</#if>
+		
 	</div>
 </div>
 <script type="text/javascript">
 
+var index = parent.layer.getFrameIndex(window.name);
 $(function(){
-	
-$("#comments_commit").click(function(){
-	var comment_id=$(this).attr("comment_id");
-	if( $.trim( $("#recomment").val())=='' ){alert("请输入回复内容"); return false;}
-	$("#comments_commit").attr("disabled",true); 
-	$.Loading.show('正在回复留言，请稍侯...');
-	var options = { 
-		url : "${ctx}/shop/admin/comments/add.do?commentId="+comment_id,
-		type : "POST",
-		dataType : 'json',
-		success : function(date) {
-			$.Loading.hide();				
-			if(date.result==1){
-				$("#comments_commit").attr("disabled",false); 
-				$("#commentscontent").html("");
-				location.reload();
-	 		}else{
-		 		alert(result.message);
-		 		$("#comments_commit").attr("disabled",false); 
-		 	}
-		},
-		error : function(e) {
-			$.Loading.hide();
-			alert("出现错误 ，请重试");
-			$("#comments_commit").attr("disabled",false); 
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	    
+	    $(".layui-btn0").click(function(){
+	    	parent.layer.close(index);
+	    });
+	});
+	//回复
+	$("#comments_commit").click(function(){
+		var comment_id=$(".comment_id").val();
+		if(comment_id==""){
+			parent.$.Loading.error("回复内容不能为空");	
 		}
-	};
-	$('#addcomment').ajaxSubmit(options);	
-});
+		var options = { 
+			url : "${ctx}/shop/admin/comments/add.do?commentId="+comment_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				if(data.result==1){
+					parent.$.Loading.success(data.message);
+					parent.layer.close(index);
+		 		}else{
+		 			parent.$.Loading.error(data.message);
+			 	}
+			},
+			error : function(e) {
+				alert("出现错误，请重试！")
+			}
+		};
+		$('#addcomment').ajaxSubmit(options);	
+	});
 
-
-$(".deleteLink").click(function(){
-	var comment_id = $(this).attr("comment_id");
-	$.ajax({
-		url:'${ctx}/shop/admin/comments/deletealone.do?commentId='+comment_id,
-		dataType:'html',
-		success:function(result){
-			parent.ShortMsg.checkNewMsg();
-				location.reload();
-		}
+	//删除
+	$(".deleteLink").click(function(){
+		var comment_id = $(this).attr("comment_id");
+		$.ajax({
+			url:'${ctx}/shop/admin/comments/deletealone.do?commentId='+comment_id,
+			dataType:'html',
+			success:function(result){
+				parent.ShortMsg.checkNewMsg();
+					location.reload();
+			}
+		});
 	});
 });
-});
 </script>
-<#include '/admin/footer.html' >

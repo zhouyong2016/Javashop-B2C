@@ -23,6 +23,7 @@ import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
+import com.enation.framework.util.DateUtil;
 import com.enation.framework.util.JsonMessageUtil;
 import com.enation.framework.util.JsonResultUtil;
 import com.enation.framework.util.StringUtil;
@@ -49,6 +50,11 @@ public class BonusController extends GridController{
 	
 	@RequestMapping(value = "/send")
 	public ModelAndView send(Integer typeid){
+		Long use_end_date = bonusTypeManager.get(typeid).getUse_end_date();
+		long now  = DateUtil.getDateline();
+		if (use_end_date < now) {
+			throw new RuntimeException("抱歉，优惠券使用结束时间不能小于当前时间");
+		}
 		ModelAndView view = new ModelAndView();
 		view.addObject("typeid", typeid);
 		
@@ -125,7 +131,7 @@ public class BonusController extends GridController{
 		}
 		
 	}
-	
+	//按人发送红包
 	@ResponseBody
 	@RequestMapping(value = "/send-for-member")
 	public JsonResult sendForMember(Integer typeid, Integer[] memberids){

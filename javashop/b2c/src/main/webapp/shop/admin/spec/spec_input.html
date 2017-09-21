@@ -1,79 +1,91 @@
-<link href="${ctx}/shop/admin/spec/css/grid.css" rel="stylesheet" type="text/css" />
+<#include '/admin/sonheader.html' >
 <style>
-.spec_pic {
-	border: 1px solid #3366CC;
-	padding: 1px;
-	vertical-align: middle;
-}
+	.layui-input{
+		width: 80%;
+	}
+	.layui-upload-button input, .layui-upload-file{
+	opacity:1;}
+	.layui-upload-button input{
+	font-size:13px;
+	}
+	.layui-upload-icon{
+	margin:0px -4px;
+	}
+	.layui-upload-button{
+	height:25px;
+	}
+	.layui-upload-button{
+	border:none;
+	}
+	.layui-upload-button input, .layui-upload-file{
+	width:65px;
+	}
 </style>
+
 <div class="main" style="background-color: white; overflow: hidden;">
 	<div class="easyui-panel" style="border-style: none;">
-		<form method="post" class="validate" name="theForm" id="specAddForm">
-			<div class="input">
-				<table cellspacing="1" cellpadding="3" width="100%"
-					class="form-table">
-					<tr>
-						<th><label class="text">规格名称：</label>
-						</th>
-						<td><input type="text" name="spec_name" data-options="required:true" class="easyui-validatebox input_text" maxlength="8"/>
-						</td>
-					</tr>
-					<tr>
-						<th><label class="text">规格备注：</label>
-						</th>
-						<td>
-							<input type="text" name="spec_memo" class="easyui-validatebox  input_text" maxlength="25"/>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label class="text">显示类型：</label>
-						</th>
-						<td><label><input type="radio" checked value="0" name="spec_type">文字</label> 
-							<label><input type="radio" value="1" name="spec_type">图片</label>
-						</td>
-					</tr>
-					
-				</table>
+		<form method="post"  class="layui-form layui-form-pane" name="theForm" id="specAddForm" style="margin:0;">
+			<div class="input" style="width:98%;margin:0 auto;">
+				<div class="layui-form-item">
+		    		<label class="layui-form-label">规格名称：</label>
+		    		<div class="layui-input-block">
+		    			<input type="text" name="spec_name" lay-verify="spec_name" required="required" autocomplete="off" class="layui-input" maxlength="8"/>
+		    		</div>
+		  		</div>
+		  		<div class="layui-form-item">
+		    		<label class="layui-form-label">规格备注：</label>
+		    		<div class="layui-input-block">
+		    			<input type="text" name="spec_memo" lay-verify="" required="required" autocomplete="off" class="layui-input" maxlength="8"/>
+		    		</div>
+		  		</div>
+				<div class="layui-form-item">
+		    		<label class="layui-form-label">显示类型：</label>
+		    		<div class="layui-input-block">
+		      			<input type="radio" name="spec_type" value="0" title="文字" checked="checked">
+		      			<input type="radio" name="spec_type" value="1" title="图片">
+		    		</div>
+		  		</div>
+				<a class="layui-btn layui-btn-normal" id="addBtn">添加规格值</a>
 			</div>
-			<div class="grid" style="padding: 0px 20px 0px 40px; width: auto;">
-				<div class="toolbar">
-					<ul>
-						<li><a id="addBtn" href="javascript:;" class="button">添加规格值</a>
-						</li>
-						<li>&nbsp;&nbsp;<span class="help_icon" helpid="spec_add"></span>
-						</li>
-					</ul>
-					<div style="clear: both"></div>
-				</div>
-				<table>
+			<div class="grid" style="width:98%;margin:0 auto;">
+				<table class="layui-table" lay-even lay-skin="nob">
 					<thead>
 						<tr>
-							<th>规格值名称</th>
-							<th>&nbsp;</th>
-							<th>操作</th>
+							<th style="width:50%">规格值名称</th>
+							<th style="width:20%">&nbsp;</th>
+							<th style="width:20%">操作</th>
 						</tr>
 					</thead>
 					<tbody id="tb"></tbody>
 				</table>
+			</div>
+			<div class="layui-layer-btn" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 96%;height: 35px; background:rgba(230,230,230,0.8)"> 
+				<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save-stock">保存</a>
+				<a class="layui-layer-btn1">取消</a>
 			</div>
 		</form>
 	</div>
 </div>
 <table id="temp" style="display: none">
 	<tr>
-		<td>
-			<input type="text" name="valueArray" class="input_text"  maxlength="10"/> 
-			<input type="hidden" name="valueIdArray" value="0" />
+		<td style="width:20%">
+			<div class="layui-form-item">
+	    		<div class="layui-input-block" style="margin:0;">
+	      			<input type="text" id="goodsname" name="valueArray" maxlength="10" lay-verify="required" required="required" autocomplete="off" class="layui-input" style="width:90%;margin:0 auto;height:30px;">
+	      			<input type="hidden" id="goodsname" name="valueIdArray" value="0" maxlength="10" lay-verify="" required="required" autocomplete="off" class="layui-input">
+	    		</div>
+	  		</div>
 		</td>
-		<td>
-			<img height="30" width="30" src="${ctx}/shop/admin/spec/image/spec_def.gif" class="spec_pic"> 
-			<span class="specImage"> 
-			<a href="javascript:;" class="sysbtn upload">上传图片</a> 
-			<input type="hidden" name="imageArray" class="imageArray" value="" /> </span>
+		<td style="width:70%;">
+		<div class="layui-input-block" style="position: relative;margin-left: 60px;margin-top:-20px;">
+					<img class="spec_pic" src="${ctx}/shop/admin/spec/image/spec_def.gif" style="display: inline-block;border:1px solid blue;" width="30" height="30">
+					<a style="position: absolute;left:40px;top:6px;text-decoration: underline;color:blue;">上传图片</a>
+					<span class="specImage" style="position: absolute;opacity:0;left:35px;top:2px;" > 
+					<input type="hidden" id="default_img_url" name="imageArray" style="display:none;border:none;">
+					<input name="file" class="layui-upload-file" type="file"  > </span>
+				</div>
 		</td>
-		<td><a href="javascript:;"> 
-			<img class="delete" src="${staticserver }/images/transparent.gif" valueid="0"> </a></td>
+		<td><button href="#" class="delete" valueid="0" style="width:70px;height:36px;margin-top:-20px;">删除</button></td>
 	</tr>
 </table>
 
@@ -101,6 +113,7 @@
 
 	function addRow() {
 		var tr = $("#temp tr").clone();
+		
 		if ($("input[value=]").attr("checked")) {
 
 			tr.find("span.specImage").parent().children().hide();
@@ -108,11 +121,23 @@
 		var body = $(".grid table:first>tbody");
 		$(".grid table:first>tbody").append(tr);
 
-		$(".grid .sysbtn.upload").click(function() {
-			self.imageInput = $(this).siblings("input");
-			openImgDlg(getPath);
-		});
+		//上传图片
+		layui.use('upload', function(){
+	    	$(".layui-upload-file").on('click',function(){
+	    		var $this=$(this);
+				layui.upload({
+				    url: '${ctx}/eop/upload/upload-file.do?ajax=1&subFolder=spec'
+				    ,elem: '.layui-upload-file' //指定原始元素，默认直接查找class="layui-upload-file"
+				    ,method: 'post' //上传接口的http类型
+				    ,success: function(res){
+				    	$this.closest('td').find("#default_img_url").val(res.path);
+				    	$this.closest('td').find('.spec_pic').attr('src',res.path);
+				    }
+				 });
+			}); 
+	      });
 
+		//绑定删除按钮
 		$(".grid table .delete").click(function() {
 			var $this = $(this);
 			var valueid = $this.attr("valueid");
@@ -137,25 +162,65 @@
 		});
 
 		function deleteRow(link) {
-			link.parent().parent().parent().remove();
+			link.parent().parent().remove();
 		}
 	}
 
 	$(function() {
 		$("span.specImage").parent().children().hide();
 
-		$("input[value=1]").click(function() {
-			$("span.specImage").parent().children().show();
-		});
-
-		$("input[value=0]").click(function() {
-			$("span.specImage").parent().children().hide();
-		});
-
 		$("#addBtn").click(function() {
 			addRow();
+			
 		});
 
+	});
+	
+	
+	
+	
+	var index = parent.layer.getFrameIndex(window.name);
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form() ,layer = layui.layer ,layedit = layui.layedit ,laydate = layui.laydate;
+	    
+	    
+	    form.verify({
+	    	spec_name: function(value){
+	        	if($.trim(value)==""){
+	          		return '请输入规格名称';
+	        	}
+	      	}
+	    });
+	    
+	    $(".layui-layer-btn1").click(function(){
+	    	parent.layer.close(index);
+	    });  
+	    
+		form.on('radio', function(data){
+			if(data.value == "1"){
+				$("span.specImage").parent().children().show();
+			}else{
+				$("span.specImage").parent().children().hide();
+			}
+		});
+	    
+	    //监听提交
+	    form.on('submit(save-stock)', function(data){
+	    	var options = {
+	   			url:ctx+"/shop/admin/spec/save-add.do",
+	   			type:"post",
+	   			dataType:"json",
+	   			success:function(data){
+	   				if(data.result==1){	
+	   					$.Loading.success(data.message);
+	   					parent.layer.close(index); //再执行关闭        
+	   					parent.table.ajax.url(ctx+"/shop/admin/spec/list-json.do").load();
+	   				}
+	   			}
+	   		};
+	   		$("#specAddForm").ajaxSubmit(options);
+	       return false;
+	    });
 	});
 </script>
 

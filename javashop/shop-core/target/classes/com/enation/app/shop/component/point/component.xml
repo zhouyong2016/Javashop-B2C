@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="会员积分组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+	
+		<plugin name="会员积分插件" id="memberPointPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="订单积分插件" id="orderPointPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+			<bundle id="cartPluginBundle"></bundle>
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		 
+		<plugin name="积分设置插件" id="pointSettingPlugin">
+			<bundle id="settingPluginBundle"></bundle>
+		</plugin>		 
+	</plugins>
+	 
+</component>

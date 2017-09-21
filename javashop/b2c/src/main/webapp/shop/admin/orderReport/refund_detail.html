@@ -1,11 +1,34 @@
 <#include '/admin/header.html' > 
 <#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.info{
+	background-color: white;
+	margin-top: 10px;
+	padding: 10px;
+	margin-bottom: 60px;
+}
+.layui-elem-field legend{
+	margin-left: 0px;
+	padding:  0px 30px;
+	margin: 0px;
+}
 
-<div class="main">
+.sellback-info .table-info td:nth-child(1),.sellback-info .table-info td:nth-child(3){
+	background-color: #eeeeee;
+	width: 150px;
+	text-align: center;
+}
+
+.sellback-info .layui-form-item{
+	display:inline;
+}
+
+</style>
+<div class="admin-main">
 	<!-- 退货申请信息 -->
-	<div class="shadowBoxWhite  whiteBox">
+	<div class="info sellback-info">
 		<div class="detail">
-			<table cellspacing="0" cellpadding="0" border="0"  style="width: 99%">
+			<table  class="layui-table table-info">
 				<tr>
 					<td>退款单号：</td>
 					<td>${refund.sn!''}</td>
@@ -29,7 +52,7 @@
 							退款单申请：
 						</td>
 						<td>
-							<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id=${refund.sellback_id}')>查看</a> 
+							<a href='javascript:void(0);' onclick=newTab('退款单-详细信息','${ctx}/shop/admin/sell-back/refund-detail.do?id=${refund.sellback_id}')>查看</a> 
 						</td>
 					</#if>
 				</tr>
@@ -41,14 +64,21 @@
 							新建
 						<#elseif refund.status==1>
 							已退款
+						<#elseif refund.status==2>
+							退款中
+						<#elseif refund.status==3>
+							退款失败
 						</#if>
 					</td>
 					<td >退款金额：</td>
 					<td>${refund.refund_money!''}</td>
+					<input type="hidden"  id="refundmoney" value="${refund.refund_money!''}"/>
 				</tr>
 				<tr>
 					<td>退款方式：</td>
-					<td>${refund.refund_way!''}</td>
+					<td>${refund.refund_way!''}
+					<input type="hidden" value="${refund.refund_way!''}" class="refund_way">
+					</td>
 					<td>退款账户：</td>
 					<td>${refund.return_account!'后台操作'}</td>
 				</tr>
@@ -65,10 +95,15 @@
 				</#if>
 				<#if refund.status==0>
 					<tr>
-						<td>审核：</td>
-						<td colspan="3">
-							金额：<input type="text"  id="refund_money" name="refund_money" value="${refund.refund_money!''}" class="input_text easyui-numberbox" precision="2" maxlength="15" />&nbsp;&nbsp;
-							<a href="javascript:void(0)"  class="button" onclick="pass(1)">退款</a>
+						<td>退款金额：</td>
+						<td colspan="3" >
+							 <input type="text"  id="refund_money" name="refund_money" value="${refund.refund_money!''}" class="input_text layui-input easyui-numberbox" precision="2" maxlength="15" style="width: 200px;display:inline;"/>&nbsp;&nbsp;
+							<#if refund.refund_way?contains("原支付方式")>
+							<a href="javascript:void(0)"  class="button layui-btn "  onclick="pass(2)" style="margin-top:-4px;">退款</a>
+							<#else>
+							<a href="javascript:void(0)"  class="button layui-btn "  onclick="pass(1)" style="margin-top:-4px;">退款</a>
+							</#if>
+							
 						</td>
 					</tr>
 				</#if>
@@ -76,9 +111,9 @@
 		</div>
 	</div>
 	<br/>
-	<div class="shadowBoxWhite  whiteBox">
+	<div class="info sellback-info">
 		<div class="detail">
-			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+			<table class="layui-table"  cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
 				<tr>
 					<th class="title" colspan="4">退货单商品</th>
 				</tr>
@@ -94,8 +129,10 @@
 							<td>
 								<a target="_blank" href="${ctx}/goods-${data.goods_id}.html">${data.goods_name }${data.spec!''}</a>
 							</td>
-							<td>${data.price?string.currency}</td>
-							<td>${data.ship_num!0 }</td>
+							<td>${data.price?string.currency}
+							<input type = "hidden" name = "price" value = "${data.price}">
+							</td>
+							<td id = "num">${data.ship_num!0 }</td>
 							<td>${data.return_num!0}</td>
 						</tr>
 				</#list>
@@ -112,11 +149,43 @@
 	</div>
 </div>
 <script type="text/javascript">
+
+
+//获取支付方式
+var pay_way=$(".refund_way").val();
+var num = document.getElementById('num').innerHTML
 function pass(status){
+	
+	if(pay_way.indexOf("原支付方式")>=0){
+		if(Number($("#refund_money").val())	 == 0){
+			alert("输入金额不能为零")
+			return;
+		}
+	}
+	
 	if($("#refund_money").val() == null || $("#refund_money").val() == ""){
-		alert("金额不能为空");
+		alert("退款金额不能为空");
 		return;
 	}
+	if(Number($("#refund_money").val())	 < 0){
+		alert("输入金额不能为负数")
+		return;
+	}
+	if(!/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test($("#refund_money").val())){
+		alert('退款金额格式有误！');
+        return;
+    }
+	//支付金额
+	var price = $("input[name = 'price']").val();
+	var tatolprice  = 0;
+	  for(var i=0;i<price.length;i++){
+          tatolprice += price[i];
+      }
+	  var tatolnum = tatolprice * 100 * num /100; 
+	if(Number($("#refund_money").val()) > $("#refundmoney").val()){
+		alert('退款金额不能大于原退款金额');
+  	    return false;
+    }
 
 	$(".button").removeAttr("onclick");
 	if($(this).attr("disabled")=="disabled"){
@@ -125,17 +194,35 @@ function pass(status){
 	
 	$(this).attr("disabled","disabled");
 	var refund_money=$("input[name='refund_money']").val();
+	var url = "";
 	$.ajax({
 		url:"${ctx}/shop/admin/order-report/edit-refund.do?id=${refund.id}&status="+status+"&refund_money="+refund_money,
 		type:"POST",
+		async: false,
 		dataType:"json",
-		success:function(data){
-			location.reload();
+		success:function(result){
+			if(result.result==1){
+				if(result.data=="SUCCESS"){
+					alert("退款成功")
+					location.reload();
+				}else if(result.data=="FAIL"){
+					alert("退款失败")
+					location.reload();
+				}else{
+					url = result.data
+				}
+			}else{
+				alert(result.message)
+			}
 		},
 		error:function(){
 			alert("出现错误");
 		}
 	});
+	if(url!=""){
+		$(".admin-main").append(url);
+	}
 	
+
 }
 </script>

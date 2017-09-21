@@ -1,138 +1,107 @@
 <#include '/admin/header.html' >
-<div class="main">
-	<form id="dly_centerform">
-		<div id="tb" style="height: auto">
-			<a href="javascript:void(0)" class="button blueButton" onclick="controlDly()">添加</a>
-			<!--  
-			<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
-			-->
-		</div>
-		<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/dly-center/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" id="dly_centerdata">
-				<thead>
-					<tr>
-						<th data-options="field:'dly_center_id',checkbox:true"></th>
-						<th data-options="field:'name',width:100">发货点名称</th>
-						<th data-options="field:'area',width:100" formatter="formatArea">地区</th>
-						<th data-options="field:'address',width:200">地址</th>
-						<th data-options="field:'zip',width:100">邮编</th>
-						<th data-options="field:'cellphone',width:100">手机</th>
-						<th data-options="field:'uname',width:100">发货人姓名</th>
-						<th data-options="field:'choose',width:50" formatter="formatChoo">默认发货点</th>
-						<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</form>
-	<div id="divdia" style="display: none;"></div>
 
-	<script type="text/javascript">
-		function controlDly(id) {
-			var map = {}; // Map map = new HashMap();
-			if (!id) {
-				map["href"] = "${ctx}/shop/admin/dly-center/add.do";
-				map["formId"] = "#dlyCenterForm";
-				map["url"] = "${ctx}/shop/admin/dly-center/save-add.do?ajax=yes";
-				map["title"] = "添加发货信息";
-				map["loadshow"] = "正在添加......";
-			} else {
-				map["href"] = "${ctx}/shop/admin/dly-center/edit.do?dlyCenterId=" + id;
-				map["formId"] = "#dlyCenterEditForm";
-				map["url"] = "${ctx}/shop/admin/dly-center/save-edit.do?ajax=yes";
-				map["title"] = "修改发货信息";
-				map["loadshow"] = "正在修改......";
-			}
-			map["divDialog"] = "#divdia";
-			map["gridreload"] = "#dly_centerdata";
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>发货点设置的仓库与真实出货的仓库可以不同。</li>
+                <li><span>.</span>发货点的作用：如果设定一个发货点并将此发货点设为“默认”，那么打印出来的发货订单中的发货仓库的信息，即为当前设置的默认仓库信息。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_dly_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary" title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+   <!--表格区域  -->
+   <form id="dly_centerform">
+    <table id="dly_centerdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" style="min-width:950px;" >
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>发货点名称</th>
+            <th>地区</th>
+            <th>地址</th>
+            <th>邮编</th>
+            <th>手机</th>
+            <th>发货人姓名</th>
+            <th>默认发货点</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
+</div>
 
-			addDialog(map);
-		}
-		function addDialog(map) {
-			$(map["divDialog"]).show();
-			$(map["divDialog"]).dialog({
-				title : map["title"],
-				width : 850,
-				closed : false,
-				cache : false,
-				href : map["href"],
-				modal : true,
-				buttons : [ {
-					text : '保存',
-					iconCls : 'icon-ok',
-					handler : function() {
-						 var savebtn = $(this);
-		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-		　　				 if(!disabled){
-			　　				 
-							 submitForm(map,savebtn);
-						 }
-					}
-				} , {
-					text : '取消',
-					handler : function() {
-						$(map["divDialog"]).dialog('close');
-					}
-				}]
-			});
-		}
-		function submitForm(map,savebtn) {
-			if($("#is_default_dc").is(":checked")){
-				$("#dlyCenterDisabled").val("true");
-			}else{
-				$("#dlyCenterDisabled").val("false");
-			}
-			
-			var value = $("#region_id").val();
-			if( value == "" || value == "0" ){
-				alert("请选择地区");
-				return false;
-			}
-			
-			var formflag = $(map["formId"]).form('validate');
-			
-			if (formflag) {
-				$.Loading.show("正在保存请稍候...");
-　				 savebtn.linkbutton("disable");	
-　				 
-				var options = {
-					url : map["url"],
-					type : "POST",
-					dataType : 'json',
-					success : function(result) {
-						if (result.result == 1) {
-							$.Loading.success(result.message);
-							$(map["divDialog"]).dialog('close');
-							$(map["gridreload"]).datagrid('reload');
-
-						}
-						if (result.result == 0) {
-							$.Loading.error(result.message);
-						}
-						savebtn.linkbutton("enable");
-					},
-					error : function(e) {
-						$.Loading.error("出现错误 ，请重试");
-						savebtn.linkbutton("enable");
-					}
-				};
-				$(map["formId"]).ajaxSubmit(options);
-			}
-		}
-		function clearForm(map) {
-			$(map["formId"])[0].reset();
-		}
-
-		function formatOperation(value, row, index) {
-			var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlDly("
-					+ row.dly_center_id + ")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.dly_center_id +")'></a>";
-			return val;
-		}
-
-		function formatChoo(value, row, index) {
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+     table = $('#dly_centerdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/dly-center/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="dly_center_id" class="fly-checkbox" value=' + obj.dly_center_id + '>';
+            		}},
+	        {data: "name"},
+	        {data: null,"render": function(data, type, row) {
+	        	return  formatArea(data.area,row,type);
+	       	}},
+	        {data: "address"},
+	        {data: "zip"},
+	        {data: "cellphone"},
+	        {data: "uname"},
+	        {data: null,"render":function(data,type,row){
+	        	return formatChoo(data.choose,type,row);
+	        }},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal _aa' name='dly_center_id'  onclick='editdly("
+				+ data.dly_center_id + ")'>修改</a> &nbsp<a class='layui-btn layui-btn-small layui-btn-danger _aa' name='dly_center_id' onclick='del("+data.dly_center_id +")'>删除</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#add_dly_button").click(function(){
+	   	 layer.open({
+	            title:"添加发货信息",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/shop/admin/dly-center/add.do",//内容的URL
+	            area:['850px','480px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
+  });
+  
+   //地区
+	function formatArea(value, row, index) {
+		var val = row.province + "-" + row.city + "-" + row.region;
+		return val;
+	}
+   
+   //是否为默认地区
+   function formatChoo(value, row, index) {
 			var val = "";
 			if(value == "true"){
 				val = "是";
@@ -141,39 +110,46 @@
 			}
 			return val;
 		}
+	//修改发货信息
+	function editdly(dly_center_id){
+		layer.open({
+	        title:"修改发货信息",//标题
+	        maxmin :true,//右上角可否放大缩小
+	        type:2,//弹框的类型
+	        shade: [0.3, '#000'],//黑色背景
+	        shadeClose:false,//黑色背景是否可以点击关闭
+	        content:ctx+"/shop/admin/dly-center/edit.do?dlyCenterId="+dly_center_id,//内容的URL
+	        area:['850px','480px'],//弹框大小
+	        scrollbar: false//是否允许浏览器出现滚动条
+	    });
+	}
+  
+  	
+    //删除发货信息
+	function del(dly_center_id) {
 		
-		function formatArea(value, row, index) {
-			var val = row.province + "-" + row.city + "-" + row.region;
-			return val;
+		if (!confirm("确认要删除发货信息吗？")) {
+			return;
 		}
-		
-		function del(dly_center_id) {
-			
-			if (!confirm("确认要删除发货信息吗？")) {
-				return;
-			}
-
-			$.Loading.show("正在删除...");
-			var options = {
-				url : "${ctx}/shop/admin/dly-center/del.do?dly_center_id="+dly_center_id,
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.show(result.message);
-						$.Loading.hide();
-						$('#dly_centerdata').datagrid('reload');
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
+		var options = {
+			url : "${ctx}/shop/admin/dly-center/del.do?dly_center_id="+dly_center_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					table.ajax.url('${ctx}/shop/admin/dly-center/list-json.do').load();
 				}
-			};
-			$('#dly_centerform').ajaxSubmit(options);
-		}
-	</script>
-	<#include '/admin/footer.html' >
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#dly_centerform').ajaxSubmit(options);
+	}
+
+</script>
+<#include '/admin/footer.html' >

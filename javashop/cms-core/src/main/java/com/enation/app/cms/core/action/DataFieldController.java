@@ -96,9 +96,9 @@ public class DataFieldController extends GridController{
 	
 	@ResponseBody
 	@RequestMapping(value="/delete")
-	public JsonResult delete(Integer fieldid){
+	public JsonResult delete(Integer field_id){
 		try{
-			this.dataFieldManager.delete(fieldid);
+			this.dataFieldManager.delete(field_id);
 			return JsonResultUtil.getSuccessJson("字段删除成功");
 		}catch(RuntimeException e){
 			this.logger.error(e.getMessage(), e);

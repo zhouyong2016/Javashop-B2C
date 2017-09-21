@@ -306,4 +306,12 @@ public interface ISellBackManager {
 	 * @param id
 	 */
 	public void editSellBackDepotId(Integer id,Integer order_id);
+	/**
+	 * 系统记录退货操作日志
+	 * @param id 退货单id
+	 * @param status 状态
+	 * @param logdetail 日志描述
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void saveLogBySystem(Integer id,String logdetail);
 }

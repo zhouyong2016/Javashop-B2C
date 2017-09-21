@@ -1,0 +1,25 @@
+.center {
+    background-color: white;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 950px;
+}
+.center img {
+    float: left;
+    margin: 75px 50px 50px 130px;
+}
+.center .right {
+    height: 100%;
+    overflow: hidden;
+    padding-right: 70px;
+}
+.center .title {
+    font-size: 25px;
+    font-weight: 700;
+    padding-top: 120px;
+}
+.center .detail {
+    font-size: 12px;
+    padding-top: 50px;
+}

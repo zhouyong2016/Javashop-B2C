@@ -1,230 +1,340 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
- 
 <style>
-.input_text{
-	width: 150px;
+ td .layui-btn{
+  background:#1E9FFF;
+  }
+    #start_time_one{
+  height:25px;
+  }
+  #end_time_one{
+  height:25px;
+  }
+  ._inline{
+  margin-right:16px!important;
+  margin-top:5px;
+  height:25px;
+  }
+  .search_conditions{
+display:block
 }
 </style>
-<div id="pay_detail" style="display: none; overflow:hidden""></div>
-<div id="loading"></div>
-<div class="main">
-	<div class='buttonArea' style="height: auto">
-		<span style="float: right;"> 
-		 	<span id="simpleSearch"> 
-			 	<input id="searchKeyword" class="input_text" type="text" maxlength="50" value="" size="30" style="width: 300px;" placeholder="请输入流水号" name="searchKeyWord">
-				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
-			</span> 
-			<a href="javascript:void(0)" class="button" data-options="plain:true" id="aAdvanced">高级搜索</a> 
-		</span>
-	</div>
-	<div style="display: block;" class="searchAdvanced" >
-			<input id="Advanced" name="Advanced" type="hidden" value="0" />
-			<table width="98%" border="0" cellspacing="0" cellpadding="8">
-				<tr>
-					<td width="70" align="right">流水号</td>
-					<td><input type="text" value="" id="sn" class="input_text">
-					</td>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>该列表展示所有未付款和已付款的订单，但无法进行删除和相关操作，而可以进行查看详情。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary" title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+            <!--搜索区域  -->
+            <div class="table_search">
+                <input type="text" id="_search" placeholder="请输入流水号" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" onclick="_searchPayment()"><i class="layui-icon">&#xe615;</i></button>
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="high_search">高级搜索</button>
+                <!--高级搜索区域  -->
+                <div class="high_searchcontent">
+                    <div class="content_title"><span>高级搜索</span></div>
+                    <form id="search_form" class="layui-form" action="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">流水号:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="sn"  lay-verify="title" autocomplete="off" placeholder="请输入流水号" class="layui-input">
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">付款状态</label>
+                            <div class="layui-input-block">
+                                <select id="paystatus"  lay-filter="">
+                                    <option value="">---所有---</option> 
+									<#list payStatusList as status>
+										<option value="${status.key}">${status.value}</option> 
+									</#list>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付方式</label>
+                            <div class="layui-input-block">
+                                <select id="payment_id"  lay-filter="">
+                                    <option value="">---所有---</option>
+                                    <#list payTypeList as plist>
+										<option value="${plist.id}">${plist.name}</option>
+									</#list>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item" style="width:100%;">
+   							 <label class="layui-form-label" >下单时间</label>
+    						<div class="layui-input-inline" >
+      							<input class="layui-input" placeholder="开始日" id="start_time">
+    						</div>
+    						<div class="layui-input-inline">
+      							<input class="layui-input" placeholder="截止日" id="end_time">
+    						</div>
+  						</div>
+  						
+                        <ul>
+                            <li class="reset">
+                                <button type="reset" id="reset_btn" class="layui-btn  layui-btn-primary">重置</button>
+                            </li>
+                            <li class="submit">
+                                <button type="button" id="submit_btn" class="layui-btn layui-btn-primary"  onclick="_highSearchPayment()" lay-submit="" lay-filter="highsearch" >开始搜索</button>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--高级搜索生成区域  -->
+    <div class="high_search">
+     	<form action="" class="layui-form layui-form-one" action="">
+   		</form> 	
+    </div>
+     <!-- //高级搜索区克隆区域 -->
+      <div class="kelong" style="display:none;">
+   		<ul  class="search_conditions " style="width:98%; ">
+ 			<li>
+ 				 <div class="layui-form-item _select">
+                       <label class="layui-form-label  _label" >流水号</label>
+                  <div class="layui-input-block _layui-input-block">
+                        <input type="text" id="sn_one" readonly="true" class="layui-input">
+                  </div>
+                  </div>
+                  <span>
+                  	<a class="closeSelf" href="javascript:void (0)">
+                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+                 	</a>
+                  </span>
+ 			</li>
+ 				<li>
+ 			    <div class="layui-form-item  _select">
+                  <label class="layui-form-label _label">付款状态</label>
+                  <div class="layui-input-block _layui-input-block">
+                    	<input type="text" id="paystatus_one" readonly="true" class="layui-input">
+                  </div>
+                   </div>
+              	 	<span>
+	                  	<a class="closeSelf" href="javascript:void (0)">
+	                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	                 	</a>
+                  </span>
+ 			</li>
+ 	
+ 			<li>
+ 			    <div class="layui-form-item  _select">
+                  <label class="layui-form-label _label">支付方式</label>
+                  <div class="layui-input-block _layui-input-block">
+                    	<input type="text" id="payment_id_one" readonly="true" class="layui-input">
+                  </div>
+               	</div>
+          	 	<span>
+	              	<a class="closeSelf" href="javascript:void (0)">
+	              		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	             	</a>
+              </span>
+ 			</li>
+ 			<li>
+ 			    <div class="layui-form-item  ">
+                      <label class="layui-form-label _select">下单时间</label>
+                         <div class="layui-input-inline _inline" >
+                           <input type="text" id="start_time_one" readonly="true" class="layui-input">
+                         </div>
+                          <div class="layui-input-inline _inline" >
+                         	 <input type="text" id="end_time_one"   readonly="true" class="layui-input">
+                         </div>
+                   </div>
+              	 	<span style="float:right;margin-top:-43px;">
+	                  	<a class="closeSelf" href="javascript:void (0)">
+	                  		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	                 	</a>
+                  </span>
+ 			</li>
+ 		</ul>
+   </div>
 
-					<td width="70" align="right">下单时间</td>
-					<td><input class="easyui-datebox" style="width: 90px;height: 28px;"
-						id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-						<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
-						data-options="buttons:e_buttons" /></td>
-					<td width="70" align="right">付款状态</td>
-					<td><select id="paystatus" class="inputSelect valid" style="width: 145px;">
-							<option value="">---所有---</option> 
-							<#list payStatusList as status>
-								<option value="${status.key}">${status.value}</option> 
-							</#list>
-					</select></td>
-					<td width="70" align="right">支付方式</td>
-					<td>
-						<select id="payment_id" class="inputSelect valid" style="width: 145px;">
-							<option value="">---所有---</option> 
-							<#if payTypeList??>
-								<#list payTypeList as plist>
-									<option value="${plist.id}">${plist.name}</option>
-								</#list>
-							</#if>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td width="70" align="right"></td>
-					<td colspan="7" align="center"><a id="searchAdvance"
-						class="button blueButton" onclick="searchOrder()"
-						href="javascript:;">开始搜索</a></td>
-				</tr>
-			</table>
-	</div>
-	<div class="clear height10"></div>
-	<div class="shadowBoxWhite tableDiv">
-		<table  id="dgs" class="easyui-datagrid" data-options="url:'${ctx}/shop/admin/order-report/payment-list-json.do',remoteSort:false,pageList: [10,15,18],pageSize:${pageSize},fitColumns:'true'" 
-			pagination="true" width="width">
-			    <thead>
-				    <tr>
-				   	 	<th  data-options="field:'order_sn',width:100">流水号</th>
-				    	<th  data-options="field:'pay_method',width:100" >支付方式</th>
-				    	<th  data-options="field:'pay_date',width:100" formatter="formatTime" >付款日期</th>
-				    	<th  data-options="field:'money',width:100" formatter="formatMoney">付款金额</th>
-				    	<th  data-options="field:'paymoney',width:100" formatter="formatMoney">已结算金额</th>
-				    	<th  data-options="field:'pay_user',width:100" >付款人</th>
-				    	<th  data-options="field:'status',width:30"  formatter="formatStatus">状态</th>
-				    	<th  data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
-				    </tr>	
-			    </thead>
-		</table>
-	</div>
+    <table id="dgs" class="layui-table site-table table-hover " width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>流水号</th>
+            <th>支付方式</th>
+            <th>付款日期</th>
+            <th>付款金额</th>
+            <th>已结算金额</th>
+            <th>付款人</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
 </div>
-<script type="text/javascript">
 
-function formatType(value,row,index){
-	var val;
-	if(value==1){val="在线支付";}else if(value==2){val="线下支付";}
-	return val;
-}
+<!--js区域  -->
+<script>
 
-function formatMoney(value,row,index){
-	var val="￥"+value;
-	return val;
-}
 
-function formatTime(value,row,index){
-	if(value==null||value==0){
-		return "";
-	}
-	else{
-		return getFormatDateByLong(value, "yyyy-MM-dd");
-	}
-}
+var index = parent.layer.getFrameIndex(window.name);
 
-function formatStatus(value,row,index){
-	var val;
-	if(value==2){val="已付款";}else{val="未付款";}
-	return val;
-}
-
-function formatOperation(value,row,index){
-	var val="<a href='#' onclick='paydetail("+row.order_id+")'>查看详细</a>";
-	return val;
-}
-function paydetail(orderId){
-	$("#pay_detail").show();
-　　	$('#pay_detail').dialog({
-　　		title: '付款单',	
-　　		width: 750,
-  		top: 100,
-　　		closed: false,
-　　		cache: false,
-　　		href: '${ctx}/shop/admin/payment/show-dialog.do?orderId='+ orderId, 	
-　　		modal: true
-　　	});
-}
-function pay(){
-	var disabled=  $("#saveBtn").hasClass("l-btn-disabled");
-	if(!disabled ){
-		var paidmoney = $("#paymoney").val();
-		if (parseFloat(paidmoney) == paidmoney) {
-			$("#saveBtn").linkbutton("disable"); 
-			var options = {
-					url :'${ctx}/payment/pay.do',
-					type : "post",
-					dataType : "json",
-					success : function(responseText) {
-						if (responseText.result == 1) {
-							$.Loading.success(responseText.message);
-							$("#pay_detail").dialog('close');
-						}
-						if (responseText.result == 0) {
-							$.Loading.error(responseText.message);
-							$("#saveBtn").linkbutton("enable"); 
-						}
-					},
-					error : function() {
-						$.Loading.error("出错了:(");
-						$("#saveBtn").linkbutton("enable"); 
-					}
-				};
-			$('#order_form').ajaxSubmit(options);
-		} 
-		else {
-			$.Loading.error("您输入的不是数字");
-		}
-	}
-}
-var buttons = $.extend([], $.fn.datebox.defaults.buttons);
-buttons.splice(1, 0, {
-text: '清空',
-handler: function(target){
-	 $('#start_time').datebox('setValue',"");
-}
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+	form.on('submit(highsearch)', function(data){
+		 $(".layui-form-one>ul").remove();
+			$(".high_search").css("display","block");
+			var kelo=$(".kelong ul").clone();
+			kelo.appendTo($(".high_search form"));
+			/* 赋值 */
+			var gjsn=$("#sn").val();
+			$("#sn_one").val(gjsn);
+			  var gjpay=$("#paystatus").find("option:selected").text();
+		       $("#paystatus_one").val(gjpay);
+		       var gjpay=$("#payment_id").find("option:selected").text();
+		       $("#payment_id_one").val(gjpay);
+		       var gjstart=$("#start_time").val();
+		       $("#start_time_one").val(gjstart);
+		       var gjend=$("#end_time").val();
+		       $("#end_time_one").val(gjend);
+		       $(".closeSelf").click(function(){
+					$(this).parent().parent().detach();
+					})
+			
+	});
 });
 
-var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
-	e_buttons.splice(1, 0, {
-	text: '清空',
-	handler: function(target){
-	 $('#end_time').datebox('setValue',"");
-	}
+var table;
+$(function(){
+	
+	 $("#high_search").on("click",function(event){
+	    	event.stopPropagation();
+	     	event.stopImmediatePropagation();
+	        $(".high_searchcontent").toggle();
+	    })
+	
+	table = $('#dgs').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/order-report/payment-list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "order_sn"},
+	        {data: "pay_method"},	        
+	        {data: function(paydata) {
+	        	if(paydata.pay_date==0){
+	        		return "";
+	        	}
+	        	else{
+	        		return getFormatDateByLong(paydata.pay_date, "yyyy-MM-dd");
+	        	}
+	       	}},
+	        {data: "money"},
+	        {data: "paymoney"},
+	        {data: "pay_user"},
+	        {data: null,"render":function(data,type,row){
+	        	var val;
+	    		if(data.status==2){
+	    		  val="已付款"
+	    		}else{
+	    		  val="未付款"
+	    		}
+	    		return val;
+	        }},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='orderId' onclick='paydetail("+row.order_id+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
 	});
-function searchOrder(){
-	var searchtype = $("#Advanced").val();
-	var keyword = $("#searchKeyword").val();
-	var start_time = $('#start_time').datebox('getValue');
-	var end_time = $('#end_time').datebox('getValue');  
+	
+	//layui日期控件配置
+	layui.use('laydate', function(){
+		  var laydate = layui.laydate;
+		  
+		  var start = {
+		    min: '2014-01-01 23:59:59',
+		    max: '2099-06-16 23:59:59',
+		    istoday: false,
+		    choose: function(datas){
+		      end.min = datas; //开始日选好后，重置结束日的最小日期
+		      end.start = datas //将结束日的初始值设定为开始日
+		    }
+		  };
+		  
+		  var end = {
+		    min: '2014-01-01 23:59:59',
+		    max: '2099-06-16 23:59:59',
+		    istoday: false,
+		    choose: function(datas){
+		      start.max = datas; //结束日选好后，重置开始日的最大日期
+		    }
+		  };
+		  
+		  document.getElementById('start_time').onclick = function(){
+		    start.elem = this;
+		    laydate(start);
+		  }
+		  document.getElementById('end_time').onclick = function(){
+		    end.elem = this
+		    laydate(end);
+		  }
+		  
+		});
+});
+
+//查看付款单
+function paydetail(orderId){
+	layer.open({
+        title:"付款单",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:'${ctx}/shop/admin/payment/show-dialog.do?orderId='+ orderId,//内容的URL
+        area:['550px','480px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
+}
+
+//普通搜索
+function _searchPayment(){
+	var keyword = $("#_search").val();
+	var param = "keyword="+keyword+"&stype="+0;
+	var url = table.ajax.url(ctx+"/shop/admin/order-report/payment-list-json.do?"+param);
+	url.load();
+}
+
+//高级搜索
+function _highSearchPayment(){
+	var start_time = $("#start_time").val();
+	var end_time = $("#end_time").val();
 	var sn = $("#sn").val();
 	var paystatus =	$("#paystatus").val();
 	var	payment_id = $("#payment_id").val();
-	if(typeof(end_time)=="undefined"){
-		end_time=start_time;
-	}
+	var param = "start_time="+start_time+"&end_time="+end_time+"&sn="+sn+"&paystatus="+paystatus+"&payment_id="+payment_id;
+	table.ajax.url(ctx+"/shop/admin/order-report/payment-list-json.do?"+param).load();
 
-	if(end_time!="" && end_time<start_time){
-		$.Loading.error("结束时间不能小于开始时间");
-		return false;
-	}
-	$("#dgs").datagrid('load', {
-		 stype:searchtype,
-		 keyword:keyword,
-		 start_time:start_time,
-		 end_time:end_time,
-		 sn:sn,
-		 paystatus:paystatus,
-		 payment_id:payment_id,
-		 page:1
-    });
 }
 
-$(function(){
-	$(".searchAdvanced").hide();
-	//高级查询按钮
-    $("#aAdvanced").click(function () {
-        if ($("#Advanced").val() == "0") {
-            $("#Advanced").val(1);
-            $("#simpleSearch").hide();
-            //$("#aAdvanced").text("简单搜索")
-            $("#aAdvanced").addClass("searchAdvancedS");
-        } else {
-            $("#Advanced").val(0);
-            $("#simpleSearch").show();
-            //$("#aAdvanced").text("高级搜索");
-            $("#aAdvanced").removeClass("searchAdvancedS");
-        }
-        $(".searchAdvanced").slideToggle("slow");
-    });
-    $("#searchBtn").click(function(){
-		$("#searchcbox").show();
-	});
-	
-	$("#closeBtn").click(function(){
-		$("#searchcbox").hide();
-	});
-	
-});
 </script>
-
-<div id="log"></div>
-
 <#include '/admin/footer.html' >
-

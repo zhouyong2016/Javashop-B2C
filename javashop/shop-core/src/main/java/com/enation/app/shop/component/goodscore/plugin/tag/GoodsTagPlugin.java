@@ -1,6 +1,7 @@
 package com.enation.app.shop.component.goodscore.plugin.tag;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.enation.app.shop.core.goods.model.Tag;
 import com.enation.app.shop.core.goods.plugin.AbstractGoodsPlugin;
 import com.enation.app.shop.core.goods.plugin.IGoodsTabShowEvent;
 import com.enation.app.shop.core.goods.service.ITagManager;
@@ -35,8 +37,7 @@ public class GoodsTagPlugin extends AbstractGoodsPlugin implements IGoodsTabShow
 	
 	
 	public String getAddHtml(HttpServletRequest request) {
-		List<Map> taglist=new ArrayList<Map>();
-		
+		List<Map> taglist = new ArrayList<Map>();
 		if(EopSetting.PRODUCT.equals("b2c")){
 			taglist  = this.tagManager.listMap();
 		}else{
@@ -51,8 +52,7 @@ public class GoodsTagPlugin extends AbstractGoodsPlugin implements IGoodsTabShow
 	
 	
 	public String getEditHtml(Map goods, HttpServletRequest request) {
-		List<Map> taglist=new ArrayList<Map>();
-		
+		List<Map> taglist = new ArrayList<Map>();
 		if(EopSetting.PRODUCT.equals("b2c")){
 			taglist  = this.tagManager.listMap();
 		}else{

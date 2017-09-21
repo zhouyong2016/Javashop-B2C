@@ -1,10 +1,19 @@
-
-<div class="easyui-panel" style="border-style:none;" >
+<#include '/admin/sonheader.html' >
+<style>
+select{
+height:25px;
+}
+input{
+height:25px;
+}
+</style>
+<div class="easyui-panel" style="border-style:none;width:99%;" >
 	<div style="float: left; height: 25px;">
 	</div>
-	<div style="padding: 10px 0 10px 60px">
-		<form id="addExpressNoForm" method="post" class="validate" >
-			<table>
+	<div >
+		<form id="addExpressNoForm" class="addExpressNoForm" method="post" class="validate" >
+			<table  class="layui-table">
+				<thead>
 				<tr>
 					<th>订单号</th>
 					<th>收货人</th>
@@ -13,6 +22,7 @@
 					<th>快递公司</th>
 					<th style="text-align: center;">快递单号</th> 
 				</tr>
+				</thead>
 				<#list orderList as order>
 				<tr>
 					<td><input type="hidden" name="order_id" value="${order.order_id }" />${order.sn }  </td>
@@ -20,7 +30,7 @@
 					<td>${order.shipping_type}</td>
 					<td>${order.payment_name}</td>
 					<td>
-						<select name="logi_id" >
+						<select name="logi_id"  class="logi_id">
 							<#list logi_list as logi>
 								<option value="${logi.id}" <#if order.logi_id?? && order.logi_id==logi.id> selected="selected" </#if> >
 									${logi.name}
@@ -29,7 +39,7 @@
 						</select>
 					</td>
 					<td>
-						<input class="easyui-validatebox input_text" maxlength="20"  name="expressno" id="expressno" style="width:120px"  validType="englishCheckSub"
+						<input class="easyui-validatebox input_text expressno_${order_index}" maxlength="20"  name="expressno" id="expressno" style="width:120px"  validType="englishCheckSub"
 							<#if order.ship_no??>
 								value="${order.ship_no }" 
 							</#if>  

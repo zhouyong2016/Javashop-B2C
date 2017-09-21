@@ -10,101 +10,92 @@
     margin-right: 5px;
     padding: 0 20px;
 }
+#addForm{
+padding:10px 0px;
+}
+.layui-input-block{width: 300px}
 </style>
-<div class="input">
-	<form class="validate" id="addForm">
+<div class="admin-main">
+	<form class="layui-form" id="addForm">
 		<input type="hidden" name="id"  disabled="true"  id="menuid"/>
-		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-			<tr>
-				<th><label class="text">名称</label></th>
-				<td>
-					<input type="text" name="title" id="name" maxlength="12" value="" dataType="string" isrequired="true" />
-				</td>
-			</tr>
-			<tr>
-				<th><label class="text">类型</label></th>
-				<td>
-					<select name="menu.menutype">
-						<option value="2">应用</option>
-						<option value="1">系统</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th><label class="text">上级菜单</label></th>
-				<td>
-					<select name="pid" id="pid">
-						<option value="0">顶级菜单</option>
+		
+		<div class="layui-form-item">
+		    <label class="layui-form-label">名称</label>
+		    <div class="layui-input-block" >
+		      <input type="text" name="title" id="name"  value=""   maxlength="12" required  lay-verify="required"  autocomplete="off" class="layui-input">
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">类型</label>
+		    <div class="layui-input-block">
+		        <select name="menu.menutype" lay-verify="required">
+			        <option value="2">应用</option>
+					<option value="1">系统</option>
+		        </select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">上级菜单</label>
+		    <div class="layui-input-block">
+		        <select name="pid" id="pid" lay-verify="required">
+			        <option value="0">顶级菜单</option>
 						<#assign children=menuList />
 						<#assign level=1 />
 						<#assign pid=parentid />
 						<#include 'select_children.html' />
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th><label class="text">url</label></th>
-				<td>
-					<input type="text" name="url" id="url"  maxlength="200" dataType="string"/>
-				</td>
-			</tr>
-			<tr>
-				<th><label class="text">target</label></th>
-				<td><input type="text" name="target" id="target"  maxlength="200"  /></td>
-			</tr>
-			<tr>
-				<th><label class="text">排序</label></th>
-				<td><input type="text" name="sorder" value="0" maxlength="8" style="width: 50px;ime-mode:disabled" dataType="int" isrequired="true" onkeyup="this.value=this.value.replace(/\D/g,'')" /></td>
-			</tr>
-			<tr>
-				<th><label class="text">允许导出</label></th>
-				<td>
-					<select name="canexp">
-						<option value="1">是</option>
-						<option value="0">否</option>
-					</select>
-				</td>
-			</tr>	
-			<tr style="height:70px;">
-				<th><label class="text">图标</label></th>
-				<td>
-				
-					<div class="icon_wrap">
-						<img src="${ctx}/adminthemes/new/images/menu_04.gif" />
-					 	<input type="hidden" id="icon" name="icon" value="default.png">
-					 	<span>正常态</span>
-				 	</div>
-				 	
-				 	点击图标更换
-				</td>
-			</tr>	
-			<tr>
-				<th><label class="text">演示站点是否禁止</label></th>
-				<td>
-					<select name="is_display">
-						<option value="0">否</option>
-						<option value="1">是</option>
-					</select>
-				</td>
-			</tr>				
-		</table>
-		<div class="submitlist" align="center">
-			<table>
-				<tr>
-					<td><input type="button" value=" 确定 " class="submitBtn"
-						id="saveAddBtn" /> <input name="reset" type="reset" value=" 重置 "
-						class="submitBtn" /></td>
-				</tr>
-			</table>
+		        </select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">url</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="url" id="url" maxlength="500"   autocomplete="off"  class="layui-input">
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">target</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="target" id="target"  maxlength="120"   onkeyup="this.value=this.value.replace(/[\u4E00-\u9FA5]/g, '');" autocomplete="off" class="layui-input">
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">排序</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="sorder"  maxlength="8" required  lay-verify="required"  autocomplete="off" dataType="int" class="layui-input" onkeyup="this.value=this.value.replace(/\D/g,'')">
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">允许导出</label>
+		    <div class="layui-input-block">
+		        <select name="canexp" lay-verify="required">
+			        <option value="1">是</option>
+					<option value="0">否</option>
+		        </select>
+		    </div>
+		</div>
+		<div class="layui-form-item" style="display: none;">
+		    <label class="layui-form-label">图标</label>
+		    <div class="layui-input-block icon_wrap" >	     
+		      	<input type="hidden" name="icon" id="menu_icon" value="default.png">
+		      	<img src="${ctx}/adminthemes/new/images/menu_04.gif" style="float:left;" />
+		      	<span>正常态</span>		    
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">演示站点是否禁止</label>
+		    <div class="layui-input-block">
+		        <select name="is_display" lay-verify="required" >
+			        <option value="0">否</option>
+					<option value="1">是</option>
+		        </select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block layui-layer-btn layui-layer-btn-"  >	
+				<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="saveAddBtn">保存</a>
+      			<button type="reset" class="layui-btn layui-btn-primary" style="height:30px;line-height:30px;    padding: 0 15px;
+    margin: 6px 6px 0px;">重置</button>
+		    </div>
 		</div>
 	</form>
-
 </div>
-<script type="text/javascript">
-$(function() {
-	$('#url').validatebox({
-		//required: true,
-		validType: 'length[1,1000]'
-	});
-});
-</script>

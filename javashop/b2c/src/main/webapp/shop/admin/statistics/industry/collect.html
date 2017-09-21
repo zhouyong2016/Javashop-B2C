@@ -1,60 +1,87 @@
 <#include '/admin/header.html' >
-
-
-<div class="main">
-	<!-- 查询条件 -->
-	<div style="display: block;" class="searchAdvanced">
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td>选择分类：
-				<select id="type" onchange="searchCat()"> 
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <!-- <div class="page_explain">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div> -->
+        <!--按钮操作  -->
+        <div class="table_control">
+            <!-- <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div> -->
+            <div class="table_search">
+            <span>选择分类</span>
+            <select id="type" onchange="searchCat()"> 
 				<#if cats??> 
 						<#list cats as cat>
 							<option value="${cat.cat_id}"<#if cat_id==cat.cat_id> selected="selected"</#if>>${cat.name}</option>
 						</#list>
 				</#if>
-				</select></td>
+				</select>
 				
-			</tr>
-		</table>
-	</div>
-	
-	<div class="clear height10"></div>
-	
-	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid" 
-			data-options="url:'${ctx}/shop/admin/industryStatistics/collect-data.do?cat_id=${cat_id}',fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
-			width="width" remoteSort="false" id="orderdata" sortName="sales" sortOrder="desc">
-			<thead>
-				<tr>
-					<th data-options="field:'name',width:70" >名称</th>
-					<th data-options="field:'avgPrice',width:70,sortable:'true',formatter:itemFormatter" >平均价格</th>
-					<th data-options="field:'salesGoodsNum',width:70,sortable:'true'" >有销量商品数</th>
-					<th data-options="field:'sales',width:100,sortable:'true'" >销量</th>
-					<th data-options="field:'saleroom',width:100,sortable:'true'"> 销售额</th>
-					<th data-options="field:'countGoods',width:100,sortable:'true'">商品总数</th>
-					<th data-options="field:'residue',width:100,sortable:'true'"> 无销量商品数</th>
-				</tr>
-			</thead>
-		</table>
-	</div> 
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="brandform">
+    <table id="orderdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>平均价格</th>
+            <th>有销量商品数</th>
+            <th>销量</th>
+            <th>销售额</th>
+            <th>商品总数</th>
+            <th>无销量商品数</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<!-- 显示结果集 --> 
 
+<!--js区域  -->
+<script>
+$(function(){
 	
+	var table = $('#orderdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/industryStatistics/collect-data.do?cat_id=${cat_id}',
+	    },
+	    columns: [ //定义列
+	        {data: "name"},
+	        {data: "avgPrice"},
+	        {data: "salesGoodsNum"},
+	        {data: "sales"},
+	        {data: "saleroom"},
+	        {data: "countGoods"},
+	        {data: "residue"}
+	     ]
+	});
+});
 
-
-<script type="text/javascript">
+//分类选择搜索
 function searchCat(){ 
 	window.location.href="${ctx}/shop/admin/industryStatistics/show-collect.do?cat_id="+$("#type").val(); 
 } 
-function itemFormatter(value, rec) {
-    var f = parseFloat(value);
-    if (isNaN(f)) {
-        return;
-    }
-    return Math.round(f * 100) / 100;
-}
-</script>
 
+</script>
 <#include '/admin/footer.html' >

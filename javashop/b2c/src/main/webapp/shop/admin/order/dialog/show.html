@@ -1,9 +1,18 @@
+<#include '/admin/sonheader.html' > 
 <#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+tbody tr{
+border-bottom:1px solid #ccc;}
+tr th{
+background:#e2e2e2;
+}
+</style>
+
 <div class="main">
 <form id="order_form">
 	<div class="shadowBoxWhite  whiteBox">
-		<div class="detail">
-			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata" style="width: 99%">
+		<div  class="list-form">
+			<table  border="1" id="orderbasedata" style="width: 99%" class="layui-table site-table table-hover" lay-skin="row" >
 				  <tbody>
 					 	<tr>
 						    <th>订单号：</th>
@@ -27,8 +36,8 @@
 			</table>
 		</div>
 	<br>
-	<div class="detail" >
-		<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata" id="paydata" style="width: 99%">
+	<div class="list-form" >
+		<table  border="1" id="orderbasedata" id="paydata" class="layui-table site-table table-hover"   style="width: 99%" lay-skin="line">
 			<thead>
 				<tr>
 					<th formatter="formatdate">付款日期</th>
@@ -57,3 +66,4 @@
 		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
 	}
 </script>
+<#include '/admin/footer.html' >

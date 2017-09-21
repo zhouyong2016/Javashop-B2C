@@ -26,6 +26,7 @@ public class Floor implements Serializable{
 	private String props;//搜索条件数据存放
 	private String brand_ids;//品牌id json串
 	private String adv_ids;//广告id json串
+	
 	public Integer getId() {
 		return id;
 	}

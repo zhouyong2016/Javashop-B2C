@@ -53,5 +53,11 @@ public interface ILogiManager {
 	public Logi getLogiById(Integer id);
 
 	public Logi getLogiByCode(String code);
+	/**
+	 * 根据物流名称查询物流信息
+	 * @param name
+	 * @return
+	 */
+	public Logi getLogiByName(String name);
 	
 }

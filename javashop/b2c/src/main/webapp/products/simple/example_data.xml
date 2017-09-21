@@ -14579,7 +14579,7 @@
 		<command>insert</command>
 		<table>es_member</table>
 		<fields>member_id,parentid,lv_id,uname,email,password,regtime,name,sex,advance,province_id,city_id,region_id,mobile,point,mp,lastlogin,is_agent,logincount,is_cheked,registerip,recommend_point_state,info_full,face,midentity,disabled</fields>
-		<values>2,0,1,'demowhj','sdkjfh1296356@qq.com','96e79218965eb72c92a549dd5a330112',1448325889,'demowhj',1,0.00,1,2816,2862,'',65,65,1450586775,0,3,0,'0:0:0:0:0:0:0:1',0,0,'demowhj',0,0</values>
+		<values>2,0,1,'demowhj','sdkjfh1296356@qq.com','96e79218965eb72c92a549dd5a330112',1448325889,'demowhj',1,0.00,1,2816,2862,'',65,65,1450586775,0,3,0,'0:0:0:0:0:0:0:1',0,0,'',0,0</values>
 	</action>
 	<action>
 		<command>insert</command>
@@ -14654,34 +14654,34 @@
 	<action>
 		<command>insert</command>
 		<table>es_payment_cfg</table>
-		<fields>id,name,config,biref,type</fields>
+		<fields>id,name,config,biref,type,is_retrace</fields>
 		<values>1,'支付宝','{"callback_encoding":""!comma;"return_encoding":""!comma;"partner":"test"!comma;"seller_email":"test"!comma;"key":"test"}','&lt;p&gt;
 	相关参数请到后台修改&lt;/p&gt;
-','alipayDirectPlugin'</values>
+','alipayDirectPlugin',1</values>
 	</action>
 	<action>
 		<command>insert</command>
 		<table>es_payment_cfg</table>
-		<fields>id,name,config,biref,type,pay_img</fields>
+		<fields>id,name,config,biref,type,pay_img,is_retrace</fields>
 		<values>2,'快钱','{"callback_encoding":"UTF-8"!comma;"ajax":"yes"!comma;"return_encoding":"UTF-8"!comma;"privateKey":"123456"!comma;"keyPwd":"123456"!comma;"partner":"test"!comma;"key":"test"!comma;"url":"http://baidu.com"}','&lt;p&gt;   keyPwd
 	请到后台修改相关参数&lt;/p&gt;
-','billPlugin','fs:/attachment/payment/kuaiqian.png'</values>
+','billPlugin','fs:/attachment/payment/kuaiqian.png',0</values>
 	</action>
 	<action>
 		<command>insert</command>
 		<table>es_payment_cfg</table>
-		<fields>id,name,config,biref,type,is_online</fields>
+		<fields>id,name,config,biref,type,is_online,is_retrace</fields>
 		<values>3,'货到付款','{}','&lt;p&gt;
 	请到后台修改相应参数&lt;/p&gt;
-','cod',0</values>
+','cod',0,0</values>
 	</action>
 	<action>
 		<command>insert</command>
 		<table>es_payment_cfg</table>
-		<fields>id,name,config,biref,type,is_online</fields>
+		<fields>id,name,config,biref,type,is_online,is_retrace</fields>
 		<values>4,'银行汇款','{}','&lt;p&gt;
 	工商银行：8888888，户名test&lt;/p&gt;
-','offline',0</values>
+','offline',0,0</values>
 	</action>
 	<action>
 		<command>insert</command>
@@ -15604,5 +15604,24 @@
 		<table>es_style</table>
 		<fields>id,style,path,is_top_style,is_default_style,page_id</fields>
 		<values>3,'style2','/floorstyle/style2.html',0,0,1</values>
+	</action>
+	<!-- 发票内容 -->
+	<action>
+		<command>insert</command>
+		<table>es_receipt_content</table>
+		<fields>contentid,receipt_content</fields>
+		<values>1,'办公用品'</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_receipt_content</table>
+		<fields>contentid,receipt_content</fields>
+		<values>2,'劳保用品'</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_receipt_content</table>
+		<fields>contentid,receipt_content</fields>
+		<values>3,'耗材'</values>
 	</action>
 </dbsolution>

@@ -1,0 +1,113 @@
+<div class="division">
+    <table cellspacing="0" cellpadding="0" border="0">
+      
+      <tbody>
+      <tr>
+        <th >商品总额：</th>
+        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+       	 	${order.goods_amount?string("currency")}
+        </td>
+      </tr>
+      
+      <tr>
+        <th >配送费用：</th>
+        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+        	<span style="float: left;">￥</span>
+        	<span id="order_shipmoney_span" price="${order.shipping_amount}" >${order.shipping_amount?string("0.00")}</span>
+        </td>
+      </tr>
+       <tr>
+	        <th>订单总额：</th>
+	        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	        	<span style="float: left;">￥</span>
+	        	<span id="order_price_span" price="${order.order_amount}">${order.order_amount?string("0.00")}</span>
+        	</td>
+      </tr>
+		<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+		<#assign creditIsOn=checkCmptIsOnTag("{'componentName':'余额支付组件'}") />
+		<#if creditIsOn=="ON" >
+		<#assign orderCreditPayTag = newTag("orderCreditPayTag") />
+		<#assign orderCreditPay = orderCreditPayTag("'order_id':${order.order_id}") />
+		<tr>
+	        <th>余额抵扣：</th>
+	        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	        		<span style="float: left;">￥</span>
+	        		<span id="order_credit_span" price="${orderCreditPay}">${orderCreditPay?string("0.00")}</span>
+        		</td>
+      	</tr>
+		</#if>
+		
+		
+       <tr>
+	        <th>优惠金额：</th>
+	        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	         
+	        	<span>${order.discount?string("currency")}</span>
+        	</td>
+      </tr>
+      <!-- 新增促销活动减去的现金信息 by_DMRain 2016-6-13 -->
+      <#if order.act_discount?exists && order.act_discount != 0>
+      <tr>
+	        <th>促销减额：</th>
+	        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	         
+	        	<span>${order.act_discount?string("currency")}</span>
+        	</td>
+      </tr>
+      </#if>
+      <tr>
+	        <th>应付金额：</th>
+	        <td style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+	        	 
+	        	<span>${order.need_pay_money?string("currency")}</span>
+        	</td>
+      </tr>
+      
+      <tr>
+        <th >已支付金额：</th>
+        <td>
+        ${order.paymoney?string("currency")}
+        </td>
+      </tr> 
+      </tbody>
+      </table>
+</div>
+<script type="text/javascript">
+<#if order.ship_status==SHIP_NO&&order.pay_status==PAY_NO>
+	<@permssion actid="order"> 
+	$(function(){
+		$("#order_shipmoney_span").AjaxEditor('${ctx}/shop/admin/order/save-ship-money.do?orderId='+$("#orderid").val(),"shipmoney",function(oldvalue,newvalue){
+			if(!/^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(newvalue)){
+				$.Loading.error("请输入正确的配送金额!");
+				return false;
+			}else if(newvalue==""){
+				$.Loading.error("金额不能为空")
+				return false;
+			}else if(newvalue.length>10){
+				$.Loading.error("输入金额过大");
+				$(this).val(oldvalue);
+				return false;
+			}else{
+				return true;
+			}
+		});
+		$("#order_price_span").AjaxEditor('${ctx}/shop/admin/order/save-price.do?orderId='+$("#orderid").val(),"price",function(oldvalue,newvalue){
+			if(!/^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(newvalue)){
+				$.Loading.error("请输入正确的订单金额!");
+				return false;
+			}else if(newvalue==""){
+				$.Loading.error("金额不能为空")
+				return false;
+			}else if(newvalue.length>10){
+				$.Loading.error("输入金额过大");
+				$(this).val(oldvalue);
+				return false;
+			}else{
+				return true;
+			}
+		});
+	});
+  	</@permssion>
+</#if>
+
+</script>

@@ -1,0 +1,46 @@
+ <!-- 团购列表 -->
+<#assign groupBuyListTag=newTag("groupBuyListTag")> 
+<#assign gbPage=groupBuyListTag()>
+<!-- 团购活动列表 -->
+<div class="group-list">
+	<ul>
+		<#if gbPage??>
+		<#list gbPage.page.result as gb>
+			<li class="c1">
+				<div class="g-list-content"> 
+					<a target="_blank" class="pic-thumb" href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}" title="${gb.gb_name}">
+						<@image border="0" src="${gb.img_url!''}"  alt="${gb.gb_name!''}" />
+					</a>
+					<h3 class="title"><a target="_blank" href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}" title="${gb.gb_name}">${gb.gb_name}</a></h3>
+					<div class="item-prices"> 
+						<span class="price"><i>¥</i>${gb.price}</span>
+						<div class="dock"><span class="limit-num">${gb.price/gb.original_price*10}&nbsp;折</span> <del class="orig-price">¥${gb.original_price}</del></div>
+						<span class="sold-num"><em>${gb.buy_num}</em>件已购买</span>
+						<a class="buy-button" target="_blank" href="${ctx}/groupbuy/groupbuy_goods.html?gbid=${gb.gb_id}">我要团</a>
+					</div>
+				</div>
+			</li>
+		</#list>
+		</#if>
+	</ul>
+</div>
+ <!--分页-->
+<div class="tc mt20 mb20">
+	<div class="pagination"> 
+		<ul>
+			<li><span>首页</span></li>
+			<li><span>上一页</span></li>
+			<li><span class="currentpage">1</span>
+			</li><li><span>下一页</span></li>
+			<li><span>末页</span></li>
+		</ul> 
+	</div>
+</div>
+<form >
+	<input type="hidden" name="catid" value="${gbPage.catid}"/>
+	<input type="hidden" name="minprice" value="${gbPage.minprice}"/>
+	<input type="hidden" name="maxprice" value="${gbPage.maxprice}"/>
+	<input type="hidden" name="sort_key" value="${gbPage.sort_key}"/>
+	<input type="hidden" name="sort_type" value="${gbPage.sort_type}"/>
+	<input type="hidden" name="area_id" value="${gbPage.area_id}"/>
+</form>

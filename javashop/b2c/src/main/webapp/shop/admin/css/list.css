@@ -1,0 +1,109 @@
+.admin-main{
+	background: #EEEFF3;
+	width: 100%;
+}
+.paperbox{
+   width: 20%;
+    height: 510px;
+    border: 1px solid #ccc;
+    margin: 20px 10px 32px 0px;
+    background: white;
+    float: left;
+    box-shadow: 0px 1px 3px rgba(4,4,4,0.3);
+}
+.paperbox-s{
+	border-bottom: 1px solid #ccc;
+	height: 40px;
+	width: 100%;
+   box-shadow: 0px 0px 3px rgba(4,4,4,0.1);
+	
+}
+.paperbox-s span{
+	font-size: 14px;
+	margin: 8px 35px 16px 10px;
+	float: left;
+}
+
+.node{
+	width: 100%;
+	margin-top: 10px;
+}
+.zTreeDemoBackground{
+	width: 100%;
+}
+.layui-btn{
+text-decoration: none;
+}
+.classification{
+	width: 100%;
+	height: 40px;
+	background: white;
+	float: left;
+	border: 1px solid #ccc;
+	box-shadow: 0px 0px 3px rgba(4,4,4,0.1);
+}
+.article{
+	width: 75%;
+	 border: 1px solid #ccc;
+	height: 510px;
+	background: white;
+	float: left;
+	margin-top: 20px;
+		box-shadow: 2px 3px 3px rgba(4,4,4,0.1);
+}
+.classification span{
+	font-size: 14px;
+   line-height: 40px;
+  width:50%;
+  display:inline-block;
+  margin-left:25px;
+}
+.classification a{
+	border-radius: 5px;
+	width: 20%;
+
+}
+.classification input{
+	width: 45%;
+	height: 30px;
+	line-height:27px;
+}
+/* 该样式影响帮助中心,文章管理搜索的样式，故：注销 */
+/* .classification button{
+   display: inline;
+   margin-top: 0px;
+   margin-left: -4px;
+   height: 29px;
+   width: 10%; 
+} */
+.layui-input, .layui-textarea{
+	display:inline;
+}
+.list-form{
+	width: 100%;
+	height:50%;
+	text-align: center;
+}
+.col-sm-7 li{
+	float: left;
+	list-style: none;
+}
+
+.anniu{
+	margin-top: 7%;
+	margin-left: 80%;
+}
+.number{
+	width: 45px;
+	height: 28px;
+	background: none;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	color: #ccc;
+}
+.digital{
+	 background: #4696D4;
+	 color: white;
+	 width: 27px;
+	 height: 33px;
+}

@@ -1,38 +1,119 @@
-<div class="main" style="background-color: white;" >
-	<div class="easyui-panel" style="border-style: none;">
-	<style>
-		.goods_brand{width:90px;}
-	</style>
-		<div style="padding: 10px 0 10px 20px">
-			<form id="brandForm" method="post" class="validate" enctype="multipart/form-data" >
-				<table>
-					<tr>
-						<td class="goods_brand">品牌名称</td>
-						<td><input class="input_text easyui-validatebox" type="text" id="name"
-							name="name" value="" data-options="required:true" maxlength="25"
-							></input></td>
-					</tr>
-					<tr>
-						<td class="goods_brand">品牌网址：</td>
-						<td><input class="easyui-validatebox input_text" type="text" id="url" value="http://"
-							name="url" data-options="required:true,validType:'url'" maxlength="100" 
-							></input></td>
-					</tr>
-					<tr>
-						<td class="goods_brand">品牌LOGO：</td>
-						<td>
-							<input class="easyui-validatebox" type="file" id="file" name="file" data-options="required:false"></input>
-						</td>
-					</tr>
-					<tr>
-						<td class="goods_brand">详细说明</td>
-						<td>
-							<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;"></script>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
-	</div>
+<#include '/admin/sonheader.html' >
+<style>
+.layui-box .layui-upload-button form{
+margin-bottom:0px;
+}
+</style>
+<script type="text/javascript">
+	var ue = UE.getEditor('editor');
+</script>
+<div class="main">
+    <!--表单区域  -->
+	<form id="brandForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">品牌名称</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="name" name="name" maxlength="25" lay-verify="name" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">品牌网址</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="url" value="http://" name="url" maxlength="100" lay-verify="url" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">品牌LOGO</label>
+    		<div class="layui-box layui-upload-button" style="line-height:36px;">
+		    	<input type="file" name="file" id="uploadBtn_image" style="float: left;height:38px;">
+		    	<input type="hidden" name="logo" id="logo" value="${imgPath!''}">
+			    	<span class="layui-upload-icon" >
+			    			<i class="layui-icon"></i>上传图片
+			    	</span>
+		    </div>
+			<div style="height: 100px; overflow: hidden;margin-top:10px; ">
+				<img id="img_fieldname" name="img_fieldname" style="height: 100px;margin-left:110px;" src="${ctx}/cms/admin/images/transparent.gif" />
+			</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">详细信息</label>
+    		<div class="layui-input-block">
+      			<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;"></script>
+    		</div>
+  		</div>
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;padding:8px 12px;position: fixed;left: 1px;width: 97%;height: 50px; background:rgba(230,230,230,0.8)"> 
+    		<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="savebrand">保存</a>
+  			<a class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
 </div>
-
+<script type="text/javascript">	
+$(function(){
+	var index = parent.layer.getFrameIndex(window.name);
+	
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	    
+	    form.render(); 
+	    
+	
+	    //自定义验证规则
+	    form.verify({
+	    	url: function(value){
+	        if(value=="http://"){
+	          return '请输入有效的url';
+	        }
+	      },
+	      name:function(value){
+	    	  if($.trim(value)==""){
+	    		  return '请输入品牌名称';
+	    	  }
+	      }
+	    });
+	    
+	    $(".layui-layer-btn1").click(function(){
+	    	parent.layer.close(index);
+	    });
+	    
+	    //监听提交
+	    form.on('submit(savebrand)', function(data){
+	    	var options = {
+	   			url:ctx+"/shop/admin/brand/save.do?",
+	   			type:"post",
+	   			dataType:"json",
+	   			success:function(data){
+	   				if(data.result==1){	
+	   					parent.$.Loading.success("添加成功");
+	   					parent.layer.close(index); //再执行关闭        
+	   					parent.table.ajax.url(ctx+"/shop/admin/brand/list-json.do").load();
+	   				}else{
+	   					parent.$.Loading.error(data.message);
+	   				}
+	   			}
+	   		};
+	   		$("#brandForm").ajaxSubmit(options);
+	       return false;
+	    });
+	});
+	
+	$("#uploadBtn_image").click(function(){
+		layui.use('upload', function(){
+		layui.upload({
+		    url: '${ctx}/eop/upload/upload-file.do?ajax=1&subFolder=brand'
+		    ,elem: '#uploadBtn_image' //指定原始元素，默认直接查找class="layui-upload-file"
+		    ,method: 'post' //上传接口的http类型
+		    ,success: function(res){
+		    	$("#img_fieldname").attr("src",res.path);
+		    	$("#logo").val(res.path);
+		    }
+		 });
+	});
+	});
+});
+</script>

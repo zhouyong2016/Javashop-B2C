@@ -1,0 +1,156 @@
+<div class="refer_detial">
+					<!--左侧大图片及缩略图-->
+					${widget_goods_gallery}
+					<!--左侧大图片及缩略图结束-->
+					<!--右侧各种信息-->
+					<div class="re_right">
+						<div class="rer_top">
+							<!--商品名称-->
+							<h2>${goods.name}</h2>
+							<!--商品名称结束-->
+							<h3>商品编号：${goods.sn}　库存：14444　现货：<span>(${goods.store})</span>盒/需定制</h3>
+							<p>计价单位：<a href="#" class="rer_explain">计价单位说明</a></p>
+							<p>市场售价：${goods.price?string("currency")}元</p>
+							<p>美睛售价：<b>${goods.mktprice?string("currency")}</b>元　(为您节省24元)</p>
+							<p>VIP价：${goods.cost}元</p>
+							<p>赠送积分：${goods.point}分</p>
+							<div>
+								<span>邮至：</span>
+								<span class="rer_address">
+									<a href="#">北京</a>
+									<ul>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+										<li><a href="#">上海</a></li>
+									</ul>
+								</span>
+								<span>　快递：5元　EMS：20元</span>
+							</div>
+						</div>
+						<div class="rer_bottom">
+							<div class="rer_quantity">
+								<label>订购数量：</label>
+								<a href="#" class="rer_subtract"></a>
+								<input type="text" name="number" class="number">
+								<a href="#" class="rer_add"></a>
+							</div>
+							<div class="rer_botton">
+								<input type="button" class="btn returnbuy_btn" value="继续购物">		
+								<input type="button" class="btn checkout_btn" value="去结算">
+							</div>
+						</div>
+						<div class="rer_partake">
+							<h2>分享到：</h2>
+							<ul>
+								<li><a href="#" class="rer_a"></a></li>
+								<li><a href="#" class="rer_b"></a></li>
+								<li><a href="#" class="rer_c"></a></li>
+								<li><a href="#" class="rer_d"></a></li>
+								<li><a href="#" class="rer_e"></a></li>
+								<li><a href="#" class="rer_f"></a></li>
+								<li><a href="#" class="rer_g"></a></li>
+								<li><a href="#" class="rer_h"></a></li>
+								<li><a href="#">QQ/MSN</a></li>
+							</ul>
+						</div>
+					</div>
+					<!--右侧各种信息结束-->
+				</div>
+				
+<div class="add_success_msg" style="display:none">
+<div >
+	<div class="message">
+		恭喜，该商品已添加到您的购物车！
+	</div>
+	<div class="button_wrapper">
+		<input type="button" class="btn returnbuy_btn" value="继续购物">		
+		<input type="button" class="btn checkout_btn" value="去结算">
+	</div>
+</div>	
+</div>
+
+<script>
+
+function showAddSuccess(btnx,btny){
+	var html = $(".add_success_msg").html();
+	$.dialog({ title:'提示信息',content:html,left:btnx,top:btny,init:function(){
+		var self = this;
+		$(".ui_content .btn").jbtn();
+		$(".ui_content .returnbuy_btn").click(function(){
+			self.close();
+		});
+
+		$(".ui_content .checkout_btn").click(function(){
+			location.href="cart.html";
+		});
+		
+	}});
+	
+}
+$(function(){
+
+$("#addbutton").click(function(){	
+	
+	
+	var $this= $(this); 
+	var btnx = $this.position().left;
+	var btny =  $this.position().top; 
+	$.Loading.show("请稍候...");
+	 
+ 
+  $this.attr("disabled",true);
+
+	var options={
+			url:"widget?type=shop_cart&action=add&ajax=yes",
+			dataType:"json",		
+			success:function(result){
+				$.Loading.hide();
+				if(result.result==1){
+					showAddSuccess(btnx,btny);
+				}else{
+					$.dialog.alert("发生错误:"+result.message) 
+				}
+				$this.attr("disabled",false);
+			},
+			error:function(){
+				$.Loading.hide();
+				$.alert("抱歉,发生错误")
+				$this.attr("disabled",false);
+			}
+	}
+	
+	$("#goodsform").ajaxSubmit(options);
+	 
+
+	
+});
+//相册缩略图滑动
+ <#if galleryList?size gt 4 > 
+	$("#detail_wrapper .gallery .thumblist").jCarouselLite({
+        btnNext: ".left-control",
+        btnPrev: ".right-control",
+		visible:4
+    });
+</#if> 
+
+//相册放大切换
+$("#detail_wrapper .gallery .thumblist li").click(function(){
+	var $this = $(this);
+	var img  = $this.children("img");
+	var zoom = document.getElementById('zoom'); //get the reference to our zoom object
+    MagicZoom.update(zoom, img.attr("big"), img.attr("small"), 'show-title: false'); 
+	$this.addClass("selected").siblings().removeClass("selected");
+});	 
+
+	
+});
+</script>		

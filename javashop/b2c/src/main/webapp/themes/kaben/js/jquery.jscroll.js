@@ -5,9 +5,7 @@
  * http://www.winwill.com/jquery/jscroll.html
  * admin@winwill.com
  */
-jQuery.browser={};(function(){jQuery.browser.msie=false; jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
 /*--------------------------------------------------------------------------------------------------*/
-
 $.fn.extend({//添加滚轮事件//by jun
 	mousewheel:function(Func){
 		return this.each(function(){

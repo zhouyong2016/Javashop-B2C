@@ -1,0 +1,65 @@
+
+.main{
+	background-color: white;
+	margin-top:10px;
+}
+
+form{
+	margin-left: 10px;
+	margin-bottom: 62px;
+}
+
+.layui-layer-btn{
+	padding: 8px 12px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+
+
+._upfile{
+	display:block;
+	float:left;
+	margin-top:8px;
+	width: 180px;
+}
+
+.buttonWrap{
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+	padding: 3px 0;
+	text-align:center;
+}
+
+._left{
+	float:left!important;
+}
+
+._fullwidth{
+	width:100%;
+}
+
+._inline{
+	display:inline;
+}
+
+.layui-form-pane .layui-input:focus, .layui-form-pane .layui-textarea:focus{
+    border-radius: 2px;
+    border-color: #01AAED!important;
+ }
+
+.padding-bottom{
+	padding-bottom: 10px;
+}
+
+.basic-config{
+	width:100%;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+.more-infor .layui-form-item{
+	display:block;
+	width:100%;
+}

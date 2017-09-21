@@ -2,7 +2,6 @@
 <#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
 <#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'团购组件'}") />
 <#assign exchangeIsOn =checkCmptIsOnTag("{'componentName':'积分兑换组件'}") />
-<#assign linkgoodsOn =checkCmptIsOnTag("{'componentName':'关联商品组件'}") />
 <#-- 创建商品基本信息标签 -->
 <#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
 <#-- 调用标签获取商品基本信息 -->
@@ -10,8 +9,8 @@
 <#assign goods_id = goods.goods_id />
 <#--获取积分商品配置 -->
 <#if exchangeIsOn=="ON">
-	<#assign exchangeSettingTag=newTag("exchangeSettingTag") >
-	<#assign exchangeSetting=exchangeSettingTag("'goods_id':'${goods.goods_id!''}'")!'' >
+				<#assign exchangeSettingTag=newTag("exchangeSettingTag") >
+				<#assign exchangeSetting=exchangeSettingTag("'goods_id':'${goods.goods_id!''}'")!'' >
 </#if>
 <#if  goods.page_title?? && goods.page_title!="" >
 	<#assign  title="${goods.page_title}" />
@@ -87,14 +86,9 @@
 
 <#if groupbuyIsOn=="ON">
 	<#-- 团购标签 -->
-	<#assign groupBuyActTag=newTag("groupBuyActTag")>
-	<#assign groupBuyAct=groupBuyActTag()>
-	<!-- 此时间内存在团购活动的时候再判断商品是否在此团购活动中 lyh 2017.5.3 -->
-	<#if groupBuyAct!="">
-		<#if goods.is_groupbuy??&&goods.is_groupbuy==1>
-	  	 <#assign groupBuyTag=newTag("groupBuyTag")>
-	 	  <#assign groupBuy=groupBuyTag("{'goodsid':${goods.goods_id} }")>
-		</#if>
+	<#if goods.is_groupbuy??&&goods.is_groupbuy==1>
+	   <#assign groupBuyTag=newTag("groupBuyTag")>
+	   <#assign groupBuy=groupBuyTag("{'goodsid':${goods.goods_id} }")>
 	</#if>
 </#if>
 
@@ -114,51 +108,6 @@
 	</div>
 	<!-- 商品详细 -->
 	<#include 'detail/goods_detail.html' />
-	
-		<#if linkgoodsOn=="ON">
-			<#assign linkGoodsTag=newTag("linkGoodsTag")>
-			<#assign linkGoodsList=linkGoodsTag("{'goods_id':${goods.goods_id}}")> 
-		</#if>
-		
-		 <#if linkgoodsOn=="ON">
-		 	<script src="${ctx}${themes_path}/js/scroll.1.3.js"></script>
-           	<#if (linkGoodsList?size>0)>
-	  			<div class="linkgoods-box">
-	  				<h3><span>相关商品</span></h3>
-	  				<div class="linkgoods">
-	  					<div class="link-left"></div>
-	  					<div class="link-middel" id="link-box">
-		  					<ul id="linkgoods-list">
-				  				<#list linkGoodsList as linkgoods>
-									<li>
-										<a  href="${ctx}/goods-${linkgoods.link_goods_id}.html"  title="${linkgoods.name}" >
-				  							<@image src="${linkgoods.thumbnail!''}" alt="${linkgoods.name}"/>
-				  						</a>
-				  						<p><a  href="${ctx}/goods-${linkgoods.link_goods_id}.html"  title="${linkgoods.name}" ><@substring title="${linkgoods.name}" length="20" dot="..." /></a></p>
-									</li>
-				  				</#list>
-							</ul>
-						</div>
-						<div class="link-right"></div>
-	  				</div>
-	  			</div>
-	  			<script>
-					$(function(){
-						$("#linkgoods-list").dayuwscroll({
-							parent_ele:'#link-box',
-							pre_btn:'.link-left',
-							next_btn:'.link-right',
-							path: 'left',
-							time:3000,
-							num:6,
-							gd_num:6,
-							waite_time:1000
-						});
-					});
-					</script>	
-  			</#if>
-           </#if>
-	
 	<div class="main-details">
 		<div class="main-details-left">
 			<div class="details-left-same">
@@ -185,7 +134,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<div class="rer-detail float-nav">
 			<div class="nav content-main-tit" id="comment-tab">
 				<span class="selected goods_d" rel="1">商品详情</span>

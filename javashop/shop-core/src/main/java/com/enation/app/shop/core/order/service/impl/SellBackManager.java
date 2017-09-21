@@ -16,9 +16,9 @@ import com.enation.app.shop.core.member.service.IMemberPointManger;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.OrderItem;
 import com.enation.app.shop.core.order.model.Refund;
+import com.enation.app.shop.core.order.model.SellBack;
 import com.enation.app.shop.core.order.model.SellBackChild;
 import com.enation.app.shop.core.order.model.SellBackGoodsList;
-import com.enation.app.shop.core.order.model.SellBack;
 import com.enation.app.shop.core.order.model.SellBackLog;
 import com.enation.app.shop.core.order.model.SellBackStatus;
 import com.enation.app.shop.core.order.plugin.order.OrderPluginBundle;
@@ -236,6 +236,7 @@ public class SellBackManager implements ISellBackManager {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Log(type=LogType.ORDER,detail="订单号为${sellBack.ordersn}由${sellBack.regoperator}退货申请，申请退款金额：${sellBack.apply_alltotal}")
 	public Integer addSellBack(SellBack sellBack,List<SellBackGoodsList> goodsList ){
 
 		/**
@@ -320,7 +321,7 @@ public class SellBackManager implements ISellBackManager {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Log(type=LogType.ORDER,detail="订单号为${sellBack.ordersn}的退货申请")
+	@Log(type=LogType.ORDER,detail="订单号为${sellBack.ordersn}由${sellBack.regoperator}退货申请，申请退款金额：${sellBack.apply_alltotal}")
 	public Integer addSellBackAdmin(SellBack sellBack,List<SellBackGoodsList> goodsList ){
 
 
@@ -394,7 +395,7 @@ public class SellBackManager implements ISellBackManager {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Log(type=LogType.ORDER,detail="订单号为${data.ordersn}申请退货")
+	@Log(type=LogType.ORDER,detail="订单号为${data.ordersn}申请退货,金额：${data.apply_alltotal}")
 	public void apply(SellBack data) {
 		//更新状态
 		this.daoSupport.update("es_sellback_list", data,"id=" + data.getId()); 
@@ -676,7 +677,7 @@ public class SellBackManager implements ISellBackManager {
 	 * @see com.enation.app.shop.core.order.service.ISellBackManager#addRetund(com.enation.app.shop.core.order.model.SellBackList)
 	 */
 	@Override
-	@Log(type=LogType.ORDER,detail="订单ID为${sellBackList.ordersn}申请退款")
+	@Log(type=LogType.ORDER,detail="订单ID为${sellBackList.ordersn}由${sellBackList.regoperator}申请退款,金额：${sellBackList.apply_alltotal}")
 	public void addSellBack(SellBack sellBackList) {
 		Order order  = this.orderManager.get(sellBackList.getOrderid());
 		sellBackList.setOrdersn(order.getSn());
@@ -735,7 +736,7 @@ public class SellBackManager implements ISellBackManager {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
-	@Log(type=LogType.ORDER,detail="ID为${id}平台售后申请审核")
+	@Log(type=LogType.ORDER,detail="平台售后已审核")
 	public void authRetund(Integer id, Integer status,String seller_remark) {
 		
 		//更改售后申请状态记录操作备注
@@ -763,9 +764,9 @@ public class SellBackManager implements ISellBackManager {
 		//审核通过创建退款单
 		if(status==1){
 			if (type == 1) {
-				log = "申请退款，通过";
+				log = "申请退款，通过，申请退款金额："+sellBackList.getApply_alltotal();
 			} else if (type == 2) {
-				log = "申请退货，通过";
+				log = "申请退货，通过，申请退款金额："+sellBackList.getApply_alltotal();
 			}
 			
 			//后台审核后，如果是单店系统，就创建退款单，多店系统不创建退货单，add_by DMRain 2016-7-21
@@ -773,7 +774,7 @@ public class SellBackManager implements ISellBackManager {
 				this.addRefund(id);
 			}
 			
-			orderManager.addLog(sellBackList.getOrderid(), log, UserConext.getCurrentAdminUser().getUsername() );
+			orderManager.addLog(sellBackList.getOrderid(), log, UserConext.getCurrentAdminUser().getUsername());
 			
 			/**
 			 * 判断退货单中的赠品id是否为空,如果不为空，就改变订单赠品状态为已完成退货
@@ -984,7 +985,6 @@ public class SellBackManager implements ISellBackManager {
 		Refund refund=new Refund();
 		refund.setSn(DateUtil.toString(DateUtil.getDateline(),"yyMMddhhmmss"));
 		refund.setMember_id(sellBackList.getMember_id());
-		refund.setRefund_way(sellBackList.getRefund_way());
 		refund.setReturn_account(sellBackList.getReturn_account());
 		refund.setRefund_money(sellBackList.getApply_alltotal());
 		refund.setSellback_id(sellBackList.getId());
@@ -992,6 +992,9 @@ public class SellBackManager implements ISellBackManager {
 		refund.setCreate_time(DateUtil.getDateline());
 		refund.setOrder_id(sellBackList.getOrderid());
 		refund.setStatus(0);
+		Order order=this.orderManager.get(sellBackList.getOrdersn());
+		refund.setRefund_type(order.getPayment_type());
+		refund.setRefund_way(sellBackList.getRefund_way());
 		refundManager.addRefund(refund);
 	}
 	
@@ -1000,5 +1003,20 @@ public class SellBackManager implements ISellBackManager {
 	public void editSellBackDepotId(Integer id, Integer order_id) {
 		String sql = "update es_sellback_list set depotid=? where orderid =?";
 		this.daoSupport.execute(sql, id, order_id);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.order.service.ISellBackManager#saveLogBySystem(java.lang.Integer, java.lang.String)
+	 */
+	@Override
+	public void saveLogBySystem(Integer recid, String logdetail) {
+		SellBackLog sellBackLog = new SellBackLog();
+
+		sellBackLog.setRecid(recid);
+		sellBackLog.setLogdetail(logdetail);
+		sellBackLog.setLogtime(DateUtil.getDateline());
+		sellBackLog.setOperator("系统检测");
+		this.daoSupport.insert("es_sellback_log", sellBackLog);
+		
 	}
 }

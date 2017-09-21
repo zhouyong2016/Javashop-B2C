@@ -83,7 +83,6 @@ public class PaymentController {
 		view.addObject("paymentList",  this.orderReportManager.listPayMentDetail(payment_id));
 		view.addObject("metaList", orderMetaManager.list(ord.getOrder_id()));
 		view.addObject("showMoney", CurrencyUtil.sub(payment.getMoney(), payment.getPaymoney()));
-		
 		view.setViewName("/shop/admin/order/dialog/pay");
  		return view;
 

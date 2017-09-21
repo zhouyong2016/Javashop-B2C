@@ -1,5 +1,4 @@
-﻿
-a,span{font-family:"微软雅黑";color:#333;}
+﻿a,span{font-family:"微软雅黑";color:#333;}
 
 
 .main .login_new{width:940px;margin:30px auto;height:400px;}
@@ -50,9 +49,6 @@ a,span{font-family:"微软雅黑";color:#333;}
     width: 230px;
     color: #ccc;
     background-color: #fff;
-    float:left;
-    height:24px;
-    line-height:24px;
 }
 .login_window .selected{
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 5px rgba(240, 127, 5, 0.4);
@@ -260,23 +256,3 @@ a,span{font-family:"微软雅黑";color:#333;}
 	top: 0;
 	left: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

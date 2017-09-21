@@ -21,6 +21,6 @@
 	
 	
 	<adminThemes>
-		<theme id="new" name="新模板" isCommonTheme="true"  default="yes"></theme>
+		<theme id="version3" name="新模板" isCommonTheme="true"  default="yes"></theme>
 	</adminThemes>
 </product>

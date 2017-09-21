@@ -30,6 +30,8 @@ public class SpecValueManager implements ISpecValueManager {
 	@Override
 	public void add(SpecValue value) {
 	   this.daoSupport.insert("es_spec_values",value);
+	   int specValueId =this.daoSupport.getLastId("es_spec_values");
+	   value.setSpec_value_id(specValueId);
 
 	}
 
@@ -49,7 +51,7 @@ public class SpecValueManager implements ISpecValueManager {
 	 */
 	@Override
 	public List<SpecValue> list(Integer specId) {
-		String sql ="select * from es_spec_values where spec_id =?";
+		String sql ="select * from es_spec_values where inherent_or_add=0 and spec_id =?";
 		List valueList = this.daoSupport.queryForList(sql, new SpecValueMapper() ,specId);
 		return valueList;
 	}
@@ -69,5 +71,44 @@ public class SpecValueManager implements ISpecValueManager {
 		}
 		temp.put("spec_image", spec_image);
 		return temp;
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.component.spec.service.ISpecValueManager#checkSpecValue(java.lang.String)
+	 */
+	@Override
+	public int checkSpecValue(String specValue,String specImage) {
+		String sql = "select count(0) from es_spec_values where spec_value= ? ";
+		if(specImage!=""){
+			sql += " and spec_image = '" + specImage+" ' ";
+		}
+		int count = this.daoSupport.queryForInt(sql, specValue);
+		count = count > 0 ? 1 : 0;
+		return count;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.component.spec.service.ISpecValueManager#delInherentSpec(java.lang.Integer)
+	 */
+	@Override
+	public void delInherentSpec(Integer goodsId) {
+		String sql = "DELETE from es_spec_values where inherent_or_add=1 and spec_value_id in (select spec_value_id from es_goods_spec where goods_id=?)";
+		this.daoSupport.execute(sql, goodsId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.component.spec.service.ISpecValueManager#selSpecValAndId(int, java.lang.String)
+	 */
+	@Override
+	public int selSpecValAndId(int specId, String spec_value, String image) {
+		String sql ="select spec_value_id from es_spec_values where spec_id=? and spec_value=?  ";
+		if(image!=""){
+			sql += " and spec_image = '" + image+" ' ";
+		}
+		return this.daoSupport.queryForInt(sql, specId,spec_value);
 	}
 }

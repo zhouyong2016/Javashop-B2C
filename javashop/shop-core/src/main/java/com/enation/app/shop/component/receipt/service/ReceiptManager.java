@@ -30,6 +30,17 @@ public class ReceiptManager   implements IReceiptManager {
 	}
 
 	@Override
+	public Receipt getById(Integer id) {
+ 
+		List list= this.daoSupport.queryForList("select * from es_receipt where id = ? ",Receipt.class,id);
+		if(list.size()==0){
+			return null;
+		}else{
+			return (Receipt)list.get(0);
+		}
+	}
+	
+	@Override
 	public Receipt getByOrderid(Integer orderid) {
  
 		List list= this.daoSupport.queryForList("select * from es_receipt where order_id = ? ",Receipt.class,orderid);

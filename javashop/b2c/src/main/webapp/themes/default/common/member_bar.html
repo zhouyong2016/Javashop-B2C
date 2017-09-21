@@ -1,0 +1,16 @@
+<#if member?? >
+		<!-- 获取member信息 -->
+		<script type="text/javascript">isLogin= true;</script>
+		<li>您好：${member.name}</li>
+		<li><a href="${ctx}/member/member.html">[会员中心]</a></li>
+		<li><a href="#" id="logout">[退出]</a></li>
+	<#else>
+		<script type="text/javascript">isLogin= false;</script>
+		<li><a href="login.html">登录 </a></li>
+		
+		<#if sms_isopen==0>
+			<li><a href="register.html">注册 </a></li>
+			<#else>
+			<li><a href="register_phone.html">手机注册 </a></li>
+		</#if>
+</#if>

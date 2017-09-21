@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="themes/default/css/datepicker.css" type="text/css" />
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%"
+	class="liststyle data">
+	<col class="span-5">
+	<col>
+	<tbody>
+		<tr>
+			<th>付款银行：</th>
+			<td>
+				<select name="bank" class="inputstyle _x_ipt">
+					<option value="中国工商银行">中国工商银行</option>
+					<option value="中国建设银行">中国建设银行</option>
+					<option value="招商银行">招商银行</option>
+					<option value="中国农业银行">中国农业银行</option>
+					<option value="中国银行">中国银行</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>付款日期：</th>
+			<td><input type="text" maxlength="25" value="<@dateformat time="
+				${orderTag.currentDate?c}" pattern="yyyy-MM-dd" />" readonly="true"
+				name="paydate" class="dateinput inputstyle _x_ipt"
+				isrequired="true"/></td>
+		</tr>
+		<tr>
+			<th>交易流水号：</th>
+			<td>
+				<input type="text" maxlength="25" id="snumber" name="sn"
+				class="inputstyle _x_ipt" fun="checkSerialNumber" />
+			</td>
+		</tr>
+		<tr>
+			<th>付款金额：</th>
+			<td>
+				<input type="text"	value="${order.order_amount?string('0.##')}" readonly="readonly"
+				id="paymoney" maxlength="25" dataType="float" name="paymoney" class="inputstyle _x_ipt" 
+				style="width: 100px; height: 15px; line-height: 15px;" isrequired="true" />
+			</td>
+		</tr>
+		<tr>
+			<th>备注：</th>
+			<td>
+				<textarea type="text" name="remark"	style="width: 400px; height: 100px; line-height: 15px;"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center" style="text-align: center">
+				<div class="pay_go btn">
+					<input type="submit" value="提交支付记录" class="yellow_btn">
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

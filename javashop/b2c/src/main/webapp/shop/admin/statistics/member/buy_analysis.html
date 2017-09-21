@@ -1,83 +1,90 @@
 <#include '/admin/header.html' >
-
-
-<script src="${ctx}/shop/admin/statistics/member/js/buy_analysis.js" type="text/javascript" ></script>
-<div class="main">
+<style>
+	tr td{
+		padding-right: 10px;
+	}
+	td select{
+		height: 25px;
+	}
+	.kedan{
+	 margin-left: 20px;
+    font-size: 16px;
+    margin-right: 10px;
+    display: inline-block;
+    margin-top: 9px;
+	}
+	#set_sections_btn{
+	line-height:27px;
+    width: 100px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background: rgba(235, 237, 243, 0.28);
+	}
+</style>
+<div class="admin-main">
 	<!-- 搜索框 -->
+	<div class="table_control">
 	<div style="display: block;" class="searchAdvanced">
 		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="80">
+			<tr style="float: right;line-height: 47px;"  >
+				<td width="100">
 					按订单周期：
 				</td>
-				<td width="70" >
-					<select id="cycle_type">
+				<td width="90">
+					<select id="cycle_type" lay-ignore >
 						<!-- <option value="0">--请选择--</option> -->
 						<option value="1">按照月统计</option>
 						<option value="2">按照年统计</option>
 					</select>
 				</td>
 				<td width="70" >
-					<select id="year">
+					<select id="year" lay-ignore >
 						<option value="0">--全年--</option>
-					</select>
+					</select>	
 				</td>
-				<td width="70" >
-					<select id="month">
+				<td width="70" lay-ignore >
+						<select id="month">
 						<!-- <option value="0">--请选择--</option> -->
-					</select>
+						</select>
 				</td>
 				
-				<td width="200" style="text-align: center;float: right">
-					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				<td width="200" style="text-align: center;">
+					<a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
 				</td>
 				<td></td>
+				</tr>
 		</table>
+	</div>
 	</div>
 	<div class="clear height10"></div>
 	
 	<!-- 主体 -->
 	<div class="input">
 		<div style="display: block;" class="goods_input">
-			
-			<h2>客单价分布图    <input type="button" id="set_sections_btn" class="button" value="设置价格区间" </h2> 
+	<h2><span class="kedan">客单价分布图</span><input type="button" id="set_sections_btn" class="button" value="设置价格区间" </h2> 
 			<hr color="#ccc" />
-			<div id="order_price_dis"></div>
+			<div id="order_price_dis" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto">
 			
 		</div>
 		<!-- 购买频次统计图 -->
 		<div class="buy_fre">
 			<br />
-			<h2>购买频次分析表</h2>
-			<hr color="#ccc" />
-			<table id="buy_fre_dg" class="easyui-datagrid"
-				data-options="pagination:false,rownumbers:true, fitColumns:'true'" >
+			<h2 style="font-size: 16px; margin-left: 20px;line-height: 25px;">购买频次分析表</h2>
+			<hr color="#ccc" style="margin-bottom: 15px;"/>
+			<table id="buy_fre_dg" class="layui-table site-table table-hover">
 				<thead>
 					<tr>
-						<th data-options="checkbox:true,width:100"></th>
-						<th data-options="field:'buy_num',width:150,sortable:'true'" >购买频次</th>
-						<th data-options="field:'member_num',width:100,sortable:'true'" >下单会员数量</th>
-						<th data-options="field:'total_num',width:100,formatter:function(value,rowData,rowIndex){
-							
-							if (parseInt(rowData.member_num) == 0) {
-								return '0.00%';
-							}
-							
-							var val = parseInt(rowData.member_num)/parseInt(value);
-							
-							//先转换成4位小数
-							val = val.toFixed(4);
- 							val = val.slice(2,4)+'.'+val.slice(4,6)+'%';
-							return val;
-						}" >人数占比</th>
+						<th>购买频次</th>
+						<th>下单会员数量</th>
+						<th>人数占比</th>
 					</tr>
 				</thead>
 			</table>
 		</div>
 		<br />
-		<h2>购买时段分布图 </h2> 
+		
 		<hr color="#ccc" />
-		<div id="buy_time_dis"></div>
+		<div id="buy_time_dis" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto">
 	</div>	
 	<div class="clear height10"></div>
 	
@@ -90,21 +97,588 @@
 			<input type="hidden" id="sections_serialize" value="" />
 			<form id="section_form">
 					 <input type="hidden" name="sections" value="0" />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
-				价格：<input type="text" class="input_text" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_1" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_2" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_3" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_4" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_5" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_6" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_7" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_8" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_9" name="sections" value="" /> <br />
+				价格：<input type="text" class="input_text_10" name="sections" value="" /> <br />
 				
 			</form>
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+/**
+ * 购买分析页面
+ */
+
+var buyFreNum = 10;	//购买频次最大频次
+var myChart;
+var option;
+$(function(){
+	
+	//初始化下拉菜单中的时间
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	
+	//for循环得到年数
+	for(var i=0;i<20;i++){
+		
+		//选中当前年 
+		if(currentYear==historyYear){
+			$("#year").append("<option value='"+historyYear+"' selected >"+historyYear+"年</option>" );
+		}else{
+			$("#year").append("<option value='"+historyYear+"' >"+historyYear+"年</option>" );
+		}
+		historyYear++;
+	}
+	
+	//for循环得到月份
+	for(var i=1;i<=12;i++){
+		
+		// 选中当前月
+		if(currentmonth==i){
+			$("#month").append("<option value='"+i+"' selected >"+i+"月</option>" );
+		}else{
+			$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
+		}
+	}
+	
+	
+	
+	
+	// 设置价格区间单机事件
+	$("#set_sections_btn").click(function(){
+		 layer.open({
+	            title:"设置价格区间",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/shop/admin/memberStatistics/get-price-range-html.do",//内容的URL
+	            area:['500px','500px'],//弹框大小
+	            scrollbar: false,//是否允许浏览器出现滚动条
+	            btn: ['确定', '取消'],
+	            yes: function(index, layero){	                   
+	           		$(".input_text_1").val(layero.find("iframe").contents().find(".input_text_1").val());
+	           		$(".input_text_2").val(layero.find("iframe").contents().find(".input_text_2").val());
+	           		$(".input_text_3").val(layero.find("iframe").contents().find(".input_text_3").val());
+	           		$(".input_text_4").val(layero.find("iframe").contents().find(".input_text_4").val());
+	           		$(".input_text_5").val(layero.find("iframe").contents().find(".input_text_5").val());
+	           		$(".input_text_6").val(layero.find("iframe").contents().find(".input_text_6").val());
+	           		$(".input_text_7").val(layero.find("iframe").contents().find(".input_text_7").val());
+	           		$(".input_text_8").val(layero.find("iframe").contents().find(".input_text_8").val());
+	           		$(".input_text_9").val(layero.find("iframe").contents().find(".input_text_9").val());
+	           		$(".input_text_10").val(layero.find("iframe").contents().find(".input_text_10").val());	        
+	                layer.close(index); //如果设定了yes回调，需进行手工关闭
+	                openPriceSections();
+	            },
+	           btn2: function(index, layero){
+
+	               //return false 开启该代码可禁止点击该按钮关闭
+	           }
+	      });
+		
+		
+	});
+	
+	var dateWhere = getDateWhere();
+	
+	// 初始化统计数据 默认区间 0~500 500~1000 1000~1500 1500~2000
+	initOrderPrice("sections=0&sections=500&sections=1000&sections=1500&sections=2000", dateWhere);
+	
+	//初始化购买频次
+	initBuyFre(dateWhere);
+	
+	//初始化购买时段统计图
+	initBuyTimeDis(dateWhere);
+	
+	
+	
+	//搜索按钮单击事件
+	$("#search_statis").click(function(){
+		var dateWhere = getDateWhere();
+		
+		//如果没有时间条件 就不用刷新
+		if(!dateWhere) {
+			return;
+		}
+		var where = "sections=0&sections=500&sections=1000&sections=1500&sections=2000";
+		
+		// 如果有区间数据并且数据正确 就不用默认区间
+		if($("#sections_is_true").val() == "1") {
+			where = $("#sections_serialize").val();
+		}
+		
+		// 初始化统计数据 
+		initOrderPrice(where, dateWhere);
+		
+		//初始化购买频次
+		initBuyFre(dateWhere);
+		
+		//初始化购买时段统计图
+		initBuyTimeDis(dateWhere);
+	});
+	
+	var type = $("#cycle_type").val();
+	
+	// 如果统计类型 是按年统计
+	if(type == "2") {
+		$("#month").hide();
+	} else {
+		$("#month").show();
+	}
+	
+	// 统计类型变更事件
+	$("#cycle_type").change(function(){
+		
+		var type = $(this).val();
+		
+		// 如果统计类型 是按年统计
+		if(type == "2") {
+			$("#month").hide();
+		} else {
+			$("#month").show();
+		}
+		
+	});
+});
+
+/**
+ * 初始化购买时段分布统计图
+ */
+function initBuyTimeDis(dateWhere) {
+
+	// ajax配置
+	var options = {
+		url : ctx + "/shop/admin/memberStatistics/get-buy-time-dis.do" ,
+		data : {'start_date' : dateWhere[0], 'end_date' : dateWhere[1]},
+		type : "post",
+		dataType:"json",
+		success:function(data){
+			//如果获得正确的数据
+			if (data.result == 1) {
+				//alert(JSON.stringify(data.data));
+				if(data.data && data.data.length < 1) {
+					//alert("当前条件下没有统计数据");
+				}
+				
+				// 1.获取到统计图相关配置
+				var conf = getBuyTimeDisConfig(data.data);
+				
+				// 2.初始化统计图
+				initHistogram("buy_time_dis",conf);
+
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+}
+
+/**
+ * 初始化购买频次列表
+ */
+function initBuyFre(dateWhere){
+	
+	// ajax配置
+	var options = {
+		url : ctx + "/shop/admin/memberStatistics/get-buy-fre.do",
+		data : {'start_date' : dateWhere[0], 'end_date' : dateWhere[1]},
+		type : "post",
+		dataType:"json",
+		success:function(data){
+			//如果获得正确的数据
+			if (data.result == 1) {
+				//计算数据
+				var list = calculatePercentage(data);
+				
+				table = $('#buy_fre_dg').DataTable({
+					"language": {
+				        "url": "${staticserver}/media/zh_CN.txt"
+				    },
+				    "processing": true,
+				    "autoWidth": true,
+				    "serverSide": false,
+				    "initComplete": function(settings, json) {
+				    	 $(".dataTables_paginate").on("click", "a", function() {
+				    		 if($('#goodsdata_processing')[0].style.display=="block"){
+								  $(".dataTables_paginate li").addClass("disabled");
+							  }  
+				         });   
+					},
+					"destroy":true,     //搜索后刷新表格数据
+				    "ordering": false,
+				    "searching": false,
+				    "lengthChange": false,
+				    "data":list,
+				    "columns": [ //定义列 
+				        {data: "buy_num"},			    
+				        {data: "member_num"},			    
+				        {data: null,"render": function(data, type, row) {
+				        	return  dataCalculation(data.total_num,data.member_num,type);
+				       	}}
+				     ]
+				});  
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+};
+
+/**
+ * 打开设置区间窗口
+ */
+function openPriceSections() {
+	getSections();
+}
+
+function getSections(){
+	
+	var $sections = $("input[name='sections']");
+	
+	var result = true;		//数据是否正确
+	var allNone = true ;
+	var allZero = true ;
+	
+	$sections.each(function(index,element){
+		var self = $(this);
+		var val = self.val();
+		if(val != "") {
+			if(isNaN(val)){
+				result = false;
+			}
+		}
+		if(val !="" && self.attr("type") !="hidden" ){
+			allNone = false ;
+		}
+		if(val != 0){
+			allZero = false ;
+		}
+	});
+	if(allNone) {
+		alert("区间不能全部为空");
+		return false;
+	}else if (allZero){
+		alert("区间范围不能全部为0");
+		return false;
+	}else if (result) {
+		var dateWhere = getDateWhere();
+		
+		// 保存区间序列化后的文本
+		$("#sections_serialize").val($("#section_form").serialize());
+		initOrderPrice($("#sections_serialize").val(),dateWhere);
+		
+		//记录区间数据正确
+		$("#sections_is_true").val("1");
+		return true;
+	} else {
+		alert("请填写正确的区间值");
+		
+		//记录区间数据错误  （不用记录，默认错误，如果保存正确值一次之后 可以重复使用，输入框不影响以前正确的数据）
+		//$("#sections_is_true").val("0");
+		return false;
+	}
+}
+
+/**
+ * 初始化客单价分布图
+ * 
+ * @param where 条件
+ */
+function initOrderPrice(where,dateWhere){
+	// ajax配置
+	var options = {
+		url : ctx + "/shop/admin/memberStatistics/get-order-price-dis.do?" + where,
+		data : {'start_date' : dateWhere[0], 'end_date' : dateWhere[1]},
+		type : "post",
+		dataType:"json",
+		success:function(data){
+			//如果获得正确的数据
+			if (data.result == 1) {
+				//alert(JSON.stringify(data.data));
+				if(data.data && data.data.length < 1) {
+					//alert("当前条件下没有统计数据");
+				}
+				
+				// 1.获取到统计图相关配置
+				var conf = getPriceDisConfig(data.data);
+				
+				// 2.初始化统计图
+				initHistogram("order_price_dis",conf);
+				
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+}
+
+/**
+ * 获取日期条件
+ * @return dateWhere[] 下标0=开始时间  下标1=结束时间
+ */
+function getDateWhere(){
+	
+	var c_type = $("#cycle_type").val();
+	var startDate, endDate; //开始时间和结束时间
+	
+	if (c_type == 0) {
+		alert("请先选择查询方式!");
+		return;
+	}
+	
+	//如果是按照年来筛选订单的
+	if(c_type == 2) {
+		
+		var year = $("#year").val();
+		
+		if(year == 0) {
+			var dateWhere = [];
+			dateWhere[0] = "";
+			dateWhere[1] = "";
+			return dateWhere;
+		}
+		
+		startDate = year + "-01-01 0:0:00";
+		endDate = year + "-12-31 23:59:59";
+		
+	} else {
+		
+		var year = parseInt($("#year").val());
+		var month = parseInt($("#month").val());
+
+		if(year == 0) {
+			alert("请选择年份");
+			return;
+		}
+		if(month == 0) {
+			alert("请选择月份");
+			return;
+		}
+		
+		//得到一个月最后一天
+		var lastDate = new Date(year, month, 0);
+		var lastDay = lastDate.getDate();
+		
+		startDate = year + "-" + month + "-01 0:0:00";
+		endDate = year + "-" + month + "-" + lastDay + " 23:59:59";
+	}
+	var dateWhere = [];
+	dateWhere[0] = startDate;
+	dateWhere[1] = endDate;
+	return dateWhere;
+}
+
+/**
+ * 获取到客单价分布统计图配置
+ * @param json 数据
+ */
+function getBuyTimeDisConfig(json){
+	
+	var conf = {};			//配置
+
+	var data = [];	// Y轴 排名数据
+	var categories = []; //X轴 名次数据
+	
+	// 遍历生成 data,categories
+	for(var i in json) {
+		var order = json[i];
+		
+		//添加到数组
+		data.push(order.num);
+		categories.push("" + order.hour_num);
+	}
+	
+	var conf = {
+		title : "购买时段分布图" ,		//统计图标题
+		yDesc : "订单数量（个）" ,			//y轴 描述
+										//X 轴数据 [数组]
+		categories : categories,				
+            							//Y轴数据 [数组]
+		data: data	
+	};
+	return conf;
+};
+
+/**
+ * 获取到客单价分布统计图配置
+ * @param json 数据
+ */
+function getPriceDisConfig(json){
+	var conf = {};			//配置
+	var data = [];	
+	var categories = []; 
+	
+	// 遍历生成 data,categories
+	for(var i in json) {
+		var order = json[i];
+		//添加到数组
+		data.push(order.num);
+		categories.push("" + order.elt_data);
+	}
+	var conf = {
+		title : "客单价分布图" ,									
+		categories : categories,				
+		data: data
+	};
+	return conf;
+};
 
 
+/**
+ * 初始化曲线图
+ * @param id	html 初始化div的id
+ * @param conf	相关配置
+ */
+function initHistogram(id,conf){
+	
+	 myChart = echarts.init(document.getElementById(id));
+		option = {
+				color: ['#7cb5ec'],
+			    title: {
+			    	x:'center',
+			    	text:conf.title
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    toolbox: {
+			        show : true,
+			        feature : {
+			            mark : {show: true},
+			            magicType : {show: true, type: ['line', 'bar']},
+			            restore : {show: true},
+			            saveAsImage : {show: true}
+			        }
+			    },
+			    legend: {
+			    	x:'center',y:'bottom',
+		            data:['下单量']
+		        },
+			    xAxis:  {
+			        type: 'category',
+			        boundaryGap: true,
+			        data: conf.categories
+			    },
+			    yAxis: {
+			        type: 'value',
+			        name:'订单数量（个）',
+			    	axisLabel : {
+		            formatter: '{value} （个）'
+		        },
+		        	boundaryGap : true
+		    
+			    },
+			    series: [
+			        {
+			        	data:conf.data,
+			            name:'下单量',
+			            type:'line',
+			            markPoint: {
+			                data: [
+			                    {type: 'max', name: '最大值'},
+			                    {type: 'min', name: '最小值'}
+			                ]
+			            },
+			            markLine: {
+			                data: [
+			                    {type: 'average', name: '平均值'}
+			                ]
+			            }
+			           
+			        },
+			       
+			    ]
+			};
+
+		myChart.setOption(option);
+
+	
+	
+	
+};
+function dataCalculation(value,rowData,rowIndex){
+	
+	if (parseInt(rowData) == 0) {
+		return '0.00%';
+	}
+	
+	var val = parseInt(rowData)/parseInt(value);
+	
+	//先转换成4位小数
+	val = val.toFixed(4);
+	val = val.slice(2,4)+'.'+val.slice(4,6)+'%';
+	return val;
+}
+
+function calculatePercentage(data){
+	
+	// 准备数据
+	var list = [];
+	// 循环生成购买频次数据   遍历多一次  统计最大频次以上的数据
+	for (var i = 0; i < buyFreNum; i++) {
+		var index = i + 1;
+		var result = false;		// 是否存在该条频次
+		//找到相应购买次数的数据
+		for (var key in data.data) {
+			var row = data.data[key];
+			
+			//如果这条数据的购买次数 相符
+			if( row.buy_num == index ) {
+				list.push(row);
+				result = true;
+				break;
+			}
+		}
+		// 如果没有该频次数据  则加入空数据
+		if ( !result ) {
+			list.push({"total_num":0,"buy_num":index,"member_num":0});
+		}
+	}
+	
+	// 添加 超过频率的数据
+	var lastRow = lastRow = {"total_num":data.data[0].total_num,"buy_num":buyFreNum + '+',"member_num":0};	// 最后一行数据
+	for (var key in data.data) {
+		var row = data.data[key];
+		
+		// 如果该条数据大于频次最大数
+		if(row.buy_num > buyFreNum ) {
+			
+			// 如果购买人数 没有值
+			if (!lastRow.member_num) {
+				lastRow.member_num = 0;
+			}
+			
+			// 增加人数
+			lastRow.member_num += row.member_num;
+			
+		}
+	}
+	// 添加进数据
+	list.push(lastRow);
+	return list;
+}
+
+</script>
 <#include '/admin/footer.html' >

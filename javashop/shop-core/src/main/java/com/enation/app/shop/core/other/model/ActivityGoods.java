@@ -16,6 +16,9 @@ public class ActivityGoods {
 	
 	/** 商品ID */
 	private Integer goods_id;
+	
+	/** 货品ID */
+	private Integer product_id;
 
 	public Integer getAg_id() {
 		return ag_id;
@@ -41,4 +44,13 @@ public class ActivityGoods {
 		this.goods_id = goods_id;
 	}
 
+	public Integer getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(Integer product_id) {
+		this.product_id = product_id;
+	}
+	
+	
 }

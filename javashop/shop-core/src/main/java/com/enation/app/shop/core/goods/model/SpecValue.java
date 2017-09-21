@@ -15,9 +15,16 @@ public class SpecValue {
 	private String spec_image;
 	private Integer spec_order;
 	private Integer spec_type;
+	private Integer inherent_or_add;  //固有规格 “0”  添加商品修改规格“1”
+	private String image;
 	
 	
-	
+	public Integer getInherent_or_add() {
+		return inherent_or_add;
+	}
+	public void setInherent_or_add(Integer inherent_or_add) {
+		this.inherent_or_add = inherent_or_add;
+	}
 	public Integer getSpec_type() {
 		return spec_type;
 	}
@@ -56,4 +63,11 @@ public class SpecValue {
 	public void setSpec_order(Integer specOrder) {
 		spec_order = specOrder;
 	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 }

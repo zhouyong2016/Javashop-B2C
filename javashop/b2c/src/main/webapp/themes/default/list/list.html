@@ -1,0 +1,133 @@
+<!--商品筛选-->
+<div class="selector">
+	<h1>商品筛选</h1>
+	<div class="filter">
+		<ul>
+			<#if goodsSelector.gys?exists>
+				<li>
+					<h2>供应商：</h2>
+					<ul>
+						<#list goodsSelector.gys as selector>
+							<li>
+								<a href="${selector.url}"<#if selector.isSelected>class="selected"</#if>>${selector.name}</a>
+							</li>
+						</#list>
+					</ul>
+				</li>
+			</#if> 
+			<#if goodsSelector.brand?exists>
+				<li>
+					<h2>品牌：</h2>
+					<ul>
+						<#list goodsSelector.brand as selector>
+							<li>
+								<a href="${selector.url}"<#if selector.isSelected>class="selected"</#if>>${selector.name}</a>
+							</li>
+						</#list>
+					</ul>
+				</li> 
+			</#if> 
+			<#if goodsSelector.prop?exists> 
+				<#assign propSelector=goodsSelector.prop> 
+				<#list propSelector?keys as propname>
+					<li>
+						<h2>${propname}：</h2>
+						<ul>
+							<#list propSelector[propname] as selector >
+								<li><a href="${selector.url}"<#if selector.isSelected>class="selected"</#if>>${selector.name}</a></li>
+							</#list>
+						</ul>
+					</li> 
+				</#list> 
+			</#if> 
+			<#if goodsSelector.price?exists>
+				<li>
+					<h2>价格：</h2>
+					<ul>
+						<#list goodsSelector.price as selector>
+							<li>
+								<a href="${selector.url}"<#if selector.isSelected>class="selected"</#if>>${selector.name}</a>
+							</li>
+						</#list>
+					</ul>
+				</li> 
+			</#if>
+		</ul>
+	</div>
+	<!--商品列表筛选下部筛选-->
+	<div class="sort_wrapper">
+		<div class="select_box">
+			<h2>排序：</h2>
+			<select id="sort" >
+				<#if goodsSelector.sort?exists>
+					<#list goodsSelector.sort as selector>
+						<option value="${selector.url}" <#if selector.isSelected>selected="selected"</#if> >${selector.name}</option>
+					</#list>
+				</#if>
+			</select>
+		</div>
+		<script type="text/javascript">
+		$(function(){
+			$("#sort").change(function(){
+				location.href=this.value;
+			});
+		});
+		</script>
+		<!-- 创建搜索url标签 -->
+		<#assign seachUrlTag= newTag("seachUrlTag")>
+		<!-- 获取搜索url -->
+		<#assign searchUrl=seachUrlTag('"name":"sort"')!'search' />
+		
+		<!-- 创建搜索参数标签 -->
+		<#assign searchParamTag= newTag("searchParamTag")>
+		<#assign sort=searchParamTag('"name":"sort"')!'-1' />
+		<div class="switch_box">
+			<ul>
+				<li class="way <#if sort=='2' || sort=='3'>selected</#if>">
+					<#if sort=='2'>
+						<a href="${ctx}${searchUrl}-sort-3.html" class="price_desc">
+					<#else>
+						<a href="${ctx}${searchUrl}-sort-2.html" class="price_asc">
+					</#if>
+					<span>价格</span></a>
+				</li>
+				<li class="way <#if sort=='4' || sort=='5'>selected</#if>">
+					
+					<#if sort=='4'>
+						<a href="${ctx}${searchUrl}-sort-5.html" class="grade_desc">
+					<#else>
+						<a href="${ctx}${searchUrl}-sort-4.html" class="grade_asc">
+					</#if>
+					<span>评价</span></a>
+				</li>
+				<li class="way <#if sort=='6' || sort=='7'>selected</#if>" >
+					
+					<#if sort=='6'>
+						<a href="${ctx}${searchUrl}-sort-7.html" class="sales_desc">
+					<#else>
+						<a href="${ctx}${searchUrl}-sort-6.html" class="sales_asc">
+					</#if>	
+					<span>销量</span></a>
+				</li>
+				<li class="way last <#if sort=='8' || sort=='9'>selected</#if>">
+					<#if sort=='8'>
+						<a class="time_desc" href="${ctx}${searchUrl}-sort-9.html">
+					<#else>
+						<a class="time_asc" href="${ctx}${searchUrl}-sort-8.html">
+					</#if>
+					<span>上架时间</span></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!--商品列表筛选下部筛选-->
+</div>
+<!--商品筛选结束-->
+<script>
+$(function(){
+	$("#sort").change(function(){
+		location.href=this.value;
+	});
+}); 
+</script>
+<#include 'goods_list.html' />

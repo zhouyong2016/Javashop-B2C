@@ -77,13 +77,13 @@ $(function(){
 //	advheight();
 });
 </script>
-<#if groupbuyIsOn=="ON">
-<#if groupBuyAct!="">
 <div class="index-main">
+	<#if groupbuyIsOn=="ON">
 		<div class="time_groupbuy">
 			<div class="groupbuy_left">
 				<div class="l_groupbuy_time">
 					<h1>限时抢购</h1>
+					<#if groupBuyAct!="">
 						<div class="g_time">
 							<span id="d1"></span><strong>天</strong> 
 							<span id="h1"></span><strong>小时</strong>
@@ -105,7 +105,9 @@ $(function(){
 							<#list goodsListGroupBuy as goods>
 								<li>
 									<div class="groupbuy_img">
-										<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"><@image class="scrollLoading" src="${goods.small!''}" alt="${goods.name}" width="210px" height="208px" /></a>
+									<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+										<@image class="scrollLoading" src="${goods.small!''}" alt="${goods.name}" width="210px" height="208px" />
+									</a>
 									</div>
 									<div class="groupbuy_name">
 										<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name}</a>

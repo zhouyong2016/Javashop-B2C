@@ -52,6 +52,19 @@ public class DispatcherFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String uri = httpRequest.getServletPath();
 
+		//icon图标不拦截
+		if (uri.startsWith("/adminthemes/version3/plugins/layui/font")) {
+			chain.doFilter(httpRequest, httpResponse);
+			return;
+		}
+		
+		//icon图标不拦截
+		if (uri.startsWith("/adminthemes/version3/css/font")) {
+			chain.doFilter(httpRequest, httpResponse);
+			return;
+		}
+		
+		//百度富文本不拦截
 		if (uri.startsWith("/ueditor")) {
 			chain.doFilter(httpRequest, httpResponse);
 			return;

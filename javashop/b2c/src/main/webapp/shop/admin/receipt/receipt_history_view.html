@@ -1,0 +1,95 @@
+<#include '/admin/sonheader.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()> 
+<style>
+	.layui-input{
+		width: 75%;
+	}
+	.layui-input-block input{
+		font-size:18px;line-height: 40px;
+	}
+</style>
+<div class="main" style="background-color: white;">
+	<form class="layui-form  layui-form-pane" action="" id="editLvForm">
+		<div class="layui-form-item">
+			<label class="layui-form-label">订单编号</label>
+			<div class="layui-input-block">
+			<input type="text" name="sn"  value="${orderReceipt.sn!''}"  class="layui-input" readonly="readonly">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">发票类型</label>
+			<div class="layui-input-block">
+			<#if orderReceipt.receipt_type??>
+				 <#if orderReceipt.receipt_type==1><input type="text"  value="个人"  class="layui-input" readonly="readonly"></#if> 
+				 <#if orderReceipt.receipt_type==2><input type="text"   value="单位"  class="layui-input" readonly="readonly"></#if> 
+				
+			<#else>
+			<input type="text"  value="无"  class="layui-input" readonly="readonly">
+			</#if>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">会员名称</label>
+			<div class="layui-input-block">
+			<input type="text" name="uname"  value="${orderReceipt.uname!''}"  class="layui-input" readonly="readonly">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">发票金额</label>
+			<div class="layui-input-block">
+			<input type="text" name="paymoney"  value="${orderReceipt.paymoney!''}"  class="layui-input" readonly="readonly">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">发票抬头</label>
+			<div class="layui-input-block">
+			<#if orderReceipt.receipt_title?trim != "">
+				<input type="text" name="receipt_title"  value="${orderReceipt.receipt_title!''}"  class="layui-input" readonly="readonly">
+				
+			<#else>
+				<input type="text"  value="无"  class="layui-input" readonly="readonly">
+			</#if>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">发票税号</label>
+			<div class="layui-input-block">
+			<#if orderReceipt.receipt_duty?trim != "">
+				<input type="text" name="receipt_duty"  value="${orderReceipt.receipt_duty}"  class="layui-input" readonly="readonly">
+				
+			<#else>
+				<input type="text"  value="无"  class="layui-input" readonly="readonly">
+			</#if>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">发票内容</label>
+			<div class="layui-input-block">
+			<input type="text" name="receipt_content"  value="${orderReceipt.receipt_content!''}"  class="layui-input" readonly="readonly">
+			</div>
+		</div
+		
+	</form>
+	<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;position: fixed;left: 1px;width: 96%;height: 50px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="editLv">关闭</a>
+  		</div>
+</div>
+<script>
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    $(".layui-layer-btn0").click(function(){
+    	parent.layer.close(index);
+    });
+    
+  
+});
+</script>
+

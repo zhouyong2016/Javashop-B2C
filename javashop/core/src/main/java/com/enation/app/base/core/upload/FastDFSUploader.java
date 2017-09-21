@@ -47,10 +47,4 @@ public class FastDFSUploader implements IUploader{
 		return path;
 	}
 
-	@Override
-	public String uploadFJ(InputStream stream, String subFolder, String fileName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

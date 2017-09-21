@@ -6,77 +6,114 @@
 .input_text {
 	width: 180px;
 }
+.sales{
+    font-size: 18px;
+    padding-left: 20px;
+    padding-top: 10px;
+}
+.site-table tr td:nth-child(1){
+	background:#EEEEEE;
+}
+.site-table tr td:nth-child(3){
+	background:#EEEEEE;
+}
+.layui-input{
+	height:30px;
+	line-height:30px;
+}
+.layui-input, .layui-textarea{
+	display:inline-block;
+	width:66%;
+}
+.layui-form-select .layui-edge{
+	right:62px;
+}
+.layui-form-select dl{
+left:53px;
+min-width:66%;
+}
 </style>
 
-<div class="main">
-	<form method="post" id="theForm">
+<div class="admin-main">
+	<form method="post" id="theForm" class="layui-form">
 		<input type="hidden" value="${orderinfo.order_id }" name="orderid" />
 		<div class="shadowBoxWhite  whiteBox detail">
-			<table cellspacing="0" cellpadding="0" border="0" style="width: 99%;">
+		  <div>
+	  	     <p class="sales">申请售后</p>
+		     <hr>
+		  </div>
+			<table class="layui-table site-table table-hover"  cellspacing="0" cellpadding="0" border="0" style="width: 98%;margin:30px auto;">
 				<tr>
-					<th class="title" colspan="4">新建退款申请</th>
+					<th class="title" colspan="4" style="padding-left:20px;font-size:14px;color:red;background:#F2F3F7;box-shadow: 0px 2px 2px rgba(204, 204, 204, 0.58)">新建退款申请</th>
 				</tr>
 				<tr>
 					<td>关联订单号：</td>
 					<td>${orderinfo.sn } 
 					<td>订单使用：</td>
 					<td><span id="meta"></span> 已支付：￥${orderinfo.paymoney}</td>
+					<input type="hidden" value="${orderinfo.paymoney}" id="paypricereturn" />
 				</tr>
 				<tr>
 					<td>退货人：</td>
-					<td>${orderinfo.ship_name } </td>
-					 <td>退款方式：</td>
-					<td>
-						${orderinfo.payment_name}
+					<td>${orderinfo.ship_name } <input type="hidden" name="sndto" value="${orderinfo.ship_name }">
 					</td>
-				</tr>
-				<tr>
-					<td>退款账号：</td>
-					<td>
-						<#if orderinfo.payment_account?? && orderinfo.payment_account!='' >
-							${orderinfo.payment_account} 
-							<input type="hidden" name="return_account" value="${orderinfo.payment_account} " />
+						<td>退款方式：</td>
+						<input type="hidden" name = "paymenttype" value = "${orderinfo.payment_type}">
+						<input type="hidden" value="${payCfg.is_retrace}" class="refund_way">
+						<td>
+						<#if payCfg.is_retrace == 1>
+							原支付方式返回
+							<input type = "hidden" name="refund_way" id="original_way" value = "原支付方式退款">
 						<#else>
-							<input class="input_text" style="ime-mode:disabled;" type="text" data-options="required:true"  isrequired="true" maxlength="50" id="return_account" name="return_account" />
+							${orderinfo.payment_name}
+							<input type = "hidden" name="refund_way" id="refund_way" value = "${orderinfo.payment_name}">
 						</#if>
-					</td>
-					<td>退还金额：</td>
-					<td>
-						¥：<input class="easyui-numberbox input_text" type="text" name="apply_alltotal" precision="2" data-options="required:true" value="${orderinfo.paymoney}" isrequired="true" maxlength="20"/>
-					</td>
+						</td>	
 				</tr>
 				<tr>
-					<td>是否已收货：</td>
-					<td>
-						<input type="radio" value="0" checked="checked" name="ship_status" />未收货
-						<input type="radio" value="1" name="ship_status"/>已收货
-					</td>
+					
 					<td>退款原因：</td>
 					<td>
 						<select name="reason" >
+							<option value="0">请选择退货原因</option>
 							<option value="商品质量有问题">商品质量有问题</option>
-							<option value="不喜欢/不想要">不喜欢/不想要</option>
 							<option value="收到商品与描述不符">收到商品与描述不符</option>
+							<option value="不喜欢/不想要">不喜欢/不想要</option>
 							<option value="发票问题">发票问题</option>
+							<option value="空包裹">空包裹</option>
+							<option value="快递无记录">快递无记录</option>
+							<option value="快递一直没有收到">快递一直没有收到</option>
+							<option value="买错/不想要">买错/不想要</option>
+							<option value="未按照时间发货">未按照时间发货</option>
 							<option value="其他">其他</option>
 						</select>
 					</td>
+					<#if payCfg.is_retrace != 1>
+						<td><div style="display:block;" id="account">退款账户：</div></td>
+						<td>
+							<input type="text" name="return_account" id="payment_account" class="layui-input" maxlength="255" style="width:500px;margin-left:10px;"/>
+						</td>
+					</#if>
 				</tr>
 				<tr>
+					<td>退还金额：</td>
+					<td>
+					 ¥： <input class="layui-input" type="text" name="apply_alltotal" precision="2" data-options="required:true" value="${orderinfo.paymoney}" isrequired="true" maxlength="20"/>
+					</td>
 					<td align="right">操作备注：</td>
-					<td colspan="3">
-						<input type="text" class="input_text" value="" id="seller_remark" name="remark" />
+					<td colspan="3"  style="text-align:left;">
+						<input type="text" style="width:500px;margin-left:10px;"  class="layui-input" value="" id="seller_remark" name="remark" />
 					</td>
 				</tr> 
 			</table>
 		</div>
 		<br>
 		<div class="shadowBoxWhite  whiteBox detail" >
-			<table class="goodsList" cellspacing="0" cellpadding="0" border="0" style="width: 99%;">
+			<table class="layui-table" cellspacing="0" cellpadding="0" border="0" style="width: 98%;margin:0px auto;">
 				<input type="hidden" id="packDetailJson" name="packDetailJson" />
 				<thead>
 					<tr>
-						<th class="title" colspan="6">退款的商品</th>
+						<th class="title" colspan="6" style="color:red;">退款的商品</th>
 					</tr>
 					<tr> 
 						<th>商品图片</th>
@@ -123,57 +160,91 @@
 					</#if>
 			</table>
 		</div>
-	</form>
-	<#if orderinfo.status==5>
-		<div class="buttonWrap">
-			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交申请</a>
+		<#if orderinfo.status==5>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+			<button class="layui-btn" id="subapply" lay-submit="" lay-filter="subapply">提交申请</button>
+			</div>
 		</div>
-	</#if>
+		</#if>
+	</form>
 </div>
 
 <script type="text/javascript">
-   
-function submitForm() {
-	if($("#return_account").val() == null || $("#return_account").val() == ""){
-		alert("退款账号不能为空");
-		return;
-	}
+$(function(){	
+	//获取支付方式
+	var pay_way=$(".refund_way").val();
 	
-	if($(this).attr("disabled")=="disabled"){
-		$.Loading.error("操作太频繁，请稍侯");
-	}	
-	$(this).attr("disabled","disabled");
-	
-	var formflag= $("#theForm").form('validate');
-	if(formflag){
-		$.Loading.success("正在提交......"); 
-		$(".savebtn").linkbutton("disable");
-		var options = {
-				url : "${ctx}/shop/admin/sell-back/save-refund.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result){
-					if(result.result==1){
-						//parent.reloadTabGrid("查看订单详细");
-						parent.CloseTabByTitle("申请售后");
-						$.Loading.success(result.message);
-						//newTab('退款单列表','${ctx}/shop/admin/order-report/refund-list.do');
+	layui.use('form', function(){
+		  var form = layui.form();
+		  form.render(); //更新全部
+		  form.on('submit(subapply)', function(data) {
+			  //退款账号的验证
+			  if(pay_way != 1){
+					if($("input#payment_account").val() == ""){
+						alert("退款账号不能为空");
+						return false;
 					}
-					if(result.result==0){ 
-						$.Loading.error(result.message);
-					}
-					$(".savebtn").linkbutton("enable");
-				},
-				error : function(e) {
-					alert("出现错误 ，请重试");
-					$(".savebtn").linkbutton("enable");
 				}
-			};
-		$("#theForm").ajaxSubmit(options);
-	}
-} 
-
-$(function(){
+			//退款金额
+				var return_money=$("input[name='apply_alltotal']").val();
+				if(pay_way == 1){
+					if( Number(return_money) == "0"){
+						alert("退款金额不能为零");
+						$("#subapply").removeAttr("disabled");
+						return false;
+					}
+				}
+				if(isNaN(return_money)){
+					alert("退款金额必须是浮点型数字，例如1.00");
+					$("#subapply").removeAttr("disabled");
+					return false;
+				}
+				if( return_money == ""){
+					alert("退款金额不能为空");
+					$("#subapply").removeAttr("disabled");
+					return false;
+				}
+				if( Number(return_money) < "0"){
+					alert("退款金额不能为负数");
+					$("#subapply").removeAttr("disabled");
+					return false;
+				}
+				if( Number(return_money) > Number($("#paypricereturn").val())){
+					alert("退款金额不能大于已支付金额");
+					$("#subapply").removeAttr("disabled");
+					return false;
+				}
+			  //退款原因的验证
+			  if($("select[name='reason']").val()=="0"){
+				  alert("请选择退款原因");
+				  return false;	
+				  }
+			  if($(this).attr("disabled")=="disabled"){
+				  $.Loading.error("操作太频繁，请稍侯");
+				  }
+			  $(this).attr("disabled","disabled");
+			  var options = {
+					  url : "${ctx}/shop/admin/sell-back/save-refund.do",
+					  type : "POST",
+					  dataType : 'json',
+					  success : function(result){
+						  if(result.result==1){
+							  $.Loading.success(result.message);
+							  $("#subapply").addClass("layui-btn-disabled");
+							  closeCurrent();
+							  }
+						  if(result.result==0){ 
+							  $.Loading.error(result.message);
+							  }
+						  },
+					  error : function(e) {
+						  $.Loading.error('出现错误，请重试');
+						  }
+				};
+			  	$('#theForm').ajaxSubmit(options);
+				return false;
+		  });
 	
 	$.getJSON("${ctx}/shop/admin/sell-back/search-sn.do?orderId=${orderinfo.order_id }",function(data){
 		if(data.result == 1){
@@ -182,6 +253,7 @@ $(function(){
 			parent.CloseTabByTitle("申请售后");
 		}
 	});
+});
 });  
 </script>
 <#include '/admin/footer.html' >

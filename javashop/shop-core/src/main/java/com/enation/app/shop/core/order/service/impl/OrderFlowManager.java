@@ -140,8 +140,6 @@ public class OrderFlowManager implements IOrderFlowManager {
 		int buygoods_num_mp = json.getInt("buygoods_num_mp");
 		int need_pay_money = (int) Math.rint(order.getNeed_pay_money());
 		order.setGainedpoint(CurrencyUtil.mul(need_pay_money, buygoods_num_mp).intValue());
-	
-		
 		
 		//判断订单号是否为空
 		if(StringUtil.isEmpty(order.getSn())){
@@ -210,7 +208,7 @@ public class OrderFlowManager implements IOrderFlowManager {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Log(type=LogType.ORDER,detail="订单ID为${orderId}，确认收款")
+	@Log(type=LogType.ORDER,detail="订单ID为${orderId}，${userName}确认收款，金额：${payMoney}")
 	public boolean pay(Integer paymentId,Integer orderId,double payMoney,String userName) {
 		
 		Order order = this.orderManager.get(orderId);
@@ -509,7 +507,7 @@ public class OrderFlowManager implements IOrderFlowManager {
 	 * @see com.enation.app.shop.core.order.service.IOrderFlowManager#rogConfirm(int, java.lang.Integer, java.lang.String, java.lang.String, java.lang.Long)
 	 */
 	@Override
-	@Log(type=LogType.ORDER,detail="订单ID为${orderId}，确认收货")
+	@Log(type=LogType.ORDER,detail="订单ID为${orderId}，${sign_name}确认收货")
 	public void rogConfirm(int orderId,Integer op_id,String op_name,String sign_name,Long sign_time){
 		Order order = this.orderManager.get(orderId);
 		this.orderPluginBundle.onRogconfirm(order);

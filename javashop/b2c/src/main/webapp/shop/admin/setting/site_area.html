@@ -1,7 +1,7 @@
-
+<#include '/admin/sonheader.html' >
 <div class="main" style="background: white;">
 	<div style="width: 100%" id="areas">
-		<ul>
+		<ul style="list-style:none;">
 			<#list regionList as sl>
 			<li>
 				<div>
@@ -25,14 +25,17 @@
 			</li> 
 			</#list>
 		</ul>
+		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;" > 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_adv">保存</a>
+  		</div>
 	</div>
 </div>
 
 <script>
 $(function() {
 	var c_areaids = null;
-	if(checkout_areaids!=null){
-		c_areaids = checkout_areaids.split(",");
+	if(parent.checkout_areaids!=null){
+		c_areaids = parent.checkout_areaids.split(",");
 	}
 	
 	$(".area").each(function() {
@@ -81,6 +84,18 @@ $(function() {
 			}
 		});
 	})
+	
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	    
+	    $(".layui-layer-btn1").click(function(){
+	    	parent.layer.close(index);
+	    });
+	    
+	});
 })
 
 </script>

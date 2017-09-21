@@ -1,22 +1,65 @@
-<form method="post" id="addmodelForm"  >
-	<table >
-	     <tr>
-	       <th width="60px;"><label class="text">模型名称:</label></th>
-	       <td><input type="text" class="easyui-validatebox input_text" name="china_name" data-options="required:true"  maxlength="60"  dataType="string" isrequired="true" /></td>
-	      </tr>
-	     <tr>
-	       <th><label class="text">表名:</label></th>
-	       <td><input type="text" class="easyui-validatebox input_text" name="english_name" data-options="required:true" maxlength="22" size="40" onblur="validation(this)" style="ime-mode: disabled;" isrequired="true"/></td>
-	      </tr>
-	     <tr>
-	       <th><label class="text">备注</label></th>
-	       <td>
-    			<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;"></script>
-	       </td>
-	     </tr>
-    </table>
-</form>
+<#include '/admin/sonheader.html' >
 <script type="text/javascript">
+ 		//富文本编辑器
+        var ue = UE.getEditor('editor');
+</script>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addmodelForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">模型名称:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="china_name" maxlength="60" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">表名:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="english_name" maxlength="22" size="40" onblur="validation(this)" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">备注</label>
+    		<div class="layui-input-block">
+      			<script id="editor" name="brief" type="text/plain" style="height:200px;width: 99%;"></script>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;"> 
+  			<a  class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_model" style="margin:0px;padding:0px 10px;">保存</a>
+  			<button class="layui-btn layui-btn-primary layui-btn-small" type="reset">还原</button>
+  		</div>
+  	</form>
+</div>
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name);
+//layui调用
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form(),
+        layer = layui.layer,
+        layedit = layui.layedit,
+        laydate = layui.laydate;
+    
+    
+    form.on('submit(save_model)', function(data){
+    	var options = {
+   			url:ctx+"/cms/admin/model/save-add.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/cms/admin/model/list-json.do").load();
+   				}
+   			}
+   		};
+   		$("#addmodelForm").ajaxSubmit(options);
+       return false;
+    });
+    
+});
 
 //对输入的表名称进行格式验证，只允许输入小写英文字母和下划线，且不能以下划线开始和结束
 //add by DMRain 2016-4-15

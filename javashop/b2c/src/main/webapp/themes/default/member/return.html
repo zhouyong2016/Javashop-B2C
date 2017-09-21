@@ -1,0 +1,244 @@
+<#include 'member_header.html' />
+<#--创建“订单货物列表”标签-->
+<#assign orderChildItemListTag = newTag("orderItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderChildItemListTag("{'orderid':${order_id}}")>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+<#--调用退款所需积分是否充足标签 -->
+<#assign checkPointPlenty = newTag("checkPointPlentyTag")>
+<#assign isPlenty = checkPointPlenty()>
+<div class="data">
+	<h2>申请退货</h2>
+</div>	
+
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg"/>
+	
+		<div>
+			<h2>温馨提示</h2>
+			<p><#if isPlenty==0>用户积分不足以退还所有货物，退款与支付金额可能会有微小出入。</#if></p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="tab">
+	<ul >
+		<li class="curr"><a href="javascript:void(0);"><span>申请退货</span></a></li>
+	</ul>
+</div>
+<div class="box">
+	<div class="top"></div>
+	<div class="body">
+		<form id="returnForm">
+			<input type="hidden" name="orderId" value="${order_id}" />
+			<table cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th>是否退货</th> 
+					<th>商品图片</th>
+					<th>商品名称</th>
+					<th>单价</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list orderItemList as item>		       
+					<tr>
+						<td>
+							<#if item.state==0 >
+								<input type="checkbox" name="goodsId" value="${item.goods_id}" autocomplete="off"/>
+								<span style="display:none">
+								<input type="checkbox" class="need_sync" goods_id="${item.goods_id}" name="item_id" value="${item.item_id}" autocomplete="off"/> 
+								<input type="checkbox" class="need_sync" goods_id="${item.goods_id}"  name="productId" value="${item.product_id}"  autocomplete="off"/>
+								<input type="checkbox" class="need_sync"  goods_id="${item.goods_id}" name="price" value="${item.price}"  autocomplete="off"/>
+								<input type="checkbox" class="need_sync" goods_id="${item.goods_id}" name="payNum" value="${item.num}" autocomplete="off"/> 
+								
+								</span>
+							<#else>
+					 		&nbsp;&nbsp;
+							</#if>
+						</td> 
+						<td style="width:50px">
+							<a target="_blank" href="../goods-${item.goods_id}.html">
+								<span style="display: block; height: 50px;" class="cart-product-img">
+									<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+								</span>
+							</a>				
+						</td>
+						<td style="width:300px;"><a target="_blank" href="../goods-${item.goods_id}.html">
+						${item.name}
+						
+						<#if item.other?? >
+							${item.other}
+						</#if>
+						</a></td>
+						<td>${item.price?string.currency}</td>
+						<td>
+							${item.num}
+						</td>
+						<td>
+							<input name="goodsNum"  type="text" value="${item.num}" disabled="disabled" maxnum="${item.num}" goods_id="${item.goods_id}" class="input_text"  style="width:30px" autocomplete="off" />
+						</td>
+						
+					</tr>
+					 
+				</#list>
+			</tbody>
+		</table>
+			<table width="100%" cellspacing="0" cellpadding="0"	class="perfection">
+				<tr>
+					<td>退款方式</td>
+					<td>
+						<select name="refund_way"> 
+							<option value="0">-- 请选择退款方式 --</option>
+							<#list paymentList as payment  >
+								<#if payment.type!="cod">
+									<option value="${payment.name}"> ${payment.name} </option>
+								</#if>
+							</#list>
+						</select>
+					</td>
+					<td>退款账号</td>
+					<td><input type="text" name="return_account" /> </td>
+				</tr> 
+				<tr>
+					<td width="10%">问题描述</td>
+					<td colspan="3"><textarea name="remark"   style="resize:none;width:90%;height:80px"></textarea> </td>
+				</tr>
+				<!-- 
+				<tr>
+					<td width="10%">上传图片</td>
+					<td colspan="3"><input type="file" name="file"> </td>
+				</tr>
+				 -->	
+			</table>
+		</form>
+		<div class="mc-mdOper">
+			<div class="btn">
+				<input type="button" name="btnSubmit" value="申请退货" id="btnSubmit" class="yellow_btn" style="margin:10px;float:right;"/>
+			</div>
+		</div>
+		<div class="pager_border">
+			<div class="clear"></div>
+		</div>
+</div>
+</div>
+	<div class="bottom"></div>
+
+<div class="clear"></div>
+<div class="helper">
+	<h2>小贴士</h2>
+	<ul>
+		<li><a href="${ctx}/help-23-14.html" target="_blank">我怎么进行退换货？</a></li>
+	</ul>
+</div>
+	<!--会员中心首页右侧结束-->
+</div>
+	<div class="rr_bottom"></div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	
+	$("input[name='goodsId']").click(function(){
+		var checked = this.checked;
+		var goodsid  = $(this).val();
+		if(checked){
+			$(".need_sync[goods_id="+goodsid+"]").attr("checked","checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").removeAttr("disabled");
+		}else{
+			$(".need_sync[goods_id="+goodsid+"]").removeAttr("checked");
+			$("[name=goodsNum][goods_id="+goodsid+"]").attr("disabled","disabled");
+		}
+	});
+	
+	$("#btnSubmit").click(function(){
+		
+		if($("input[name='goodsId']").filter(":checked").length==0){
+			alert("请选择要退货的商品");
+			return false;
+		}
+		
+		var error =0;
+		
+		$("[name=goodsNum]").each(function(i,v){
+			var $this = $(v);
+			var maxnum= $this.attr("maxnum");
+			var num = $this.val();
+			
+			if(num==""){
+				alert("请输入退货数量");
+				error=1;
+				return ;
+			}
+			
+			
+			if(num=="0"){
+				alert("退货数量不能为0");
+				error=1;
+				return ;
+			}
+			
+			if (!$.isNumber(num)){
+				alert("退货数量请输入数字");
+				error=1;
+				return ;
+			}
+			
+			if(num>maxnum){
+				alert("退货数量不能大于购物数量");
+				error=1;
+				return ;
+			}
+			
+		});
+		
+		
+		if(1==error){
+			return false;
+		}
+		 
+		if($("select[name='refund_way']").val()=="0"){
+			alert("请选择支付方式");
+			return false;
+			
+		}
+		if($("input[name='return_account']").val()==""){
+			alert("请填写退款账号");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		 
+		
+		var options = {
+				url : "${ctx}/api/shop/sellBack!apply.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						alert(result.message);
+						location.href="return_list.html"
+					}else{
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#returnForm').ajaxSubmit(options);
+	});
+	 
+})
+</script>
+<#include '../common/footer.html'/>

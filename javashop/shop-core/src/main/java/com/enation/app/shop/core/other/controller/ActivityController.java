@@ -1,6 +1,7 @@
 package com.enation.app.shop.core.other.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -367,5 +368,16 @@ public class ActivityController extends GridController{
 	public GridJsonResult listGoodsJson(String keyword, Integer activity_id){
 		Page webpage = this.activityManager.listGoods(keyword, activity_id, this.getPage(), this.getPageSize());
 		return JsonResultUtil.getGridJson(webpage);
+	}
+	/**
+	 * 获取所有有效并且正在上架销售的商品列表json
+	 * @param keyword 搜索关键字
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/list-goods-json-map")
+	public GridJsonResult listGoodsJsonMap(String keyword, Integer activity_id){
+		List<Map> list = this.activityManager.listGoods(keyword, activity_id);
+		return JsonResultUtil.getGridJson(list);
 	}
 }

@@ -30,10 +30,6 @@
 <#assign orderMetaTag = newTag("orderMetaTag")>
 
 <#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
-<#-- 创建“发票标签” -->
-<#assign receiptTag = newTag("receiptTag")>
-<#-- 调用发票标签 -->
-<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
 <#assign orderstatus="com.enation.app.shop.front.tag.order.OrderStatusDirectiveModel"?new()>
 <link rel="stylesheet" href="${ctx}${themes_path}/css/reveal.css" type="text/css" />
 <script src="${ctx}${themes_path}/js/Order.js" type="text/javascript"></script>
@@ -84,7 +80,7 @@
 						</#if>
 					</#if>
 				</td>
-				<td>${item.price?string.currency}元 × ${item.num}<#if item.exchange_point??&&item.exchange_point gt 0 >+${(item.exchange_point!'0')}积分 </#if></td>	
+				<td>${item.price?string.currency}元 × ${item.num}<#if item.exchange_point??&&item.exchange_point gt 0 >+${(item.exchange_point!'0')?number*item.num}积分 </#if></td>	
 			</tr>
 		</#list>
 		</table>
@@ -142,9 +138,17 @@
 		</#if>
 	</div>
 	<div class="order-detail-same">
-		<h2>发表信息</h2>
-		<p><span>发票抬头：</span>${orderreceipt.title!'无'}</p>
-		<p><span>发票内容：</span>${orderreceipt.content!'无'}</p>
+		<h2>发票信息</h2>
+		<#if orderDetail.receipt?? && orderDetail.receipt == 1>
+			<p><span>发票抬头：</span>${orderDetail.receipt_title!'无'}</p>
+			<p><span>发票内容：</span>${orderDetail.receipt_content!'无'}</p>
+			<p><span>发票类型：</span><#if orderDetail.receipt_type==1>个人<#else>单位</#if></p>
+			<#if orderDetail.receipt_duty?? && orderDetail.receipt_duty!="">
+				<p><span>发票税号:</span>${orderDetail.receipt_duty!'无'}</p>
+			</#if>	
+		<#else>
+			<p><span>无</span></p>
+		</#if>	
 	</div>
 	<#if orderDetail.remark??>
 		<div class="order-detail-same">

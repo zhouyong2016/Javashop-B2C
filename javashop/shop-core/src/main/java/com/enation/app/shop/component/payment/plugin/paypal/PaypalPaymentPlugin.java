@@ -41,6 +41,8 @@ import com.enation.app.shop.component.payment.plugin.paypal.base.rest.PayPalReso
 import com.enation.app.shop.component.payment.plugin.paypal.util.GenerateAccessToken;
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.eop.resource.model.EopSite;
@@ -380,6 +382,14 @@ private static 	Map<String, String> map = new HashMap<String, String>();
 	public String getName() {
 		
 		return "paypal支付插件";
+	}
+
+
+
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

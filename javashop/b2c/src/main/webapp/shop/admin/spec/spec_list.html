@@ -1,204 +1,137 @@
-<#include '/admin/header.html' > 
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-
-<div id="loading"></div>
-<div class="main">
-	<div class='buttonArea'>
-		<a href="javascript:void(0)" class="button" onclick="controlSpec()">添加</a>
-		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
-	</div>
-	<div class="clear height10"></div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="specform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/spec/list-json.do',pageList:[10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
-				width="width" pagination="true" id="specdata">
-				<thead>
-					<tr>
-						<th data-options="field:'spec_id',checkbox:true,width:100"></th>
-						<th data-options="field:'spec_name',width:100">规格名称</th>
-						<th data-options="field:'spec_type',width:100" formatter="forSpecType">类型</th>
-						<th data-options="field:'action',width:25"
-							formatter="formatAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</form>
-	</div>
+<#include '/admin/header.html' >
+<style>
+ .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+           <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>可以添加不同规格，在添加商品或者类型中，选择当前不同的规格。</li>
+                <li><span>·</span>规格用途：比如前台购买鞋子，规格就是尺寸，颜色等等。。</li>
+                <li><span>·</span>关于库存：比如一个商品有不同规格，那么不同规格的商品，库存也是不一样的，可以按规格来进货。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="addspec" title="添加" class="layui-btn layui-btn-primary " ><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" id="deletespec" title="删除" class="layui-btn layui-btn-primary " onclick="delSpec();"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" title="提示" class="layui-btn layui-btn-primary " id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+   </div>
+   <!--表格区域  -->
+   <form id="specform">
+      <table id="specdata" class="layui-table site-table table-hover" width="100%" lay-skin="line"> 
+        <thead>
+        <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>规格名称</th>
+            <th>类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+      </table>
+      <!--传值等操作(暂定)  -->
+      <div id="addBrand" ></div>
+   </form>
 </div>
-<div id="divdia" style="display: none;"></div>
 
-
-<script type="text/javascript">
-
-
-
-
-	function controlSpec(id) {
-		var map = {}; // Map map = new HashMap();
-		if (!id) {
-			map["href"] = "${ctx}/shop/admin/spec/add.do";
-			map["formId"] = "#specAddForm";
-			map["url"] = "${ctx}/shop/admin/spec/save-add.do";
-			map["title"] = "添加规格";
-			map["loadshow"] = "正在添加......";
-		} else {
-			map["href"] = "${ctx}/shop/admin/spec/edit.do?specId="+id;
-			map["formId"] = "#specEditForm";
-			map["url"] = "${ctx}/shop/admin/spec/save-edit.do";
-			map["title"] = "修改规格";
-			map["loadshow"] = "正在修改......";
-		}
-		map["divDialog"] = "#divdia";
-		map["gridreload"] = "#specdata";
-
-		addDialog(map);
-	}
-	function addDialog(map) {
-		$(map["divDialog"]).show();
-		$(map["divDialog"]).dialog({
-			title : map["title"],
-			width : 600,
-			height : 400,
-			closed : false,
-			cache : false,
-			href : map["href"],
-			modal : true,
-			buttons : [{
-				text : '保存',
-				handler : function() {
-					var savebtn = $(this);
-	　　				var disabled=savebtn.hasClass("l-btn-disabled");
-	　　				if(!disabled){
-	　　					var type=1;
-	　　					$("#tb input[name=valueArray]").each(function(i, o){
-	　　						if($(o).val()==""){
-	　　							type=0;
-	　　						}
-	　　					});
-	　　					if(type==1){
-		　　					submitForm(map,savebtn);
-	　　					}else{
-	　　						alert("请填写规格值");
-	　　					};
-					}
-				}
-			}]
-		});
-	}
-	function submitForm(map,savebtn) {
-		var formflag = $(map["formId"]).form().form('validate');
-		if (formflag) {
-			$.Loading.show("正在保存请稍候...");
-			savebtn.linkbutton("disable");
-			var options = {
-				url : map["url"],
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$(map["divDialog"]).dialog('close');
-						$(map["gridreload"]).datagrid('reload');
-						$.Loading.success(result.message);
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-					savebtn.linkbutton("enable");
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-					savebtn.linkbutton("enable");
-				}
-			};
-			$(map["formId"]).ajaxSubmit(options);
-		}
-	}
-
-	function formatAction(value, row, index) {
-		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlSpec("
-				+ row.spec_id + ")' ></a>";
-		return val;
-	}
+<!--js区域  -->
+<script>
+var table;
+$(function(){
 	
+	 table = $('#specdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/spec/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="spec_id" class="fly-checkbox" value=' + obj.spec_id + '>';
+            		}},
+	        {data: "spec_name"},
+	        {"data": function (obj) {
+	    		if(obj.spec_type==0){
+	    			return '文字';
+	    		}
+	    		if(obj.spec_type==1){
+	    			return '图片';
+	    		}
+            }},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='editSpec("+data["spec_id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
 	
-	/*
-	*删除规格操作
-	*/
-	function del() {
-		var rows = $('#specdata').datagrid("getSelections");
-		if (rows.length < 1) {
-			alert("请选择要删除的规格");
-			return false;
-		}
-		if (!confirm("确认要删除这些规格吗？")) {
-			return false;
-		}
-		 $.Loading.show("正在检测规格使用情况"); 
-		//先检测是否有规格被使用
-		var options = {
-				url : "${ctx}/shop/admin/spec/check-used.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					 $.Loading.hide(); 
-					if (result.result == 1) {
-						 if(result.used==1){//有规格被使用
-							 $.Loading.error("规格已经被商品使用，不能删除");
-						 }
-						 
-						 if(result.used==0){//规格没有被使用，删除
-							 doDelSpec();
-						 }
- 					}
-					if (result.result == 0) {
-						 alert("检测规格使用情况出错");
-					}
+	 //添加规格
+	$("#addspec").click(function(){
+	   	layer.open({
+            title:"添加规格",//标题
+            maxmin :true,//右上角可否放大缩小
+            type:2,//弹框的类型
+            shade: [0.3, '#000'],//黑色背景
+            shadeClose:false,//黑色背景是否可以点击关闭
+            content:"${ctx}/shop/admin/spec/add.do",//内容的URL
+            area:['630px','500px'],//弹框大小
+            scrollbar: false,//是否允许浏览器出现滚动条
+        });
+	});
+});
 
-				},
-				error : function(e) {
-					alert("出现错误 ，请重试");
-				}
-			};
-			$('#specform').ajaxSubmit(options);	
-		
-		 
-	}
-	
-	/**
-	* 真正删除规格的操作
-	*/
-	function doDelSpec(){
-		var options = {
-				url : "${ctx}/shop/admin/spec/delete.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success(result.message);
-						$("#specdata").datagrid('reload');
-					}
-					if (result.result == 0) {
-						alert(result.message);
-					}
+//修改规格
+function editSpec(specId){
+	layer.open({
+        title:"修改规格",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/spec/edit.do?specId="+specId,//内容的URL
+        area:['630px','500px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+    });
+}
 
-				},
-				error : function(e) {
-					alert("出现错误 ，请重试");
+//删除规格
+function delSpec(){
+	var check = $("input[name='spec_id']").is("input:checked");
+	if(check == false){
+		alert("请选择删除的规格");
+		return false;
+	} 
+	if (!confirm("确认要删除规格吗？")) {
+		return false;
+	}
+   var options = {
+		   url:ctx+"/shop/admin/spec/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/spec/list-json.do").load();
+				}else{
+					$.Loading.error(data.message);
 				}
-			};
-			$('#specform').ajaxSubmit(options);
-	}
-	
-	function forSpecType(value, row, index){
-		var val="";
-		if(value==0){
-			val="文字";
-		}
-		if(value==1){
-			val="图片";
-		}
-		return val;
-	}
+			}
+   };
+   $("#specform").ajaxSubmit(options);
+}
 </script>
 <#include '/admin/footer.html' >

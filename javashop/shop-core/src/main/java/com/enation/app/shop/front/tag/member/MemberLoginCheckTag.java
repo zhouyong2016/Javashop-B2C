@@ -14,7 +14,6 @@ import com.enation.eop.sdk.context.UserConext;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.taglib.BaseFreeMarkerTag;
 import com.enation.framework.util.RequestUtil;
-import com.enation.framework.util.StringUtil;
 
 import freemarker.template.TemplateModelException;
 
@@ -32,10 +31,10 @@ public class MemberLoginCheckTag extends BaseFreeMarkerTag {
 	@Override
 	protected Object exec(Map params) throws TemplateModelException {
 		String loginUrl = (String) params.get("login_url");
-
+		
 		HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 		String curr_url = RequestUtil.getRequestUrl(request);
-
+		
 		String ctx = this.getRequest().getContextPath();
 		if("/".equals(ctx)){
 			ctx="";
@@ -49,12 +48,7 @@ public class MemberLoginCheckTag extends BaseFreeMarkerTag {
 		if (member == null) {
 			HttpServletResponse response = ThreadContextHolder.getHttpResponse();
 			try {
-				Object obj = params.get("unionId");
-//				System.out.println("---"+obj+"====");
-				
-				if((obj == null || StringUtil.toInt(obj.toString(),false) == 0) && !"".equals(obj)){
-					response.sendRedirect(loginUrl);
-				}
+				response.sendRedirect(loginUrl);
 				Member nullMember = new Member();
 				nullMember.setMember_id(0);
 				return nullMember;

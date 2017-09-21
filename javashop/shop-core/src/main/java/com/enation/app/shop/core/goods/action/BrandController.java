@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,9 @@ import com.enation.eop.sdk.utils.StaticResourcesUtil;
 import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
+import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.database.Page;
+import com.enation.framework.util.CurrencyUtil;
 import com.enation.framework.util.FileUtil;
 import com.enation.framework.util.JsonResultUtil;
 import com.enation.framework.util.StringUtil;
@@ -98,6 +102,7 @@ public class BrandController extends GridController {
 	 * 获取品牌JSON列表
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ResponseBody
 	@RequestMapping(value="/list-json")
 	public GridJsonResult listJson(String keyword){

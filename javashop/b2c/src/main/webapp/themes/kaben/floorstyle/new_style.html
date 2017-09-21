@@ -38,46 +38,16 @@
 		background-color: #286090;
 		border-color: #204d74;
 	}
-	.goods-title-top
 </style>
 <div class="index-same-fool">
 	<div class="box-css"></div>
 		<div class="index-same-tile index-food">
 			<h1 id="title_id" >
-			<#if floor?exists >
-				${floor.title}
-			</#if>
-			<span></span>
+				<#if floor?exists >
+					${floor.title}
+				</#if>
+				<span></span>
 			</h1>
-			
-			<ul class="items-box" style="min-width: 40px;float:left;margin:0 0 0 520px">
-			
-			<!-- 创建商品分类标签 -->
-			<#if guid_cat_id??&& guid_cat_id!='' >
-			<#assign goodsCatTag= newTag("goodsCatTag")>
-			<#assign goodsCat = goodsCatTag("'parentid':${guid_cat_id},'catimage':'on'")!'' >
-				<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-				data-operation-url="${ctx}/core/admin/template/edit-guid-cat.do" 
-				data-operation-id="${guid_cat_id}" 
-				data-save-url="${ctx}/core/admin/template/save-guid-cat.do?ajax=yes"
-				data-title="修改分类列表" 
-				data-formId="editGuidForm"  
-				data-floorId="${floor.id}" >
-				<#list goodsCat.cat_tree as cat>
-					<#if cat_index lt 5>
-						<li <#if !cat_has_next>class="last"</#if>><a href="${ctx}/goods_list.html?cat=${cat.cat_id}" title="${cat.name }">${cat.name }</a></li>
-					</#if>
-				</#list>
-			<#else>
-				<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
-				data-operation-url="${ctx}/core/admin/template/edit-guid-cat.do" 
-				data-operation-id="" 
-				data-save-url="${ctx}/core/admin/template/save-guid-cat.do?ajax=yes"
-				data-title="新增分类列表" 
-				data-formId="editGuidForm"  
-				data-floorId="${floor.id}" >
-			</#if>
-			</ul>
 		</div>
 		<div class="same-box ">
 			<div class="same-box-left ">
@@ -85,13 +55,7 @@
 					<ul class="items-box">
 						<#if brand_ids??&& brand_ids!='' >
 						<!-- 品牌 -->
-						<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
-								data-operation-url="${ctx}/core/admin/template/edit-brand.do"
-								data-operation-id=""
-								data-save-url="${ctx}/core/admin/template/save-brand.do?ajax=yes"
-								data-title="修改品牌列表"
-								data-formId="editBrandForm"
-								data-floorId="${floor.id}" >
+						<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles b_brand" data-floorId="${floor.id}">
 						<#assign floorBrandListByCatidTag= newTag("floorBrandListByCatidTag")>
 						<!-- 调用商品品牌信息 -->
 						<#assign brandListByCatid = floorBrandListByCatidTag("'brand_ids':${brand_ids}")!'' >
@@ -103,25 +67,13 @@
 							</li>
 						</#list>
 						<#else>
-							<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles"
-								data-operation-url="${ctx}/core/admin/template/edit-brand.do"
-								data-operation-id=""
-								data-save-url="${ctx}/core/admin/template/save-brand.do?ajax=yes"
-								data-title="修改品牌列表"
-								data-formId="editBrandForm"
-								data-floorId="${floor.id}" >
+							<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles b_brand" data-floorId="${floor.id}" >
 						</#if>
 					</ul>
 				</div>
 				<div class="same-cat items-box">
 					<#if cat_id??&& cat_id!='' >
-					<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-cat.do" 
-							data-operation-id="${cat_id}" 
-							data-save-url="${ctx}/core/admin/template/save-cat.do?ajax=yes"
-							data-title="修改分类列表" 
-							data-formId="editCatForm"  
-							data-floorId="${floor.id}" >
+					<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles b_cats" data-floorId="${floor.id}">
 					<!-- 创建商品分类标签 -->
 					<#assign goodsCatTag= newTag("goodsCatTag")>
 					<!-- 调用商品分类信息 -->
@@ -138,27 +90,14 @@
 								<!--  <a href="search-cat-${cat.cat_id}.html" class="menu">${cat.name }</a><br/>-->
 					</#list>
 					<#else>
-						<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-cat.do" 
-							data-operation-id="" 
-							data-save-url="${ctx}/core/admin/template/save-cat.do?ajax=yes"
-							data-title="新增分类列表" 
-							data-formId="editCatForm"  
-							data-floorId="${floor.id}" >
+						<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles b_cats" data-floorId="${floor.id}">
 					</#if>
 				</div>
 				
 			</div>
 			<div class="same-box-middel items-box">
 				<#if adv_ids??&& adv_ids!='' >
-				<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
-						data-operation-url="${ctx}/core/admin/template/edit-adv.do" 
-						data-operation-id="" 
-						data-save-url="${ctx}/core/admin/template/save-adv.do?ajax=yes"
-						data-title="修改广告图片" 
-						data-formId="editAdvForm"  
-						data-floorId="${floor.id}" 
-						data-goods-index="only" >
+				<input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles b_advs" data-floorId="${floor.id}" data-goods-index="only">
 				<!-- 调用广告信息,传递参数acid:1 -->
 				<#assign advList = floorAdvListTag("'aid':'${adv_ids}','position':'only'")!'' >
 				 <#list advList as adv3>
@@ -167,14 +106,7 @@
 			                </a>
 	               </#list>
 	             <#else>
-	             	<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles"
-						data-operation-url="${ctx}/core/admin/template/edit-adv.do" 
-						data-operation-id="" 
-						data-save-url="${ctx}/core/admin/template/save-adv.do?ajax=yes"
-						data-title="修改广告图片" 
-						data-formId="editAdvForm"  
-						data-floorId="${floor.id}" 
-						data-goods-index="only" >
+	             	<input type="button" style="display:none" value="修改"  class="floor new_tab btn-default-styles b_advs" data-floorId="${floor.id}" data-goods-index="only">
 	             </#if>
 			</div>
 			<div class="same-box-right">
@@ -183,15 +115,8 @@
 					<div class="child_floor_tab">
 						<ul class="floor_tab_ul">
 							<#list childFloorList as childs>
-								<li  id="${childs.id}" class="show_this tab_item items-box" style="cursor: pointer; opacity: 1; margin-right: 10px; width: 70px; " >
-								 <input type="button" style="display:none" value="编辑"  class="floor new_tab btn-default-styles"
-										data-operation-url="${ctx}/core/admin/template/edit-batch-goods.do" 
-										data-operation-id="" 
-										data-save-url="${ctx}/core/admin/template/save-batch-goods.do?ajax=yes"
-										data-title="批量添加商品" 
-										data-formId="editBatchGoodsForm"  
-										data-floorId="${childs.id}" >
-
+								<li id="${childs.id}" class="show_this tab_item items-box" style="cursor: pointer; opacity: 1; margin-right: 10px; width: 70px; " >
+								 <input type="button" style="display:none" value="编辑" class="floor new_tab btn-default-styles b_tags" data-floorId="${childs.id}">
 									<a href="javascript:void(0);">${childs.title}</a>
 								</li>
 							</#list>
@@ -199,10 +124,9 @@
 						<div class="curBg"></div>
 					</div>
 					<#list childFloorList as childs>
-					<#if childs.path??>
-					<#include '${childs.path}' >
-					</#if>
-						
+						<#if childs.path??>
+							<#include '${childs.path}' />
+						</#if>
 					</#list>
 				</#if>
 			</div>
@@ -236,7 +160,7 @@
 			var box = $('.items-box');
 			for(var i = 0; i < box.length; i++){
 				var _box = box.eq(i);
-				if(_box.find('div, li, a').length == 0 || (_box.find('.pagination').length > 0) && _box.find('ul').length == 0){
+				if(_box.find('div, li, a').length === 0 || (_box.find('.pagination').length > 0) && _box.find('ul').length === 0){
 					_box.find("input[type='button']").show();
 				}else {
 					_box.hover(function(){

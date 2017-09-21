@@ -16,7 +16,7 @@ import com.enation.framework.plugin.AutoRegisterPlugin;
  * @author lzf<br/>
  * 2012-4-1下午10:34:27<br/>
  */
-@Component   
+@Component
 public class MemberMkPointHistoryPlugin extends AutoRegisterPlugin implements
 		IMemberTabShowEvent {
 	

@@ -1,33 +1,75 @@
-<div class="main" style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-		<form id="addForm" method="post" class="validate">
-			<table width="100%">
-				<tr>
-					<td nowrap="" width="70%">配送公式： <input type="text"
-						class="input_text" size="50" value="" id="dlg_expressions">
-					</td>
-				</tr>
-				<tr>
-					<td nowrap="" width="70%">商品重量： <input type="text" value="0"
-						style="width: 200px;" size="8" maxlength="20" class="input_text"
-						name="weight" id="weight"> 克</td>
-					<td nowrap="" width="30%" rowspan="3">
-						<p>
-							<a href="javascript:;" id="calculatePrice" class="easyui-linkbutton">
-								计算</a>
-						</p></td>
-				</tr>
-				<tr>
-					<td nowrap="" width="70%">订单价格： <input type="money"
-						style="width: 200px;" vtype="money" style="" value="0" size="8"
-						maxlength="20" class="input_text" name="orderprice"
-						id="orderprice"></td>
-				</tr>
-				<tr>
-					<td nowrap="" width="70%"><span id="result"></span>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
+<#include '/admin/sonheader.html' >
+
+<div class="admin-main">
+    <!--表单区域  -->
+	<form id="addForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item" style="margin-top:20px;">
+    		<label class="layui-form-label">配送公式：</label>
+    		<div class="layui-input-block">
+      			<input type="text" size="50" value="" id="dlg_expressions" name="dlg_expressions" lay-verify="dlg_expressions" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">商品重量：</label>
+    		<div class="layui-input-block">
+      			<input type="text" size="8" maxlength="20" value="0" name="weight" id="weight" lay-verify="weight" autocomplete="off" class="layui-input" style="display:inline">克
+    		    <a class="layui-btn layui-btn-mini" id="calculatePrice" lay-submit="" >计算</a>
+    		</div>
+    		
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">订单价格：</label>
+    		<div class="layui-input-block">
+      			<input type="text" value="0" size="8" maxlength="20" name="orderprice" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+  			<span id="result"></span>
+  		</div>
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    //计算
+	$("#calculatePrice").click(function() {
+		//验证
+		var expressions = $("input[name='dlg_expressions']").val();
+		var weight = $("input[name='weight']").val();
+		if(weight == ""){
+			alert("商品重量不能为空！")
+			return false;
+		}
+		if(expressions == ""){
+			alert("配送方式不能为空！")
+			return false;
+		}
+		
+		function tint(value) {
+			return value < 0 ? 0 : value;
+		}
+		var w = parseFloat($("#weight").val());
+		var p = parseFloat($("#orderprice").val());
+		var exp = $("#dlg_expressions").val();
+		var result = "";
+		try {
+			result = "计算结果：" + eval(exp);
+		} catch (e) {
+			result = "公式错误";
+		}
+		$("#result").html(result);
+	});
+});
+</script>

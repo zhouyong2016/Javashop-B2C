@@ -1,5 +1,5 @@
-<#assign checkGoodsPartActTag = newTag("checkGoodsPartActTag")>
-<#assign goodsPartAct = checkGoodsPartActTag("{'goods_id':${goods.goods_id}}")!'' >
+<#assign checkGoodsPartActTag = newTag("checkGoodsPartActTag") />
+<#assign goodsPartAct = checkGoodsPartActTag("{'goods_id':${goods_id}}")!'' />
 
 <#if goodsPartAct.activity??>
     <#assign activitySalesDetailTag= newTag("activitySalesDetailTag") />
@@ -12,7 +12,7 @@
         <div class="other-item-content activity-item-content" style="margin-left: 50px;">
             <#if detail.is_full_minus == 1>
                 <div class="item-activity">
-                    <span class="icon-activity" style="width:40px;">满减</span>
+                    <span class="icon-activity" style="width:30px;">满减</span>
                     <span class="detail-activity">满${detail.full_money!''} 减${detail.minus_value!''}元</span>
                 </div>
             </#if>
@@ -62,14 +62,11 @@
                 location.href = ctx + data_href;
                 return false
             }
-            activity.css({height: 27 * items.length});
+            activity.css({height: 26 * items.length});
             showMore.addClass('show-detail')
             setTimeout(function () {
                 showMore.html('查看促销详情');
             }, 200)
         })
-        
-        //修改IE11下商品详情灰色价格区域在有促销情况下显示不全
-        $("body .midden-area-priceArea").css("height","auto");
     })
 </script>

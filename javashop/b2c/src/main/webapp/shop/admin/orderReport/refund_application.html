@@ -1,53 +1,90 @@
-<#include '/admin/header.html' > <#assign
-dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<div class="shadowBoxWhite tableDiv">
-		<table id="orderReturndata" class="easyui-datagrid"
-			data-options="url:'${ctx}/shop/admin/sell-back/refund-list-json.do?status=0',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
-			pagination="true" width="width">
-			<thead>
-				<tr>
-					<th data-options="field:'id',width:35">退款ID</th>
-					<th data-options="field:'tradeno',width:100">退款单号</th>
-					<th data-options="field:'ordersn',width:100">退款订单号</th>
-					<th data-options="field:'regoperator',width:100">业务员</th>
-					<th data-options="field:'tradestatus',width:100" formatter="formatTradestatus">状态</th>
-					<th data-options="field:'regtime',width:100" formatter="formatTime">创建时间</th>
-					<th data-options="field:'apply_alltotal',width:100">申请退款金额</th>
-					<th data-options="field:'operation',width:100" formatter="formatOperation">操作</th>
-				</tr>
-			</thead>
-		</table>
-		<div id="pay_detail"></div>
-	</div>
-</div>
-<script type="text/javascript">
-
-	function formatTime(value, row, index) {
-		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
-	}
-	function formatOperation(value, row, index) {
-		if(row.tradestatus==0){
-			return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"'); >审核</a>";
-		}
-		return "<a href='javascript:void(0);' onclick=newTab('退款单','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"'); >查看</a>";
-	}
-	function formatTradestatus(value,row,index){
-		if(value==0){
-			return "申请退款";
-		}else if(value==1){
-			return "审核通过";
-		}else if(value==6){
-			return "已退款";
-		}else if(value==3){
-			return "待退款"
-		}else{
-			return "审核拒绝";
-		}
-		return "";
-	}
+<#include '/admin/header.html' >
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>退款状态分为：新建、审核通过、审核拒绝三种状态。</li>
+                <li><span>·</span>操作审核，分为审核通过，和审核不通过，也可以在审核的时候填写备注内容。</li>
+                <li><span>·</span>对其操作完之后，不管是审核通过还是不通过，退款申请列表都不再显示该申请。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
     
-</script>
-<div id="log"></div>
+    <!--表格区域  -->
+    <table id="orderReturndata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+        <tr>
+            <th>退款ID</th>
+            <th>退款单号</th>
+            <th>退款订单号</th>
+            <th>业务员</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>退款金额</th>
+            <th>操作</th>
+        </tr>
+        </thead>
 
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
+</div>
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	 table = $('#orderReturndata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/sell-back/refund-list-json.do?status=0',
+	    },
+	    columns: [ //定义列
+	        {data: "id"},
+	        {data: "tradeno"},
+	        {data: "ordersn"},
+	        {data: "regoperator"},
+	        {data: null,"render":function(data,type,row){
+	        	if(data.tradestatus==0){
+	    			return "新建";
+	    		}else if(data.tradestatus==1){
+	    			return "审核通过";
+	    		}else{
+	    			return "审核拒绝";
+	    		}
+	    		return "";
+	        }},
+	        {data: null,"render":function(data,type,row){
+	        	return getFormatDateByLong(data.regtime, "yyyy-MM-dd hh:mm:ss");
+	        }},
+	        {data: "apply_alltotal"},
+	        {data: null,"render": function(data, type, row) {
+	        	if(row.tradestatus==0){
+	        	return "<a class='layui-btn layui-btn-small _aa' name='id' onclick=newTab('退款申请详细','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"');>审核</a>";		//获取值:data["brand_id"]
+	        	}
+	        		return "<a class='layui-btn layui-btn-small _aa' name='id' onclick=newTab('查看退款申请','${ctx}/shop/admin/sell-back/refund-detail.do?id="+row.id+"');>查看</a>";
+	       	}}
+	     ]
+	});
+});
+
+</script>
 <#include '/admin/footer.html' >

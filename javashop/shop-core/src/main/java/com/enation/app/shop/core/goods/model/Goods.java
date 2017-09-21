@@ -18,8 +18,6 @@ public class Goods implements java.io.Serializable {
 	private String unit;
 	private Double weight;
 	private Integer market_enable; //上下架	上架：1	 下架：0   预览：2
-	// private String image_default;
-	// private String image_file;
 	private String thumbnail;
 	private String big;
 	private String small;
@@ -36,7 +34,7 @@ public class Goods implements java.io.Serializable {
 	private Long last_modify;
 	private Integer view_count;
 	private Integer buy_count;
-	private Integer disabled;	//删除： 回收站：1	 正常 ：0     失效：2
+	private Integer disabled;	//删除： 回收站：1	 正常 ：0       失效：2
 	private String page_title;
 	private String meta_keywords;
 	private String meta_description;
@@ -86,19 +84,6 @@ public class Goods implements java.io.Serializable {
 	public void setGoods_id(Integer goods_id) {
 		this.goods_id = goods_id;
 	}
-
-	// public String getImage_default() {
-	// return image_default;
-	// }
-	// public void setImage_default(String image_default) {
-	// this.image_default = image_default;
-	// }
-	// public String getImage_file() {
-	// return image_file;
-	// }
-	// public void setImage_file(String image_file) {
-	// this.image_file = image_file;
-	// }
 
 	public String getThumbnail() {
 		return thumbnail;

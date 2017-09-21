@@ -74,7 +74,7 @@ Eop.Spec={
 			Refresh[i].refresh(pro,specLink,product_ar);
 		}
 		if(pro){
-			
+			  
 		}
 		else{
 			alert("缺货");
@@ -151,6 +151,7 @@ var PriceRefresh={
 		if(pro.length==1){
 			$(".kaben-price span").text("￥"+pro[0].price );
 			$("#productid").val(pro[0].product_id);
+			$(".enable_store").html(pro[0].specs);
 		}
 		else{
 			var maxPrice=0,minPrice=-1;

@@ -69,8 +69,8 @@ public class StandardOrderPaySuccessProcessor implements IPaySuccessProcessor {
 				PayCfg payCfg = this.paymentManager.get(pluginId);
 
 				//修改订单状态为已付款付款
-				this.daoSupport.execute("update es_payment_logs set paymoney=paymoney+? , pay_method=? where payment_id=?",
-						needPayMoney,payCfg.getName(),paymentid);
+				this.daoSupport.execute("update es_payment_logs set paymoney=paymoney+? , pay_method=? ,trasaction_id = ? where payment_id=?",
+						needPayMoney,payCfg.getName(),tradeno,paymentid);
 
 				//更新订单的已付金额
 				this.daoSupport.execute("update es_order set paymoney=paymoney+?,payment_account=?,payment_id=?,payment_name=?,payment_type=? where order_id=?",

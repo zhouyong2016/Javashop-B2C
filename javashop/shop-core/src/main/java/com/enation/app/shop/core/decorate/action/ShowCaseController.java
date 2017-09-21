@@ -1,6 +1,7 @@
 package com.enation.app.shop.core.decorate.action;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,6 +207,18 @@ public class ShowCaseController extends GridController{
 	public GridJsonResult getSelectGoods(Integer id){
 		ShowCase showCase=this.showCaseManager.getShowCaseById(id);
 		List<Goods> list=this.showCaseManager.getSelectGoods(showCase.getContent());
+		return JsonResultUtil.getGridJson(list);
+	}
+	/**
+	 * 获取已选择商品Map集合
+	 * @param id 橱窗id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="get-selected-goods-map")
+	public GridJsonResult getSelectGoodsMap(Integer id){
+		ShowCase showCase=this.showCaseManager.getShowCaseById(id);
+		List<Map> list=this.showCaseManager.getSelectGoodsMap(showCase.getContent());
 		return JsonResultUtil.getGridJson(list);
 	}
 	

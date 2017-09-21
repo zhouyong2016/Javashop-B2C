@@ -1,24 +1,52 @@
+<#include '/admin/sonheader.html' >
 <#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+p{
+	font-size: 14px;
+	margin-left:20px;
+	
+}
+textarea{
+    width: 90%;
+    height: 50px;
+    margin-left: 30px;
+}
+form{
+margin-top:10px;
+}
+tr td{
+ padding-top:10px;
+}
+.layui-table{
+width:96%;
+margin:0px auto;
+margin-top:20px;
+}
+.cancle{
+height:30px;
+line-height:30px;
+}
+</style>
 <div class="main" style="background-color: white;" >
-	<div class="easyui-panel" style="border-style: none;">
-		<div style="padding: 10px 0 10px 20px">
+	<div  style="border-style: none;">
+		<div >
 			<form id="replyForm" method="post" class="validate">
 			<input type="hidden" name="commentId" value="${memberComment.comment_id }"/>
-				<table>
+				<table lay-skin="line">
 					<tr>
 						<td>
 							<#if memberComment.type = 1>
-								<h3>评论内容： </h3>
+								<p>评论内容： </p>
 							<#else>
-								<h3>咨询内容： </h3>
+								<p>咨询内容： </p>
 							</#if>
-							<textarea rows="5" cols="80" style="resize: none;text-align:left;">${memberComment.content!''} </textarea>
+							<textarea rows="5" cols="80" style="resize: none;text-align:left;" readonly = "readonly">${memberComment.content!''} </textarea>
 							<#if galleryList?size != 0>
 								<br/>
-								<h3>评论图片： </h3>
+								<p>评论图片： </p>
 								<#list galleryList as gallery>
 									<a href="${gallery.original!''}" target="_blank">
-										<img src="${gallery.original!''}" width="100px;" height="100px;"/> 
+										<img src="${gallery.original!''}" width="100px;" height="100px;" style="margin-left:30px;"/> 
 									</a> 
 								</#list>
 							</#if>
@@ -28,13 +56,13 @@
 						<tr>
 							<td>
 								<#if memberComment.replystatus = 1>
-									<h3>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]回复如下： </h3>
-									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 565px;">
+									<p>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]回复如下： </p>
+									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 565px;margin-left:30px;">
 										${memberComment.reply!''}
 									</div>
 								<#else>
-									<h3>商家回复：</h3>
-									<h3>商家还没有回复此条评论</h3>
+									<p>商家回复：</p>
+									<p style="margin-left:30px;">商家还没有回复此条评论</p>
 								</#if>
 							</td>
 						</tr>
@@ -43,19 +71,41 @@
 						<tr>
 							<td>
 								<#if memberComment.status == 0>
-									<h3>商家回复：</h3>
-									<h3>此条咨询还没有通过商家审核</h3>
+									<p>商家回复：</p>
+									<p style="margin-left:30px;">此条咨询还没有通过商家审核</p>
 								<#else>
-									<h3>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]<#if memberComment.status == 2>拒绝</#if>通过审核并回复如下： </h3>
-									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 565px;">
+									<p>商家于[<@dateformat time='${memberComment.replytime}' pattern='yyyy-MM-dd'/>]<#if memberComment.status == 2>拒绝</#if>通过审核并回复如下： </p>
+									<div class="division" style="border:1px solid #BEBEBE;height: 130px;width: 520px;margin-left:30px;">
 										${memberComment.reply!''}
 									</div>
 								</#if>
 							</td>
 						</tr>
 					</#if>
+					<tr style="position: fixed; bottom:2px; right: 19px;">
+						<td>
+						    <a class="layui-btn  layui-btn-primary cancle">关闭</a>
+						</td>
+					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
 </div>
+<script>
+var index = parent.layer.getFrameIndex(window.name);
+$(function(){
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	  
+	    
+	    $(".cancle").click(function(){
+	     	parent.layer.close(index);
+	    });
+	   
+	});
+});	
+</script>

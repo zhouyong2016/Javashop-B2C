@@ -1,114 +1,216 @@
 <#include '/admin/header.html' >
-<div id="loading"></div>
-<div class="main">
-	<form id="logsform">
-		<div id="tb" style="height: auto">
-				<span id="simpleSearch">
-					<table width="98%" border="0" cellspacing="0" cellpadding="7">
-						<tr>
-							<th width="70" align="right">操作者</th>
-							<td width="300px">
-								<select name="userid" class="inputSelect"  id="userid">
-									<option value="0">--请选择操作管理员--</option>
+<style type="text/css">
+#start_time_one{
+  height:25px;
+  }
+  #end_time_one{
+  height:25px;
+  }
+  ._inline{
+  margin-right:16px!important;
+  margin-top:5px;
+  height:25px;
+  }
+  .search_conditions{
+   display:block
+}
+</style>
+<div  class="admin-main">
+   <div>
+    	<!-- 提示区域 -->
+        <!-- <div class="page_explain">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div> -->
+        <!-- 按钮操作 -->
+        <div class="table_control">
+            <!-- <div class="table_opera">
+                <button type="button" title="提示" class="layui-btn layui-btn-primary " id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div> -->
+            
+            <!-- 搜索区域操作 -->
+            <div class="table_search" style="line-height: 45px;">
+         		<button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="high_search">高级搜索</button>
+              <!--   高级搜索区域 -->
+                <div class="high_searchcontent">
+                    <div class="content_title"><span>高级搜索</span></div>
+                    <form id="search_form" class="layui-form" action="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">操作者</label>
+                            <div class="layui-input-block">
+                                <select id="userid" name="userid" lay-filter="">
+                                    <option value="">--请选择操作管理员--</option> 
 									<#if adminList??>
 										<#list adminList as adminuser>
 											<option value="${adminuser.userid }">${adminuser.username }</option>
 										</#list>
 									</#if>
-								</select>
-							</td>
-							<th width="70" align="right">类型</th>
-							<td>
-								<select name="type" class="inputSelect"  id="type">
-									<option value="0">--请选择类型--</option>
-									<option value="member">会员</option>
-									<option value="goods">商品</option>
-									<option value="order">订单</option>
-									<option value="adv">广告</option>
-									<option value="setting">设置</option>
-									<option value="floor">楼层</option>
-									<option value="store">店铺</option>
-								</select>
-							</td>
-							<th width="70" align="right">时间</th>
-							<td>
-								<input class="easyui-datebox" style="width: 90px;height: 28px;" id="start_time" />
-		                        <span>&nbsp;~&nbsp;</span>
-		                        <input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time" />
-							</td>
-							<td colspan="7" align="center">
-								<a href="javascript:void(0)" class="easyui-linkbutton"  data-options="plain:true" onclick="searchLogs()">搜索</a>
-							</td>
-						</tr>
-					</table>
-					
-				</span>
-			</span>
-		</div>
-		<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/logs/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
-				sortName="log_id" sortOrder="desc" pagination="true" id="logsdata">
-				<thead>
-					<tr>
-						<th data-options="field:'xx',width:100" formatter="formatSequence">序号</th>
-						<th data-options="field:'type',width:200">类型</th>
-						<th data-options="field:'detail',width:400"  formatter="formatDetail">操作</th>
-						<th data-options="field:'name',width:100">操作者</th>
-						<th data-options="field:'time',width:200" formatter="formatDateline">时间</th>
-					</tr>
-				</thead>
-			</table>
-		</form>
-	</div>
-	<div id="divdia"></div>
-</div>
-<script type="text/javascript">
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <select id="type" name="type"  lay-filter="">
+                                    <option value="0">--请选择类型--</option>
+									<option value="member">member</option>
+									<option value="goods">goods</option>
+									<option value="order">order</option>
+									<option value="adv">adv</option>
+									<option value="setting">setting</option>
+									<option value="floor">floor</option>
+									<option value="store">store</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item" style="width:100%;">
+   							 <label class="layui-form-label" >时间</label>
+    						<div class="layui-input-inline" >
+      							<input class="layui-input" placeholder="开始日" id="start_time">
+    						</div>
+    						<div class="layui-input-inline">
+      							<input class="layui-input" placeholder="截止日" id="end_time">
+    						</div>
+  						</div>
+                        
+                        <ul>
+                            <li class="reset">
+                                <button type="reset" id="reset_btn" class="layui-btn  layui-btn-primary layui-btn-small" style="height: 38px;">重置</button>
+                            </li>
+                            <li class="submit">
+                                <a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small" style="width: 100%;background: #00ce6a;width: 100%;background: #00ce6a;height: 38px;float: left;margin-top: 8px;line-height: 38px;">开始搜索</a>                       
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <!--高级搜索生成内容  -->
+   <div class="high_search">
+	
+   </div>
+  
+   
+   
 
-	//序号
-	function formatSequence(value, row, index){
-		var options = $("#logsdata" ).datagrid("getPager" ).data("pagination" ).options;
-		var curr = options.pageNumber;
-		var size = options.pageSize;
-		return (Number(curr)-1)*Number(size)+index+1;
-	}
+   
+   <!--表格区域  -->
+   <form id="gridform">
+    <table id="logsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        	<thead>
+        		<tr>
+            		<th>类型</th>
+            		<th>操作</th>
+            		<th>操作者</th>
+            		<th>时间</th>
+        		</tr>
+        	</thead>
+    </table>
+    <!-- 传值等区域(暂定) -->
+    <div id="addBrand" ></div>
+   </form>
+</div>
+
+<!--js区域  -->
+<script>
+
+$(function(){
+	//高级搜索框的显示隐藏
+    $("#high_search").on("click",function(event){
+    	event.stopPropagation();
+     	event.stopImmediatePropagation();
+        $(".high_searchcontent").toggle();
+    })
+    
+	var table = $('#logsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/logs/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "type"},
+	        {data: "detail"},
+	        {data: "name"},
+	        {data: null,"render": function(data, type, row) {
+	        	if(data.time==null){
+	        		return " ";
+	        	}else{
+	        		return getFormatDateByLong(data.time, "yyyy-MM-dd hh:mm:ss");
+	        	}
+	       	}}
+	     ]
+	});
 	
-	//操作内容
-	function formatDetail(value, row, index){
-		return "<div title='"+value+"'>"+value+"</div>";
-	}
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+	    
+	    form.render('select'); 
+		  
+		  //监听提交
+		  $("#search_statis").click(function(){	
+			  highSearchGoods(table)
+			});	
+		  
+		  var start = {
+		    min: '2014-01-01 23:59:59',
+		    max: '2099-06-16 23:59:59',
+		    istoday: false,
+		    choose: function(datas){
+		      end.min = datas; //开始日选好后，重置结束日的最小日期
+		      end.start = datas //将结束日的初始值设定为开始日
+		    }
+		  };
+		  
+		  var end = {
+		    min: '2014-01-01 23:59:59',
+		    max: '2099-06-16 23:59:59',
+		    istoday: false,
+		    choose: function(datas){
+		      start.max = datas; //结束日选好后，重置开始日的最大日期
+		    }
+		  };
+		  
+		  $('#start_time').click(function(){
+			    start.elem = this;
+			    laydate(start);
+		  });
+		  $('#end_time').click(function(){
+			    end.elem = this
+			    laydate(end);
+		  });  
+	});
+});
+
+function highSearchGoods(table){
 	
-	//时间
-	function formatDateline(value, row, index) {
-		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
-	}
-	
-	//搜索
-	function searchLogs(){
-		var formflag= $("#logsform").form().form('validate');
-		if(formflag){
-			var type = $("#type").val();
-			var userid = $("#userid").val();
-			
-			var start_time = $('#start_time').datebox('getValue');
-			var end_time = $('#end_time').datebox('getValue'); 
-			if(start_time != '' && end_time != ''){
-				if(end_time < start_time){
-					$.Loading.error("结束时间不能小于开始时间");
-					return ;
-				}
-			}
-			
-			$('#logsdata').datagrid('load', {
-				 type:type,
-				 userid:userid,
-				 start_time:start_time,
-				 end_time:end_time,
-				 page:1
-		    }); 
-		}
-	}
-	
+	var userid = $("#userid").val();
+	var type = $("#type").val();
+	var start_time = $("#start_time").val();
+	var end_time =$("#end_time").val();
+	var param = "userid="+userid+"&type="+type+"&start_time="+start_time+"&end_time="+end_time;
+	var url = table.ajax.url("${ctx}/shop/admin/logs/list-json.do?"+param);
+	url.load();
+}
+
+
 </script>
 <#include '/admin/footer.html' >

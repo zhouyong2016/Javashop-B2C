@@ -1,0 +1,27 @@
+<!-- 创建菜单标签 -->
+<#assign menuTag= newTag("menuTag")>
+<!-- 调用菜单信息 -->
+<#assign menuList = menuTag()!'' >
+<ul>
+	<#list menuList as menu >
+		<#assign haschild=false />
+		<#assign first=false />
+		<#assign last=false />
+		<#if menu.hasChildren ><#assign haschild=true /></#if>
+		<#if menu_index==0><#assign first=true /></#if>
+		<#if !menu_has_next><#assign last=true /></#if> 
+		<li class="<#if menu_index==0>first</#if><#if !menu_has_next>last</#if><#if haschild > haschild</#if>" >
+			<em <#if first>class="first"</#if> ></em>
+			<a href="${ctx}/${menu.url}" >${menu.name!''}</a>	 
+			<span ></span> 
+			<em  <#if last>class="last"</#if> ></em>
+			<#if haschild  >
+				<ul class="child">
+					<#list menu.children as child>
+					   <li <#if !child_has_next>class="last"</#if> ><a href="${ctx}/${child.url!''}" )>${child.name!''}</a></li>
+				    </#list>
+				</ul>
+			</#if>
+		</li>
+	</#list>
+</ul>

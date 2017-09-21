@@ -1,5 +1,6 @@
 <script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
 <script type="text/javascript" src="${ctx}${themes_path}/js/checkout-new.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/checkout-receipt.js"></script>
 <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout-new.css" />
 
 <form id="checkoutForm">
@@ -232,34 +233,63 @@
 			</div>
 			<div class="content-ckt invoice">
 				<div class="">普通发票</div>
-				<div class="receipt-title">个人</div>
-				<div class="receipt-content">办公用品</div>
+				<div class="receipt-title"></div>
+				<div class="receipt-content">无需发票</div>
 				<a href="javascript: void(0);" class="edit-invoice">修改</a>
 				<div style="display: none;" id="invoice_content">
+					<#assign receiptListTag= newTag("receiptListTag") />
+					<#assign receiptList= receiptListTag() />
 					<div class="invoice-dialog" id="invoice_dialog">
 						<div class="invoice-head">
 							<div class="title-invoice-head">发票抬头：</div>
-							<div class="items-invoice-head">
-								<div class="ckt-checkbox head-invoice">
+							<div class="items-invoice-head" style="margin-bottom: 10px">
+								<div class="ckt-checkbox head-invoice personal selected">
 									<span>个人</span>
+									<input type="text" class="company-invoice-input" value="个人" style="display: none;" />
 								</div>
-								<div class="ckt-checkbox head-invoice company">
-									<span>单位：<input type="text" class="company-invoice-input"  maxlength="255"></span>
-								</div>
+								<#list receiptList as receipt>
+									<script>console.log(${otj(receipt)})</script>
+									<div class="ckt-checkbox head-invoice company">
+										<div class="__title__">${receipt.title}</div>
+										<input type="text" class="company-invoice-input" maxlength="30" value="${receipt.title}" data-old_value="${receipt.title}" style="border: none; outline: none;" />
+										<div class="__btns__">
+											<a href="javascript:;" class="__edit__">编辑</a>
+											<a href="javascript:;" class="__update__">保存</a>
+											<a href="javascript:;" class="__delete__">删除</a>
+										</div>
+										<input type="hidden" name="receipt_id" value="${receipt.id}">
+										<input type="hidden" name="receipt_content" value="${receipt.content}">
+										<input type="hidden" name="receipt_duty" value="${receipt.duty}">
+									</div>
+								</#list>
+								<#if receiptList?size lt 5 >
+									<div class="ckt-checkbox head-invoice company __add_ele__" style="display: none">
+										<input type="text" class="company-invoice-input" maxlength="60" style="border: none; outline: none;" placeholder="新增单位发票抬头">
+										<div class="__btns__ show">
+											<a href="javascript:;" class="__save__">保存</a>
+										</div>
+									</div>
+									<a href="javascript:;" style="color: #005ea7" class="add-invoice">新增单位发票</a>
+								</#if>
 							</div>
 						</div>
+						<div class="invoice-head duty" style="display: none">
+							<div class="title-invoice-head" style="margin-top: 10px">纳税人识别号：</div>
+							<input type="text" class="duty-invoice-input" placeholder="纳税人识别号">
+						</div>
 						<div class="invoice-content">
-							<div class="title-invoice-head">发票内容：</div>
-							<div class="items-invoice-content">
-								<div class="ckt-checkbox content-invoice selected">
-									<span>办公用品</span>
+							<div class="title-invoice-head" style="float:left">发票内容：</div>
+							<div class="items-invoice-content" style="float: left; width: 360px;">
+								<div class="ckt-checkbox content-invoice selected" style="width: 90px;margin: 5px 20px 0 0;">
+									<span>明细</span>
 								</div>
-								<div class="ckt-checkbox content-invoice">
-									<span>劳保用品</span>
-								</div>
-								<div class="ckt-checkbox content-invoice">
-									<span>耗材</span>
-								</div>
+								<#list receiptContentList as receiptContent>
+									<#if receiptContent_index lt 6>
+									<div class="ckt-checkbox content-invoice" style="width: 92px;margin: 5px 20px 0 0;">
+										<span>${receiptContent.receipt_content}</span>
+									</div>
+									</#if>	
+								</#list>
 							</div>
 						</div>
 
@@ -275,11 +305,13 @@
 
 							<!--单位【公司】名称-->
 							<input type="hidden" name="receiptTitle">
+
+							<!--单位【公司】纳税人识别号-->
+							<input type="hidden" name="receiptDuty">
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="placeholder-20"></div>
 		</div>
 		<!--发票信息 end-->
 

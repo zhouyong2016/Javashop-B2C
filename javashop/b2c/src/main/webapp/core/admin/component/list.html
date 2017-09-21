@@ -1,68 +1,106 @@
 <#include '/admin/header.html' >
-
-<div class="main">
-	<table class="easyui-treegrid" id="catdata"
-		data-options="url:'${ctx}/core/admin/component/list-json.do',fitColumns:'true',idField: 'id',treeField: 'name',onLoadSuccess:init">
-		<thead>
-			<tr>
-				<th data-options="field:'name',width:200">名称</th>
-				<th data-options="field:'install_state',width:100" formatter="fminstall">安装状态</th>
-				<th data-options="field:'enable_state',width:100" formatter="fmenable">启用状态</th>
-				<th data-options="field:'option',width:100" formatter="fmoption" >操作</th>
-			</tr>
-		</thead>
-	</table>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>如果此处未显示您需要的组件，请检查pom文件中是否添加依赖，并注意依赖方式（jar/war）是否正确。</li>
+                <li><span>.</span>为了保证系统的稳定性，请不要随意停用和卸载系统默认开启的组件。</li>
+				<li><span>.</span>如果组件安装、启用、停用、卸载报错提示，请联系javashop工程师进行处理。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+    <table id="catdata" class="layui-table site-table table-hover"  width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>组件名称</th>
+            <th>包含插件</th>
+            <th>安装状态</th>
+            <th>启用状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
 </div>
 
+<!--js区域  -->
 <script>
-
-
-function init(){
+$(function(){
 	
-	$(".stop").click(function(){ 
-		 if(!$(this).hasClass("l-btn-disabled")){
-			
-			if(confirm( "确认停用此组件吗?" )){ 
-				$(this).addClass("l-btn-disabled"); 
-				$(this).css("color","#CCC");
-				$(this).unbind("click");
-				request("${ctx}/core/admin/component/stop.do?componentid="+$(this).attr("componentid") ); 
-				
-			}
-		}
+	//加载数据
+	var table = $('#catdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "paging":false,
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        type:"post",
+	        url: '${ctx}/core/admin/component/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "name"},
+	        {data: function (row) {
+	        	var val="<ul>";
+				$.each(row.children, function(index, content){ 
+					val = val+"<li>"+content.name+"</li>";
+				});
+	        	return val+"</ul>";
+	        }},
+	        {data: function (row){
+	        	if(row.install_state==1){
+	        		return "已安装";
+	        	}else{
+	        		return "未安装";
+	        	}
+	        }},
+	        {data: function (row){
+	        	if(row.enable_state==1){
+	        		return "已启用";
+	        	}else{
+	        		return "未启用";
+	        	}
+	        }},
+	        {data: function (row) {
+	        	var val="";
+	        	if(row.install_state==1  ){
+	        		if(row.enable_state==0){
+	        			val='<a componentid="'+row.componentid+'" class="layui-btn layui-btn-small start button"  href="javascript:;" onclick="start(this)" >启用</a>&nbsp;&nbsp;';
+	        			val+='<a componentid="'+row.componentid+'" class="layui-btn layui-btn-small layui-btn-warm uninstall button" onclick="uninstall(this)"  href="javascript:;" >卸载</a>'
+	        		}
+	        		if(row.enable_state==1){
+	        			val='<a componentid="'+row.componentid+'" class="layui-btn layui-btn-small layui-btn-danger stop button" href="javascript:;" onclick="stop(this)" >停用</a>'
+	        		}
+	        	}else if(row.install_state==0){
+	        		val='<a componentid="'+row.componentid+'" class="install button layui-btn layui-btn-small layui-btn-normal" href="javascript:;" onclick="install(this)" installstate="'+row.install_state+'" >安装</a>';
+	        	}
+	        	return val;
+	       	}}
+	     ]
 	});
-	
-	$(".imgTree").click(function(){
-		var $this = $(this);
-		var status = $this.attr("status");
-		if(status=='close')  {
-			$this.parent().next().show().next().show();
-			$this.attr("status","open");
-			$this.attr("src","images/sitemapopened.gif");
-			
-		}else if(status=='open'){
-			$this.attr("status","close");
-			$this.attr("src","images/sitemapclosed.gif");
-			$this.parent().next().hide().next().hide();
-		}
-			
-	});
-	
-	
-	$(".start").click(function(){
-		if(!$(this).hasClass("l-btn-disabled")){
-			$(this).addClass("l-btn-disabled"); 
-			$(this).css("color","#CCC");
-			$(this).unbind("click");
-			request("${ctx}/core/admin/component/start.do?componentid="+$(this).attr("componentid") );
+});
+
+//安装操作
+function install($this){
+	if(!$($this).hasClass("layui-btn-disabled")){
+		$($this).addClass("layui-btn-disabled");
 		
-		}
-	});
-	
-	
-	$(".install").click(function(){
-		if(!$(this).hasClass("l-btn-disabled")){
-		var componentid = $(this).attr("componentid");
+		var componentid = $($this).attr("componentid");
 		if(componentid=="productComponent" ){
 			if($("b[componentid='goodsSpecComponent']").attr("installstate")=="1"){
 				alert("标准货品组件和规格组件只能同时使用一个");
@@ -70,32 +108,50 @@ function init(){
 			}
 		}
 		
-		
 		if(componentid=="goodsSpecComponent" ){
 			if($("b[componentid='productComponent']").attr("installstate")=="1"){
 				alert("标准货品组件和规格组件只能同时使用一个");
 				return 
 			}
 		}
-		$(this).addClass("l-btn-disabled"); 
-		$(this).css("color","#CCC");
-		$(this).unbind("click");
-		request("${ctx}/core/admin/component/install.do?componentid="+$(this).attr("componentid") );
-		
-		}
-	});
+		request("${ctx}/core/admin/component/install.do?componentid="+$($this).attr("componentid") );
+	}
 	
-	$(".uninstall").click(function(){
-		if(!$(this).hasClass("l-btn-disabled")){
-		if(confirm( "确认卸载此组件吗?此操作可能会破坏现有数据，且无法恢复!" )){
-			$(this).addClass("l-btn-disabled"); 
-			$(this).css("color","#CCC");
-			$(this).unbind("click");
-			request("${ctx}/core/admin/component/un-install.do?componentid="+$(this).attr("componentid") );  
-		}
-		}
-	});
 }
+
+//卸载操作
+function uninstall($this){
+	
+	if(!$($this).hasClass("layui-btn-disabled")){
+		$($this).addClass("layui-btn-disabled");
+		
+		layer.confirm('确认卸载此组件吗?此操作可能会破坏现有数据，且无法恢复!', {icon: 3, title:'提示'}, function(index){
+			request("${ctx}/core/admin/component/un-install.do?componentid="+$($this).attr("componentid") ); 
+		});
+	}
+}
+
+//启用操作
+function start($this){
+	if(!$($this).hasClass("layui-btn-disabled")){
+		$($this).addClass("layui-btn-disabled");
+		request("${ctx}/core/admin/component/start.do?componentid="+$($this).attr("componentid") );
+	}
+}
+
+
+//停用操作
+function stop($this){
+	
+	if(!$($this).hasClass("layui-btn-disabled")){
+		$($this).addClass("layui-btn-disabled");
+		
+		layer.confirm('确认停用此组件吗？', {icon: 3, title:'提示'}, function(index){
+			request("${ctx}/core/admin/component/stop.do?componentid="+$($this).attr("componentid") ); 
+		});
+	}
+}
+
 
 function request(requrl){
 	$.ajax({
@@ -103,10 +159,9 @@ function request(requrl){
 		dataType:"json",
 		success:function(result){
 			if(result.result==1){
-				alert("操作成功"); 
 				location.reload();
 			}else{
-				$.Loading.error(result.message);
+				alert(result.message);
 			}
 		},error:function(){
 			alert("启动组件出现错误");
@@ -115,45 +170,5 @@ function request(requrl){
 }
 
 
-function fminstall(value,row,index){
-	var val="";
-	if(value==0){
-		val="未安装";
-	}else if(value==1){
-		val="已安装";
-	}else if(value==2){
-		val="错误"+row.error_message;
-	}
-	return val;
-}
-
-function fmenable(value,row,index){
-	var val ="";
-	if(value==0){
-		val="已停用";
-	}else if(value==1){
-		val="已启用";
-	}else if(value==2){
-		val="错误";
-	}
-	return val;
-}
-	
-function fmoption(value,row,index){
-	var val="";
-	if(row.install_state==1  ){
-		if(row.enable_state==0){
-			val='<a componentid="'+row.componentid+'" class="start button"  href="javascript:;">启用</a>&nbsp;&nbsp;';
-			val+='<a componentid="'+row.componentid+'" class="uninstall button"  href="javascript:;">卸载</a>'
-		}
-		if(row.enable_state==1){
-			val='<a componentid="'+row.componentid+'" class="stop button" href="javascript:;">停用</a>'
-		}
-	}else if(row.install_state==0){
-		val='<a  class="install button" href="javascript:;" componentid="'+row.componentid+'" installstate="'+row.install_state+'" >安装</a>';
-	}
-	return val;
-}
 </script>
-
 <#include '/admin/footer.html' >

@@ -1,6 +1,7 @@
 package com.enation.app.shop.core.decorate.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.enation.app.shop.core.decorate.model.ShowCase;
 import com.enation.app.shop.core.goods.model.Goods;
@@ -76,5 +77,12 @@ public interface IShowCaseManager {
 	 * @return
 	 */
 	List getShowCaseByFlag(String flag);
+	
+	/**
+	 * 获取已选择的橱窗商品Map集合 
+	 * @param content 商品id内容
+	 * @return
+	 */
+	List<Map> getSelectGoodsMap(String content);
 
 }

@@ -1,65 +1,156 @@
+<#include '/admin/sonheader.html' >
 <#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
-
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
 <style>
-.input_text{width: 200px;}
-.left{width:410px;}
-.table-right{width:130px;float:none;}
-
+  .layui-form-pane .layui-input-block{
+    margin-left:122px;
+  }
+  .layui-input, .layui-textarea{
+    width:100%;
+  }
+  .layui-form-item{
+    display:inline-block;
+    width:48%;
+  }
+  .layui-form-item label{
+    width:121px!important;
+  }
+  .app-address{
+    height: 36px!important;
+    line-height: 36px;
+  }
+  .app-address-title{
+    height: 36px!important;
+    line-height: 36px!important;
+  }
+  .app-address-body{
+    margin-top: 14px;
+  }
+  .app-address-title i{
+    top: 6px!important;
+  }
+  .layui-form-pane .layui-input{
+  	width:90%;
+  }
 </style>
-
-<div class="easyui-panel" style="border-style: none;">
-	<div style="padding: 10px 0 10px 20px">
-		<form id="dlyCenterForm" method="post" class="validate">
-			<table>
-				<tr>
-					<th>发货点名称：</th>
-					<td class="left"><input class="input_text easyui-validatebox" type="text" id="name" maxlength="20"
-						name="name" data-options="required:true"
-						style="width: 155px;"></input>
-					</td>
-					<th>发货人姓名：</th>
-					<td class="table-right"><input class="input_text easyui-validatebox" type="text" id="url"  maxlength="20"
-						name="uname" data-options="required:true"></input>
-					</td>
-				</tr>
-				<tr>
-					<th>地区：</th>
-					<td class="left">
-						<@regionSelectDirective />
-					</td>
-					<th>手机：</th>
-					<td class="table-right"><input class="input_text easyui-numberbox" type="text" validType="mobile"
-						name="cellphone" maxlength="11" data-options="required:true"></input>
-					</td>
-				</tr>
-
-				<tr>
-					<th>邮编：</th>
-					<td class="left"><input class="input_text easyui-numberbox" name="zip" onkeyup="this.value=this.value.replace(/\D/g,'')" 
-					onafterpaste="this.value=this.value.replace(/\D/g,'')" data-options="required:true" maxlength="6">
-					</td>
-					<th>电话：</th>
-					<td class="table-right"><input class="input_text easyui-validatebox" type="text" validType="tel"
-						name="phone" maxlength="15" data-options="required:true"/>
-					</td>
-				</tr>
-				<tr>
-					<th>地址：</th>
-					<td class="left"><input class="input_text easyui-validatebox" type="text" maxlength="30"
-						name="address" data-options="required:true"></input>
-					</td>
-					<th>默认地址：</th>
-					<td class="table-right"><input type="checkbox" id="is_default_dc"  name="is_default"></input>
-						<input type="hidden" name="choose"  id="dlyCenterDisabled"/>
-					</td>
-				</tr>
-
-				<tr>
-					<th>备注：</th>
-					<td colspan="3"><textarea rows="5" cols="45" class="input_text" maxlength="100"
-							style="width: 395px;" name="memo"></textarea></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+<div class="main">
+    <!--表单区域  -->
+	<form id="dlyCenterForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">发货点名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="name" id="name" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">发货人姓名：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  id="url"  maxlength="20" name="uname" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  	
+  		<div class="layui-form-item" >
+      		<label class="layui-form-label">地区</label>
+      		<div class="layui-input-block" id="selectAddress" name="area">
+      			<script type="text/javascript">
+					$(function() {
+						$('#selectAddress').addressSelect();
+					})
+				</script>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">手机：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="cellphone" maxlength="11" lay-verify="phone" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">邮编：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="zip" maxlength="6"   onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">电话：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="phone" maxlength="15" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" style="width:68%;">
+    		<label class="layui-form-label">地址：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="address" maxlength="30" lay-verify="required" autocomplete="off" class="layui-input" style="display:inline-block;width:50%;">
+      			<input type="checkbox" id="is_default_dc"  name="is_default" title="默认地址"></input>
+      			<input type="hidden" name="choose"  id="dlyCenterDisabled"/>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item layui-form-text" style="display:block;width:100%;">
+    		<label class="layui-form-label _left">文本域</label>
+    		<div class="layui-input-block _left" style="width:82%;">
+      			<textarea name="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_adv">保存</a>
+  			<a class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+    
+    //监听提交
+    form.on('submit(save_adv)', function(data){
+    	 if( $("input[name='region_id']").val() == ""){
+  	    	parent.$.Loading.error("地区不能为空");
+  	    	return;
+  	    }
+    	if($("#is_default_dc").is(":checked")){
+			$("#dlyCenterDisabled").val("true");
+		}else{
+			$("#dlyCenterDisabled").val("false");
+		}
+		var options = {
+			url : ctx+"/shop/admin/dly-center/save-add.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					parent.$.Loading.success(result.message); 
+					parent.layer.close(index);
+					parent.table.ajax.url('${ctx}/shop/admin/dly-center/list-json.do').load();
+				}
+				if (result.result == 0) {
+					parent.$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				parent.$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$("#dlyCenterForm").ajaxSubmit(options);
+		
+		return false;
+    });
+    
+});
+</script>

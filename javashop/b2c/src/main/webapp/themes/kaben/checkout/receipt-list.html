@@ -1,0 +1,26 @@
+<#assign receiptListTag= newTag("receiptListTag") />
+<#assign receiptList= receiptListTag() />
+<input type="hidden" id="regionid" value="${defaultReceiptTag!0}" >
+<#list receiptList as receipt>
+    <li class="li-ckt-info" receipt_id="${receipt.id}">
+        <input type="hidden"
+               class="data-input"
+               title="${receipt.title!''}"
+               content="${receipt.content!''}"
+               receiptId="${receipt.id!''}"
+        >
+        <div class="ckt-checkbox info"> <!--w: 150px-->
+            <span title="${receipt.title}">${receipt.title}</span>
+        </div>
+        <div class="name-li-ckt-info" title="${receipt.title!''}">${receipt.title!''}</div>
+        <div class="mobile-li-ckt-info" title="${receipt.content!''}">${receipt.content!''}</div>
+        <#if receipt.is_default == 1>
+            <div class="default-li-ckt-info">默认发票</div>
+        </#if>
+        <div class="operate-li-ckt-info">
+            <#if receipt.is_default == 0><a href="javascript: void(0);" class="set" receipt_id="${receipt.id}">设置为默认</a></#if>
+            <a href="javascript: void(0);" class="edit" receipt_id="${receipt.id}">编辑</a>
+            <#if receipt.is_default == 0><a href="javascript: void(0);" class="delete" receipt_id="${receipt.id}">删除</a></#if>
+        </div>
+    </li>
+</#list>

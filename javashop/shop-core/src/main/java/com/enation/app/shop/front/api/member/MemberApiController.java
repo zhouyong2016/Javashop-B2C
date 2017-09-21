@@ -158,11 +158,12 @@ public class MemberApiController  {
 	@RequestMapping(value="/vali-register-sms-code",produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResult valiRegisterSmsCode(String mobile, String smsCode){
 		try {
+			HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 			if (SmsUtil.validSmsCode(smsCode, mobile, SmsTypeKeyEnum.REGISTER.toString())) {
 				
 				// 把注册信息 加密  放到session当中
 				String ciphertext = EncryptionUtil1.authcode("{\"account_type\" : \"mobile\",\"account\" : \"" + mobile + "\"}", "ENCODE", "", 0);
-				ThreadContextHolder.getSession().setAttribute("account_info", ciphertext);
+				request.getSession().setAttribute("account_info", ciphertext);
 				
 				return JsonResultUtil.getSuccessJson("验证成功");
 			} else {
@@ -226,7 +227,7 @@ public class MemberApiController  {
 							String cookieValue = EncryptionUtil1.authcode(
 									"{username:\"" + member.getUname() + "\",password:\"" + StringUtil.md5(member.getPassword()) + "\"}",
 									"ENCODE", "", 0);
-							HttpUtil.addCookie(ThreadContextHolder.getHttpResponse(), "JavaShopUser", cookieValue, 60 * 24 * 14);
+							HttpUtil.addCookie(ThreadContextHolder.getHttpResponse(), "JavaShopUser", cookieValue, 60 * 60 * 24 * 14);
 						}
 						//手机登录时没有密码
 						shiroLogin(member.getUname(), validcode);
@@ -899,10 +900,7 @@ public class MemberApiController  {
 		} else {
 			member.setMidentity(0);
 		}
-		// String pw_question = request.getParameter("member.pw_question");
-		// member.setPw_question(pw_question);
-		// String pw_answer = request.getParameter("member.pw_answer");
-		// member.setPw_answer(pw_answer);
+		
 		try {
 			// 判断否需要增加积分
 			boolean addPoint = false;
@@ -918,7 +916,7 @@ public class MemberApiController  {
 					int mp = memberPointManger.getItemPoint(IMemberPointManger.TYPE_FINISH_PROFILE + "_num_mp");
 					//添加会员的等级积分和消费积分 dongxin改
 					memberPointManger.add(member, point,	"完善个人资料", null, 0,0);
-					memberPointManger.add(member, 0, "完善个人资料", null, mp,1);
+					memberPointManger.add(member, 0,	"完善个人资料", null, mp,1);
 				}
 			} else {
 				memberManager.edit(member);

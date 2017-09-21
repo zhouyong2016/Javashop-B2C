@@ -1,96 +1,133 @@
 <#include '/admin/header.html' >
-<div id="loading"></div>
-<div class="main">
-	<div id="depotinfo" style="display: none;"></div>
-	<div class='buttonArea' style="height: auto">
-		<input type="hidden" id="catid" value="${catid}"> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			data-options="plain:true"
-			onclick="newTab('添加文章','${ctx}/cms/admin/data/add.do?catid=${catid}')">添加</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-			data-options="plain:true" onclick="updateSort()">保存排序</a> <span
-			style="float: right; height: 28px;"> 关键字：<input type="text"
-			class="input_text" name="searchText" value="${searchTitle!''}" /> <select
-			name="searchField"> <#list fieldList as field>
+<style type="text/css">
+
+.table_search button{
+	margin-top: 0px!important;
+}
+td input{
+	border: none;
+   	text-align: center;
+    width: 40px;
+}
+.receiptsInputText{
+    width: 35px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+   	text-align:center;
+   	
+}
+
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                            	<li><span>·</span>管理当前分类下所有的文章管理，可以对当前分类下所有的文章进行添加，修改，删除操作</li>
+
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+        <input type="hidden" id="catid" value="${catid}">
+            <div class="table_opera">
+                <button type="button" id="catid" class="layui-btn layui-btn-primary " title="添加" onclick="newTab('添加文章','${ctx}/cms/admin/data/add.do?catid=${catid}')"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="保存排序" onclick="updateSort()"><i class="icon iconfont icon-xuanze"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+          
+            <!--搜索区域  -->
+            <div class="table_search" style="line-height: 47px;">
+             <input type="text" id="searchText" class="keysearch" placeholder="请在这里输入关键字" style="margin-top: 0px;height:25px;">
+              <select name="searchField" style="height: 25px;">
+               	<#list fieldList as field>
 				<option value="${field.english_name}">${field.china_name}</option>
 				</#list>
-		</select> <input type="button" class="button blueButton" value="搜索" onclick="search()" /> </span>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="dataForm" >
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/cms/admin/data/list-json.do?catid=${catid}',fitColumns:'true',pageSize:${pageSize}" pagination="true"
-				width="width" id="helpdata">
-				<thead>
-					<tr>
-						<th data-options="field:'id',width:30" formatter="formatIds">id</th>
-						<th data-options="field:'page_title',width:100">页面标题</th>
-						<th data-options="field:'sort',width:100" formatter="formatSorts">排序</th>
-						<th data-options="field:'add_time',width:100"
-							formatter="formatDate">添加时间</th>
-						<th data-options="field:'edit',width:100" formatter="formatEdit">修改</th>
-						<th data-options="field:'delete',width:100"
-							formatter="formatDelete">删除</th>
-					</tr>
-				</thead>
-			</table>
-		</form>
-	</div>
+		      </select>
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="data"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+           
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="dataForm">
+    <table id="helpdata" class="layui-table site-table table-hover" style="width: 100%;" >
+        <thead>
+          <tr>     
+            <th>id</th>
+            <th>页面标题</th>
+            <th>排序</th>
+            <th>添加时间</th>
+            <th>修改</th>
+            <th>删除</th>
+          </tr>
+        </thead>
+
+    </table>
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<script type="text/javascript">
-function formatDate(value,row,index){
-	if(value==null){
-		return "";
-	}
-	else{
-		return getFormatDateByLong(value, "yyyy-MM-dd");
-	}
-}
-function formatSorts(value, row, index) {
-	var val = '<input type="text" onblur="onlyNumber(this,'+row.sort+')" value="'+row.sort+'" class="input_text" style="width:60px" name="sorts" maxlength="9">';
-	return val;
-}
 
+<script>
+var table;
+$(function(){
+	
+	table = $('#helpdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/cms/admin/data/list-json.do?catid=${catid}',
+	    },
+	    columns: [ //定义列
+	        {data: null,"render": function(obj) {
+	    	     return '<input type="hidden" name="dataids" value="'+obj.id+'" ><span>'+obj.id+'</span>';		
+	    	}},      
+	        {data: "page_title"},
+	        {data: null,"render": function(obj) {
+ 	        	return '<input type="text" name="sorts"  class="receiptsInputText" value="'+obj.sort+'" id="sorts">';		
+ 	       	}},
+	        {data: null,"render": function(obj) {
+	        	if(obj.add_time==null){
+	        		return "";
+	        	}
+	        	else{
+	        		return getFormatDateByLong(obj.add_time, "yyyy-MM-dd");
+	        	}
+	       	}},
+	       	{data: null,"render": function(data, type, row) {
+	       		return "<a class='layui-btn layui-btn-small layui-btn-normal' name='change_btn' onclick=\"newTab('修改','${ctx}/cms/admin/data/edit.do?dataid="+data["id"]+"&catid="+$("#catid").val()+"')\")>编辑</a>";
+	       	}},
+	       	{data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-danger' name='change_btn' onclick='del("+ row.id+ ")'><img catid='"+row.id+"' src='${ctx}/cms/admin/images/transparent.gif'>删除</a>"
+	       	}}
+	     ]
+	});
+	
+	//搜索
+	$("#data").click(function(){
+		searchData(table);
+	});
+});
 
-function formatIds(value,row,index){
-	var val = row.id+'<input type="hidden"  value="'+row.id+'" name="dataids">';
-	return val;
+function searchData(table){
+	var searchText = $("#searchText").val();
+	var searchField = $("select[name='searchField']").val();
+	var param = "&searchText="+searchText+"&searchField="+searchField;
+	var url = table.ajax.url("${ctx}/cms/admin/data/list-json.do?catid=${catid}"+param);
+	url.load();
 }
-function formatEdit(value, row, index) {
-	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick=\"newTab('修改','${ctx}/cms/admin/data/edit.do?dataid="+row.id+"&catid="+$("#catid").val()+"')\")></a>";
-	return val;
-}
-function formatDelete(value, row, index) {
-	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.id+ ')"><img catid="'+row.id+'" src="${ctx}/cms/admin/images/transparent.gif"></a>';
-	return val;
-}
-
-//验证排序值是否输入有误 add by DMRain 2016-3-16
-function onlyNumber(obj,sort){
-	var z = /^[0-9]*$/;
-	if(!z.test(obj.value)){
-	   	alert("排序值输入有误！");
-	   	obj.value = "" + sort;
-    }else{
-    	if(obj.value.length > 1){
-    		if(obj.value.charAt(0) == "0"){
-    			var s = "";
-       			for(var i = 0; i < obj.value.length; i++){
-       				if(obj.value.charAt(i) == "0"){
-       					s = obj.value.substring(i+1);
-       				}else{
-       					break;
-       				}
-       			}
-       			if(s == ""){
-       				s = 0;
-       			}
-       			obj.value = "" + s;
-    		}
-    	}
-    }
-}
-
+//删除
 function del(id){
 	if(!confirm("确认要删除吗？")){	
 		return ;
@@ -100,51 +137,47 @@ function del(id){
 			type : "POST",
 			dataType : 'json',
 			success : function(result) {
-				$.Loading.success(result.message);
 				if(result.result==1){
-					$('#helpdata').datagrid('reload');
+				    $.Loading.success(result.message);
+					table.ajax.url("${ctx}/cms/admin/data/list-json.do?catid="+$("#catid").val()).load();
+// 					newTab('商城公告','${ctx}/cms/admin/data/list.do?catid=26');
 				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
 			}
 	};
 	$('#dataForm').ajaxSubmit(options);	
 }
-function search(){
-
-	var searchText = $.trim($("input[name='searchText']").val());
-	var searchField = $("select[name='searchField']").val();
-	var url = "${ctx}/cms/admin/data/list-json.do?ajax=yes&catid="+$("#catid").val() + "&searchField=" + searchField + "&searchText=" + searchText;
-	$('#helpdata').datagrid({url:url});
-}
 function updateSort(){
-	$.Loading.show('正在保存排序，请稍侯...');
+	var t=$("#sorts").val();
+	if(t==undefined){
+		alert("目前该页面没有数据！");
+		return;
+	};
+	
+	var z= /^[0-9]*$/;
+	if(!z.test(t)&&t!=undefined){
+	   $.Loading.error("请输入数字！");
+	   return;
+	};
+	
 	var options = {
 			url :"${ctx}/cms/admin/data/update-sort.do?ajax=yes"+"&catid="+$("#catid").val(),
 			type : "POST",
 			dataType : 'json',
 			success : function(result) {				
 			 	if(result.result==1){
-			 		$.Loading.hide();
-			 		$.Loading.success(result.message);
-			 		$('#helpdata').datagrid('reload');
-			 	}else{
-			 		$.Loading.error(result.message);
+			 		$.Loading.success("保存成功！！");
+			 		location.reload()
 			 	}
-			},
-			error : function(e) {
-				$.Loading.hide();
-				$.Loading.error("出错了");
+			 	if(result.result==0){
+			 		$.Loading.error(result.message);
+				}
 			}
 		};
 
 	$("#dataForm").ajaxSubmit(options);		
 }
-
-//定义一个刷新datagrid的方法，将其保存到window.top中
-window.top["reload_Abnormal_Monitor"]=function(){
-    $("#helpdata").datagrid("reload");
-};
 </script>
 <#include '/admin/footer.html' >

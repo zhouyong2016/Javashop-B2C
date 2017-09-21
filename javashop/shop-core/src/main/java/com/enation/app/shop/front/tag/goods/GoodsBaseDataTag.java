@@ -58,18 +58,16 @@ public class GoodsBaseDataTag extends BaseFreeMarkerTag {
 					 goods_id= this.getGoodsId(); 
 				 }
 				 Map goodsMap = goodsManager.get(goods_id);
-				 
-				 goodsMap.put("goods_off", 0);//默认商品没有下架
-				  
 				 /**
 				  * 如果商品不存在抛出页面找不到异常 
 				  */
 				 if(goodsMap==null||goodsMap.size()==0){
 					//标记下架
-	                goodsMap.put("goods_off", 1);
-//	                return goodsMap;
-					throw new UrlNotFoundException();
+	                goodsMap.put("goods_off", -1);
+	                return goodsMap;
 				 }
+				 
+				 goodsMap.put("goods_off", 0);//默认商品没有下架
 				 /**
 				  * 如果已下架抛出页面找不到异常 
 				  */
@@ -97,8 +95,8 @@ public class GoodsBaseDataTag extends BaseFreeMarkerTag {
 					 
 					//标记下架
 	                goodsMap.put("goods_off", 1);
-	                //return goodsMap;
-					throw new UrlNotFoundException();
+	                return goodsMap;
+//					throw new UrlNotFoundException();
 				 }
 				 
 				 String intro  =(String)goodsMap.get("intro");

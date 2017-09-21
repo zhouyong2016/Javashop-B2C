@@ -1,0 +1,65 @@
+<!-- 商品规格 -->
+<input type="hidden" name="productid" id="productid"  />
+<input type="hidden" value="1" name="havespec" />
+<input type="hidden" name="action" value="addProduct" />
+
+<div class="goods-spec" id="goods-spec">
+	<!-- 创建商品规格标签 -->
+	<#assign goodsSpecTag = newTag("goodsSpecTag") >
+	<!-- 调用商品规格标签 -->
+	<#assign goodsSpace = goodsSpecTag("'goods_id':${goods.goods_id}")!'' >
+	<#if  goodsSpace.have_spec??&& goodsSpace.have_spec ==1 >
+		<h4 class="spec-tip"></h4>
+	
+		<!-- 规格列表 -->
+		<#list goodsSpace.specList as spec>
+			<table width="100%" class="spec-item">
+				<tbody>
+					<tr>
+						<td style="width: 10%; white-space: nowrap;"><span><em>${spec.spec_name}</em>：</span></td>
+						<td style="padding-left: 15px;">
+			 				<ul>
+								<#list spec.valueList as val  >
+									<#if spec.spec_type==0>
+										<li>
+											<a name="goods_spec" specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="" title="${val.spec_value}">
+												<span><nobr>${val.spec_value}</nobr></span><i>&nbsp;</i>
+											</a>
+										</li>
+									</#if>
+									<#if spec.spec_type==1>
+										<li>
+											<a name="goods_spec" specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;" class="" title="${val.spec_value}" >
+												<@image height="30" width="30" title="${val.spec_value}" alt="${val.spec_value}" src="${val.spec_image}" />
+												<i title="${val.spec_value}">&nbsp;</i> 
+											</a>
+										</li>
+									</#if>				
+								</#list>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</#list>
+	</#if>
+	
+</div>
+<!-- 商品购买 -->
+<div class="rer_quantity" style="margin-top:5px;margin-bottom:0">
+	<label>订购数量：</label>
+	<div id="num" class="Numinput"></div>						
+</div>
+<div class="btn_box" style="margin-top:5px;">
+ 
+		<div class="btn">
+			<input type="button" class="yellow_btn gnotifybtn" value="缺货登记" <#if goods.store gt 0>style="display:none"</#if> 	goodsid="${goods.goods_id}" productid="0" />	
+		</div>
+		<div class="btn">			
+			<input type="button" class="buynow_btn" value="立即购买"  id="buyNow" <#if goods.store == 0>style="display:none"</#if>/>			
+		</div>
+		<div class="btn">
+			<input type="button" class="addtocart_btn" value="加入购物车"  id="addCart" <#if goods.store ==  0 || (goods.isvirtual?exists &&goods.isvirtual==1) >style="display:none"</#if>/>	
+		</div>
+ 
+</div>

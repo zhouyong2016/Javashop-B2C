@@ -1,12 +1,55 @@
-<div class="main shadowBoxWhite"  style="overflow: hidden;">
-	<div class="easyui-panel" ">
-		<div style="padding: 10px 0 10px 20px">
-			<form id="editform" method="post" class="validate">
-				<input type="hidden" name="id" value="${id!''}" >
-				<table>
-					${platformHtml!''}
-				</table>
-			</form>
-		</div>
+<#include '/admin/header.html' >
+<form id="editform" method="post" class="layui-form">
+	<div class="main"  style="overflow: hidden;">	
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				  <input type="hidden" name="id" value="${id!''}" required  lay-verify="required"  autocomplete="off" class="layui-input">
+			</div>
+		</div>				
+			${platformHtml!''}			
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="save-stock">保存</button>
+				<a class="layui-btn layui-btn-primary layui-layer-btn1">取消</a>
+			</div>
+	  	</div>				
 	</div>
-</div>
+</form>	
+<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name);
+	
+	//绑定事件
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form()
+	        ,layer = layui.layer
+	        ,layedit = layui.layedit
+	        ,laydate = layui.laydate;
+		form.render('select'); //刷新select选择框渲染
+	    //取消
+	    $(".layui-layer-btn1").click(function(){
+	    	parent.layer.close(index);
+	    });
+	    
+	    //提交
+		form.on('submit(save-stock)', function(data){
+			if($("#user").val() == 1&&$("#code").val().length==0){			
+				alert("必要参数不能为空"); 	
+				return false;
+			}
+	    	var options = {
+	   			url:"${ctx}/shop/admin/express/save-edit.do?id=${id}",
+	   			type:"post",
+	   			dataType:"json",
+	   			success:function(data){
+	   				if(data.result==1){	
+	   					parent.layer.close(index); //再执行关闭        
+	   				}
+	   			}
+	   		};
+	   		$("#editform").ajaxSubmit(options);
+	       return false;
+	    });
+
+	});
+</script>
+<#include '/admin/footer.html' >

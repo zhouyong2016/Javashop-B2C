@@ -3,6 +3,7 @@ package com.enation.app.cms.core.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,18 +192,28 @@ public class DataCatManager implements IDataCatManager {
 		if(this.logger.isDebugEnabled()){
 			this.logger.debug("查找"+parentid+"的子 ");
 		}
-		String sql = "select * from es_data_cat order by parent_id,cat_order" ;
-		List<DataCat> allCatList = this.daoSupport.queryForList(sql, DataCat.class);
+		//根据parent_id读取分类数据
+		String sql = "select cat_id,name,parent_id,if_audit,url,cat_order from es_data_cat where parent_id=?  order by parent_id,cat_order" ;
+		List<DataCat> allCatList = this.daoSupport.queryForList(sql,DataCat.class,parentid);
+		
+		//读取所有的数据（除上面已读取的分类外）
+		String total = "select parent_id from es_data_cat where parent_id!=?";
+		List totalList = this.daoSupport.queryForList(total,parentid);
+		
 		List<DataCat> topCatList  = new ArrayList<DataCat>();
 		for(DataCat cat :allCatList){
-			if(cat.getParent_id().compareTo(parentid)==0){
+			Map map = new HashMap();
+			map.put("parent_id", cat.getCat_id());
+			//如果所有数据中的 cat_id 包含真实返回的分类数据，说明此分类有子。
+			if(totalList.contains(map)){
 				if(this.logger.isDebugEnabled()){
 					this.logger.debug("发现子["+cat.getName()+"-"+cat.getCat_id() +"]");
 				}
-				List<DataCat> children = this.getChildren(allCatList, cat.getCat_id());
-				cat.setChildren(children);
-				topCatList.add(cat);
+				cat.setHasChildren(true);
 			}
+			List<DataCat> children = this.getChildren(allCatList, cat.getCat_id());
+			cat.setChildren(children);
+			topCatList.add(cat);
 		}
 		return topCatList;			 
 	}
@@ -261,5 +272,11 @@ public class DataCatManager implements IDataCatManager {
 			}
 		}
 		return children;
+	}
+
+	@Override
+	public Integer getDataCat(String name) {
+		String sql = "select count(*) from es_data_cat where name = ? ";
+		return this.daoSupport.queryForInt(sql, name);
 	}
 }

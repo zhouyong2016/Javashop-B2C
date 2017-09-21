@@ -1,118 +1,238 @@
-<script type="text/javascript">
-	$(function() {
-		Param.init();
-	})
-</script>
-<script type="text/javascript">
-<!--
-	function setParamNum() {
-		document.getElementById("paramnum").value = '';
-		var result = checkInputs();
-		if (result) {
-			var param_div = document.getElementById("param_div");
-			var tbls = param_div.getElementsByTagName("table");
-			var paramnum = document.getElementById("paramnum").value;
-
-			for ( var i = 0; i < tbls.length; i++) {
-
-				var texts = tbls[i].getElementsByTagName("input");
-
-				if (paramnum != '') {
-					paramnum += ",";
-				}
-				paramnum += (texts.length - 1);
-
-			}
-			document.getElementById("paramnum").value = paramnum;
-			return true;
-		}
-		return false;
+<#include '/admin/sonheader.html' >
+<style type="text/css">
+	tbody{
+		width: 100%;
+	}
+	table{
+		margin-top: 20px;
+		margin-left: 10px;
 
 	}
-	function checkInputs() {
-		var groups = document.getElementsByName("groupnames");
-		var params = document.getElementsByName("paramnames");
-		var paramsLen = params.length;
-		var groupsLen = groups.length;
-		for ( var i = 1; i < groupsLen; i++) {
-			if (groups[i].value == "") {
-				alert("请输入参数组名称");
-				return false;
+    .grop td{
+    	background: #DDEEF2;
+    }
+    tbody tr{
+    	border-bottom: 1px solid #ccc;
+    }
+    tbody tr td{
+    	border-right: 1px solid #ccc;
+    	height: 35px;
+    	padding: 3px 6px;
+    	font-size: 14px;
+    }
+      td input{
+    	width: 60%;
+    	height: 30px;
+    }
+    .paramAddBtn{
+    	font-size: 16px;
+    	color: #4287cf;
+    	display: block;
+    	margin: 10px 10px;
+    	cursor: pointer;
+    }
+    .paramAddBtn:hover{
+    	color: red;
+    }
+</style>
+<form class="layui-form params-form">
+	<input type="hidden" name="paramnum" id="paramnum" />
+	<input type="hidden" name="typeId" value="${goodsType.type_id}">
+	<!-- //新增参数按钮 -->
+	<div><span class="paramAddBtn">新增参数组</span></div>
+	<!-- 克隆内容区 -->
+	<div class="out">
+		<div class="all" id="all">
+		<#if goodsType??> 
+			<#if goodsType.paramGroups??> 
+				<#list goodsType.paramGroups as group>
+					<table style="width: 100%">
+						<tbody>
+							<tr class="grop">
+								<td>参数组名</td>
+								<td>
+									<input type="text" name="groupnames" value="${group.name }">
+								</td>
+								<td>
+									<span>
+										<a class="paramAdd">新增参数</a>
+										<a class="clear">删除</a>
+									</span>
+								</td>
+							</tr>
+							<#list group.paramList as gparam>
+							<tr>
+								<td>参数名</td>
+								<td>
+									<input type="text" name="paramnames" value="${gparam.name }">
+								</td>
+								<td>
+									<span>
+										<a class="clearon">删除</a>
+									</span>
+								</td>
+							</tr>
+							</#list>
+						</tbody>	
+					</table>
+				</#list> 
+			</#if> 
+		</#if>
+		</div>
+	</div>	
+	
+	<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 98%;height: 50px; background:rgba(230,230,230,0.8)"> 
+		<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="saveparams">保存</a>
+	</div>
+</form>
+<!-- 克隆的table内容 -->
+	<div class="canshu" id="param_div" style="display: none;" >
+		<table style="width: 100%">
+			<tbody>
+				<tr class="grop">
+					<td>参数组名</td>
+					<td>
+						<input type="text" name="groupnames" >
+					</td>
+					<td>
+						<span>
+							<a class="paramAdd">新增参数</a>
+							<a class="clear">删除</a>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td>参数名</td>
+					<td>
+						<input type="text" name="paramnames">
+					</td>
+					<td>
+						<span>
+							<a class="clearon">删除</a>
+						</span>
+					</td>
+				</tr>
+			</tbody>	
+		</table>
+	</div>
+	<!-- 克隆的参数名内容 -->
+	<div class="canshum" style="display: none;">
+	    <table>
+		  	<tr>
+				<td>参数名</td>
+				<td>
+					<input type="text" name="paramnames">
+				</td>
+				<td>
+					<span>
+						<a class="clearon">删除</a>
+					</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+<!-- //js区域 -->
+
+<script type="text/javascript">
+
+$(function(){
+	// 克隆的参数组内容
+	$(".paramAddBtn").click(function(){
+		
+		$(".canshu table").clone(true).appendTo($(".all"));
+	})
+	// 克隆的参数名内容
+	$(".paramAdd").on("click",function(){
+		$(".canshum table tr").clone(true).appendTo($(this).parent().parent().parent().parent());
+  	});
+  	// 删除克隆的参数组内容
+   	$(".clear").click(function(){
+         $(this).parent().parent().parent().parent().parent().remove();
+   	})
+   	// 删除克隆的参数名内容
+	$(".clearon").click(function(){
+	   	$(this).parent().parent().parent().remove();
+	})	 
+ })
+var index = parent.layer.getFrameIndex(window.name);
+var typeId = ${goodsType.type_id};
+//保存
+$(function(){
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form();
+		form.on('submit(saveparams)', function(data){
+			var res=setParamNum();
+			if(res){
+				var options = {
+			   			url:"${ctx}/shop/admin/type/save-params.do?ajax=yes&typeId="+typeId+"&otherType=3",
+			   			type:"post",
+			   			dataType:"json",
+			   			success:function(data){
+			   				if(data.result==1){
+			   					parent.$.Loading.success(data.message)
+			   					parent.layer.close(index);
+			   				}else{
+			   					layer.msg(data.message, {icon: 5}); 
+			   				}
+			   			},
+			   			error:function(data){
+			   				layer.msg("出错了，请稍后重试", {icon: 5}); 
+			   			}
+			   		};
+			   		$(".params-form").ajaxSubmit(options);
+				    return false;
 			}
-		}
-		for ( var i = 1; i < paramsLen; i++) {
-			if (params[i].value == "") {
-				alert("请输入参数名称");
-				return false;
+		});
+	})
+	
+	//添加
+	$(".add-props").click(function(){
+		$(".add-tr tr").clone().appendTo(".t-body");
+		 layui.form().render();
+		 
+		 //删除此行
+		 $(".del").click(function(){
+			 $(this).parent().parent().remove();
+		 })
+	})
+	
+})
+function setParamNum() {
+	document.getElementById("paramnum").value = '';
+	var result = checkInputs();
+	if (result) {
+		var param_div = document.getElementById("all");
+		var paramnum = document.getElementById("paramnum").value;
+		var tbls = param_div.getElementsByTagName("table");
+		for ( var i = 0; i < tbls.length; i++) {
+			var texts = tbls[i].getElementsByTagName("input");
+			if (paramnum != '') {
+				paramnum += ",";
 			}
+			paramnum += (texts.length - 1);
+
 		}
+		document.getElementById("paramnum").value = paramnum;
+		
 		return true;
 	}
-//-->
+	return false;
+
+}
+function checkInputs() {
+	var result = true;
+	$(".out .all").find("input[name=groupnames]").each(function(index,value){ 
+	    if($(value).val()==""){//判断值
+	    	alert("请输入参数组名称");
+	    	result = false;
+	    }
+	});
+	$(".out .all").find("input[name=paramnames]").each(function(index,value){       
+	    if($(value).val()==""){//判断值
+	    	alert("请输入参数名称");
+	    	result = false;
+	    }
+	});
+	return result;
+}
 </script>
-
-<div class="main" style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-		<form method="post" action="${ctx}/shop/admin/type/save-params.do" name="theForm1"
-			id="paramsForm">
-			<input type="hidden" name="paramnum" id="paramnum" />
-
-			<div style="text-align: center">
-				<div class="list-div" id="listDiv"
-					style="width: 100%; text-align: left">
-
-					<div class="toolbar">
-						<ul>
-							<li><a href="javascript:;" id="paramAddBtn">新增参数组</a>
-							</li>
-						</ul>
-						<div style="clear: both"></div>
-					</div>
-
-					<div class="input detail">
-						<div id="param_div">
-							<#if goodsType??> 
-							<#if goodsType.paramGroups??> 
-								<#list goodsType.paramGroups as group>
-									<table cellpadding="3" cellspacing="0" style="width: 100%;">
-										<tr class="group">
-											<td style="background-color: #DDEEF2;">参数组名</td>
-											<td width="50%" style="background-color: #DDEEF2;">
-												<input type="text" class="input_text" name="groupnames" maxlength="60" value="${group.name }" />
-											</td>
-											<td  style="background-color: #DDEEF2;">
-												
-												<span>
-													<a href="javascript:;" class="sysbtn addBtn">新增参数</a>
-													<a href="javascript:;">
-														<img class="delete" src="${ctx}/shop/admin/images/transparent.gif"> </a>
-												</span> 
-												
-												<span style="display: inline; float: left"> </span>
-											</td>
-										</tr>
-		
-										<#list group.paramList as gparam>
-										<tr class="param">
-											<td width="10%" style="text-align: right;">参数名</td>
-											<td width="26%"><input type="text" name="paramnames" class="input_text" value="${gparam.name }" maxlength="50"/>
-											</td>
-											<td>&nbsp;
-												<a href="javascript:;">
-													<img class="delete" src="${ctx}/shop/admin/images/transparent.gif">
-												</a>
-											</td>
-										</tr>
-										</#list>
-									</table>
-								</#list> 
-							</#if> 
-							</#if>
-						</div>
-					</div>
-				</div>
-			</div>
-			<input type="hidden" name="typeId" value="${goodsType.type_id}">
-		</form>
-	</div>
-</div>

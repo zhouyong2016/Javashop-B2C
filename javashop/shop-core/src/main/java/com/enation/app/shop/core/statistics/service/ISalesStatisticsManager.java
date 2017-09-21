@@ -126,6 +126,16 @@ public interface ISalesStatisticsManager {
 	 * @return
 	 */
 	public Double getRefund(int year,int month,Map map);
+	
+	/**
+	 * 实收金额
+	 * @author xulipeng
+	 * @param year		年
+	 * @param month		月
+	 * @param map		扩展参数
+	 * @return
+	 */
+	public Double getPaid(int year,int month,Map map);
 
 
 }

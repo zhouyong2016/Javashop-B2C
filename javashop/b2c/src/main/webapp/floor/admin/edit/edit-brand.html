@@ -1,75 +1,184 @@
 <#include '/admin/header.html' >
 
-<div class="main">
-	<div class="clear height10"></div>
-	<div style="display: block;"
-		class="input shadowBoxWhite wf100 whiteBox">
-		<div class="floor_brand"></div>
-	</div>
-	<div class="buttonWrap">
-			<a href="javascript:;" id="brand" class="easyui-linkbutton">确定</a>
+<div class="admin-main">
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">选择品牌</li>
+			<li>已选品牌</li>
+		</ul>
+		<div class="layui-tab-content" style="min-height: 100px;">
+			<!-- 选择品牌列表 -->
+			<div class="layui-tab-item layui-show">
+			 	<a class="layui-btn  layui-btn-primary layui-btn-small batchChoice" style="margin:10px 20px">批量选择</a>
+				<table id="advdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+					<thead>
+						<tr>
+							<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+							<th>品牌名称</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			
+			<!-- 已选品牌 -->
+			<div class="layui-tab-item">
+				<a class="layui-btn  layui-btn-primary layui-btn-small batchCancelled" style="margin:10px 20px">批量取消</a>
+				<form action="">
+					<input type="hidden" name="floor_id" value="${floor_id}">
+					<input type="hidden" name="keyword" value="">
+					<table class="layui-table" id="opt-Adv">
+						<thead>
+							<tr>
+								<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-oll'></th>
+								<th>品牌名称</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</form>
+			</div>
+			
+			<div style="text-align: center;">
+				<a class="layui-btn layui-btn-normal" id="adv">保存</a>
+			</div>
+			
+		</div>
 	</div>
 </div>
-<script type="text/javascript" src="${ctx}/floor/admin/edit/jquery.brandSelector.js" > </script>
-<script type="text/javascript">
+
+
+<script>
+	//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+	layui.use('element', function() {
+		var element = layui.element();
+	});
 	
-		$(function(){
-			//创建商品选择器
-			var container=$(".floor_brand");
-			var options={
-					brandid_name:'brand_ids',
-					selected_data_url:'${ctx}/core/admin/templateshow/get-selected-brand.do?floor_id='+${floor_id}
-			
-			};
-			container.brandSelector(options);
-			
-			$("#brand").click(function() {
-				
-				//判断linkbutton是否已禁用，如果禁用则跳过
-			 	var disabled=  $(this).hasClass("l-btn-disabled");
-				if( !disabled ){
-						var brand_ids = [];
-						$("input[name='brand_ids']").each(function(i, o){
-							brand_ids[i] = $(o).val();
-						});
-						if(brand_ids.length==0){
-							$.Loading.error("请添加品牌");
-							return;
-						}
-						
-						$("#brand").linkbutton("disable");
-						$.Loading.show("正在保存请稍候..");
-						
-						$.ajax({
-							url : "${ctx}/core/admin/template/save-brand.do?ajax=yes" ,
-							type : "POST",
-							dataType : "json",
-							data:{
-								"floor_id":${floor_id},
-								"brand_ids":brand_ids,
-								"keyword":container.find(".keyword").val(),
-							},
-							success : function(result) {
-								
-								if (result.result == 1) {
-									$.Loading.success(result.message);
-									parent.SelectTable("模板编辑");
-									parent.refreshCurrentTab();
-									parent.CloseTabByTitle("修改品牌列表");
-									//刷新tab
-									
-								}else{
-									$("#brand").linkbutton("enable");
-									$.Loading.error(result.message);
-								}
-							},
-							error : function(e) {
-								$.Loading.error("出错了,请重试");
-								$("#brand").linkbutton("enable");
-							}
-						});
-					}
-				});
+	var table;
+	$(function(){
+		
+		 table= $('#advdata').DataTable({
+			"language": {
+		        "url": "${staticserver}/media/zh_CN.txt"
+		    },
+		    "processing": true,
+		    "serverSide": true,
+		    "ordering": false,
+		    "searching": false,
+		    "lengthChange": false,
+		    ajax: {
+		        //指定数据源
+		        type:"post",
+		        url: '${ctx}/shop/admin/brand/list-json.do',
+		    },
+		    columns: [ //定义列
+	            {"data": function (obj) {
+	                return '<input type="checkbox" name="aid" class="fly-checkbox" value=' + obj.brand_id + '>';
+	            		}},
+		        {data: "name"},
+		        {data: function(obj) {
+		        	return "<a class='layui-btn layui-btn-small _aa' data-name=" + obj.name +" data-brand_id=" + obj.brand_id + " name='aid' onclick='optAdv(this,\""+obj.name+"\","+obj.brand_id+")'>选择此品牌</a>"; 		//获取值:data["brand_id"]
+		       	}}
+		     ]
 		});
+		 
+		//加载已选品牌
+		$.ajax({
+			url : "${ctx}/core/admin/templateshow/get-selected-brand.do?floor_id=${floor_id}" ,
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.each( result, function(index, content){
+					$("<tr><td><input type='checkbox' name='selectedaid' class='fly-checkbox'></td><td>"+content.name+"</td><td><a class='layui-btn layui-btn-small layui-btn-danger' onclick='cancel(this)'>取消此品牌</a> <input type='hidden' name='brand_ids' value='"+content.brand_id+"'></td></tr>").appendTo($("#opt-Adv tbody"));
+				})
+			}
+		})
+		 
+		 $("#adv").click(function() {
+			//判断linkbutton是否已禁用，如果禁用则跳过
+		 	var disabled=  $(this).hasClass("layui-btn-disabled");
+			if( !disabled ){
+					var brand_ids = [];
+					$("input[name='brand_ids']").each(function(i, o){
+						brand_ids[i] = $(o).val();
+					});
+					if(brand_ids.length==0){
+						$.Loading.error("请添加品牌");
+						return;
+					}
+					$("#adv").addClass("layui-btn-disabled");
+					$.Loading.show("正在保存请稍候..");
+					$.ajax({
+						url : "${ctx}/core/admin/template/save-brand.do?ajax=yes" ,
+						type : "POST",
+						dataType : "json",
+						data:{
+							"floor_id":"${floor_id}",
+							"brand_ids":brand_ids,
+							"keyword":""
+						},
+						success : function(result) {
+							
+							if (result.result == 1) {
+								$.Loading.success(result.message);
+								$("#adv").removeClass("layui-btn-disabled");
+							}else{
+								$("#adv").removeClass("layui-btn-disabled");
+								$.Loading.error(result.message);
+							}
+						},
+						error : function(e) {
+							$.Loading.error("出错了,请重试");
+							$("#adv").removeClass("layui-btn-disabled");
+						}
+					});
+				}
+			});
+	});
+	
+	//选择此品牌
+	function optAdv(obj,name,brand_id){
+		$(obj).addClass("layui-btn-disabled");
+		$("<tr><td><input type='checkbox' name='selectedaid' class='fly-checkbox'></td><td>"+name+"</td><td><a class='layui-btn layui-btn-small layui-btn-danger' onclick='cancel(this)'>取消此品牌</a> <input type='hidden' name='brand_ids' value='"+brand_id+"'></td></tr>").appendTo($("#opt-Adv tbody"));
+	}
+	/* 点击批量选择按钮 */
+	 $(".batchChoice").click(function(){
+		 var checkArry = $("#advdata input[name=aid]:checked")
+        for (var i = 0; i < checkArry.length; i++) { 
+           	 optAdv($(checkArry[i]).closest('tr').find('a'),$(checkArry[i]).closest('tr').find('a').attr("data-name"),$(checkArry[i]).closest('tr').find('a').attr("data-brand_id"))
+        }
+			
+	}) 
+	
+	/* 点击批量取消按钮 */
+  	 $(".batchCancelled").click(function(){
+		 var checkArry = $("#opt-Adv input[name=selectedaid]:checked")
+        for (var i = 0; i < checkArry.length; i++) { 
+       		cancel($(checkArry[i]).closest('tr').find('a'));
+        }
+	})
+	 //已选广告列表里点击全选让其复选框选中
+	$("#selected-oll").click(function(){
+		var removecheck =$("#selected-oll").is(":checked");
+		if(removecheck == true){
+			$("input[name=selectedaid]").prop('checked',true);
+		}
+		if(removecheck == false){
+			$("input[name=selectedaid]").prop('checked',false);
+		}
+	})
+	
+
+		
+
+	//取消已选
+	function cancel(obj){
+		$(obj).parent().parent().remove();
+	}
+	
 </script>
+
 <#include '/admin/footer.html' >

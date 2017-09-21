@@ -1,0 +1,272 @@
+<#include '/admin/header.html' >
+
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+<link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/css/main_page.css" />
+<link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/css/animate.min.css" />
+<script type="text/javascript" src="${ctx}/adminthemes/version3/js/short-msg.js"></script>
+<style type="text/css">
+	.layui-layer-dialog .layui-layer-content{
+		line-height: 9px;
+	}
+	.layui-side{
+		z-index: 1!important;
+	}
+	.tools-other i{
+		display: block;
+		float: left;
+
+	}
+	.tools-other li{
+	    width: 134px;
+		margin-left: -74px;
+		height:2px;
+		margin-top: 86px;
+	}
+	
+	.layui-nav{
+		padding: 0px!important;
+	}
+	.icon-up{
+	    width: 170px;
+	    top: -84px;
+	    left: -100px;
+	}
+	.left-sroll{
+	margin-left:78px;
+	}
+	.layui-nav-bar{
+		display: none;
+	}
+	</style>
+<script>
+</script>
+
+<!-- 顶部 
+<div class="main-blank-top">
+</div>
+-->
+
+<!-- 内容 -->
+<div class="layui-layout layui-layout-admin beg-layout-container">
+	<div class="main-left">
+		<!-- 左侧搜索 -->
+		<div class="main-left-search" >
+			 <img src="${staticserver}/images/logo1.png" style="width: 60px;">
+		</div>
+		<div class="layui-side beg-layout-side-left left-menu" id="menu">
+               <ul class="layui-nav layui-nav-tree " lay-filter="" id="top-nav">
+               <#assign count = 1>
+               <#list menuList as menu>
+				<#if menu.hasChildren >
+                   <li class="layui-nav-item" id="${menu.id}" style="line-height: 4px;">
+                		<a href="javascript:void(0)" >
+                 			<!-- <i class="iconfont">&#xe65c;</i> -->
+                 			<cite class="marg-left menu_content">${menu.title!''}</cite>
+                 		</a>
+                   </li>
+                 </#if>
+                 <#assign count = count+1>
+              	 </#list>
+               </ul>
+           </div>
+           <!-- 登录用户头像 -->
+		<div class="main-left-user">
+			<div class="user-tools">
+				<ul>
+					<li>
+            			<a href="${ctx}/index.html" target="_blank">
+               				<i class="iconfont">&#xe6bf;</i> 
+               				<b>浏览网站</b>
+           				</a>
+        			</li>
+       				 <li class="last">
+            			<a href="javascript:void(0)" id="logout_btn">
+            				<i class="iconfont" >&#xe6eb;</i> 
+            				<b>注销</b>
+           				 </a>
+        			</li>
+				</ul>
+			</div>
+			<div class="user-border"></div>
+			<img class="person-admin-img" src="${ctx}/adminthemes/version3/images/0.jpg" />
+		</div>
+
+
+	</div>
+	<!-- 右侧 -->
+	<div class="layui-tab layui-tab-brief layout-nav-card left-nav" lay-filter="layout-tab" >
+		<div class="tab-background"></div>
+		<div class="main-logo">
+			<div class="message-center">
+				<p class="message-title">系统消息</p>
+				<i class = "msg_num"></i>
+			</div>
+			
+			<div class="message-list">
+				<div class="message-list-box">
+					<ul>
+						
+					</ul>
+					<div class="up-img"></div>
+				</div>
+			</div>
+			
+			
+			<!-- <img  src="${ctx}/adminthemes/version3/images/demo.jpg" /> -->
+		</div>
+		
+		<!-- 滑动系统消息 -->
+		
+		<ul class="layui-tab-title nav-tabs"  style="border-bottom: 0;">
+			<li class="layui-this"><a href="javascript:;"> <b>首页</b><span></span>
+			</a></li>
+		</ul>
+		<div class="tools-other layui-nav">
+			<ul lay-filter="" style="margin-top:-75px;">
+				<li class="layui-nav-item"> 
+					<i class="iconfont left-sroll" href="javascript:;">&#xe679;</i>
+				 	<i class="iconfont right-sroll">&#xe6a3;</i>
+				   	<dl class="layui-nav-child"> <!-- 二级菜单 -->
+			      		<dd><a href="javascript:void(0);" class="refresh">刷新当前页面</a></dd>
+			      		<dd><a href="javascript:void(0);" class="closeCurrent">关闭当前页面</a></dd>
+			      		<dd><a href="javascript:void(0);" class="closeOther">关闭其它页面</a></dd>
+	    			</dl>
+				</li>
+			</ul>
+		</div>
+		<!--二级三级菜单栏-->
+		<div class="layui-side beg-layout-side" id="side" lay-filter="side" >
+			<ul class="layui-nav layui-nav-tree navbar_background"> 
+				<#assign count = 1>
+          			<#list menuList as menu>
+					<#if menu.hasChildren >
+           				<#list menu.children as child>
+							<#if child.hasChildren > 
+								<li class="layui-nav-item layui-nav-itemed last-menu" style="display:none;" id="${child.pid}" >
+									<h2><i class="iconfont">&#xe661;</i>${child.title}</h2>
+	 								<dl class="layui-nav-child" rel="show">
+ 	   									<#list child.children as son>
+											 <dd >
+												 <a href="javascript:;" data-url="${ctx}${son.url}">
+												 	<cite>${son.title}</cite>
+												 </a>
+											 </dd>
+		 								</#list>
+	  								</dl>
+	 							</li>
+	 						</#if>
+						</#list>
+		 			</#if>
+            			<#assign count = count+1>
+    	 			</#list>
+				</ul>
+		</div> 
+		<div class="layui-tab-content shadow" style="margin-right: 70px;overflow-y:scroll;padding: 0px;" >
+			<div class="layui-tab-item layui-show" >
+				<iframe id="FrameID" name="frames" src="../core/admin/index/show.do" style="height: 475px;"></iframe>
+			</div>
+		</div>
+	</div>
+</div>	
+
+	
+
+<script>
+
+	$(function(){
+		
+		//刷新当前页面
+		$(".refresh").click(function(){
+			refreshCurrent();
+		})
+		//关闭当前页面
+		$(".closeCurrent").click(function(){
+			closeCurrent();
+		})
+		//关闭其他页面
+		$(".closeOther").click(function(){
+			closeOther();
+		})
+		
+		$("#FrameID").height($(window).height()-parseInt(75));
+       
+	 	//左侧底部头像鼠标移入移除滑动效果
+		$(".main-left-user").hover(
+	        function() {
+	        	$(".user-tools").animate({"left": "70px"}, 300, "swing");
+	        },function() {
+	        	$(".user-tools").stop(true,false).animate({"left": "-30px"}, 300, "swing");
+	        }
+	    );
+	 	
+	 	//消息中心，鼠标移入移除
+	 	
+	 	
+	 	
+	 	$(".main-logo").hover(
+		        function() {
+		        	$(".message-list").animate({"top": "80px"}, 300, "swing");
+		        },function() {
+		        	$(".message-list").stop(true,false).animate({"top": "-300px"}, 300, "swing");
+		        }
+		    );
+	 	
+	 	
+	 	$(".last-menu h2").click(function(){
+	 		var isClose = $(this).next("dl").attr("rel");
+	 		if(isClose == "show"){
+	 			$(this).find("i").addClass("up");
+	 			$(this).next("dl").attr("rel","close");
+	 			$(this).next("dl").slideUp();
+	 		}else{
+	 			$(this).find("i").removeClass("up");
+	 			$(this).next("dl").attr("rel","show");
+	 			$(this).next("dl").slideDown();
+	 		}
+	 	})
+	 	
+	 	//获得tab标签总长度
+	 	$(".layui-nav-child").click(function(){
+	 		var tabWidth = parseInt($(document).width())-parseInt(290);     //tab标签宽度
+	 		
+	 		var liWidth = parseInt(0);                                      //tab标签下li总宽度
+	 		$(".layui-tab-title li").each(function(){
+	 			liWidth += parseInt(this.offsetWidth);
+	 		})
+			//判断当tab标签里的li总宽度大于ul应展示宽度，可以进行左右滑动		 		
+	 		if(liWidth > tabWidth ){
+	 			//向左滚动
+	 			var liNum=$('.layui-tab-title li').length; 
+ 				var n= 0; 
+				$('.right-sroll').click(function(){ 
+					if($('.layui-tab-title').offset().left<=220){
+						$('.layui-tab-title').css("left",220);
+						return;
+					}
+					  
+					if(!$('.layui-tab-title li').is(':animated') ){ 
+						$('.layui-tab-title').animate({left:'+=120px'},100); 
+					} 
+				}); 
+
+	 			//向右滚动
+				$('.left-sroll').click(function(){ 
+					if (!$('.layui-tab-title').is(':animated') || n<10){ 
+						$('.layui-tab-title').animate({left:'-=120px'},100); 
+						n++; 
+				    } 
+				})
+	 		}
+	 	})
+	 	var interval = setInterval(function(){ShortMsg.init()}, 1000*60)
+	})
+
+layui.use('element', function(){
+  var element = layui.element();
+});
+</script>
+	
+<script type="text/javascript"src="${ctx}/adminthemes/version3/js/main_page.js"></script>
+<script type="text/javascript"src="${ctx}/adminthemes/version3/js/short-msg.js"></script>
+
+<#include '/admin/footer.html' >

@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout-new.css" />
 <script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
+
 <div id="checkout_wrapper">
 	<div class="pay_frame">
 		<form class="validate" id="checkoutform">
@@ -144,65 +145,118 @@
 				</div>
 			</div>
 			
-
-		<!--发票信息 start-->
-		<div class="ckt-item invoice">
-			<div class="top-ckt">
-				<span class="title-top">发票信息</span>
-				<div class="clearfix"></div>
-			</div>
-			<div class="content-ckt invoice">
-				<div class="">普通发票</div>
-				<div class="receipt-title">个人</div>
-				<div class="receipt-content">办公用品</div>
-				<a href="javascript: void(0);" class="edit-invoice">修改</a>
-				<div style="display: none;" id="invoice_content">
-					<div class="invoice-dialog" id="invoice_dialog">
-						<div class="invoice-head">
-							<div class="title-invoice-head">发票抬头：</div>
-							<div class="items-invoice-head">
-								<div class="ckt-checkbox head-invoice">
-									<span>个人</span>
+			<h3>发票信息 <a href="javascript:;" class="c-new-receipt" style="float: right; color: #337ab7; font-size: 12px;"></a></h3>
+			<script type="text/javascript" src="${ctx}${themes_path}/js/checkout-receipt.js"></script>
+				<!--发票信息 start-->
+				<div class="ckt-item invoice">
+					<div class="top-ckt">
+						<div class="clearfix"></div>
+					</div>
+					<div class="content-ckt invoice">
+						<#assign receiptListTag = newTag("receiptListTag") />
+						<#assign receiptList = receiptListTag() />
+						<#list receiptList as receipt>
+							<#if receipt.is_default == 1>
+								<#assign defaultReceipt = receipt />
+							</#if>
+						</#list>
+						<div class="receipt-title"><#if defaultReceipt??>${defaultReceipt.title}</#if></div>
+						<div class="receipt-content"><#if defaultReceipt??>${defaultReceipt.content}<#else/>无需发票</#if></div>
+						<a href="javascript: void(0);" class="edit-invoice">修改</a>
+						<#if defaultReceipt??><a href="javascript: void(0);" class="cancel-invoice" style="margin-left: 10px; color: #ff3500;">取消发票</a></#if>
+						<div style="display: none;" id="invoice_content">
+							<div class="invoice-dialog" id="invoice_dialog">
+								<div class="invoice-head">
+									<div class="title-invoice-head">发票抬头：</div>
+									<div class="items-invoice-head" style="margin-bottom: 10px">
+										<div class="ckt-checkbox head-invoice personal">
+											<span>个人</span>
+											<input type="text" class="company-invoice-input" value="个人" style="display: none;" />
+										</div>
+										<#list receiptList as receipt>
+											<div class="ckt-checkbox head-invoice company<#if receipt.is_default == 1> selected</#if>">
+												<div class="__title__">${receipt.title}</div>
+												<input type="text" class="company-invoice-input" maxlength="30" value="${receipt.title}" data-old_value="${receipt.title}" style="border: none; outline: none;" />
+												<div class="__btns__">
+													<a href="javascript:;" class="__edit__">编辑</a>
+													<a href="javascript:;" class="__update__">保存</a>
+													<a href="javascript:;" class="__delete__">删除</a>
+												</div>
+												<input type="hidden" name="receipt_id" value="${receipt.id}">
+												<input type="hidden" name="receipt_content" value="${receipt.content}">
+												<input type="hidden" name="receipt_duty" value="${receipt.duty}">
+											</div>
+										</#list>
+										<#if receiptList?size lt 10 >
+											<div class="ckt-checkbox head-invoice __add_ele__" style="display: none">
+												<input type="text" class="company-invoice-input" maxlength="60" style="border: none; outline: none;" placeholder="新增单位发票抬头">
+												<div class="__btns__ show">
+													<a href="javascript:;" class="__save__">保存</a>
+												</div>
+											</div>
+											<a href="javascript:;" style="color: #005ea7" class="add-invoice">新增单位发票</a>
+										</#if>
+									</div>
 								</div>
-								<div class="ckt-checkbox head-invoice company">
-									<span>单位：<input type="text" class="company-invoice-input"  maxlength="255"></span>
+								<div class="invoice-head duty" style="display: <#if defaultReceipt??>block<#else/>none</#if>">
+									<div class="title-invoice-head" style="margin-top: 10px">纳税人识别号：</div>
+									<input type="text" class="duty-invoice-input" readonly placeholder="纳税人识别号" <#if defaultReceipt??>value="${defaultReceipt.duty}"</#if>>
+                                    <span style="color: #ff3500">必填</span>
+								</div>
+								<div class="invoice-content">
+									<div class="title-invoice-head">发票内容：</div>
+									<div class="items-invoice-content">
+										<div class="ckt-checkbox content-invoice<#if defaultReceipt?? && defaultReceipt.content != "明细"><#else/> selected</#if>">
+										<span>明细</span>
+									</div>
+									<#assign receiptContentListTag= newTag("receiptContentListTag") />
+									<#assign receiptContentList = receiptContentListTag() />
+									<#list receiptContentList as receiptContent>
+										<div class="ckt-checkbox content-invoice<#if defaultReceipt?? && defaultReceipt.content == receiptContent.receipt_content> selected</#if>">
+											<span>${receiptContent.receipt_content}</span>
+										</div>
+									</#list>
 								</div>
 							</div>
-						</div>
-						<div class="invoice-content">
-							<div class="title-invoice-head">发票内容：</div>
-							<div class="items-invoice-content">
-								<div class="ckt-checkbox content-invoice selected">
-									<span>办公用品</span>
-								</div>
-								<div class="ckt-checkbox content-invoice">
-									<span>劳保用品</span>
-								</div>
-								<div class="ckt-checkbox content-invoice">
-									<span>耗材</span>
-								</div>
+
+							<div class="invoice-inputs" style="display: none;">
+								<#if defaultReceipt??>
+									<!--1: 需要发票  2:不需要发票-->
+									<input type="hidden" name="receipt" value="1">
+
+									<!--1: 个人  2:单位-->
+									<input type="hidden" name="receiptType" value="2">
+
+									<!--明细 办公用品 劳保用品 耗材-->
+									<input type="hidden" name="receiptContent" value="${defaultReceipt.content}">
+
+									<!--单位【公司】名称-->
+									<input type="hidden" name="receiptTitle" value="${defaultReceipt.title}">
+
+									<!--单位【公司】纳税人识别号-->
+									<input type="hidden" name="receiptDuty" value="${defaultReceipt.duty}">
+								<#else/>
+									<!--1: 需要发票  2:不需要发票-->
+									<input type="hidden" name="receipt" value="2">
+
+									<!--1: 个人  2:单位-->
+									<input type="hidden" name="receiptType">
+
+									<!--明细 办公用品 劳保用品 耗材-->
+									<input type="hidden" name="receiptContent">
+
+									<!--单位【公司】名称-->
+									<input type="hidden" name="receiptTitle">
+
+									<!--单位【公司】纳税人识别号-->
+									<input type="hidden" name="receiptDuty">
+								</#if>
 							</div>
-						</div>
-
-						<div class="invoice-inputs" style="display: none;">
-							<!--1: 需要发票  2:不需要发票-->
-							<input type="hidden" name="receipt" value="2">
-
-							<!--1: 个人  2:单位-->
-							<input type="hidden" name="receiptType">
-
-							<!--明细 办公用品 劳保用品 耗材-->
-							<input type="hidden" name="receiptContent">
-
-							<!--单位【公司】名称-->
-							<input type="hidden" name="receiptTitle">
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="placeholder-20"></div>
-		</div>
-			
+	</div>
+	<!--发票信息 end-->
 		<div class="goods_wrapper">
 				<#-- 创建购物车标签 -->
 				<#assign cartTag = newTag("cartCheckTag")>
@@ -348,29 +402,6 @@
 var Ckt = {};
 $(function(){
 $(function(){
-	invoiceEvent();
-	/* 发票信息事件绑定
-	 ============================================================================ */
-	function invoiceEvent(){
-		var invoice = $('.content-ckt.invoice');
-
-		//  发票信息编辑
-		$('.edit-invoice').on('click', function(){
-			Ckt.invoice.e_invoice();
-		});
-
-		//  发票抬头选择
-		$('#dialogModal').on('click', '.ckt-checkbox.head-invoice', function(){
-			var _this = $(this);
-			Ckt.invoice.s_invoiceHead(_this);
-		});
-
-		//  发票内容选择
-		$('#dialogModal').on('click', '.ckt-checkbox.content-invoice', function(){
-			var _this = $(this);
-			Ckt.invoice.s_invoiceContent(_this);
-		});
-	}
 	
 	//如果结算页面中没有商品信息，直接跳转至购物车页面
 	//add by DMRain 2016-4-22
@@ -583,128 +614,7 @@ $(function(){
 		$(".payment_selected").hide();
 		$(".payment_modify").show();
 		$(".payment_modify").attr("isClose","0");
-	})
-	
-	/* 发票信息逻辑处理
-	 ============================================================================ */
-	Ckt.invoice = (function(){
-
-		//  修改发票信息
-		function E_invoice(){
-			var invoiceDialog = $('#invoice_dialog');
-			invoiceDialog.dialogModal({
-				title    : '发票信息',
-				top      : 100,
-				showCall : function(){
-					$('.company-invoice-input').on('click', function(e){
-						if($(this).closest('.head-invoice').is('.selected')){
-							e.stopPropagation();
-						}
-					});
-				},
-				callBack : function(){
-					var dialogModal = $('#dialogModal');
-					if(dialogModal.find('.ckt-checkbox.head-invoice.selected').length < 1){
-						$.message.error('请选择发票抬头！');
-						return false;
-					}else {
-						if(dialogModal.find('.ckt-checkbox.head-invoice.company').is('.selected')){
-							if(!dialogModal.find('.company-invoice-input').val()){
-								$.message.error('请填写发票信息！');
-								return false;
-							}else {
-								setTnvoice();
-								return true;
-							}
-						}else {
-							setTnvoice();
-							return true;
-						}
-					}
-
-					function setTnvoice(){
-						var title    = '',
-							comInput = dialogModal.find('.head-invoice.selected').find('.company-invoice-input');
-						if(comInput.length > 0){
-							title = comInput.val()
-						}else {
-							title = dialogModal.find('.head-invoice.selected').find('span').html();
-						}
-
-						$('.receipt-title').html(title);
-						$('.receipt-content').html(dialogModal.find('.content-invoice.selected').find('span').html());
-					}
-				}
-			});
-		}
-
-		//  发票抬头选择
-		function S_invoiceHead(_this){
-			var _this   = _this,
-				_state  = _this.is('.selected'),
-				company = _this.is('.company');
-			var invoiceInputs  = $('#dialogModal').find('.invoice-inputs'),
-				receipt        = invoiceInputs.find("input[name='receipt']"),
-				receiptType    = invoiceInputs.find("input[name='receiptType']"),
-				receiptTitle   = invoiceInputs.find("input[name='receiptTitle']"),
-				receiptContent = invoiceInputs.find("input[name='receiptContent']");
-			if(_state){
-				_this.removeClass('selected');
-				receipt.val(2);
-				receiptType.val('');
-				receiptTitle.val('');
-				receiptContent.val('');
-			}else {
-				_this.addClass('selected')
-					 .siblings().removeClass('selected');
-				if(company){
-					//  显示input，并焦点
-					var _thisInput = _this.find('input');
-					_thisInput.addClass('shows').focus();
-					receipt.val(1);
-					receiptType.val(2);
-					_thisInput.on('input propertychange', function(){
-						var _val = $(this).val();
-						receiptTitle.val(_val)
-					})
-					if(!receiptContent.val()){
-						receiptContent.val('办公用品')
-					}
-					//  设置input
-				}else {
-					//  设置input
-					receipt.val(1);
-					receiptType.val(1);
-					receiptTitle.val('');
-					_this.siblings().find('input').val('');
-					if(!receiptContent.val()){
-						receiptContent.val('办公用品')
-					}
-				}
-			}
-		}
-
-		//  发票内容选择
-		function S_invoiceContent(_this){
-			var _this = _this;
-			var receiptContent = $('#dialogModal').find('.invoice-inputs').find("input[name='receiptContent']");
-			_this.addClass('selected')
-				 .siblings().removeClass('selected');
-			receiptContent.val(_this.find('span').html());
-		}
-
-		return {
-			e_invoice        : function(){
-				return E_invoice();
-			},
-			s_invoiceHead    : function(_this){
-				return S_invoiceHead(_this);
-			},
-			s_invoiceContent : function(_this){
-				return S_invoiceContent(_this);
-			}
-		}
-	})();
+	});
 	
 	});
 	

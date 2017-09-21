@@ -1,0 +1,8 @@
+<script type="text/javascript">
+$(function(){
+	$(".order_detail .tab li[tabid=5]").click(function(){
+		$("#paylog_wrapper").load("${ctx}/admin/plugin?beanid=orderDetailPayLogPlugin&orderid=${orderid}",{cache:true});
+	});
+});
+</script>
+<div id="paylog_wrapper">加载中...</div>

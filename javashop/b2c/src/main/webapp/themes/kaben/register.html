@@ -30,11 +30,30 @@
 						</div>
 					</li>
 					<li>
+						<div class="reg_box">
+							<span class="item">密&nbsp; 码：</span>
+							<input type="password" class="password" name="password" id="password"   fun="isPasswd"   maxlength="20" placeholder="6-20英文字母或数字组成" isrequired="true" />
+						</div>
+					</li>
+					<li>
+					<div class="reg_box">
+						<span class="item">确认密码：</span>
+						<input type="password" class="password" name="reg_password"  id="reg_passwd_r" name="passwd_re"   fun="checkpwd" class="definition_small" maxlength="16" placeholder="确认登录密码" isrequired="true" />
+					</div>
+					</li>
+					<li>
 						<div class="reg_box" style="margin:0 auto 5px;">
 							<span class="item">手机号：</span>
 							<input type="text" class="user_name_mobile" id="mobile" name="mobile" fun="checkMobile" maxlength="11" placeholder="可以用来找回用户名" isrequired="true"/>
 						</div>
 						<p class="for-email"><span>或</span><a href="${ctx}/register-meail.html">邮箱注册</a></p>
+					</li>
+					<li>
+						<div class="reg_box">
+							<span class="item">验证码：</span>
+							<input type="text" id="iptlogin" name="validcode" class="regis_small inputstyle _x_ipt" size="8" maxlength="4" isrequired="true" />
+							<img id="LoginimgVerifyCode" src="${ctx}/validcode.do?vtype=memberreg" alt="会员登录验证码" />
+						</div>
 					</li>
 					<li>
 						<div class="reg_box">
@@ -50,25 +69,8 @@
 							<input type="text" class="email" maxlength="50" id="reg_email" name="email"  fun="checkEmail" i placeholder="邮箱用于登录和取回密码"/>
 						</div>
 					</li> -->
-					<li>
-						<div class="reg_box">
-							<span class="item">密&nbsp; 码：</span>
-							<input type="password" class="password" name="password" id="password"   fun="isPasswd"   maxlength="16" placeholder="6-16英文字母或数字组成" isrequired="true" />
-						</div>
-					</li>
-					<li>
-					<div class="reg_box">
-						<span class="item">确认密码：</span>
-						<input type="password" class="password" name="reg_password"  id="reg_passwd_r" name="passwd_re"   fun="checkpwd" class="definition_small" maxlength="16" placeholder="确认登录密码" isrequired="true" />
-					</div>
-					</li>
-					<li>
-						<div class="reg_box">
-							<span class="item">验证码：</span>
-							<input type="text" id="iptlogin" name="validcode" class="regis_small inputstyle _x_ipt" size="8" maxlength="4" isrequired="true" />
-							<img id="LoginimgVerifyCode" src="${ctx}/validcode.do?vtype=memberreg" alt="会员登录验证码" />
-						</div>
-					</li>
+					
+					
 					<li>
 						<div class="regis_read">
 							<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
@@ -117,13 +119,13 @@ $(function(){
  				if(result.result==1){
 	 				location.href="register_success.html?mailurl="+result.mailurl+"&forward=${forward!''}";
 	 			}else{
-	 				$.alert(result.message);
+	 				$.message.error(result.message);
 	 				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
 	 				$.Loading.hide();
 		 		} 
 			},
 			error : function(e) {
-				$.alert("出现错误 ，请重试");
+				$.message.error("出现错误 ，请重试");
 				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
 				$.Loading.hide();
 			}
@@ -270,47 +272,45 @@ function checkpwd(){
 	}
 }
 
-var i = 60;
-var t1; 
-function aginSend(){
-	if(i == 0) {
-		var text = "重新获取 ";
-		$("#get-sms-code").html(text);
-		$("#get-sms-code").click(sendSms);
-		window.clearInterval(t1); 
-	} else {
-		var text = i + '秒';
-		$("#get-sms-code").html("重新获取: " + text);
-		i--;
-	}
-}
-
 function sendSms(){
 	var mobileNum = $.trim($("#mobile").val());
+	var iptlogin = $.trim($("#iptlogin").val());
 	if(!mobileNum){
-		$.message.error("手机号不能为空") || alert('手机号不能为空')
+		$.message.error("手机号不能为空");
 		return false;
 	}else if (!/^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9]|17[0-9])[0-9]{8}$/.test(mobileNum)) {
-		$.message.error("请填写正确的手机号") || alert('请填写正确的手机号')
+		$.message.error("请填写正确的手机号");
 		return false;
 	}
+	if(!iptlogin){
+		$.message.error("验证码不能为空！！");
+		return false;
+	}
+	
 	var opts = {
 		url : ctx + "/api/shop/sms/send-sms-code.do?mobile=" + mobileNum+"&key=register",
 		type: 'POST',
 		chace: false,
 		success:function(result) {
+            $("#get-sms-code").on('click', function () {
+                sendSms();
+            })
 			if(result.result == 1) {
 				$.message.success('发送成功，请注意查收！');
-				$("#get-sms-code").off('click');
-				t1 = window.setInterval(aginSend,1000);
+				$.countDown($("#get-sms-code"));
 			} else {
 				$.message.error(result.message);
 			}
 		},
 		error : function(){
 			$.message.error('出现错误，请重试！');
+            $("#get-sms-code").on('click', function () {
+                sendSms();
+            })
 		}
 	};
+
+    $("#get-sms-code").off('click');
 	$.ajax(opts);
 }
 

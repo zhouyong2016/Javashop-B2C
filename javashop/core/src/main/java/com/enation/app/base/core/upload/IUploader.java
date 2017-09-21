@@ -31,14 +31,6 @@ public interface IUploader {
 	 * @return
 	 */
 	public String[] upload(InputStream  stream,String subFolder,String fileName,int width,int height);
-	/**
-	 *上传附件
-	 * @param stream
-	 * @param subFolder
-	 * @param fileName
-	 * @return
-	 **/
-	public String uploadFJ(InputStream stream, String subFolder, String fileName);
 	
 	
 }

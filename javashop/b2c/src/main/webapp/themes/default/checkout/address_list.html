@@ -1,0 +1,28 @@
+<#--创建"会员地址列表"标签-->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<#--调用"会员地址列表"标签-->          
+<#assign consigneeList= consigneeListTag()>
+<#list consigneeList as address>
+	<label>
+		<input type="radio" autocomplete="off" 
+		<#if address.def_addr?exists&& address.def_addr==1>
+		checked=true id="def_addr"
+		</#if> 
+		value="${address.addr_id}" province_id="${address.province_id?c}" city_id="${address.city_id?c}" region_id="${address.region_id?c}" name="addressId" shipAddr="${address.addr!''}" shipName="${address.name!''}"  shipMobile="${address.mobile!''}"  shipTel="${address.tel!''}" shipZip="${address.zip!''}" />
+		${address.province}-${address.city}-${address.region}-${address.addr!''}(收货人：${address.name!''}，手机：${address.mobile!''}，电话：${address.tel!''}，邮编：${address.zip!''})
+	</label>
+</#list>
+<script>
+$(function(){
+	
+	
+	var item = $("input[name='addressId']:checked");//将input选中赋值给变量item，
+	var len=item.length;                            //判断选中的个数
+	if(len==0){                                     //如果选中的个数等于0，那么代表没有默认地址。
+		 $('input[name=addressId]:first').attr('checked', 'checked');
+		$("input[name='addressId']:checked").attr("id","def_addr")  //给checked=true的input添加一个ID名称
+		} 
+	$("#def_addr").click();	
+	
+})
+</script>

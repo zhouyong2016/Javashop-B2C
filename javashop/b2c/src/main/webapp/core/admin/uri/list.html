@@ -1,240 +1,131 @@
-<#include '/admin/header.html' > 
-<div class="main">
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueBlue"
-			data-options="iconCls:'icon-add',plain:true" id="add_uri_button">添加</a>
-		<a href="javascript:void(0)" class="button"
-			data-options="iconCls:'icon-remove',plain:true" onclick="saveEdit()">保存修改</a>
-		
-		<span style="float: right;"> 
-				<span id="simpleSearch">
-					<input id="searchKeyword" class="input_text" type="text" value="" size="30"
-					placeholder="请输入模糊关键字" name="searchKeyWord"> 
-					<a href="javascript:void(0)" class="easyui-linkbutton" 
-					data-options="plain:true" onclick="searchUrl()">搜索</a>
-				</span>
-		</span>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="uriForm">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/core/admin/themeUri/list-json.do',fitColumns:'true'" width="width" id="uridata">
-				<thead>
-					<tr>
-						<th data-options="field:'id',width:20" formatter="formatId">编号</th>
-						<th data-options="field:'uri',width:100" formatter="formatUri">uri</th>
-						<th data-options="field:'path',width:100" formatter="formatPath">path</th>
-						<th data-options="field:'pagename',width:100" formatter="formatPagename">页面名称</th>
-						<th data-options="field:'action',width:50" formatter="formatAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-			
-		</form>
-		<div id="uriInfo" style="display: none;"></div>
-	</div>
+<#include '/admin/header.html' >
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+           <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>url映射含义：当很多页面样式一样但是数据不同时，我们就可以使用同一个模板，此处我们通过正则建立了映射。比如：</li>
+				<li>&nbsp;&nbsp;goods-x.html映射到 goods.html、  help-x.html映射到 help.html......</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_uri_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+            <!--搜索区域  -->
+            <div class="table_search">
+                <input type="text" id="searchKeyword" class="keysearch" placeholder="请在这里输入关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="searchUrl"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="uriForm">
+    <table id="uridata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>uri</th>
+            <th>path</th>
+            <th>页面名称</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<script type="text/javascript">
-var app_path = "";
-function formatAction(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.id+")'></a>";
-	return val;
-}
 
-function formatUri(value, row, index){
-	var val = '<input type="text" value="'+row.uri+'" class="input_text"  name="uri" style="width:95%" maxlength="60">';
-	return val;
-}
-function formatPath(value,row,index){
-	var val = '<input type="text" value="'+row.path+'" class="input_text"  name="path" style="width:95%" maxlength="60">';
-	return val;
-}
-function formatPagename(value,row,index){
-	var val = '<input type="text" value="'+row.pagename+'" class="input_text"  name="pagename" style="width:95%" maxlength="60">';
-	return val;
-}
-function formatId(value,row,index){
-	var val = row.id+'<input type="hidden" value="'+row.id+'" class="input_text"  name="ids">';
-	return val;
-}
-function saveEdit(){
-	var options = {
-			url : "${ctx}/core/admin/themeUri/batch-edit.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {	
-				$.Loading.hide();
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$('#uridata').datagrid('reload');
-				}else{
-					$.Loading.error(result.message);					
-				}
-			},
-			error : function(e) {
-				$.Loading.hide();
-				$.Loading.error("出错了");
-			}
-		};
-		$('#uriForm').ajaxSubmit(options);
-}
-$("#add_uri_button").click(function(){
-	 $("#uriInfo").show();
-	　　	$('#uriInfo').dialog({
-	　　		title: '添加',			
-	　　		width: 600,
-	  		top:20,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/core/admin/themeUri/add.do?ajax=yes', 	 
-	　　		modal: true,
-	　　		buttons: [{				
-	　　			 text:'保存',
-	　　			 handler:function(){
-	　　				 var savebtn = $(this);
-	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-	　　				 	 uriinfoForm("add",savebtn);
-	　　				 }
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				$('#addUriForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#uridata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/core/admin/themeUri/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "id"},
+	        {data: "uri"},
+	        {data: "path"},
+	        {data: "pagename"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='edit("+data["id"]+")'>修改</a>"+"&nbsp"+"<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("+data["id"]+")'>删除</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	//搜索
+	$("#searchUrl").click(function(){
+		search(table);
+	});
+	
+	$("#add_uri_button").click(function(){
+	   	 layer.open({
+	            title:"添加",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/core/admin/themeUri/add.do",//内容的URL
+	            area:['600px','500px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
 });
-function edit(val){
-	 $("#uriInfo").show();
-	　　	$('#uriInfo').dialog({
-	　　		title: '编辑',			
-	　　		width: 600,
-	  		top:20,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/core/admin/themeUri/edit.do?ajax=yes&id='+val, 	 
-	　　		modal: true,
-	　　		onLoad : function() {
-				//var instance = ckeditor.instances["description"];
-				//if (instance) { ckeditor.remove(instance); }
-				//$("#description").ckeditor();
-			},
-	　　		buttons: [{				
-	　　			 text:'保存',
-	　　			 handler:function(){
-	　　				 var editbtn = $(this);
-	　　				 var disabled=editbtn.hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-	　　				 	 uriinfoForm("edit",editbtn);
-	　　				 }
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				$('#uriInfoForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
-}
-function uriinfoForm(val,savebtn){
-	var formflag= $("#uriInfoForm").form().form('validate');
-	 savebtn.linkbutton("disable");	
-	if(formflag&&checkEdit()){
-		$.Loading.show("正在保存请稍候...");
-		var uriurl="";
-		if(val=="edit"){uriurl="${ctx}/core/admin/themeUri/save-edit.do?ajax=yes"}
-		if(val=="add"){uriurl="${ctx}/core/admin/themeUri/save-add.do?ajax=yes"}
-		var options = {
-				url : uriurl,
-				type : "POST",
-				dataType : "json",
-				success : function(result) {
-					if(result.result==1){
-						$("#uriInfo").dialog('close');
-						$.Loading.success(result.message);
-						$('#uridata').datagrid('reload');
-					}else{
-						$.Loading.error(result.message);
-					}
-					savebtn.linkbutton("enable");
-			 	},
-			 	error : function(e) {
-			 		savebtn.linkbutton("enable");
-			 		$.Loading.error('出现错误，请重试');
-				}
-			};
-		$("#addUriForm").ajaxSubmit(options);
-		$("#uriInfoForm").ajaxSubmit(options);
-	}else{
-		savebtn.linkbutton("enable");
-	}
-}
-function checkEdit(){
-	var result = true;
-	$("#uri").each(function(){
-		if( $.trim( $(this).val() )=='' ){
-			result = false;
-			$.Loading.error('uri不能为空');
-		}
-	});
 
-	$("#path").each(function(){
-		if( $.trim( $(this).val() )=='' ){
-			result = false;
-			$.Loading.error('模版文件不能为空');
-		}
-	});
-
-	$("#pagename").each(function(){
-		if( $.trim( $(this).val() )=='' ){
-			result = false;
-			$.Loading.error('页面名称不能为空');
-		}
-	});
-	
-	$("#point").each(function(){
-		var point  = $.trim( $(this).val() );
-		
-		if( point=='' || parseInt(point) != point ){
-			result = false;
-			$.Loading.error('积分不能为空，且必须是数字');
-		}
-	});
-
-	return result;	
-}
-function del(id){
-	if(!confirm("确认要删除吗？")){	
-		return ;
-	}
-	$.Loading.show("正在删除......");
-	var options = {
-			url : "${ctx}/core/admin/themeUri/delete.do?ajax=yes&id="+id,
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$('#uridata').datagrid('reload');
-				}else{
-					$.Loading.error(result.message);
-				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
-			}
-	};
-	$('#uriForm').ajaxSubmit(options);
-}
-
-function searchUrl(){
+function search(table){
 	var keyword = $("#searchKeyword").val();
-	
-	$('#uridata').datagrid('load', {
-		 keyword:keyword
-   }); 
+	var url = table.ajax.url("${ctx}/core/admin/themeUri/list-json.do?keyword="+keyword);
+	url.load();
 }
 
+//修改
+function edit(id){
+	 layer.open({
+         title:"修改",//标题
+         maxmin :true,//右上角可否放大缩小
+         type:2,//弹框的类型
+         shade: [0.3, '#000'],//黑色背景
+         shadeClose:false,//黑色背景是否可以点击关闭
+         content:ctx+"/core/admin/themeUri/edit.do?id="+id,//内容的URL
+         area:['600px','500px'],//弹框大小
+         scrollbar: false//是否允许浏览器出现滚动条
+     });
+}
+
+//删除
+function del(id){
+	if(!confirm("确认要删除吗？")){
+		return;
+	}
+	$.ajax({
+		url:ctx+"/core/admin/themeUri/delete.do?id="+id,
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result == 1){
+				$.Loading.success(data.message);
+				table.ajax.url(ctx+"/core/admin/themeUri/list-json.do").load();
+			}
+		}
+	});
+}
 </script>
 <#include '/admin/footer.html' >

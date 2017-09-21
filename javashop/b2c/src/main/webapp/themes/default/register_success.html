@@ -1,0 +1,55 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+<!--登录界面-->
+
+	<div class="tip_wrap">
+		<div class="success">
+			<div class="span-auto">
+				<h1 style="height:60px;line-height:60px">恭喜，您已成功注册为会员!</h1>
+				<ul>
+					<li>我们已向您的注册邮箱<span><a style="color: red" href="${mailurl!''}"
+							target="_blank">${member.email}</a></span>发送了一封验证邮件，
+					</li>
+					<li>请前往收信并完成验证，验证后您将获得20奖励积分。</li>
+					<li>
+						<span>
+							<#if forward?? && forward!="" >
+								<a href="${forward}" style="color: red">继续操作</a>
+								<#else>
+								<a href="index.html" style="color: red" >返回网站首页</a>
+							</#if>
+						</span>
+						<span>
+							<a href="member/member.html" style="color: red" class="zhuce_cg2">去会员中心</a>
+						</span>
+					</li>
+					<li><span>未收到邮件？</span></li>
+					<li>1、查看邮箱的垃圾邮件或广告邮件，邮件有可能被误认为垃圾邮件。</li>
+					<li>2、如果超过10分钟仍未收到验证邮件，请点击 <a href="javascript:;"
+						id="resend_btn" style="color: red;">重新发送</a>。
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+<script>
+$(function(){
+	$("#resend_btn").click(function(){
+		$.Loading.show("请稍候...");
+		$.ajax({		
+			url:'api/shop/member!reSendRegMail.do?ajax=yes',
+			dataType:'json',
+			success:function(result){
+				$.Loading.hide();
+				$.alert(result.message);
+			},error:function(){
+				$.Loading.hide();
+				$.alert("抱歉，发生错误");
+			}
+			
+		});
+	});
+});
+</script>
+<#include 'common/footer.html'/>

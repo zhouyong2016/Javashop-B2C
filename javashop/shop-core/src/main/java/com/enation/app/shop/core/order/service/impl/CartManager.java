@@ -461,18 +461,19 @@ public class CartManager implements ICartManager {
 		//优惠后的订单价格,默认为商品原始价格
 		Double goodsPrice =0.0; 
 	 
-		
-		//计算商品重量及商品价格
-		for (CartItem cartItem : cartItemList) {
-			
-			// 计算商品重量
-			weight = CurrencyUtil.add(weight, CurrencyUtil.mul(cartItem.getWeight(), cartItem.getNum()));
-			
-		 
-			//计算商品优惠后的价格小计
-			Double itemTotal = CurrencyUtil.mul(cartItem.getCoupPrice(), cartItem.getNum());
-			goodsPrice=CurrencyUtil.add(goodsPrice, itemTotal);
-			
+		if(cartItemList!=null && !cartItemList.isEmpty()){
+			//计算商品重量及商品价格
+			for (CartItem cartItem : cartItemList) {
+				
+				// 计算商品重量
+				weight = CurrencyUtil.add(weight, CurrencyUtil.mul(cartItem.getWeight(), cartItem.getNum()));
+				
+			 
+				//计算商品优惠后的价格小计
+				Double itemTotal = CurrencyUtil.mul(cartItem.getCoupPrice(), cartItem.getNum());
+				goodsPrice=CurrencyUtil.add(goodsPrice, itemTotal);
+				
+			}
 		}
 		
 		 
@@ -704,6 +705,5 @@ public class CartManager implements ICartManager {
 		}
 		return total;
 	}
-
 
 }

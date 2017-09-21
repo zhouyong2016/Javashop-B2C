@@ -1,72 +1,108 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+td .layui-btn-small{
+background:#1E9FFF;
+}
+.page_explain ul li{
+height:30px;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>如果此处没有您需要的支付方式，请点击‘左上角’上的添加按钮。</li>
+                <li><span>.</span>微信支付：如果添加按钮中没有微信支付，可能是项目里没有关联sms项目或者没有购买短信组件或者没有安装启用组件。</li>
+               <li>&nbsp;&nbsp;&nbsp;pc端/wap端/H5端-微信支    付接口；原生APP-微信移动支付接口。</li>
+                <li><span>.</span>支付宝支付：pc端-支付宝即时到帐接口；wap端/H5端-支付宝Wap支付接口；原生APP端：支付宝移动支付。另外，支付宝pc端支付时：</li>
+                <li>&nbsp;&nbsp;&nbsp;立即支付采用    的是同步回调接口，扫码支付采用的是异步回调函数，所以扫码支付必须线上测试。</li>
+				<li><span>.</span>配置文档，请参考javashop文档：《v61微信支付组件使用说明文档》、《支付宝配置说明》、《中国银联配置》、</li>
+				<li>&nbsp;&nbsp;&nbsp;《银联在线配置说明》......</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="添加" onclick="newTab('添加支付方式','${ctx}/shop/admin/payCfg/add.do')"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary" title="删除" onclick="delPayment()"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="licon iconfont icon-tishi1"></i></button>
+            </div>
 
-<div class="main">
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton"  onclick="newTab('添加支付方式','${ctx}/shop/admin/payCfg/add.do')">添加</a>
-		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="paymentform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/payCfg/list-json.do',fitColumns:'true'" width="width" id="paymentdata">
-				<thead>
-				    <tr>
-				    	<th  data-options="field:'id',checkbox:true,width:100" ></th>
-				   	 	<th  data-options="field:'name',width:100">支付方式</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			 </table>
-		 </form>
-		<div id="payCfginfo" style="display: none;"></div>
-	</div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="paymentform">
+    <table id="paymentdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>支付方式</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
 
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	table = $('#paymentdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/payCfg/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="id" class="fly-checkbox" value=' + obj.id + '>';
+            		}},
+	        {data: "name"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' onclick='newTab(\"修改支付方式\",\"${ctx}/shop/admin/payCfg/edit.do?paymentId="+data["id"]+"\")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+});
 
- <script type="text/javascript">
- 
-function formatAction(value,row,index){
-		var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\"修改支付方式\",\"${ctx}/shop/admin/payCfg/edit.do?paymentId="+row.id+"\")'></a>";
-			return val;
-}
-function del(){ 
-	var rows = $('#paymentdata').datagrid("getSelections"); 
-	if(rows.length<1){
-		$.Loading.error("请选择要删除的支付方式");
+function delPayment(){
+	var check = $("input[name='id']").is("input:checked");
+	if(check == false){
+		alert("请选中需要删除的支付方式！！！");
+		return false;
+	}
+	if(!confirm("确认要删除支付方式？")){
 		return;
 	}
-	if(!confirm("确认要将这些支付方式删除吗？")){	
-		return ;
-	}
 	var options = {
-			url : "${ctx}/shop/admin/payCfg/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					var rows = $('#paymentdata').datagrid("getSelections"); 
-					for(var i =0;i<rows.length;i++){      
-			 			var index = $('#paymentdata').datagrid('getRowIndex',rows[i]); 
-			 			$('#paymentdata').datagrid('deleteRow',index);      
-			 		}
+			url:ctx+"/shop/admin/payCfg/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result == 1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/payCfg/list-json.do").load();
 				}
-				if(result.result==0){ 
-					$.Loading.error(result.message);
+				if(data.result==0){
+					$.Loading.error(data.message);
 				}
-			},
-			error : function(e) {
-				alert("出现错误 ，请重试");
 			}
 	};
-	$('#paymentform').ajaxSubmit(options);	
+	$("#paymentform").ajaxSubmit(options);
 }
-
-//定义一个刷新datagrid的方法，将其保存到window.top中 add_by DMRain 2016-8-31
-window.top["reload_Abnormal_Monitor"]=function(){
-    $("#paymentdata").datagrid("reload");
-};
 </script>
 <#include '/admin/footer.html' >
-	   	 

@@ -71,9 +71,9 @@ public interface ITagManager {
 	public List<Tag> list(); 
 	/**
 	 * 标签列表Map集合
-	 * @return List<Map>
+	 * @return List<Tag>
 	 */
-	public List<Map> listMap(); 
+	public List<Map> listMap();
 	
 	/**
 	 * 读取某个引用的标签id集合

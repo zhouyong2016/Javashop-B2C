@@ -391,4 +391,13 @@ public class MemberStatisticsController {
 			return JsonResultUtil.getErrorJson("获取用户数据出错:" + e.getMessage());
 		}
 	}
+	/**
+	 * 获取价格区间页
+	 * @return result name
+	 */
+	@RequestMapping(value="/get-price-range-html")
+	public String getPriceRangeHtml(){
+		
+		return "/shop/admin/statistics/member/price_range";
+	}
 }

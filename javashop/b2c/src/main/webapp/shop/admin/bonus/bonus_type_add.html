@@ -1,105 +1,182 @@
+<#include '/admin/sonheader.html' >
 <#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+
 <style>
-.input_text{
-	width: 200px;
+.layui-form-pane .layui-form-label{
+ width:25%;
+}
+.layui-form-item input{
+  width: 77%;
+.layui-form-pane .layui-form-label {
+	width: 180px;
 }
 </style>
-<div class="easyui-panel" style="border-style: none;">
-	<div style="padding: 10px 0 10px 20px">
-		<form method="post" class="validate" id="bonusTypeForm">
-			<table>
-				<tr>
-					<th><label class="text">优惠券识别码：</label></th>
-					<td><input class="easyui-validatebox input_text"
-						data-options="required:true,validType:['string','length[0,20]','englishCheckSub']" type="text"
-						name="recognition" maxlength="60" 
-						isrequired="true" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">类型名称：</label></th>
-					<td><input class="easyui-validatebox input_text"
-						data-options="required:true" type="text"
-						name="type_name" maxlength="60" 
-						isrequired="true" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">红包金额：</label></th>
-					<td><input maxlength="7" class="easyui-numberbox input_text"
-						data-options="required:true" type="text"
-						name="type_money" dataType="float" isrequired="true" precision="2"/>
-						<em class="tip">此类红包可以抵消的金额</em>
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">最小订单金额</label></th>
-					<td><input maxlength="7" type="text" name="min_goods_amount"
-						class="easyui-numberbox input_text" data-options="required:true" precision="2"/> 
-						<em class="tip">只有商品总金额达到这个数的订单才能使用这种红包</em>
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">如何发放此类型红包：</label></th>
-					<td>
-						<input type="radio" name="send_type" value="0"checked="true" />按用户发放&nbsp;&nbsp;&nbsp;&nbsp; 
-						<input type="radio" name="send_type" value="3" />线下发放的红包&nbsp;&nbsp;&nbsp;&nbsp;
-					</td>
-				</tr>
-				<tr id="min_tr" style="display: none">
-					<th><label class="text">订单下限</label></th>
-					<td><input type="text" name="min_amount" class="input_text" /> 
-					<em class="tip">只要订单金额达到该数值，就会发放红包给用户</em>
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">发放开始日期：</label></th>
-					<td><input type="text" name="sendTimeStart" style="height: 28px;"  id="sendTimeStart" disabled="disabled" value="<@dataformat time="now" pattern="yyyy-MM-dd" />"
-						value="" class="easyui-datebox" data-options="required:true" /> 
-						<em class="tip">只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以发放</em>
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">发放结束日期：</label></th>
-					<td><input type="text" name="sendTimeEnd" style="height: 28px;" id="sendTimeEnd" disabled="disabled" value="<@dataformat time="nextmonth" pattern="yyyy-MM-dd" />"
-						class="easyui-datebox" data-options="required:true" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">使用起始日期：</label></th>
-					<td><input type="text" name="useTimeStart" style="height: 28px;" id="useTimeStart"  value="<@dataformat time="now" pattern="yyyy-MM-dd" />" 
-						class="easyui-datebox" data-options="required:true" /> <em
-						class="tip">只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以使用</em>
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">使用结束日期：</label></th>
-					<td><input type="text" name="useTimeEnd" style="height: 28px;" id="useTimeEnd"  value="<@dataformat time="nextmonth" pattern="yyyy-MM-dd" />"
-						class="easyui-datebox" data-options="required:true" /></td>
-				</tr>
-			</table>
-		</form>
-	</div>
-</div>
 
-<script type="text/javascript">
+<div class="main">
+    <!--表单区域  -->
+	<form id="bonusTypeForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label ">优惠券识别码：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="recognition" maxlength="60"  lay-verify="recognition" autocomplete="off" class="layui-input w300">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label ">类型名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="type_name" maxlength="60"   lay-verify="type_name" autocomplete="off" class="layui-input w300">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">红包金额：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="type_money" maxlength="7" lay-verify="type_money" autocomplete="off"  class="layui-input _left w300">
+      			<div class="layui-form-mid layui-word-aux">此类红包可以抵消的金额</div>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">最小订单金额：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="min_goods_amount" maxlength="7" lay-verify="min_goods_amount" autocomplete="off" class="layui-input _left w300">
+      			<div class="layui-form-mid layui-word-aux">只有商品总金额达到这个数的订单才能使用这种红包</div>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">如何发放此类型红包：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="send_type" value="0" title="按用户发放" checked="checked">
+     			<input type="radio" name="send_type" value="3" title="线下发放的红包">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">发放开始日期：</label>
+    		<div class="layui-input-block">
+      			<input  type="text" class="layui-input _left w300" name="sendTimeStart"   disabled="disabled" id="sendTimeStart"  value="<@dataformat time='now'  pattern='yyyy-MM-dd hh:mm:ss'/>" />
+    			<div class="layui-form-mid layui-word-aux" >只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以发放</div>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">发放结束日期：</label>
+    		<div class="layui-input-block">
+      			<input type="text" class="layui-input w300" name="sendTimeEnd"   disabled="disabled" id="sendTimeEnd" value="<@dataformat time='nextmonth'  pattern='yyyy-MM-dd hh:mm:ss'/>"  />
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" style="padding-top: 8px;margin-bottom:0;">
+    		<label class="layui-form-label">使用起始日期：</label>
+    		<div class="layui-input-block">
+  				<input class="layui-input _left w300" name="useTimeStart" id="useTimeStart"  onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+			    <div class="layui-form-mid layui-word-aux" >只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以使用</div>
+			</div>
+  		</div>
+  		
+  		<div class="layui-form-item" style="padding-top: 8px;margin-bottom:0;'">
+    		<label class="layui-form-label">使用结束日期：</label>
+    		<div class="layui-input-block">
+  				<input class="layui-input _left w300" name="useTimeEnd" id="useTimeEnd"  onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+			</div>
+  		</div>
+  		
+		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 50px; background:rgba(230,230,230,0.8)">   			<a class="layui-layer-btn0" type="submit" id="savebtn" lay-submit="" lay-filter="save_bonus_type">保存</a>
+  			<a class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
+</div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    
+    //类型切换
 	$(function() {
-		
-		//类型切换
 		$("input[type=radio]").click(
 				function() {
 					var value = this.value;
-					//if (value == 1 || value == 2) {
-					//	$("input[name=sendTimeStart],input[name=sendTimeEnd]")
-					//			.attr("disabled", false);
-					//} else {
-					//	$("input[name=sendTimeStart],input[name=sendTimeEnd]")
-					//			.attr("disabled", true);
-					//} 
-					
+					if (value == 1 || value == 2) {
+						$('#sendTimeStart').datebox('enable');
+						$('#sendTimeEnd').datebox('enable'); 
+					} else {
+						$('#sendTimeStart').datebox('disable');
+						$('#sendTimeEnd').datebox('disable');
+					}
+
 					if (value == 2) {
 						$("#min_tr").show();
 					} else {
 						$("#min_tr").hide();
 					}
-				});
-
+			});
 	});
+	var check= /^(([1-9]+[.]?[0-9]{1,2})|[1-9])$/; 
+    form.verify({
+    	recognition:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入优惠券识别码";
+    		}
+    	},
+    	type_name:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入类型名称";
+    		}
+    	},
+    	type_money:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入红包金额";
+    		}
+    		if(!check.test(value)){  
+            	return "请输入大于零的数";
+            }
+    	},
+    	min_goods_amount:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入最小订单金额";
+    		}
+    		if(!check.test(value)){  
+            	return "请输入大于零的数";
+            }
+    	}
+    	
+    });
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+  //提交表单，保存添加
+  form.on('submit(save_bonus_type)',function(data){
+	  var amount = parseInt($("input[name='min_goods_amount']").val());
+	  var money = parseInt($("input[name='type_money']").val());
+	  if(amount < money){
+		  parent.$.Loading.error("最小订单金额不能小于红包金额！");
+		  return false;
+	  }
+	  var options = {
+			  url:ctx+"/shop/admin/bonus-type/save-add.do",
+			  type:"post",
+			  dataType:"json",
+			  success:function(data){
+				  if(data.result==1){
+					  parent.layer.close(index); 
+					  parent.$.Loading.success(data.message);
+					  parent.table.ajax.url(ctx+"/shop/admin/bonus-type/list-json.do").load();
+				  }
+				  if(data.result==0){
+					  parent.$.Loading.error(data.message);
+				      }
+				  }
+			  };
+	  $("#bonusTypeForm").ajaxSubmit(options);
+	  return false;
+  }); 
+});
 </script>

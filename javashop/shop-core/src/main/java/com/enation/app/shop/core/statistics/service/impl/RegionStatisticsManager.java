@@ -76,12 +76,11 @@ public class RegionStatisticsManager implements IRegionStatisticsManager {
 		int num=1;
 		// 循环地区值
 		for (Object o : myMap.keySet()) {
-
 			// 获取地区下单数量
 			value = this.getRegionNum(list, o.toString());
 
 			// 拼接JSON
-			sb.append("{\"hc-key\":\"").append(myMap.get(o)).append("\",\"value\":").append(value).append("}");
+			sb.append("{\"name\":\"").append(o.toString()).append("\",\"value\":").append(value).append("}");
 			if(myMap.keySet().size()!=num){
 				sb.append(",").append("\n");
 			}

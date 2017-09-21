@@ -1,167 +1,173 @@
 <#include '/admin/header.html' >
 <#assign imageuploader="com.enation.framework.directive.ImageUploaderDirectiveModel"?new()>
-
-<script type="text/javascript">
-
-var showImgs = [];
-var actualImgs = [];
-<#if pay_img?? >
-	showImgs.push("${pay_img}");
-	actualImgs.push("${pay_img}");
-</#if>
-	//上传图片插件配置
-	var image_uploader_setting = {
-		imageName : "payImg",	// 表单提交时 的name
-		subFolder : "payment",		// 上传目录
-		showImgs : showImgs,	//显示的img值数组，不提交。只做显示用
-		actualImgs : actualImgs,	// 实际的img值数组，会提交
-		fileNumLimit:1 //最多上传图片个数
-	}
-</script>
-
 <style>
-.form-table th {
-	width: 150px;
-}
+  .layui-form-select{
+    width:50%;
+  }
+   .layui-select-title input{
+    width:100%;
+  }
+  .layui-form-pane .layui-form-label{
+    width:200px;
+    margin-left:20px;
+  }
+   .layui-form-pane .layui-input-block{float:left; margin:0 0 0 10px;width:60%;}
 </style>
-<div class="main">
-	<div class="shadowBoxWhite wf100 whiteBox">
-		<form id="editpayCfgForm" method="post" class="validate">
-			<input type="hidden" name="paymentId" value="${paymentId }" />
-			<table cellspacing="1" cellpadding="3" width="100%"
-				class="form-table" id="pluginTable">
-				<tr id="first">
-					<th>支付方式：</th>
-					<td><select name="type" id="pluginList" onchange="bian()">
-							<option value="">请选择要添加的支付方式</option> 
+<script type="text/javascript">
+ 		//富文本编辑器
+    var ue = UE.getEditor('editor');
+    var showImgs = [];
+    var actualImgs = [];
+    <#if pay_img?? >
+    	showImgs.push("${pay_img}");
+    	actualImgs.push("${pay_img}");
+    </#if>
+      //上传图片插件配置
+    	var image_uploader_setting = {
+    		imageName : "payImg",	// 表单提交时 的name
+    		subFolder : "payment",		// 上传目录
+    		showImgs : showImgs,	//显示的img值数组，不提交。只做显示用
+    		actualImgs : actualImgs,	// 实际的img值数组，会提交
+    		fileNumLimit:1 //最多上传图片个数
+    	}
+</script>
+<div class="admin-main">
+    <!--表单区域  -->
+	<form id="editpayCfgForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px;padding-bottom:10px;">
+	<input type="hidden" name="paymentId" value="${paymentId }" />
+		<div class="layui-form-item" id="first">
+			<label class="layui-form-label _stration">支付方式：</label>
+    		<div class="layui-input-block">
+      			<select name="type" id="pluginList" lay-verify="" lay-filter="plugin" style="width: 250px;">
+					<option value="">请选择要添加的支付方式</option> 
 							<#list pluginList as plugin>
 								<option value="${plugin.id }"
 								<#if type==plugin.id > selected="selected" </#if> >${plugin.name }</option>
 							</#list>
-					</select></td>
-				</tr>
-				<tr id="name">
-					<th>支付方式名称：</th>
-					<td><input type="text" class="easyui-validatebox input_text"
-						name="name" value="${name}" id="payment_name"
-						data-options="required:true" dataType="string" isrequired="true" maxlength="20" />
-					</td>
-				</tr>
-				<tr id="online">
-					<th>是否属于网上支付</th>
-					<td>
-						<input type="radio" value="1" name="isOnline" <#if is_online==1>checked </#if> > 是&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" value="0" name="isOnline" <#if is_online==0>checked </#if> > 否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<label style="color: red;">注：重要参数，认真选择。否则会造成支付出现错误！</label>
-					</td>
-				</tr>
-				<tr id="img">
-					<th>支付方式展示图片</th>
-					<td>
-						<@imageuploader />
-					</td>
-				</tr>
-				<tr id="last">
-					<th>介绍：</th>
-					<td>
-						<script id="editor" name="biref" type="text/plain" style="height:200px;width: 99%;">${biref!''}</script>
-					</td>
-				</tr>
-
-			</table>
-		</form>
-		<div class="buttonWrap">
-			<a href="javascript:;" id="saveBtn" class="easyui-linkbutton">保存</a>
-		</div>
-	</div>
+				</select>
+   			</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="name">
+    		<label class="layui-form-label">支付方式名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="payment_name" name="name" value="${name}" maxlength="20"  lay-verify="" lay-verify="required" autocomplete="off" class="layui-input" >
+    		</div>
+  		</div>
+  		
+  		
+  		<div class="layui-form-item" id="online">
+    		<label class="layui-form-label">是否属于网上支付</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="isOnline" value="1" title="是" <#if is_online==1>checked </#if>>
+      			<input type="radio" name="isOnline" value="0" title="否" <#if is_online==0>checked </#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="online">
+	    		<label class="layui-form-label" >是否支持原支付方式退款</label>
+	    		<div class="layui-input-block">
+	      			<input type="radio" name="isRetrace" value="1" title="是" <#if is_retrace==1>checked </#if>>
+	      			<input type="radio" name="isRetrace" value="0" title="否" <#if is_retrace==0>checked </#if>>
+	    		</div>
+	  		</div>
+  		
+  		<div class="layui-form-item" id="img">
+    		<label class="layui-form-label">支付方式展示图片</label>
+    		<div class="layui-input-block">
+      			<@imageuploader />
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="last">
+    		<label class="layui-form-label">介绍：</label>
+    		<div class="layui-input-block">
+      			<script id="editor" name="biref" type="text/plain" style="height:200px;width: 99%;">${biref!''}</script>
+    		</div>
+  		</div>
+	
+  		<div class="layui-form-item" id="button">
+    		<div class="layui-input-block padding-bottom" align=center  >
+      			<a class="layui-btn" href="javascript:void(0)" lay-submit="" lay-filter="editPay">立即提交</a>
+      			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+   			</div>
+  		</div>
+  	</form>
 </div>
-<script type="text/javascript">
-	var ue = UE.getEditor('editor',{
-		zIndex:0,
-	});
-
-	$(function() {
-
-		$("#saveBtn").click(function() {
-			var savebtn = $(this);
-			var formflag= $("#editpayCfgForm").form('validate');
-			if(formflag) {
-				//pluginList
-				var type = $("#pluginList").val();
-				if(type == "") {
-					$.Loading.error("请选择支付方式！");	
-					
-					savebtn.linkbutton("enable");
-					return;
-				}
-			}
-			if(formflag){
-				var options = {
-					url : "${ctx}/shop/admin/payCfg/save-edit.do",
-					type : "POST",
-					dataType : "json",
-					success : function(result) {
-						if(result.result==1){
-							$.Loading.success(result.message);
-							$("#payCfginfo").dialog('close');
-							$('#paymentdata').datagrid('reload');
-						}else{
-							$.Loading.error(result.message);
-						}
-						savebtn.linkbutton("enable");
-				 	},
-				 	error : function(e) {
-						savebtn.linkbutton("enable");
-				 		$.Loading.error("出现错误 ，请重试");	
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+  //监听下拉框
+    form.on('select(plugin)', function(data){
+  	  var name = $("#pluginList option:selected").text();
+  	  loadHtml("", data.value, name);
+  	});
+    
+    //监听提交
+    form.on('submit(editPay)', function(){
+     	var options = {
+				url : "${ctx}/shop/admin/payCfg/save-edit.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						parent.$.Loading.success(result.message); 				
+					}else{
+						parent.$.Loading.error(result.message);
 					}
-				};
-				$('#editpayCfgForm').ajaxSubmit(options);
-			}else{
-				$.Loading.hide();
-				savebtn.linkbutton("enable");
+			 	},
+				 error : function(e) {
+					 parent.$.Loading.error("出现错误 ，请重试");	
+				}
+		 	};
+		$("#editpayCfgForm").ajaxSubmit(options);
+		
+		return false; 
+    });
+});   
+
+
+$(function(){
+	loadHtml('${paymentId}','${type}','${name}');
+});
+
+
+function loadHtml(paymentid, pluginid, name) {
+	if (pluginid && pluginid != '') {
+		$.ajax({
+			url : "${ctx}/shop/admin/payCfg/get-plugin-html.do?pluginId=" + pluginid
+					+ "&paymentId=" + paymentid,
+			success : function(html) {
+				cleanTr();
+				$("div[id=name]").after(html);
+				$("#payment_name").val(name);
+				layui.form().render();
+			},
+			error : function() {
+				alert("出错了");	
 			}
-		})
-	})
-	$(function(){
-		loadHtml('${paymentId}','${type}','${name}');
-	});
-
-	function bian() {
-		var pluginid = $("#pluginList").val();
-		var name = $("#pluginList option:selected").text();
-		loadHtml("", pluginid, name);
+		});
 	}
+}
 
-	function loadHtml(paymentid, pluginid, name) {
-		if (pluginid && pluginid != '') {
-			$.ajax({
-				url : "${ctx}/shop/admin/payCfg/get-plugin-html.do?pluginId=" + pluginid
-						+ "&paymentId=" + paymentid,
-				success : function(html) {
-					cleanTr();
-					$("#pluginTable tr[id=name]").after(html);
-					$("#payment_name").val(name);
-				},
-				error : function() {
-					$.Loading.error("出错了");
-				}
-			});
+function cleanTr() {
+	$("#editpayCfgForm>div").each(function(){
+		var value = $(this).attr("id");
+		if (value != "first"
+				&& value != "last"
+				&& value != "name" 
+				&& value != "img"
+				&& value != "first"
+				&& value != "button"
+				&& value != "online"){
+			$(this).remove();
 		}
-	}
+	});
+}
 
-	function cleanTr() {
-		$("#pluginTable>tbody>tr").each(
-			function() {
-				if ($(this).attr("id") != "first"
-						&& $(this).attr("id") != "last"
-						&& $(this).attr("id") != "name" 
-						&& $(this).attr("id") != "img"
-						&& $(this).attr("id") != "online"){
-					$(this).remove();
-				}
-			});
-	}
 </script>
-
 <#include '/admin/footer.html' >
-

@@ -1,178 +1,186 @@
 <#include '/admin/header.html' >
-<div id="loading"></div>
-<div class="main">
-	<div class='buttonArea'>
-		<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
-	</div>
-	<div class="clear height10"></div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="commentsform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/comments/list-json.do?type=1',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" id="commentsdata">
-				<thead>
-					<tr>
-						<th data-options="field:'comment_id',checkbox:true"></th>
-						<th data-options="field:'gname',width:200" formatter="formatName">商品名称</th>
-						<th data-options="field:'muname',width:200" formatter="formatUname">评论人</th>
-						<th data-options="field:'dateline',width:300" formatter="formatDateline">评论日期</th>
-						<th data-options="field:'grade',width:200,formatter:function(value,rowData,rowIndex){
-							var val = '';
-							switch(value) {
-								case 1:
-									val='差评';
-									break;
-								case 2:
-									val='中评';
-									break;
-								case 3:
-									val='好评';
-									break;
-								default :
-									val='好评';
-									
-							}
-							return val;
-						}">评价</th>
-						<#if product_type=="b2c">
-							<th data-options="field:'status',width:200" formatter="formatStatus">显示状态</th>
-							<th data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
-						<#else>
-							<th data-options="field:'action',width:100,align:'center'" formatter="formatDetail">操作</th>
-						</#if>
-					</tr>
-				</thead>
-			</table>
-		</form>
-	</div>
-	<div id="divdia"></div>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>首先，只有购买完商品，并完成订单后，买家才能对商品进行评论。</li>
+                <li><span>·</span>可以对其进行回复，但是需要审核通过，前台才会显示评论以及回复内容。</li>
+                <li><span>·</span>审核拒绝的话，前台不会显示出评论内容。</li>
+                <li><span>·</span>如果审核通过，前台也显示其内容，但是把列表中的评论记录删除掉的话，前台显示依然会消失。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="删除" onclick="delComments();"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+   <form id="commentsform">
+    <table id="commentsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>商品名称</th>
+            <th>评论人</th>
+            <th>评论日期</th>
+            <th>评价</th>
+            <#if product_type=="b2c">
+				<th>显示状态</th>
+				<th>操作</th>
+			<#else>
+				<th>操作</th>
+			</#if>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<script type="text/javascript">
-	function details(commentid) {
-		$("#divdia").dialog({
-			title : "评论信息",
-			top:20,
-			width : 700,
-			height : 500,
-			closed : false,
-			cache : false,
-			href : "${ctx}/shop/admin/comments/detail.do?commentId=" + commentid,
-			modal : true,
-			buttons : [ {
-				text : '关闭',
-				handler : function() {
-					$("#divdia").dialog('close');
-				}
-			} ]
-		});
-	}
 
-	//查看评论详细 主要应用与b2b2c后台商品评论列表
-	//add by DMRain 2016-4-20
-	function lookDetails(commentid) {
-		$("#divdia").dialog({
-			title : "查看信息",
-			top:20,
-			width : 700,
-			height : 500,
-			closed : false,
-			cache : false,
-			href : "${ctx}/shop/admin/comments/look-detail.do?commentId=" + commentid,
-			modal : true,
-			buttons : [ {
-				text : '关闭',
-				handler : function() {
-					$("#divdia").dialog('close');
-				}
-			} ]
-		});
-	}
+<!--js区域  -->
+<script>
+var table;
+$(function(){
 	
-	function formatOperation(value, row, index) {
-		var val = "<a class='edit' title='审核回复' href='javascript:void(0);' onclick='details("
-				+ row.comment_id + ")' ></a>";
-		return val;
-	}
+	table = $('#commentsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/comments/list-json.do?type=1',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="comment_id" class="fly-checkbox" value=' + obj.comment_id + '>';
+            		}},
+	        {data: "gname"},
+	        {data: "muname"},
+	        {data: null,"render": function(data, type, row) {
+	        	if(data.dateline==null){
+	        		return " ";
+	        	}else{
+	        		return getFormatDateByLong(data.dateline, "yyyy-MM-dd hh:mm:ss");
+	        	}
+	       	}},
+	        {data: null,"render": function(data, type, row) {
+	        	return grade(data.grade,type,row);
+	        }},
+	        <#if product_type=="b2c">
+	        {data: null,"render": function(data, type, row){
+	        	return formatStatus(data.status, type, row);
+	        }},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='details("+data["comment_id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+			<#else>
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='lookDetails("+data["comment_id"]+")'>查看</a>";		//获取值:data["brand_id"]
+	       	}}
+			</#if>
+	     ]
+	});
+});
 
-	//查看评论详细 主要应用与b2b2c后台商品评论列表
-	//add by DMRain 2016-4-20
-	function formatDetail(value, row, index) {
-		var val = "<a class='edit' title='查看' href='javascript:void(0);' onclick='lookDetails("
-				+ row.comment_id + ")' ></a>";
-		return val;
+//好评 显示
+function grade(value,row,index){
+	var val = '';
+	switch(value) {
+		case 1:
+			val='差评';
+			break;
+		case 2:
+			val='中评';
+			break;
+		case 3:
+			val='好评';
+			break;
+		default :
+			val='好评';
+			
 	}
-	
-	function formatDefault_lv(value, row, index) {
-		var val;
-		if (value == 1) {
-			val = "是";
-		} else {
-			val = "否";
-		}
-		return val;
+	return val;
+}
+//审核状态
+function formatStatus(value, row, index) {
+	var val;
+	if (value == 0) {
+		val = "未审核";
 	}
+	if (value == 1) {
+		val = "审核通过";
+	}
+	if (value == 2) {
+		val = "审核拒绝";
+	}
+	return val;
+}
 
-	function formatName(value, row, index) {
-		var val = '<a href="${ctx}/goods-'+row.goods_id+'.html" target="_blank" >'
-				+ value + '</a>';
-		return val;
-	}
+//评论审核
+function details(commentID){
+	layer.open({
+        title:"评论审核",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/comments/detail.do?commentId="+commentID,//内容的URL
+        area:['600px','500px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+    });
+}
 
-	function formatUname(value, row, index) {
-		var val;
-		if (value != null && value != '') {
-			val = value;
-		}
-		if (value == null && value == '') {
-			val = "游客";
-		}
-		return val;
-	}
+//查看评论
+function lookDetails(commentID){
+	layer.open({
+        title:"查看",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/comments/look-detail.do?commentId="+commentID,//内容的URL
+        area:['600px','300px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+    });
+}
 
-	function formatDateline(value, row, index) {
-		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+//删除评论
+function delComments(){
+	var check = $("input[name='comment_id']").is("input:checked");
+	if(check==false){
+		alert("请选择要删除的评论！！！");
+		return false;
 	}
-
-	function formatStatus(value, row, index) {
-		var val;
-		if (value == 0) {
-			val = "未审核";
-		}
-		if (value == 1) {
-			val = "审核通过";
-		}
-		if (value == 2) {
-			val = "审核拒绝";
-		}
-		return val;
+	if(!confirm("确定要删除这些评论？")){
+		return;
 	}
-	function del() {
-		var rows = $('#commentsdata').datagrid("getSelections");
-		if (rows.length < 1) {
-			$.Loading.error("请选择删除评论");
-			return;
-		}
-		if (!confirm("确认要将评论删除吗？")) {
-			return;
-		}
-		var options = {
-			url : "${ctx}/shop/admin/comments/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if (result.result == 1) {
-					$.Loading.success(result.message);
-					$('#commentsdata').datagrid("reload");
+	var options = {
+			url:ctx+"/shop/admin/comments/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/comments/list-json.do?type=1").load();
+				}if(data.result==0){
+					$.Loading.error(data.message);
 				}
-				if (result.result == 0) {
-					$.Loading.error(result.message);
-				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
 			}
-		};
-		$('#commentsform').ajaxSubmit(options);
-	}
+	};
+	$("#commentsform").ajaxSubmit(options);
+}
 </script>
 <#include '/admin/footer.html' >

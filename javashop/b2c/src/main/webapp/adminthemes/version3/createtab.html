@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>createtab</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css" />
+</head>
+<body>
+<blockquote class="layui-elem-quote">
+    创建新的tab,即点击按钮在tabs添加新的选项卡.其主要有以下组成
+    <xmp><a class="layui-btn-small layui-btn" ></a> 首先a标签附于按钮的样式如layui-btn等
+    ,然后添加onclick事件(重要),onclick="newTab('title','icon','url') ,事件的三个参数 分别为按钮名称,按钮的图标class,新tab的url.</xmp>
+    <xmp>在a标签里添加 <i class="fa fa-plus" aria-hidden="true"></i>(同理改变class改变图标)a标签的图标样式,<cite>添加商品</cite>a标签的名称</xmp>具体如下
+</blockquote>
+<a class="layui-btn-small layui-btn" onclick="newTab('添加商品','fa fa-plus','http://www.baidu.com')" >
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    <cite>添加商品</cite>
+</a>
+<a class="layui-btn-small layui-btn" onclick="newTab('添加商品1','fa fa-plus','http://www.baidu.com')" >
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    <cite>添加商品1</cite>
+</a>
+<button  class="layui-btn layui-btn-small layui-btn-normal" onclick="jsCopy('content' )">复制代码</button>
+<hr>
+  <pre class="layui-code"  lay-title=" " lay-height="" lay-skin="" lay-encode="true" id="content">
+   <a class="layui-btn-small layui-btn" onclick="newTab('添加商品','fa fa-plus','http://www.baidu.com')" >//传三个参数 标题 图标class url
+       <i class="fa fa-plus" aria-hidden="true"></i>//改变class即可改变图标
+       <cite>添加商品</cite>//按钮title
+   </a>
+
+      //i标签的class例如fa fa-plus是决定图标的不同 具体class请参考http://www.fontawesome.com.cn/
+
+    <a class="layui-btn-small layui-btn" onclick="newTab('添加商品1','fa fa-plus','http://www.baidu.com')">//传三个参数 标题 图标class url
+        <i class="fa fa-plus" aria-hidden="true"></i>//改变class即可改变图标
+        <cite>添加商品1</cite>//按钮title
+    </a>
+  </pre>
+
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script src="js/createtab.js"></script>
+</body>
+</html>

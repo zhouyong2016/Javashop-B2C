@@ -94,11 +94,21 @@ h1,h2,h3,h4,h5,h6 {
 .close_box a {
 	float: right
 }
+#layui-layer1{
+width:300px;
+
+}
+.layui-layer-page .layui-layer-content{
+overflow:hidden;
+}
+.layui-layer-iframe .layui-layer-btn, .layui-layer-page .layui-layer-btn{
+padding-top:10px;
+}
 -->
 </style>
 <div class="main">
 	<div id="orderinfo" style="display: none; overflow:hidden" ></div>
-	<div id="cancelorder" style="padding-left:30px; display: none;"> 
+	<div id="cancelorder" style="text-align:center;padding-top:20px; display: none;"> 
 		请选择取消原因：
 		<select name="reason">
 			<option value="现在不想购买">现在不想购买</option>
@@ -113,25 +123,23 @@ h1,h2,h3,h4,h5,h6 {
 	<div class="toolbar">
 		<form id="nextForm" action="" method="post">
 			<div style="float:left">
-				<@permssion actid="customer_service,super_admin">
-					<a href="#" class="easyui-linkbutton" id="confirmorder" disabled="disabled" data-options="toggle:true,group:'g1'">确认订单</a>
-	   			</@permssion>
-				<@permssion actid="finance,super_admin">
-					<a href="#" class="easyui-linkbutton" id="pay" disabled="disabled" data-options="toggle:true,group:'g1'">确认收款</a>
-				</@permssion>
-				<@permssion actid="depot_admin,super_admin">
-					<a href="#" class="easyui-linkbutton" id="ship" disabled="disabled" data-options="toggle:true,group:'g1'">发货</a>
-					<a href="#" class="easyui-linkbutton" id="rog" disabled="disabled" data-options="toggle:true,group:'g1'">确定收货</a>
-				</@permssion>
-				<@permssion actid="customer_service,super_admin">
-					<a href="#" class="easyui-linkbutton"  id="returned" disabled="disabled" data-options="toggle:true,group:'g1'">售后</a>
-					<a href="#" class="easyui-linkbutton" id="cancel"  disabled="disabled" data-options="toggle:true,group:'g1'">取消订单</a>
-				</@permssion>
+				<div class="layui-btn-group">
+					<@permssion actid="customer_service,super_admin">
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="confirmorder" >&nbsp;&nbsp;确认订单&nbsp;&nbsp;</a>
+					</@permssion>
+					<@permssion actid="finance,super_admin">
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="pay"  >&nbsp;&nbsp;确认收款&nbsp;&nbsp;</a>
+					</@permssion>
+					<@permssion actid="depot_admin,super_admin">
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="ship" >&nbsp;&nbsp;发货&nbsp;&nbsp;</a>
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="rog" >&nbsp;&nbsp;确定收货&nbsp;&nbsp;</a>
+					</@permssion>
+					<@permssion actid="customer_service,super_admin">
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="returned"  >&nbsp;&nbsp;售后&nbsp;&nbsp;</a>
+						<a class="layui-btn layui-btn-normal layui-btn-small layui-btn-disabled" id="cancel"  >&nbsp;&nbsp;取消订单&nbsp;&nbsp;</a>
+					</@permssion>
+				</div>
 			</div>
-			<span style="float:right;display:block;height:30px;">
-				<a href="javascript:;" id="printExpress"  class="easyui-linkbutton"  >打印快递单 </a>
-				<a href="javascript:;" id="printShip"  class="easyui-linkbutton"  >打印发货单 </a>
-			</span>
 		</form>
 		<div style="clear: both"></div>
 	</div>
@@ -169,7 +177,9 @@ h1,h2,h3,h4,h5,h6 {
 </div>
 
 <script>
+
 $(function(){
+	
  	 $(".order_detail .contentTab>ul>li").click(function(){
  	 	 var tabid=$(this).attr("tabid");
  	 	 $(".order_detail .contentTab>ul>li").removeClass("contentTabS");

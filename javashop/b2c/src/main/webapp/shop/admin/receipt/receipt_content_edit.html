@@ -1,0 +1,54 @@
+<#include '/admin/header.html' >
+<style>
+  .layui-input{
+  width:75%
+  }
+ 
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="editReceiptContentForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px;margin-left:10px;">
+		<input type="hidden" name="contentid" value="${receiptContent.contentid}">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">发票内容：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="receipt_content" value="${receiptContent.receipt_content}" maxlength="50" required lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;position: fixed;left: 1px;width: 96%;height: 50px; background:rgba(230,230,230,0.8)"> 
+  			<a style="margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_receipt_content">保存</a>
+  			
+  		</div>
+  	</form>
+</div>
+<script>
+var index = parent.layer.getFrameIndex(window.name);
+
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form();
+    form.on('submit(save_receipt_content)', function(data){
+    	var options = {
+   			url:ctx+"/shop/admin/receipt/edit-save.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/shop/admin/receipt/list-json.do").load();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#editReceiptContentForm").ajaxSubmit(options);
+       return false;
+    });
+    
+ 
+   
+    
+});
+</script>

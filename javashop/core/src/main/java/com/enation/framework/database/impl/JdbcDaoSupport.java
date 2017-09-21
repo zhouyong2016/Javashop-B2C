@@ -169,7 +169,7 @@ public class JdbcDaoSupport implements IDaoSupport {
 	public String queryForString(String sql, Object... args) {
 		String s = "";
 		try {
-			s = (String) this.jdbcTemplate.queryForObject(sql, String.class);
+			s = (String) this.jdbcTemplate.queryForObject(sql, String.class,args);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 

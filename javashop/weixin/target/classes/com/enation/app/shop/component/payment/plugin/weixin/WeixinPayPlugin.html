@@ -1,0 +1,31 @@
+
+<div class="layui-form-item" >
+    <label class="layui-form-label" style="width: 150">商户号MCHID ：</label>
+    <div class="layui-input-block">
+      	<input type="text"  name="mchid" id="mchid"  value="${mchid!''}" maxlength="50"   lay-verify="required" autocomplete="off" class="layui-input" style="width: 480">
+    </div>
+</div>
+<div class="layui-form-item" >
+    <label class="layui-form-label" style="width: 150"> APPID：</label>
+    <div class="layui-input-block">
+      	<input type="text"  name="appid" value="${appid!''}"  lay-verify="required" autocomplete="off" class="layui-input" style="width: 480">
+    </div>
+</div>
+<div class="layui-form-item" >
+    <label class="layui-form-label" style="width: 150">API密钥(key)：</label>
+    <div class="layui-input-block">
+      	<input type="text"  name="key" id="key"  value="${key!''}"  lay-verify="required" autocomplete="off" class="layui-input" style="width: 480">
+      	<script src="${ctx}/resource/com/enation/app/shop/component/payment/plugin/weixin/md5.js"></script>
+ 
+ 	 <a href="javascript:;" onclick="javascript:var hash = hex_md5( 't'+new Date().getTime() ); $('#key').val(hash); ">点击生成</a>
+    </div>
+</div>
+<div class="layui-form-item" >
+    <label class="layui-form-label" style="width: 150">应用密钥(AppSecret)：</label>
+    <div class="layui-input-block">
+      	<input type="text"  name="appsecret"  value="${appsecret!''}"  lay-verify="required" autocomplete="off" class="layui-input" style="width: 480">
+    </div>
+</div>
+
+<!-- 默认开启 -->
+<input type="hidden" name="autoreg"  value="yes"  />

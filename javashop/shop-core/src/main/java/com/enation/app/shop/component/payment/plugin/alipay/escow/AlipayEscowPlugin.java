@@ -8,14 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
+import com.enation.app.shop.component.payment.plugin.alipay.AlipayRefund;
 import com.enation.app.shop.component.payment.plugin.alipay.JavashopAlipayUtil;
 import com.enation.app.shop.component.payment.plugin.alipay.sdk33.config.AlipayConfig;
 import com.enation.app.shop.component.payment.plugin.alipay.sdk33.util.AlipaySubmit;
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.eop.resource.model.EopSite;
+import com.enation.framework.context.spring.SpringContextHolder;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.util.StringUtil;
 
@@ -297,6 +301,13 @@ public class AlipayEscowPlugin extends AbstractPaymentPlugin  implements IPaymen
 		} catch (Exception e) {
 			throw new RuntimeException("验证失败");  
 		}
+	}
+
+
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		AlipayRefund alipayRefund = SpringContextHolder.getBean("alipayRefund");
+		return alipayRefund.onRefund(order, refund,paymentLog);
 	}
 
 }

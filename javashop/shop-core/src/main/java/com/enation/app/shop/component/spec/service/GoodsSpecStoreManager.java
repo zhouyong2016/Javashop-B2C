@@ -56,9 +56,8 @@ public class GoodsSpecStoreManager   implements IGoodsSpecStoreManager {
 		
 		boolean isSuperAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("super_admin"));//超级管理员权限
 		boolean isDepotAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("depot_admin"));//库存管理权限
-		boolean isSupplierAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("supplier"));// 供应商组件管理权限
 		
-		if(!isSuperAdmin && !isDepotAdmin&&!isSupplierAdmin){
+		if(!isSuperAdmin && !isDepotAdmin){
 			throw new RuntimeException("没有维护库存的权限");
 		}
 		

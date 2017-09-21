@@ -480,9 +480,8 @@ public class MemberAddressApiController extends GridController{
 		if(StringUtil.isEmpty(name)){
 			throw new RuntimeException("姓名不能为空！");
 		}
-		Pattern p = Pattern.compile("^[0-9A-Za-z一-龥]{0,20}$");
+		Pattern p = Pattern.compile("^([0-9A-Za-z一-龥]|-|_){0,20}$");
 		Matcher m = p.matcher(name);
-
 		if (!m.matches()) {
 			throw new RuntimeException("收货人格式不正确！");
 		}

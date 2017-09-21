@@ -34,5 +34,11 @@ public interface PayEnable {
 	 */
 	public Integer getOrder_id();
 	
+	/**
+	 * 交易类型
+	 * @return
+	 */
+	public String getPayment_type();
+	
 	
 }

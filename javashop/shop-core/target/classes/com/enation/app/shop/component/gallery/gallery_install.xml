@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>es_goods</table>
+		<field type="add">
+			<name>thumbnail</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_goods</table>
+		<field type="add">
+			<name>big</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_goods</table>
+		<field type="add">
+			<name>small</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_goods</table>
+		<field type="add">
+			<name>original</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_goods_gallery</table>
+		<field><name>img_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>goods_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>thumbnail</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>small</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>big</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>original</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>tiny</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>isdefault</name><type>int</type><size>11</size><option>00</option><default>0</default></field>
+		<field><name>sort</name><type>int</type><size>10</size><option>00</option><default>0</default></field>
+	</action>
+</dbsolution>

@@ -1,0 +1,17 @@
+{
+	"processing": "<img src='./../../../adminthemes/version3/images/_loading.gif'/ style='width:100px;height:50px;'>",
+	"lengthMenu": "显示 _MENU_ 项结果",
+	"sZeroRecords": "没有匹配结果",
+	"info": "&nbsp;&nbsp;&nbsp;显示第 _START_ 至 _END_ 条结果，共 _TOTAL_ 条",
+	"infoEmpty": "&nbsp;&nbsp;显示第 0 至 0 条结果，共 0 条",
+	"infoFiltered": "(由 _MAX_ 项结果过滤)",
+	"infoPostFix": "",
+	"search": "搜索:",
+	"url": "",
+	"paginate": {
+		"first":    "首页",
+		"previous": "上页",
+		"next":     "下页",
+		"last":     "末页"
+	}
+}

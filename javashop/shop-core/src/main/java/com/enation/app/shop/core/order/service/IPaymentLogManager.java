@@ -21,5 +21,10 @@ public interface IPaymentLogManager {
 	 * @return
 	 */
 	public List<PaymentLog> list(int orderid,int type,int status);
-	
+	/**
+	 * 查询某个收款单数据
+	 * @param orderid
+	 * @return
+	 */
+	public PaymentLog get(int orderid);
 }

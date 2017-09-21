@@ -1,0 +1,124 @@
+#floor_1{margin:0px auto;width:980px;border-top:1px solid #e7e8e4;clear:both;}
+/***********************************************************************
+首页-商品分类
+************************************************************************/
+#cat_wrapper{width:188px;padding-left:12px;float:left;display:inline;margin-right:5px;background-color:#f5f5f1;}
+#cat_wrapper h1{width:149px;color:#333;font-size:14px;font-weight:bold;margin-left:9px;padding-left:30px;height:41px;line-height:41px;background:url(../images/syhibj.jpg) no-repeat left center;}
+#cat_wrapper ul{width:188px;}
+#cat_wrapper ul li{width:151px;white-space:nowrap;height:38px;line-height:38px;border-top:1px solid #e4e4e1;background:url(../images/sysplbbj.jpg) no-repeat left center;padding-left:24px;}
+#cat_wrapper ul li a{color:#53a0be;}
+
+
+/**********************************************************************************
+首页-商品分类-下拉菜单
+*************************************************************************************/
+#cat_wrapper ul .selected{position:relative;z-index:1001;padding:0px;margin-left:-12px;}
+#cat_wrapper ul .selected a.menu{position:absolute;color:#6c6c6c;z-index:1002;font-weight:bold;display:block;background:url(../images/zctccd1.gif) no-repeat left top;line-height:41px;height:43px;padding-left:36px;width:144px;}
+#cat_wrapper ul .child{position:absolute;left:179px;top:0px;width:417px;display:none;}
+#cat_wrapper ul .child .top{overflow:hidden;padding:0px;margin:0px;width:417px;height:4px;background:url(../images/ys.png) no-repeat left top;}
+#cat_wrapper ul .child .bottom{overflow:hidden;margin:0px;width:417px;height:4px;background:url(../images/zctccdxb.gif) no-repeat left top;}
+#cat_wrapper ul .child .con{background-color:#fff;overflow:hidden;width:416px;border-left:1px solid #3c7f99;border-right:1px solid #3c7f99;padding:0px;margin:0px;}
+#cat_wrapper ul .child .con .inner_con{width:380px;overflow:hidden;margin:4px 12px 0px 18px;}
+#cat_wrapper ul .child .con .last{border:0px none;}
+#cat_wrapper ul .child .con .inner_con li{border-bottom:1px dashed #F2F2F2;height:auto;overflow:hidden;white-space:normal;width:411px;float:none;border-top:0px none;background:none;padding:0px;}
+#cat_wrapper ul .child .con .inner_con .last{border:0px none;}
+#cat_wrapper ul .child .con .inner_con li h6{width:90px;margin-right:10px;text-align:right;color:#53a0be;float:left;display:inline;height:30px;line-height:30px;}
+#cat_wrapper ul .child .con .inner_con li ul{padding:0px;margin:0px;width:285px;float:left;display:inline;}
+#cat_wrapper ul .child .con .inner_con li ul li{white-space: nowrap;overflow:hidden;float:left;display:inline;margin:0px 5px 0px 0px;height:auto;line-height:30px;border:0px none;width:auto;}
+#cat_wrapper ul .child .con .inner_con li ul li a{position:static;display:inline;background:none;padding:0px 0px 0px 5px;margin:0px;color:#53a0be;font-weight:normal;border-left:1px solid #ccc;}
+
+/***************************************************************************
+首页-首页广告图片轮换样式
+*****************************************************************************/
+#floor_1 .right{width:775px;overflow:hidden;float:left;display:inline;}
+#floor_1 .right .adv{float:left;display:inline;position:relative;margin-bottom:14px;z-index:100;} 
+#floor_1 .slides {POSITION: relative;  HEIGHT: 296px;OVERFLOW: hidden;}
+#floor_1 .slide-pic LI {DISPLAY: none;overflow:hidden;height:296px;}
+#floor_1 .slide-pic LI.cur {DISPLAY: block}
+#floor_1 .slide-li {POSITION: absolute; BOTTOM: 0px; LEFT: 0px;	margin-bottom:-1px;}
+#floor_1 .slide-li LI {	TEXT-ALIGN: center; LINE-HEIGHT: 22px; WIDTH: 192px; FLOAT: left; HEIGHT: 31px; MARGIN-RIGHT: 1px;opacity:1.0;filter:alpha(opacity=100); background-color:#ADABA5; display:inline; }
+#floor_1 .slide-li LI.last{width:195px}
+#floor_1 .slide-li A {	WIDTH: 192px; DISPLAY: block; HEIGHT: 22px; COLOR: #fff; FONT-SIZE: 12px}
+#floor_1 .op LI {	FILTER: alpha(opacity=40); BACKGROUND: #000; opacity: 0.4;width:192px;}
+#floor_1 .op LI.cur {	BACKGROUND: #fff;opacity: 0.4;FILTER:alpha(opacity=80);}
+#floor_1 .slide-txt SPAN {	DISPLAY: none}
+#floor_1 .slides .slide-pic{width:775px;height:296px;overflow:hidden;}
+#floor_1 .slides .slide-pic li img{width:775px;height:296px;}
+#floor_1 .slides .slide-li{height:31px;overflow:hidden;}	
+#floor_1 .slides .slide-li .cur{background-color:#49a9cf;}
+#floor_1 .slides .slide-txt a{display:block;width:191px;height:31px;line-height:31px;text-align:center;color:#DEDDDB;font-size:16px;}
+#floor_1 .slides .slide-txt a:hover{background-color:#49a9cf;color:#fff;TEXT-DECORATION: none}
+
+
+/************************************************************************
+首页-右侧-特别推荐商品
+*************************************************************************/
+#floor_1 .right .unusual{width:775px;height:160px;overflow:hidden;}
+#floor_1 .right .unusual ul{height:160px;overflow:hidden;}
+#floor_1 .right .unusual ul li{width:246px;position:relative;height:158px;border:1px solid #b2b2b2;float:left;display:inline;margin-right:15px;}
+#floor_1 .right .unusual ul li.last{margin-right:0}
+#floor_1 .right .unusual ul li img{width:246px;height:158px;}
+#floor_1 .right .unusual ul li span{width:45px;height:22px;background:url(../images/syx.gif) no-repeat left top;position:absolute;left:0px;top:10px;}
+
+
+/*************************************************************
+首页-第二层-商品排行-左侧-十大商品排行
+****************************************************************/
+#floor_2{width:980px;overflow:hidden;padding:10px 0px;overflow:hidden;margin:0px auto;}
+
+/******************************************************************************
+首页-第二层-商品排行-右侧-上部分大图片
+*******************************************************************************/
+#floor_2 .right{width:775px;height:415px;float:left;display:inline;overflow:hidden;margin-left:5px;}
+#floor_2 .right .top{height:194px;overflow:hidden;margin-bottom:10px;}
+#floor_2 .right .top img{width:775px;height:194px;}
+
+
+/*************************************************************************
+首页-第二层-商品排行-右侧-下部分小图片列表
+**************************************************************************/
+#floor_2 .right .bottom{height:212px;overflow:hidden;}
+#floor_2 .right .bottom ul{height:212px;overflow:hidden;border-left:1px solid #bfbfbf;}
+#floor_2 .right .bottom ul li{width:190px;overflow:hidden;height:207px;padding:1px;border:1px solid #bfbfbf;border-left:0px none;float:left;display:inline;}
+#floor_2 .right .bottom ul li img{width:190px;height:162px;margin-bottom:1px;}
+#floor_2 .right .bottom ul li.last {width:192px;}
+#floor_2 .right .bottom ul li .indexshow{width:190px;height:44px;overflow:hidden;background-color:#333;text-align:center;}
+#floor_2 .right .bottom ul li .indexshow a{display:block;width:190px;height:22px;line-height:22px;color:#fff;overflow:hidden;text-align:center;font-weight:normal;}
+#floor_2 .right .bottom ul li .indexshow span{margin:0px 5px;color:#fff;}
+#floor_2 .right .bottom ul li .indexshow span del{color:#ffc000;}
+#floor_2 .right .bottom ul li .indexshow span strong{color:#E90101;font-size:14px;}
+
+/***********************************************************************
+第三层-相同内容
+*************************************************************************/
+.same{width:980px;overflow:hidden;margin-bottom:10px;margin:0px auto;}
+.same .title{width:980px;height:36px;overflow:hidden;}
+.same .title h1{width:141px;height:36px;line-height:36px;float:left;display:inline;font-family:微软雅黑;font-weight:normal;font-size:34px;color:#000;}
+.same .title h2{width:440px;height:36px;line-height:46px;float:left;display:inline;font-family:微软雅黑;font-weight:normal;font-size:24px;color:#64c000;}
+.same .title ul{height:17px;overflow:hidden;padding-top:19px;float:right;display:inline;margin-right:33px;}
+.same .title ul li{float:left;display:inline;text-align:center;}
+.same .title ul li a{display:block;padding:0px 8px;border-left:1px solid #8f8e8f;color:#828282;}
+.same .title ul .last a{border-right:1px solid #8f8e8f;}
+.same .title span{width:44px;height:16px;float:right;margin-top:20px;display:block;background:url(../images/sygd.jpg) no-repeat left top;}
+
+/*******************************************************************
+第三层-相同内容-大幅图片
+*****************************************************************/
+.same .frame{width:976px;overflow:hidden;border:1px solid #ccc;padding:1px;}
+.same .frame .f_top{width:976px;height:200px;margin-bottom:2px;overflow:hidden;}
+.same .frame .f_top img{width:976px;height:200px;}
+
+
+/************************************************************************
+第三层-相同内容-小图片列表
+*************************************************************************/
+.same .frame  .f_bottom{width:976px;overflow:hidden;}
+.same .frame  .f_bottom ul{width:987px;overflow:hidden;}
+.same .frame  .f_bottom ul li{border:1px dashed #ccc;border-bottom:0px none;border-left:0px none;float:left;display:inline;width:195px;height:210px;}
+.same .frame  .f_bottom ul li .effect{display:block;width:175px;height:190px;}
+.same .frame  .f_bottom ul li:hover{background-color:#f6f8df;}
+.same .frame  .f_bottom ul li img{width:175px;height:125px;margin:10px 10px 0px;}
+.same .frame  .f_bottom ul li a{width:175px;line-height:25px;overflow:hidden;text-align:center;margin-left:10px;display:block}
+.same .frame  .f_bottom ul li p{width:175px;text-align:center;color:#7f7f7f;}
+.same .frame  .f_bottom ul li h3{width:175px;text-align:center;font-weight:normal;color:#000;}
+.same .frame  .f_bottom ul li h3 span{font-size:20px;color:#E90101;}

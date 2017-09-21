@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -94,6 +95,21 @@ public class SettingController {
 	    }
 		settingService.save( settings );
 		return JsonResultUtil.getSuccessJson("配置修改成功");
+	}
+
+	/**
+	 * 全局关闭提示
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/close-prompt")
+	public JsonResult closePrompt(){
+		HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+		if(session!=null){
+			session.setAttribute("userSetPrompt", 1);
+			return JsonResultUtil.getSuccessJson("设置成功");
+		}
+		return JsonResultUtil.getErrorJson("设置失败");
 	}
 
 	

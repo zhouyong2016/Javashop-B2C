@@ -1,0 +1,45 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/member.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/themes/default/css/checkout.css" type="text/css" />
+<div id="main">
+	<div class="checkout_step2">
+		<@image src="${ctx}/themes/default/images/pay.jpg" alt="结算流程第二步" />
+	</div>
+	<#--创建支付结果标签-->
+	<#assign paymentResultTag = newTag("paymentResultTag")   />
+	<#--获取支付结果-->
+	<#assign paymentResult= paymentResultTag()   />
+	<div id="checkout_wrapper">
+		<div class="encircle" style="background:#F0F1F5;">
+			<h1>支付状态</h1>
+			<div class="pay_result">
+				<div class="pay_result_img">
+					<#if paymentResult.result==1>
+						<@image src="${ctx}/themes/default/images/fukuan_cg.jpg" alt="支付成功" />
+					<#else>
+						<@image src="${ctx}/themes/default/images/fukuan_bcg.jpg" alt="支付失败" />
+					</#if>
+				</div>
+				<div class="pay_result_word">
+					<#if paymentResult.result==1>
+						<h2>恭喜您支付成功</h2>
+						<p>您的订单号：<span>${paymentResult.ordersn!''}</span></p>
+						<#if paymentResult.orderType =="credit">
+						<a href="${ctx}/member/credit/credit.html" class="continue_buy"></a>
+						<#else>
+							<a href="${ctx}/index.html" class="continue_buy"></a>
+							<a href="member/order_detail.html?ordersn=${paymentResult.ordersn!''}" class="go_this_order"></a>
+						</#if>
+					<#else>
+						<h2>非常抱歉，您本次支付未成功</h2>
+						<p>失败是因为：<span>${paymentResult.error!''}</span></p>
+						<a href="${ctx}/index.html"  class="continue_buy"></a>
+						<a href="member/member.html" class="go_my_center"></a>
+					</#if>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<#include 'common/footer.html' />
+	

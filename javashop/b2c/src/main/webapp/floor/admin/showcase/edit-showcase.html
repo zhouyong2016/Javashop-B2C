@@ -1,123 +1,214 @@
 <#include '/admin/header.html' >
-<div class="main">
-		<div  class="input shadowBoxWhite wf100 whiteBox">
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsSelector.js"> </script>
+<style>
+  .layui-input, .layui-textarea{
+    width:20%;
+  }
+    .layui-form-label{
+  margin-left:15px;
+  }
+  .layer-anim{
+  height:500px!important;
+  }
+  .layui-layer-page .layui-layer-content{
+  height:400px!important;
+  }
+  .__GSR__ .layui-table th, .__GSR__ .layui-table td{
+  width:5%;!important;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button{
+  padding:1px;border: 1px solid transparent;margin-left:2px;display:inline-block;
+  }
+  .__GSR__ .dataTables_paginate .paginate_button, .__GSR__ .dataTables_paginate .ellipsis{
+  height:34px;}
+  
+</style>
+<div class="admin-main">
 		<input name="showcase_inputAction" id="floor_inputAction" type="hidden" value="${actionName!''}">
-		<form method="post" name="theForm" id="theForm" enctype="multipart/form-data">
-			<div class="text" style="padding: 20px 15px;">
-				<input type="hidden" name="id" value="${showcase.id!''}" >
-				<table class="form-table">
-					<tbody>
-						<th style="text-align: left;" align="left" colspan="2" class="groupname title">基本信息</th>
-						<tr>
-							<th>标题:</th>
-							<td style="text-align: left;">
-								<input class="easyui-validatebox input_text validatebox-text validatebox-invalid"
-								type="text"	maxlength="20" isrequired="true" datatype="string"
-								data-options="required:true" name="title" autocomplete="off" title="" value="${showcase.title!''}" >
-							</td>
-						</tr>
-
-						<tr>
-							<th>排序:</th>
-							<td style="text-align: left;">
-								<input class="easyui-validatebox input_text validatebox-text validatebox-invalid"
-								type="text"	maxlength="5" isrequired="true" datatype="string" value="${showcase.sort!''}"
-								data-options="required:true" name="sort" autocomplete="off" title="" onkeyup="this.value=this.value.replace(/[^\d]/g,'') ">
-							橱窗显示的顺序
-							</td>
-						</tr>
-
-						<tr>
-							<th>显示:</th>
-							<td style="text-align: left;">
-								<input type="radio" name="is_display" value="0" <#if showcase.is_display?? && showcase.is_display==0>checked="checked"</#if>>显示
-								<input type="radio" name="is_display" value="1" <#if showcase.is_display?? && showcase.is_display==1>checked="checked"</#if>>不显示
-							</td>
-						</tr>
-						<tr>
-							<th>橱窗标识:</th>
-							<td style="text-align: left;">
-								<input class="easyui-validatebox input_text validatebox-text validatebox-invalid"
-								type="text"	maxlength="20" isrequired="true" datatype="string" value="${showcase.flag!''}"
-								data-options="required:true" name="flag" autocomplete="off" title="" onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" >
-							首页橱窗默认为index_top,如果想增加其他标识请修改对应页面代码,否则页面不显示橱窗
-							</td>
-						</tr>
-
-						<tr>
-							<th style="text-align: left;" align="left" colspan="2" class="groupname title">橱窗内容</th>
-							<td style="text-align: left;">
-								<input type="hidden" id="content" name="content" value="${showcase.content!''}" >
-								<!-- <a href="javascript:;" id="add_content_button" class="button blueButton">添加展示商品</a> -->
-							</td>
-						</tr>
-
-					</tbody>
-				</table>
+		<form id="theForm" name="theForm" method="post" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="${showcase.id!''}" >
+		<span style="color: #53606b;font-size: 18px; display:inline-block;margin:10px 0px 0px 10px;">基本信息</span><hr>
+		
+		<div class="layui-form-item">
+    		<label class="layui-form-label">标题:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="title" maxlength="20"  title="" lay-verify="required"  autocomplete="off" class="layui-input" value="${showcase.title!''}">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">排序:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="sort"   maxlength="5" isrequired="true" datatype="string" value="${showcase.sort!''}" title="" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" lay-verify="" autocomplete="off" class="layui-input" style="display:inline-block;">
+    			<span>橱窗显示的顺序</span>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">显示:</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="is_display" value="0" title="显示" checked="checked" <#if showcase.is_display?? && showcase.is_display==0>checked="checked"</#if>>
+      			<input type="radio" name="is_display" value="1" title="不显示" <#if showcase.is_display?? && showcase.is_display==1>checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">橱窗标识:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="flag"  maxlength="20" datatype="string" isrequired="true" title="" value="${showcase.flag!''}" onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" value="index_top" lay-verify="" autocomplete="off" class="layui-input" style="display:inline-block;">
+    			<span>首页橱窗默认为index_top,如果想增加其他标识请修改对应页面代码,否则页面不显示橱窗</span>
+    		</div>
+  		</div>
+         <span style="color: #53606b;font-size: 18px;margin-left:10px;">橱窗内容</span><hr>
+         <input type="hidden" id="content" name="content" value="${showcase.content!''}" >
+        <a class='layui-btn layui-btn-small part-status' type="radio" value="2"  name="range_type" id="part" style="margin:10px;">添加商品</a>
+        <input type="hidden" value="0" id="hidInput">
+		<div id="showcase_goods"></div>
+		<div class="canshum" style="overflow-y: scroll;max-height:500px;width:100%;overflow-x:hidden;">
+			<table class="layui-table site-table table-hover goodsTable" id="goodsTable" style="width: 900px; margin:1%;">
+	             <thead>
+	                <tr>
+	                    <th>缩略图</th>
+	                    <th>商品名称</th>
+	                    <th>商品编号</th>
+	                    <th class="align-left">商品分类</th>
+	                    <th>销售价格</th>
+	                    <th>操作</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+							
+				</tbody>		
+	        </table>
+	     </div>
+		<div class="layui-form-item" style="width: 100%; margin: 50px 0 0 0 ">
+			<div class="layui-input-block layui-layer-btn-">
+				<a class="layui-btn" lay-submit="" type="submit" lay-filter="edit_show"  style="margin-left: 260px">保存</a>
 			</div>
-		</form>
-		<div class="showcase_goods"></div>
-		<div class="buttonWrap">
-			<a href="javascript:;" id="showcaseinput" class="easyui-linkbutton">确定</a>
 		</div>
+		</form>
 	</div>
-</div>
 <script type="text/javascript" src="${ctx}/shop/admin/js/jquery.goodsSelector.js" > </script>
 <script type="text/javascript">
-	
-	$(function() {
-		//初始化商品选择器
-		var container=$(".showcase_goods");
-		var options={
-				goodsid_name:'goods_ids',
-				selected_data_url:'${ctx}/core/admin/showcase/get-selected-goods.do?id='+${showcase.id!''},
-		};
-		container.goodsSelector(options);
+var index = parent.layer.getFrameIndex(window.name);
 
-		//绑定确认按钮
-		$("#showcaseinput").click(function(){
-			$("#showcaseinput").unbind("click");
-			var goods_ids = [];
-			$("input[name='goods_ids']").each(function(i, o){
-				goods_ids[i] = $(o).val();
-			});
-			$("#content").val(goods_ids); 
-			var disabled=  $(this).hasClass("l-btn-disabled");
-			if( !disabled ){
-				var formflag = $("#theForm").form('validate');
-				if (formflag) {
-					$("#floorinput").linkbutton("disable");
-					$.Loading.show("正在保存请稍候..");
-					var options = {
-						url : $("#floor_inputAction").val() ,
-						type : "POST",
-						dataType : "json",
-						success : function(result) {							
-							if (result.result == 1) {
-								$.Loading.success(result.message);
-								parent.SelectTable("橱窗管理");
-								parent.refreshCurrentTab();
-								parent.CloseTabByTitle("橱窗编辑");
-							}else{
-								$.Loading.error(result.message);
-								$("#floorinput").linkbutton("enable");
-							}
-						},
-						error : function(e) {
-							$.Loading.error("出错了,请重试");
-							$("#floorinput").linkbutton("enable");
-						}
-					};
-					$('#theForm').ajaxSubmit(options);
-				}else{
-					$.Loading.error("请检查数据");
-				}
-			}
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    form.render(); //更新全部
+    //修改保存        
+    form.on('submit(edit_show)', function(data){
+   	var goods_ids = [];
+		$("input[name='goods_ids']").each(function(i, o) {
+			goods_ids[i] = $(o).val();
 		});
-			
+		$("#content").val(goods_ids);
+    	var options = {
+   			url: $("#floor_inputAction").val() ,
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					$.Loading.success(data.message);
+   				}if(data.result==0){
+   					$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#theForm").ajaxSubmit(options);
+       return false;
+    });
+}); 
+$(function(){
+	var table = $('#goodsTable').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "bInfo": false,
+	    "bPaginate": false,
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/core/admin/showcase/get-selected-goods-map.do?id='+${showcase.id!''},
+	    },
+	    columns: [ //定义列        
+            {"data": function (data) {
+            	if(data.thumbnail.indexOf("fs:") != -1 ){
+            		data.thumbnail = data.thumbnail.replace("fs:",ctx+"/statics");
+                };
+                return "<img src='"+ data.thumbnail +"' style='width: 40px; height: 40px;' /><input type='hidden' value="+data.goods_id+" name='goods_ids' class='goodsid' />";
+            }},
+            {"data": "name"},
+            {"data": "sn"},
+            {"data": "cat_name"},
+            {"data": "price"},
+            {"data": function (data) {
+                return "<a class='layui-btn layui-btn-small clearon' onclick='del(this)' >删除</a>";
+            }},
+	     ]
 	});
+	//部分商品参加单选框点击操作
+	$(".part-status").click(function(){
+		//当id=hidInput这个input框的值等于0的时候，就让商品选择器加载商品并将input框的值设置为1，以防止再次加载
+		if($("#hidInput").val() == 0){
+			  $.GoodsSelector({
+                  confirm: function (goodsArray) {
+		        	//遍历
+		               $.each(goodsArray,function(n,values){			            	  	        
+		             		var data = piece(values);
+		             		var num = $(".goodsTable tbody").find("tr").length;	
+		             		if(num>0){
+		             			var num = 0;
+		             			$(".goodsTable tbody").find("input[name=goods_ids]").each(function(index,value){	          
+		             				if($(value).val()==values.goods_id){	  
+				             			num = 1;
+				             		}
+			             		});	             			
+		             			if(num==0){
+		             				$("#goodsTable tbody").prepend(data);
+		             			}
+		             		}else{
+		             			$("#goodsTable tbody").prepend(data);
+		             		}
+		               })
+		               //删除行
+		               $(".clearon").click(function(){		           
+		            	   console.log($(this))
+		           	   		$(this).parent().parent().remove();
+		           	   })	
+		         }
+		});
+		}
+	});	
+})
+
+//拼接
+function piece(data){
+	if(data.thumbnail.indexOf("fs:") != -1 ){
+		data.thumbnail = data.thumbnail.replace("fs:",ctx+"/statics");
+    };
+	var value= "<tr>"+ 
+		  "<td ><img src='"+ data.thumbnail +"' style='width: 40px; height: 40px;' /><input type='hidden' value="+data.goods_id+" name='goods_ids' id='goods_ids' class='goodsid' /></td>"+
+		  "<td >"+data.name+"</td>"+
+		  "<td >"+data.sn+"</td>"+
+		  "<td >"+data.cat_name+"</td>"+
+		  "<td >"+data.price+"</td>"+
+		  "<td ><a class='layui-btn layui-btn-small clearon' >删除</a></td>"+
+		  "</tr>";
+     return value;
+}	
+//删除
+function del(obj){
 	
-	
+	$(obj).parent().parent().remove()
+}
 </script>
 
 <#include '/admin/footer.html' >

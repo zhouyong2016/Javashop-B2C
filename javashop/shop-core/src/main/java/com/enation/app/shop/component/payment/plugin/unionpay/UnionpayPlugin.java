@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.chainsaw.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +23,13 @@ import com.enation.app.shop.component.payment.plugin.unionpay.sdk.SDKConfig;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.app.shop.core.order.service.IOrderManager;
+import com.enation.app.shop.core.order.service.IRefundManager;
+import com.enation.framework.context.spring.SpringContextHolder;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.util.CurrencyUtil;
 import com.enation.framework.util.FileUtil;
@@ -49,6 +52,8 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 	@Autowired
 	private IOrderManager orderManager;
 	
+	@Autowired
+	private IRefundManager refundManager;
 	/**
 	 * 5.0.0
 	 */
@@ -93,7 +98,7 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 			if(respCode.equals("00")){	//交易成功
 				
 				if(validaeData()){
-					this.paySuccess(ordersn, tradeno, "",ordertype);
+					this.paySuccess(ordersn, queryId, "",ordertype);
 					return ordersn;
 				}else{
 					throw new RuntimeException("验证失败");
@@ -111,10 +116,6 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 	@Override
 	public String onReturn(String ordertype) {
 		try {
-			
-			
-			
-			
 			HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 			String respCode = request.getParameter("respCode");	//应答码			参考：https://open.unionpay.com/ajweb/help/respCode/respCodeList
 			String respMsg = request.getParameter("respMsg");	//应答信息
@@ -139,7 +140,7 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 					String ordersn  = order.getSn();
 					
 					
-					this.paySuccess(ordersn, tradeno,"", ordertype);
+					this.paySuccess(ordersn, queryId,"", ordertype);
 					return ordersn;
 				}else{
 					throw new RuntimeException("验证失败");
@@ -176,7 +177,9 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 		String testModel = params.get("testModel");
  
 		//如果已经加载，并且是生产环境则不用再加载
-		if(is_load==1 && "no".equals(testModel) ){return ;}
+		if(is_load==1 && "no".equals(testModel) ){
+			return ;
+		}
 		
 		//签名证书路径
 		String signCert = params.get("signCert");
@@ -214,13 +217,13 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 			
 			//设置测试环境的提交地址
 			if("yes".equals(testModel)){
-				pro.setProperty("acpsdk.frontTransUrl", "https://101.231.204.80:5000/gateway/api/frontTransReq.do");
-				pro.setProperty("acpsdk.backTransUrl", "https://101.231.204.80:5000/gateway/api/backTransReq.do");
-				pro.setProperty("acpsdk.singleQueryUrl", "https://101.231.204.80:5000/gateway/api/queryTrans.do");
-				pro.setProperty("acpsdk.batchTransUrl", "https://101.231.204.80:5000/gateway/api/batchTrans.do");
-				pro.setProperty("acpsdk.fileTransUrl", "https://101.231.204.80:9080/");
-				pro.setProperty("acpsdk.appTransUrl", "https://101.231.204.80:5000/gateway/api/appTransReq.do");
-				pro.setProperty("acpsdk.cardTransUrl", "https://101.231.204.80:5000/gateway/api/cardTransReq.do");
+				pro.setProperty("acpsdk.frontTransUrl", "https://gateway.test.95516.com/gateway/api/frontTransReq.do");
+				pro.setProperty("acpsdk.backTransUrl", "https://gateway.test.95516.com/gateway/api/backTransReq.do");
+				pro.setProperty("acpsdk.singleQueryUrl", "https://gateway.test.95516.com/gateway/api/queryTrans.do");
+				pro.setProperty("acpsdk.batchTransUrl", "https://gateway.test.95516.com/gateway/api/batchTrans.do");
+				pro.setProperty("acpsdk.fileTransUrl", "https://filedownload.test.95516.com/");
+				pro.setProperty("acpsdk.appTransUrl", "https://gateway.test.95516.com/gateway/api/appTransReq.do");
+				pro.setProperty("acpsdk.cardTransUrl", "https://gateway.test.95516.com/gateway/api/cardTransReq.do");
 			}
 			
 			//设置生产环境的提交地址
@@ -396,7 +399,14 @@ public class UnionpayPlugin extends AbstractPaymentPlugin implements IPaymentEve
 		}
 		return res;
 	}
-	 
- 
-
+/*
+ * (non-Javadoc)
+ * @see com.enation.app.shop.core.order.plugin.payment.IPaymentEvent#onRefund(com.enation.app.shop.core.order.model.PayEnable, com.enation.app.shop.core.order.model.Refund, com.enation.app.shop.core.order.model.PaymentLog)
+ */
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		/** 调用退款方法 */
+		UnionpayRefund unionpayRefund=SpringContextHolder.getBean("unionpayRefund");
+		return unionpayRefund.onRefund(order, refund, paymentLog);
+	}
 }

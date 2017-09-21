@@ -76,7 +76,7 @@
     font-family: "Microsoft YaHei";
     padding-left: 3px;
     vertical-align: middle;
-    width: 140px; 
+    width: 160px; 
     margin:0 10px 0 0;
     float:left;
     line-height: 25px;
@@ -110,8 +110,8 @@
 .right_area ul li .selected input{color:#666;}
 
 /**********************/
-.register-seccess{width:800px;height:300px;padding:0px 0px;border:1px solid #e0e0e0;margin:70px auto; box-shadow: 0 2px 5px #ccc;}
-.register-seccess .success-word{margin:70px auto 50px auto;width:500px;line-height:60px;height:60px;text-align:center;}
+.register-seccess{width:800px;height:200px;padding:50px 0px;border:1px solid #e0e0e0;margin:70px auto; box-shadow: 0 2px 5px #ccc;}
+.register-seccess .success-word{margin:20px auto 50px auto;width:500px;line-height:60px;height:60px;text-align:center;}
 .register-seccess .success-word img{width:60px;height:60px;display:inline;float:left;margin:0px 20px 0px 0px}
 .register-seccess .success-word h1{display:inline;float:left;height:60px;line-height:60px;font-size:20px;font-weight: normal;}
 .register-seccess .seccess-btn{width:390px;height:60px;margin:0px auto;}
@@ -135,4 +135,4 @@
 	 color: #38f;
     margin: 0 0 0 5px;
 }
-.validate ul li .regis_read .satisfied{margin:9px 0 0 0;}
+.validate ul li .regis_read .satisfied{margin:0 5px 0 0;height:20px;float:left;}

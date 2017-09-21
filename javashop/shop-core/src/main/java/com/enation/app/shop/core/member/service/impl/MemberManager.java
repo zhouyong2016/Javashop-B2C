@@ -588,8 +588,9 @@ public class MemberManager  implements IMemberManager {
 		String sql = createTemlSql(memberMap);
 		if(other != null && order != null){
 			sql+=" order by "+other+" "+order;
+		}else{
+			sql+=" order by m.member_id desc";
 		}
-		//		System.out.println(sql);
 		Page webpage = this.daoSupport.queryForPage(sql, page, pageSize);
 
 		return webpage;
@@ -603,7 +604,9 @@ public class MemberManager  implements IMemberManager {
 	public Page searchMemberNoShop(Map memberMap, Integer page,
 			Integer pageSize, String other, String order) {
 		String sql = createTemlSqlNoShop(memberMap);
-		sql+=" order by "+other+" "+order;
+		if(other != null && order != null){
+			sql+=" order by "+other+" "+order;
+		}
 		//		System.out.println(sql);
 		Page webpage = this.daoSupport.queryForPage(sql, page, pageSize);
 
@@ -686,8 +689,8 @@ public class MemberManager  implements IMemberManager {
 		}
 
 		if (uname != null && !uname.equals("")) {
-			sql += " and m.name like '%" + uname + "%'";
-			sql += " or m.uname like '%" + uname + "%'";
+//			sql += " and m.name like '%" + uname + "%'";
+			sql += " and m.uname like '%" + uname + "%'";
 		}
 		if(mobile!=null&&!mobile.equals("")){
 			sql += " and m.mobile like '%" + mobile + "%'";

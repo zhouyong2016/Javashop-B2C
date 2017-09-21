@@ -339,7 +339,6 @@ public class MemberController extends GridController {
 			@RequestParam(value = "region_id", required = false) Integer region_id,
 			@RequestParam(value = "isshopkeeper", required = false) Integer isshopkeeper) {
 
-
 		Map memberMap = new HashMap();
 		memberMap.put("stype", stype);
 		memberMap.put("keyword", keyword);
@@ -353,6 +352,7 @@ public class MemberController extends GridController {
 		memberMap.put("province_id", province_id);
 		memberMap.put("city_id", city_id);
 		memberMap.put("region_id", region_id);
+		
 		if (isshopkeeper != null && isshopkeeper == 1) {
 			return JsonResultUtil.getGridJson(memberManager.searchMemberNoShop(memberMap, this.getPage(),
 					this.getPageSize(), this.getSort(), this.getOrder()));
@@ -506,7 +506,7 @@ public class MemberController extends GridController {
 
 			if (validEmail(member.getEmail())) {
 				member.setRegtime(DateUtil.getDateline());// lzf add
-				memberManager.register(member);
+				memberManager.add(member);
 
 				Map map = new HashMap();
 				map.put("result", 1);
@@ -569,7 +569,7 @@ public class MemberController extends GridController {
 		pointHistory.setPoint(point);
 		pointHistory.setReason("管理员手工修改");
 		pointHistory.setTime(DateUtil.getDateline());
-		pointHistory.setMp(point);
+		pointHistory.setMp(0);
 		try {
 			memberManager.edit(member);
 			pointHistoryManager.addPointHistory(pointHistory);

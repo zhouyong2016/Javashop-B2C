@@ -1,191 +1,163 @@
 <#include '/admin/header.html' >
-<script type="text/javascript" src="${ctx}/core/admin/js/AdColumn.js"></script>
-<div class="main">
-	<form id='adcform'>
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlAdc()">新增广告位置</a>
-		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
-		<span style="float: right;height:28px;"> 
-			<a href="javascript:void(0)" class="button b_fr" onclick="searchAdc()">搜索</a>
-			<input id="cname" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="请输入模糊关键字" name="cname"> 
-		</span>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid" 
-				data-options="url:'${ctx}/core/admin/adColumn/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'" 
-				pagination="true" id="adcdata">
-				    <thead>
-					    <tr>
-					    	<th  data-options="field:'acid',checkbox:true"></th>
-					    	<th  data-options="field:'show_id'" formatter="formatShowId">ID</th>
-					    	<th  data-options="field:'cname',width:200">标题</th>
-					   	 	<th  data-options="field:'atype',width:200" formatter="formatAtype">广告类型</th>
-					    	<th  data-options="field:'width',width:300" >宽度</th>
-					    	<th  data-options="field:'height',width:200">高度</th>
-					    	<th  data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
-					    </tr>
-				    </thead>
-			 </table>
-		<div id="divdia" style="display: none;"></div>
-	</div>
-	</form>
+<style>
+.layui-layer-iframe iframe{
+}
+td .layui-btn-small{
+background:#1E9FFF;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+		            <ul>
+		                <li><span>·</span>前台展示的所有广告位，全部由此列表来展示和操作。</li>
+		                <li><span>·</span>添加或者修改广告位的时候，您可以选择不同的广告类型，和按需要更改不同的高度，宽度。</li>
+		                <li><span>·</span>查看广告列表中，您可以直接对齐开启，关闭，或者进行其他修改操作。</li>
+		            </ul>
+        </div>
+        <!--按钮区域  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="addadc" class="layui-btn layui-btn-primary " title="新增广告位置"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="删除" onclick="delAdc();"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+            
+            <!--搜索区域  -->
+            <div class="table_search">
+                <input type="text" id="cname" class="keysearch" placeholder="请在这里输入关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="search_adColumn"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+   <form id="adcform">
+    <table id="adcdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>ID</th>
+            <th>标题</th>
+            <th>广告类型</th>
+            <th>宽度</th>
+            <th>高度</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
 
-<script type="text/javascript">
-function controlAdc(id){
-	var map = {}; // Map map = new HashMap();
-	if(!id){
-		map["href"] ="${ctx}/core/admin/adColumn/add.do";
-		map["formId"] ="#addForm";
-		map["url"] ="${ctx}/core/admin/adColumn/add-save.do?ajax=yes";
-		map["title"]="添加广告位置";
-		map["loadshow"]="正在添加......";
-	}else{
-		map["href"] ="${ctx}/core/admin/adColumn/edit.do?ac_id="+id;
-		map["formId"] ="#editForms";
-		map["url"] ="${ctx}/core/admin/adColumn/edit-save.do?ajax=yes";
-		map["title"]="修改广告位置";
-		map["loadshow"]="正在修改......";
-	}
-	map["divDialog"]="#divdia";
-	map["gridreload"]="#adcdata";
+<!--js区域  -->
+<script>
+var table;
+$(function(){
 	
-	//需要验证的参数
-	map["nameId"]="#name";
-	map["urlId"]="#acwidth";
-	
-	addDialog(map);
-}
-function addDialog(map){
-	$(map["divDialog"]).show();
-	$(map["divDialog"]).dialog({
-		title: map["title"],
-		width: 600,
-		height: 300,
-		closed: false,
-		cache: false,
-		href: map["href"],
-		modal: true,
-		buttons: [{
-			 text:'保存',
-			 iconCls:'icon-ok',
-			 handler:function(){
-			 	var savebtn = $(this);
-　　				var disabled=savebtn.hasClass("l-btn-disabled");
-　　				if(!disabled){
-					submitForm(map,savebtn);
-				}
-　　			}
-		},{
-			 text:'取消',
-			 handler:function(){
-				 $(map["divDialog"]).dialog('close');
-			 }
-		}]
+	table = $('#adcdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/core/admin/adColumn/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="acid" class="fly-checkbox" value=' + obj.acid + '>';
+            		}},
+	        {data: "acid"},
+	        {data: "cname"},
+	        {"data": function (obj) {
+	        	if(obj.atype==0){
+	        		  return '<span class="label label-success radius">图片</span>';
+	        	}else if(obj.atype==1){
+	        		  return '<span class="label label-success radius">Flash</span>';
+	        	}
+            }},
+	        {data: "width"},
+	        {data: "height"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='ac_id' onclick='editadc("+data["acid"]+")' >操作</a>"+"&nbsp"+
+	        	"<a class='layui-btn layui-btn-small _aa' name='ac_id' onclick='newTab(\""+row.cname+"-广告列表\",\"${ctx}/core/admin/adv/tlist.do?acid="+row.acid+"\")' >查看广告列表</a>";	
+	       	}}
+	     ]
 	});
+	
+	//搜索
+	$("#search_adColumn").click(function(){
+		searchAdColumn(table);
+	});
+	
+	$("#addadc").click(function(){
+	   	 layer.open({
+	            title:"添加广告位置",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/core/admin/adColumn/add.do",//内容的URL
+	            area:['600px','500px'],//弹框大小
+	            scrollbar: true,//是否允许浏览器出现滚动条
+	        });
+		});
+	
+});
+
+
+function searchAdColumn(table){
+	var cname = $("#cname").val();
+	var url = table.ajax.url(encodeURI("${ctx}/core/admin/adColumn/list-json.do?cname="+cname));
+	url.load();
 }
-function submitForm(map,saveBtn) {
-	var formflag = $(map["formId"]).form().form('validate');
-	if(formflag){
-		$.Loading.show(map["loadshow"]);
-		saveBtn.linkbutton("disable"); //禁用	
-		var options = {
-				url : map["url"],
-				type : "POST",
-				dataType : 'json',
-				success : function(result){
-					$.Loading.hide();
-					if(result.result==1){
-						$(map["divDialog"]).dialog('close');
-						$(map["gridreload"]).datagrid('reload');
-						$.Loading.success(result.message);
-					}
-					if(result.result==0){ 
-						$.Loading.error(result.message);
-					}
-					saveBtn.linkbutton("enable"); //禁用	
-				
-				},
-				error : function(e) {
-					alert("出现错误 ，请重试");
-					saveBtn.linkbutton("enable"); //禁用	
-				}
-			};
-		$(map["formId"]).ajaxSubmit(options);
+
+function editadc(ac_id){
+	 layer.open({
+         title:"修改广告位置",//标题
+         maxmin :true,//右上角可否放大缩小
+         type:2,//弹框的类型
+         shade: [0.3, '#000'],//黑色背景
+         shadeClose:false,//黑色背景是否可以点击关闭
+         content:ctx+"/core/admin/adColumn/edit.do?ac_id="+ac_id,//内容的URL
+         area:['600px','500px'],//弹框大小
+         scrollbar: true,//是否允许浏览器出现滚动条
+     });
+}
+
+//删除
+function delAdc(){
+	var check = $("input[name='acid']").is("input:checked");
+	if(check == false){
+		alert("请选择需要删除的广告位置！！！");
+		return false;
 	}
-	saveBtn.linkbutton("enable"); 
-}
-function clearForm(map) {
-	$(map["formId"]).form('clear');
-}
-
-
-function formatOperation(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='controlAdc("+row.acid+")' ></a>";
-	val+="<a class='view' title='查看广告列表' href='javascript:void(0);' onclick='newTab(\""+row.cname+"-广告列表\",\"${ctx}/core/admin/adv/tlist.do?acid="+row.acid+"\")' ></a>"
-	return val;
-}
-function formatShowId(value,row,index){
-	return row.acid;
-}
-function formatAtype(value,row,index){
-	var val;
-	if(value==0){
-		val="图片";
-	}else if(value==1){
-		val="Flash";
-	}
-	return val;
-}
-
-function del(){
-	var rows = $('#adcdata').datagrid("getSelections"); 
-	if (rows.length < 1) {
-		$.Loading.error("请选择删除广告位");
+	if (!confirm("确认要删除广告位置吗？")) {
 		return;
 	}
-	
-	if (!confirm("确认删除？")) {	
-		return ;
-	}
-	
-	$.Loading.show("正在删除......");
- 	var options = {
-		url : "${ctx}/core/admin/adColumn/delete.do?ajax=yes",
-		type : "POST",
-		dataType : 'json',
-		success : function(result) {
-			if(result.result==1){
-				$.Loading.success(result.message);
-				var rows = $('#adcdata').datagrid("getSelections"); 
-				for(var i =0;i<rows.length;i++){      
-		 			var index = $('#adcdata').datagrid('getRowIndex',rows[i]); 
-		 			$('#adcdata').datagrid('deleteRow',index);    
-		 		}
+	var options = {
+			url:ctx+"/core/admin/adColumn/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result == 1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/core/admin/adColumn/list-json.do").load();
+				}
 			}
-			if(result.result==0){
-				$.Loading.error(result.message);
-			}
-		},
-		error : function(e) {
-			$.Loading.error("出现错误 ，请重试");
-		}
 	};
- 	
-	$('#adcform').ajaxSubmit(options);
-};
-
-//搜索
-function searchAdc(){
-	var formflag= $("#adcform").form().form('validate');
-	if(formflag){
-		var cname = $.trim($("#cname").val());
-		$('#adcdata').datagrid('load', {
-			 cname:cname,
-			 page:1
-	    }); 
-	}
+	$("#adcform").ajaxSubmit(options);
 }
+
+
 </script>
 <#include '/admin/footer.html' >
- 

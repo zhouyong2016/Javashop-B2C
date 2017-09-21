@@ -1,77 +1,161 @@
-<div class="easyui-panel" style="border-style:none;" >
-	<div style="padding: 10px 0 10px 60px">
-		<form id="addAdminForm" method="post" class="validate" >
-			<table>
-			
-				<tr>
-					<th><label class="text">用户名：</label></th>
-					<td><input class="easyui-validatebox input_text" type="text" name="username"  maxlength="12" data-options="required:true" /></td>
-				</tr>
-
-				<tr>
-					<th><label class="text">密码：</label></th>
-					<td><input class="easyui-validatebox input_text" type="password" name="password" id="pwd" maxlength="20" data-options="required:true,validType:['string','length[5,20]']" isrequired="true" /></td>
-				</tr>
-				<tr >
-					<th><label class="text">确认密码：</label></th>
-					<td><input class="easyui-validatebox input_text" type="password" id="repwd"  fun='checkpwd' maxlength="20" data-options="required:true,validType:['string','length[5,20]']"/></td>
-				</tr>
-				<tr>
-					<th><label class="text">类型：</label></th>
-					<td>
-						<input type="radio"  name="founder" value="0" id="notSuperChk" checked="true">普通管理员&nbsp;&nbsp;
-						<input type="radio"  name="founder" value="1" id="superChk">超级管理员
-					</td>
-				</tr>
-				<tr id="roletr">
-					<th><label class="text">角色：</label></th>
-					<td>
-						<ul style="width:100%" id="rolesbox">
-							<#list roleList as role>
-								<li style="width:33%;display:block"><input autocomplete="off" type="checkbox" name="roleids" value="${role.roleid }"  />
-								${role.rolename }&nbsp;</li>
-							</#list>
-						</ul>
-					</td>		
-				</tr>
-				
-				<tr>
-					<th><label class="text">状态：</label></th>
-					<td>
-						<input type="radio"  name="state" value="1" checked=true>启用&nbsp;&nbsp;
-						<input type="radio"  name="state" value="0">禁用 
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">姓名：</label></th>
-					<td><input type="text" name="realname" class="input_text easyui-validatebox" data-options="required:true,validType:['string']" maxlength="12" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">编号：</label></th>
-					<td><input type="text" name="userno" class="input_text"  onkeyup='this.value=this.value.replace(/\D/gi,"")' maxlength="32" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">部门：</label></th>
-					<td><input type="text" name="userdept"  class="input_text" maxlength="32"/></td>
-				</tr>
-				<tr>
-					<th><label class="text">备注：</label></th>
-					<td><input type="text" name="remark" class="input_text" maxlength="200" /></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+<#include '/admin/header.html' >
+<style>
+  .layui-input{
+  width:75%
+  }
+ 
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addAdminForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px;margin-left:10px;">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">用户名：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="username"  maxlength="12" lay-verify="username" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">密码：</label>
+    		<div class="layui-input-block">
+      			<input type="password" name="password" id="pwd" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">确认密码：</label>
+    		<div class="layui-input-block">
+      			<input type="password" type="password" id="regPwd"  fun='checkpwd' maxlength="20" lay-verify="regPwd" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">类型：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="founder" value="0" id="notSuperChk" lay-filter="founder" checked="checked" title="普通管理员">
+      			<input type="radio" name="founder" value="1" id="superChk" lay-filter="founder" title="超级管理员">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="roletr">
+    		<label class="layui-form-label">角色：</label>
+    		<div class="layui-input-block">
+      			<ul style="width:100%;margin-left:10px;" id="rolesbox">
+					<#list roleList as role>
+					<li style="width:40%;display:block">
+						<input autocomplete="off" type="checkbox" name="roleids" value="${role.roleid }"  />
+						${role.rolename }&nbsp;
+					</li>
+					</#list>
+				</ul>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">状态：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="state" value="1" checked="checked" title="启用">
+      			<input type="radio" name="state" value="0"  title="禁用">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">姓名：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="realname"  maxlength="12" lay-verify="required"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">编号：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="userno"  onkeyup='this.value=this.value.replace(/\D/gi,"")' maxlength="32"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">部门：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="userdept"  maxlength="32"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">备注：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="remark" maxlength="200" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;margin-left:-7px;;z-index:1000;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a style="margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_user_admin">保存</a>
+  			
+  		</div>
+  	</form>
 </div>
-<script type="text/javascript">
-$(function(){
-	$("#notSuperChk").click(function(){
-		if(this.checked)
-		$("#roletr").show();
-	});
-	$("#superChk").click(function(){
-		if(this.checked)
-		$("#roletr").hide();
-	});	
+<script>
+var index = parent.layer.getFrameIndex(window.name);
 
-});	
 
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form(),
+    layedit = layui.layedit,
+    laydate = layui.laydate;
+	form.render(); 
+    form.on('radio(founder)', function(data){
+    	  if(data.value==1){
+    		  $("#roletr").hide();
+    	  }else {
+    		  $("#roletr").show();
+			}
+    	});  
+
+    
+   /*  密码验证 */
+  form.verify({
+	  username: function(value, item){ //value：表单的值、item：表单的DOM对象
+		    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+		      return '用户名不能有特殊字符';
+		    }
+		    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+		      return '用户名首尾不能出现下划线\'_\'';
+		    }
+		    if(/^\d+\d+\d$/.test(value)){
+		      return '用户名不能全为数字';
+		    }
+		  },
+	  regPwd:function(value) {
+   			  var pwd=$("#pwd").val();
+   			  if(!new RegExp(pwd).test(value)){
+   				 return '两次密码输入不一致';
+   			  }
+   		  }
+     
+   		   
+   }); 
+   
+    form.on('submit(save_user_admin)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/userAdmin/add-save.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/userAdmin/list-json.do").load();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#addAdminForm").ajaxSubmit(options);
+       return false;
+    });
+    
+ 
+   
+    
+});
+</script>

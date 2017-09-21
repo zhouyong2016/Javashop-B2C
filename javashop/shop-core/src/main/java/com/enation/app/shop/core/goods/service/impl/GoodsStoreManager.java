@@ -299,8 +299,10 @@ public class GoodsStoreManager  implements IGoodsStoreManager {
 		if(!StringUtil.isEmpty(sn)){
 			sql.append(" and g.sn like '%"+sn+"%'");
 		}
-
-		sql.append("order by "+sort+" "+order);
+		if(sort!=null && order!=null ){
+			sql.append("order by "+sort+" "+order);
+		}
+		
 		Page webPage = this.daoSupport.queryForPage(sql.toString(), page, pageSize);
 
 		List<Map>goodslist = (List<Map>) webPage.getResult();
@@ -335,6 +337,7 @@ public class GoodsStoreManager  implements IGoodsStoreManager {
 				}
 			}
 			ps_sql=ps_sql+" order by goodsid,depotid ";
+			
 			List<Map> storeList  = this.daoSupport.queryForList(ps_sql);
 
 			for (Map goods : goodslist) {

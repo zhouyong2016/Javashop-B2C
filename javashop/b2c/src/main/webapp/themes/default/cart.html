@@ -1,0 +1,31 @@
+<#assign  title="购物车" />
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/cart.css" type="text/css" />
+<script src="${ctx}/themes/default/js/Cart.js" type="text/javascript"></script>
+<!--正文-->
+<div id="main">
+	<div id="cart_wrapper">
+		<!--购物进程提示-->
+		<div class="cart_nav">
+			<div class="step1">
+				<@image src="${ctx}/themes/default/images/gwc.jpg" alt="购物车及购物车进程" />
+			</div>
+		</div>
+		<!--购物进程提示结束-->
+		<!--商品列表-->
+		<div class="goods_list">
+			<!--选购物品标题-->
+			<#include 'cart/cart_item.html' />
+		</div>
+		<!--商品列表结束-->
+	<!--购物车推荐商品-->
+	<div class="shop_rec">
+		<div class="shop_caption">
+			<h1>根据您的购物车中的商品，我们为您推荐</h1>
+		</div>
+		<#include 'cart/cart_recomm.html'/>
+	</div>
+	<!--购物车推荐商品结束-->
+	</div>
+</div>
+<#include 'common/footer.html'/>

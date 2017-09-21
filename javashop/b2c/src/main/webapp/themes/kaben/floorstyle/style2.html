@@ -9,7 +9,7 @@
 					<#if key =="0" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
+                            <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
 							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
 								   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
 								   data-operation-id="${goods_id}"
@@ -30,7 +30,6 @@
 							<div class="goods-price">
 								<span>${floorGoods.price?string.currency}</span>
 							</div>
-							</#if>
 					</#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
@@ -58,28 +57,31 @@
 					<#if key =="1" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
-								<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-									   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-									   data-operation-id="${goods_id}"
-									   data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-									   data-title="修改楼层商品"
-									   data-formId="editEachGoodsForm"
-									   data-floorId="${childs.id}"
-									   data-goods-index="${key}">
-								<div class="goods-img">
-									<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-										<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
-									</a>
-								</div>
-								<div class="goods-name">
-									<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
-									   title="${floorGoods.name}">${floorGoods.name}</a>
-								</div>
-								<div class="goods-price">
-									<span>${floorGoods.price?string.currency}</span>
-								</div>
-								</#if>
+                            <#if floorGoods.name??>
+                                <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
+                                <input type="button" style="display:none" value="编辑"
+                                       class="floor new_dialog btn-default-styles"
+                                       data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+                                       data-operation-id="${goods_id}"
+                                       data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+                                       data-title="修改楼层商品"
+                                       data-formId="editEachGoodsForm"
+                                       data-floorId="${childs.id}"
+                                       data-goods-index="${key}">
+                                <div class="goods-img">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html">
+                                        <@image class="scrollLoading" src="${floorGoods.thumbnail!''}"
+                                        alt="${floorGoods.name}" style="width:100%;" />
+                                    </a>
+                                </div>
+                                <div class="goods-name">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
+                                       title="${floorGoods.name}">${floorGoods.name}</a>
+                                </div>
+                                <div class="goods-price">
+                                    <span>${floorGoods.price?string.currency}</span>
+                                </div>
+                            </#if>
 					</#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
@@ -107,29 +109,32 @@
 					<#if key =="2" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
-							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-							data-operation-id="${goods_id}"
-							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-							data-title="修改楼层商品"
-							data-formId="editEachGoodsForm"
-							data-floorId="${childs.id}"
-							data-goods-index="${key}">
-							<div class="goods-img">
-							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-							<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
-							</a>
-							</div>
-							<div class="goods-name">
-								<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
-										title="${floorGoods.name}">${floorGoods.name}</a>
-							</div>
-							<div class="goods-price">
-								<span>${floorGoods.price?string.currency}</span>
-							</div>
-							</#if>
-						</#if>
+                            <#if floorGoods.name??>
+                                <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
+                                <input type="button" style="display:none" value="编辑"
+                                       class="floor new_dialog btn-default-styles"
+                                       data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+                                       data-operation-id="${goods_id}"
+                                       data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+                                       data-title="修改楼层商品"
+                                       data-formId="editEachGoodsForm"
+                                       data-floorId="${childs.id}"
+                                       data-goods-index="${key}">
+                                <div class="goods-img">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html">
+                                        <@image class="scrollLoading" src="${floorGoods.thumbnail!''}"
+                                        alt="${floorGoods.name}" style="width:100%;" />
+                                    </a>
+                                </div>
+                                <div class="goods-name">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
+                                       title="${floorGoods.name}">${floorGoods.name}</a>
+                                </div>
+                                <div class="goods-price">
+                                    <span>${floorGoods.price?string.currency}</span>
+                                </div>
+                            </#if>
+                    </#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
 						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
@@ -156,29 +161,32 @@
 					<#if key =="3" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
-							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-							data-operation-id="${goods_id}"
-							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-							data-title="修改楼层商品"
-							data-formId="editEachGoodsForm"
-							data-floorId="${childs.id}"
-							data-goods-index="${key}">
-							<div class="goods-img">
-							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-							<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
-							</a>
-							</div>
-							<div class="goods-name">
-								<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
-										title="${floorGoods.name}">${floorGoods.name}</a>
-							</div>
-							<div class="goods-price">
-								<span>${floorGoods.price?string.currency}</span>
-							</div>
-							</#if>
-						</#if>
+                            <#if floorGoods.name??>
+                                <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
+                                <input type="button" style="display:none" value="编辑"
+                                       class="floor new_dialog btn-default-styles"
+                                       data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+                                       data-operation-id="${goods_id}"
+                                       data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+                                       data-title="修改楼层商品"
+                                       data-formId="editEachGoodsForm"
+                                       data-floorId="${childs.id}"
+                                       data-goods-index="${key}">
+                                <div class="goods-img">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html">
+                                        <@image class="scrollLoading" src="${floorGoods.thumbnail!''}"
+                                        alt="${floorGoods.name}" style="width:100%;" />
+                                    </a>
+                                </div>
+                                <div class="goods-name">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
+                                       title="${floorGoods.name}">${floorGoods.name}</a>
+                                </div>
+                                <div class="goods-price">
+                                    <span>${floorGoods.price?string.currency}</span>
+                                </div>
+                            </#if>
+                    </#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
 						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
@@ -205,29 +213,32 @@
 					<#if key =="4" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
-							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-							data-operation-id="${goods_id}"
-							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-							data-title="修改楼层商品"
-							data-formId="editEachGoodsForm"
-							data-floorId="${childs.id}"
-							data-goods-index="${key}">
-							<div class="goods-img">
-							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-							<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
-							</a>
-							</div>
-							<div class="goods-name">
-								<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
-										title="${floorGoods.name}">${floorGoods.name}</a>
-							</div>
-							<div class="goods-price">
-								<span>${floorGoods.price?string.currency}</span>
-							</div>
-							</#if>
-						</#if>
+                            <#if floorGoods.name??>
+                                <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
+                                <input type="button" style="display:none" value="编辑"
+                                       class="floor new_dialog btn-default-styles"
+                                       data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+                                       data-operation-id="${goods_id}"
+                                       data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+                                       data-title="修改楼层商品"
+                                       data-formId="editEachGoodsForm"
+                                       data-floorId="${childs.id}"
+                                       data-goods-index="${key}">
+                                <div class="goods-img">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html">
+                                        <@image class="scrollLoading" src="${floorGoods.thumbnail!''}"
+                                        alt="${floorGoods.name}" style="width:100%;" />
+                                    </a>
+                                </div>
+                                <div class="goods-name">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
+                                       title="${floorGoods.name}">${floorGoods.name}</a>
+                                </div>
+                                <div class="goods-price">
+                                    <span>${floorGoods.price?string.currency}</span>
+                                </div>
+                            </#if>
+                    </#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
 						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
@@ -254,29 +265,32 @@
 					<#if key =="5" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						<#if floorGoods.name??>
-							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-							data-operation-id="${goods_id}"
-							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-							data-title="修改楼层商品"
-							data-formId="editEachGoodsForm"
-							data-floorId="${childs.id}"
-							data-goods-index="${key}">
-							<div class="goods-img">
-							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-							<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}" style="width:100%;" />
-							</a>
-							</div>
-							<div class="goods-name">
-								<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
-										title="${floorGoods.name}">${floorGoods.name}</a>
-							</div>
-							<div class="goods-price">
-								<span>${floorGoods.price?string.currency}</span>
-							</div>
-							</#if>
-						</#if>
+                            <#if floorGoods.name??>
+                                <input type="hidden" class="goods_sn" value="${floorGoods.sn}">
+                                <input type="button" style="display:none" value="编辑"
+                                       class="floor new_dialog btn-default-styles"
+                                       data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+                                       data-operation-id="${goods_id}"
+                                       data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+                                       data-title="修改楼层商品"
+                                       data-formId="editEachGoodsForm"
+                                       data-floorId="${childs.id}"
+                                       data-goods-index="${key}">
+                                <div class="goods-img">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html">
+                                        <@image class="scrollLoading" src="${floorGoods.thumbnail!''}"
+                                        alt="${floorGoods.name}" style="width:100%;" />
+                                    </a>
+                                </div>
+                                <div class="goods-name">
+                                    <a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html"
+                                       title="${floorGoods.name}">${floorGoods.name}</a>
+                                </div>
+                                <div class="goods-price">
+                                    <span>${floorGoods.price?string.currency}</span>
+                                </div>
+                            </#if>
+                    </#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
 						   data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
@@ -297,17 +311,20 @@
 						   data-goods-index="5">
 				</#if>
 			</li>
-			<script type="text/javascript">
-				(function() {
-					var li = $('.box-li');
-					for (var i = 0; i < li.length; i++) {
-						if (li.eq(i).find('div').length == 0) {
-							li.eq(i).find('.add').show();
-						} else {
-							li.eq(i).find('.add').remove();
-						}
-					}
-				})();
-			</script>
 		</ul>
+		<script type="text/javascript">
+			$(function () {
+                var li = $('.box-li');
+                for (var i = 0; i < li.length; i++) {
+                    if (li.eq(i).find('div').length === 0) {
+                        li.eq(i).find('.add').show();
+                    } else {
+                        li.eq(i).find('.add').remove();
+                    }
+                }
+                $('.child_floor_show').each(function () {
+                    $(this).find("input[type='button']").remove();
+                })
+            })
+		</script>
 </div>

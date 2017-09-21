@@ -1,0 +1,55 @@
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<table cellspacing="0" cellpadding="0" border="0" width="100%" >
+	<tbody>
+		<tr>
+			<th><em style="color: red;">*</em> 收货地区：</th>
+			<td id="checkout-select-area">
+				<@regionSelect />
+			</td>
+		</tr>
+		<tr>
+			<th><em style="color: red;">*</em> 地址：</th>
+			<td>
+			<input type="text"  id="addr" size="30" style="width: 360px;"   name="shipAddr" isrequired="true" dataType="string"  autocomplete="off" maxlength="58"></td>
+		</tr>
+		<tr>
+			<th><em style="color: red;">*</em> 邮编：</th>
+			<td>
+			<input type="text" id="zip" size="30" style="width: 60px;"  name="shipZip" isrequired="true" dataType="post_code"  autocomplete="off" 
+				onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="6">
+			</td>
+		</tr>
+		<tr>
+			<th><em style="color: red;">*</em> 收货人姓名：</th>
+			<td><input type="text"  size="30" style="width: 60px;" id="name" name="shipName"  autocomplete="off" isrequired="true" dataType="string" maxlength="30"><span class="notice_inline">请填写真实姓名，以免延误收货</span></td>
+		</tr>
+		<tr>
+			<th>联系手机：</th>
+			<td><input type="text"  id="mobile" style="width: 180px;" size="30" name="shipMobile"  autocomplete="off" 
+				 onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11"></td>
+		</tr>
+		<tr>
+			<th>联系电话：</th>
+			<td><input type="text"  id="tel" dataType="tel_num" style="width: 180px;" size="30" name="shipTel"  autocomplete="off"
+				onkeyup="this.value=this.value.replace(/[^\d-]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="13"><span class="notice_inline">手机和电话填写一项即可</span></td>
+		</tr>
+		<tr>
+			<th>送货时间：</th>
+			<td>
+				<select	name="shipDay" class="inputstyle">
+					<option value="任意日期" selected="selected">任意日期</option>
+					<option value="仅工作日">仅工作日</option>
+					<option value="仅休息日">仅休息日</option>
+				</select>&nbsp;
+			</td>
+		</tr>
+		<#if isLogin>
+		<tr class="recsave">
+			<th>是否保存地址：</th>
+			<td><label><input type="checkbox" value="yes" autocomplete="off" id="saveAddress" name="saveAddress">保存本次收货地址</label></td>
+		</tr>
+		</#if>
+	</tbody>
+</table>
+
+

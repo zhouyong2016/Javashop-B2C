@@ -1,22 +1,71 @@
-<div class="easyui-panel" style="border-style:none;" >
-	<div style="padding: 10px 0 10px 60px">
-		<form id="addTagForm" method="post" class="validate" >
-			<table>
-					<tr>
-					<td>标签名称</td>
-					<td><input class="easyui-validatebox input_text" type="text" data-options="required:true" name="tag_name" id="name" maxlength="30" dataType="string" isrequired="true"/>
-					</td>
-					</tr>
-					<tr>
-					<td>品牌标签：</td>
-					<td> 是<input type="radio" data-options="required:true" name="type"  value="1"/>
-					&nbsp;否
-					<input type="radio" data-options="required:true" name="type" value="0"/> 
-					</td>
-					</tr>
-			</table>
-		</form>
-	</div>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-input{
+    width: 80%;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addTagForm" class="layui-form layui-form-pane" action="">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">标签名称</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="tag_name" id="name" maxlength="30" lay-verify="tag_name"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">品牌标签：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="type" value="0" title="否">
+      			<input type="radio" name="type" value="1" title="是" checked="checked">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000; position: fixed;left: 1px;width: 96%;height: 30px; background:rgba(230,230,230,0.8)"> 
+	  			<a class="layui-layer-btn0" type="submit" style="margin: 0px 0px 0px 100px;" lay-submit="" lay-filter="savetag">保存</a>
+	  			<a class="layui-layer-btn1" style="margin: 0px 100px 0px 0px;">取消</a>
+  			</div>
+  	</form>
 </div>
-	
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
 
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    form.verify({
+    	tag_name: function(value){
+        	if($.trim(value)==""){
+          		return '请输入标签名称';
+        	}
+      	}
+    });
+    
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+    //监听提交
+    form.on('submit(savetag)', function(data){
+    	var options = {
+    			url: ctx+"/shop/admin/tag/save-add.do",
+    			type: "post",
+    			dataType: "json",
+    			success:function(result){
+    				if(result.result==1){
+    					$.Loading.success("添加成功");
+    					parent.layer.close(index);
+    					parent.table.ajax.reload();
+    				}
+    			}
+    	};
+   		$("#addTagForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>

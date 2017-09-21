@@ -1,46 +1,66 @@
-<div class="main" style="background-color: white;">
-	<form  method="post" id="menuinfoForm">
+<#include '/admin/sonheader.html' >
+<style>
+ .layui-select-title input{
+  width:100%;
+ }
+ .layui-unselect {
+  width:50%;
+ }
+ .layui-input{
+  width: 75%;
+ }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="menuinfoForm" class="layui-form layui-form-pane" action="">
 		<#if isEdit> 
 			<input type="hidden" name="menuid" value="${menuid!''}" />
 		</#if>
 		<input type="hidden" id="childrenId" value="${menuid!''}">
-		<table cellspacing="1" cellpadding="3" width="100%" >
-			<tr>
-				<th>名称</th>
-				<td><input type="text" name="name" class="input_text easyui-validatebox"
-					value="${siteMenu.name!''}" maxlength="13" data-options="required:true"
-					 isrequired="true" /></td>
-			</tr>
-			<tr>
-				<th>上级菜单</th>
-				<td><select name="parentid" id="parentid">
-						<option value="0">顶级类别</option> <#assign children=menuList />
-						<#assign level=1 /> <#include 'select_children.html' />
-				</select></td>
-			</tr>
-			<tr>
-				<th>链接</th>
-				<td><input type="text" name="url" class="input_text" maxlength="30"
-					style="width: 200px" value="${siteMenu.url!''}" dataType="string"
-					isrequired="true" maxlength="60" placeholder="请输入符合规范的站内链接"/><br/>
-					<span style="color: red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/goods-402.html，只需填写goods-402.html即可！</span>
-				</td>
-			</tr>
-			<tr>
-				<th>目标</th>
-				<td><input type="text" name="target"
-					class="input_text" style="width: 200px"
-					value="${siteMenu.target!''}" dataType="string" maxlength="60"/></td>
-			</tr>
-			<tr>
-				<th>排序</th>
-				<td><input type="text" name="sort" class="input_text easyui-numberbox"
-					style="width: 50px" value="${siteMenu.sort!''}" dataType="int"
-					data-options="required:true" isrequired="true" maxlength="9"/></td>
-			</tr>
-		</table>
-	</form>
-
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">名称</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="name" value="${siteMenu.name!''}" maxlength="13"  lay-verify="name" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		<div class="layui-form-item">
+			<label class="layui-form-label _stration">上级菜单</label>
+    		<div class="layui-input-block">
+      			<select name="parentid" id="parentid">
+						<option value="0">顶级类别</option> 
+						<#assign children=menuList />
+						<#assign level=1 /> 
+						<#include 'select_children.html' />
+				</select>
+   			</div>
+  		</div>
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">链接</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="url"  maxlength="60" value="${siteMenu.url!''}" placeholder="请输入符合规范的站内链接"  autocomplete="off" class="layui-input">
+    		</div>
+    		<div class="layui-form-mid layui-word-aux" style="color:red;font-size: 12px;">例如：http://www.javamall.com.cn/version4/goods-11.html，只需填写goods-11.html即可！</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">目标</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="target" value="${siteMenu.target!''}" maxlength="60" lay-verify="target"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		<input type="hidden" id="m_id" value="${siteMenu.menuid!''}" />
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">排序</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="sort" value="${siteMenu.sort!''}" maxlength="9" lay-verify="sort|number"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>		
+  		<div class=" layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 0px;bottom: 0px;background: rgba(230,230,230,0.8) ;height: 40px;width: 97%;"> 
+  			<a class="layui-layer-btn0"  type="submit"  lay-submit=""  lay-filter="site_menu">保存</a> 					
+  			<a class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
+  		
 </div>
 <script type="text/javascript">
 $(function(){
@@ -55,4 +75,70 @@ $(function(){
 		$("#parentid").val(${siteMenu.parentid!''});
 	</#if>
 });
+
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+
+    //校验
+    form.verify({
+    	name:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入导航栏名称";
+    		}
+    	},
+    	url:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入符合规范的站内链接";
+    		}
+    	},
+    	target:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入导航目标";
+    		}
+    	},
+    	sort:function(value){
+    		if($.trim(value) == ""){
+    			return "排序不能为空";
+    		}
+    	}
+    });
+
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+  
+    form.on('submit(site_menu)', function(){ 
+    	var url;
+    	var menuId = $("#m_id").val();
+    	if(menuId != 0){
+ 			url = ctx+"/core/admin/site-menu/save.do?menuid="+menuId;
+ 		}else{
+ 			url = ctx+"/core/admin/site-menu/save.do";
+ 		}
+    	var options = {
+   			url:url,
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent._goodsCatEdit.refreshData();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#menuinfoForm").ajaxSubmit(options);
+       return false; 
+    });
+}); 
+
+
+
 </script>

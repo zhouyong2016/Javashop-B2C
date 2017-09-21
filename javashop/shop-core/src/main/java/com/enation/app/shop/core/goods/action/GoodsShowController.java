@@ -1,7 +1,5 @@
 package com.enation.app.shop.core.goods.action;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -10,9 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.enation.app.shop.core.goods.model.Tag;
-import com.enation.app.shop.core.goods.service.ITagManager;
 import com.enation.app.shop.core.goods.service.IGoodsTagManager;
+import com.enation.app.shop.core.goods.service.ITagManager;
 import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;

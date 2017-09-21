@@ -1,188 +1,360 @@
 <#include '/admin/header.html' >
 <#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
 <#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsCatsSelect.js"></script>
 <style>
-.searchAdvancedS{
-background-color: #FDEA7A;
+td .layui-btn{
+background:#1E9FFF;
 }
+.search_conditions{
+display:block
+}
+#__GCS__{
+width:23%!important;
+left:56%!important;
+height:300px;
+box-shadow:0px 2px 2px rgba(102, 102, 102, 0.47);
+}
+#__GCS__ .__GCS__content .__GCS__list{
+height:240px;
+}
+
 
 </style>
-<div id="loading"></div>
-<div class="main">
-	<form id="gridform" method="post">
-		<div class='buttonArea'>
-			<span id="searchbtn" style="float:left;display:block">	
-			<@permssion actid="goods,super_admin">		
-				<a href="javascript:void(0)" class="button blueButton"  onclick="newTab('添加商品','${ctx}/shop/admin/goods/select-cat.do')">添加</a>
-				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
-				<#if market_enable?? && market_enable=='2'>
+<div  class="admin-main">
+   <div>
+    	<!-- 提示区域 -->
+        <div class="page_explain">
+        	<h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>上架状态分为：出售中、仓库中和禁售三种状态</li>
+                <li><span>·</span>审核状态分为：审核通过、等待审核和审核失败三种状态</li>
+                <li><span>·</span>商品只有在审核通过并且出售中的商品才能正常出售。商品是否需要审核可以在“商品设置”中由管理员进行设置。</li>
+                <li><span>·</span>禁售或审核失败的商品，商家只能重新编辑后才能够进行出售。</li>
+            </ul>
+        </div>
+        <!-- 按钮操作 -->
+        <div class="table_control">
+            <div class="table_opera">
+            <@permssion actid="goods,super_admin">	
+                <button type="button" title="添加" class="layui-btn layui-btn-primary " onclick='newTab("添加商品","${ctx}/shop/admin/goods/select-cat.do");'>
+                    <i class="icon iconfont icon-llalbumshopselectorcreate"></i>
+                </button>
+
+                <button htype="button" title="删除" class="layui-btn layui-btn-primary " onclick="del()">
+                    <i class="icon iconfont icon-guanbi1"></i>
+                </button>
+
+                <#if market_enable?? && market_enable=='2'>
 				<#else>
-				<a href="javascript:void(0)" class="button"  onclick="newTab('商品草稿箱','${ctx}/shop/admin/goods/list.do?market_enable=2')">商品草稿箱</a>
-				</#if>
-				<a href="javascript:void(0)" class="button"  onclick="newTab('商品回收站','${ctx}/shop/admin/goods/trash-list.do')">回收站</a>
-			</@permssion>
-			</span>
-			<span style="float: right;height:28px;"> 
-				<a href="javascript:void(0)" class="button b_fr" id="aAdvanced"  >高级搜索</a>
-				<a href="javascript:void(0)" class="button b_fr" onclick="searchGoods()">搜索</a>
-				<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="请输入模糊关键字" name="searchKeyWord"> 
-			</span>
-		</div>
-		
-		<div style="display: block;" class="searchAdvanced" >
-		<input id="Advanced" name="Advanced" type="hidden" value="0" />
-			<table width="98%" border="0" cellspacing="0" cellpadding="8">
-				<tr>
-					<td width="70" align="right">商品名称</td>
-					<td>
-						<input type="text" value="${name!''}" id="name"  class="input_text" style="width: 95%;" >
-					</td>
-					<td width="70" align="right">商品编号</td>
-					<td>
-						<input type="text" value="${name!''}" id="sn" data-options="validType:['englishCheckSub']" class="input_text easyui-validatebox" style="width: 95%;">
-					</td>
-					<td width="70" align="right">类别</td>
-					<td>
-						<input class="easyui-combotree" name="cat.parent_id" id="catid"
-						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',method:'get'" style="width: 200px;height: 28px;" />
-					</td>
-					<td>
-						<a id="searchAdvance" class="button blueButton" onclick="searchGoods()" href="javascript:;">开始搜索</a>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"  url="${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}" 
-				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
-				sortName="goods_id" sortOrder="desc">
-				<thead>
-					<tr>
-						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
-						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
-						<th data-options="field:'name',width:500" formatter="formatName">商品名称</th>
-						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
-						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
-						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
-						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
-						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th>
-						<th data-options="field:'action',align:'center',width:100" formatter="formatAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</form>
+                <button type="button" title="商品草稿箱" class="layui-btn layui-btn-primary " onclick='newTab("商品草稿箱","${ctx}/shop/admin/goods/list.do?market_enable=2");'>
+                    <i class="icon iconfont icon-caogaoxiang"></i>
+                </button>
+                </#if>
+                <button type="button" title="回收站" class="layui-btn layui-btn-primary " onclick='newTab("商品回收站","${ctx}/shop/admin/goods/trash-list.do");'>
+                    <i class="icon iconfont icon-delete_light"></i>
+                </button>
+                <button type="button" title="提示" class="layui-btn layui-btn-primary " id="explain">
+                    <i class="icon iconfont icon-tishi1"></i>
+                </button>
+            </@permssion>
+            </div>
+            
+            <!-- 搜索区域操作 -->
+            <div class="table_search">
+                <input type="text" id="_search" class="keyword" placeholder="请在这里输入关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="searchBtn"><i class="layui-icon">&#xe615;</i></button>
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="high_search">高级搜索</button>
+              <!--   高级搜索区域 -->
+                <div class="high_searchcontent">
+                    <div class="content_title"><span>高级搜索</span></div>
+                    <form id="search_form" class="layui-form" action="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >商品名称:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="goods_name" name="goods_name" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >商品编号:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="goods_num" name="goods_num" lay-verify="title" autocomplete="off" placeholder="请输入编号" class="layui-input">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类别:</label>
+                            <div class="layui-input-block">                    
+                                <input type="text" id="cat_name" value="" style="width: 200px;height: 25px;position: relative;" />
+								<input type="hidden" id="cat_id" name="cat_id" value="" />
+                            </div>
+                        </div>
+                        <ul>
+                            <li class="reset">
+                                <button type="reset" id="reset_btn" class="layui-btn  layui-btn-primary">重置</button>
+                            </li>
+                            <li class="submit">
+                                <button type="button" class="layui-btn layui-btn-primary" id="submit_btn"  lay-submit="" lay-filter="highsearch" >开始搜索</button>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--高级搜索生成内容  -->
+   <div class="high_search" >
+		 <form action="" class="layui-form layui-form-one" action=""></form> 	
+   </div>
+   
+   <div class="kelong" style="display:none;">
+   		<ul  class="search_conditions " style="width:98%; ">
+ 			<li>
+ 				 <div class="layui-form-item _select">
+                       	<label class="layui-form-label  _label" >商品名称</label>
+	                 <div class="layui-input-block _layui-input-block">
+	                   	<input type="text" id="goods_name_one" name="goods_name" readonly="true" class="layui-input">
+	                 </div>
+               	</div>
+                <span>
+                	<a class="closeSelf" href="javascript:void (0)">
+                		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+               		</a>
+                </span>
+ 			</li>
+			<li>
+				<div class="layui-form-item _select">
+                    <label class="layui-form-label  _label" >商品编号</label>
+	               <div class="layui-input-block _layui-input-block">
+	                     <input type="text" id="goods_num_one" name="goods_num" readonly="true" class="layui-input">
+	               </div>
+               </div>
+               <span>
+	               	<a class="closeSelf" href="javascript:void (0)">
+	               		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	              	</a>
+               </span>
+ 			</li>
+ 			<li>
+ 			  <div class="layui-form-item _select">
+                  <label class="layui-form-label _label">类别</label>
+               <div class="layui-input-block  _layui-input-block" style="margin-top:-5px;">                    
+                    <input type="text" id="cat_name_one" value="" placeholder="请输入类别" readonly="true" />
+                    <input type="hidden" id="cat_id" name="cat_id" value=""  readonly="true"/>
+                </div>
+              </div>
+               <span>
+	               	<a class="closeSelf" href="javascript:void (0)">
+	               		<i class="layui-icon" style="color: #5f8bca;">&#x1006;</i>
+	              	</a>
+              </span>
+ 			</li>
+ 		</ul>
+   </div>
+   
+   <!--表格区域  -->
+   <form id="gridform">
+    <table id="goodsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+        <thead>
+        <tr>
+            <th width="10px"><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th width="70px">商品图片</th>
+            <th>商品编号</th>
+            <th width="350px">商品名称</th>
+            <th>分类</th>
+            <th>销售价格</th>
+            <th>上架</th>
+            <th>品牌</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <!-- 传值等区域(暂定) -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<script type="text/javascript">
-function formatName(value,row,index){
-	if(row.market_enable==2){
-		val="<a href='${ctx}/goods-"+row.goods_id+".html' target=\"_blank\">【预览】"+row.name+"</a>";
-	}else{
-		val="<a href='${ctx}/goods-"+row.goods_id+".html' target=\"_blank\">"+row.name+"</a>";
-	}
-	return val;
-}
-function market_enable(value,row,index){
-	var val;
-	if(value==1){
-		val="是";
-	}else if(value==2){
-		val="草稿";
-	}else{
-		val="否";
-	}
-	return val;
-}
-function formatMoney(value,row,index){
-	var val="￥"+value;
-	return val;
-}
-function formatTime(value,row,index){
+
+
+
+<!--js区域  -->
+<script>
+
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+	form.on('submit(highsearch)', function(data){
+		 $(".layui-form-one>ul").remove();
+	$(".high_search").css("display","block");
+	 
+	var kelo=$(".kelong ul").clone();
+	kelo.appendTo($(".high_search form"));
+	var gjname=$("#goods_name").val();
+	$("#goods_name_one").val(gjname);
+	var gjnum=$("#goods_num").val();
+	$("#goods_num_one").val(gjnum);
+	var gjcatname=$("#cat_name").val();
+	$("#cat_name_one").val(gjcatname);
+	var gjcatid=$("#cat_id").val();
+	$("#cat_id_one").val(gjcatid);
+	$(".closeSelf").click(function(){
+		$(this).parent().parent().detach();
+		})
+	});
+});
+
+var table;
+$(function(){
 	
-	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	//高级搜索框的显示隐藏
+    $("#high_search").on("click",function(event){
+    	event.stopPropagation();
+     	event.stopImmediatePropagation();
+        $(".high_searchcontent").toggle();
+    })
+	
+	
+	table = $('#goodsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "initComplete": function(settings, json) {
+	    	 $(".dataTables_paginate").on("click", "a", function() {
+	    		 if($('#goodsdata_processing')[0].style.display=="block"){
+					  $(".dataTables_paginate li").addClass("disabled");
+				  }  
+	         });   
+		  },
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="goods_id" class="fly-checkbox" value=' + obj.goods_id + '>';
+            }},
+            {data: function (obj) {
+            	if(obj.thumbnail == null){
+            		return '<a href="${ctx}/goods-'+obj.goods_id+'.html" target="_blank"><img alt="" style="height: 60px;" src="'+convertToUrl("${ctx}/statics/images/no_picture.jpg")+'"></a>';
+            	}else{
+            		 return '<a href="${ctx}/goods-'+obj.goods_id+'.html" target="_blank"><img alt="" style="height: 60px;" src="'+convertToUrl(obj.thumbnail)+'"></a>';
+            	}
+            }},	
+	        {data: "sn"},
+	        {data: function (obj) {
+                return '<a href="${ctx}/goods-'+obj.goods_id+'.html" target="_blank">'+obj.name+'</a>';
+            }},
+	        {data: "cat_name"},
+	        {data: function (obj) {
+                return '￥'+obj.price;
+            }},
+	        {data: function (obj) {
+	        	if(obj.market_enable==1){
+	        		return "售卖中";
+	        	}else if(obj.market_enable==0){
+	        		return "已下架";
+	        	}else{
+	        		return "预览商品";
+	        	}
+            }},
+	        {data: "brand_name"},
+	        {data: function (obj) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='newTab(\""+obj.name+"\",\"${ctx}/shop/admin/goods/edit.do?goodsId="+obj.goods_id+"\")' >操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	//普通搜索
+	$("#searchBtn").click(function(){
+		searchGoods(table);
+	});
+	
+	//高级搜索
+	$("#submit_btn").click(function(){
+		highSearchGoods(table);
+	});
+	
+	$("#if-reload").click(function(){
+		//var index = parent.layer.getFrameIndex(window.name); 
+        //parent.layer.close(index);
+        parent.closeOther();
+        
+        //console.log(window.parent.name);
+	})
+	
+	//分类选择
+	 $('#cat_name').goodsCatsSelect({
+		 	top: 179,
+		 	left: 582,
+		 	zIndex: 998,
+           callback: function (cat) {
+              var cat_id = cat.cat_id;
+              var cat_name = cat.string;
+              $("#cat_name").val(cat_name);
+              $("#cat_id").val(cat_id);
+           }
+     });
+	
+});
+
+
+
+
+//普通搜索
+ function searchGoods(table){
+	var keyword = $(".keyword").val();
+	var param = "&keyword="+keyword+"&stype="+0;
+	var url = table.ajax.url("${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}"+param);
+	url.load();
 }
-function formatAction(value,row,index){
-	var val="<a class='edit' title='修改' href='#' onclick='newTab(\""+(row.name).substring(0,11)+"..\",\"${ctx}/shop/admin/goods/edit.do?goodsId="+row.goods_id+"\")' ></a>";
-	return val;
+
+//高级搜索
+function highSearchGoods(table){
+	var keyword = $(".keyword").val();
+	var name = $("#goods_name").val();
+	var sn = $("#goods_num").val();
+	var catid = $("#cat_id").val();
+	var param = "&keyword="+keyword+"&stype="+1+"&name="+name+"&sn="+sn+"&catid="+catid;
+	var url = table.ajax.url("${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}"+param);
+	url.load();
 }
-function del(){ 
-	var rows = $('#goodsdata').datagrid("getSelections"); 
-	if(rows.length<1){
-		$.Loading.error("请选择删除商品");
+
+//删除商品
+function del(){
+	var ch_goodsId = $("input[name='goods_id']").is("input:checked");
+	if(ch_goodsId == false){
+		alert("请选择要放入回收站的商品");
+		return false;
+	}
+	if (!confirm("确定要把这些商品放入回收站吗？")) {
 		return;
 	}
-	if(!confirm("确认要将这些商品放入回收站吗？")){	
-		return ;
-	}
-	$.Loading.show("正在删除......");
- 	var options = {
-			url : "${ctx}/shop/admin/goods/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-		 			$('#goodsdata').datagrid("reload");      
+	var options = {
+			url:ctx+"/shop/admin/goods/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/goods/list-json.do?market_enable=${market_enable!''}").load();
 				}
-				if(result.result==0){
-					$.Loading.error(result.message);
+				if(data.result==0){
+					$.Loading.error(data.message);
 				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
 			}
-		};
-		$('#gridform').ajaxSubmit(options);	
-}
-	
-function append(){
-		location.href="goods!selectCat.do";
-}
-
-$(function(){
-	if("${optype}"=="stock"){
-		$("#searchbtn").hide();
 	};
-	$(".searchAdvanced").hide();
-	//高级查询按钮
-    $("#aAdvanced").click(function () {
-        if ($("#Advanced").val() == "0") {
-            $("#Advanced").val(1);
-            $("#simpleSearch").hide();
-            $("#aAdvanced").addClass("searchAdvancedS");
-        } else {
-            $("#Advanced").val(0);
-            $("#simpleSearch").show();
-            $("#aAdvanced").removeClass("searchAdvancedS");
-        }
-        $(".searchAdvanced").slideToggle("slow");
-    });
-})		
-
-//搜索
-function searchGoods(){
-	var formflag= $("#gridform").form().form('validate');
-	if(formflag){
-		var searchtype = $("#Advanced").val();
-		var keyword = $.trim($("#searchKeyword").val());
-		var name = $.trim($("#name").val());
-		var sn = $.trim($("#sn").val());
-		var catid = $("#catid").combo('getValue');
-		
-		$('#goodsdata').datagrid('load', {
-			 stype:searchtype,
-			 keyword:keyword,
-			 name:name,
-			 sn:sn,
-			 catid:catid,
-			 page:1
-	    }); 
-	}
+	$("#gridform").ajaxSubmit(options);
 }
- 	
+
 </script>
-
 <#include '/admin/footer.html' >
-
-

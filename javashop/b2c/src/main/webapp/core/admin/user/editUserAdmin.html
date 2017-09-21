@@ -1,85 +1,117 @@
+<#include '/admin/header.html' >
 <style>
-#repwdtr,#pwdtr{display:none}
+  .layui-input{
+    width: 75%;
+  }
+  .layui-form-pane .layui-form-label{
+  margin-left:10px;
+  }
 </style>
-<div class="easyui-panel" style="border-style:none;" >
-	<div style="padding: 10px 0 10px 60px">
-		<form id="editAdminForm" method="post" class="validate" >
-		<input type="hidden" name="userid" value="${adminUser.userid }" />
-			<table>
-				<tr>
-					<th><label class="text">用户名：</label></th>
-					<td><input class="easyui-validatebox input_text" type="text" name="username" value="${adminUser.username!'' }" maxlength="12" data-options="required:true"  dataType="string" isrequired="true" /></td>
-				</tr>
-				<tr>
-					<th> </th>
-					<td> <input type="checkbox" name="updatePwd" id="updatePwd" value="yes"  />同时修改密码 </td>
-				</tr>
-				<tr id="pwdtr">
-					<th><label class="text">密码：</label></th>
-					<td><input class="easyui-validatebox input_text" type="password" name="newPassword" id="pwd" maxlength="20" data-options="validType:['string','length[5,20]']" /></td>
-				</tr>
-				<tr id="repwdtr">
-					<th><label class="text">确认密码：</label></th>
-					<td><input class="easyui-validatebox input_text" type="password" id="repwd" dataType="string" maxlength="20" data-options="validType:['string','length[5,20]']"  /></td>
-				</tr>
-				<tr>
-					<th><label class="text">类型：</label></th>
-					<td>
-						<input type="radio"  name="founder" value="0" id="notSuperChk"  <#if adminUser.founder==0> checked="checked"</#if> >普通管理员&nbsp;&nbsp;
-						<input type="radio"  name="founder" value="1" id="superChk" <#if adminUser.founder==1> checked="checked"</#if>>超级管理员
-					</td>
-				</tr>
-				<tr id="roletr">
-					<th><label class="text">角色：</label></th>
-					<td>
-						<ul style="width:100%" id="rolesbox">
-							<#list roleList as role>
-							<li style="width:33%;display:block">
-								<input type="checkbox" name="roleids" value="${role.roleid }"  
-									<#list userRoles as userrele>
-										<#if userrele.roleid ==role.roleid>
-										checked="checked"
-										</#if> 
-									</#list>>
-								${role.rolename }&nbsp;</li>
-							</#list>
-							
-						</ul> 
-					</td>		
-				</tr>
-					<#list htmlList as html>
-						${html }
+<div class="main">
+    <!--表单区域  -->
+	<form id="editAdminForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+	<input type="hidden" name="userid" value="${adminUser.userid }" />
+	
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">用户名：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="username"  maxlength="12" value="${adminUser.username!'' }" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		<div class="layui-form-item">
+  			<input type="checkbox" name="updatePwd" id="updatePwd" lay-filter="updatePwd" value="yes" title="同时修改密码：">
+  		</div>
+  		
+  		<div class="layui-form-item" id="pwdtr">
+    		<label class="layui-form-label">密码：</label>
+    		<div class="layui-input-block">
+      			<input type="password" name="newPassword" id="pwd" maxlength="20"  autocomplete="off" class="layui-input" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="repwdtr">
+    		<label class="layui-form-label">确认密码：</label>
+    		<div class="layui-input-block">
+      			<input type="password" type="password" id="repwd"   maxlength="20"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">类型：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="founder" value="0" id="notSuperChk" lay-filter="founder" title="普通管理员" <#if adminUser.founder==0> checked="checked"</#if>>
+      			<input type="radio" name="founder" value="1" id="superChk" lay-filter="founder" title="超级管理员" <#if adminUser.founder==1> checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="roletr">
+    		<label class="layui-form-label">角色：</label>
+    		<div class="layui-input-block" id="rolesbox">
+      			<ul style="width:100% ;margin-left:10px;" >
+					<#list roleList as role>
+					<li style="width:40%;display:block" id="li_${role.roleid!''}">
+						<input autocomplete="off" type="checkbox" name="roleids" value="${role.roleid!''}"
+							<#list userRoles as userrele>
+								<#if userrele.roleid ==role.roleid>
+								checked="checked"
+								</#if> 
+							</#list>>
+						${role.rolename }&nbsp;
+					</li>
 					</#list>
-				
-				<tr>
-					<th><label class="text">状态：</label></th>
-					<td>
-						<input type="radio"  name="state" value="1" <#if adminUser.state==1> checked=true </#if> >启用&nbsp;&nbsp;
-						<input type="radio"  name="state" value="0" <#if adminUser.state==0> checked=true </#if> >禁用 
-					</td>
-				</tr>
-				<tr>
-					<th><label class="text">姓名：</label></th>
-					<td><input type="text" class="input_text easyui-validatebox"  maxlength="12" name="realname" value="${adminUser.realname!'' }"   data-options="required:true"/></td>
-				</tr>
-				<tr>
-					<th><label class="text">编号：</label></th>
-					<td><input type="text" class="input_text" name="userno"  value="${adminUser.userno!''}" onkeyup='this.value=this.value.replace(/\D/gi,"")' maxlength="32" /></td>
-				</tr>
-				<tr>
-					<th><label class="text">部门：</label></th>
-					<td><input type="text" class="input_text" name="userdept" value="${adminUser.userdept!'' }"  maxlength="32"/></td>
-				</tr>
-				<tr>
-					<th><label class="text">备注：</label></th>
-					<td><input type="text" class="input_text" name="remark"  value="${adminUser.remark!'' }" maxlength="200" /></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+				</ul>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">状态：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="state" value="1"  title="启用" <#if adminUser.state==1> checked=true </#if>>
+      			<input type="radio" name="state" value="0"  title="禁用" <#if adminUser.state==0> checked=true </#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">姓名：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="realname" lay-verify="required" maxlength="12" value="${adminUser.realname!'' }" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">编号：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="userno"  value="${adminUser.userno!''}" onkeyup='this.value=this.value.replace(/\D/gi,"")' maxlength="32"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">部门：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="userdept" value="${adminUser.userdept!'' }"  maxlength="32"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">备注：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="remark" maxlength="200" value="${adminUser.remark!'' }" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a style="margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="edit_user_admin">保存</a>
+  			<button class="layui-btn layui-btn-primary layui-btn-small" id="reset" type="reset" style="width: 60px;">还原</button>
+  		</div>
+  	</form>
 </div>
-<script type="text/javascript">
+<script>
+var index = parent.layer.getFrameIndex(window.name);
 $(function(){
+	
+	/*  页面一加载就先触发下还原按钮 */
+	$("#reset").trigger('click');
+	
 	$("#notSuperChk").click(function(){
 		if(this.checked)
 		$("#roletr").show();
@@ -88,14 +120,56 @@ $(function(){
 		if(this.checked)
 		$("#roletr").hide();
 	});	
-	$("#updatePwd").click(function(){
-		if(this.checked){
-			$("#pwdtr").show();
-			$("#repwdtr").show();			
-		}else{
-			$("#pwdtr").hide();
-			$("#repwdtr").hide();
-		}
-	});
+	var val=$('input:radio[name="founder"]:checked').val();
+	if(val==1){
+	    $("#roletr").hide();
+	}else {
+		$("#roletr").show();
+	}
+});
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form(),
+    layedit = layui.layedit,
+    laydate = layui.laydate;
+    
+    form.on('radio(founder)', function(data){
+    	  if(data.value==1){
+    		  $("#roletr").hide();
+    	  }else {
+    		  $("#roletr").show();
+			}
+    	});
+    //初始化隐藏
+    $("#pwdtr").hide();
+	$("#repwdtr").hide();
+	//CheckBox切换状态控制显示隐藏
+    form.on('checkbox(updatePwd)', function(data){
+		  if(data.elem.checked==true){
+			  $("#pwdtr").show();
+			  $("#repwdtr").show();
+		  }else{
+			  $("#pwdtr").hide();
+			  $("#repwdtr").hide(); 
+		  }
+		});
+   
+    form.on('submit(edit_user_admin)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/userAdmin/edit-save.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/userAdmin/list-json.do").load();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#editAdminForm").ajaxSubmit(options);
+       return false;
+    });
 });
 </script>

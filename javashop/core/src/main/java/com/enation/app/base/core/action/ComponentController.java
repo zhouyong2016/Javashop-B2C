@@ -20,6 +20,7 @@ import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
 import com.enation.framework.component.ComponentView;
 import com.enation.framework.component.IComponentManager;
+import com.enation.framework.component.PluginView;
 import com.enation.framework.util.JsonResultUtil;
 
 /**
@@ -50,7 +51,7 @@ public class ComponentController extends GridController {
 	@ResponseBody
 	@RequestMapping(value="/list-json")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String listJson() {
+	public GridJsonResult listJson() {
 		List<ComponentView> componentList = this.componentManager.list();
 		
 		List l = new ArrayList();
@@ -65,14 +66,13 @@ public class ComponentController extends GridController {
 			
 			int size = view.getPluginList().size();
 			if(size!=0){
-				map.put("state", "closed");
+				//map.put("state", "closed");
 				map.put("children", view.getPluginList());
 			}
 			l.add(map);
 		}
-
-	String json = JSONArray.fromObject(l).toString();
-	return json;
+		//String json = JSONArray.fromObject(l).toString();
+		return JsonResultUtil.getGridJson(l);
 
 	}
 

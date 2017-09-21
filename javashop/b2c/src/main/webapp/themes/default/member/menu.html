@@ -1,0 +1,55 @@
+		<div class="manage">
+			<h2>交易管理</h2>
+			<ul>
+			    <li><a href="${ctx}/member/order.html">我的订单</a></li>		
+				<li><a href="${ctx}/member/address.html">收货地址</a></li>
+				<li><a href="${ctx}/member/return_list.html">退货申请</a></li>	
+			</ul>
+		</div>
+	 	<div class="lens">
+	 		<h2>收藏夹</h2>
+			<ul>
+				<li><a href="${ctx}/member/favorite.html">商品收藏</a></li>
+				
+				<!--  此项功能暂时废弃   修改人：DMRain 2015-12-07
+				<li><a href="${ctx}/member/gnotify.html">缺货登记</a></li>
+				-->
+			</ul>	 		
+	 		
+	 	</div>
+	 	
+		<div class="accounts">
+			<h2>评论管理</h2>
+			<ul>
+				<li><a href="${ctx}/member/comments.html">我的评论</a></li>
+				<li><a href="${ctx}/member/ask.html">我的咨询</a></li>
+			</ul>	
+		</div>
+		
+	 	<div class="password">
+	 		<h2>帐号管理</h2>
+			<ul>
+				<li><a href="${ctx}/member/info.html">
+
+				<#if member?exists>
+					<#if member.info_full == 0>
+					完善基本资料(20分)
+					<#elseif member.info_full == 1>
+					修改个人资料
+					</#if>
+				</#if>
+				</a></li>
+				<li><a href="${ctx}/member/point.html">我的积分</a></li>
+				<li><a href="${ctx}/member/security.html">修改密码</a></li>		
+				<li><a href="${ctx}/member/bonus.html">我的优惠券</a></li>
+				<#--检测组件是否启用 -->
+				<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+				<#assign groupbuyIsOn = checkCmptIsOnTag("{'componentName':'余额支付组件'}") />
+				<#if groupbuyIsOn=="ON">
+				<li><a href="${ctx}/member/credit/credit.html">我的余额</a></li>	
+				</#if>		
+			</ul>	 		
+	 		
+	 	</div>
+	 	
+	 	

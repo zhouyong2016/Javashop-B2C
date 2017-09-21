@@ -1,171 +1,113 @@
 <#include '/admin/header.html' >
 <#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<script type="text/javascript" src="${ctx}/core/admin/js/Auth.js"></script>
-<div class="main">
-	<div id="roleinfo"></div>
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" id="add_role_button">添加</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="rolefrom">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/core/admin/role/list-json.do',fitColumns:'true'" width="width" id="roledata">
-				<thead>
-				    <tr>
-				   	 	<th  data-options="field:'rolename',width:100">角色名称</th>
-				   	 	<th  data-options="field:'rolememo',width:100">描述</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			 </table>
-		</form>
-	</div>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+             <h2>操作提示</h2>
+            <ul>
+                <li><span>.</span>角色管理承接管理员管理，启下权限管理。设定好角色权限统称之后，再在“权限管理”中对此权限统称赋予具体的权限。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="add_role_button" class="layui-btn layui-btn-primary " title="添加"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="rolefrom">
+    <table id="roledata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+        <thead>
+          <tr>
+            <th>角色名称</th>
+            <th>描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
 
-
- <script type="text/javascript">
-function formatAction(value,row,index){
-		var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.roleid +")'></a><a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.roleid +")'></a>";
-		return val;
-		
-}
-function del(roleid){
-	if(!confirm("确认要删除角色吗？")){	
-		return ;
-	}
-	$.Loading.show("正在删除......");
-	var options = {
-			url : "${ctx}/core/admin/role/delete.do?ajax=yes&roleid="+roleid,
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$('#roledata').datagrid('reload');
-				}else{
-					$.Loading.error(result.message);
-				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
-			}
-	};
-	$('#rolefrom').ajaxSubmit(options);	
-} 
-$("#add_role_button").click(function(){
-	$("#roleinfo").show();
-　　	$('#roleinfo').dialog({
-　　		title: '添加角色',			
-　　		width: 550,
-  		top:30,
-　　		closed: false,
-　　		cache: false,
-　　		href: '${ctx}/core/admin/role/add.do', 	
-　　		modal: true,
-　　		buttons: [{					
-　　			 text:'保存',
-　　			 iconCls:'icon-ok',
-　　			 handler:function(){
-　　				 var savebtn = $(this);
-	　　			  var disabled=savebtn.hasClass("l-btn-disabled");
-	　　			  if(!disabled){
-		　　				 $.Loading.show("正在保存请稍候...");
-		　　				 savebtn.linkbutton("disable");	
-　　				 		addroleForm(savebtn);	
-　　				 		}
-　　			 }
-　　			 },{
-　　			 text:'还原',
-　　			 handler:function(){
-　　				 $('#addroleForm')[0].reset() ;
-　　			 }
-　　		}]
-　　	});
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#roledata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/core/admin/role/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "rolename"},
+	        {data: "rolememo"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='edit("+data["roleid"]+")' >修改</a>"+"&nbsp"+"<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("+data["roleid"]+")' >删除</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#add_role_button").click(function(){
+	   	 layer.open({
+	            title:"添加角色",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:ctx+"/core/admin/role/add.do",//内容的URL
+	            area:['550px','450px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
 });
-function addroleForm(savebtn){
-	var formflag= $("#addroleForm").form().form('validate');
-	if(formflag){
-	 	var options = {
-			url : "${ctx}/core/admin/role/save-add.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				if(result.result == 1){
-					$.Loading.success(result.message);
-				}else{
-					$.Loading.error(result.message);
-				}
-				$("#roleinfo").dialog('close');
-				$('#roledata').datagrid('reload');
-		 	},
-			 error : function(e) {
-				 $.Loading.error("出现错误 ，请重试");	
-				 savebtn.linkbutton("enable");
-			}
-		};
-		$('#addroleForm').ajaxSubmit(options);	
-	}else{
-		$.Loading.hide();
-		savebtn.linkbutton("enable");
-	}
+
+//修改
+function edit(roleid){
+	layer.open({
+        title:"修改角色",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/core/admin/role/edit.do?roleid="+roleid,//内容的URL
+        area:['550px','450px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
 }
-function edit(roleId){
-	 $("#roleinfo").show();
-	　　	$('#roleinfo').dialog({
-	　　		title: '修改角色',			
-	　　		width: 550,
-	　　		top:30,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/core/admin/role/edit.do?roleid='+roleId, 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				 var editbtn = $(this);
-		　　			  var disabled=editbtn.hasClass("l-btn-disabled");
-		　　			  if(!disabled){
-			　　				 $.Loading.show("正在保存请稍候...");
-			　　				 editbtn.linkbutton("disable");	
-	　　				 		 editroleForm();	
-	　　				 }
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#editroleForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	}); 
-}
-function editroleForm(editbtn){
-	var formflag= $("#editroleForm").form().form('validate');
-	if(formflag){
-		var options = {
-			url : "${ctx}/core/admin/role/save-edit.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				if(result.result == 1){
-					$.Loading.success(result.message);
-				}else{
-					$.Loading.error(result.message);
-				}
-				$("#roleinfo").dialog('close');
-				$('#roledata').datagrid('reload');
-			},
-		 	error : function(e) {
-		 		$.Loading.error("出现错误 ，请重试");	
-		 		editbtn.linkbutton("enable");
-			}
-		};
-		$('#editroleForm').ajaxSubmit(options);
-	}else{
-		$.Loading.hide();
-		editbtn.linkbutton("enable");
+
+//删除
+function del(roleid){
+	if(!confirm("确认要删除吗？")){
+		return;
 	}
+	$.ajax({
+		url:ctx+"/core/admin/role/delete.do?roleid="+roleid,
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result == 1){
+				table.ajax.url(ctx+"/core/admin/role/list-json.do").load();
+				$.Loading.success(data.message);
+			}else{
+				$.Loading.error(data.message);
+			}
+		}
+	});
 }
 </script>
-
-	   	 
+<#include '/admin/footer.html' >

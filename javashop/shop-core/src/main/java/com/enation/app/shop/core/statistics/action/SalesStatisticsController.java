@@ -175,7 +175,7 @@ public class SalesStatisticsController extends GridController{
 		refund = this.salesStatisticsManager.getRefund(year, month, null);
 		view.addObject("refund", refund);
 		
-		paid = CurrencyUtil.sub(receivables, refund);
+		paid = this.salesStatisticsManager.getPaid(year, month, null);
 		view.addObject("paid", paid);
 		
 		view.addObject("pageSize", this.getPageSize());
@@ -218,7 +218,7 @@ public class SalesStatisticsController extends GridController{
 	public Object saleIncomeTotleJson(Integer year, Integer month, Double receivables, Double refund, Double paid){
 		receivables =  this.salesStatisticsManager.getReceivables(year, month, null);
 		refund = this.salesStatisticsManager.getRefund(year, month, null);
-		paid = CurrencyUtil.sub(receivables, refund);
+		paid = this.salesStatisticsManager.getPaid(year, month, null);
 		
 		Map map = new HashMap();
 		map.put("receivables", receivables);

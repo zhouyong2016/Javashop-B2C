@@ -1,75 +1,184 @@
-<#include '/admin/header.html' > 
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div id="loading"></div>
-	<div class="main">
-		<form id="orderform">
-			<div class='buttonArea'>
-				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" id="cleanBtn">清除</a>
-				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" id="revertBtn">还原</a>
-			</div>
-			<div class="clear height10"></div>
-			<div class="shadowBoxWhite tableDiv">
-					<table class="easyui-datagrid"
-						data-options="url:'${ctx}/shop/admin/order/trash-list-json.do',remoteSort:false,pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
-						pagination="true" width="width" id="orderdata">
-						<thead>
-							<tr>
-								<th data-options="field:'order_id',checkbox:true,width:100"></th>
-								<th data-options="field:'sn',width:150">订单号</th>
-								<th data-options="field:'create_time',width:100,sortable:true" formatter="formatDate">下单日期</th>
-								<th data-options="field:'sale_cmpl_time',width:100,sortable:true" formatter="formatDate">发货日期</th>		
-								<th data-options="field:'need_pay_money',width:100,sortable:true" formatter="forMoney">订单总额</th>
-								<th data-options="field:'paymoney',width:100,sortable:true" formatter="forMoney">实付金额</th>
-								<th data-options="field:'ship_name',width:100">收货人</th>
-								<th data-options="field:'status',width:100,sortable:true" formatter="forStruts">订单状态</th>
-								<th data-options="field:'pay_status',width:100,sortable:true" formatter="forpay">付款状态</th>
-								<th data-options="field:'ship_status',width:100,sortable:true" formatter="forship">发货状态</th>
-								<th data-options="field:'shipping_type',width:100,sortable:true">配送方式</th>
-								<th data-options="field:'payment_name',width:100,sortable:true">支付方式</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-		</form>
-	</div>
-<script type="text/javascript">
-//金额
-function forMoney(value, row, index) {
-	var val = "￥" + value;
-	return val;
-}
-//日期
-function formatDate(value,row,index){
-	if(value==null||value==0){
-		return "";
-	}
-	else{
-		return getFormatDateByLong(value, "yyyy-MM-dd");
-	}
-}
+<#include '/admin/header.html' >
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>只有作废订单才可以删除，删除掉的订单会出现在此列表中，订单的各种状态可以显示，但是无法对该订单进行操作。</li>
+                <li><span>·</span>可以选择清除，如果清除的话，此订单便不会再有记录，也无法查看或者还原此订单。</li>
+                <li><span>·</span>可以选择还原，如果想还原订单的话，只需要选中订单，点击还原即可，还原订单便会重新出现在订单列表中，您可以进行其他操作。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="cleanBtn" class="layui-btn layui-btn-primary layui-btn-small" title="清除"><i class="layui-icon">&#xe640;</i></button>
+                <button type="button" id="revertBtn" class="layui-btn layui-btn-primary layui-btn-small" title="还原"><i class="layui-icon">&#xe603;</i></button>
+                <button type="button" id="explain" class="layui-btn layui-btn-primary layui-btn-small" title="提示" ><i class="layui-icon">&#xe607;</i></button>
+            </div>
+    	</div>
+    </div>
+    <!--表格区域  -->
+	<form id="orderform">
+	  <table id="orderdata" class="layui-table site-table table-hover" width="100%" >
+	     <thead>
+	       <tr>
+	         <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+	         <th>订单号</th>
+	         <th>下单日期</th>
+	         <th>发货日期</th>
+	         <th>订单总额</th>
+	         <th>实付金额</th>
+	         <th>收货人</th>
+	         <th>订单状态</th>
+	         <th>付款状态</th>
+	         <th>发货状态</th>
+	         <th>配送方式</th>
+	         <th>支付方式</th>
+	       </tr>
+	     </thead>
+	  </table>
+	  <!--传值等操作(暂定)  -->
+	 <div id="addBrand" ></div>
+	</form>
+</div>
 
-//订单状态
-function forStruts(value, row, index) {
-	var val;
-	val = getType(${status_Json!''},value);
-	return val;
-}
+<!--js区域  -->
+<script>
+$(function(){
+	
+	var table = $('#orderdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/order/trash-list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="checklist" class="fly-checkbox" value=' + obj.order_id + '>';
+            		}},
+	        {data: "sn"},
+	        {data: null,
+				"render" : function(data, type, row) {
+					return getFormatDateByLong(
+							data.create_time,
+							"yyyy-MM-dd hh:mm:ss");
+				}},
+	        {data: null,
+				"render" : function(data, type, row) {
+					if(data.sale_cmpl_time ==0 || data.sale_cmpl_time==null){
+						return "";
+					}else{
+					return getFormatDateByLong(
+							data.sale_cmpl_time,
+							"yyyy-MM-dd hh:mm:ss");
+					}
+				}},
+	        {data: "need_pay_money"},
+	        {data: "paymoney"},
+	        {data: "ship_name"},
+	        {data: null,"render": function(data,type,row){
+	        	var val;
+	        	val = getType(${status_Json!''},data.status);
+	        	return val;
+	        }},
+	        {data: null,"render": function(data,type,row){
+	        	var val;
+	        	val = getType(${payStatus_Json!''},data.pay_status);
+	        	return val;
+	        }},
+	        {data: null,"render": function(data,type,row){
+	        	var val;
+	        	val = getType(${ship_Json!''},data.ship_status);
+	        	return val;
+	        }},
+	        {data: "shipping_type"},
+	        {data: "payment_name"}
+	     ]
+	});
+	
+	$("#cleanBtn").click(function(){
+		var rows = document.getElementsByName("checklist");
+		if (rows.length < 1) {
+			alert("请选择要删除的订单");
+			return;
+		}
+		if (!confirm("确认要将这些订单彻底删除吗？删除后将不可恢复？")) {
+			return;
+		}
+		var check_val = [];
+		for(k in rows){
+		    if(rows[k].checked){
+		        check_val.push(rows[k].value);	       
+		   }
+		}
+		var options = {
+				url : "${ctx}/shop/admin/order/clean.do?order_id="+check_val,
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						table.ajax.url("${ctx}/shop/admin/order/trash-list-json.do").load();
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}	
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");				
+				}
+			};
+		$('#orderform').ajaxSubmit(options);
+	});
+	$("#revertBtn").click(function(){
+		var rows = document.getElementsByName("checklist");
+		if (rows.length < 1) {
+			alert("请选择要还原的订单");
+			return;
+		}
+		if (!confirm("确认要将这些订单还原吗？")) {
+			return;
+		}
+		var check_val = [];
+		for(k in rows){
+		    if(rows[k].checked){
+		        check_val.push(rows[k].value);	       
+		   }
+		}
 
-//付款状态
-function forpay(value,row,index){
-	var val;
-	val = getType(${payStatus_Json!''},value);
-	return val;
-}
+		var options = {
+				url : "${ctx}/shop/admin/order/revert.do?order_id="+check_val,
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						table.ajax.url("${ctx}/shop/admin/order/trash-list-json.do").load();
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}	
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+				}
+			};
+			$('#orderform').ajaxSubmit(options);
+	});
+});
 
-//发货状态
-function forship(value,row,index){
-	var val;
-	val = getType(${ship_Json!''},value);
-	return val;
-}
 
-
+//状态
 function getType(exMap,value){
 	var val;
 	$.each(exMap,function(key,values){ 
@@ -80,73 +189,6 @@ function getType(exMap,value){
 	});
 	return val;
 }
-$(function(){
-	$("#cleanBtn").click(function(){
-		var rows = $('#orderdata').datagrid("getSelections");
-		if (rows.length < 1) {
-			$.Loading.error("请选择要删除的订单");
-			return;
-		}
-		if (!confirm("确认要将这些订单彻底删除吗？删除后将不可恢复？")) {
-			return;
-		}
-		$("#cleanBtn").linkbutton("disable");
-		var options = {
-				url : "${ctx}/shop/admin/order/clean.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success(result.message);
-						$('#orderdata').datagrid("reload");
-						$('#orderdata').datagrid('clearSelections');
-					}
-					if (result.result == 0) {
-						$.Loading.success(result.message);
-					}
-					$("#cleanBtn").linkbutton("enable");
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-					$("#cleanBtn").linkbutton("enable");
-				}
-			};
-		$('#orderform').ajaxSubmit(options);
-	});
-	$("#revertBtn").click(function(){
-		var rows = $('#orderdata').datagrid("getSelections");
-		if (rows.length < 1) {
-			$.Loading.error("请选择要还原的订单");
-			return;
-		}
-		if (!confirm("确认要将这些订单还原吗？")) {
-			return;
-		}
-		$("#revertBtn").linkbutton("disable");	
-		var options = {
-				url : "${ctx}/shop/admin/order/revert.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success(result.message);
-						$('#orderdata').datagrid("reload");
-						$('#orderdata').datagrid('clearSelections');
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-					$("#revertBtn").linkbutton("enable");	
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-					$("#revertBtn").linkbutton("enable");	
-				}
-			};
-			$('#orderform').ajaxSubmit(options);
-	});
-})
-
 
 </script>
 <#include '/admin/footer.html' >

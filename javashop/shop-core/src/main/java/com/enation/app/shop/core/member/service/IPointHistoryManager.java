@@ -57,7 +57,7 @@ public interface IPointHistoryManager {
 	 * @return
 	 */
 	public Long getGainedPoint(int pointType);
-	
+
 	/**
 	 * 新增日志
 	 * 
@@ -74,17 +74,5 @@ public interface IPointHistoryManager {
 	 * @return
 	 */
 	public Page pagePointFreeze(int pageNo, int pageSize);
-	/**
-	 * 获得累计的等级积分
-	 * @param member_id
-	 * @return
-	 */
-	public Long getPoint(int member_id);
-	/**
-	 * 获得累计的消费积分
-	 * @param member_id
-	 * @return
-	 */
-	public Long getMp(int member_id);
 
 }

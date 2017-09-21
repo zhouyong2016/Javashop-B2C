@@ -1,0 +1,22 @@
+<link type="text/css" rel="stylesheet" href="${ctx}/shop/admin/css/gallery/album.css"  />
+<script type="text/javascript">
+var showImgs = [];
+var actualImgs = [];
+<#if thumbnail_images?? >
+<#list thumbnail_images as gallery>
+showImgs.push("${gallery.thumbnail}");
+actualImgs.push("${gallery.original}");
+</#list>
+</#if>
+
+//上传图片插件配置
+var image_uploader_setting = {
+	imageName : "picnames",	// 表单提交时 的name
+	subFolder : "/goods",		// 上传目录
+	showImgs : showImgs,	//显示的img值数组，不提交。只做显示用
+	actualImgs : actualImgs	// 实际的img值数组，会提交
+}
+</script>
+<div id="album_tab" class="form-table albumbox" style="width:800px;" >
+<@imageuploader />
+</div>

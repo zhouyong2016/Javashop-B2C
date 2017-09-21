@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 
+import org.apache.poi.ss.util.SSCellRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -49,8 +50,9 @@ public class RegionController  {
 	@ResponseBody
 	@RequestMapping("/list-children")
 	public Object listChildren(Integer parentid){
-		
-		return regionsManager.listChildrenAsyn(parentid);
+		List list  = regionsManager.listChildrenAsyn(parentid);
+		String s = JSONArray.fromObject(list).toString();
+		return s.replace("local_name", "text").replace("p_region_id", "parent_id").replace("region_id", "id");
 	}
 	
  

@@ -1,95 +1,19 @@
-<script type="text/javascript">
-    function contains(obj_sel, option) {
-        var options = obj_sel.options;
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].value == option.value) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    function rightMove() {
-
-        var brand_sel = document.getElementById("brand_sel");
-        var choose_sel = document.getElementById("choose_sel");
-
-        var brand_options = brand_sel.options;
-        var s = choose_sel.options.length;
-        for (var i = brand_options.length-1; i>=0; i--) {
-            var is_selected = brand_options[i].selected;
-            if (is_selected) {
-                var option = new Option(brand_options[i].text, brand_options[i].value);
-                if (!contains(choose_sel, option)) {
-                    choose_sel.options[s++] = new Option(brand_options[i].text, brand_options[i].value);
-                }
-                brand_options[i].remove();
-            }
-        }
-    }
-
-    function leftMove() {
-        var brand_sel = document.getElementById("brand_sel");
-        $("#choose_sel>option").each(function () {
-            var option = $(this);
-            if (option.attr("selected")) {
-
-                //加入到左侧
-                var brand_option = new Option(option.text(), option.val());
-                if (!contains(brand_sel, brand_option)) {
-                    brand_sel.options[brand_sel.options.length++] = brand_option;
-                }
-
-                //删除右侧
-                option.remove();
-            }
-        });
-    }
-
-    function clean() {
-        $("#choose_sel>option").each(function () {
-        	var option= $(this);
-        	var brand_option = new Option(option.text(), option.val());
-        	var brand_sel = document.getElementById("brand_sel");
-        	brand_sel.options[brand_sel.options.length++] =brand_option;
-            $(this).remove();
-        });
-
-    }
-
-    function selectChoose() {
-        $("#choose_sel>option").attr("selected", "true");
-        return true;
-    }
-
-    var selectSpec = new Array();
-    <#list goodsType.specList as spec>
-    selectSpec.push('${spec.spec_id}');
-    </#list>
-    $(function () {
-
-        //左侧选择框去掉已经选择的规格
-        var selectObj = document.getElementById("brand_sel");
-        var options = selectObj.options;
-        for (var i = options.length - 1; i >= 0; i--) {
-            if ($.inArray(options[i].value, selectSpec) > -1) {
-                options[i].remove();
-            }
-        }
-    });
-</script>
+<#include '/admin/sonheader.html' >
 <div class="easyui-panel" style="border-style: none;">
-    <form method="post" name="theForm1" id="typeSpecFrom" class="validate">
+    <script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.form-3.51.js"></script>
+    <link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/plugins/layui/css/modules/layer/default/layer.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/css/layerform.css"/>
+    <form method="post" name="theForm1" id="typeSpecForm" class="validate">
         <table cellspacing="1" cellpadding="3" width="100%" class="form-table">
             <tr>
                 <td width="19%" height="77" align="left">
                     <select name="speclist" id="brand_sel" multiple="true" style="width: 200px; height: 200px; border: 1px solid #000000">
-                    <#list specList as spec>
-                        <option value="${spec.spec_id }">${spec.spec_name }</option>
-                    </#list>
-                </select>
+                        <#list specList as spec>
+                            <option value="${spec.spec_id }">${spec.spec_name }</option>
+                        </#list>
+                    </select>
+                </td>
                 <td width="13%" align="center">
                     <input name="submit" type="button" class="button" value="  ->  " onclick="javascript:rightMove();"/>
                     <br/>
@@ -98,14 +22,141 @@
                     <input name="submit" type="button" class="button" value="  重置  " onclick="javascript:clean();"/>
                 </td>
                 <td width="68%" height="77" align="left">
-                    <select class="easyui-validatebox" name="choose_specs" id="choose_sel" multiple="true"
-                            style="width: 200px; height: 200px; border: 1px solid #000000">
+                    <select class="easyui-validatebox" name="choose_specs" id="choose_sel" multiple="true"  style="width: 200px; height: 200px; border: 1px solid #000000">
                         <#list goodsType.specList as spec>
                             <option value="${spec.spec_id }" selected="true">${spec.spec_name }</option>
                         </#list>
-                    </select></td>
+                    </select>
+                    <div id="inputs" style="display: none;"></div>
+                </td>
             </tr>
         </table>
         <input class="easyui-validatebox" type="hidden" name="typeId" value="${goodsType.type_id}">
+        <div class="layui-layer-btn" style="padding:8px 12px;position: fixed;left: 1px;width: 98%;height: 50px; background:rgba(230,230,230,0.8)">
+            <a class="layui-layer-btn0" type="submit">保存</a>
+            <a class="layui-layer-btn1">取消</a>
+        </div>
     </form>
+    <script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form()
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        
+        //取消
+        $('.layui-layer-btn1').on('click', function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index)
+        });
+        //保存
+        $('.layui-layer-btn0').on('click', function () {
+            var options = $("select[name='choose_specs']").find('option');
+            var inputs = '';
+            for(var i = 0; i < options.length; i++){
+                inputs += '<input type="hidden" name="choose_specs" value="'+ options[i].value +'" />'
+            }
+            
+            $('#inputs').html(inputs);
+            $("#choose_sel").attr("name","");
+            $('#typeSpecForm').ajaxSubmit({
+                url: '${ctx}/shop/admin/type/save-spec.do',
+                type: 'POST',
+                success: function (res) {
+                    if(res.result === 1){
+                    	parent.$.Loading.success("保存成功");
+                        parent.layer.close(index); //再执行关闭        
+                    }else {
+                        parent.$.Loading.error(res.message);
+                    }
+                },
+                error: function () {
+                    parent.$.Loading.error('出现错误，请稍候重试！');
+                }
+            })
+        });
+    });   
+    </script>
+    <script type="text/javascript">
+        function contains(obj_sel, option) {
+            var options = obj_sel.options;
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === option.value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        //移动
+        function rightMove() {
+
+            var brand_sel = document.getElementById("brand_sel");
+            var choose_sel = document.getElementById("choose_sel");
+
+            var brand_options = brand_sel.options;
+            var s = choose_sel.options.length;
+            for (var i = brand_options.length-1; i>=0; i--) {
+                var is_selected = brand_options[i].selected;
+                if (is_selected) {
+                    var option = new Option(brand_options[i].text, brand_options[i].value);
+                    if (!contains(choose_sel, option)) {
+                        choose_sel.options[s++] = new Option(brand_options[i].text, brand_options[i].value);
+                    }
+                    brand_options[i].remove();
+                }
+            }
+        }
+        //移动
+        function leftMove() {
+            var brand_sel = document.getElementById("brand_sel");
+            $("#choose_sel>option").each(function () {
+                var option = $(this);
+                if (option.attr("selected")) {
+
+                    //加入到左侧
+                    var brand_option = new Option(option.text(), option.val());
+                    if (!contains(brand_sel, brand_option)) {
+                        brand_sel.options[brand_sel.options.length++] = brand_option;
+                    }
+
+                    //删除右侧
+                    option.remove();
+                }
+            });
+        }
+       //清除
+        function clean() {
+            $("#choose_sel>option").each(function () {
+                var option= $(this);
+                var brand_option = new Option(option.text(), option.val());
+                var brand_sel = document.getElementById("brand_sel");
+                brand_sel.options[brand_sel.options.length++] =brand_option;
+                $(this).remove();
+            });
+
+        }
+
+        function selectChoose() {
+            $("#choose_sel>option").attr("selected", "true");
+            return true;
+        }
+
+        var selectSpec = new Array();
+        <#list goodsType.specList as spec>
+        selectSpec.push('${spec.spec_id}');
+        </#list>
+        $(function () {
+
+            //左侧选择框去掉已经选择的规格
+            var selectObj = document.getElementById("brand_sel");
+            var options = selectObj.options;
+            for (var i = options.length - 1; i >= 0; i--) {
+                if ($.inArray(options[i].value, selectSpec) > -1) {
+                    options[i].remove();
+                }
+            }
+        });
+    </script>
 </div>

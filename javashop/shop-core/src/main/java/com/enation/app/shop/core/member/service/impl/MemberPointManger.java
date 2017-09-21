@@ -85,6 +85,7 @@ public class MemberPointManger   implements IMemberPointManger {
 		pointHistory.setRelated_id(relatedId);
 		pointHistory.setMp(mp);
 		pointHistory.setPoint_type(pointType);
+		
 		pointHistoryManager.addPointHistory(pointHistory);
 		 
 		Integer memberpoint  = member.getPoint();

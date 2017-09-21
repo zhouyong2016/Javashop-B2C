@@ -39,7 +39,7 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 	 * @param goods
 	 */
 	public void onBeforeAdd(Map goods) {
-		HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest  request = ThreadContextHolder.getHttpRequest();
 		List<IPlugin> plugins = this.getPlugins();
 
 		if (plugins != null) {
@@ -67,7 +67,7 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 	 * @param goods
 	 */
 	public void onBeforeAddPreview(Map goods) {
-		HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest  request = ThreadContextHolder.getHttpRequest();
 		List<IPlugin> plugins = this.getPlugins();
 
 		if (plugins != null) {
@@ -97,7 +97,7 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 	 */
 	public void onAfterAdd(Map goods) {
 
-		HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest  request = ThreadContextHolder.getHttpRequest();
 		List<IPlugin> plugins = this.getPlugins();
 
 		if (plugins != null) {
@@ -111,7 +111,6 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 						loger.debug(" yes ,do event...");
 					}
 					IGoodsAfterAddEvent event = (IGoodsAfterAddEvent) plugin;
-					
 					try {
 						event.onAfterGoodsAdd(goods, request);
 					} catch (Exception e) {
@@ -224,7 +223,7 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 	 *            页面传递的商品数据
 	 */
 	public void onBeforeEdit(Map goods) {
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+		HttpServletRequest request = ThreadContextHolder.getHttpRequest();  
 		List<IPlugin> plugins = this.getPlugins();
 
 		if (plugins != null) {
@@ -250,7 +249,7 @@ public class GoodsPluginBundle extends AutoRegisterPluginsBundle {
 	 *            修改后的商品基本数据
 	 */
 	public void onAfterEdit(Map goods) {
-		HttpServletRequest request =((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+		HttpServletRequest request =ThreadContextHolder.getHttpRequest();  
 		List<IPlugin> plugins = this.getPlugins();
 
 		if (plugins != null) {

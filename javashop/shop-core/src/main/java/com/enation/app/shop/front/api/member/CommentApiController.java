@@ -1,7 +1,6 @@
 package com.enation.app.shop.front.api.member;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +22,7 @@ import com.enation.app.shop.core.member.model.MemberComment;
 import com.enation.app.shop.core.member.model.MemberOrderItem;
 import com.enation.app.shop.core.member.service.IMemberCommentManager;
 import com.enation.app.shop.core.member.service.IMemberOrderItemManager;
-import com.enation.eop.SystemSetting;
-import com.enation.eop.sdk.context.EopSetting;
 import com.enation.eop.sdk.context.UserConext;
-import com.enation.eop.sdk.utils.StaticResourcesUtil;
 import com.enation.framework.action.JsonResult;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.util.JsonResultUtil;
@@ -191,14 +187,14 @@ public class CommentApiController {
 	@RequestMapping(value = "/addComment", produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonResult addComment(Integer commenttype[],Integer product_id[], Integer goods_id[], String content[],Integer orderid) {
 		try {
-			
+			MemberComment memberComment = new MemberComment();
 	
 			HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 			Integer contentotal = 0; //添加字段用于判断该商品是否被评论
 			for(int i=0;i<goods_id.length;i++){
-				MemberComment memberComment = new MemberComment();
+		
 				memberComment.setType(commenttype[i]);
-				String[] picnames = request.getParameterValues("picnames_"+product_id[i]);
+		
 				Map goods = goodsManager.get(goods_id[i]);
 				
 				// 判断是否存在此商品
@@ -238,12 +234,7 @@ public class CommentApiController {
 				memberComment.setMember_id(member == null ? 0 : member.getMember_id());
 				memberComment.setDateline(System.currentTimeMillis() / 1000);
 				memberComment.setIp(request.getRemoteHost());
-				//判断商品是否上传图片
-				if (picnames != null) {
-					//将第一张图片存入，用于判断评论是否为图片上传				
-					String transformPath = StaticResourcesUtil.transformPath(picnames[0]);
-					memberComment.setImg(transformPath);
-				}
+	
 				if(contentcount>0){
 					memberCommentManager.add(memberComment);
 					// 更新为已经评论过此商品
@@ -269,4 +260,5 @@ public class CommentApiController {
 
 		}
 	}
+	
 }

@@ -93,7 +93,10 @@ public class OrderApplyShortMsgPlugin extends AutoRegisterPlugin implements ISho
 //					msgList.add(msg);
 //				}
 			}
-			
+			ShortMsg fail = this.getFailMessage();
+			if(fail!=null){
+				msgList.add(fail);
+			}
 		}
 		return msgList;
 	}
@@ -222,8 +225,25 @@ public class OrderApplyShortMsgPlugin extends AutoRegisterPlugin implements ISho
 			ShortMsg msg  = new ShortMsg();
 			msg.setUrl("/shop/admin/order-report/refund-list.do?state="+SellBackStatus.apply.getValue());
 			msg.setContent("有"+count +"个退款单需要完成");
-			msg.setTitle("退款单");
+			msg.setTitle("待处理退款单");
 			msg.setTarget("ajax");
+			return msg;
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取退款失败的消息
+	 */
+	private ShortMsg getFailMessage(){
+		String sql = "select count(0) from es_refund where status=3 ";
+		int count = this.daoSupport.queryForInt(sql);
+		if(count>0){
+			ShortMsg msg  = new ShortMsg();
+			msg.setUrl("/shop/admin/order-report/refund-list.do?state=3");
+			msg.setTitle("退款失败订单");
+			msg.setTarget("ajax");
+			msg.setContent("有"+(count)+"个退款失败的订单");
 			return msg;
 		}
 		return null;

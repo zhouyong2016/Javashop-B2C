@@ -1,0 +1,188 @@
+<#include 'member_header.html' />
+<script  src="${ctx}/themes/default/js/Order.js" ></script>
+<!-- 获取会员评论标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员评论标签-->
+<#assign memberCommentList = memberCommentListTag()>
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderList = newTag("memberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign ordersLists = memberOrderList()>
+<!-- 获得会员订单列表 -->
+<#assign order = ordersLists.ordersList>
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag= newTag("goodsListTag") >  
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!--调用"商品列表"标签，并传递参数-->            
+<#assign  goodsList= goodsListTag("'tagid':'2','goodsnum':'4'") >
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 获取关键字“member”会员MAP集合 -->
+<#assign mp = memberPoint.member>
+			
+				<div class="white_box">
+					<div class="box" >
+						<div class="top"></div>
+						<div class="body">
+						 	<div class="inner_con">
+								<div class="portrait">
+									<div class="userico">
+										<#if member.face?exists && member.face != ''>
+			        						<img src="<@imgurl pic='${member.face}'/>" width="120" height="120"/>
+			        					<#else>
+				        					<@image src="${ctx}/themes/default/images/default_face.jpg" width="120" height="120" />
+				        				</#if>
+									</div>
+									<a class="uploadIco" href="info.html">上传会员头像</a>
+								</div>
+								<dl class="baseStat">
+									<dt>您好，<strong>${member.uname!''}</strong>，欢迎回来！</dt>
+									<dd>
+										<span>会员编号：<em>${90000000+member.member_id}</em></span>
+									</dd>
+									<dd>
+										<span>等级：<em>${member.lvname!''}</em><a href="../help-17-13.html" target="_blank">[如何升级]</a></span>
+										<span>等级积分：<em>${member.point}</em></span>
+									</dd>
+									<dd>
+										<span style=" margin-right:3px;">消费积分：<em>${member.mp!''}</em></span>
+										<span style=" margin-right:9px;"><a href="point.html" title="关于消费积分"><@image src="${ctx}/themes/default/images/member_what_tp_03.png"/></a></span>
+										<span style=" margin-right:3px;">冻结消费积分：<em>${memberPoint.freezepoint}</em><!--<a href="javascript:void();" id="beforeFreeze" style=" margin-left:5px;text-decoration:underline;">提前解冻</a></span>
+										<span style=" margin-right:9px;"><a href="help-3-40.html#a1" title="您可以提前解冻被冻结的积分，但与被解冻积分相关的订单商品，将不能进行退换货操作。"><@image src="${ctx}/themes/default/images/member_what_tp_03.png"/></a>--></span>
+									</dd>
+									<dd id="member_tip4" flag="none" style=" display:none;">
+										<span class="member_tip"></span>
+										<span class="member_tip2">您可以提前解冻被冻结的积分，但与被解冻积分的相关订单会置为完成状态，将不能进行退换货操作。<a href="order.html?ordersList.status=6" style=" color:#2875C2;">我要去解冻</a></span>
+										<span class="member_tip3"></span>
+									</dd>
+									<dd style=" z-index:1; position: inherit; float:left;">
+										<span>邮箱：<em class="email">${member.email!''}</em><a class="strong" href=""></a></span>
+									</dd>
+									<dd class="noborder">
+										<span>购物礼券：<em>${member.couponNum!0}</em>张(会员诗句列表中无)</span>
+										<span>抵用金额：<em>${member.couponprice!0}</em>元(会员诗句列表中无)</span>
+									</dd>
+								</dl>
+								<div class="myLinks">
+									<div class="cr_admonishtop"></div>
+									<span class="mlTop"></span>
+									<div class="mlInner">
+										<ul class="clearfix">
+											<li class="lnk1"><a href="comments.html"><strong>${memberCommentList.totalCount}条</strong>条评论消息</a></li>
+											<li class="lnk2"><a href="order.html?ordersList.status=0"><strong>${ordersLists.totalCount}条</strong>个订单</a></li>
+											<li class="lnk3"><a href="ask.html"><em>${memberAskList.totalCount}条</em>条咨询回复</a></li>
+											<li class="lnk4"><a href="favorite.html"><strong>${collect.totalCount}条</strong>个收藏商品</a></li>
+										</ul>
+									</div>
+									<span class="mlBtm"></span>
+									<div class="cr_admonishbottom"></div>
+								</div>
+							</div>
+						</div>
+						<div class="bottom"></div>
+					</div>
+				</div>
+				<!-- 订单列表 -->
+				<div class="box" id="myorder" style="margin-top:10px">
+					<div class="top"></div>
+						<div class="body">
+							<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+							<table cellspacing="0" cellpadding="0" width="100%">
+								<tr>
+									<th class="orId">订单号</th>
+									<th class="date">下单时间</th>
+									<th class="consignee">收货人</th>
+									<th class="price">总价</th>
+									<th class="status">状态</th>
+									<th class="payment">付款方式</th>
+									<th class="oper">操作</th>
+								</tr>
+								<#list order as orderLista>
+								<tr class="hovertr">
+									<td>${orderLista.sn}</td>
+									<td><@dateformat time="${orderLista.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+									<td>${orderLista.ship_name!'' }</td>
+									<td>￥${orderLista.order_amount?string("0.##")}</td>
+									<td><strong><@orderstatus status="${orderLista.status}" type="order" /></strong></td>
+									<td>${orderLista.payment_name}</td>
+									<td class="oper">
+										<span>
+											<#if orderLista.status == orderState.ORDER_NOT_PAY>
+												<#if orderLista.isOnlinePay  >
+													<a href="${ctx}/api/shop/payment.do?orderid=${orderLista.order_id}" class="green_btn">立即付款</a>
+												</#if>	
+												<#if orderLista.status==orderState.ORDER_NOT_PAY>
+													<a href='javascript:;' class="cancelBtn" sn="${orderLista.sn}" rel="${orderLista.order_id}" >取消订单</a>
+												</#if>
+											<#elseif orderLista.status == 5>
+												<a href="javascript:;"   class="rogBtn" orderid="${orderLista.order_id}">确认收货</a>
+												<a href="return.html?order_id=${orderLista.order_id}"  class="" >申请退货</a>
+											<#elseif orderLista.status==6 >
+												<a href="javascript:;"  class="thawBtn" orderid="${orderLista.order_id}">解冻</a>
+											<#elseif orderLista.status==7 >
+												<a href="return.html?order_id=${orderLista.order_id}"  class="" >申请退货</a>
+											</#if>
+										</span>
+										<span>
+											<a class="check" href="order_detail.html?ordersn=${orderLista.sn}">查看</a>
+										</span>
+							    	</td>
+								</tr>
+								</#list>
+							</table>
+							<p class="oper clearfix">
+								<a class="checkAll" href="order.html">查看所有<strong>${ordersLists.totalCount}</strong>笔订单</a>	
+							</p>
+							<div class="clear"></div>
+						</div>
+					<div class="bottom"></div>
+				</div>
+				<div class="box"   style="margin-top:10px">
+				<div class="top"></div>
+				<div class="body">
+	 			 <h1>推荐商品</h1>
+				<ul class="prodList">	
+					<#list goodsList as goods>
+					<li <#if !goods_has_next>class="last"</#if>>
+						<a href="../goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}"  /></a>
+						<div class="indexshow">
+							<a href="../goods-${goods.goods_id}.html">${goods.name}</a>
+							<span><del>${goods.mktprice?string.currency}</del></span>
+							<span><strong>${goods.price?string.currency}</strong>元</span>
+						</div>
+					</li>
+					</#list>
+    				<div class="clear"></div>
+				</ul>	  
+				</div>
+			<div class="bottom"></div>
+			</div>
+		</div>
+		<div class="rr_bottom"></div>
+		</div>
+		<!--会员中心首页右侧结束-->
+	</div>
+</div>	
+<!-- 浮动窗口 取消订单 -->
+<#include 'order_cancel.html'/>
+<script>
+$(function(){
+	Order.init();	
+})
+</script>
+<!-- 浮动窗口 取消订单结束 -->
+		<#include '../common/footer.html'/>
+		

@@ -1,176 +1,196 @@
 <#include '/admin/header.html' >
+<style>
+ td .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+    	<!-- 提示区域 -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>本列表展示出了当前所有品牌内容，并可以对其添加、删除、和修改.</li>
+                <li><span>·</span>可以在添加或修改商品的时候，对其选择分类下的相应品牌.</li>
+                <li><span>·</span>该品牌可以用在类型列表中的关联品牌中，可以选择和设置关联品牌.</li>
+            </ul>
+        </div>
+        
+        <div class="table_control">
+        
+        	<!-- 添加等按钮区域 -->
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="添加" onclick="_change()" ><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="删除" onclick="del()"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary" title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
 
-<div class="main">
-	<form id="brandform">
-		<div class='buttonArea'>
-			<div style="float:left">
-				<a href="javascript:void(0)" class="button blueButton"  onclick="controlBrands()">添加</a>
-				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
-			</div>
-			<span style="float: right;"> 
-				<span id="simpleSearch">
-					<a href="javascript:void(0)" class="button b_fr" 
-					data-options="plain:true" onclick="searchBrand()">搜索</a>
-					<input id="keyword" class="input_text b_fr mr5" type="text" maxlength="50" value="" size="30"
-					placeholder="请输入模糊关键字" name="searchKeyWord"> 
-				</span>
-			</span>
-		</div>
-		<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"
-				data-options="url:'list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" id="branddata">
-				<thead>
-					<tr>
-						<th data-options="field:'brand_id',checkbox:true,width:100"></th>
-						<th data-options="field:'name',width:200">品牌名称</th>
-						<th data-options="field:'url',width:300">品牌网址</th>
-						<th data-options="field:'action',width:25" formatter="formatOperation">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</form>
-	<div id="addBrand" ></div>
+			<!-- 搜索区域 -->
+            <div class="table_search">
+                <input type="text" id="_search" class="keyword" placeholder="请在这里输入关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="searchBtn" ><i class="layui-icon">&#xe615;</i></button>
+            </div>
+           
+        </div>
+    </div>
 
-	<script type="text/javascript">
+	<!-- 列表区域 -->
+	<form action="" id="brandForm">
+    <table id="branddata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+        <thead>
+        <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>品牌名称</th>
+            <th>品牌网址</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+    </table>
+    
+    <!-- 添加或修改等弹出框 -->
+    <div id="brand_dialog" ></div>
+    </form>
+</div>
+
+
+<!-- js操作区域 -->
+<script>
+
+	/* 配置添加或修改不同的调用地址   brandid不传递则为添加 */
+	function _change(brandid){
+	  	var map = {}; // Map map = new HashMap();
+		if (!brandid) {
+			map["href"] = "${ctx}/shop/admin/brand/add.do";
+			map["formId"] = "#brandForm";
+			map["url"] = "${ctx}/shop/admin/brand/save.do";
+			map["title"] = "添加品牌";
+		} else {
+			map["href"] = "${ctx}/shop/admin/brand/edit.do?brandId=" + brandid;
+			map["formId"] = "#brandEditForm";
+			map["url"] = "${ctx}/shop/admin/brand/save-edit.do";
+			map["title"] = "修改品牌";
+		}
+		map["divDialog"] = "#brand_dialog";//最后空div名字
+		map["gridreload"] = "#branddata";//表格名字
+		addDialog(map);
+	}
 	
-	var flag=false;
+    function addDialog(map){
+    	layer.open({
+    		title : map["title"],//标题
+            maxmin :false,//右上角可否放大缩小
+            type:2,//弹框的类型
+            shade: [0.3, '#000'],//黑色背景
+            shadeClose:false,//黑色背景是否可以点击关闭
+            content:map["href"],//内容的URL
+            area:['800px','500px'],//弹框大小
+            scrollbar: false//是否允许浏览器出现滚动条
+        });
+    }
+    
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+});
+var  table;
+$(function(){
 	
-		function controlBrands(brandid) {
-			var map = {}; // Map map = new HashMap();
-			if (!brandid) {
-				map["href"] = "${ctx}/shop/admin/brand/add.do";
-				map["formId"] = "#brandForm";
-				map["url"] = "${ctx}/shop/admin/brand/save.do";
-				map["title"] = "添加品牌";
-			} else {
-				map["href"] = "${ctx}/shop/admin/brand/edit.do?brandId=" + brandid;
-				map["formId"] = "#brandEditForm";
-				map["url"] = "${ctx}/shop/admin/brand/save-edit.do";
-				map["title"] = "修改品牌";
-			}
-			map["divDialog"] = "#addBrand";
-			map["gridreload"] = "#branddata";
+	 table = $('#branddata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "autoWidth": true,
+	    "initComplete": function(settings, json) {
+		    $(".dataTables_paginate").on("click", "a", function() {
+		    	if($('#branddata_processing')[0].style.display=="block"){
+					  $(".dataTables_paginate li").addClass("disabled");
+				  }  
+	         });   
+		}, 
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/brand/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="brand_id" class="fly-checkbox" value=' + obj.brand_id + '>';
+            		}},
+	        {data: "name"},
+	        {data: "url"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='edit("+data["brand_id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+     
+     //普通搜索
+     $("#searchBtn").click(function(){
+    	 searchDate(table);
+     });
+     
+});
 
-			addDialog(map);
-		}
-		function addDialog(map) {
-			$(map["divDialog"]).show();
-			$(map["divDialog"]).dialog({
-				title : map["title"],
-				width : 800,
-				top:10,
-				height : 400,
-				closed : false,
-				cache : false,
-				href : map["href"],
-				modal : true,
-				onLoad : function() {
-					if(flag){
-						UE.getEditor('editor').destroy();
-					}
-					var ue = UE.getEditor('editor', {
-					    zIndex: 99999
-					});
-					flag = true;
-				},
-				buttons : [ {
-					text : '保存',
-					iconCls : 'icon-ok',
-					handler : function() {
-						 var savebtn = $(this);
-		　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-		　　				 if(!disabled){
-							 submitForm(map,savebtn);
-			　　			 }
-					}
-				}, {
-					text : '取消',
-					handler : function() {
-						$(map["divDialog"]).dialog('close');
-					}
-				} ]
-			});
-		}
-		function submitForm(map,savebtn) {
-			var formflag = $(map["formId"]).form().form('validate');
-			if (formflag) {
-				$.Loading.show("正在保存请稍候...");
-　				savebtn.linkbutton("disable");
-				var options = {
-					url : map["url"],
-					type : "POST",
-					dataType : 'json',
-					success : function(result) {
-						if (result.result == 1) {
-							$.Loading.success(result.message);
-							$(map["divDialog"]).dialog('close');
-							$(map["gridreload"]).datagrid('reload');
-						}
-						if (result.result == 0) {
-							$.Loading.error(result.message);
-						}
-						savebtn.linkbutton("enable");
-					},
-					error : function(e) {
-						$.Loading.error("出现错误 ，请重试");
-						savebtn.linkbutton("enable");
-					}
-				};
-				$(map["formId"]).ajaxSubmit(options);
-			}
-		}
 
-		//清空
-		function clearForm(map) {
-			$(map["formId"]).form('clear');
-		}
+/* 更新数据 */
+function searchDate(table){
+	
+	var keyword = $(".keyword").val();
+	
+	var param = "keyword="+keyword;
+	var url = table.ajax.url("${ctx}/shop/admin/brand/list-json.do?"+param);
+    url.load();
+}
 
-		//操作
-		function formatOperation(value, row, index) {
-			var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='controlBrands("
-					+ row.brand_id + ")'></a>";
-			return val;
-		}
-
-		//删除
-		function del() {
-			var rows = $('#branddata').datagrid("getSelections");
-			if (rows.length < 1) {
-				$.Loading.error('请选择要删除的品牌');
-				return;
-			}
-			if (!confirm("确认要将这些品牌删除吗？")) {
-				return;
-			}
-			var options = {
-				url : "${ctx}/shop/admin/brand/delete.do?ajax=yes",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success('删除成功');
-						$('#branddata').datagrid('reload');
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-				},
-				error : function(e) {
-					$.Loading.error("出现错误，请重试");
+//修改品牌
+function edit(brandId){
+	layer.open({
+        title:"修改品牌",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/brand/edit.do?brandId="+brandId,//内容的URL
+        area:['800px','500px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
+}
+//删除
+function del(){
+	var check = $("input[name='brand_id']").is("input:checked");
+	if(check ==false){
+		alert("请选择你要删除的品牌");
+		return false;
+	}
+	if (!confirm("确认要删除品牌吗？")) {
+		return;
+	}
+	var options = {
+			url: ctx+"/shop/admin/brand/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success("删除成功")
+					table.ajax.url(ctx+"/shop/admin/brand/list-json.do").load();
 				}
-			};
-			$('#brandform').ajaxSubmit(options);
-		}
-		
-		function searchBrand(){
-			var keyword = $("#keyword").val();
+				if (data.result == 0) {
+					$.Loading.error(data.message);
+				}
+			}
+	};
+	$("#brandForm").ajaxSubmit(options);
+}
 
-			$("#branddata").datagrid('load', {
-				 keyword:keyword
-		    });
-		}
-	</script>
-	<#include '/admin/footer.html' >
+</script>
+
+<#include '/admin/footer.html' >

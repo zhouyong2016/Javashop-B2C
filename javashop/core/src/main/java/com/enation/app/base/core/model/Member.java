@@ -15,8 +15,6 @@ public class Member implements java.io.Serializable {
 	private String email;		//电子邮箱
 	private String password;	//密码
 	private Long regtime;		//注册时间
-	private String pw_answer;	//问题答案
-	private String pw_question;	//问题
 	private String name;		//会员姓名
 	private Integer sex;		//性别
 	private Long birthday;		//出生日期
@@ -124,22 +122,6 @@ public class Member implements java.io.Serializable {
 
 	public void setRegtime(Long regtime) {
 		this.regtime = regtime;
-	}
-
-	public String getPw_answer() {
-		return pw_answer;
-	}
-
-	public void setPw_answer(String pwAnswer) {
-		pw_answer = pwAnswer;
-	}
-
-	public String getPw_question() {
-		return pw_question;
-	}
-
-	public void setPw_question(String pwQuestion) {
-		pw_question = pwQuestion;
 	}
 
 	public String getName() {

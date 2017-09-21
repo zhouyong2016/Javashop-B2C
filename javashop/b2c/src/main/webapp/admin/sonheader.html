@@ -1,0 +1,80 @@
+<script>
+var ctx="${ctx}";
+</script>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/plugins/layui/css/layui.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/css/layerform.css" />
+<link rel="stylesheet"  href="${ctx}/adminthemes/version3/css/common.css" />
+
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/plugins/layui/layui.js "></script>  
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.form-3.51.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.loading.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/js/global.js"></script>
+
+<#-- 加载百度富文本ueditor -->
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="${ctx}/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<#-- 加载ztree -->
+<script  type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.exedit.js"></script>
+
+<script type="text/javascript">
+
+UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+UE.Editor.prototype.getActionUrl = function(action) {
+    if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+        return ctx+"/core/admin/ueditor/upload-img.do";
+    } else {
+        return this._bkGetActionUrl.call(this, action);
+    }
+}
+
+function completeLoading() {  
+    if (document.readyState == "complete") {  
+        var loadingMask = document.getElementById('loadingDiv');  
+        loadingMask.parentNode.removeChild(loadingMask);  
+    }  
+} 
+
+//时间公共getFormatDateByLong(value, "yyyy-MM-dd")
+Date.prototype.format = function (format) {  
+    var o = {  
+        "M+": this.getMonth() + 1,  
+        "d+": this.getDate(),  
+        "h+": this.getHours(),  
+        "m+": this.getMinutes(),  
+        "s+": this.getSeconds(),  
+        "q+": Math.floor((this.getMonth() + 3) / 3),  
+        "S": this.getMilliseconds()  
+    };  
+    if (/(y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    }  
+    for (var k in o) {  
+        if (new RegExp("(" + k + ")").test(format)) {  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));  
+        }  
+    }  
+    return format;  
+};  
+function getFormatDateByLong(l, pattern) {  
+    return getFormatDate(new Date(l*1000), pattern);  
+}     
+
+function getFormatDate(date, pattern) {  
+    if (date == undefined) {  
+        date = new Date();  
+    }  
+    if (pattern == undefined) {  
+        pattern = "yyyy-MM-dd hh:mm:ss";  
+    }  
+    return date.format(pattern);  
+}
+
+</script>

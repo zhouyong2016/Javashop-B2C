@@ -7,57 +7,82 @@ background-color: #FDEA7A;
 
 </style>
 <div id="loading"></div>
-<div class="main">
+<div class="admin-main">
+     <div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" title="保存选中" class="layui-btn layui-btn-primary layui-btn-small" onclick="controlBrands()"><i class="layui-icon">&#xe618;</i></button>
+            </div>
+        </div>
+        
+         <div class="table_search">
+                <input type="text" id="_search" class="keyword" placeholder="请输入模糊关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="_searchBrand"><i class="layui-icon">&#xe615;</i></button>
+            </div>  
+    </div>
+    <!--表格区域  -->
 	<form id="gridform" method="post">
 	<input type="hidden" name="tag_id" value="${tag_id!''}"/> 
-		<div class='buttonArea'>
-			<span id="searchbtn">
-				<a href="javascript:void(0)" class="button"  onclick="controlBrands()">添加选中</a>
-			</span>
-			<span style="float: right;"> 
-				<span id="simpleSearch">
-					<input id="searchKeyword" class="input_text" type="text" value="" size="30"
-					placeholder="请输入品牌关键字" name="searchKeyWord"> 
-					<a href="javascript:void(0)" class="easyui-linkbutton" 
-					data-options="plain:true" onclick="searchBrands()">搜索</a>
-				</span> 
-			</span>
-		</div>
-		 
-	<div class="clear height10"></div>
-		<div class="shadowBoxWhite tableDiv">
-			<table class="easyui-datagrid"  url="${ctx}/shop/admin/brand/list-json.do" 
-				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="brandsdata"
-				sortName="goods_id" sortOrder="desc">
-				<thead>
-					<tr>
-						<th data-options="field:'brand_id',checkbox:true,width:100"></th>
-						<th data-options="field:'name',width:200">品牌名称</th>
-						<th data-options="field:'url',width:300">品牌网址</th> 
-					</tr>
-				</thead>
-			</table>
-		</div>
+      <table id="tagdata" class="layui-table site-table table-hover">
+        <thead>
+       	  <tr>
+        	<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>品牌名称</th>
+            <th>品牌网址</th>
+          </tr>
+        </thead>
+      </table>
 	</form>
-</div>
+	<!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
+  </div>
 <script type="text/javascript">  
-
-//搜索
-function searchBrands(){
+var table;
+$(function(){
+	table = $('#tagdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/brand/list-json.do',
+	    },
+	    columns: [ //定义列
+	         {"data": function (obj) {
+	                   return '<input type="checkbox" name="brand_id" class="fly-checkbox" value=' + obj.brand_id + '>';
+	               }},
+	        {data: "name"},
+	        {data:"url"}
+	     ]
+	});
 	
-	 var keyword = $("#searchKeyword").val();
-	 
-	$('#brandsdata').datagrid('load', { 
-		 keyword:keyword 
-    }); 
-}
-function controlBrands(){
-	var rows = $('#brandsdata').datagrid("getSelections"); 
-	if(rows.length<1){
-		$.Loading.error("请选择要添加的品牌");
-		return;
+	//普通搜索
+	$("#_searchBrand").click(function(){
+		searchBrand(table);
+	});
+});
+	//搜索
+	function searchBrand(table){
+		var keyword = $("#_search").val();
+		var param = "keyword="+keyword+"&stype="+0;
+		var url = table.ajax.url("${ctx}/shop/admin/brand/list-json.do?"+param);
+		url.load();
 	}
-	$.Loading.show("正在添加品牌...");
+
+//保存添加
+function controlBrands(){
+	var check = $("input[name='brand_id']").is("input:checked");
+	if(check == false){
+		alert("请选择要添加的品牌！！！");
+		return false;
+	}
 	var options = {
 			url : "${ctx}/shop/admin/brands-show/add.do?ajax=yes",
 			type : "POST",
@@ -65,10 +90,10 @@ function controlBrands(){
 			success : function(result) {
 				if(result.result==1){
 					$.Loading.success(result.message);
-					location.reload();     
+					table.ajax.url(ctx+"/shop/admin/brand/list-json.do").load();
 				}
 				if(result.result==0){
-					$.Loading.success(result.message);
+					$.Loading.error(result.message);
 				}
 			},
 			error : function(e) {
@@ -78,7 +103,6 @@ function controlBrands(){
 		$('#gridform').ajaxSubmit(options);	
 }
 </script>
-
 <#include '/admin/footer.html' >
 
 

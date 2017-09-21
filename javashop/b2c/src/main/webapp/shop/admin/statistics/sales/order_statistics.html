@@ -3,11 +3,12 @@
 
 <div class="main">
 	<!-- <a href="javascript:void(0)" onclick="ref()" id="ref">更新</a> -->
+	<div class="table_control">
 	<div style="display: block;" class="searchAdvanced">
 		<input id="Advanced" name="Advanced" type="hidden" value="0" />
 		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="80px" align="right">按订单状态：</td>
+			<tr style="float: right;">
+				<td width="90px" align="right">按订单状态：</td>
 				<td width="200px">
 					<select id="status" >
 						<option value="0">---所有---</option> 
@@ -18,7 +19,7 @@
 						</#if>
 					</select>
 				</td>
-				<td width="80">
+				<td width="90">
 					按订单周期：
 				</td>
 				<td width="70" >
@@ -36,11 +37,12 @@
 					</select>
 				</td>
 				<td width="200" style="text-align: center;">
-					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+						<a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
 				</td>
 				<td></td>
 			</tr>
 		</table>
+	   </div>
 	</div>
 	<div class="clear height10"></div>
 	

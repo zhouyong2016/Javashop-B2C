@@ -1,4 +1,4 @@
-<!-- 下单商品数量统计js -->
+
 
 <!-- 用户记录当前tab页是否是最新数据 是否需要刷新 0表示不需要 1表示需要 -->
 <input type="hidden" class="now_tab_data_hid" tab_id ="2" value="0" />
@@ -7,18 +7,11 @@
 <div id="goods_money_statistics">
 	
 </div>
+
+<div id="main_money" style="height:500px;top: 30px;  margin: 0px 0px 100px 0px;"></div>
 <div class="tableDiv">
-	<!-- dataGrid -->
-	<table id="moneydata" class="easyui-datagrid" 
-		data-options="pageList: [50],pageSize:50,fitColumns:'true',queryParams:{'complete':'${complete!''}'}" 
-		 width="width" sortName="order_id" sortOrder="desc">
-		<thead>
-			<tr>
-				<th data-options="field:'order_id',checkbox:true,width:100"></th>
-				<th data-options="field:'oiname',width:150" >名称</th>
-				<th data-options="field:'t_money',width:100" >下单金额</th>
-			</tr>
-		</thead>
+	<table id="moneydata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+	
 	</table>
 	
 </div> 
@@ -59,7 +52,7 @@ $(function() {
  * @param endDate 结束时间
  */
 function getGoodsMoney(){
-	
+	var moneyChart = echarts.init(document.getElementById('main_money'));
 	var param = getParam();
 	year=param[0];
 	month=param[1];
@@ -85,12 +78,23 @@ function getGoodsMoney(){
 				
 				// 1.获取到统计图相关配置
 				
-				moneyHighcharts(goods_money_statistics,money_chart,"下单金额",data.data.highchartsjson)
-				// 3.初始化datagrid
-				$("#moneydata").datagrid();
+				moneyCharts(moneyChart,"下单金额",data.data.chartsjson)
 				
-				// 4.将数据绑定到datagrid  
-				$("#moneydata").datagrid('loadData', data.data.gridjson); 
+				//3.加载表格数据
+				$('#moneydata').dataTable({
+					"language": {
+				        "url": staticserver+"/media/zh_CN.txt"
+				    },
+				    "destroy": true,
+				    "ordering": false,
+				    "searching": false,
+				    "lengthChange": false,
+			        "data": data.data.gridjson.data,
+			        "columns": [
+			            {data: "oiname","title": "名称"},
+			            {data: "t_money","title": "下单金额"},		         
+			        ]
+			    });
 			} else {
 				alert("调用action出错：" + data.message);
 			} 

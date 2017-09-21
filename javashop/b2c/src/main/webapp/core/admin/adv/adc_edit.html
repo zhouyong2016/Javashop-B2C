@@ -1,40 +1,106 @@
-<div class="main" style="background-color: white;">
-	<div class="easyui-panel" style="border-style: none;">
-		<form id="editForms" method="post" class="validate">
-			<table>
-				<tr>
-					<th>位置名称：</th>
-					<td><input class="easyui-validatebox input_text" type="text"
-						id="name" value="${adColumn.cname}" name="cname"
-						data-options="required:true"  maxlength="20"></input></td>
-
-				</tr>
-				<tr>
-					<th>广告类型：</th>
-					<td><select class="easyui-validatebox" name="atype">
-							<#if adColumn.atype==0>
+<#include '/admin/sonheader.html' >
+<style>
+ .layui-select-title input{
+  width:100%;
+ }
+ .layui-unselect {
+  width:50%;
+ }
+ .layui-input{
+  width: 75%;
+ }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="editForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">位置名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="cname" maxlength="20" value="${adColumn.cname}" lay-verify="cname" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		 <div class="layui-form-item">
+    		<label class="layui-form-label">广告类型：</label>
+    		<div class="layui-input-block">
+      			<select name="atype" lay-filter="">
+      				<#if adColumn.atype==0>
 							<option value=0 selected="selected">图片</option>
 							<option value=1>Flash</option> <#else>
 							<option value=0>图片</option>
 							<option value=1 selected="selected">Flash</option> </#if>
-
-					</select></td>
-				</tr>
-				<tr>
-					<th>宽度：</th>
-					<td><input class="input_text easyui-numberbox" type="text" id="acwidth"
-						value="${adColumn.width!''}" name="width"
-						data-options="required:true" maxlength="4"></input>&nbsp;px</td>
-
-				</tr>
-				<tr>
-					<th>高度：</th>
-					<td><input class="input_text easyui-numberbox" type="text" id="acheight"
-						value="${adColumn.height!''}" name="height"
-						data-options="required:true" maxlength="4"></input>&nbsp;px</td>
-				</tr>
-			</table>
-			<input type="hidden" name="acid" value="${adColumn.acid}">
-		</form>
-	</div>
+      			</select>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">宽度：</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="acwidth" name="width" maxlength="4" value="${adColumn.width_num!''}"  lay-verify="acwidth" autocomplete="off" class="layui-input" style="display:inline;">&nbsp;px
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">高度：</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="acheight" name="height" maxlength="4"  lay-verify="height" value="${adColumn.height_num!''}" autocomplete="off" class="layui-input" style="display:inline;">&nbsp;px
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 98%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="button" id="savebtn"  lay-submit="" lay-filter="editgadc">保存</a>
+  			<a class="layui-layer-btn1" type="button" id="restbtn"  layposition: fixed;left: 1px;width: 98%;height: 40px; background:rgba(230,230,230,0.8)-submit="" lay-filter="">取消</a>
+  		</div>
+  		<input type="hidden" name="acid" value="${adColumn.acid}">
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    
+    form.verify({
+    	cname:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入位置名称";
+    		}
+    	},
+    	acwidth:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入宽度";
+    		}
+    	},
+    	height:function(value){
+    		if($.trim(value) == ""){
+    			return "请输入高度";
+    		}
+    	}
+    });
+    //取消按钮
+	$(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    }); 
+    
+form.on('submit(editgadc)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/adColumn/edit-save.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/adColumn/list-json.do").load();
+   				}
+   			}
+   		};
+   		$("#editForm").ajaxSubmit(options); 
+       return false;
+    });
+
+});
+</script>

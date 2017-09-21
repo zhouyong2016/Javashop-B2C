@@ -112,5 +112,16 @@ public interface IGoodsCatManager {
 	 */
 	public List<Cat> getParents(int catid);
 	
+	/**
+	 * 获取商品类型所有父
+	 * @return
+	 */
+	public List getGoodsParentsType();
 	
+	/**
+	 * 商品发布，获取当前登录用户选择经营类目的所有父
+	 * @param cat_id
+	 * @return
+	 */
+	public List<Cat> getGoodsParentsType(Integer cat_id);
 }

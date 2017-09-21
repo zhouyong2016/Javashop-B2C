@@ -1,178 +1,137 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	 <div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="controlTag()">添加</a>
-		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="tagform">
-			<table class="easyui-datagrid"
-			data-options="url:'${ctx}/shop/admin/tag/list-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true',toolbar:'#tb'"pagination="true" width="width" id="tagdata">
-				<thead>
-				    <tr>
-				   		<th data-options="field:'tag_id',checkbox:true,width:100" ></th>
-				   		<th data-options="field:'id',width:20" formatter="formatId">标签id</th>
-				   	 	<th data-options="field:'tag_name',width:100">标签</th>
-				   	 	<th data-options="field:'type',width:100" formatter="formatType">标签类型</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			</table>
-		</form>
-		<div id="Taginfo" style="display: none;"></div>
-	</div>
+<style>
+ .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>标签列表分为商品标签，和品牌标签。  商品标签会出现在商品标签设置，品牌标签会出现在品牌标签设置。</li>
+                <li><span>·</span>商品标签会出现在商品标签设置，可以对标签进行商品相关操作。</li>
+                <li><span>·</span>品牌标签会出现在品牌标签设置，可以对品牌进行相关操作。</li>
+                <li><span>·</span>如果添加完标签后，点击操作，里面是无法对标签进行 商品或者品牌的标签类型 做更改的。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="addtag" title="添加" class="layui-btn layui-btn-primary" ><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" id="deletetag" title="删除" class="layui-btn layui-btn-primary " onclick="delTag();"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" title="提示" class="layui-btn layui-btn-primary" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+   </div>
+   
+   <!--表格区域  -->
+   <form id="tagform">
+    <table id="tagdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>标签id</th>
+            <th>标签</th>
+            <th>标签类型</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等区域(暂定)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
- <script type="text/javascript">
-function formatAction(value,row,index){
-	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+row.tag_id+")'></a>";
-	return val;
-}
-function formatType(value,row,index){
-	if(value==1){
-		return "品牌标签"
-	}else{
-		return "商品标签";
-	}
-}
-function formatId(value,row,index){
-	var val=row.tag_id;
-	return val;
-}
-function del(){ 
-	 	var rows = $('#tagdata').datagrid("getSelections"); 
-	 	if(rows.length<1){
-	 		$.Loading.error("请选择要删除的标签");
-	 		return;
-	 	}
-		if(!confirm("确认要删除这些标签吗？")){	
-			return ;
-		}
-		var options = {
-				url : "${ctx}/shop/admin/tag/delete.do?ajax=yes",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if(result.result==1){
-						$.Loading.success(result.message);
-						$('#tagdata').datagrid('reload');
-						$('#tagdata').datagrid('clearSelections');
-					}else{
-						$.Loading.error(result.message);
-					}
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-				}
-		};
-		$('#tagform').ajaxSubmit(options);	
-		
-}
- function controlTag(){
-	 $("#Taginfo").show();
-	　　	$('#Taginfo').dialog({
-	　　		title: '添加标签',			
-	　　		width: 750,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/shop/admin/tag/add.do', 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-	　　					var savebtn = $(this);
-	　　				 	addTagForm(savebtn);		
-	　　				 }
-	　　			}
-	　　		},{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#addTagForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
- }
- function edit(tagId){
-	 $("#Taginfo").show();
-	　　	$('#Taginfo').dialog({
-	　　		title: '修改标签',			
-	　　		width: 750,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/shop/admin/tag/edit.do?tagId='+tagId, 	 
-	　　		modal: true,
-	　　		buttons: [{					
-	　　			 text:'保存',
-	　　			 iconCls:'icon-ok',
-	　　			 handler:function(){
-	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-	　　					var editbtn = $(this);
-		　　				editTagForm(editbtn);		
-		　　			}
-　　				 }
-　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				 $('#editTagForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	}); 
- }
-function addTagForm(savebtn){
-	var formflag= $("#addTagForm").form().form('validate');
-	if(formflag){
-		 $.Loading.show("正在保存请稍候...");
-		 savebtn.linkbutton("disable");
-		var options = {
-			url : "${ctx}/shop/admin/tag/save-add.do?ajax=yes",
-			type : "POST",
-			dataType : "json",
-			success : function(result) {
-				$.Loading.success(result.message);
-				$("#Taginfo").dialog('close');
-				$('#tagdata').datagrid('reload');
-				savebtn.linkbutton("enable");
-		 	},
-			 error : function(e) {
-				 $.Loading.error("出现错误 ，请重试");	
-				 savebtn.linkbutton("enable");
-			}
-		
-		};
-		$('#addTagForm').ajaxSubmit(options);
-	}
-}
-function editTagForm(editbtn){
-	var formflag= $("#editTagForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候..");
-		editbtn.linkbutton("disable");
-		var options = {
-				url : "${ctx}/shop/admin/tag/save-edit.do?ajax=yes",
-				type : "POST",
-				dataType : "json",
-				success : function(result) {
-					if(result.result==1){
-						$.Loading.success(result.message);
-						$("#Taginfo").dialog('close');
-						$('#tagdata').datagrid('reload');
-					}else{
-						$.Loading.error(result.message);
-					}
-					editbtn.linkbutton("enable");
-			 	},
-			 	error : function(e) {
-			 		$.Loading.error("出现错误 ，请重试");	
-			 		editbtn.linkbutton("enable");
-				}
-		};
-		$('#editTagForm').ajaxSubmit(options);
-	}
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	 table = $('#tagdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/tag/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="tag_id" class="fly-checkbox" value=' + obj.tag_id + '>';
+            		}},
+	        {data: "tag_id"},
+	        {data: "tag_name"},
+	        {"data": function (obj) {
+	    		if(obj.type==1){
+	    			return '品牌标签';
+	    		}else{
+	    			return '商品标签';
+	    		}
+            }},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='editTag("+data["tag_id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#addtag").click(function(){
+	   	 layer.open({
+	            title:"添加标签",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:'${ctx}/shop/admin/tag/add.do',//内容的URL
+	            area:['560px','250px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+		});
+});
+
+//修改标签
+function editTag(tag_id){
+	layer.open({
+        title:"修改标签",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:'${ctx}/shop/admin/tag/edit.do?tagId='+tag_id,//内容的URL
+        area:['450px','150px'],//弹框大小
+        scrollbar: false//是否允许浏览器出现滚动条
+    });
 }
 
+//删除tag
+function delTag(){
+	var tag = $("input[name='tag_id']").is("input:checked");
+	if(tag == false){
+		alert("请选择需要删除标签");
+		return false;
+	} 
+	if (!confirm("确认要删除标签吗？")) {
+		return;
+	}
+	var options = {
+			url:ctx+"/shop/admin/tag/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				if(result.result==1){
+					$.Loading.success("删除成功");
+					table.ajax.url(ctx+"/shop/admin/tag/list-json.do").load();
+				}
+			}
+	};
+	$("#tagform").ajaxSubmit(options);
+}
 </script>
-	   	 
+<#include '/admin/footer.html' >

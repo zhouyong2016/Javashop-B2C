@@ -31,12 +31,8 @@ public class FloorGoodsTag extends BaseFreeMarkerTag {
 	@Override
 	protected Object exec(Map params) throws TemplateModelException {
 		Integer goods_id = Integer.valueOf(params.get("goods_id").toString());
-		Goods g=this.goodsManager.getGoods(goods_id);
-		//如果是下架或者商品已经不存在则不在页面显示 返回空商品对象
-		if(g.getMarket_enable() != 0){
-			return g;
-		}
-		return new Goods();
+		Goods g = this.goodsManager.getGoods(goods_id);
+		return  g;
 	}
 
 }

@@ -1,0 +1,235 @@
+<#include '/common/header.html' />
+<!-- 团购分类 -->
+<#assign groupBuyCatListTag=newTag("groupBuyCatListTag")>
+<#assign groupBuyCatList=groupBuyCatListTag()>
+<!-- 团购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")>
+<#assign groupBuyAct=groupBuyActTag()>
+<!-- 团购地区列表 -->
+<#assign groupBuyAreaListTag=newTag("groupBuyAreaListTag")>
+<#assign groupBuyAreaList=groupBuyAreaListTag()>
+<!-- 团购时间 -->
+<#if groupBuyAct!="">
+	<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+	<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+</#if>
+<div class="h-breadcrumb-layout">
+	<div class="h-breadcrumb wrapper">
+		<span><a href="${ctx}/index.html">首页</a></span>
+		<span class="arrow">&gt;</span>
+		<span>团购</span>
+	</div>
+</div>
+<div id="headRelative" class="g-header">
+	<div class="title">
+    	<h1>团购</h1>
+    	<div class="city">
+    		[<a href="javascript:void(0)" id="button_show">
+      		<h2 id="show_area_name">全国</h2>
+      		<i class="arrow"></i> </a>]
+      	</div>
+  	</div>
+    <div id="list" class="list" style="display: none;"><a id="button_close" class="close" href="javascript:void(0)">X</a>
+    	<ul>
+      		<li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,'全国')">全国</a></li>
+      		<#list groupBuyAreaList as groupBuyArea>
+      			<li><a href="javascript:void(0)" onclick="set_groupbuy_area(${groupBuyArea.area_id},'${groupBuyArea.area_name}')">${groupBuyArea.area_name}</a></li>
+      		</#list>
+       </ul>
+  	</div>
+</div>
+
+<div class="g-container wrapper">
+  <div class="g-nav">
+    <div class="info">
+		<#if groupBuyAct!="">    
+	      	<h4>${groupBuyAct.act_name}</h4>
+	      	<span class="time"><@dateformat time="${groupBuyAct.start_time}" pattern="yyyy-MM-dd"/></span>
+	      	<span>至</span>
+	      	<span class="time"><@dateformat time="${groupBuyAct.end_time}" pattern="yyyy-MM-dd"/></span>
+	    </#if> 
+    </div>
+    <ul id="sort_type">
+     	<li class="current">
+     		<a onclick="set_sort_type('1')" type="1" href="javascript:void(0)">商品团购</a>
+     	</li>
+      	<li>
+      		<a onclick="set_sort_type('2')" type="2" href="javascript:void(0)">即将开始</a>
+      	</li>
+      	<li>
+      		<a onclick="set_sort_type('0')" type="0" href="javascript:void(0)">往期团购</a>
+      	</li>
+    </ul>
+  </div>
+  <div class="g-screen"> 
+	  <div class="fenlei">
+	    <!-- 分类过滤列表 -->
+			<dl id="groupbuy_cat">
+				<dt>分类:</dt>
+				<dd class="nobg selected"><a onclick="set_groupbuy_class('0')" href="javascript:void(0)" type="0">不限</a></dd>
+				<#list groupBuyCatList as groupBuyCat>
+					<dd> <a onclick="set_groupbuy_class('${groupBuyCat.catid}')" type="${groupBuyCat.catid}" href="javascript:void(0)">${groupBuyCat.cat_name}</a> </dd>
+				</#list>
+			</dl>
+			    <!-- 价格过滤列表 -->
+			<dl id="groupbuy_price">
+			  	<dt>价格:</dt>
+			  	<dd class="nobg selected"><a onclick="set_groupbuy_price('0')" type="0" href="javascript:void(0)" >不限</a></dd>
+				<dd> <a onclick="set_groupbuy_price('1',this)" type="1" href="javascript:void(0)">500元以下</a> </dd>
+				<dd> <a onclick="set_groupbuy_price('2')" type="2" href="javascript:void(0)"  type="2">501元-1000元</a> </dd>
+				<dd> <a onclick="set_groupbuy_price('3')" type="3" href="javascript:void(0)">1001元-2000元</a> </dd>
+				<dd> <a onclick="set_groupbuy_price('4')" type="4" href="javascript:void(0)">2001元-3000元</a> </dd>
+				<dd> <a onclick="set_groupbuy_price('5')" type="5" href="javascript:void(0)">3001元以上</a> </dd>
+			</dl>
+				<!--排序-->
+			<dl class="g-sortord" id="groupbuy_sort">
+				<dt>排序:</dt>
+				<dd class="nobg selected"><a onclick="set_groupbuy_order('0')" type="0" href="JavaScript:void(0);">默认</a></dd>
+				<dd><a onclick="set_groupbuy_order('price')" type="price" href="javascript:void(0)">价格</a></dd>
+				<dd><a onclick="set_groupbuy_order('sale')" type="sale" href="javascript:void(0)">折扣</a></dd>
+				<dd><a onclick="set_groupbuy_order('rebate')" type="rebate" href="javascript:void(0)">销量</a></dd>
+			</dl>
+		</div>
+		<div class="dc"> 
+	      <!-- 倒计时 距离本期结束 -->
+	      <h5>距离本期结束</h5>
+	      <p>
+	      	<span id="d1"></span><strong>天</strong>
+	      	<span id="h1"></span><strong>小时</strong>
+	      	<span id="m1"></span><strong>分</strong>
+	      	<span id="s1"></span><strong>秒</strong>
+	      </p>
+	      <#if groupBuyAct!="">
+	      <script type="text/javascript">
+             tms[tms.length] = "${groupBuyActSurplus.cha}";
+             day[day.length] = "d1";
+             hour[hour.length] = "h1";
+             minute[minute.length] = "m1";
+             second[second.length] = "s1";
+         </script> 
+         </#if>
+	    </div>
+  	</div>
+	<div id="groupbuyGoods">
+	</div>
+</div>
+	<input type="hidden" name="catid" value=""/>
+	<input type="hidden" name="minprice" value=""/>
+	<input type="hidden" name="maxprice" value=""/>
+	<input type="hidden" name="sort_key" value=""/>
+	<input type="hidden" name="sort_type" value=""/>
+	<input type="hidden" name="area_id" value=""/>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	loadPage(1);
+});
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    $('.group-list').children('ul').children('li').bind('mouseenter',function(){
+        $('.group-list').children('ul').children('li').attr('class','c1');
+        $(this).attr('class','c2');
+    });
+    $('.group-list').children('ul').children('li').bind('mouseleave',function(){
+        $('.group-list').children('ul').children('li').attr('class','c1');
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" dd").removeClass("selected");
+	$("#"+type+" dd a[type='"+value+"']").parents("dd").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+//选择价格
+function set_groupbuy_price(value){
+	if(value=="1"){
+		$("input[name='minprice']").val(0);
+		$("input[name='maxprice']").val(500);
+	}else if(value=="2"){
+		$("input[name='minprice']").val(501);
+		$("input[name='maxprice']").val(1000);
+	}else if(value=="3"){
+		$("input[name='minprice']").val(1001);
+		$("input[name='maxprice']").val(2000);
+	}else if(value=="4"){
+		$("input[name='minprice']").val(2001);
+		$("input[name='maxprice']").val(3000);
+	}else if(value=="5"){
+		$("input[name='minprice']").val(3001);
+		$("input[name='maxprice']").val(0);
+	}else{
+		$("input[name='minprice']").val(0);
+		$("input[name='maxprice']").val(0);
+	}
+	loadPage();
+	index_click("groupbuy_price",value);
+	
+}
+//选择排序类型
+function set_groupbuy_order(value){
+	if(value=="price"){
+		$("input[name='sort_key']").val(1);
+	}else if(value=="sale"){
+		$("input[name='sort_key']").val(2);
+	}else if(value=="rebate"){
+		$("input[name='sort_key']").val(3);
+	}
+	loadPage();
+	index_click("groupbuy_sort",value);
+}
+//选择团购分类
+function set_groupbuy_class(value){
+	$("input[name='catid']").val(value);
+	loadPage();
+	index_click("groupbuy_cat",value);
+}
+function set_sort_type(value){
+	$("input[name='sort_type']").val(value);
+	loadPage();
+	
+	$("#sort_type li").removeClass("current");
+	$("#sort_type li a[type='"+value+"']").parents("li").addClass("current");
+}
+function loadPage(page){
+	var minprice=$("input[name='minprice']").val();
+	var maxprice=$("input[name='maxprice']").val();
+	var sort_key=$("input[name='sort_key']").val();
+	var sort_type=$("input[name='sort_type']").val();
+	var catid=$("input[name='catid']").val();
+	var area_id=$("input[name='area_id']").val();
+	var url=""
+	if(page!=null){
+		 url="${ctx}/groupbuy/groupbuy_goods_list.html?page="+page+"&minprice="+minprice+"&maxprice="+maxprice+"&sort_key="+sort_key+"&catid="+catid+"&sort_type="+sort_type+"&area_id="+area_id;
+	}else{
+		url="${ctx}/groupbuy/groupbuy_goods_list.html?minprice="+minprice+"&maxprice="+maxprice+"&sort_key="+sort_key+"&catid="+catid+"&sort_type="+sort_type+"&area_id="+area_id;
+	}
+	$("#groupbuyGoods").load(url,function(){
+		$(".page li a").click(function(){
+			var pageno= $(this).attr("page");
+			loadPage(pageno);
+		});
+	});	
+}
+</script>
+<#include '/common/footer.html'/>

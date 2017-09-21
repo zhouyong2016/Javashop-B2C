@@ -98,7 +98,6 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 	public void onStoreSave(Map goods) {
 		boolean isSuperAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("super_admin"));// 超级管理员权限
 		boolean isDepotAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("depot_admin"));// 库存管理权限
-		boolean isSupplierAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("supplier"));// 供应商组件管理权限
 
 		HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 
@@ -141,19 +140,6 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 			storeLog.setUserid(adminUser.getUserid());
 			storeLog.setUsername(adminUser.getUsername());
 			storeLogManager.add(storeLog);
-		} else if (isSupplierAdmin) {
-			DepotUser depotUser = (DepotUser) adminUser;
-			StoreLog storeLog = new StoreLog();
-			storeLog.setGoodsid(goodsid);
-			storeLog.setGoodsname(goods.get("name").toString());
-			storeLog.setDepot_type(1);
-			storeLog.setOp_type(0);
-			storeLog.setDepotid(depotUser.getDepotid());
-			storeLog.setDateline(DateUtil.getDateline());
-			storeLog.setNum(total);
-			storeLog.setUserid(adminUser.getUserid());
-			storeLog.setUsername(adminUser.getUsername());
-			storeLogManager.add(storeLog);
 		} else {
 			throw new RuntimeException("没有操作库存的权限");
 		}
@@ -167,7 +153,6 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 	public void onStockSave(Map goods) {
 		boolean isSuperAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("super_admin"));// 超级管理员权限
 		boolean isDepotAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("depot_admin"));// 库存管理权限
-		boolean isSupplierAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("supplier"));// 供应商组件管理权限
 
 		HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 
@@ -212,20 +197,7 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 			storeLog.setUserid(adminUser.getUserid());
 			storeLog.setUsername(adminUser.getUsername());
 			storeLogManager.add(storeLog);
-		} else if (isSupplierAdmin) {
-			DepotUser depotUser = (DepotUser) adminUser;
-			StoreLog storeLog = new StoreLog();
-			storeLog.setGoodsid(goodsid);
-			storeLog.setGoodsname(goods.get("name").toString());
-			storeLog.setDepot_type(1);
-			storeLog.setOp_type(0);
-			storeLog.setDepotid(depotUser.getDepotid());
-			storeLog.setDateline(DateUtil.getDateline());
-			storeLog.setNum(total);
-			storeLog.setUserid(adminUser.getUserid());
-			storeLog.setUsername(adminUser.getUsername());
-			storeLogManager.add(storeLog);
-		}else {
+		} else {
 			throw new RuntimeException("没有操作库存的权限");
 		}
 	}
@@ -234,7 +206,6 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 	public void onShipSave(Map goods) {
 		boolean isSuperAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("super_admin"));// 超级管理员权限
 		boolean isDepotAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("depot_admin"));// 库存管理权限
-		boolean isSupplierAdmin = this.permissionManager.checkHaveAuth(PermissionConfig.getAuthId("supplier"));// 供应商组件管理权限
 
 		HttpServletRequest request = ThreadContextHolder.getHttpRequest();
 
@@ -264,19 +235,6 @@ public class GoodsSpecStorePlugin extends AbstractGoodsStorePlugin implements IG
 				storeLogManager.add(storeLog);
 			}
 		} else if (isDepotAdmin) {
-			DepotUser depotUser = (DepotUser) adminUser;
-			StoreLog storeLog = new StoreLog();
-			storeLog.setGoodsid(goodsid);
-			storeLog.setGoodsname(goods.get("name").toString());
-			storeLog.setDepot_type(1);
-			storeLog.setOp_type(0);
-			storeLog.setDepotid(depotUser.getDepotid());
-			storeLog.setDateline(DateUtil.getDateline());
-			storeLog.setNum(total);
-			storeLog.setUserid(adminUser.getUserid());
-			storeLog.setUsername(adminUser.getUsername());
-			storeLogManager.add(storeLog);
-		}else if (isSupplierAdmin) {
 			DepotUser depotUser = (DepotUser) adminUser;
 			StoreLog storeLog = new StoreLog();
 			storeLog.setGoodsid(goodsid);

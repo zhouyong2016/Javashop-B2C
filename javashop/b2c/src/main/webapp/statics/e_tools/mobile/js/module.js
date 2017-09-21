@@ -326,7 +326,7 @@ Module.prototype.navigator = (function () {
 Module.prototype.searchControl = (function () {
     var searchPage, searchLayer, closeBtn, searchTypeBox, arrowDown;
     function _init() {
-        if(layer.v != 2){throw new Error('没有加载layer-mobile,或不是最新版本！')};
+        if(!layer.v || layer.v < 2){throw new Error('没有加载layer-mobile,或不是最新版本！')};
         searchPage ? _show() : $.ajax({
             url: ctx + '/common/search.html',
             type: 'GET',
@@ -520,14 +520,14 @@ Module.prototype.scrollToTopControl = (function () {
             return _hide()
         }
     }
-})()
+})();
 
 var moduleJs   = document.scripts, moduleScript = moduleJs[moduleJs.length - 1], jsPath = moduleScript.src;
 var modulePath = jsPath.substring(0, jsPath.lastIndexOf("/") - 2);
 var moduleCss  = document.createElement('link');
 moduleCss.href = modulePath + 'css/module.css';
 moduleCss.type = 'text/css';
-moduleCss.rel  = 'styleSheet'
+moduleCss.rel  = 'styleSheet';
 moduleCss.id   = 'module';
 document.head.appendChild(moduleCss);
 
@@ -535,4 +535,4 @@ $(document).on('tap', '.tap', function () {
     var _href = $(this).attr('data-href');
     if(_href){location.href = _href;}
     return false
-})
+});

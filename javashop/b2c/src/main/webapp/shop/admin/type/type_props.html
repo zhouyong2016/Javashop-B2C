@@ -1,135 +1,182 @@
-<script type="text/javascript">
-	var editIndex = undefined;
-	function endEditing() {
-		if (editIndex == undefined) {
-			return true;
-		}
-		if ($('#dprops').datagrid('validateRow', editIndex)) {
-			$('#dprops').datagrid('getRows', editIndex);
-			$('#dprops').datagrid('endEdit', editIndex);
-			editIndex = undefined;
-			return true;
-		} else {
-			return false;
-		}
-	}
+<#include '/admin/sonheader.html' >
 
-	var propstype = [ {
-		type : "1",
-		typename : "输入项 可搜索",
-		group : "输入项"
-	}, {
-		type : "2",
-		typename : "输入项 不可搜索",
-		group : "输入项"
-	}, {
-		type : "3",
-		typename : "选择项 可搜索",
-		group : "选择项"
-	}, {
-		type : "4",
-		typename : "选择项 不可搜索",
-		group : "选择项"
-	} ];
-
-	var requireds = [ {
-		rvalue : "0",
-		rtype : "否"
-	}, {
-		rvalue : "1",
-		rtype : "是"
-	} ];
-
-	var datatypes = [ {
-		dvalue : " ",
-		dtype : "无"
-	}, {
-		dvalue : "int",
-		dtype : "整数"
-	}, {
-		dvalue : "float",
-		dtype : "浮点数"
-	} ]
-	function formatid(value, row, index) {
-		return index;//'<input type="text" value="'+index+'" name="index">';
-	}
-</script>
 <div class="main" style="background-color: white;">
-	<div class="buttonArea" style="height: auto">
-		<a href="javascript:void(0)" class="button" onclick="addprops()">添加</a>
-		<a href="javascript:void(0)" class="button" onclick="removeitprops()">删除</a>
-		<a href="javascript:void(0)" class="button" onclick="reject()">还原</a>
+	<div class="buttonArea" style="height: auto;margin-left: 10px;">
+		<a href="javascript:void(0)" class="button add-props layui-btn layui-btn-normal" >添加</a>
 	</div>
-	<table class="easyui-datagrid" style="width: width;" id="dprops"
-		data-options="url:'${ctx}/shop/admin/type/edit-json.do?typeId=${goodsType.type_id}',remoteSort:true,fitColumns:'true',onClickRow: onClickRow">
+</div>
+
+<style>
+.props .layui-input, .layui-textarea{
+	width: 100%;
+}
+.layui-form-select dl{
+z-index:1001;
+}
+</style>
+
+<form class="layui-form props-form">
+	<input type="hidden" name="typeId" value="${goodsType.type_id}"  >
+	<table class="layui-table">
+		<colgroup>
+			<col width="150">
+			<col width="160">
+			<col>
+			<col width="90">
+			<col width="90">
+			<col width="110">
+			<col width="90">
+		</colgroup>
 		<thead>
 			<tr>
-				<th data-options="field:'id',hidden:true"></th>
-				<th
-					data-options="field:'name',width:100,sortable:true,required:true,editor:{type:'validatebox',options:{required:true,validType:'length[1,10]'}}">属性名</th>
-				<th
-					data-options="field:'type',width:150,
-					formatter:function(value,row){
-						for (var i = 0; i < propstype.length; i++) {
-							if (propstype[i].type == value)
-							return propstype[i].typename;
-						}
-						return value;
-					},
-					editor:{
-					type:'combobox',
-						options:{
-							valueField:'type',
-							textField:'typename',
-							groupField:'group',
-							panelHeight: 'auto',
-							data:propstype,
-							required:true,
-							editable:false
-						}
-					}">类型</th>
-				<th data-options="field:'options',width:100,editor:'text'">选择项(逗号分隔)</th>
-				<th data-options="field:'unit',width:100,editor:'text'">单位</th>
-				<th
-					data-options="field:'required',width:100,
-					formatter:function(value,row){
-							for (var i = 0; i < requireds.length; i++) {
-								if (requireds[i].rvalue == value)
-								return requireds[i].rtype;
-							}
-							return value;
-						},
-						editor:{
-						type:'combobox',
-							options:{
-								valueField:'rvalue',
-								textField:'rtype',
-								panelHeight: 'auto',
-								data:requireds,
-								required:true,
-								editable:false
-							}
-						}">必填</th>
-				<th
-					data-options="field:'datatype',width:100,
-					formatter:function(value,row){
-								for (var i = 0; i < datatypes.length; i++) {
-									if (datatypes[i].dvalue == value)
-									return datatypes[i].dtype;
-								}
-								return value;
-							},
-							editor:{
-							type:'combobox',
-								options:{
-									valueField:'dvalue',
-									textField:'dtype',
-									panelHeight: 'auto',
-									data:datatypes,
-									editable:false
-								}
-					}">校验</th>
+				<th>属性名</th>
+				<th>类型</th>
+				<th>选择项(逗号分隔)</th>
+				<th>单位</th>
+				<th>必填</th>
+				<th>校验</th>
+				<th>操作</th>
 			</tr>
 		</thead>
+		<tbody class="t-body">
+			<!-- ${ctx}/shop/admin/type/edit-json.do?typeId=${goodsType.type_id} -->
+			<#list proplist as p>
+			<tr>
+				<td>
+			     	<input type="text" name="name"  lay-verify="required" value="${p.name!''}" placeholder="请输入属性名" autocomplete="off" class="layui-input">
+				</td>
+				<td>
+					<select name="type" lay-verify="required"  >
+						<option value="">请选择</option>
+						<optgroup label="选择项">
+					    	<option value="3"  <#if p.type==3>selected="selected"</#if> >可搜索</option>
+					    	<option value="4" <#if p.type==4>selected="selected"</#if>>不可搜索</option>
+					  	</optgroup>
+						<optgroup label="输入项">
+					   		<option value="1" <#if p.type==1>selected="selected"</#if>>可搜索</option>
+					    	<option value="2" <#if p.type==2>selected="selected"</#if>>不可搜索</option>
+					  	</optgroup>
+					</select>
+				</td>
+				<td>
+					<input type="text" name="options"  lay-verify="required" value="${p.options!''}" placeholder="示例 红色,白色,黑色" autocomplete="off" class="layui-input">
+				</td>
+				<td>
+					<input type="text" name="unit" value="${p.unit!''}" placeholder="单位" autocomplete="off" class="layui-input">
+				</td>
+				<td>
+					<select name="required" lay-verify="">
+					  <option value="0" <#if p.required==0>selected="selected"</#if> >否</option>
+					  <option value="1" <#if p.required==1>selected="selected"</#if> >是</option>
+					</select> 
+				</td>
+				<td>
+					<select name="datatype" lay-verify="">
+					  <option value=" " >无</option>
+					  <option value="int" <#if p.datatype=='int'>selected="selected"</#if> >整数</option>
+					  <option value="fload" <#if p.datatype==''>selected="selected"</#if> >小数</option>
+					</select> 
+				</td>
+				<td>
+					<a class="del layui-btn layui-btn-danger layui-btn-small" href="javascript:void(0)" >删除</a>
+				</td>
+			</tr>
+			</#list>
+		</tbody>
 	</table>
-</div>
+	
+	<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 98%;height: 50px; background:rgba(230,230,230,0.8)"> 
+		<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="saveprops">保存</a>
+	</div>
+</form>
+
+
+<!-- 隐藏表格，添加按钮会用到此table -->
+<table style="display: none;" class="add-tr">
+	<tr>
+		<td>
+	     	<input type="text" name="name"  lay-verify="required" placeholder="请输入属性名" autocomplete="off" class="layui-input">
+		</td>
+		<td>
+			<select name="type" >
+				<option value="">请选择</option>
+				<optgroup label="选择项">
+			    	<option value="3">可搜索</option>
+			    	<option value="4">不可搜索</option>
+			  	</optgroup>
+				<optgroup label="输入项">
+			   		<option value="1">可搜索</option>
+			    	<option value="2">不可搜索</option>
+			  	</optgroup>
+			</select>
+		</td>
+		<td>
+			<input type="text" name="options" required  lay-verify="required" placeholder="示例 红色,白色,黑色" autocomplete="off" class="layui-input">
+		</td>
+		<td>
+			<input type="text" name="unit" placeholder="单位" autocomplete="off" class="layui-input">
+		</td>
+		<td>
+			<select name="required" lay-verify="">
+			  <option value="0">否</option>
+			  <option value="1">是</option>
+			</select> 
+		</td>
+		<td>
+			<select name="datatype" lay-verify="">
+			  <option value=" ">无</option>
+			  <option value="int">整数</option>
+			  <option value="fload">小数</option>
+			</select> 
+		</td>
+		<td>
+			<a class="del layui-btn layui-btn-danger layui-btn-small" href="javascript:void(0)" >删除</a>
+		</td>
+	</tr>
+</table>
+
+<script>
+
+var index = parent.layer.getFrameIndex(window.name);
+//保存
+$(function(){
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	    var form = layui.form();
+		form.on('submit(saveprops)', function(data){
+			var options = {
+	   			url:"${ctx}/shop/admin/type/save-props.do?typeId=${goodsType.type_id}",
+	   			type:"post",
+	   			dataType:"json",
+	   			success:function(data){
+	   				if(data.result==1){
+	   					$.Loading.success(data.message);
+	   					layer.msg(data.message, {icon: 6});
+	   					parent.layer.close(index);
+	   				}else{
+	   					layer.msg(data.message, {icon: 5}); 
+	   					
+	   				}
+	   			},
+	   			error:function(data){
+	   				layer.msg("出错了，请稍后重试", {icon: 5}); 
+	   			}
+	   		};
+	   		$(".props-form").ajaxSubmit(options);
+		    return false;
+		});
+	})
+	
+	//添加
+	$(".add-props").click(function(){
+		
+		$(".add-tr tr").clone(true).appendTo(".t-body");
+		 layui.form().render();
+	});
+	 //删除此行
+	 $(".del").click(function(){
+		 $(this).parent().parent().remove();
+	 })
+	
+})
+
+</script>

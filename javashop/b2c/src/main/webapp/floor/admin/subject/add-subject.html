@@ -1,44 +1,99 @@
-<div class="easyui-panel" style="border-style: none;">
-	<div style="padding: 10px 0 10px 60px">
-		<form method="post" name="addForm" id="addForm" enctype="multipart/form-data">
-			<table>
-				<tbody>
-					<tr>
-						<th>标题:</th>
-						<td>
-							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
-							type="text"	maxlength="20" isrequired="true" datatype="string" 
-							data-options="required:true" name="title" autocomplete="off" title="" >
-						</td>
-					</tr>
-					<tr>
-						<th>排序:</th>
-						<td>
-							<input class="easyui-validatebox input_text validatebox-text validatebox-invalid" 
-							type="text"	maxlength="5" isrequired="true" datatype="string" 
-							data-options="required:true" name="sort" autocomplete="off" title="" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " value="1">
-						控制专题横幅的显示顺序
-						</td>
-					</tr>
-					
-					<tr>
-						<th>显示:</th>
-						<td>
-							<input type="radio" name="is_display" value="0" checked="checked">显示
-							<input type="radio" name="is_display" value="1">不显示 
- 						</td>
-					</tr>
-					<tr>
-						<th>横幅:</th>
-						<td>
-							<input class="easyui-validatebox validatebox-text validatebox-invalid" 
-							type="file"	maxlength="50" isrequired="true" datatype="string" 
-							data-options="required:false" name="file" autocomplete="off" title="" >
-						在专题页面显示的图片横幅 建议大小 1200px*300px
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</div>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-input{
+    width: 70%;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form class="layui-form layui-form-pane" action="" id="subjectForm" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">标题</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="title" maxlength="20" lay-verify="title" autocomplete="off"  class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">排序</label>
+    		<div class="layui-input-block">
+      			<input type="text" maxlength="5" name="sort" lay-verify="sort" value="1" autocomplete="off"  class="layui-input" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" style="float:left;">
+      			<div class="layui-form-mid layui-word-aux">控制专题横幅的显示顺序</div>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">显示</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="is_display" value="0" checked="checked" title="显示">
+      			<input type="radio" name="is_display" value="1" title="不显示">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">横幅</label>
+    		<div class="layui-input-block">
+    			<input type="file" name="file" maxlength="50" class="_upfile" > 
+      			<div class="layui-form-mid layui-word-aux">在专题页面显示的图片横幅 建议大小 1200px*300px</div>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;position: fixed;left: 1px;width: 96%;height: 50px; background:rgba(230,230,230,0.8)"> 
+  			<button class="layui-btn layui-btn-normal save" type="submit"  lay-submit="" lay-filter="saveSubject" >保存</button>
+  			<button class="layui-btn layui-btn-primary" >取消</button>
+  		</div>
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+
+    //自定义验证规则
+    form.verify({
+      title: function(value){
+        if($.trim(value)==""){
+          return '请输入标题';
+        }
+      },
+      sort:function(value){
+    	  if($.trim(value)==""){
+    		  return "排序不能为空";
+    	  }
+      }
+    });
+    
+    $(".layui-btn-primary").click(function(){
+    	parent.layer.close(index);
+    });
+
+    
+    //监听提交
+    form.on('submit(saveSubject)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/subject/save-add.do",
+   			type:"post",
+   			dataType:"json",
+   			async: false,  
+   			async: false,
+   			beforeSend:function(){  
+   			  $('.save').attr("disabled", true);		       	
+   			}, 
+   			success:function(data){
+   				if(data.result==1){	
+   					$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/subject/list-json.do").load();
+   				}
+   			}
+   		};
+   		$("#subjectForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>
+

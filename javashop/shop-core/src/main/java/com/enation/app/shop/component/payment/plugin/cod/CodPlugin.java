@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 
@@ -45,5 +47,12 @@ public class CodPlugin extends AbstractPaymentPlugin implements IPaymentEvent {
 	public String onReturn(String ordertype) {
 		return "";
 	}
+
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

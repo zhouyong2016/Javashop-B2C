@@ -1,22 +1,67 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main">
-	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid"
-			data-options="url:'${ctx}/shop/admin/goods-show/tag-list-json.do',fitColumns:'true'" width="width">
-			<thead>
-			    <tr>
-			   	 	<th  data-options="field:'tag_name',width:100">标签</th>
-			   	 	<th  data-options="field:'action',width:100" formatter="formatAction">商品设置</th>
-			   	 	
-			   	 </tr>
-			</thead>
-		 </table>
-	</div>
+<style>
+ .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>本列表中，是不允许删除相关标签的，如果想要删除，请到标签列表中进行操作。</li>
+                <li><span>·</span>标签中，可以点击操作来添加商品，并可对其进行排序操作，添加完毕后，前台对应标签会显示其商品。</li>
+                <li><span>·</span>在添加，或者修改商品的时候，同时也可以选择标签，保存成功后，也可以显示在页面上。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" title="提示" class="layui-btn layui-btn-primary " id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+   </div>
+   
+   <!--表格区域  -->
+   <table id="tagdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>标签</th>
+            <th>商品设置</th>
+          </tr>
+        </thead>
+   </table>
+   <!--传值等操作(暂定)  -->
+   <div id="addBrand" ></div>
 </div>
-<script type="text/javascript">
- function formatAction(value,row,index){
-	var val="<a href='javascript:void(0);' onclick=\"newTab('设置','${ctx}/shop/admin/goods-show/list.do?tagid="+row.tag_id+"')\">设置</a>";
-	return val;
-}
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#tagdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goods-show/tag-list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "tag_name"},
+	        {data: function(obj) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='set_up_tag' onclick=\"newTab('设置','${ctx}/shop/admin/goods-show/list.do?tagid="+obj.tag_id+"')\" >设置</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+});
 </script>
+<#include '/admin/footer.html' >

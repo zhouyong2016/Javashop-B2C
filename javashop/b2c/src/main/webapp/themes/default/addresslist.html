@@ -1,0 +1,320 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="themes/default/css/member.css" type="text/css" />
+	<!--正文-->
+<!-- 获取会员基本信息 -->
+<#assign memberInfoTag=newTag("memberInfoTag")>
+<!-- 调用会员基本信息 -->
+<#assign memberInfo=memberInfoTag()>
+
+		<div id="memeber_wrapper">
+
+		<!--会员中心首页左侧-->
+		<div id="menu_wrapper">
+				<!--会员中心圆形头部-->
+				<div class="round_header">
+				</div>
+				<!--会员中心圆形头部结束-->
+				<h1><a href="member_index.html">会员中心首页</a></h1>
+				<!--会员中心左侧会员缩略图-->
+				<div class="breviary">
+					<#if member?exists>
+						<#if member.face?exists && member.face != ''>
+						<img src="<@imgurl pic='${member.face}'/>"  alt="会员头像缩略图" />
+						<#else>
+						<@image src="${ctx}/themes/default/images/hutx.jpg" alt="会员头像缩略图" />
+						</#if>
+					<div>
+						<h2>${member.name!''}</h2>
+						<p>会员等级：${member.lvname!''}</p>
+					</div>
+				 </#if>
+				</div>
+				<!--会员中心左侧会员缩略图结束-->
+				<!--会员中心左侧列表-->
+				<div class="inner_wrapper">
+					<#include 'member/menu.html' />	 
+				</div>
+				<!--会员中心左侧列表结束-->
+				<!--会员中心圆形底部-->
+				<div class="round_bottom">
+				</div>
+				<!--会员中心圆形底部结束-->
+			 
+		</div>	
+		<!--会员中心首页左侧结束-->
+		<!--会员中心首页右侧-->
+		
+		<div id="content_wrapper">
+			<div class="crew_right">
+			<div class="rr_header"></div>
+			
+	<div class="conInner">		
+<!-- 会员地址列表及添加。包括所有JS、标签、API等。方便查找 -->
+<div class="data">
+	<h2>我的收货地址</h2>
+</div>	
+<!--温馨提示-->
+<div class="tip">
+<div class="top"></div>
+<div class="body">
+	<@image src="${ctx}/themes/default/images/gth.jpg"/>
+
+	<div>
+		<h2>温馨提示</h2>
+		<p>1、这里将显示您的收货地址信息</p>
+		<p>2、您还可以管理您的收货地址簿、增加新的收货地址等操作。</p>
+	</div>
+</div>
+<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+
+
+<div class="tab">
+<ul >
+	<li class="selected addresslist"><a href="javascript:"><span>收货地址管理</span></a></li>
+	
+	<li class="addressadd"><a href="javascript:"><span>新增收货地址</span></a></li>
+</ul>
+</div>
+<div class="box">
+<div class="top"></div>
+<div class="body">
+<!-- 获取当前会员地址列表标签 -->
+<#assign consigneeListTag=newTag("consigneeListTag")>
+<!-- 调用当点会员地址列表 -->
+<#assign consigneeList=consigneeListTag()>
+<!-- 会员地址列表，外侧新增div进行包裹，以至于以后地址列表与地址添加进行切换 -->
+<div class="dizhiliebiao">
+<#if consigneeList?size gt 0 >
+<table width="100%" cellspacing="0" cellpadding="3" class="liststyle">
+	<thead>
+		<tr>
+			<th>收货人</th>
+			<th>地址</th>
+			<th>电话</th>
+			<th>手机</th>
+			<th>邮编</th>
+			<th>默认</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list consigneeList as address>
+		<tr>
+			<td><a
+				href="member_address.html?action=edit&addr_id=${address.addr_id}">${address.name!''}${address.def_addr!''}</a></td>
+			<td style="text-align: center;" class="textwrap">${address.province!''}-${address.city!''}-${address.region!''}-${address.addr!''}</td>
+			<td>${address.tel!''}</td>
+			<td>${address.mobile!''}</td>
+			<td>${address.zip!''}</td>
+			<td><#if address.def_addr == 0 >否</#if><#if address.def_addr == 1 >是</#if></td>
+			<td>
+			<aref="member_address.html?action=edit&addr_id=${address.addr_id}">修改</a>&nbsp;&nbsp;<a
+				href="member_address.html?action=delete&addr_id=${address.addr_id}" onclick="return confirm('您确认要删除该行数据吗？');">删除</a></td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<#else>
+<div class="empty" >您尚未添加收货地址</div>
+</#if>
+</div>
+<!--地址列表结束  -->
+<!-- 新增地址，这里包括所有新增地址列表中的代码 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()><!-- 这个东西是干什么的？能否使用标签代替 -->
+<div class="form_wrap white_box" style="display:none;">
+<div class="box" >
+	<div class="top"></div>
+	<div class="body">
+ 
+	<form id="member_addr"  class="validate"   action="" method="post">
+
+	<table cellspacing="0" cellpadding="0" border="0" >
+	
+		<tbody>
+			<tr>
+				<th>默认收货地址：</th>
+				<td>
+					<label><input type="radio"    value="0" name="def_addr">否</label> 
+					<label><input type="radio"   value="1"  name="def_addr">是</label>
+				</td>
+			</tr>
+			<tr>
+				<th><em></em>姓名：</th>
+				<td><input type="text"  class="input_text "  isrequired="true"  name="name"   autocomplete="off"></td>
+			</tr>
+	
+			<tr>
+				<th>手机：</th>
+				<td><input type="text" class="input_text" name="mobile" id="mobile" autocomplete="off"></td>
+			</tr>
+	
+			<tr>
+				<th>电话：</th>
+				<td><input type="text"  class="input_text"  name="tel"  id="tel" dataType="tel_num"   autocomplete="off"><span
+					class="infotips">其中联系电话和联系手机必须填写一项</span></td>
+			</tr>
+					
+			<tr>
+				<th><em></em>地区：</th>
+				<td>		
+				<@regionSelect />
+				</td>
+			</tr>
+			<tr>
+				<th><em></em>地址：</th>
+				<td><textarea   rows="3" cols="30" name="addr" isrequired="true" type="textarea"  ></textarea></td>
+			</tr>
+			<tr>
+				<th><em></em>邮编：</th>
+				<td><input   class="input_text" isrequired="true" name="zip" id="zipcode" autocomplete="off"  dataType="post_code" ></td>
+			</tr>
+			<tr>
+				<th></th>
+	
+				<td>
+					<div class="btn"><input type="button" name="submit" class="yellow_btn" value="保存并返回"></div>
+				</td>
+	
+			</tr>
+		</tbody>
+	</table>
+	
+ 
+	</form>
+	</div>
+	<div class="bottom"></div>
+
+</div>
+</div>
+<!-- 收货地址与添加地址切换隐藏 -->
+<script>
+ $(function(){
+	 $(".addresslist").click(function(){
+		 $(".dizhiliebiao").css({"display":"block"});
+		 $(".white_box").css({"display":"none"});
+		 $(".tab ul li").removeClass("selected");
+		 $(this).addClass("selected");		 
+	 }),
+	 $(".addressadd").click(function(){
+		 $(".dizhiliebiao").css({"display":"none"});
+		 $(".white_box").css({"display":"block"});
+		 $(".tab ul li").removeClass("selected");
+		 $(this).addClass("selected");		 
+	 })
+	 
+ })
+</script>
+<script type="text/javascript">
+$(function(){
+		var addAction = "api/shop/memberAddress!add.do";
+		var exp=$(':radio[name="def_addr"]:checked').attr("rel");
+		$(".yellow_btn").click(function(){
+
+		
+			 $("#member_addr").ajaxSubmit({
+					url:addAction,
+					type:"post",
+					dataType:"json",
+			 
+					success:function(result){
+						
+						 if(result.result==1){
+							alert("恭喜添加成功");
+							location.href="addresslist.html";
+						 }
+						 else{
+							alert("请按提示添加哦！")
+						 };
+						 
+					 
+					},
+					error:function(e){
+						alert("操作失败！");
+					}
+				});
+			 
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		});	
+})
+</script>	
+<script type="text/javascript">
+$(function(){
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#zipcode").val(zipcode);
+	};	
+	$("#mobile").setValidator(function(){
+		var tel= $.trim( $("#tel").val() ) ;
+		var mobile = $.trim( $("#mobile").val() ) ;		
+		if( tel=="" && mobile==""  ){
+			return  "手机或电话必须填写一项";
+		}		
+		if( mobile!="" &&!$.isMobile(mobile) ){
+			return  "手机格式不正确";
+		}	
+		return true;
+	});
+	$("#region_id").setValidator(function(){
+		var value = $("#region_id").val();
+		if( value=="" || value=="0" ) return "地区信息不完整";
+		else return true;
+
+	});
+	
+	
+	
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+<div class="bottom"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 会员地址列表及添加 -->
+			<div class="rr_bottom"></div>
+			</div>
+		</div>
+		
+		
+		<!--会员中心首页右侧结束-->
+		</div>
+		<#include 'common/footer.html'/>
+		

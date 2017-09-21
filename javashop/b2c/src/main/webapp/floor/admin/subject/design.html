@@ -1,4 +1,18 @@
 <#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsSelector.js"> </script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.autoFloat.js"> </script>
+<style>
+.__GSR__ .dataTables_paginate .paginate_button, .__GSR__ .dataTables_paginate .ellipsis{
+padding:0px;
+}
+.pagination>li:first-child>a, .pagination>li:first-child>span{
+margin-left:-3px;
+}
+.pagination>li:last-child>a, .pagination>li:last-child>span{
+border-top-right-radius:0px;
+}
+</style>
+
 <div class="main">
 	<div class="clear height10"></div>
 	<div style="display: block;"
@@ -6,13 +20,14 @@
 		<div id="editSubject" style="height:auto"></div>
 		<div>
 			<a href="javascript:void(0)" id="addGoods">
-				<img alt="添加商品" src="${ctx}/floor/admin/subject/addGoods.png" style="width:50%;height:200px;float:left" title="一次最多添加一行">
-			</a>
+				<img class="part-status" alt="添加商品" src="${ctx}/floor/admin/subject/addGoods.png" style="width:50%;height:200px;float:left" title="一次最多添加一行">
+			</a><input type="hidden" value="0" id="hidInput">
 			<a href="javascript:void(0)" id="addPicture">
 				<img alt="添加图片" src="${ctx}/floor/admin/subject/addPicture.png" style="width:50%;height:200px;float:right">
 			</a>
 		</div>
 	</div>
+	
 	<form id="addPictureForm" method="post" enctype="multipart/form-data">
 	<input type="file" name="file" id="fileToUpload" onchange="fileChange();" style="display:none;">
 	</form>
@@ -26,10 +41,10 @@
 	$(function(){
 		var id="${subject.id}";
 		$("#editSubject").load("${ctx}/subject/subject-style.html?subjectid="+id,function(){
-			$(".subject_edit").show();
-			
-			
-			$(".subject_goods_edit").unbind("click").click(function(){
+			setTimeout(function () {
+                $(".subject_edit").show();
+            }, 200);
+			 /* $(".subject_goods_edit").unbind("click").click(function(){
 				var button=$(this);
 				var id=button.attr("data-subjectId");
 				var operation_url=button.attr("data-operation-url");
@@ -38,8 +53,41 @@
 				var formId=button.attr("data-formId");
 				var index=button.attr("data-index");
 				var subject_id=button.attr("data-subjectId");
+				alert(2)
 					append(id,operation_url,save_url,title,formId,subject_id,index);
-			});
+			});  */
+			 
+			//编辑商品 
+			 $(".subject_goods_edit").unbind("click").click(function(){
+				 var button=$(this);
+				 var index=button.attr("data-index");
+						  $.GoodsSelector({
+                              confirm: function (goodsArray) {
+					        	 var goods_ids= [];
+					        	  //遍历
+					               $.each(goodsArray,function(n,value){		     	
+					            	   goods_ids.push(value.goods_id);			
+					               })
+					               $.ajax({
+										url:"${ctx}/core/admin/subject/save-edit-goods.do?goods_ids="+goods_ids+"&subject_id="+id+"&index="+index,
+										type : "POST",
+										dataType : 'json',
+										success : function(result) {
+											if (result.result == 1) {	
+												alert("保存成功！！")
+												location.reload();
+											}
+											if (result.result == 0) {
+												alert(result.message);
+											}
+										},
+										error : function(e) {
+											alert("出现错误 ，请重试");
+										}
+									});
+					         }
+					});
+				});
 			
 			$(".subject_goods_delete").unbind("click").click(function(){
 				var button=$(this);
@@ -49,15 +97,6 @@
 			});
 			
 		 	$(".subject_image_edit").unbind("click").click(function(){
-				/* 
-				var id=button.attr("data-subjectId");
-				var operation_url=button.attr("data-operation-url");
-				var save_url=button.attr("data-save-url");
-				var title=button.attr("data-title");
-				var formId=button.attr("data-formId");
-				
-				var subject_id=button.attr("data-subjectId");
-					append(id,operation_url,save_url,title,formId,subject_id,index); */
 				var button=$(this);
 				var index=button.attr("data-index");
 				$("#edit_picture_index").val(index);
@@ -70,37 +109,44 @@
 				var index=button.attr("data-index");
 				delImage(subject_id,index);
 			});
-			
+		});
+
+		//添加商品图片
+		$("#addGoods").click(function(){
+				  $.GoodsSelector({
+                      confirm: function (goodsArray) {
+			        	 var goods_ids= [];
+			        	  //遍历
+			               $.each(goodsArray,function(n,value){		     	
+			            	   goods_ids.push(value.goods_id);			
+			               });
+			               $.ajax({
+								url:"${ctx}/core/admin/subject/save-add-goods.do?goods_ids="+goods_ids+"&subject_id="+id,
+								type : "POST",
+								dataType : 'json',
+								success : function(result) {
+									if (result.result == 1) {	
+										alert("保存成功！！")
+										location.reload();
+									}
+									if (result.result == 0) {
+										alert(result.message);
+									}
+								},
+								error : function(e) {
+									alert("出现错误 ，请重试");
+								}
+							});
+			         }
+			});
 		});
 		
-		$("#addGoods").click(function(){
-			var id='';
-			var operation_url="${ctx}/core/admin/subject/add-goods.do";
-			var save_url="${ctx}/core/admin/subject/save-add-goods.do?";
-			var title="添加商品";
-			var formId="addGoodsForm";
-			var subject_id=${subject.id};
-			var index='';
-			append(id,operation_url,save_url,title,formId,subject_id,index) ;
-		});
 		$("#addPicture").click(function(){
-			/* var id='';
-			var operation_url="${ctx}/core/admin/subject/add-image.do";
-			var save_url="${ctx}/core/admin/subject/save-add-image.do";
-			var title="添加图片";
-			var formId="addImageForm";
-			var subject_id=${subject.id};
-			var index='';
-			append(id,operation_url,save_url,title,formId,subject_id,index) ; */
 			$("#fileToUpload").click();
 			
 		});
-		
-		
-		
-		
 	});
-	function append(id,operation_url,save_url,title,formId,subject_id,index) {
+	/* function append(id,operation_url,save_url,title,formId,subject_id,index) {
 		var id2;
 		if(typeof(id)=="undefined"){
 			id2='';
@@ -118,8 +164,8 @@
 			
 		map["divDialog"] = "#divdia";
 		addDialog(map);
-	}
-	function addDialog(map) {
+	} */
+	/* function addDialog(map) {
 		$(map["divDialog"]).show();
 		$(map["divDialog"]).dialog({
 			title : map["title"],
@@ -146,7 +192,7 @@
 				}
 			} ]
 		});
-	}
+	} */
 	function submitForm(map,savebtn) {
 		var formflag = $(map["formId"]).form().form('validate');
 		if (formflag) {

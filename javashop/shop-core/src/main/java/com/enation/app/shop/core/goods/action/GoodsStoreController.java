@@ -79,8 +79,7 @@ public class GoodsStoreController extends GridController {
 	@SuppressWarnings("rawtypes")
 	public String listStoreJson(){
 		List list = this.goodsStoreManager.getStoreList();
-		String s = JSONArray.fromObject(list).toString();
-		return s.replace("name", "text");
+		return JSONArray.fromObject(list).toString();
 	}
 
 	/**

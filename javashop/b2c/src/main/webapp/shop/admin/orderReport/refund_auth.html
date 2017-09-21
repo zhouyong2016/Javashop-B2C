@@ -1,12 +1,36 @@
 <#include '/admin/header.html' > 
 <#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
 <#assign permssion="com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.info{
+	background-color: white;
+	margin-top: 10px;
+	padding: 10px;
+	margin-bottom: 60px;
+}
+.layui-elem-field legend{
+	margin-left: 0px;
+	padding:  0px 30px;
+	margin: 0px;
+}
 
-<div class="main">
+.sellback-info .table-info td:nth-child(1),.sellback-info .table-info td:nth-child(3){
+	background-color: #eeeeee;
+	width: 150px;
+	text-align: center;
+}
+
+.sellback-info .layui-form-item{
+	display:inline;
+}
+
+</style>
+
+<div class="admin-main">
 	<!-- 退货申请信息 -->
-	<div class="shadowBoxWhite  whiteBox">
+	<div class="info sellback-info">
 		<div class="detail">
-			<table cellspacing="0" cellpadding="0" border="0"  style="width: 150">
+			<table class="layui-table table-info">
 				<tr>
 					<th class="title" colspan="4">退货申请</th>
 				</tr>
@@ -41,14 +65,7 @@
 				<tr>
 					<td width="80">详细描述：</td>
 					<td>${sellBackList.remark!'' }</td>
-						<td >收货状态：</td>
-					<td width="80">
-					
-					
-					<#if sellBackList.ship_status=='0'>未收货
-					<#elseif sellBackList.ship_status=='1'>已收货
-					</#if>
-					</td>
+						
 				</tr>
 				<#if sellBackList.tradestatus?? && sellBackList.tradestatus==0>
 					<tr>
@@ -60,8 +77,8 @@
 					<tr>
 						<td>审核：</td>
 						<td colspan="3" class="pass">
-							<a href="javascript:void(0)" class="button pass1" onclick="pass(1)">审核通过</a>
-							<a href="javascript:void(0)" class="button pass2" onclick="pass(2)">审核不通过</a>
+							<a href="javascript:void(0)" class="layui-btn  layui-btn-small pass1" onclick="pass(1)">审核通过</a>
+							<a href="javascript:void(0)" class="layui-btn  layui-btn-danger layui-btn-small pass2" onclick="pass(2)">审核不通过</a>
 						</td>
 					</tr>
 				<#else>
@@ -76,9 +93,9 @@
 		</div>
 	</div>
 	<br/>
-	<div class="shadowBoxWhite  whiteBox">
+	<div class="info sellback-info">
 		<div class="detail">
-			<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+			<table class="layui-table"  cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
 				<tr>
 					<th class="title" colspan="4">退货单商品</th>
 				</tr>

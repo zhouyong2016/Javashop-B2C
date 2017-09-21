@@ -56,13 +56,6 @@ public class SellBackApiController {
 			,Integer[] item_id,SellBack sellBack){
 		try {
 			
-			if(StringUtil.isEmpty(sellBack.getRefund_way())) {
-				return JsonResultUtil.getErrorJson("退款方式不能为空");
-			}
-			
-			if(StringUtil.isEmpty(sellBack.getReturn_account())) {
-				return JsonResultUtil.getErrorJson("退款账号不能为空");
-			}
 			
 			//记录会员信息
 			Member member =  UserConext.getCurrentMember();
@@ -110,7 +103,6 @@ public class SellBackApiController {
 		try{
 			//记录会员信息
 			Member member =  UserConext.getCurrentMember();
-			Order order=orderManager.get(sellBack.getOrderid());
 			sellBack.setMember_id(member.getMember_id());
 			sellBack.setSndto(member.getName());
 			sellBack.setTradeno(com.enation.framework.util.DateUtil.toString(DateUtil.getDateline(),"yyMMddhhmmss"));//退款单号
@@ -118,7 +110,6 @@ public class SellBackApiController {
 			sellBack.setTradestatus(0);
 			sellBack.setRegtime(DateUtil.getDateline());
 			sellBack.setType(1);
-			sellBack.setRefund_way(order.getPayment_name());
 			sellBackManager.addSellBack(sellBack);
 			return JsonResultUtil.getSuccessJson("退款申请成功");
 		} catch (RuntimeException e) {

@@ -66,45 +66,6 @@ public class LocalUploader implements IUploader{
 		return path;
 	}
 	/**
-	 * 上传附件到本地
-	 */
-	@Override
-	public String uploadFJ(InputStream stream, String subFolder,String fileName) {
-		/**
-		 * 参数校验
-		 */
-		if(stream==null){
-			throw new IllegalArgumentException("file or filename object is null");
-		}
-		if(subFolder == null){
-			throw new IllegalArgumentException("subFolder is null");
-		}
-		if(!FileUtil.isAllowUp(fileName)){
-			throw new IllegalArgumentException("不被允许的上传文件类型");
-		}
-		/**
-		 * 组合文件名
-		 */
-		String ext = FileUtil.getFileExt(fileName);
-		fileName = DateUtil.toString(new Date(), "mmss") + StringUtil.getRandStr(4) + "." + ext;
-		String static_server_path= SystemSetting.getStatic_server_path();
-		String filePath =  static_server_path + "/attachment/";
-		
-		if(subFolder!=null){
-			filePath+=subFolder +"/";
-		}
-		
-		String timePath=this.getTimePath();
-		String path  = EopSetting.FILE_STORE_PREFIX+ "/attachment/" +(subFolder==null?"":subFolder)+"/"+timePath+"/"+fileName;
-		filePath +=timePath;
-		filePath += fileName;
-		/**
-		 * 写入文件
-		 */
-		FileUtil.write(stream, filePath);
-		return path;
-	}
-	/**
 	 * 删除本地图片
 	 */
 	@Override

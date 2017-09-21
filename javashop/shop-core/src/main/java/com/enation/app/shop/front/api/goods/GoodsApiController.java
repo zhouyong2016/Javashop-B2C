@@ -36,8 +36,6 @@ import freemarker.template.TemplateModelException;
  * @author kingapex
  *2013-8-20下午8:17:14
  */
-
-
 @Scope("prototype")
 @Controller 
 @RequestMapping("/api/shop/goods")
@@ -77,7 +75,7 @@ public class GoodsApiController  extends GridController {
 	}
 	
 	/***
-	 * 
+	 * 货品列表
 	 * @param goodsid 商品Id
 	 * @return
 	 */
@@ -136,34 +134,8 @@ public class GoodsApiController  extends GridController {
 		return null;
 	}
 	
-	public Object goodsSpec(){
-//		Map goods = new HashMap();
-//		HttpServletRequest request  = this.getRequest();
-//		Integer goods_id ; 
-//		if(params.get("goods_id")==null){
-//			goods =(Map)request.getAttribute("goods");
-//			if(goods==null) throw new TemplateModelException("调用商规格标签前，必须先调用商品基本信息标签");
-//			goods_id = (Integer) goods.get("goods_id");
-//		}else{
-//			goods_id=Integer.parseInt(params.get("goods_id").toString());
-//			goods = this.goodsManager.get(goods_id);
-//		}
-//		List<Product> productList  = this.productManager.list(goods_id);
-//		Map data = new HashMap();
-//		if( (""+goods.get("have_spec")).equals("0")){
-//			data.put("productid", productList.get(0).getProduct_id());//商品的货品id
-//			data.put("productList", productList);//商品的货品列表
-//		}else{
-//			List<Specification> specList = this.productManager.listSpecs(goods_id);
-//			data.put("specList", specList);//商品规格数据列表
-//			data.put("productList", productList);//商品的货品列表
-//		}
-//		data.put("have_spec", goods.get("have_spec"));//是否有规格
-//		return data;
-		return null;
-	}
 	/***
-	 * 
+	 * 货品快照列表
 	 * @param goodsid 商品Id
 	 * @param snapshotid 快照id
 	 * @return

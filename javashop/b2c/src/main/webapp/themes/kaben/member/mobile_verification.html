@@ -103,13 +103,13 @@ $(function(){
 		
 		//手机校验码不能为空
 		if($("#code").val() == ""){
-			alert("请填写手机校验码");
+			$.message.error("请填写手机校验码");
 			return false;
 		}
 		
 		//验证码不能为空
 		if($("#authCode").val() == ""){
-			alert("请填写验证码");
+			$.message.error("请填写验证码");
 			return false;
 		}
 		
@@ -126,12 +126,12 @@ $(function(){
 						location.href = "update_mobile_verification.html";
 					}
 				} else {
-					alert(data.message); 
+					$.message.error(data.message)
 					$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
 				}
 			},
 			error : function(){
-				alert("出现错误，请重试！");
+				$.message.error("出现错误，请重试！");
 				$("#code-img").attr("src","${ctx}/validcode.do?vtype=membervalid&r="+new Date().getTime());
 			}
 		});	
@@ -176,7 +176,7 @@ function sendCode(){
 		dataType:"json",
 		success:function(data){
 			if(data.result==0){
-				alert(data.message);
+				$.message.error(data.message);
 				$("#sendMobileCode").html("重新发送验证码");
 			}else{
 				 curCount = count;
@@ -187,7 +187,7 @@ function sendCode(){
 			}
 		},
 		error:function(){
-			alert("出现错误");
+			$.message.error("出现错误");
 		}
 	});	
 }

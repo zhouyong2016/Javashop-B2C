@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/css/table.css" />
+    <link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/datatables/dataTables.bootstrap.css" />
+    <link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/datatables/jquery.dataTables.min.css" />
+    <script type="text/javascript"src="${ctx}/adminthemes/version3/datatables/jquery.js "></script>
+    <script type="text/javascript"src="${ctx}/adminthemes/version3/datatables/jquery.dataTables.min.js "></script>
+    <script type="text/javascript"src="${ctx}/adminthemes/version3/datatables/dataTables.bootstrap.js "></script>
+<body>
+<div class="admin-main">
+    <table id="example" class="layui-table site-table table-hover">
+        <thead>
+        <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>ID</th>
+            <th>文章类别</th>
+            <th>文章标题</th>
+            <th>文章内容</th>
+            <th>发布时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+    </table>
+
+</div>
+<script type="text/javascript"src="${ctx}/adminthemes/version3/plugins/layui/layui.js "></script>
+<script type="text/javascript"src="${ctx}/adminthemes/version3/js/table.js "></script>
+<script>
+    $("#example").grid({
+        "columns": [{ //定义列
+            "data": function (obj) {
+                return '<input type="checkbox" name="checklist" class="fly-checkbox" data-id=' + obj.id + '>';
+            },
+        }, {
+            "data": "id", //editField: "id", 可编辑?
+        }, {
+            "data": "articleSorts",
+        }, {
+            "data": function (obj) {
+                return '<u class="btn-showarticle">' + obj.articleTitle + '</u>';
+            },
+        }, {
+            "data": "articleContents",
+        }, {
+            "data": "releaseTime",
+        }, {
+            "data": function (obj) {
+                if (obj.releaseStatus) {
+                    return '<span class="label label-success radius">正常发布</span>';
+                } else {
+                    return '<span class="label label-default radius">暂停发布</span>';
+                }
+            },
+        }], url: '../adminthemes/version3/datas/test.json',
+        "columnDefs": [ {
+            orderable: false,//false禁止排序
+            targets: 0 },//禁止排序列数,值可以是数组或对象
+            {
+                "targets":7,//配置哪一列的操作
+                "render": function() {
+                    return ' <div class="dropdown"><button  class="layui-btn layui-btn-small"  name="drop-btn"> <i class="fa fa-gears"></i> 下拉信息 <i class="fa fa-caret-down" aria-hidden="true"></i> </button> <ul class="dropdown-menu"> <li> <a href="javascript:void (0)"> <i class="fa fa-pencil-square" aria-hidden="true"></i>编辑信息 </a> </li> <li> <a href="javascript:void (0)"> <i class="fa fa-trash" aria-hidden="true"></i>删除信息 </a> </li> <li> <a href="javascript:void (0)"> <i class="fa fa-pencil-square" aria-hidden="true"></i>修改信息 </a> </li> <li> <a href="javascript:void (0)"> <i class="fa fa-plus" aria-hidden="true"></i>添加信息 </a> </li> </ul> </div>';
+                }
+            }
+        ],
+    }); //调用自定义 插件
+</script>
+
+
+</body>
+
+</html>

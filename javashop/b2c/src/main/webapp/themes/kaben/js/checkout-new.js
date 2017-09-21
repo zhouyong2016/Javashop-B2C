@@ -22,12 +22,9 @@ $(function(){
 		//  优惠劵、余额事件绑定
 		couponEvent();
 
-		//  发票信息事件绑定
-		invoiceEvent();
-
 		//  送货时间事件绑定
 		timeEvent();
-	})()
+	})();
 
 	/* 收货人信息事件绑定
 	 ============================================================================ */
@@ -111,29 +108,6 @@ $(function(){
 		couopn.on('click', '.content-item-coupon', function(){
 			var _this = $(this);
 			Ckt.coupon.s_discount(_this);
-		});
-	}
-
-	/* 发票信息事件绑定
-	 ============================================================================ */
-	function invoiceEvent(){
-		var invoice = $('.content-ckt.invoice');
-
-		//  发票信息编辑
-		$('.edit-invoice').on('click', function(){
-			Ckt.invoice.e_invoice();
-		});
-
-		//  发票抬头选择
-		$('#dialogModal').on('click', '.ckt-checkbox.head-invoice', function(){
-			var _this = $(this);
-			Ckt.invoice.s_invoiceHead(_this);
-		});
-
-		//  发票内容选择
-		$('#dialogModal').on('click', '.ckt-checkbox.content-invoice', function(){
-			var _this = $(this);
-			Ckt.invoice.s_invoiceContent(_this);
 		});
 	}
 
@@ -677,10 +651,8 @@ $(function(){
 				title    : '发票信息',
 				top      : 100,
 				showCall : function(){
-					$('.company-invoice-input').on('click', function(e){
-						if($(this).closest('.head-invoice').is('.selected')){
-							e.stopPropagation();
-						}
+                    invoiceDialog.on('click', '.company-invoice-input', function(e){
+                        e.stopPropagation();
 					});
 				},
 				callBack : function(){

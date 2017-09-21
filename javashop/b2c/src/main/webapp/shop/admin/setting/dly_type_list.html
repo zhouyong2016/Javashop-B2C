@@ -1,99 +1,133 @@
 <#include '/admin/header.html' >
 <#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
 <script type="text/javascript" src="${ctx}/shop/admin/js/DlyTypeInput.js"></script>
-<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.checktree.js"></script>   
-<link rel="stylesheet" type="text/css" media="screen" href="${ctx}/shop/admin/setting/checktree.css" />
-<div class="main">
-	<div class="buttonArea">
-		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="newTab('添加配送方式','${ctx}/shop/admin/dly-type/add-type.do')">添加</a>
-		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="dlyform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/dly-type/list-json.do',pageList: [5,10,15],pageSize:10,fitColumns:'true'"pagination="true" width="width" id="dlydata">
-				<thead>
-				    <tr>
-				   		<th  data-options="field:'type_id',checkbox:true,width:100" ></th>
-				   	 	<th  data-options="field:'name',width:100">配送方式</th>
-				   	 	<th  data-options="field:'corp_id',width:100" formatter="forcorp">物流公司</th>
-				   	 	<th  data-options="field:'is_same',width:100" formatter="forpay">地区费用类型</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			 </table>
-		 </form>
-	</div>
+<script type="text/javascript" src="${ctx}/shop/admin/js/jquery.checktree.js"></script> 
+<style>
+td .layui-btn-small{
+background:#1E9FFF;
+}
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>配送方式相关设置，于添加，都由此页面做出统一处理。</li>
+                <li><span>·</span>点击操作，可以对配送方式的详细内容做出修改，比如默认公司的选择，地区配送设置，等等..</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="添加" onclick="newTab('添加配送方式','${ctx}/shop/admin/dly-type/add-type.do')"><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="删除" onclick="del()"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+   <!--表格区域  -->
+   <form id="dlyform">
+    <table id="dlydata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>配送方式</th>
+            <th>物流公司</th>
+            <th>地区费用类型</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
 
- <script type="text/javascript">
- function formatAction(value,row,index){
-		var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\"修改配送方式\",\"${ctx}/shop/admin/dly-type/edit.do?typeId="+row.type_id+"\")'></a>";
-			return val;
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#dlydata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/dly-type/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="type_id" class="fly-checkbox" value=' + obj.type_id + '>';
+            		}},
+	        {data: "name"},
+	        {data: null,"render": function(data, type, row) {
+	         	var val;
+	       	 	if(data.corp_id!=null&&data.corp_id==0){
+	       	 	return "";
+	       	 	}else{
+	       	 	<#list logiList as ll>
+       		 	if(data.corp_id=="${ll.id}"){
+       			 	val="${ll.name}";
+       		 		}
+       		 	</#list>
+	       	 	return val;
+	       	 	}
+	       	 
+	       	}},
+	        {data: null,"render": function(data, type, row) {
+	        	var val;
+	        	if(data.is_same!=null){
+	        		if(data.is_same==1){
+	        			val="统一配置";
+	        		}else{
+	        			val="指定地区配置";
+	        		}
+	        	}
+	        	return val;
+	       	}},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' onclick='newTab(\"修改配送方式\",\"${ctx}/shop/admin/dly-type/edit.do?typeId="+data.type_id+"\")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+});
+//删除
+function del(){
+	var check = $("input[name='type_id']").is("input:checked");
+	if(check == false){
+		alert("请选中需要删除的配送方式！！！");
+		return false;
 	}
- function forcorp(value,row,index){
-	 var val;
-	 if(value!=null){
-		 <#list logiList as ll>
-		 	if(value=="${ll.id}"){
-			 	val="${ll.name}";
-		 	}
-		 </#list>
-	 }
-	 return val;
-}
- function forpay(value,row,index){
-	 var val;
-	 if(value!=null){
-		 if(value==1){
-			 val="统一配置";
-		 }else{
-			 val="指定地区配置";
-		 }
-	 }
-	 return val;
-}
-function del(){ 
-	var rows = $('#dlydata').datagrid("getSelections"); 
-	if(rows.length<1){
-		$.Loading.error("请选择要删除的配送方式");
+	if(!confirm("确认要删除配送方式？")){
 		return;
 	}
-	if(!confirm("确认要将这些配送方式删除吗？")){	
-		return ;
-	}
-	 var options = {
-			url : "${ctx}/shop/admin/dly-type/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
+	var options = {
+			url:ctx+"/shop/admin/dly-type/delete.do?",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				if(result.result == 1){
 					$.Loading.success(result.message);
-					var rows = $('#dlydata').datagrid("getSelections"); 
-					for(var i =0;i<rows.length;i++){      
-			 			var index = $('#dlydata').datagrid('getRowIndex',rows[i]); 
-			 			$('#dlydata').datagrid('deleteRow',index);      
-			 		}
+					table.ajax.url(ctx+"/shop/admin/dly-type/list-json.do").load();
+					
 				}
 				if(result.result==0){
 					$.Loading.error(result.message);
 				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误，请重试");
 			}
 	};
-	$('#dlyform').ajaxSubmit(options);	
+	$("#dlyform").ajaxSubmit(options);
 }
 
- function edit(typeId){
-	 window.location.href="dlyType!edit.do?typeId="+typeId;
- }
- 
- window.top["reload_Abnormal_Monitor"]=function(){
-     $("#dlydata").datagrid("reload");
- };
- 
 </script>
 <#include '/admin/footer.html' >
-	   	 

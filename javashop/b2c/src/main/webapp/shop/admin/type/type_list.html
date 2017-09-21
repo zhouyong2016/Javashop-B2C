@@ -1,356 +1,217 @@
 <#include '/admin/header.html' >
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<script type="text/javascript" src="${ctx}/shop/admin/js/GoodsType.js"></script>
-<div class="main">
-	<div class="buttonArea">
-		<div style="float:left">
-			<a href="javascript:void(0)" class="button blueButton" onclick="controlType()">添加</a>
-			<a href="javascript:void(0)" class="button" onclick="del()">删除</a>
-		</div>
-		<span style="float: right;"> 
-			<span id="simpleSearch">
-				<a href="javascript:void(0)" class="button b_fr" 
-				data-options="plain:true" onclick="searchKeyword()">搜索</a>
-				<input id="keyword" class="input_text b_fr mr5" type="text" maxlength="50" value="" size="30"
-				placeholder="请输入模糊关键字" name="keyword"> 
-			</span>
-		</span>
-	</div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="typeform">
-			<table class="easyui-datagrid" 
-			data-options="url:'${ctx}/shop/admin/type/list-json.do',pageList: [5,10,15],pageSize:10,fitColumns:'true',toolbar:'#tb'" pagination="true" width="width" id="typedata">
-				<thead>
-					<tr>
-						<th data-options="field:'type_id',checkbox:true,width:100" ></th>
-						<th data-options="field:'name',width:100">类型名称</th>
-						<th data-options="field:'have_prop',width:100" formatter="forProp">属性</th>
-						<th data-options="field:'have_parm',width:100" formatter="forParm">参数</th>
-						<th data-options="field:'join_brand',width:100" formatter="forBrand">关联品牌</th>
-						<th data-options="field:'join_spec',width:100" formatter="forSpec">关联规格</th>
-						<th data-options="field:'action',align:'center',width:100" formatter="formatAction">操作</th>
-					</tr>
-				</thead>
-			</table>
-		</form>
-		<div id="divdia" style="display: none;"></div>
-	</div>
+<style>
+ td .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+       <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>可对类型或者相应属性、参数、关联品牌、关联规格、进行添加、删除、和修改操作。</li>
+                <li><span>·</span>属性：对类型进行属性添加，比如 选择项是否可搜索，选择项的选择，是否为必填，等等。</li>
+                <li><span>·</span>参数：设置参数之后，可以在前台商品详情也所看到。</li>
+                <li><span>·</span>关联品牌：添加品牌的话，可以在对商品进行添加，修改的时候，选择对应分类下的所有品牌。</li>
+                <li><span>·</span>关联规格：开启关联规格之后，可以为该类型增加规格，比如，容量、尺寸、颜色等等...</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" id="addtype" title="添加" class="layui-btn layui-btn-primary " ><i class="icon iconfont icon-llalbumshopselectorcreate"></i></button>
+                <button type="button" id="deletetype"  title="删除" class="layui-btn layui-btn-primary " onclick="delType();"><i class="icon iconfont icon-guanbi1"></i></button>
+                <button type="button" title="提示" class="layui-btn layui-btn-primary" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+
+            <div class="table_search">
+                <input type="text" id="_search" placeholder="请在这里输入关键字" style="height:25px;">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="_searchTypeId"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+           
+        </div>
+   </div>
+   <!--表格区域  -->
+   <form id="typeform">
+    <table id="typedata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+        <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>类型名称</th>
+            <th>属性</th>
+            <th>参数</th>
+            <th>关联品牌</th>
+            <th>关联规格</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+    </table>
+    <!--传值等操作  -->
+    <div id="addBrand" ></div>
+   </form>
 </div>
-<script type="text/javascript">
 
-/*
- * 设置打开dialog前的参数
- */
-function controlType(id,obj){
-	var map = {}; // Map map = new HashMap();
-	map["width"] = 800;
-	map["height"] = 350
-	if(!id){
-		map["href"] ="${ctx}/shop/admin/type/step1.do";
-		map["formId"] ="#addForm";
-		map["url"] ="${ctx}/shop/admin/type/checkname.do?ajax=yes";
-		map["title"]="添加类型";
-		map["loadshow"]="正在添加......";
-	}else{
-		if(obj==1){
-			map["href"] ="${ctx}/shop/admin/type/edit.do?typeId="+id;
-			map["formId"] ="#editForm";
-			map["url"] ="${ctx}/shop/admin/type/checkname.do?ajax=yes";
-			map["title"]="修改类型";
-		}
-		if(obj==2){
-			map["href"] ="${ctx}/shop/admin/type/edit-other.do?typeId="+id+"&otherType="+obj;
-			map["tid"]=id;
-			map["title"]="修改属性";
-		}
-		if(obj==3){
-			map["href"] ="${ctx}/shop/admin/type/edit-other.do?typeId="+id+"&otherType="+obj;
-			map["formId"] ="#paramsForm";
-			map["url"] ="${ctx}/shop/admin/type/save-params.do?ajax=yes&typeId="+id+"&otherType="+obj;
-			map["title"]="修改参数";
-		}
-		if(obj==4){
-			map["href"] ="${ctx}/shop/admin/type/edit-other.do?typeId="+id+"&otherType="+obj;
-			map["formId"] ="#typebrandFrom";
-			map["url"] ="${ctx}/shop/admin/type/save-brand.do?ajax=yes?typeId="+id+"&otherType="+obj;
-			map["title"]="修改关联品牌";
-			map["width"] = 510;
-			map["height"] = 300;
-		}
-		if(obj==5){
-			map["href"] ="${ctx}/shop/admin/type/edit-other.do?typeId="+id+"&otherType="+obj;
-			map["formId"] ="#typeSpecFrom";
-			map["url"] ="${ctx}/shop/admin/type/save-spec.do?ajax=yes?typeId="+id+"&otherType="+obj;
-			map["title"]="修改关联规格";
-			map["width"] = 510;
-			map["height"] = 300;
-		}
-		
-		
-		map["loadshow"]="正在修改......";
-	}
-	map["divDialog"]="#divdia";
-	map["gridreload"]="#typedata";
+<!--js区域  -->
+<script>
+var table;
+$(function(){
 	
-	addDialog(map,obj);
+	 table = $('#typedata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/type/list-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="type_id" class="fly-checkbox" value=' + obj.type_id + '>';
+            }},
+            //名称
+	        {data: "name"},
+	        //属性
+	        {"data": function (obj) {
+	        	if(obj.have_prop == 1){
+	        		return '<a class="layui-btn layui-btn-mini layui-btn-normal" typeId= '+obj.type_id+' onclick="editProps('+obj.type_id+', 2)">修改</a>';
+	        	}else{
+	        		return '无';
+	        	}
+            }},
+            
+            //参数
+	        {"data": function (obj) {
+	        	if(obj.have_parm == 1){
+	        		return '<a class="layui-btn layui-btn-mini layui-btn-normal" typeId= '+obj.type_id+' onclick="editProps('+obj.type_id+', 3)">修改</a>';
+	        	}else{
+	        		return '无';
+	        	}
+            }},
+            //品牌
+            {"data": function (obj) {
+	        	if(obj.join_brand == 1){
+	        		return '<a class="layui-btn layui-btn-mini layui-btn-normal" typeId= '+obj.type_id+' onclick="editProps('+obj.type_id+', 4)">修改</a>';
+	        	}else{
+	        		return '无';
+	        	}
+            }},
+            //规格
+	        {"data": function (obj) {
+	        	if(obj.join_spec == 1){
+	        		return '<a class="layui-btn layui-btn-mini layui-btn-normal" typeId= '+obj.type_id+' onclick="editProps('+obj.type_id+', 5)">修改</a>';
+	        	}else{
+	        		return '无';
+	        	}
+            }},
+	        
+	        
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='change_btn' onclick='editType("+data["type_id"]+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+	
+	$("#_searchTypeId").click(function(){
+		_searchGoodsType(table);
+	});
+	
+	//添加
+	$("#addtype").click(function(){
+		 layer.open({
+	            title:"添加类型",//标题
+	            maxmin :true,//右上角可否放大缩小
+	            type:2,//弹框的类型
+	            shade: [0.3, '#000'],//黑色背景
+	            shadeClose:false,//黑色背景是否可以点击关闭
+	            content:"${ctx}/shop/admin/type/step1.do",//内容的URL
+	            area:['600px','400px'],//弹框大小
+	            scrollbar: false//是否允许浏览器出现滚动条
+	        });
+	});
+});
+
+function _searchGoodsType(table){
+	var keyword = $("#_search").val();
+	var url =table.ajax.url("${ctx}/shop/admin/type/list-json.do?keyword="+keyword);
+	url.load();
 }
 
-/**
- * 打开dialog 
- */
-function addDialog(map,obj){
-	$(map["divDialog"]).show();
-	$(map["divDialog"]).dialog({
-		title: map["title"],
-		width: map["width"],
-		height: map["height"],
-		closed: false,
-		cache: false,
-		href: map["href"],
-		modal: true,
-		buttons: [{
-			 text:'保存',
-			 handler:function(){
-				 var savebtn = $(this);
-　　				 var disabled= savebtn.hasClass("l-btn-disabled");
-　　				 if(!disabled){
-	　　				 
-					if(obj==3){					
-						var res=setParamNum();
-						if(res){
-							submitForm(map,savebtn);
-						}
-					}else if(obj==4 || obj==5){
-						selectChoose();
-						submitForm(map,savebtn);
-					}else if(obj==2){
-						$.Loading.show("正在保存请稍候...");
-						savebtn.linkbutton("disable");	
-						saveprop(map["tid"],savebtn);
-					}else{
-						submitForm(map,savebtn);
-					}
-				}
-			 }
-			 }]
-		});
-}
-
-/**
- * 提交保存参数
- */
-function submitForm(map,savebtn) {
-	var formflag= $(map["formId"]).form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		savebtn.linkbutton("disable");	
-		var options = {
-				url : map["url"],
-				type : "POST",
-				dataType : 'json',
-				success : function(result){
-					if(result.result==1){
-						$(map["divDialog"]).dialog('close');
-						$(map["gridreload"]).datagrid('reload');
-						$.Loading.success(result.message);
-					}
-					if(result.result==0){ 
-						$.Loading.error(result.message);
-					}
-					savebtn.linkbutton("enable");
-				},
-				error : function(e) {
-					$.Loading.error("出现错误 ，请重试");
-					savebtn.linkbutton("enable");
-				}
-			};
-		$(map["formId"]).ajaxSubmit(options);
-	}		
-}
-
-/**
- * 清楚已经输入的参数
- */
-function clearForm(map) {
-	$(map["formId"]).form('clear');
-}
-
-/**
- * 格式化操作显示
- */
-function formatAction(value,row,index){
-	var val="<a class='edit' title='类型修改' href='javascript:void(0);' onclick='controlType("+row.type_id+",1)' ></a>";
-	return val;
-}
-
-/**
- * 格式化关联品牌显示
- */
-function forBrand(value,row,index){
-	var val;
-	if(value==1){
-		val="<a class='edit' title='品牌关联修改' href='javascript:void(0);' onclick='controlType("+row.type_id+",4)' ></a>";
-	}else if(value==0){
-		val="否";
-	}
-	return val;
-}
-
-function forProp(value,row,index){
-	var val;
-	if(value==1){
-		val="<a class='edit' title='类型属性修改' href='javascript:void(0);' onclick='controlType("+row.type_id+",2)' ></a>";
-	}else if(value==0){
-		val="否";
-	}
-	return val;
-}
-function forParm(value,row,index){
-	var val;
-	if(value==1){
-		val="<a class='edit' title='类型参数修改' href='javascript:void(0);' onclick='controlType("+row.type_id+",3)' ></a>";
-	}else if(value==0){
-		val="否";
-	}
-	return val;
-}
-
-function forSpec(value,row,index){
-	var val;
-	if(value==1){
-		val="<a class='edit' title='规格关联修改' href='javascript:void(0);' onclick='controlType("+row.type_id+",5)' ></a>";
-	}else if(value==0){
-		val="否";
-	}
-	return val;
-}
-
-/**
- * 删除类型
- */
-function del(){ 
-
-	var rows = $('#typedata').datagrid("getSelections"); 
- 	if(rows.length<1){
- 		$.Loading.error("请选择要删除的标签");
- 		return;
- 	}
-	if(!confirm("确认要将这些类型放入回收站吗？")){	
-		return ;
-	}
-		
-	 var options = {
-			url : "${ctx}/shop/admin/type/delete.do?ajax=yes",
-			type : "POST",
-			dataType : 'json',
-			success : function(result) {
-				if(result.result==1){
-					$.Loading.success(result.message);
-					$("#typedata").datagrid('reload');
-				}else{
-					$.Loading.error(result.message);
-				}
-			},
-			error : function(e) {
-				alert("出现错误 ，请重试");
-			}
-		};
-		$('#typeform').ajaxSubmit(options);	
-	}
-
-
-function addprops() {
-	if (endEditing()) {
-		$('#dprops').datagrid('appendRow', {
-			status : 'P'
-		});
-		editIndex = $('#dprops').datagrid('getRows').length - 1;
-		$('#dprops').datagrid('selectRow', editIndex).datagrid('beginEdit',
-				editIndex);
-	}
-}
-
-function onClickRow(index) {
-
-	if (editIndex != index) {
-		if (endEditing()) {
-			$('#dprops').datagrid('selectRow', index).datagrid('beginEdit',index);
-			editIndex = index;
-		} else {
-			$('#dprops').datagrid('selectRow', editIndex);
-		}
-	}
-}
-
-/**
- * 保存新增属性
- */
-function saveprop(tid,savebtn) {
-	if (endEditing()) {
-		var rows = $("#dprops").datagrid('getRows');
-		for ( var i = 0; i < rows.length; i++) {
-			$("#dprops").datagrid('endEdit', i);
-		}
-		if ($("#dprops").datagrid('getChanges').length) {
-            var inserted = $("#dprops").datagrid('getChanges', "inserted");
-            var deleted = $("#dprops").datagrid('getChanges', "deleted");
-            var updated = $("#dprops").datagrid('getChanges', "updated");
-            var effectRow = new Object();
-            if (inserted.length) {
-                effectRow["inserted"] = JSON.stringify(inserted);
-            }
-            if (deleted.length) {
-                effectRow["deleted"] = JSON.stringify(deleted);
-            }
-            if (updated.length) {
-                effectRow["updated"] = JSON.stringify(updated);
-            }
-
-            $.post("${ctx}/shop/admin/type/save-props.do?typeId="+tid, effectRow, function(rsp) {
-                if(rsp.result==1){
-                	$.Loading.success("保存成功");
-                    $("#dprops").datagrid('acceptChanges');
-                }
-                savebtn.linkbutton("enable");
-            }, "JSON").error(function() {
-            	$.Loading.error("保存出错，请重试");
-            	savebtn.linkbutton("enable");
-            });
-        }else{
-        	$.Loading.hide();
-        	alert("没有可保存的记录");
-        	savebtn.linkbutton("enable");
-        }
-	}else{
-		$.Loading.hide();
-		alert("请填写必输项数据或检查您的数据是否超长");
-		savebtn.linkbutton("enable");
-	}
-}
-
-//删除属性（行）
-function removeitprops(){
-	if (editIndex == undefined){return}
-	$("#dprops").datagrid('cancelEdit', editIndex)
-	.datagrid('deleteRow', editIndex);
-	editIndex = undefined;
-}
-
- function reject(){
-	 $('#dprops').datagrid('rejectChanges');
-	 editIndex = undefined;
- }
- 
- //搜索关键字
- function searchKeyword(){
-	var keyword = $("#keyword").val();
-
-	$("#typedata").datagrid('load', {
-		 keyword:keyword
+//修改类型
+function editType(typeId){
+	layer.open({
+        title:"修改类型",//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/type/edit.do?typeId="+typeId,//内容的URL
+        area:['600px','400px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
     });
- }
- 
- 
-</script>
+}
 
+
+//修改属性
+function editProps(id,typeid){
+	var title ="修改";
+	if(typeid==2){
+		title ="修改属性";
+	}else if(typeid==3){
+		title ="修改参数";
+	}else if(typeid==4){
+		title ="关联品牌";
+	}else if(typeid==5){
+		title ="关联规格";
+	}
+	layer.open({
+        title:title,//标题
+        maxmin :true,//右上角可否放大缩小
+        type:2,//弹框的类型
+        offset: '20px',
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/type/edit-other.do?typeId="+id+"&otherType="+typeid,//内容的URL
+        area:['900px','500px'],//弹框大小
+        scrollbar: true//是否允许浏览器出现滚动条
+    });
+}
+
+
+
+
+//删除类型
+function delType(){
+	var checktype = $("input[name='type_id']").is("input:checked");
+	if(checktype == false){
+		alert("请选择删除的类型");
+		return false;
+	} 
+	if (!confirm("确认要删除该类型吗？")) {
+		return;
+	}
+   var options = {
+		   url:ctx+"/shop/admin/type/delete.do",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.result==1){
+					$.Loading.success(data.message);
+					table.ajax.url(ctx+"/shop/admin/type/list-json.do").load();
+				}
+			    if(data.result==0){
+			    	$.Loading.error(data.message);
+			    }
+			}
+   };
+   $("#typeform").ajaxSubmit(options);
+}
+</script>
 <#include '/admin/footer.html' >

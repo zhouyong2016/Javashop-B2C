@@ -1,78 +1,117 @@
+
 <#include '/admin/header.html' >
-
-</style>
-<div class="main">
-	<div style="display: block;" class="searchAdvanced">
-		<form id="hotgoodsForm">
-		<input id="Advanced" name="Advanced" type="hidden" value="0" />
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="60px" align="right">
-					商品名称:
-				</td>
-				<td width="180px">
-					<input style="width: 180px;" class="input_text" type="text" id="name" name="name" value="">
-				</td>
-				<td width="80px" align="right">
-					商品分类:
-				</td>
-				<td width="170px">
-					<select id="catId" class="easyui-combotree combo" name="cat_id" 
-						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
-						style="width: 170px;">
-					</select>
-				</td>
-				<td width="80">
-					按订单周期：
-				</td>
-				<td width="70" >
-					<select id="cycle_type" name="cycle_type" onchange="statistics_mode(this.value)" >
-						<option value="1" <#if cycle_type==1 >selected="selected"  </#if> >按照月统计</option>
-						<option value="0" <#if cycle_type==0 >selected="selected"  </#if> >按照年统计</option>
-					</select>
-				</td>
-				<td width="70" >
-					<select id="year">
-					</select>
-				</td>
-				<td width="70" >
-					<select id="month">
-					</select>
-				</td>
-				<td width="170" style="text-align: center;">
-					<a id="submit_form" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
-				</td>
-				<td></td>
-			</tr>
-		</table>
-		</form>
-	</div>
+<style>
+	tr td select{
+		height: 30px;
+	}
+	tr td{
+	white-space:nowrap;
+	}
 	
-	<div class="clear height10"></div>
-	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid" 
-			data-options="url:'${ctx}/shop/admin/goodsStatis/goods-sales-detail-json.do',pageList: [5,10,15,20,50],pageSize:5,fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
-			pagination="true" width="width" id="goodsdata" sortName="order_id" sortOrder="desc">
-			<thead>
-				<tr>
-					<th data-options="field:'order_id',checkbox:true,width:100"></th>
-					<th data-options="field:'oiname',width:150" >名称</th>
-					<th data-options="field:'t_order_num',width:100" >下单量</th>
-					<th data-options="field:'t_goods_num',width:100" >下单商品件数</th>
-					<th data-options="field:'t_money',width:100" >下单金额</th>
+</style>
+<div  class="admin-main" style="margin: 20px 25px 10px">
+	<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsCatsSelect.js"></script>
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <ul>
+                <li>11</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div>
+    </div>
+    <div class="table_control">
+    <form id="hotgoodsForm">
+		<div style="display: block;" class="searchAdvanced">
+			<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr style="line-height: 47px">
+					<td width="8%" align="right" style="padding-right: 2%;">商品名称:</td>
+					<td width="12%" >
+						<input type="text" name="title" id="name" required lay-verify="required" placeholder="" autocomplete="off"  style="width: 70%;height: 25px" > 
+					</td>
+					<td width="8%" align="right" style="padding-right: 2%;">商品分类:</td>
+					<td width="12%" >
+						<input type="text" id="cat_name" value="" style="width: 70%;height: 25px;" />
+						<input type="hidden" id="cat_id" name="cat_id" value="" />
+					</td>
+					<td width="9%" style="padding-left: 1%;">按订单周期：</td>
+					<td width="9%" style="padding-right: 1%;">
+						<select id="cycle_type" name="cycle_type">
+							<option value="1"<#if cycle_type==1
+								>selected="selected" </#if> >按照月统计</option>
+							<option value="0"<#if cycle_type==0
+								>selected="selected" </#if> >按照年统计</option>
+						</select>
+					</td>
+					<td width="8%" style="padding-right: 1%;">
+						<select id="year"> </select>
+					</td>
+					<td width="8%">
+						<select id="month" 
+							<#if cycle_type==0 > style="display: none;" </#if> >
+						</select>
+					</td>
+					<td width="10%" style="text-align: center;">
+							<a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
+					</td>
+			
 				</tr>
-			</thead>
-		</table>
+			</table>
+		</div>
+	</form>
 	</div>
-
+    <!--高级搜索生成区域  -->
+    <div class="high_search"></div>
+    
+    <!--表格区域  -->
+    <table id="goodsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>名称</th>
+            <th>下单量</th>
+            <th>下单商品件数</th>
+            <th>下单金额</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
 </div>
-
 <input type="hidden" id="this_type" value="1" >
 
-<script type="text/javascript">
-
+<!--js区域  -->
+<script>
 $(function(){
 	
+	var table = $('#goodsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goodsStatis/goods-sales-detail-json.do',
+	    },
+	    columns: [ //定义列
+            {"data": function (obj) {
+                return '<input type="checkbox" name="checklist" class="fly-checkbox" data-id=' + obj.id + '>';
+            		}},
+	        {data: "oiname"},
+	        {data: "t_order_num"},
+	        {data: "t_goods_num"},
+	        {data: "t_money"}
+	     ]
+	});
+	
+	//按订单周期的三级联动
 	var currentYear = new Date().getFullYear();
 	var historyYear = currentYear-10;
 	currentYear = ${year};
@@ -98,33 +137,53 @@ $(function(){
 		}
 	}
 	
-	$("#submit_form").click(function(){
-		var name = $("#name").val();
-		var catId = $("input[name='cat_id']").val();
-		var cycle_type = $("#cycle_type").val();
-		var year = $("#year").val();
-		var month = $("#month").val();
-		
-		$("#goodsdata").datagrid('load', {
-			name : name,
-			cat_id : catId,
-			cycle_type:cycle_type,
-			year : year,
-			month : month
-	    });
-	})
+	//layui配置
+	layui.use(['form'], function(){
+	    var form = layui.form();
+	    
+	    //监听form表单的select选项切换
+	    form.on('select(cycle_type)', function(data){
+	    	if(data.value==1){
+	    		$("._month").show();
+	    	}else{
+	    		$("._month").hide();
+	    	}
+	    });     
+	    
+	});
+	$("#search_statis").click(function(){	
+		searchGoods(table)
+	});	
+	$("#cycle_type").change(function(){
+			if($(this).val()==1){
+				$("#month").show();
+			}else{
+				$("#month").hide();
+			}
+		});
+	//分类选择
+	 $('#cat_name').goodsCatsSelect({	
+           callback: function (cat) {
+              var cat_id = cat.cat_id;
+              var cat_name = cat.string;
+              $("#cat_name").val(cat_name);
+              $("#cat_id").val(cat_id);
+           }
+     });
 	
-})
-
-function statistics_mode(mode_value){
-	if(mode_value==1){
-		$("#month").show();
-	}else{
-		$("#month").hide();
-	}
-	//refresh_data();
+});
+//商品搜索
+function searchGoods(table){
+	var name = $("#name").val();
+	var cat_id = $("#cat_id").val();
+	var cycle_type = $("#cycle_type").val();
+	var year = $("#year").val();
+	var month = $("#month").val();
+	//var catid = $("#goods_kinds").combo('getValue');
+	var param ="name="+name+"&cat_id="+cat_id+"&cycle_type="+cycle_type+"&year="+year+"&month="+month;
+	var url = table.ajax.url("${ctx}/shop/admin/goodsStatis/goods-sales-detail-json.do?"+param);
+	url.load();
 }
 
 </script>
 <#include '/admin/footer.html' >
-

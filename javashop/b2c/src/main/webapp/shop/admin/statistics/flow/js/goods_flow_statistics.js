@@ -97,8 +97,7 @@ function initGoodsFlowStatistics(dateWhere) {
 				var conf = getGoodsFlowConfig(data.data);
 				
 				// 2.初始化统计图
-				initHistogram("flow_statistics",conf);
-
+				initHistogram(conf,dateWhere);
 			} else {
 				alert("调用action出错：" + data.message);
 			} 
@@ -172,41 +171,24 @@ function getDateWhere(){
  * @returns json格式的配置
  */
 function getGoodsFlowConfig(json){
-	var conf = {};			//配置
-	var num = topNum;								// top几
-	var colors = Highcharts.getOptions().colors;	// 颜色
-
-	var data = [];	// Y轴 排名数据
-	var categories = []; //X轴 名次数据
+	var conf = {};		
+	var num = topNum;	
+	var data = [];	
+	var categories = []; 
+	var name = [];
 	
 	// 遍历生成 data,categories
 	for(var i in json) {
 		var member = json[i];
-		var temp = {
-			name:member.name,
-			color: colors[0],
-	        y: member.num
-		};
-		
-		//添加到数组
-		data.push(temp);
+	     data.push(member.num);
+		name.push(member.name)
 		categories.push(parseInt(i) + 1);
-	}
-	
-	var conf = {
-		title : "商品访问量Top" + num ,		//统计图标题
-		yDesc : "访问量（次）" ,			//y轴 描述
-										//X 轴数据 [数组]
-		categories : categories,				
-            							//Y轴数据 [数组]
-		series : [
-			{
-				name : '访问量', 
-				data: data,
-            	color: 'white'
-			}
-		]						
-
+		};
+		var conf = {
+			title : "商品访问量Top" + num ,
+			categories : categories,				
+        	data : data, 
+        	name: name
 	};
 	return conf;
 }
@@ -215,49 +197,92 @@ function getGoodsFlowConfig(json){
  * @param id	html 初始化div的id
  * @param conf	相关配置
  */
-function initHistogram(id,conf){
-
-	var options = {
-			credits: {
-	             //text: 'Javashop',
-	             //href: 'http://www.javamall.com.cn'
-				enabled:false
+function initHistogram(conf,dateWhere){
+	var myChart = echarts.init(document.getElementById('main'));
+	$.ajax({
+		type : "post",
+		async : true,            //异步请求	（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+		url : ctx + "/shop/admin/flowStatistics/get-goods-flow-statistics.do",
+		data : {'start_date' : dateWhere[0], 'end_date' : dateWhere[1],'top_num':topNum},
+		type : "post",
+		dataType:"json",  //返回数据形式为json
+		success : function(result) {
+		    //请求成功时执行该函数内容，result即为服务器返回的json对象
+		    if (result) {
+		           myChart.setOption({        //加载数据图表
+		        	   tooltip: {
+		                    trigger: 'item',
+		                    formatter: function(params){
+		                    	var dataname = result.data[params.dataIndex].name;
+		                    	return dataname + '<br/>' + params.seriesName + ' : ' +params.value +'次';
+		                    }
+		                }
+		        	   
+		           });
+		    }
+		},
+		error : function(errorMsg) {
+		    //请求失败时执行该函数
+		alert("图表请求数据失败!");
+		myChart.hideLoading();
+		}		                    
+	})
+	
+	var option = {
+		    color: ['#7cb5ec'],
+		    title: {
+		    	x:'center',
+		        text: conf.title
+		    },
+		    toolbox: {
+		        show : true,
+		        feature : {
+		            mark : {show: true},
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    
+		    tooltip: {
+	            show: true,
+	            lable:{
+	            axisPointer :
+		                      {
+	              shadowColor: 'rgba(0, 0, 0, 0.5)',
+	              shadowBlur: 10
+		                      },         
+	            } 
 	        },
-			chart : {
-				type : 'column'
-			},
-			title : {
-				text : conf.title
-			},
-			xAxis : {
-				categories : conf.categories
-			},
-			yAxis : {
-				min : 0,
-				title : {
-					text : conf.yDesc
-				}
-			},
-			plotOptions: {
-	            column: {
-	                
-	                dataLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold'
-	                    },
-	                    formatter: function() {
-	                        return this.y +'次';
-	                    }
-	                }
+	        legend: {
+	        	x:'center',y:'bottom',
+	            data:['访问量']
+	        },
+	        xAxis : [
+	            {
+	                type : 'category',
+	                boundaryGap: true,
+	                data : conf.categories
 	            }
-	        },
-	        tooltip: {//鼠标放在图形上时的提示信息  
-                formatter: function() {  
-                        return '<b>'+ this.key +'</b><br/>';  
-                }
-	        },
-			series : conf.series
-		};
-	$("#" + id).highcharts(options);
+	        ],
+	        yAxis : [
+	            {
+            	type: 'value',
+            	boundaryGap: true,
+            	name:'访问量（次）',
+    	    	axisLabel : {
+                formatter: '{value} 次'
+	                },
+	            }
+	        ],
+	        series : [
+	            {
+	            	name :"访问量",
+	                type:"bar",
+	                data:conf.data
+	            }
+	        ]
+	    };
+		
+	myChart.setOption(option);
 };

@@ -94,14 +94,14 @@ public class ActivityManager implements IActivityManager{
 				
 				//促销活动开始时间不为空
 				if (start_time != null && !StringUtil.isEmpty(start_time)) {			
-					long stime = DateUtil.getDateline(start_time, "yyyy-MM-dd HH:mm:ss");
-					sql += " and start_time >= " + stime;
+					long stime = DateUtil.getDateline(start_time+" 23:59:59", "yyyy-MM-dd HH:mm:ss");
+					sql += " and start_time <= " + stime;
 				}
 				
 				//促销活动结束时间不为空
 				if (end_time != null && !StringUtil.isEmpty(end_time)) {			
-					long etime = DateUtil.getDateline(end_time, "yyyy-MM-dd HH:mm:ss");
-					sql += " and end_time <= " + etime;
+					long etime = DateUtil.getDateline(end_time+" 00:00:00", "yyyy-MM-dd HH:mm:ss");
+					sql += " and end_time >= " + etime;
 				}
 			}
 		}
@@ -133,7 +133,7 @@ public class ActivityManager implements IActivityManager{
 		
 		//如果促销活动ID不等于0
 		if (activity_id != 0) {
-			sql = "select g.*,ag.activity_id from es_goods g left join es_activity_goods ag on g.goods_id = ag.goods_id where g.disabled = 0 and g.market_enable = 1 and ag.activity_id = " + activity_id + "";
+			sql = "select g.*,ag.activity_id ,c.name as cat_name from es_goods g left join es_activity_goods ag on g.goods_id = ag.goods_id left join es_goods_cat c on g.cat_id=c.cat_id  where g.disabled = 0 and g.market_enable = 1 and ag.activity_id = " + activity_id + "";
 			int total = this.getGoodsTotal(activity_id);
 			
 			//如果参加促销活动的商品总数大于10
@@ -402,6 +402,32 @@ public class ActivityManager implements IActivityManager{
 	private int getGoodsTotal(Integer activity_id){
 		String sql = "select count(0) from es_activity_goods where activity_id = ?";
 		return this.daoSupport.queryForInt(sql, activity_id);
+	}
+	/* (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityManager#listGoods(java.lang.String, java.lang.Integer, int, int)
+	 */
+	@Override
+	public List<Map> listGoods(String keyword, Integer activity_id) {
+		String sql = "";
+		
+		//如果促销活动ID不等于0
+		if (activity_id != 0) {
+			sql = "select g.*,ag.activity_id ,c.name as cat_name from es_goods g left join es_activity_goods ag on g.goods_id = ag.goods_id left join es_goods_cat c on g.cat_id=c.cat_id  where g.disabled = 0 and g.market_enable = 1 and ag.activity_id = " + activity_id + "";
+			int total = this.getGoodsTotal(activity_id);
+			sql += " order by g.create_time desc";
+		} else {
+			sql = "select * from es_goods where disabled = 0 and market_enable = 1";
+			
+			//如果搜索关键字不为空
+			if (keyword != null && !StringUtil.isEmpty(keyword)) {
+				sql += " and (name like '%" + keyword + "%' or sn like '%" + keyword + "%')";
+			}
+			
+			sql += " order by create_time desc";
+		}
+		 List<Map> queryForList = this.daoSupport.queryForList(sql);
+		
+		return queryForList;
 	}
 
 }

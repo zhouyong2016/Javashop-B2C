@@ -8,8 +8,10 @@ package com.enation.app.shop.core.goods.service;
  */
 public class SnDuplicateException extends RuntimeException {
 	 
+	private static final long serialVersionUID = -5860514618486825874L;
+
 	public SnDuplicateException(String sn){
-		super("货号["+ sn +"]重复");
+		super("商品编号["+ sn +"]重复");
 	}
 	
 }

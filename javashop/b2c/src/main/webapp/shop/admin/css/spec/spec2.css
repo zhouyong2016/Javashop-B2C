@@ -22,7 +22,7 @@
 
 
 .detail{
-	width: 60%;
+	width: 80%;
 	padding-bottom: 30px;
 	padding-top: 20px;
 }
@@ -42,4 +42,29 @@
 }
 .price{
 	width: 60px;
+}
+
+/* 2017-03-02 10:37 增加图片上传div
+ ============================================================================ */
+.image-update-box {
+    width: 80%;
+    min-height: 90px;
+    background-color: #fafafa;
+}
+
+.image-update-box .item {
+    float: left;
+    position: relative;
+    width: 60px;
+    margin: 5px;
+    height: 60px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 60px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.image-update-box .item input {
+    display: none;
 }

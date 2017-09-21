@@ -1,36 +1,64 @@
+<#include '/admin/sonheader.html' >
 <style>
+	.layui-input-line{float: left;width:300px}
+	.layui-form-pane .layui-form-label{width: 180px;float: left;}
 	.combo{display:inline}
 	.combo-arrow{margin:2px 1px 0px 0px}
 </style>
-<div class="easyui-panel" style="border-style: none;">
+<div class="admin-main">
 	<div style="padding: 10px 0 10px 60px">
-		<form id=regioneditForm method="post" class="validate">
-			<table>
-				<tr>
-					<th>地区名称</th>
-					<td><input class="input_text  easyui-validatebox" type="text" id="local_name" maxlength="60"
-						name="local_name" data-options="required:true" value="${regions.local_name!''}"></input>
-					</td>
-
-				</tr>
-				<tr>
-					<th>邮政编码:</th>
-					<td>
-						 <input class="input_text easyui-numberbox" type="text" maxlength="60"
-						name="zipcode" data-options="required:true" value="${regions.zipcode!''}"></input>
-					</td>
-				</tr>
-				<tr>
-					<th>是否支持货到付款:</th>
-					<td>
-						<select name="cod" id="cod" style="height: 30px;width: 200px;">
-					     	<option value="1" <#if regions.cod==1>selected </#if>	>支持</option>
+		<form id=regioneditForm  class="layui-form layui-form-pane">
+				<div class="layui-form-item">
+		    		<label class="layui-form-label" >地区名称</label>
+		    		<div class="layui-input-line">
+		      			<input type="text"  name="local_name" value="${regions.local_name!''}"  maxlength="60" id="local_name" lay-verify="required" class="layui-input">
+		    		</div>
+  				</div>
+  				<div class="layui-form-item">
+		    		<label class="layui-form-label">邮政编码:</label>
+		    		<div class="layui-input-line" >
+		      			<input type="text"  name="zipcode" value="${regions.zipcode!''}" maxlength="6" id="local_name" lay-verify="required|number" class="layui-input">
+		    		</div>
+  				</div>
+  				<div class="layui-form-item">
+					<label class="layui-form-label" >是否支持货到付款:</label>
+		    		<div class="layui-input-line">
+		      			<select name="cod" id="cod">
+							<option value="1" <#if regions.cod==1>selected </#if>	>支持</option>
 					     	<option value="0" <#if regions.cod==0>selected </#if> 	>不支持</option>
-					     </select>
-					</td>
-				</tr>
-			</table>
+						</select>
+		   			</div>
+		  		</div>							
 			<input type="hidden" name="region_id" value="${regions.region_id}" >
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    form.on('submit(save)', function(){ 
+    	var options = {
+   			url:"${ctx}/shop/admin/region/save-edit.do?ajax=yes",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent._goodsCatEdit.refreshData();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#regioneditForm").ajaxSubmit(options);
+       return false; 
+    });
+}); 
+</script>

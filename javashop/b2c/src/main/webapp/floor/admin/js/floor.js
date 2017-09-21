@@ -59,6 +59,8 @@ $(function(){
 		$("#floorform").ajaxSubmit(options);
 	})
 });
+
+
 /**
  * 根据操作类型对弹出的dialog进行基本配置
  * @param id 楼层id 当id为空时,是添加楼层事件
@@ -99,6 +101,7 @@ function append(id, obj) {
 	map["gridreload"] = "#pcfloordata";
 	addDialog(map);
 }
+
 /**
  * 根据配置信息弹出窗口
  * @param map 配置信息
@@ -132,6 +135,7 @@ function addDialog(map) {
 		} ]
 	});
 }
+
 /**
  * 提交表单
  * @param map 配置信息
@@ -394,5 +398,4 @@ function del(id) {
 			$.Loading.error("出现错误 ，请重试");
 		}
 	});
-
 }

@@ -132,7 +132,9 @@ public class SpecController extends GridController{
 	public JsonResult saveAdd(Specification spec, @RequestParam(value = "valueIdArray", required = false) Integer[] valueIdArray,@RequestParam(value = "valueArray", required = false) String[] valueArray, @RequestParam(value = "imageArray", required = false) String[] imageArray){
 		
 		List valueList=fillSpecValueList(valueIdArray,valueArray,imageArray);
-		
+		if(spec.getSpec_type()==1){
+			spec.setSpec_memo("type_color");
+		}
 		try {
 			this.specManager.add(spec, valueList);
 			return JsonResultUtil.getSuccessJson("规格添加成功");
@@ -190,6 +192,12 @@ public class SpecController extends GridController{
 	@RequestMapping(value="delete")
 	public JsonResult delete(Integer[] spec_id){
 		try {
+			for (Integer valueid : spec_id) {
+				boolean isused = this.specManager.checkUsed(valueid);
+				if(isused){
+					return JsonResultUtil.getErrorJson("规格已经被商品使用，不能删除");
+				}
+			}
 			this.specManager.delete(spec_id);
 			return JsonResultUtil.getSuccessJson("规格删除成功");
 		} catch (Exception e) {
@@ -211,6 +219,9 @@ public class SpecController extends GridController{
 	
 				SpecValue specValue = new SpecValue();
 				specValue.setSpec_value_id(valueIdArray[i]);
+				if(valueIdArray[i] ==0){
+					specValue.setInherent_or_add(0);
+				}
 				specValue.setSpec_value(value);
 				if( imageArray!=null&&imageArray.length!=0){
 					String image = imageArray[i];

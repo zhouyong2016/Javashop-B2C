@@ -1,98 +1,341 @@
-<#include '/admin/header.html' > 
+<#include '/admin/header.html' >
 <#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
+<style>
+.site-table tbody tr td .layui-btn + .layui-btn{
+width:80px
+}
 
-
-<div class="main" style="background-color: white;">
-	<form id="addForm">
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<th>标题：</th>
-				<td>
-					<input class="input_text easyui-validatebox" name="msg_title" data-options="required:true" maxlength="30"/>
-				</td>
-			</tr>
-			<tr>
-				<th>消息内容：</th>
-				<td>
-					<textarea class="input_text easyui-validatebox" rows="10"  placeholder="限20000字"  name="msg_content" data-options="required:true" maxlength="20000"></textarea>
-					<span class="un">还可以输入<font id="font_size">20000</font>个字</span>
-				</td>
-			</tr>
-			<tr>
-				<th>范围：</th>
-				<td>
-					<input type="radio" name="send_type" value="0" id="sendAll" checked="true">发送全站
-					<input type="radio" name="send_type" value="1" id="sendPart">发送指定会员
-					<input type="hidden" name="member_ids" id="content">
-				</td>
-			</tr>
-		</table>
-	</form>
-	<div class="buttonWrap fixed">
-		<a id="saveBtn" class="easyui-linkbutton" onclick="submitForm()"
-			href="javascript:;">发送</a>
-	</div>
-	<div id="show_members"></div>
+table.dataTable tbody th, table.dataTable tbody td{
+padding:8px 38px;
+}
+.layui-form-item{
+	margin-left:10px;
+}
+.layui-table td, .layui-table th{
+padding:8px 42px;
+}
+#memberdatatwo tbody tr{
+  display:none;
+}
+</style>
+<div class="admin-main">
+    <!--表单区域  -->
+	<form id="addForm" class="layui-form layui-form-pane" action="" style="padding-top: 10px;padding-bottom:30px;">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">标题：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="msg_title" maxlength="30" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item ">
+   			<label class="layui-form-label">消息内容：</label>
+    		<div class="layui-input-block">
+      			<textarea name="msg_content" placeholder="限20000字" maxlength="2000" lay-verify="required" class="layui-textarea"></textarea>
+      			<span class="un">还可以输入<font id="font_size">20000</font>个字</span>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">范围：</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="send_type" value="0" lay-filter="sendAll"  id="sendAll" checked="checked" title="发送全站">
+      			<input type="radio" name="send_type" value="1" lay-filter="sendPart" id="sendPart" title="发送指定会员"  >
+      			<input type="hidden" name="member_ids" id="content">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<div class="layui-input-block">
+      			<button class="layui-btn" id="saveBtn" lay-submit="" lay-filter="saveBtn">确认发送</button>
+    		</div>
+  		</div>
+  	</form>
+  	<div id="show_members" style="display:none;">
+  	<div class="layui-tab">
+     <ul class="layui-tab-title">
+	    <li class="layui-this">选择会员</li>
+	    <li>已选会员</li>
+ 	</ul> 
+ <!--  //点击发送指定会员出现的内容 -->
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show" style="height:100%">
+    	<div class="choice" style="height:40px;">
+	    		 <a class="layui-btn  layui-btn-normal layui-btn-small" onclick="batchchoice()">批量选择</a>
+	    	<span style="float:right;">
+	        <span>关键字:</span>
+		        <input type="text" id="_search" placeholder="请输入用户名/姓名/手机号" class="choice-inp" style="height:28px;margin-top:2px;">
+		        <button type="button" class="layui-btn  layui-btn-normal  layui-btn-small" onclick="searchOrder()">搜索</button>
+	        </span>
+        </div>
+        <div class="chioce-list xuanze">
+       		<form id="memberform">
+				<table id="memberdata" class="layui-table site-table table-hover selected"
+						width="100%" lay-skin="line">
+				<thead>
+				<tr>
+					<th><input type='checkbox' class='btn-checkall fly-checkbox'
+						id='selected-all'></th>
+						<th>用户名</th>
+						<th>姓名</th>
+						<th>邮箱</th>
+						<th>手机</th> 
+						<th>操作</th>
+				</tr>
+				</thead>
+				</table>
+				<div id="addBrand"></div>
+			</form>
+        </div>
+    </div>
+    <div class="layui-tab-item">
+         <div class="cancel">
+          	 <a class="layui-btn  layui-btn-normal layui-btn-small" onclick="batch()">批量取消</a>
+         </div>
+    	<div class="cansel-list  yixuan">
+   			<form id="memberformone">
+				<table id="memberdatatwo" class="layui-table site-table table-hover selected" width="100%" lay-skin="line">
+					<thead>
+						<tr>
+							<th><input type='checkbox' class='btn-checkall fly-checkbox' checked='false'
+								id='selected-alltwo'></th>
+								<th>用户名</th>
+								<th>姓名</th>
+								<th>邮箱</th>
+								<th>手机</th> 
+								<th>操作</th>
+						</tr>
+					</thead>
+				</table>
+			</form>
+    	</div>
+    	
+    </div>
+    
+  </div>
+</div>
+  	
+  	
+  	</div>
 </div>
 <script type="text/javascript" src="${ctx}/shop/admin/js/jquery.membersSelector.js"></script>
 <script>
-	$(function(){
-		$("#sendPart").click(function(){
-			//创建会员选择器
+var table;
+$(function(){
+	layui.use(['form','element'], function(){
+	    var form = layui.form();
+	    var element = layui.element();
+	    form.on('radio(sendPart)', function(data){
+	    	//创建会员选择器
+	    	$("#show_members").css("display","block");
 			var container = $("#show_members");
-			if(container.text() == ""){
 				var options = {
 					membersid_name : 'members_ids',
 				};
-				container.membersSelector(options);
+			}); 
+	    form.on('radio(sendAll)',function(data){
+	    	$("#show_members").css("display","none");
+	    });
+	    
+	    form.on('submit(saveBtn)', function(data) {
+	    	var formflag = $("#addForm");
+			if (formflag) {
+				var sendType = $("input[name='send_type']:checked").val();
+				if(sendType == 1){
+					var members_ids = [];
+					$(".yixuan input[name='member_id']").each(function(i, o) {
+						members_ids[i] = $(o).val();
+					});
+					if(members_ids.length <= 0){
+						alert("请选择要通知的会员......");
+						return false;
+					}
+					$("#content").val(members_ids);
+				}
+				var options = {
+					url : "${ctx}/shop/admin/message/save-message.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+							newTab("历史消息","${ctx}/shop/admin/message/list.do");
+						}
+						if (result.result == 0) {
+							$.Loading.error(result.message);
+						}
+					},
+					error : function(result) {
+						$.Loading.error("发生错误，请重试");
+					}
+				};
+				$("#addForm").ajaxSubmit(options);
+				return false;
 			}
-		});
-		$("#sendAll").click(function(){
-			var container = $("#show_members");
-			container.empty();
-		});
+	    });
+	});
+
+	//
+	$("#sendAll").click(function(){
+		var container = $("#show_members");
+		container.empty();
 	});
 	
-	function submitForm() {
-		var formflag = $("#addForm").form().form('validate');
-		if (formflag) {
-			var sendType = $("input[name='send_type']:checked").val();
-			if(sendType == 1){
-				var members_ids = [];
-				$("input[name='members_ids']").each(function(i, o) {
-					members_ids[i] = $(o).val();
-				});
-				if(members_ids.length <= 0){
-					alert("请选择要通知的会员......");
-					return;
-				}
-				$("#content").val(members_ids);
-			}
-			$.Loading.show("正在添加......");
-			var options = {
-				url : "${ctx}/shop/admin/message/save-message.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success(result.message);
-						newTab("历史消息","${ctx}/shop/admin/message/list.do");
-						parent.CloseTabByTitle("发送消息");
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-				},
-				error : function(e) {
-					var result = JSON.parse(e.responseText)
-					$.Loading.error(result.message);
-					$("#saveBtn").linkbutton("enable");
-				}
-			};
-			$("#addForm").ajaxSubmit(options);
-			$("#saveBtn").linkbutton("disable");
-		}
-	}
+		table = $('#memberdata').DataTable({
+			"language": {
+		        "url": "${staticserver}/media/zh_CN.txt"
+		    },
+		    "processing": true,
+		    "serverSide": true,
+		    "ordering": false,
+		    "searching": false,
+		    "lengthChange": false,
+		    ajax: {
+		        //指定数据源
+		        type:"post",
+		        url: '${ctx}/shop/admin/member/member-list-json.do',
+		    },
+		    columns: [ //定义列
+		         {"data": function (obj) {
+		                   return '<input type="checkbox" onclick="check(this)"   name="member_id" class="fly-checkbox" value=' + obj.member_id + '>';
+		                   return '<input type="hidden" value='+obj.member_id+'>';
+		               		}},
+		       
+		        {data: "uname"},
+		        {data: "name"},
+		        {data: "email"},
+		        {data: "mobile"},	        
+		        {data: null,"render":function(data,type,row){
+		        	return "<a class='layui-btn  layui-btn-normal layui-btn-small anniu' name='membertwo_id' onclick='select(this)'  >选择此会员</a>"
+		        	    + "<a class='layui-btn  layui-btn-normal layui-btn-small anniuone' name='memberone_id' onclick='unselect(this)' style='display:none'>已选择</a>"
+		        	     + "<a class='layui-btn  layui-btn-normal layui-btn-small anniutwo' name='memberthree_id' onclick='upselect(this)' style='display:none'>删除</a>";
+		        	
+		        }}  
+		     ]
+		});
+		table = $('#memberdatatwo').DataTable({
+			"language": {
+		        "url": "${staticserver}/media/zh_CN.txt"
+		    },
+		    "processing": true,
+		    "serverSide": true,
+		    "ordering": false,
+		    "searching": false,
+		    "lengthChange": false,
+		    ajax: {
+		        //指定数据源
+		        type:"post",
+		        url: '${ctx}/shop/admin/member/member-list-json.do',
+		    },
+		    columns: [ //定义列
+		         {"data": function (obj) {
+		                   return '<input type="checkbox" onclick="check(this)"   name="member_id" class="fly-checkbox" value=' + obj.member_id + '>';
+		                   return '<input type="hidden" value='+obj.member_id+'>';
+		               		}},
+		       
+		        {data: "uname"},
+		        {data: "name"},
+		        {data: "email"},
+		        {data: "mobile"},	        
+		        {data: null,"render":function(data,type,row){
+		        	return "<a class='layui-btn  layui-btn-normal layui-btn-small anniutwo' name='memberthree_id' onclick='upselect(this)' style='display:block'>删除</a>";
+		        	
+		        }}  
+		     ]
+		});
+ });
+    /* 点击批量选择按钮 */
+    	var arr=[];
+        var one=[];
+    	 function batchchoice(){
+        /* 右侧按钮 */
+    	$('#memberdata input[name=member_id]').closest('tr').find('td:last').find('.anniuone').css({'display':'none'}).siblings('.anniu').css({'display':'block'});
+    	$('#memberdata input[name=member_id]:checked').closest('tr').find('td:last').find('.anniuone').css({'display':'block'}).siblings('.anniu').css({'display':'none'});
+    	/* 批量选择框的复选框选中状态 */
+    	var onechexk=$('#memberdata input[name=member_id]:checked')
+          for (var i=0;i<onechexk.length;i++){
+        	  arr.push($(onechexk).eq(i).val())
+          }
+    	  /* 批量取消框中所有的复选框 */
+          for(var j=0;j<$('#memberdatatwo input[name=member_id]').length;j++){
+        	  var twochexk=$('#memberdatatwo input[name=member_id]').eq(j).val();
+        	  for(var m=0;m<arr.length;m++){
+        		   if(twochexk==arr[m]){
+        			 $('#memberdatatwo input[name=member_id]').eq(j).closest('tr').css({'display':'table-row'})
+        		   }
+        	  }
+          }
+    	  /* 一开始批量选择框中的复选框就不选中状态 */
+          $('#memberdatatwo input[name=member_id]').each(function () {
+              $(this).attr('checked',false);
+      });	
+    	$(".yixuan .selected").find('[name="memberthree_id"]').css("display","block");
+        $(".yixuan .selected").find('[name="memberone_id"]').css("display","none"); 
+    }
+   
+    /* 点击批量取消按钮 */
+    function batch(){
+    	$(".yixuan .selected input[name=member_id]:checked").closest('tr').css({'display':'none'});
+    	$(".xuanze .selected input[name=member_id]").closest('tr').find('td:last').find('.anniuone').css({'display':'none'}).siblings('.anniu').css({'display':'block'});
+    	$('.xuanze .selected input:checkbox').each(function () {
+            $(this).attr('checked',false);
+    	});	
+    }
+    /* 批量取消框 中 复选框全选显示  */
+    $('#selected-alltwo').attr({'checked':false})
+    var clic=0;
+    $('#memberdatatwo').on('click','#selected-alltwo',function(){
+    	   var _this=this;
+    	   var tr = $('#memberdatatwo input[name=member_id]').closest('tr')
+    	   clic++;
+    	   if(clic%2==1){
+    		   for(var i=0;i<tr.length;i++){
+       		    if($(tr).eq(i).css('display')=='table-row'){
+       		        $(tr).eq(i).find('input[name=member_id]').prop({'checked':true});
+       		    }
+       	    }
+    	   }else{
+    		   $(tr).find('input[name=member_id]').attr({'checked':false});
+    		  
+    	   }
+    	    
+    })
+   /*  点击选择此会员按钮 */
+     function select(obj){
+       $(obj).css("display","none"); 
+       $(obj).parent().find('[name="memberone_id"]').css("display","block"); 
+       $(".yixuan .selected").find('[name="memberthree_id"]').css("display","block");
+       $(".yixuan .selected").find('[name="memberone_id"]').css("display","none"); 
+         var  yixuan= $(obj).closest('tr').find('input[name="member_id"]').val();
+         for (var i=0;i<$('#memberdatatwo input[name=member_id]').length;i++){
+       	     one.push($('#memberdatatwo input[name=member_id]').eq(i).val())
+         }
+       	  for(var m=0;m<one.length;m++){
+       		   if( yixuan==one[m]){
+       			 $('#memberdatatwo input[name=member_id]').eq(m).closest('tr').css({'display':'table-row'})
+       		   }
+       	  }
+     }; 
+  /*    点击已选择按钮 */
+     function  unselect(obj){
+      $(obj).css("display","none");
+          $(obj).parent().find('[name="membertwo_id"]').css("display","block");
+          var length=$(".selected tbody tr").length-1;
+          var tab = $(".selected  tbody tr:eq("+length+")"); 
+          tab.remove(); 
+     }
+  /* 点击删除按钮 */
+     function upselect(obj){
+    	 $(obj).closest('tr').css({'display':'none'})
+    	
+    	 var ind = $(obj).closest('tr').index()
+    	 $("#memberdata input[name=member_id]").eq(ind).attr({'checked':false})
+    	 $("#memberdata input[name=member_id]").eq(ind).closest('tr').find('td:last').find('.anniuone').css({'display':'none'}).siblings('.anniu').css({'display':'block'});
+  }
+	function selected_btn_formater(value,row,index) {
+		return "<span class='cancel_select_btn'  membersid='"+ value.member_id +"'></span>";
+	};
+	
 	
 	$('textarea').each(function() {  
 		var ta = $(this), p = ta.parent(), ml = parseInt(ta.attr('maxlength')),  
@@ -103,13 +346,18 @@
 			ta.bind('click keyup', function() {  
 				var m = $(this), v1 = m.val();  
 				if (v1.length > ml) {  
-					m.val(v1.substring(0, ml))  
+					m.val(v1.substring(0, ml));  
 				}  
 				$("#font_size").text(ml-m.val().length);  
 			});  
 		}  
 	}); 
 	
+	//搜索功能
+	function searchOrder(){
+		var keyword = $("#_search").val();
+		table.ajax.url(ctx+"/shop/admin/member/member-list-json.do?keyword="+keyword+"&stype="+0).load();
+	}	
+	
 </script>
-
 <#include '/admin/footer.html' >

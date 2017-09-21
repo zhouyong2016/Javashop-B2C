@@ -2,7 +2,7 @@ package com.enation.app.shop.core.order.model;
 
 
 /**
- * 收款日志
+ * 收款单
  * @author kingapex
  *2010-4-8上午09:09:43
  *
@@ -29,9 +29,11 @@ public class PaymentLog implements java.io.Serializable {
 	private Double credit;
 	private String admin_user;
 	private Double paymoney; //已结算金额
+	/**
+	 * 支付交易单号
+	 */
+	private String trasaction_id; 
 	
-	
-
 	public Integer getPayment_id() {
 		return payment_id;
 	}
@@ -169,6 +171,13 @@ public class PaymentLog implements java.io.Serializable {
 		this.paymoney = paymoney;
 	}
 	
+	public String getTrasaction_id() {
+		return trasaction_id;
+	}
+
+	public void setTrasaction_id(String trasaction_id) {
+		this.trasaction_id = trasaction_id;
+	}
 
 	
 }

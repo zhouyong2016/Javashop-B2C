@@ -1,118 +1,133 @@
 <#include '/admin/header.html' >
+<style>
+.layui-input-block input {
+	width: 40%;
+}
 
-<div class="main">
-	<div class="shadowBoxWhite  whiteBox">
-		<form method="post" id="dataForm" >
-			<#if isEdit > <input type="hidden" name="dataid" value="${dataid}" />
-			<input type="hidden" id="dataAction"
-				value="${ctx}/cms/admin/data/save-edit.do?ajax=yes&modelid=${modelid}" /> <#else> <input
-				type="hidden" id="dataAction"
-				value="${ctx}/cms/admin/data/save-add.do?ajax=yes&modelid=${modelid!''}" /> </#if>
+.layui-form-pane .layui-form-label {
+	width: 150px;
+}
 
-			<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" class="form-table">
-				<tr>
-					<th><label class="text">所属分类：</label>
-					</th>
-					<td><select name="catid">
-							<option value="${catid}" selected><#if cat??>${cat.name}</#if></option> 
-							<#assign children=catList /> 
-							<#assign level=1 />
-							<#include 'select_children.html' />
-					</select></td>
-				</tr>
-				<tr>
-					<th><label class="text">权重：</label>
-					</th>
-					<td><input type="text" class="easyui-numberbox input_text" maxlength="9"
-						data-options="required:true" name="sort" style="width: 50px"<#if
-						isEdit >value="${(article.sort?c)!0}"</#if> /> 权重越高则越靠前显示</td>
-				</tr>
-
-				<tr>
-					<th><label class="text">页面标题：</label>
-					</th>
-					<td><input maxlength="20"  type="text" class="easyui-validatebox input_text"
-						data-options="required:true" name="page_title"
-						style="width: 250px" <#if isEdit >value="${article.page_title!''}"</#if>/></td>
-				</tr>
-				<tr>
-					<th><label class="text">页面关键字：</label>
-					</th>
-					<td><input maxlength="20" type="text" class="input_text easyui-validatebox" name="page_keywords" data-options="required:true"
-						style="width: 250px"<#if isEdit
-						>value="${article.page_keywords!''}"</#if> /></td>
-				</tr>
-				<tr>
-					<th><label class="text">页面描述：</label>
-					</th>
-					<td>
-						<script id="editor1" name="page_description" type="text/plain" style="height:200px;width: 99%;">
-							<#if isEdit  >${article.page_description!''}</#if>
-						</script>
-					</td>
-				</tr>
-				
-				<#if fieldList ??> 
-				<#list fieldList as field >
-				<tr>
-					<th><label class="text">${field.china_name}：</label>
-					</th>
-					<td>${field.inputHtml}</td>
-				</tr>
-				</#list> 
-				</#if>
-			</table>
-		</form>
-		<div class="buttonWrap">
-			<a href="javascript:;" id="datainput" class="easyui-linkbutton">保存</a>
+.input_text {
+	height: 36px; ! important;
+	border: 1px solid #ccc;
+	!
+	important;
+}
+</style>
+<div class="admin-main">
+	<!--表单区域  -->
+	<form id="dataForm" class="layui-form layui-form-pane"
+		style="padding: 10px 10px;">
+		<#if isEdit > <input type="hidden" name="dataid" value="${dataid}" />
+		<input type="hidden" id="dataAction"
+			value="${ctx}/cms/admin/data/save-edit.do?ajax=yes&modelid=${modelid}" />
+		<#else> <input type="hidden" id="dataAction"
+			value="${ctx}/cms/admin/data/save-add.do?ajax=yes&modelid=${modelid!''}" />
+		</#if>
+		<div class="layui-form-item">
+			<label class="layui-form-label _stration">所属分类：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="catid" value="${catid}"> <input
+					class="layui-input" type="text" disabled="disabled"
+					value="${cat.name}">
+			</div>
 		</div>
-	</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">权重：</label>
+			<div class="layui-input-block">
+				<input type="text" name="sort"  maxlength="
+					9"  lay-verify="required|number" autocomplete="off"
+					class="layui-input"<#if isEdit
+				>value="${(article.sort?c)!0}"</#if> />
+				<div class="layui-form-mid layui-word-aux">	权重越高则越靠前显示</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">页面标题：</label>
+			<div class="layui-input-block">
+				<input type="text" name="page_title" maxlength="20"
+					lay-verify="required" autocomplete="off" class="layui-input"<#if
+				isEdit >value="${article.page_title!''}"</#if> />
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">页面关键字：</label>
+			<div class="layui-input-block">
+				<input type="text" name="page_keywords" maxlength="20"
+					lay-verify="required" autocomplete="off" class="layui-input"<#if
+				isEdit >value="${article.page_keywords!''}"</#if> />
+			</div>
+		</div>
+
+		<div class="layui-form-item" style="width: 100%">
+			<label class="layui-form-label">页面描述：</label>
+			<div class="layui-input-block">
+				<script id="editor1" name="page_description" type="text/plain"
+					style="height: 200px; width: 90%; margin-left: 40px;">
+						<#if isEdit  >${article.page_description!''}</#if>
+				</script>
+			</div>
+		</div>
+
+		<#if fieldList ??> 
+			<#list fieldList as field >
+			<div class="layui-form-item">
+				<label class="layui-form-label">${field.china_name}：</label>
+				<div class="layui-input-block">${field.inputHtml}</div>
+			</div>
+			</#list> 
+		</#if>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block" style="padding-bottom: 10px;">
+				<button type="button" class="layui-btn save" lay-submit lay-filter="saveData">立即提交</button>
+			</div>
+		</div>
+	</form>
 </div>
 <script type="text/javascript">
-
-var ue = UE.getEditor('editor1',{
-	zIndex:0,
-});
+	var ue = UE.getEditor('editor1', {
+		zIndex : 0,
+	});
 
 	$(function() {
-		
-		$("#datainput").click(function() {
-			var dataurl = $("#dataAction").val();
-			var formflag = $("#dataForm").form('validate');
-			if (formflag) {
-				$.Loading.show("正在保存,请稍候");
-				$("#datainput").linkbutton("disable");
-				var options = {
-					url : dataurl,
-					type : "POST",
-					dataType : 'json',
-					success : function(result) {
-						if (result.result == 1) {
-							$.Loading.success(result.message);
-							if( dataurl == "${ctx}/cms/admin/data/save-add.do?ajax=yes&modelid=${modelid!''}" ){
-								parent.reloadTabGrid("文章列表");
-								parent.reloadTabGrid("商城公告");
-								parent.reloadTabGrid("联系平台");
-								parent.reloadTabGrid("联系方式");
-								parent.reloadTabGrid("热门关键字");
-								parent.CloseTabByTitle("添加文章");
-							}
-						}
-						if (result.result == 0) {
-							$.Loading.error(result.message);
-						}
-						$("#datainput").linkbutton("enable");
-					},
-					error : function(e) {
-						$.Loading.error("出现错误 ，请重试");
-						$("#datainput").linkbutton("enable");
+		//关键字和url添加layui样式
+		$("._input input").addClass("layui-input");
+	});
+
+	layui.use([ 'form', 'layedit', 'laydate' ],function() {
+		var form = layui.form(), layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+
+		$(".layui-layer-btn1").click(function() {
+			parent.layer.close(index);
+		});
+
+		//监听提交
+		form.on('submit(saveData)',function(data) {
+
+			var path = $("#dataAction").val();
+			var options = {
+				url : path,
+				type : "post",
+				dataType : "json",
+				async : false,
+				beforeSend : function() {
+					$('.save').attr("disabled",true);
+				},
+				success : function(data) {
+					if (data.result == 1) {
+						parent.$.Loading.success(data.message); 
+						closeCurrent(); //关闭页面
+					} else {
+						layer.msg(data.message,{icon : 5});
 					}
-				};
-				$('#dataForm').ajaxSubmit(options);
-			} else {
-				$.Loading.hide();
-				$("#datainput").linkbutton("enable");
-			}
+				}
+			};
+			$("#dataForm").ajaxSubmit(options);
+			return false;
 		});
 	});
 </script>

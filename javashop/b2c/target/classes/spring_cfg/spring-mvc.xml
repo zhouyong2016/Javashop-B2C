@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd " >
+        
+    
+	<!-- freemarker的配置 -->  
+    <bean id="freemarkerConfigurer"  
+        class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+        <property name="templateLoaderPath" value="/" />  
+        <property name="defaultEncoding" value="UTF-8" />  
+        <property name="freemarkerSettings">  
+            <props>  
+                <prop key="template_update_delay">10</prop>  
+                <prop key="locale">zh_CN</prop>  
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>  
+                <prop key="date_format">yyyy-MM-dd</prop>  
+                <prop key="number_format">#.##</prop>  
+            </props>  
+        </property>  
+    </bean>  
+ 
+   <bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+   
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json; charset=utf-8</value>
+            </list>
+        </property>
+    </bean>
+ 
+    
+    <!-- FreeMarker视图解析  -->  
+    <bean id="viewResolver"  
+        class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">  
+        <property name="viewClass"  value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+        <property name="suffix" value=".html" />  
+        <property name="contentType" value="text/html;charset=UTF-8" />  
+        <property name="exposeRequestAttributes" value="true" />  
+        <property name="exposeSessionAttributes" value="true" />  
+        <property name="exposeSpringMacroHelpers" value="true" />  
+    </bean>  
+    
+    
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="4096000"/>
+        <property name="uploadTempDir" value="upload/temp"/>
+        <!-- 懒加载为了让异常能走到controller中 -->
+        <property name="resolveLazily" value="true" />
+    </bean>
+ 
+   
+       
+	<!-- 声明改变request的拦截器 -->  
+	<mvc:interceptors>
+		<bean class="com.enation.eop.sdk.interceptor.ChangeRequestInterceptor"></bean>
+	</mvc:interceptors>
+
+    <context:annotation-config />  
+    <!--  未设置编码格式 
+    <mvc:annotation-driven />
+    -->
+    
+    <mvc:annotation-driven>
+    	<mvc:message-converters register-defaults="true">
+    		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+    			<constructor-arg value="UTF-8" />
+    		</bean>
+    		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                     <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                         <property name="failOnEmptyBeans" value="false" />
+                     </bean>
+                 </property>
+            </bean>
+    	</mvc:message-converters>
+    </mvc:annotation-driven>
+    <aop:aspectj-autoproxy/> 
+    
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"></bean>
+</beans>

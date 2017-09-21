@@ -11,7 +11,7 @@ public class SellBack {
 	
 	private Integer id;				//ID
 	private String tradeno;			//退货单号
-	private Integer tradestatus;	//状态   所有状态看SellBackStatus类
+	private Integer tradestatus;	//状态 0待审核。1.审核成功代发货.2.已入库。3.已完成。4.已取消。5.部分入库  6拒绝申请7.退款中 8.退款失败
 	private int orderid; 			//订单id 2015-11-19 kingapex新增，因为在多处需要此参数， 还需要通过ordersn去取，所以新增此字段
 	private String ordersn;			//订单号
 	private String regoperator;		//操作员
@@ -34,7 +34,6 @@ public class SellBack {
 	private String remark;			//备注
 	private String reason;			//退货（退款）原因
 	private Integer type;			//1.退款 。2.退货
-	private String ship_status;		//是否已收货 0.未收货1.已收货  
 	private Long confirm_time;		//确认退货单时间
 	private Integer gift_id;		//赠品id add_by DMRain 2016-7-19
 	
@@ -183,12 +182,7 @@ public class SellBack {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	public String getShip_status() {
-		return ship_status;
-	}
-	public void setShip_status(String ship_status) {
-		this.ship_status = ship_status;
-	}
+	
 	public Long getConfirm_time() {
 		return confirm_time;
 	}

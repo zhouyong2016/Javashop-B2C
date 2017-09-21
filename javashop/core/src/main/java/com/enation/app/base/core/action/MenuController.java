@@ -69,6 +69,8 @@ public class MenuController  {
 		
 		try{
 			this.menuManager.move(id, targetid, movetype);
+			//将session中的菜单列表数据移除
+			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey);
 			return JsonResultUtil.getSuccessJson("移动成功");
 		}catch(Throwable e){
 			this.logger.error("move menu",e);
@@ -121,8 +123,8 @@ public class MenuController  {
 		
 		try{
 			Integer menuid=this.menuManager.add(menu);
-			//清空菜单列表
-			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey.toString());
+			//将session中的菜单列表数据移除
+			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey);
 			return JsonResultUtil.getObjectJson(menuid);
 		}catch(RuntimeException e){
 			e.printStackTrace();
@@ -161,8 +163,8 @@ public class MenuController  {
 		
 		try{
 			this.menuManager.edit(menu);
-			//清空菜单列表
-			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey.toString());
+			//将session中的菜单列表数据移除
+			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey);
 			return JsonResultUtil.getSuccessJson("添加成功");
 		}catch(RuntimeException e){
 			logger.error(e.getMessage(), e);
@@ -181,8 +183,8 @@ public class MenuController  {
 	public JsonResult updateSort(Integer[] menu_ids,Integer[] menu_sorts){
 		try{
 			this.menuManager.updateSort(menu_ids, menu_sorts);
-			//清空菜单列表
-			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey.toString());
+			//将session中的菜单列表数据移除
+			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey);
 			return JsonResultUtil.getSuccessJson("");
 		}catch(RuntimeException e){
 			this.logger.error(e.getMessage(), e);
@@ -205,7 +207,7 @@ public class MenuController  {
 		
 		try{
 			this.menuManager.delete(id);
-			//清空菜单列表
+			//将session中的菜单列表数据移除
 			ThreadContextHolder.getSession().removeAttribute(SystemSetting.menuListKey.toString());
 			return JsonResultUtil.getSuccessJson("删除成功");
 		}catch(RuntimeException e){
@@ -221,11 +223,12 @@ public class MenuController  {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/get-menu-json")
-	public String getMenuJson( int authid){
+	public String getMenuJson(Integer authid){
 		StringBuffer data  = new StringBuffer();
 		data.append("[");
 		List<Menu> menuList  = this.menuManager.getMenuTree(0);
 		com.enation.app.base.core.model.AuthAction authAction=null;
+		
 		if(authid!=0)
 			authAction=  authActionManager.get(authid);
 		int i=0;
@@ -248,12 +251,12 @@ public class MenuController  {
 	 */
 	private String menutoJson(Menu menu,com.enation.app.base.core.model.AuthAction authAction){
 		StringBuffer data  = new StringBuffer();
-		data.append("{\"id\":"+menu.getId()+", \"text\":\""+menu.getTitle()+"\"");	
+		data.append("{\"id\":"+menu.getId()+", \"name\":\""+menu.getTitle()+"\""+",\"open\":true");	
 			if(authAction!=null){
 			String[] menuids=authAction.getObjvalue().split(",");
 			if(authAction!=null){
 				for (int i = 0; i < menuids.length; i++) {
-					if(Integer.parseInt(menuids[i])==menu.getId() && !menu.getHasChildren()){
+					if(Integer.parseInt(menuids[i])==menu.getId()){
 							data.append(",\"checked\":true");
 					}
 				}

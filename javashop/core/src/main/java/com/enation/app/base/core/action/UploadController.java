@@ -74,17 +74,16 @@ public class UploadController {
 		if (file != null && file.getOriginalFilename() != null) {
 			try{
 				
-				if(!FileUtil.isAllowUp(file.getOriginalFilename())){
-					return JsonResultUtil.getErrorJson("不允许上传的文件格式，请上传图片,压缩包,word,excle,pdf,ico,文本,mp4格式文件。");
+				if(!FileUtil.isAllowUpImg(file.getOriginalFilename())){
+					return JsonResultUtil.getErrorJson("不允许上传的文件格式，请上传gif,jpg,bmp格式文件。");
 				}
 				InputStream stream=file.getInputStream();
 				IUploader uploader=UploadFacatory.getUploaer();
-				path = uploader.uploadFJ(stream, subFolder,file.getOriginalFilename());
+				path = uploader.upload(stream, subFolder,file.getOriginalFilename());
 			}catch(IllegalArgumentException e){
 				
 				return JsonResultUtil.getErrorJson(e.getMessage());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// 将本地附件路径换为静态资源服务器的地址

@@ -1,6 +1,5 @@
 package com.enation.app.shop.front.tag.decorate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.enation.app.shop.core.decorate.model.Floor;
 import com.enation.app.shop.core.decorate.service.IFloorManager;
-import com.enation.app.shop.core.goods.model.Goods;
-import com.enation.framework.database.IDaoSupport;
 import com.enation.framework.taglib.BaseFreeMarkerTag;
 import com.enation.framework.util.JsonUtil;
 import com.enation.framework.util.StringUtil;
@@ -34,8 +31,6 @@ public class FloorTag extends BaseFreeMarkerTag {
 
 	@Autowired
 	private IFloorManager floorManager;
-	@Autowired
-	private IDaoSupport daoSupport;
 
 	/**
 	 * 获得特定楼层信息

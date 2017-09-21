@@ -22,7 +22,9 @@ import com.enation.eop.sdk.utils.StaticResourcesUtil;
 import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
+import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.util.JsonResultUtil;
+import com.enation.framework.util.StringUtil;
 
 /**
  * 支付配置action
@@ -108,6 +110,7 @@ public class PayCfgController extends GridController {
 		view.addObject("type", cfg.getType());
 		view.addObject("biref", cfg.getBiref());
 		view.addObject("paymentId", paymentId);
+		view.addObject("is_retrace", cfg.getIs_retrace());
 		view.addObject("is_online", cfg.getIs_online());
 		view.addObject("pay_img", StaticResourcesUtil.convertToUrl(cfg.getPay_img()));
 		
@@ -127,9 +130,14 @@ public class PayCfgController extends GridController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/save-add")
-	public Object saveAdd(String name,String type,String biref,String payImg,Integer isOnline){
+	public Object saveAdd(String name,String type,String biref,String payImg,Integer isOnline,Integer isRetrace){
 		try{
-			HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+			
+			if(StringUtil.isEmpty(name) || StringUtil.isEmpty(type)){
+				return JsonResultUtil.getErrorJson("支付方式必选");
+			}
+			
+			HttpServletRequest  request = ThreadContextHolder.getHttpRequest();
 			Enumeration<String> names = request.getParameterNames();
 			Map<String,String> params = new HashMap<String, String>();
 			while(names.hasMoreElements()){
@@ -149,20 +157,20 @@ public class PayCfgController extends GridController {
 			}
 			
 			PayCfg pay=paymentManager.getPayCfgByName(type);
+			
 			if (pay != null) {
-				
 				return JsonResultUtil.getErrorJson("支付方式添加失败,不能添加重复的支付方式");
-			} else {
-				Integer id = this.paymentManager.add(name, type, biref,payImg,isOnline,params);
 				
+			} else {
+				Integer id = this.paymentManager.add(name, type, biref,payImg,isOnline,params,isRetrace);
 				Map map=new HashMap();
 				map.put("result", 1);
 				map.put("message","支付方式添加成功" );
 				map.put("id", id);
+				
 				return map;
 			}
 		}catch(RuntimeException e){
-			e.printStackTrace();
 			logger.error("支付方式添加失败", e);
 			return JsonResultUtil.getErrorJson("支付方式添加失败");
 		} 		
@@ -200,18 +208,18 @@ public class PayCfgController extends GridController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/save-edit")
-	public JsonResult saveEdit(Integer paymentId,String type,String name,String biref,String payImg,Integer isOnline){
+	public JsonResult saveEdit(Integer paymentId,String type,String name,String biref,String payImg,Integer isOnline,Integer isRetrace){
 		try{
 			
 			if(EopSetting.IS_DEMO_SITE ){//如果是演示站点
 				return JsonResultUtil.getErrorJson("抱歉，当前为演示站点，以不能修改这些示例数据，请下载安装包在本地体验这些功能！");
 			}
-			HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+			HttpServletRequest  request = ThreadContextHolder.getHttpRequest();
 			Enumeration<String> names = request.getParameterNames();
 			Map<String,String> params = new HashMap<String, String>();
 			while(names.hasMoreElements()){
 				String nname= names.nextElement();
-				
 				if("name".equals(nname)) continue;
 				if("type".equals(nname)) continue;
 				if("biref".equals(nname)) continue;
@@ -225,7 +233,7 @@ public class PayCfgController extends GridController {
 				params.put(nname, value);
 			}
 			
-			this.paymentManager.edit(paymentId,name,type, biref,payImg,isOnline,params);
+			this.paymentManager.edit(paymentId,name,type, biref,payImg,isOnline,params,isRetrace);
 			return JsonResultUtil.getSuccessJson("支付方式修改成功");
 		}catch(RuntimeException e){
 			logger.error("支付方式修改失败", e);

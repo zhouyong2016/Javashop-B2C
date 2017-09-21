@@ -1,77 +1,149 @@
-<div class="easyui-layout" style=" height: 329px;">
-	<div data-options="region:'north'" style="height: 40px;text-align: right;">
-		<div style="padding-top: 3px;">
-			<input type="text" style="height: 25px;" id="keywords" />
-			<a href="javascript:void(0)" class="easyui-linkbutton" >搜索</a>
+<#include '/admin/sonheader.html' >
+<link href="${ctx}/statics/js/common/zTreeStyle/zTreeStyle.css"
+	rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="${ctx}/adminthemes/version3/datatables/jquery.dataTables.min.js "></script>
+	<script type="text/javascript" src="${ctx}/adminthemes/version3/datatables/dataTables.bootstrap.js "></script>
+	<link rel="stylesheet"  href="${ctx}/adminthemes/version3/datatables/dataTables.bootstrap.css" />
+    <link rel="stylesheet"  href="${ctx}/adminthemes/version3/datatables/jquery.dataTables.min.css" />
+
+<link rel="stylesheet" href="../css/list.css" />
+<link rel="stylesheet" href="../css/demo.css" />
+<style>
+.article {
+	float: right;
+	margin-right: 40px;
+}
+
+.paperbox{
+	margin-left: 10px;
+}
+
+td{
+	text-align: center;
+}
+
+#goods_data tr th {
+	text-align: center;
+}
+</style>
+
+<div class="admin-main" >
+	<!--  <div style="padding-left: 200px;">
+		<input type="text" name="keyword" style="width: 300px; height: 30px;"
+			placeholder="请输入标题" autocomplete="off" class="layui-input keyword">
+		<button class="layui-btn-primary layui-btn layui-btn-small" id="search">
+			<i class="layui-icon">&#xe615;</i>
+		</button>
+	</div>-->
+	<div class="paperbox"
+		style="width: 130px;; height:300px; white-space: nowrap; overflow: scroll">
+		<!-- //插件 -->
+		<div class="node">
+			<div class="zTreeDemoBackground left">
+				<ul id="tree_goods" class="ztree"></ul>
+			</div>
 		</div>
 	</div>
-	<div data-options="region:'west'" title="分类"
-		style="width: 200px;">
-		<div class="easyui-panel" style="padding: 5px">
-			<ul id="tt"  class="easyui-tree" data-options="url:'${ctx}/shop/admin/goods-select/list-json.do',method:'get',animate:true,onClick:showGoodsList"></ul>
-		</div>
-	</div>
-	<div data-options="region:'center',title:'商品',iconCls:'icon-ok'">
-		<table id="goodsdetailed" fitColumns="true"></table>
+	<div class="article" style="white-space: nowrap;overflow: scroll; height: 300px;">
+		<!-- 表格-->
+			<div class="list-form">
+				<table id="goods_data" class="layui-table site-table table-hover" style="width: 900px;"  lay-skin="line">
+					<thead >
+						<tr>
+							<th></th>
+							<th>编号</th>
+							<th>名称</th>
+							<th>价格</th>
+							<th>规格</th>
+							<th>库存量</th>
+							
+						</tr>
+					</thead>
+				</table>
+			</div>
 	</div>
 </div>
-
 <script type="text/javascript">
-	var sing=${sing};
-	var flag=false;
-	if(sing==0){
-		flag=true;
-	}
-	function showGoodsList(node){
-	  $('#goodsdetailed').datagrid({
-        	singleSelect:flag,
-        	collapsible:true,
-            url:"${ctx}/shop/admin/goods-select/list-product-by-cat-id.do?catid="+node.id,
-            columns:[[
-				{field:'ck',checkbox:true},	   
-	            {field:'sn',title:'编号',width:70},
-	            {field:'name',title:'名称',width:100},
-	            {field:'price',title:'价格',width:50},
-	            {field:'specs',title:'规格',width:30},
-	            {field:'store',title:'库存量',width:50},
-	            {field:'goods_id',title:'gid',width:0,hidden:'true'},
-	            {field:'product_id',title:'pid',width:0,hidden:'true'}
-            ]]
-         });
-	}
+	$(function() {
+		var setting = {
+			view : {
+				showIcon : showIconForTree
+			},
+			async : {
+				enable : true,
+				url : ctx + "/shop/admin/goods-select/list-json.do",
+				autoParam : [ "cat_id" ]
+			},
+			callback : {
+				onClick: zTreeOnClick
+			}
+		};
+		$.fn.zTree.init($("#tree_goods"), setting);
+	});
 
-	function getGoodsData(mulit){
-		// 2015-07-08  增加多选  冯兴隆
-		try{
-			var currentRow = $("#goodsdetailed").datagrid("getSelections");
-			if(mulit == 1){
-				var goodsData = [];
-				for(var key in currentRow){
-					var good = currentRow[key];
-					goodsData.push(good);
-				}
-				return goodsData;
-			}else{
-				var goodsData = {};
-				if(currentRow.length == 1){
-					goodsData["sn"]=currentRow[0].sn;
-					goodsData["name"]=currentRow[0].name;
-					goodsData["price"]=currentRow[0].price;
-					goodsData["store"]=currentRow[0].store;
-					goodsData["specs"]=currentRow[0].specs;
-					goodsData["goods_id"]=currentRow[0].goods_id;
-					goodsData["product_id"]=currentRow[0].product_id;
-				}
-				return goodsData;
-			}
-		}catch(e){
-			//alert(e);
-			if(mulit == 1){
-				return [];
-			}else{
-				return {};
-			}
-		}
+	function showIconForTree(treeId, treeNode) {
+		return !treeNode.isParent;
+	};
+	
+	function zTreeOnClick(event, treeId, treeNode){
+		
+		var table = $('#goods_data').DataTable({
+			"language": {
+		        "url": "${staticserver}/media/zh_CN.txt"
+		    },
+		    "info": false,
+		    "paging":false,
+		    "processing": true,
+		    "serverSide": true,
+		    "ordering": false,
+		    "searching": false,
+		    "lengthChange": false,
+		    "destroy": true,
+		    "autoWidth":false,
+		    ajax: {
+		        //指定数据源
+		        async:false,
+		        type:"post",
+		        url: '${ctx}/shop/admin/goods-select/list-product-by-cat-id.do?catid='+treeNode.cat_id,
+		    },
+		    columns: [ //定义列
+		           {"data": function (obj) {
+		               return '<input type="checkbox" name="checkbox" class="fly-checkbox">';
+		           }}, 
+		           {"data": function (obj) {
+	                	return '<span id="sn">'+obj.sn+'</span>';
+	               	}}, 
+	               	{"data": function (obj) {
+	                	return '<span id="name">'+obj.name+'</span>';
+	               	}},
+	               	{"data": function (obj) {
+	                	return '<span id="price">'+obj.price+'</span>';
+	               	}},
+	               	{"data": function (obj) {
+	               		if(obj.specs == null){
+	               			return '<span id="specs"></span>';
+	               		}else{
+	               			return '<span id="specs">'+obj.specs+'</span>';
+	               		}
+	                	
+	               	}},
+	               	{"data": function (obj) {
+	                	return '<span id="store">'+obj.store+'</span>';
+	               	}},
+		   	   	   	{"data": function (obj) {
+	                	return '<input type="hidden"  name="goods_id" value='+obj.goods_id+'>';
+	               	}}, 
+	               	{"data": function (obj) {
+			              return '<input type="hidden"  name="product_id" value='+obj.product_id+'>';
+			        }}
+		     ]
+		});
 	}
 	
+
+	$('.admin-main').on('click', 'tr', function(){
+		$(this).addClass('selected')
+			   .siblings().removeClass('selected').find('.fly-checkbox').prop('checked', false)
+	})
+
 </script>

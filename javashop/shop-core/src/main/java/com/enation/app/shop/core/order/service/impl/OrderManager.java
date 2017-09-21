@@ -118,8 +118,7 @@ public class OrderManager implements IOrderManager {
 			this.daoSupport.execute("update es_order set order_amount=?,need_pay_money=? where order_id=?", price, needPayMoney,
 					orderid);
 		}
-		
-		//如果当前运行的程序为b2b2c项目  修改子订单的金额时，同时改变父订单的金额  addBy -LYH  2017.5.1
+		//如果当前运行的程序为b2b2c项目  修改子订单的金额时，同时改变父订单的金额  addBy -LYH  2017.8.16
 		if (EopSetting.PRODUCT.equals("b2b2c")) {
 			Integer parentId=this.daoSupport.queryForInt("select parent_id from es_order where order_id =?", orderid);
 			List<Order> childOrderList=this.getChildOrders(parentId);
@@ -1136,7 +1135,7 @@ public class OrderManager implements IOrderManager {
 	@Override
 	public Page listOrder(Map map, int page, int pageSize, String other, String order) {
 		// this.cancelOrder();
-		String sql = createTempSql(map, other, order);
+		String sql = createTempSql(map, other, order)+ " order by create_time desc";
 		Page webPage = this.daoSupport.queryForPage(sql, page, pageSize);
 		orderPluginBundle.filterOrderPage(webPage);
 		return webPage;
@@ -1360,7 +1359,7 @@ public class OrderManager implements IOrderManager {
 		this.daoSupport.execute("UPDATE es_order SET status=6,cancel_reason=? WHERE order_id=?",reason, order_id);
 		//触发插件桩
 		this.orderPluginBundle.onCanel(this.get(order_id));
-		this.addLog(order_id, "申请取消订单", "会员");
+		this.addLog(order_id, "申请取消订单", "管理员:"+UserConext.getCurrentAdminUser().getUsername());
 	}
 
 	/**
@@ -1581,8 +1580,9 @@ public class OrderManager implements IOrderManager {
 		if (!StringUtil.isEmpty(complete)) {
 			sql.append(" and o.status=" + OrderStatus.ORDER_COMPLETE);
 		}
-
-		sql.append(" ORDER BY o." + other + " " + order);
+		if(!StringUtil.isEmpty(order)){
+			sql.append(" ORDER BY o." + other + " " + order);
+		}
 
 		// System.out.println(sql.toString());
 		return sql.toString();
@@ -1702,6 +1702,7 @@ public class OrderManager implements IOrderManager {
 		
 		return daoSupport.queryForList(sql,Order.class,orderid);
 	}
+
 
 
 }

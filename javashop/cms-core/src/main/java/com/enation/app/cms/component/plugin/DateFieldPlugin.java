@@ -29,7 +29,7 @@ public class DateFieldPlugin extends AbstractFieldPlugin {
 			html.append(value);
 			html.append("\"");
 		}
-		html.append(" class=\"easyui-datetimebox\" style=\"height:25px;\" ");
+		html.append(" class=\"\" style=\"height:25px;\" ");
 		html.append(">");
 
 		return html.toString();

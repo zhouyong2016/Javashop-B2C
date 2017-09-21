@@ -74,7 +74,7 @@ public interface IProductManager {
 	 * @return
 	 */
 	public List<Product> list(Integer goods_id);
-
+	
 	/**
 	 * 删除某商品的所有货品
 	 * @param goodsid
@@ -88,18 +88,6 @@ public interface IProductManager {
 	 */
 	public List listProductByCatId(Integer catid);
 	
-	
-	/**
-	 * 判断当前会员店铺中，货品货号是否已存在
-	 * @author xulipeng
-	 * @param sn 货号
-	 * @param goodsid 商品id
-	 * @param storeid 店铺id
-	 * @return	int 1代表已有，0代表没有
-	 * 2015年08月31日23:05:45
-	 */
-	public int getSnIsExist(String sn,Integer goodsid,Integer storeid);
-
 	/**
 	 * 根据catId和storeId得到货品列表
 	 * @param catid 分类id
@@ -107,6 +95,5 @@ public interface IProductManager {
 	 * @return 货品列表
 	 */
 	public List listProductByStoreId(Integer catid, int storeId);
-	
 	
 }

@@ -1,0 +1,174 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()> 
+<script type="text/javascript" src="${ctx}resource/com/enation/app/shop/component/orderreturns/action/OrderReturn.js">
+
+</script>
+<style>
+#order_dialog .con{
+		background:none repeat scroll 0 0 #FFFFFF;
+		overflow-x:hidden;
+		overflow-y:auto;
+		height: 400px;   visibility: visible; opacity: 1; position: relative;
+}
+
+</style>
+	<div class="toolbar">
+		 <input type="button" id="returnagree" value="同意" />	
+		 <input type="button" id="returnrefuse" value="拒绝" />
+		 <input type="button" id="confirm_rec" value="<#if rorder.type==1 >退回货品已收到</#if><#if rorder.type==2 >双方货款已结清，换货已发出</#if>" />
+		 <input type="button" id="return_complete" value="<#if rorder.type==1 >已退款，退货完成</#if><#if rorder.type==2 >换货完成</#if>" />		 		 		
+	</div>
+<div align="center">
+	<div class="main-div">
+		   <table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+		     <tr>
+		       <th><label class="text">订单编号：</label></th>
+		       <td>${rorder.ordersn }
+		       </td>
+		     </tr>
+		     <tr>
+		       <th><label class="text">会员上传图片</label></th>
+		       <td>
+		        <img alt="货物图" src="${rorder.photo }">
+				</td>
+		     </tr>	
+		     <tr>
+		       <th><label class="text">申请类型</label></th>
+		       <td>
+		        		<#if rorder.type==1 >
+		    		   	退货
+		    		
+		    		   </#if>
+		    		   <#if rorder.type==2 >
+		    		   	换货
+		    		
+		    		   </#if>
+				</td>
+		     </tr>	
+		     <tr>
+		     	<th><label class="text">申请理由</label></th>
+		     	<td>
+		        ${rorder.apply_reason }
+				</td>
+		     </tr>
+		     <tr>
+		     	<th><label class="text">拒绝理由</label></th>
+		     	<td>
+			       <#if rorder.refuse_reason ?exists >
+			      	  <span id="r_reason">	${rorder.refuse_reason }</span>
+			       <#else>
+			       	  <span id="r_reason">无</span>	  
+			       </#if>
+				</td>
+		     </tr>	
+	     	 <tr>
+		       <th><label class="text">申请提交时间</label></th>
+		       <td>
+		        <@dateformat pattern="yyyy-MM-dd hh:mm:ss" time="${ (rorder.add_time *1000)?c}" /> 
+				</td>
+		     </tr>			     		     		     	     
+		   </table>
+	</div>
+	
+<div>
+<form id="returnorderitems">
+<input type="hidden"  name="returnOrderId" value="${rorder.id}"/>
+ <table style="width: 800px;" align="left">
+ <tr>
+      <th>货号</th>
+      <th>商品名称</th>
+      <th>价格</th>
+      <th>购买量</th>
+      <th>已发货量</th> 
+      <th>申请状态</th>
+      <th>处理状态</th>
+ </tr>
+ 
+ <#list itemList as item>
+ <input type="hidden"  name="itemid"  value="${item.item_id}"/>
+          <tr>
+        				<td>${item.sn }<#if item.state == 8 || item.state == 10 >(换货前)</#if></td>
+						<td>
+						
+						<#if item.state != 8 && item.state != 10 >
+							<a target="_blank"  href="../../goods-${item.goods_id!''}.html"	title="${item.name}">${item.name}</a>
+						<#else>
+							<a target="_blank"  href="../../goods-${item.change_goods_id!''}.html"	title="${item.change_goods_name!''}">${item.change_goods_name!''}(换货后)</a>	
+						</#if>
+			
+						
+						</td>
+						<td >
+							${item.price?string.currency}
+							<#if item.state == 8 || item.state == 10 >(换货后)</#if>
+						</td>
+						
+          <td >${item.num}</td>
+          <td >${item.ship_num}</td>
+          <td>
+          
+   				&nbsp;
+		 
+		  </td>
+		  
+		  <td>
+		  <#if item.state ==0>正常</#if>
+		  <#if item.state ==1>申请退货</#if>
+		  <#if item.state ==2>申请换货 </#if>
+		  <#if item.state ==3>退货已拒绝 </#if>
+		  <#if item.state ==4>换货已拒绝</#if>
+		  <#if item.state ==5>退货申请审核通过，等待客户将货品退回</#if>
+		  <#if item.state ==6>换货申请审核通过，等待客户将货品退回</#if>
+		  <#if item.state ==7>客户退回货品已收到，正在执行退款</#if>
+		  <#if item.state ==8>换货已收货，新换货物已发出</#if>
+		  <#if item.state ==9>退货完成</#if>
+		    <#if item.state ==10>换货完成</#if>
+		  </td>
+		  
+		  <td>
+		  <input type="checkbox"  <#if item.state==0>disabled="disabled"</#if>   <#if item.state==5>disabled="disabled" checked="checked"</#if>  name="itemid_array" value="${item.item_id}" />
+		  
+		  </td>
+		  
+		  
+        </tr>
+</#list> 	
+ </table> 
+ </form>
+</div>
+</div>
+
+<div id="changeSn_dlg">
+<div class="con">
+	</div>
+</div>
+
+<div id="returnorder_dlg">
+	<form  id="returnorderform"  method="post">
+		<input type="hidden"  name="returnOrderId"  value="${rorder.id}"/>
+		
+		<div class="con">
+		</div>
+		
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				 <th>
+				 	<label class="text">拒绝理由：</label>
+				 </th>
+				 <td>
+				 	<textarea style="width:300px;height:200px" id="refuse_reason1"  name="refuse_reason"></textarea>
+				 </td>
+			 </tr>
+			 <tr>
+				 <td align="center">
+					 <input type="button" value="确定" class="submitBtn" />
+				 </td>
+			 </tr>
+		 </table>
+	</form>
+</div>
+
+ <script>
+$(function(){
+	OrderReturn.init(${rorder.id},${rorder.state},${rorder.type});
+});
+</script>

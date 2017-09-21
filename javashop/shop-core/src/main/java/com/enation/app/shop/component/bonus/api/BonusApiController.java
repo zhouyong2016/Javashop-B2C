@@ -148,7 +148,7 @@ public class BonusApiController  {
 			}
 	
 			Double goodsprice = cartManager.countGoodsTotal(RequestContextHolder.getRequestAttributes().getSessionId());
-			if(goodsprice<= bonus.getMin_goods_amount()){
+			if(goodsprice < bonus.getMin_goods_amount()){
 				return JsonResultUtil.getErrorJson("订单的商品金额不足["+bonus.getMin_goods_amount()+"],不能使用此红包");
 			}
 			

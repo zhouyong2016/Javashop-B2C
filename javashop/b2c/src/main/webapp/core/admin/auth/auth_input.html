@@ -1,38 +1,170 @@
-<form id="authForm" method="post" class="validate" >
-	<#if isEdit=1><input type="hidden" name="choose" value="${auth.choose!''}" /></#if>
-	<div style="padding: 10px 0 10px 60px">
-		<table>
-			<tr>
-				<td>权限点名称:</td>
-				<td><input type="text" class="easyui-validatebox input_text" data-options="required:true" name="name" id="authname" maxlength="60"  <#if isEdit=1>value=${auth.name}</#if>></td>
-			</tr>
-			<tr>
-				<td>菜单:</td>
-				<td>
-					<#if isEdit==1>
-						<ul id="tt" ></ul>
-						<input type="hidden" name="authid" value="${auth.actid}">
-					<#else>	
-						<ul id="tt" class="easyui-tree" data-options="cascadeCheck:false,url:'menu!getMenuJson.do?authid=0',method:'get',animate:true,checkbox:true"></ul>
-					</#if>
-			    </td>
-			</tr>
-		</table>
-	</div>
-</form>
+<#include '/admin/sonheader.html' >
+<style>
+	.layui-input{
+		width: 75%;
+	}
+	.layui-form-pane .layui-form-label{
+	margin-left:10px;
+	width:120px;
+	}
+	 .layui-form-pane .layui-input-block{
+		 margin-left:120px;
+	 }
+</style>
+	
+	<link rel="stylesheet" href="../css/demo.css"/>
+	<link rel="stylesheet" href="${ctx}/adminthemes/version3/css/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.excheck.js"></script>
+	<script type="text/javascript" src="${ctx}/adminthemes/version3/js/jquery.ztree.exedit.js"></script>
+<div class="main">
+    <!--表单区域  -->
+	<form id="authForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+		<#if isEdit=1><input type="hidden" name="choose" value="${auth.choose!''}" /></#if>
+		<#if isEdit=1><input type="hidden" name="authid" value="${auth.actid!''}" /></#if>
+		<input type="hidden" name="menuids" id="menuids" value="" />
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">权限点名称:</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="name" id="rolename" maxlength="60" dataType="string" lay-verify="required" autocomplete="off" class="layui-input" <#if isEdit=1>value=${auth.name}</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item content_wrap">
+    		<label class="layui-form-label">菜单:</label>
+    		<div class="zTreeDemoBackground left">
+				<ul id="treeDemo" class="ztree"></ul>
+			</div>
+  		</div>
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="site_menu">保存</a>
+  		</div>
+  	</form>
+</div>
+<script>
+<#if isEdit==1>
+	var url="${ctx}/core/admin/auth/save-edit.do";
+<#else>	
+	var url="${ctx}/core/admin/auth/save-add.do";
+</#if>
+var index = parent.layer.getFrameIndex(window.name);
 
-<script type="text/javascript">
-
-$("#tt").tree({
-	cascadeCheck:'true',
-	<#if isEdit==1>
-	url : "${ctx}/core/admin/menu/get-menu-json.do?authid=${auth.actid}&"+new Date().getTime(),
-	<#else>	
-	url : "${ctx}/core/admin/menu/get-menu-json.do?authid=0&"+new Date().getTime(),
-	</#if>
-	method:'get',
-    animate:true,
-    checkbox:true
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form(),
+    layedit = layui.layedit,
+    laydate = layui.laydate;
+	
+	 //监听提交
+    form.on('submit(site_menu)', function(data){
+    	var menuids = getNode();
+ 		$("#menuids").val(menuids);
+		var options = {
+			url : url,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				if (data.result == 1) {
+					parent.layer.close(index); //再执行关闭    
+					parent.table.ajax.url(ctx+"/core/admin/auth/list-json.do").load();
+					parent.$.Loading.success(data.message);
+					
+				}
+				if (data.result == 0) {
+					parent.$.Loading.error(data.message);
+				}
+			},
+			error : function(e) {
+				parent.$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$("#authForm").ajaxSubmit(options);
+		
+		return false;
+    });
+    
 });
+<#if isEdit==1>
+	var value="${ctx}/core/admin/menu/get-menu-json.do?authid=${auth.actid!''}";
+<#else>	
+	var value="${ctx}/core/admin/menu/get-menu-json.do?authid=0";
+</#if>
+var setting = {
+		view: {
+			dblClickExpand: false
+		},
+		async: {
+			enable: true,
+			url : value,
+			autoParam:[]
+		},
+		check: {
+			enable: true
+		},
+		callback: {
+			onRightClick: OnRightClick
+		}
+	};	
+$(function(){
+	$.fn.zTree.init($("#treeDemo"), setting);
+});
+function showIconForTree(treeId, treeNode) {
+	return !treeNode.isParent;
+};
+function OnRightClick(event, treeId, treeNode) {
+	if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
+		zTree.cancelSelectedNode();
+		showRMenu("root", event.clientX, event.clientY);
+	} else if (treeNode && !treeNode.noR) {
+		zTree.selectNode(treeNode);
+		showRMenu("node", event.clientX, event.clientY);
+	}
+}
+
+function showRMenu(type, x, y) {
+	$("#rMenu ul").show();
+	if (type=="root") {
+		$("#m_del").hide();
+		$("#m_check").hide();
+		$("#m_unCheck").hide();
+	} else {
+		$("#m_del").show();
+		$("#m_check").show();
+		$("#m_unCheck").show();
+	}
+	rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
+
+	$("body").bind("mousedown", onBodyMouseDown);
+}
+function hideRMenu() {
+	if (rMenu) rMenu.css({"visibility": "hidden"});
+	$("body").unbind("mousedown", onBodyMouseDown);
+}
+function onBodyMouseDown(event){
+	if (!(event.target.id == "rMenu" || $(event.target).parents("#rMenu").length>0)) {
+		rMenu.css({"visibility" : "hidden"});
+	}
+}
+var addCount = 1;
+function checkTreeNode(checked) {
+	var nodes = zTree.getSelectedNodes();
+	if (nodes && nodes.length>0) {
+		zTree.checkNode(nodes[0], checked, true);
+	}
+	hideRMenu();
+}
+function getNode(type){
+	var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+    nodes=treeObj.getCheckedNodes(true),
+    v="";
+    for(var i=0;i<nodes.length;i++){
+    	if(i==nodes.length-1){
+    		v+=nodes[i].id;
+    	}else{
+    		v+=nodes[i].id + ",";
+    	}
+    }
+   	return v;
+};
+
 
 </script>

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+
+<!-- 商品表索引 -->
+	<action>
+		<command>index</command>
+		<table>es_goods</table>
+		<index name="ind_goods_cat_id">
+			<field><name>cat_id</name></field>
+		</index>
+		<index name="ind_goods_brand_id">
+			<field><name>brand_id</name></field>
+		</index>
+		<index name="ind_goods_name">
+			<field><name>name</name></field>
+		</index>
+		<index name="ind_goods_sn">
+			<field><name>sn</name></field>
+		</index>
+		<index name="ind_goods_other">
+			<field><name>goods_type</name></field>
+			<field><name>disabled</name></field>
+			<field><name>market_enable</name></field>
+		</index>
+	</action>
+	
+<!-- 会员表索引 -->	
+	<action>
+		<command>index</command>
+		<table>es_member</table>
+		<index name="ind_member_uname">
+			<field><name>uname</name></field>
+			<field><name>email</name></field>
+		</index>
+		<index name="ind_member_lvid">
+			<field><name>lv_id</name></field>
+		</index>
+	</action>	
+
+<!-- 现金账户日志索引 -->	
+	<action>
+		<command>index</command>
+		<table>es_account_log</table>
+		<index name="ind_account_log">
+			<field><name>user_id</name></field>
+			<field><name>change_type</name></field>
+		</index>
+	</action>	
+ 
+<!-- 优惠卷索引 -->	
+	<action>
+		<command>index</command>
+		<table>es_member_coupon</table>
+		<index name="ind_member_coupon">
+			<field><name>memberid</name></field>
+		</index>
+	</action>	
+ 
+ 	<action>
+		<command>index</command>
+		<table>es_allocation_item</table>
+		<index name="es_allocation_item">
+			<field><name>orderid</name></field>
+			<field><name>itemid</name></field>
+			<field><name>depotid</name></field>
+		</index>
+	</action>	
+	
+	<action>
+		<command>index</command>
+		<table>es_brand</table>
+		<index name="ind_brand">
+			<field><name>disabled</name></field>
+		</index>
+	</action>
+	
+	<action>
+		<command>index</command>
+		<table>es_cart</table>
+		<index name="ind_cart_sessionid">
+			<field><name>session_id</name></field>
+		</index>
+	</action>
+	
+	<action>
+		<command>index</command>
+		<table>es_delivery</table>
+		<index name="ind_deliver_orderid">
+			<field><name>order_id</name></field>
+		</index>
+	</action>	
+ 	
+ 	<action>
+		<command>index</command>
+		<table>es_delivery_item</table>
+		<index name="ind_delivery_item">
+			<field><name>delivery_id</name></field>
+		</index>
+	</action>	
+	
+ 	<action>
+		<command>index</command>
+		<table>es_freeze_point</table>
+		<index name="es_freeze_point_index">
+			<field><name>memberid</name></field>
+			<field><name>type</name></field>
+		</index>
+	</action>	
+ 
+  	<action>
+		<command>index</command>
+		<table>es_freeze_point</table>
+		<index name="es_freeze_point_index1">
+			<field><name>orderid</name></field>
+			<field><name>dateline</name></field>
+		</index>
+	</action>
+ 
+   	<action>
+		<command>index</command>
+		<table>es_goods_cat</table>
+		<index name="ind_goods_cat_parentid">
+			<field><name>parent_id</name></field>
+		</index>
+	</action>
+ 
+    <action>
+		<command>index</command>
+		<table>es_goods_cat</table>
+		<index name="ind_goods_cat_order">
+			<field><name>cat_order</name></field>
+		</index>
+	</action>
+ 
+    <action>
+		<command>index</command>
+		<table>es_goods_depot</table>
+		<index name="es_goods_room_goods_index2">
+			<field><name>depotid</name></field>
+			<field><name>iscmpl</name></field>
+		</index>
+	</action>
+ 
+    <action>
+		<command>index</command>
+		<table>es_goods_depot</table>
+		<index name="es_goods_room_goods_index1">
+			<field><name>goodsid</name></field>
+			<field><name>depotid</name></field>
+		</index>
+	</action>
+	
+    <action>
+		<command>index</command>
+		<table>es_goods_spec</table>
+		<index name="ind_spec_goods_index">
+			<field><name>goods_id</name></field>
+		</index>
+	</action>
+	
+    <action>
+		<command>index</command>
+		<table>es_goods_spec</table>
+		<index name="ind_spec_goods_value">
+			<field><name>spec_id</name></field>
+			<field><name>spec_value_id</name></field>
+		</index>
+	</action>
+	
+    <action>
+		<command>index</command>
+		<table>es_helpcenter</table>
+		<index name="ind_helpcenter_catid">
+			<field><name>cat_id</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_member_address</table>
+		<index name="ind_mem_addr">
+			<field><name>member_id</name></field>
+			<field><name>isdel</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_member_lv_discount</table>
+		<index name="es_ind_mem_lv_dis">
+			<field><name>lv_id</name></field>
+			<field><name>cat_id</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_member_order_item</table>
+		<index name="ind_member_order_item_index">
+			<field><name>member_id</name></field>
+			<field><name>goods_id</name></field>
+			<field><name>order_id</name></field>
+			<field><name>item_id</name></field>
+			<field><name>product_id</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_order</table>
+		<index name="ind_order_sn">
+			<field><name>sn</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_order</table>
+		<index name="ind_order_state">
+			<field><name>status</name></field>
+			<field><name>pay_status</name></field>
+			<field><name>ship_status</name></field>
+		</index>
+	</action>	
+
+    <action>
+		<command>index</command>
+		<table>es_order</table>
+		<index name="ind_order_memberid">
+			<field><name>member_id</name></field>
+		</index>
+	</action>
+	
+    <action>
+		<command>index</command>
+		<table>es_order</table>
+		<index name="ind_order_term">
+			<field><name>disabled</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_order_items</table>
+		<index name="es_order_item">
+			<field><name>order_id</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_order_log</table>
+		<index name="ind_order_log">
+			<field><name>order_id</name></field>
+		</index>
+	</action>		
+	
+    <action>
+		<command>index</command>
+		<table>es_order_meta</table>
+		<index name="es_ind_orderex_orderid">
+			<field><name>orderid</name></field>
+		</index>
+	</action>
+	
+    <action>
+		<command>index</command>
+		<table>es_payment_logs</table>
+		<index name="ind_pay_log">
+			<field><name>order_id</name></field>
+			<field><name>status</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_point_history</table>
+		<index name="ind_ponit_history">
+			<field><name>member_id</name></field>
+			<field><name>type</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_product</table>
+		<index name="ind_product_goodsid">
+			<field><name>goods_id</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_product_store</table>
+		<index name="ind_product_store_proid">
+			<field><name>productid</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_product_store</table>
+		<index name="ind_product_store_roomid">
+			<field><name>depotid</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_refund_logs</table>
+		<index name="es_ind_refund_log">
+			<field><name>order_id</name></field>
+		</index>
+	</action>		
+	
+<!-- 报错：
+org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [create index fk_spec_value on es_spec_values(spec_id)];
+nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'fivebug.es_spec_values' doesn't exist	 -->	
+<!--     <action>
+		<command>index</command>
+		<table>es_spec_values</table>
+		<index name="fk_spec_value">
+			<field><name>spec_id</name></field>
+		</index>
+	</action>	 -->
+	
+    <action>
+		<command>index</command>
+		<table>es_store_log</table>
+		<index name="ind_store_log_goodsid">
+			<field><name>goodsid</name></field>
+			<field><name>productid</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_store_log</table>
+		<index name="ind_store_log_depot">
+			<field><name>op_type</name></field>
+			<field><name>depotid</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_tag_rel</table>
+		<index name="ind_tag_rel_1">
+			<field><name>tag_id</name></field>
+			<field><name>rel_id</name></field>
+		</index>
+	</action>		 
+	
+    <action>
+		<command>index</command>
+		<table>es_tag_rel</table>
+		<index name="ind_tag_rel_2">
+			<field><name>ordernum</name></field>
+		</index>
+	</action>	
+	
+    <action>
+		<command>index</command>
+		<table>es_transaction_record</table>
+		<index name="index_goods_id">
+			<field><name>goods_id</name></field>
+		</index>
+	</action>		
+			
+</dbsolution>	

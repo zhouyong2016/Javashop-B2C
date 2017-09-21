@@ -717,8 +717,8 @@ input.mall_td {
 
 /***** 积分  *********/
 .member-point {
-	width: 884px;
-	padding: 0px 0px 0px 48px;
+	width: 836px;
+	padding: 0px 48px;
 	overflow: hidden;
 }
 
@@ -1722,9 +1722,9 @@ input.mall_td {
 	display: block;
 	float: left;
 	margin: 0;
-	height: 33px;
+	height: 17px;
 	margin: 0;
-	padding: 0px 10px;
+	padding: 7px 10px;
 	width: 170px;
 }
 
@@ -1750,10 +1750,7 @@ input.mall_td {
 }
 
 .addr_input_wp .input_add {
-	height: 33px;
-	line-height:33px;
-	padding:0 10px;
-	float:left;
+	height: 22px;
 }
 
 .gray_unable {
@@ -1766,7 +1763,7 @@ input.mall_td {
 	color: #666;
 	margin: 0;
 	padding: 4px 10px 5px;
-	width: 150px;
+	width: 240px;
 }
 
 .add_hide_wp .btns_info {

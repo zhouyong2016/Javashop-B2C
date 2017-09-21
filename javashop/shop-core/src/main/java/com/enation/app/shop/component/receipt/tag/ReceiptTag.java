@@ -28,14 +28,14 @@ public class ReceiptTag extends BaseFreeMarkerTag{
 	private IOrderManager orderManager;
 
 	/**
-	 * @param orderid 订单id,int型 必须
+	 * @param receiptId 发票id,int型 必须
 	 * @return 发票实体 {@link Receipt}
 	 * 如果该订单不存在发票，返回null。
 	 */
 	@Override
 	protected Object exec(Map params) throws TemplateModelException {
-		Integer orderid = (Integer) params.get("orderid");
-			 Receipt receipt = receiptManager.getByOrderid(orderid);
+		Integer receiptId = (Integer) params.get("receiptId");
+			 Receipt receipt = receiptManager.getById(receiptId);
 			 if(receipt==null){
 				receipt = new Receipt();   
 			 }

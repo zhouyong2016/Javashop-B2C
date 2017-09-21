@@ -1,0 +1,69 @@
+<#include '/admin/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/plugins/select2/css/select2.min.css"/>
+<script type="text/javascript" src="${ctx}/adminthemes/version3/plugins/select2/js/select2.min.js"></script>
+<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsCatsEdit.js"></script>
+<style>
+.__GCD__content .__GCD__input input{
+height:30px;
+line-height:30px;
+padding:4px 10px;
+}
+</style>
+<div class="admin-main" id="__cat_box__" style="margin-top: 30px;">
+    <script>
+        var ctx = '${ctx}';
+        var _goodsCatEdit = $('#__cat_box__').goodsCatsEdit({
+            canEdit  : true,
+            api	: '/core/admin/site-menu/get-list-by-parentid-json.do',
+            maxLeave : 2,
+            addCat   : function (cat) {          			
+                        layer.open({
+                            type: 2,
+                            title: '添加导航',
+                            area: ['600px', '400px'],
+                            content: ctx + '/core/admin/site-menu/add.do',  
+                            scrollbar: true,//是否允许浏览器出现滚动条
+                            maxmin :true,//右上角可否放大缩小 
+                        })                               
+            },
+            editCat  : function (siteMenu) {           
+                        layer.open({
+                            type: 2,
+                            title: '编辑导航',
+                            area: ['600px', '400px'],
+                            content:ctx + '/core/admin/site-menu/edit.do?menuid='+siteMenu.id,
+                            scrollbar: true,//是否允许浏览器出现滚动条
+                            maxmin :true,//右上角可否放大缩小
+                        })             
+            },
+            deleteCat: function (siteMenu) {
+                layer.confirm('确定要删除这个分类吗？', {icon: 3, title:'提示'}, function (index) {
+                    layer.close(index);
+                    var __load = layer.load(2);
+                    $.ajax({
+                        url: ctx + '/core/admin/site-menu/delete.do',
+                        data: { menuid: siteMenu.id },
+                        type: 'POST',
+                        success: function (res) {
+                            layer.close(__load);
+                            if(res.result === 1){
+                                layer.msg('删除成功！', { icon: 1 });
+                                _goodsCatEdit.refreshData();
+                            }else {
+                                layer.msg(res.message, { icon: 5 });
+                            }
+                        },
+                        error: function () {
+                            layer.close(__load);
+                            layer.msg('出现错误，请稍候再试！', { icon: 2 });
+                        }
+                    })
+                })
+            },
+            callback: function (siteMenu) {
+                console.log(siteMenu)
+            }
+        }).init();
+    </script>
+</div>
+<#include '/admin/footer.html' />

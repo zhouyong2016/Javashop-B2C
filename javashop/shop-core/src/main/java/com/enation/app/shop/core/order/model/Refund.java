@@ -21,10 +21,11 @@ public class Refund {
 	private String sndto;		//退货人
 	private String member_name;	//会员名称
 	private String refund_user;	//退款操作人(管理员名称)
-	private Integer status;	//退款状态 0，新建 1，已付款
-	
-	
-	
+	private Integer status;	//退款状态 0，新建 1，已退款 新增状态2.退款中3.退款失败
+	/** 支付类型 */
+	private String refund_type;
+	/** 新增退款交易发起时间，供中国银联使用 */
+	private String txn_time;
 	public Integer getId() {
 		return id;
 	}
@@ -109,4 +110,17 @@ public class Refund {
 	public void setOrder_id(Integer order_id) {
 		this.order_id = order_id;
 	}
+	public String getRefund_type() {
+		return refund_type;
+	}
+	public void setRefund_type(String refund_type) {
+		this.refund_type = refund_type;
+	}
+	public String getTxn_time() {
+		return txn_time;
+	}
+	public void setTxn_time(String txn_time) {
+		this.txn_time = txn_time;
+	}
+	
 }

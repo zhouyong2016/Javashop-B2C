@@ -60,7 +60,8 @@ public class BrandSearchFilter extends AutoRegisterPlugin implements
 		for (Brand brand : brandList) {
 			SearchSelector selector = new SearchSelector();
 			selector.setName(brand.getName());
-			String brandurl =servlet_path +"?"+ BrandUrlUtils.createBrandUrl(""+brand.getBrand_id());
+			//因首页可以进入品牌搜索列表，所以改为固定html页
+			String brandurl ="goods_list.html" +"?"+ BrandUrlUtils.createBrandUrl(""+brand.getBrand_id());
 			selector.setUrl(brandurl);
 			selector.setValue(brand.getLogo());
 			selectorList.add(selector);

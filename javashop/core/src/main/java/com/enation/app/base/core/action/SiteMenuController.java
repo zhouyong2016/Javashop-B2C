@@ -17,6 +17,8 @@ import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
 import com.enation.framework.util.JsonResultUtil;
 
+import net.sf.json.JSONArray;
+
 /**
  * 后台导航栏管理
  * @author DMRain 2016年2月20日 版本改造
@@ -30,6 +32,8 @@ public class SiteMenuController extends GridController{
 
 	@Autowired
 	private ISiteMenuManager siteMenuManager ;
+	@Autowired
+	private ISiteMenuManager siteMenuDbManager ;
 	
 	/**
 	 * 跳转至导航栏列表
@@ -38,7 +42,7 @@ public class SiteMenuController extends GridController{
 	@RequestMapping(value="/list")
 	public String list(){
 		
-		return "/core/admin/siteMenu/menu_list";
+		return "/core/admin/siteMenu/site_menu_list";
 	}
 	
 	/**
@@ -50,6 +54,18 @@ public class SiteMenuController extends GridController{
 	public GridJsonResult listJson(){
 		List menuList = this.siteMenuManager.list(0);
 		return JsonResultUtil.getGridJson(menuList);
+	}
+	
+	/**
+	 * 异步加载获取导航栏列表json
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/get-list-by-parentid-json")
+	public String getListJson(Integer parentid){
+		List menuList = this.siteMenuDbManager.list(parentid);
+		String s = JSONArray.fromObject(menuList).toString();
+		return s.replace("name", "text").replace("menuid", "id");
 	}
 	
 	/**

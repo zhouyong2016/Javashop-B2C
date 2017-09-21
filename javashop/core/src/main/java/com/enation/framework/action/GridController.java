@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.enation.eop.SystemSetting;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.database.Page;
+import com.enation.framework.util.CurrencyUtil;
 import com.enation.framework.util.StringUtil;
 
 
@@ -46,13 +47,14 @@ public class GridController {
 		
 		HttpServletRequest request =  ThreadContextHolder.getHttpRequest();
 		
-		/**
-		 * easy ui grid可能传递过来的分页参数
-		 */
-		int rows = StringUtil.toInt( request.getParameter("rows") ,0);
+//		/**
+//		 * easy ui grid可能传递过来的分页参数
+//		 */
+//		int rows = StringUtil.toInt( request.getParameter("rows") ,0);
+		int rows = StringUtil.toInt( request.getParameter("length") ,0);
 		
 		/**
-		 * 如果easy ui grid没有传递分页参数，则使用后台设置的分页参数
+		 * 如果grid没有传递分页参数，则使用后台设置的分页参数
 		 */
 		if( rows==0) {
 			rows=SystemSetting.getBackend_pagesize();
@@ -74,7 +76,15 @@ public class GridController {
 		/**
 		 * 通过request获取当前页码
 		 */
-		int page = StringUtil.toInt(request.getParameter("page"),1);
+		int _page = StringUtil.toInt(request.getParameter("page"),-9999);
+		
+		String start = request.getParameter("start");
+		start = (start == null || start.equals("")) ? "0" : start;
+		
+		String length = request.getParameter("length");
+		length = (length == null || length.equals("")) ? "10" : length;
+		
+		int page = _page == -9999 ? this.convertPage(start, length) : _page;
 		
 		/**
 		 * 使页码不得小于1
@@ -85,8 +95,8 @@ public class GridController {
 	}
 	
 	/**
-	 * 获取排序方式
-	 * @return 排序方式（正序、倒序）
+	 * 根据*排序
+	 * @return 根据*排序
 	 */
 	public String getSort() {
 		
@@ -100,9 +110,10 @@ public class GridController {
 		return sort;
 	}
 
+	
 	/**
-	 * 根据*排序
-	 * @return 根据*排序
+	 * 获取排序方式
+	 * @return 排序方式（正序、倒序）desc or ase
 	 */
 	public String getOrder() {
 		
@@ -116,6 +127,27 @@ public class GridController {
 		return order;
 	}
 
+	
+	/**
+	 * 将要查询的起始条数，转换成页数
+	 * @param start
+	 * @return
+	 */
+	public static int convertPage(String start,String length){
+		long startNum = Long.parseLong(start);
+		long pageSize = Long.parseLong(length);
+		
+		startNum = startNum+1;
+		int page = 1;
+		
+		if(startNum<pageSize){
+			page = 1;
+		}else{
+			double num =  CurrencyUtil.div(startNum, pageSize);
+			page = (int) Math.ceil(num);
+		}
+		return page;
+	}
 	
 	
 }

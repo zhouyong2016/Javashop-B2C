@@ -3,6 +3,10 @@ package com.enation.app.base.core.action;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,12 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.enation.app.base.core.service.dbsolution.DBSolutionFactory;
 import com.enation.eop.SystemSetting;
+import com.enation.eop.processor.core.freemarker.FreeMarkerPaser;
 import com.enation.eop.sdk.context.EopSetting;
 import com.enation.framework.action.GridController;
 import com.enation.framework.util.FileUtil;
+import com.enation.framework.util.JsonResultUtil;
 import com.enation.framework.util.StringUtil;
 
 /**
@@ -32,7 +39,7 @@ public class DataExportController extends GridController {
 	 * @return 数据导出页面
 	 */
 	@RequestMapping(value="/export")
-	public String execute(HttpServletRequest request){
+	public Object execute(HttpServletRequest request){
 		String a;
 		// 判定是否是b2b2c
 				if (EopSetting.PRODUCT.equals("b2b2c")) {
@@ -77,7 +84,7 @@ public class DataExportController extends GridController {
 		data = data.replaceAll(SystemSetting.getStatic_server_domain(), "fs:");
 		response.setContentType("application/octet-stream");response.getHeader("Content-Length");
 		response.setContentLength(data.getBytes().length);
-		response.setHeader("Content-Disposition", String.format("inline; filename=\"data.xml\""));
+		response.setHeader("Content-Disposition", String.format("attachment; filename=\"data.xml\""));
 		
 		// Copy bytes from source to destination(outputstream in this example), closes both streams.
 		response.getWriter().write(data, 0, data.length());  //等同，FileCopyUtils.copy(data, response.getWriter());

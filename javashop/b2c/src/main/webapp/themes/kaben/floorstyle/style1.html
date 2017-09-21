@@ -52,30 +52,28 @@
 					<#if key =="1" >
 						<#assign goods_id=childs.goods_ids[key] >
 						<#assign floorGoods=floorGoodsTag("{'goods_id':'${goods_id}'}") >
-						
 							<#if floorGoods.name??>
-											<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
-										data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
-										data-operation-id="${goods_id}"
-										data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
-										data-title="修改楼层商品"
-										data-formId="editEachGoodsForm"
-										data-floorId="${childs.id}"
-										data-goods-index="${key}">
-									<div class="show_right show_right_img" >
-										<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-											<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}"  />
-										</a>
-										<div class="show_right_name">
-											<div class="show_right_txt">
-												<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
-													${floorGoods.name}
-												</a>
-											</div>
-										</div>
-									</div>
-							</#if>
-							
+							<input type="button" style="display:none" value="编辑"  class="floor new_dialog btn-default-styles"
+							data-operation-url="${ctx}/core/admin/template/edit-each-goods.do"
+							data-operation-id="${goods_id}"
+							data-save-url="${ctx}/core/admin/template/save-each-goods.do?ajax=yes"
+							data-title="修改楼层商品"
+							data-formId="editEachGoodsForm"
+							data-floorId="${childs.id}"
+							data-goods-index="${key}">
+						<div class="show_right show_right_img" >
+							<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+								<@image class="scrollLoading" src="${floorGoods.thumbnail!''}" alt="${floorGoods.name}"  />
+							</a>
+							<div class="show_right_name">
+								<div class="show_right_txt">
+									<a target="_blank" href="${ctx}/goods-${floorGoods.goods_id}.html" >
+										${floorGoods.name}
+									</a>
+								</div>
+							</div>
+						</div>
+						</#if>
 						</#if>
 					</#list>
 					<input type="button" style="display:none" value="新增"  class="floor new_dialog btn-default-styles add"
@@ -146,56 +144,55 @@
 						   data-goods-index="2">
 				</#if>
 			</li>
-			<script type="text/javascript">
-				(function() {
-					var li = $('.box-li');
-					for (var i = 0; i < li.length; i++) {
-						if (li.eq(i).find('div').length == 0) {
-							li.eq(i).find('.add').show();
-						} else {
-							li.eq(i).find('.add').remove();
-						}
-					}
-				})();
-			</script>
 		</ul>
 	</div>
 </div>
-<script>
-	//  大图鼠标移入显示商品名称
-	$(document).ready(function() {
-		$('.floor_img_hidden').hover(function() {
-			$(".floor_name_hidden", this).stop().animate({
-				top : '340px'
-			}, {
-				queue : false,
-				duration : 180
-			});
-		}, function() {
-			$(".floor_name_hidden", this).stop().animate({
-				top : '391px'
-			}, {
-				queue : false,
-				duration : 180
-			});
-		});
-	});
-	//  两个小图鼠标移入显示商品名称
-	$(document).ready(function() {
-		$('.show_right').hover(function() {
-			$(".show_right_name", this).stop().animate({
-				top : '141px'
-			}, {
-				queue : false,
-				duration : 180
-			});
-		}, function() {
-			$(".show_right_name", this).stop().animate({
-				top : '241px'
-			}, {
-				queue : false,
-				duration : 180
-			});
-		});
-	});
+<script type="text/javascript">
+    $(function () {
+        var li = $('.box-li');
+        for (var i = 0; i < li.length; i++) {
+            if (li.eq(i).find('div').length === 0) {
+                li.eq(i).find('.add').show();
+            } else {
+                li.eq(i).find('.add').remove();
+            }
+        }
+        $('.child_floor_show').each(function () {
+            $(this).find('input').remove();
+        });
+
+        //  大图鼠标移入显示商品名称
+        $('.floor_img_hidden').hover(function() {
+            $(".floor_name_hidden", this).stop().animate({
+                top : '340px'
+            }, {
+                queue : false,
+                duration : 180
+            });
+        }, function() {
+            $(".floor_name_hidden", this).stop().animate({
+                top : '391px'
+            }, {
+                queue : false,
+                duration : 180
+            });
+        });
+
+        //  两个小图鼠标移入显示商品名称
+        $('.show_right').hover(function() {
+            $(".show_right_name", this).stop().animate({
+                top : '141px'
+            }, {
+                queue : false,
+                duration : 180
+            });
+        }, function() {
+            $(".show_right_name", this).stop().animate({
+                top : '241px'
+            }, {
+                queue : false,
+                duration : 180
+            });
+        });
+    });
 </script>

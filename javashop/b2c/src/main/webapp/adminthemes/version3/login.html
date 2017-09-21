@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href=" ../favicon.ico" />
+
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+<link rel="stylesheet" type="text/css"href="${ctx}/adminthemes/version3/plugins/layui/css/layui.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/css/login.css" />
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-form-2.33.js"></script>
+<script type="text/javascript"src="${ctx}/adminthemes/version3/plugins/layui/layui.js "></script>
+<script type="text/javascript" src="../adminthemes/version3/js/login.js"></script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<div class="all">
+<!--logo  -->
+<div class="box">
+   <div class="top">
+   		<div class="logo">
+   			<img alt="" src="${ctx}/adminthemes/version3/images/logo_03.png">
+   		
+   		</div>
+   </div>
+   <div class="center">
+   		 	<form class="layui-form" method="" >
+   		 		<input type="hidden" id="referer" value="${referer!''}" />
+   		 		<span class="red"></span>
+	 			<input type="text" id="username"  lay-verify="username"  placeholder="这里输入登录名">
+	 		 	<input type="password" id="password"   lay-verify="pass"  placeholder="这里输入密码">
+	 			 <input type="text" maxlength="4"  id="valid_code"  autocomplete="off" placeholder="验证码" >
+   		 		<div class="code">
+   		 			  <img id="code_img" class="code_img"  style="cursor: pointer;"/>
+   		 		</div>
+   		 			  <input id="login_btn" name="login_btn" style="cursor: pointer;" lay-submit="" lay-filter="login" value="登录" >
+   		 	</form>
+	</div>
+   <div class="flood">
+       <span>
+          <input type="checkbox" id="" style="cursor: pointer;">       
+       </span>
+       <span style="color:#85888e;">
+       		保持登录状态
+       </span>
+   	</div>
+</div>
+</div>
+<script>
+$(function(){
+ Loginer.init();
+ 
+ //获得屏幕高度
+ var height = $(window).height();
+ $("body").css({"height":height+"px","overflow":"hidden"});
+});
+</script>
+</body>
+</html>

@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enation.app.base.core.model.Member;
 import com.enation.app.shop.core.goods.model.Cat;
 import com.enation.app.shop.core.goods.model.mapper.CatMapper;
 import com.enation.app.shop.core.goods.service.IGoodsCatManager;
+import com.enation.eop.sdk.context.UserConext;
 import com.enation.eop.sdk.utils.StaticResourcesUtil;
 import com.enation.framework.annotation.Log;
 import com.enation.framework.database.IDaoSupport;
@@ -27,7 +29,7 @@ public class GoodsCatManager  implements IGoodsCatManager {
 	
 	@Autowired
 	private IDaoSupport daoSupport;
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsCatManager#checkname(java.lang.String, java.lang.Integer)
@@ -96,8 +98,9 @@ public class GoodsCatManager  implements IGoodsCatManager {
 	 */
 	@Override
 	public List<Cat> listChildren(Integer catId) {
-		 String sql  ="select c.*,'' type_name from es_goods_cat c where parent_id=?";
-		 return this.daoSupport.queryForList(sql,new CatMapper(), catId);
+		String sql  ="select c.*,'' type_name from es_goods_cat c where parent_id=?";
+		return this.daoSupport.queryForList(sql,new CatMapper(), catId);
+		
 	}
 	
 	/*
@@ -312,6 +315,26 @@ public class GoodsCatManager  implements IGoodsCatManager {
 			}
 		}
 		return children;
+	}
+
+	@Override
+	public List getGoodsParentsType() {
+		String sql = "select cat_id,name from es_goods_cat where parent_id=0";
+		return this.daoSupport.queryForList(sql);
+	}
+
+	@Override
+	public List<Cat> getGoodsParentsType(Integer cat_id) {
+		String sql  ="";
+		Member m = UserConext.getCurrentMember();
+		sql = "select goods_management_category from es_store where member_id="+ m.getMember_id();      //获取会员所有经营类目
+		String goods_management_category = this.daoSupport.queryForString(sql);
+		if(cat_id ==0 && goods_management_category!=null){
+			sql = "select c.*,'' type_name from es_goods_cat c where cat_id in("+goods_management_category+")";
+			return this.daoSupport.queryForList(sql, new CatMapper());
+		}else{
+			return listChildren(cat_id);
+		}
 	}
 
 }

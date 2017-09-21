@@ -24,9 +24,6 @@
 <#assign orderStautsTag= newTag("orderStautsTag") />
 <#--获取订单状态 -->
 <#assign orderStauts= orderStautsTag() />
-<#--创建发票详细标签-->
-<#assign receiptTag = newTag("receiptTag")>
-<#assign orderreceipt = receiptTag("{'orderid':${orderid}}")>
 
 <#--创建订单货物列表标签-->
 <#assign orderItemListTag = newTag("orderItemListTag")>
@@ -95,10 +92,10 @@
 					<p>配送时间：</p>
 					<i>${order.ship_day}</i>
 				</div>
-				<#if orderreceipt.title??>
+				<#if order.receipt_title??>
 				<div class="checkout_order_same">
 					<p>发票信息：</p>
-					<i>${orderreceipt.title!'无'}：</i> <i style="margin: 0;">${orderreceipt.content!'无'}</i>
+					<i>${order.receipt_title!'无'}：</i> <i style="margin: 0;">${order.receipt_content!'无'}</i>
 				</div>
 				</#if>
 				<div class="checkout_order_tools ">

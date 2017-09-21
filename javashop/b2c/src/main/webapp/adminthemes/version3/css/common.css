@@ -1,0 +1,126 @@
+body,html{
+	margin: 0;
+	padding: 0;
+}
+
+.w20 {
+	width: 20px;
+}
+
+.w50 {
+	width: 50px;
+}
+
+.w100 {
+	width: 100px;
+}
+.w150 {
+	width: 150px;
+}
+.w200 {
+	width: 200px;
+}
+
+.w300 {
+	width: 300px;
+}
+
+.w400 {
+	width: 400px;
+}
+
+.w500 {
+	width: 500px;
+}
+
+.w600 {
+	width: 600px;
+}
+
+.w700 {
+	width: 700px;
+}
+
+.w800 {
+	width: 800px;
+}
+
+.w900 {
+	width: 900px;
+}
+
+.w1000 {
+	width: 1000px;
+}
+
+.nav-tabs .layui-this cite{
+	color: #FF4C1B;
+}
+
+.color-1{
+	color: #333;
+	font-style: inherit;
+}
+.color-2{
+	color: #333;
+	font-style: inherit;
+}
+.color-3{
+	color: #333;
+	font-style: inherit;
+}
+.color-4{
+	color: #333;
+	font-style: inherit;
+}
+.color-5{
+	color: #333;
+	font-style: inherit;
+}
+.color-6{
+	color: #333;
+	font-style: inherit;
+}
+.color-7{
+	color: #333;
+	font-style: inherit;
+
+}
+.color-8{
+	color: #333;
+	font-style: inherit;
+}
+.left-nav ul li cite{
+	font-style:normal;
+}
+
+.save-div {
+	width: 95.5%;
+	height: 50px;
+	line-height: 50px;
+	background-color: #eeeeee;
+	position: fixed;
+	bottom: 5px;
+	text-align: center;
+	border: 1px solid #e2e2e2;
+	border-radius: 2px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+	padding-right: 10px;
+}
+
+.layui-table td, .layui-table th {
+	font-size: 13px;
+}
+
+body .demo-class{width:450px!important; white-space:nowrap;border:1px solid rgba(204, 204, 204, 0.16);box-shadow: 0px 2px 2px rgba(43, 43, 43, 0.19)}
+body .demo-class .layui-layer-ico{
+	position: absolute!important;
+	top: 9px!important;
+}
+body .demo-class i{
+	display:inline-block!important;
+
+}
+#menu .layui-nav-bar{
+	display: none;
+}

@@ -1,9 +1,9 @@
 $(function(){
 	$("#save_showcasesort_button").click(function(){
-		var showcase_ids=$("input[name='showcase_ids']");
-		if(showcase_ids.length<1){
-			$.Loading.error('当前没有需要保存的数据');
-			return;
+		var check = $("input[name='id']").val();
+		if(check == false){
+			alert("请选择要排序的橱窗！！！");
+			return false;
 		}
 		$.Loading.show('正在保存排序，请稍侯...');
 		var options = {
@@ -13,13 +13,12 @@ $(function(){
 				success : function(result) {				
 				 	if(result.result==1){
 				 		$.Loading.success(result.message);
-				 		location.reload();
+				 		table.ajax.url(ctx+"/core/admin/showcase/list-json.do").load();
 				 	}else{
 				 		alert(result.message);
 				 	}
 				},
 				error : function(e) {
-					$.Loading.hide();
 					alert("出错啦:(");
  				}
  		};
@@ -117,44 +116,39 @@ function onlyNumber(obj,sort,id){
 		}
 	}
 }
-/**
- * 修改显示状态
- * @param id
- */
+//显示.停用的状态切换
 function changeshow(id){
-	var value=$("#showcaseimg"+id).attr("showvalue");
-	var changevalue=$("#showcaseimg"+id).attr("changevalue");
+	var value=$("#subjectimg"+id).attr("showvalue");
+	var changevalue=$("#subjectimg"+id).attr("changevalue");
 	$.ajax({
 		url:ctx+"/core/admin/showcase/save-display.do?id=" + id+"&is_display="+changevalue,
 		type : "POST",
 		dataType : 'json',
 		success : function(result) {
 			if (result.result == 1) {
-				$.Loading.success(result.message);
-				//loadData1(1);
 				if(changevalue==1){
-						$("#showcaseimg"+id).removeClass("stop");
-						$("#showcaseimg"+id).addClass("start");
-						$("#showcaseimg"+id).val("启用");
-						$("#showcasestatus"+id).html("未显示");
-						$("#showcaseimg"+id).attr("showvalue",changevalue);
-						$("#showcaseimg"+id).attr("changevalue",value);
+						$("#subjectimg"+id).removeClass("stop layui-btn-danger");
+						$("#subjectimg"+id).addClass("start layui-btn-normal");
+						$("#subjectimg"+id).val("启用");
+						$("#subjectstatus"+id).html("未显示");
+						$("#subjectimg"+id).attr("showvalue",changevalue);
+						$("#subjectimg"+id).attr("changevalue",value);
 					
 				}else{
-						$("#showcaseimg"+id).removeClass("start");
-						$("#showcaseimg"+id).addClass("stop");
-						$("#showcaseimg"+id).val("停用");
-						$("#showcasestatus"+id).html("已显示");
-						$("#showcaseimg"+id).attr("showvalue",changevalue);
-						$("#showcaseimg"+id).attr("changevalue",value);
+						$("#subjectimg"+id).removeClass("start layui-btn-normal");
+						$("#subjectimg"+id).addClass("stop layui-btn-danger");
+						$("#subjectimg"+id).val("停用");
+						$("#subjectstatus"+id).html("已显示");
+						$("#subjectimg"+id).attr("showvalue",changevalue);
+						$("#subjectimg"+id).attr("changevalue",value);
 				}
 			}
 			if (result.result == 0) {
-				$.Loading.error(result.message);
+				alert(result.message);
 			}
 		},
 		error : function(e) {
-			$.Loading.error("出现错误 ，请重试");
+			alert("出现错误 ，请重试");
 		}
 	});
 }

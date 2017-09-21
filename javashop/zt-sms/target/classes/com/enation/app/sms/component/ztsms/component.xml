@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="助通短信组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+
+	<plugins>
+ 		<plugin name="助通短信插件" id="smsZtPlugin">
+		</plugin>
+	</plugins>
+	
+</component>

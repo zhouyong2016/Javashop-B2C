@@ -1,8 +1,11 @@
 package com.enation.app.shop.component.spec.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import com.enation.framework.annotation.Log;
 import com.enation.framework.database.IDaoSupport;
 import com.enation.framework.database.Page;
 import com.enation.framework.log.LogType;
+import com.enation.framework.util.JsonUtil;
 import com.enation.framework.util.StringUtil;
 import com.enation.app.shop.core.goods.model.SpecValue;
 import com.enation.app.shop.core.goods.model.Specification;
@@ -211,13 +215,21 @@ public class SpecManager  implements ISpecManager {
 	 * @see com.enation.app.shop.component.spec.service.ISpecManager#listSpecAndValueByType(int)
 	 */
 	@Override
-	public List<Specification> listSpecAndValueByType(int goodsTypeId){
+	public List<Specification> listSpecAndValueByType(int goodsTypeId,int goodsId){
 
 		String sql ="select s.* from es_specification s inner join es_type_spec ts on s.spec_id=ts.spec_id where ts.type_id=?";
 		List<Specification> specList= this.daoSupport.queryForList(sql,Specification.class, goodsTypeId);
-
-		sql ="select * from es_spec_values where spec_id in (select spec_id from es_type_spec where type_id=?) order by spec_value_id";
-		List valueList=   this.daoSupport.queryForList(sql, new SpecValueMapper(), goodsTypeId);
+//		sql ="select * from es_spec_values where spec_id in (select spec_id from es_type_spec where type_id=?) order by spec_value_id";
+//		List valueList= this.daoSupport.queryForList(sql, new SpecValueMapper(), goodsTypeId);
+		List valueList=null;
+		if(goodsId == 0){
+			sql ="select * from es_spec_values where inherent_or_add=0 and spec_id in (select spec_id from es_type_spec where type_id=?) order by spec_value_id";
+			valueList = this.daoSupport.queryForList(sql, new SpecValueMapper(), goodsTypeId);
+		}else{
+			sql ="select * from es_spec_values where spec_value_id in (select spec_value_id from es_goods_spec where goods_id =?) OR inherent_or_add=0 and spec_id in (select spec_id from es_type_spec where type_id=?) order by spec_value_id";
+			valueList = this.daoSupport.queryForList(sql, new SpecValueMapper(), goodsId,goodsTypeId);
+		}
+		   
 		for(Specification spec :specList){
 			List<SpecValue> newList =  new ArrayList<SpecValue>();
 			for(SpecValue value:(List<SpecValue>)valueList){
@@ -226,9 +238,10 @@ public class SpecManager  implements ISpecManager {
 				}
 			}
 			spec.setValueList(newList);
-		}
+		}		
 		return specList;
 	}
+	
 	
 	
 	/*

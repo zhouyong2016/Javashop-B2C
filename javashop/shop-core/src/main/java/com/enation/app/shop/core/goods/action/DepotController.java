@@ -103,6 +103,22 @@ public class DepotController extends GridController {
 	@RequestMapping(value="/save-edit")
 	public JsonResult saveEdit(Depot room){
 		try {
+			Integer identy = 0;
+			if(room.getChoose() == 0){
+				List<Depot> list=this.depotManager.list();
+				//标识仓库中是否存在默认仓库，如果要将仓库是否默认修改成否，检测仓库中是否存在默认仓库，否则无法修改
+				for (int i = 0; i < list.size(); i++) {
+					if(list.get(i).getId() != room.getId()){
+						if(list.get(i).getChoose() == 1){
+							identy = 1;
+						}
+					}
+				}
+				if(identy == 0){
+					return JsonResultUtil.getErrorJson("必需存在一个默认仓库");
+				}
+			}
+			
 			this.depotManager.update(room);
 			return JsonResultUtil.getSuccessJson("修改仓库成功");
 		} catch (Exception e) {

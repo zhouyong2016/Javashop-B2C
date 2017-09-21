@@ -25,6 +25,9 @@ import net.sf.json.JSONArray;
  * @version v2.0 改为spring mvc
  * @since v6.0
  */
+
+
+
 @Controller
 @Scope("prototype")
 @RequestMapping("/cms/admin/cat")
@@ -52,7 +55,8 @@ public class DataCatController extends GridController{
 	@RequestMapping(value="/list-json-help")
 	public String listJsonHelp() {
 		List catList = dataCatManager.listAllChildren(2);
-		return JSONArray.fromObject(catList).toString();
+		String catJson = JSONArray.fromObject(catList).toString();
+		return catJson.replace("url", "html");
 	}
 	
 	//到添加页面
@@ -130,17 +134,44 @@ public class DataCatController extends GridController{
 			return JsonResultUtil.getErrorJson("保存失败");
 		}
 	}
-	
 	/**
-	 * 用于异步显示分类树
+	 * 检测名称是否重复
+	 * @param cat_id
 	 * @return
 	 */
-	@RequestMapping(value="/show-cat-tree")
-	public ModelAndView showCatTree(int cat_id){
-		ModelAndView view = new ModelAndView();
-		view.addObject("catList", dataCatManager.listAllChildren(cat_id));
-		view.setViewName("/cms/admin/cat/cat_tree");
-		return view;
+	@ResponseBody
+	@RequestMapping(value="/check-repeat")
+	public Integer checkRepeat(String name){
+		return this.dataCatManager.getDataCat(name);
+		 
 	}
+	
+	
+	/**
+	 * 异步加载文章分类数
+	 * @author xulipeng
+	 * @param cat_id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/show-cat-tree")
+	public String showCatTree(Integer cat_id){
+		cat_id = cat_id==null?0:cat_id;
+		List<DataCat> catList = dataCatManager.listAllChildren(cat_id);
+		String catJson = JSONArray.fromObject(catList).toString();
+		return catJson.replace("hasChildren", "isParent").replace("url", "html");
+	}
+	
+//	/**
+//	 * 用于异步显示分类树
+//	 * @return
+//	 */
+//	@RequestMapping(value="/show-cat-tree")
+//	public ModelAndView showCatTree(int cat_id){
+//		ModelAndView view = new ModelAndView();
+//		view.addObject("catList", dataCatManager.listAllChildren(cat_id));
+//		view.setViewName("/cms/admin/cat/cat_tree");
+//		return view;
+//	}
 	
 }

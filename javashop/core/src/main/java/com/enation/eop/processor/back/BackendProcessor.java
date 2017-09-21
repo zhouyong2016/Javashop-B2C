@@ -1,13 +1,16 @@
 package com.enation.eop.processor.back;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.enation.eop.IEopProcessor;
+import com.enation.eop.SystemSetting;
 import com.enation.eop.resource.IAdminThemeManager;
 import com.enation.eop.resource.IMenuManager;
 import com.enation.eop.resource.model.AdminTheme;
@@ -73,15 +76,22 @@ public class BackendProcessor implements IEopProcessor {
 			
 			if(adminUser==null){//超时了
 				String referer = RequestUtil.getRequestUrl(httpRequest);
-				referer=URLEncoder.encode(referer, "utf-8");//add by jianghongyan 对url进行处理  
-				httpResponse.sendRedirect(ctx+"/admin/login.do?timeout=yes&referer="+referer);
+				referer=URLEncoder.encode(referer, "utf-8");//add by jianghongyan 对url进行处理 
+				
+				PrintWriter out = httpResponse.getWriter();  
+		        out.println("<html>");      
+		        out.println("<script>");      
+		        out.println("window.open('"+ctx+"/admin/login.do','_top')");      
+		        out.println("</script>");      
+		        out.println("</html>"); 
 				return true;
 			}else{
 				
-				
 				IMenuManager menuManager = SpringContextHolder.getBean("menuManager");
 				List<Menu> menuList = null;
-				Object sessionMenuList = ThreadContextHolder.getSession().getAttribute("menuListKey");
+				//从session中获取菜单列表
+				Object sessionMenuList = ThreadContextHolder.getSession().getAttribute(SystemSetting.menuListKey.toString());
+				//判断session是否存储了菜单列表，如果不存在则查询存入
 				if(sessionMenuList==null){
 					menuList = menuManager.getMenuByUser(adminUser);
 					ThreadContextHolder.getSession().setAttribute("menuListKey", menuList);
@@ -139,11 +149,7 @@ public class BackendProcessor implements IEopProcessor {
 						if (url.indexOf('?') > 0) { 
 							url = url.substring(0, url.indexOf('?'));
 						}
-						//打补订下版本重构：由于三级链接获取文章列表的时候URI与二级链接获取文章列表的uri一样，导致判断的时候出现result = false，出现授权不足的页面
 						if (uri.equals(url)) {
-							if(!uri.equals("/cms/admin/data/list.do") || !uri.equals("/cms/admin/data/help-list.do")){
-								break;
-							}
 							result = false;
 						}
 					}
@@ -175,14 +181,18 @@ public class BackendProcessor implements IEopProcessor {
 					}
 				}
 				
-				
-				
 				EopSite site=EopSite.getInstance();
 				String product_type = EopSetting.PRODUCT;
 				httpRequest.setAttribute("site",site);
 				httpRequest.setAttribute("ctx",ctx);
 				httpRequest.setAttribute("product_type",product_type);
 				httpRequest.setAttribute("theme",getAdminTheme(site.getAdminthemeid() ));
+				
+				HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+				if(session!=null){
+					httpRequest.setAttribute("prompt", session.getAttribute("userSetPrompt"));	//关闭全局提示，1为关闭
+				}
+				
 				
 			}
 		}

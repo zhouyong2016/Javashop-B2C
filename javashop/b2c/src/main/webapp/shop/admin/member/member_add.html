@@ -1,142 +1,183 @@
-<#include '/admin/header.html' > 
+<#include '/admin/header.html' >
 <#assign regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.RegionSelectDirective"?new()>
 <script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.addressSelect-1.0.js"></script>
-
-<div class="main" style="background-color: white; padding: 10px 0 155px 30px;position:relative;">
-	<form id="addForm" enctype="multipart/form-data">
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<th>用户名：</th>
-				<td><input class="input_text easyui-validatebox" type="text"
-					id="m_name" name="uname" maxlength="18" data-options="required:true"></input>
-				</td>
-				<th>密码：</th>
-				<td><input class="input_text easyui-validatebox" minlength="6" maxlength="18"
-					type="password" name="password" data-options="required:true,validType:'minLength[6]'" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"></input>
-				</td>
-			</tr>
-			<tr>
-				<th>昵称：</th>
-				<td><input class="input_text" type="text" name="name" maxlength="20"></input>
-				</td>
-				<th>性别：</th>
-				<td valign="middle"><select class="easyui-validatebox"
-					name="sex">
-						<option value="1">&nbsp;男&nbsp;</option>
-						<option value="0">&nbsp;女&nbsp;</option>
-				</select></td>
-			</tr>
-			<tr>
-				<th>出生日期：</th>
-				<td><input class="input_text easyui-datebox" name="mybirthday" data-options="required:true" id="mybirthday" style="height: 28px;" />
-				</td>
-				<th>Email：</th>
-				<td><input class="input_text easyui-validatebox" type="text" name="email"
-					data-options="required:true,validType:'email'" maxlength="50"></input>
-				</td>
-			</tr>
-			<tr>
-				<th>固定电话：</th>
-				<td><input class="input_text easyui-validatebox" type="text"
-					id="name" validType="tel" name="tel"
-					data-options="required:false" maxlength="15"></input>
-				</td>
-				<th>移动电话：</th>
-				<td><input class="input_text easyui-validatebox" type="text"
-					id="name" validType="mobile" name="mobile"
-					data-options="required:false"  onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="11"></input>
-				</td>
-			</tr>
-			<#if is_lvmember==1>
-			<tr>
-				<th>会员等级：</th>
-				<td>
-					<select name="lv_id">
-						<option value="0">--请选择等级--</option> 
+<style>
+.layui-input-block input{
+ width:100%;
+}
+.layui-form-item{
+ width:30%;
+ display:inline-block;
+ margin-left:3%;
+}
+.app-address-title{
+  height: 36px;
+  line-height: 36px;
+}
+.app-address-body{
+  margin-top: 14px;
+}
+.app-address-title i{
+  top: 6px;
+}
+</style>
+<div  class="admin-main">    
+    <!--表单区域  -->
+   <form id="addForm" class="layui-form layui-form-pane" style="padding-top: 10px;">
+     	<div class="layui-form-item">
+    		<label class="layui-form-label">用户名：</label>
+    		<div class="layui-input-block">
+      			<input type="text"  id="m_name" name="uname" maxlength="18"  lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+     	</div>
+     	
+     	<div class="layui-form-item">
+    		<label class="layui-form-label">密码：</label>
+    		<div class="layui-input-block">
+      			<input type="password" name="password"  minlength="6" maxlength="18"  lay-verify="required"  autocomplete="off" class="layui-input">
+    		</div>
+     	</div>
+     	
+     	<div class="layui-form-item">
+    		<label class="layui-form-label">昵称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="name" maxlength="20"  lay-verify="required"  autocomplete="off" class="layui-input">
+    		</div>
+     	</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">性别</label>
+    		<div class="layui-input-block">
+      			<select name="sex" lay-filter="">
+        			<option value=""></option>
+        			<option value="1" selected="selected">男</option>
+        			<option value="0">女</option>
+      			</select>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+  			<label class="layui-form-label">出生日期</label>
+  			<div class="layui-input-block">
+      			<input type="text" class="layui-input" lay-verify="required"  placeholder="出生日期" name ="mybirthday"  onclick="layui.laydate({elem: this, min: '1900-01-01 23:59:59', max: laydate.now()})">
+    		</div>
+		</div>
+		
+		<div class="layui-form-item">
+      		<label class="layui-form-label">邮箱</label>
+      		<div class="layui-input-block">
+        		<input type="text" name="email" lay-verify="required|email" maxlength="50" autocomplete="off" class="layui-input">
+      		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+      		<label class="layui-form-label">固定电话</label>
+      		<div class="layui-input-block">
+        		<input type="tel" id="name"  name="tel" maxlength="15"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+      		<label class="layui-form-label">移动电话</label>
+      		<div class="layui-input-block">
+        		<input type="tel" id="name"  name="mobile" maxlength="11" " autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<#if is_lvmember==1>
+  			<div class="layui-form-item">
+    			<label class="layui-form-label">会员等级：</label>
+    			<div class="layui-input-block">
+      				<select name="lv_id" lay-filter="">
+        				<option value="0">--请选择等级--</option> 
 							<#if lvlist??> 
 								<#list lvlist as lv>
 									<option value="${lv.lv_id }">${lv.name }</option> 
 								</#list> 
 							</#if>
-					</select>
-				</td>
-			</tr>
-			</#if> 
-			<tr>
-				<th>地区：</th>
-				<td id="selectAddress">
-						<script type="text/javascript">
-							$(function() {
-								$('#selectAddress').addressSelect();
-							})
-						</script>
-					</td>
-				<th>邮编：</th>
-				<td><input class="input_text" id="zip" name="zip" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6">
-				</td>
-			</tr>
-
-			<tr>
-				<th>地址：</th>
-				<td><input class="input_text" type="text" name="address" maxlength="58"></input>
-				</td>
-			</tr>
-
-			<tr>
-				<th>安全问题：</th>
-				<td><input class="input_text" type="text" id="name"
-					name="pw_question" data-options="required:true"
-					value="我的宠物名字是？"  maxlength="58"></input>
-				</td>
-				<th>回答：</th>
-				<td><input class="input_text" type="text" id="name"
-					name="pw_answer" maxlength="58" data-options="required:true,validType:'maxLength[58]"></input></td>
-			</tr>
-		</table>
-	</form>
-	<div class="buttonWrap fixed" style="position:absolute;left:0px;bottom:0px;">
-		<a id="searchAdvance" class="easyui-linkbutton" onclick="submitForm()"
-			href="javascript:;">保存</a>
-	</div>
+      				</select>
+    			</div>
+  			</div>
+  		</#if> 
+  		
+  		<div class="layui-form-item" >
+      		<label class="layui-form-label">地区</label>
+      		<div class="layui-input-block" id="selectAddress">
+      			<script type="text/javascript">
+					$(function() {
+						$('#selectAddress').addressSelect();
+					})
+				</script>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">邮编：</label>
+    		<div class="layui-input-block">
+      			<input type="text" id="zip" name="zip" maxlength="6"  autocomplete="off" class="layui-input">
+    		</div>
+     	</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">地址：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="address" maxlength="58" autocomplete="off" class="layui-input">
+    		</div>
+     	</div>
+     	
+     	<div class="layui-form-item" style="width:100%">
+    		<div class="layui-input-block">
+      			<button class="layui-btn" lay-submit="" lay-filter="addmemberdemo">立即提交</button>
+      			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    		</div>
+  		</div>
+  		
+   </form>
 </div>
-<script>
-	function submitForm() {
-		var formflag = $("#addForm").form().form('validate');
-		if($("#zip").val().length>0){
-			if($("#zip").val().length<6){
-				alert("请输入正确的邮编！");
-				return;
-			}
+
+
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+
+    
+    //监听提交
+    form.on('submit(addmemberdemo)', function(data){
+    	
+    	if($("input[name='region']").val() === ""|| $("input[name='region']").val() === "-- 请选择 --"){
+			$.Loading.show("请选择地区");
+			return false;
 		}
-		var city_id = $('.app-address').find("input[name='city_id']").val(), region_id = $('.app-address').find("input[name='region_id']").val()
-		if(city_id != 1310 && (!region_id || region_id == '')){
-		    alert('请选择地址！');
-            return false
-        }
-		if (formflag) {
-			$.Loading.show("正在添加......");
-			var options = {
-				url : "${ctx}/shop/admin/member/save-member.do",
-				type : "POST",
-				dataType : 'json',
-				success : function(result) {
-					if (result.result == 1) {
-						$.Loading.success(result.message);
-						newTab($("#m_name").val() + "—会员修改",
-								"${ctx}/shop/admin/member/detail.do?memberId="+ result.id);
-						parent.CloseTabByTitle("会员添加");
-					}
-					if (result.result == 0) {
-						$.Loading.error(result.message);
-					}
-				},
-				error : function(e) {
-					alert("出现错误 ，请重试");
+    	
+		var options = {
+			url : "${ctx}/shop/admin/member/save-member.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					newTab($("#m_name").val() + "—会员修改",
+							"${ctx}/shop/admin/member/detail.do?memberId="+ result.id);
+					parent.CloseTabByTitle("会员添加");
 				}
-			};
-			$("#addForm").ajaxSubmit(options);
-		}
-	}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$("#addForm").ajaxSubmit(options);
+		
+		return false;
+    });
+    form.render();
+});
 </script>
 
 <#include '/admin/footer.html' >

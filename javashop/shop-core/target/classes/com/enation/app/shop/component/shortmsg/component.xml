@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店短消息组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="网店短消息提醒插件" id="shopShortMsgPlugin">
+			<bundle id="shortMsgPluginBundle"></bundle>
+		</plugin>
+		<plugin name="订单短消息提醒插件" id="orderApplyShortMsgPlugin">
+			<bundle id="shortMsgPluginBundle"></bundle>
+		</plugin>
+		<plugin name="货品预警短消息提醒插件" id="goodsWarningShortMsgPlugin">
+			<bundle id="shortMsgPluginBundle"></bundle>
+		</plugin>
+		
+				 
+	</plugins>
+</component>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="网店促销活动组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+ 		<plugin name="添加订单赠品和优惠券插件" id="orderAfterGiftBonusPlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="订单取消增加赠品库存插件" id="orderCancelGiftStorePlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="确认收款为会员发放电子优惠券插件" id="orderPaySendBonusPlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="订单发货减少赠品实际库存插件" id="orderShipReduceGiftStorePlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="订单退款赠品库存还原插件" id="refundGiftRestorePlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+ 		<plugin name="确认收货会员增加促销积分插件" id="orderActivityPointPlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+	</plugins>
+
+</component>

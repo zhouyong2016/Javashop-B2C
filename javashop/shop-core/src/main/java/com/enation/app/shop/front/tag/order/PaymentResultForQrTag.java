@@ -7,12 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.enation.app.base.core.model.Member;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.PaymentResult;
 import com.enation.app.shop.core.order.service.IOrderManager;
 import com.enation.app.shop.core.order.service.IPaymentManager;
-import com.enation.eop.sdk.context.UserConext;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.taglib.BaseFreeMarkerTag;
 
@@ -37,7 +35,6 @@ public class PaymentResultForQrTag extends BaseFreeMarkerTag {
 	protected Object exec(Map params) throws TemplateModelException {
 		
 		PaymentResult paymentResult = new PaymentResult();
-		Member member = UserConext.getCurrentMember();
 		
 		//支付状态 1:支付成功 {内网支付不能更改订单付款状态 (仅支付宝扫码支付方式)}，0:支付出现问题，
 		
@@ -45,14 +42,6 @@ public class PaymentResultForQrTag extends BaseFreeMarkerTag {
 		Integer orderId = Integer.parseInt(request.getParameter("orderId"));
 		
 		Order order = this.orderManager.get(orderId);
-		
-		if(member.getMember_id()!=order.getMember_id()){
-			paymentResult.setResult(2);
-			paymentResult.setError("当前用户不存在此订单!");
-			paymentResult.setOrdersn(order.getSn());
-			paymentResult.setOrderType(order.getOrderType());
-			return paymentResult;
-		}
 		
 		String pluginId = request.getParameter("pluginId");
 		String trade_status = request.getParameter("trade_status");

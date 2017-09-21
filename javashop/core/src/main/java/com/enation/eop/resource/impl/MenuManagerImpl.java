@@ -265,7 +265,6 @@ public class MenuManagerImpl   implements IMenuManager {
 	 */
 	@Override
 	public List<Menu> getMenuByUser(AdminUser user) {
-		// TODO Auto-generated method stub
 		//获取所有菜单
 		List<Menu> menuList = this.getMenuList();
 		//对菜单进行筛选

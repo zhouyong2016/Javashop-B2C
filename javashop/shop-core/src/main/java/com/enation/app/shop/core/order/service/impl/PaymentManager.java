@@ -101,7 +101,7 @@ public class PaymentManager implements IPaymentManager {
 	@Override
 	@Log(type=LogType.SETTING,detail="新安装了一个${type}支付类型的${name}支付方式")
 	public Integer add(String name, String type, String biref,String pay_img,Integer isOnline,
-			Map<String, String> configParmas) {
+			Map<String, String> configParmas,Integer isRetrace) {
 		if(StringUtil.isEmpty(name)) throw new IllegalArgumentException("payment name is  null");
 		if(StringUtil.isEmpty(type)) throw new IllegalArgumentException("payment type is  null");
 		if(configParmas == null) throw new IllegalArgumentException("configParmas  is  null");
@@ -113,6 +113,7 @@ public class PaymentManager implements IPaymentManager {
 		payCfg.setPay_img(transformPath(pay_img));
 		payCfg.setIs_online(isOnline);
 		payCfg.setConfig( JSONObject.fromObject(configParmas).toString());
+		payCfg.setIs_retrace(isOnline);
 		this.daoSupport.insert("es_payment_cfg", payCfg);
 		Integer id = this.daoSupport.getLastId("es_payment_cfg");
 		return id;
@@ -157,7 +158,7 @@ public class PaymentManager implements IPaymentManager {
 	@Override
 	@Log(type=LogType.SETTING,detail="修改了${type}支付类型的${name}支付方式信息")
 	public void edit(Integer paymentId, String name,String type, String biref,String pay_img,Integer isOnline,
-			Map<String, String> configParmas) {
+			Map<String, String> configParmas,Integer isRetrace) {
 		
 		if(StringUtil.isEmpty(name)) throw new IllegalArgumentException("payment name is  null");
 		if(configParmas == null) throw new IllegalArgumentException("configParmas  is  null");
@@ -168,6 +169,7 @@ public class PaymentManager implements IPaymentManager {
 		payCfg.setType(type);
 		payCfg.setPay_img(transformPath(pay_img));
 		payCfg.setIs_online(isOnline);
+		payCfg.setIs_retrace(isRetrace);
 		payCfg.setConfig( JSONObject.fromObject(configParmas).toString());	
 		this.daoSupport.update("es_payment_cfg", payCfg, "id="+ paymentId);
 	}

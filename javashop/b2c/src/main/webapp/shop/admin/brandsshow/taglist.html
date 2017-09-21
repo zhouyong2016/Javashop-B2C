@@ -1,39 +1,77 @@
-<#include '/admin/header.html' > 
-<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
-<div class="main"> 
-	<div class="shadowBoxWhite tableDiv">
-		<form id="tagform">
-			<table class="easyui-datagrid"
-			data-options="url:'${ctx}/shop/admin/brands-show/list-json.do',pageList: [5,10,15],pageSize:5,fitColumns:'true'" pagination="true" width="width" id="tagdata">
-				<thead>
-				    <tr>
-				   		<th  data-options="field:'tag_id',checkbox:true,width:100" ></th>
-				   		<th  data-options="field:'id',width:20" formatter="formatId">标签id</th>
-				   	 	<th  data-options="field:'tag_name',width:100">标签</th>
-				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
-				   	 </tr>
-				</thead>
-			</table>
-		</form>
-		<div id="Taginfo" style="display: none;"></div>
-	</div>
+<#include '/admin/header.html' >
+<style>
+ .layui-btn{
+  background:#1E9FFF;
+  }
+</style>
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>本列表中，是不允许删除相关标签的，如果想要删除，请到标签列表中进行操作。</li>
+                <li><span>·</span>标签中，可以点击操作来添加品牌，并可对其进行排序操作，添加完毕后，前台对应标签会显示其品牌。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" title="说明" class="layui-btn layui-btn-primary " id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    <!--表格区域  -->
+	<form id="tagform">
+      <table id="tagdata" class="layui-table site-table table-hover">
+        <thead>
+       	  <tr>
+        	<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+            <th>标签id</th>
+            <th>标签</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+      </table>
+	</form>
+	<!--传值等操作(暂定)  -->
+    <div id="addBrand" ></div>
 </div>
- 
-</div>
-<script type="text/javascript">  
- 
 
-function formatAction(value,row,index){
-	var val="<a class='edit' title='编辑品牌' href='javascript:void(0);' onclick='edit("+row.tag_id+")'></a>";
-		return val;
-	}
-	function formatId(value,row,index){
-		var val=row.tag_id;
-		return val;
-	}
+<!--js区域  -->
+<script>
+$(function(){
+	
+	var table = $('#tagdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/brands-show/list-json.do',
+	    },
+	    columns: [ //定义列
+	         {"data": function (obj) {
+	                   return '<input type="checkbox" name="tag_id" class="fly-checkbox" data-id=' + obj.tag_id + '>';
+	               }},
+	        {data: "tag_id"},
+	        {data: "tag_name"},
+	        {data: null,"render": function(data, type, row) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='tag_id' onclick='edit("+row.tag_id+")'>操作</a>";		//获取值:data["brand_id"]
+	       	}}
+	     ]
+	});
+});
+//品牌编辑
+function edit(id) {
+	newTab('分类品牌编辑', '${ctx}/shop/admin/brands-show/brand-list.do?tag_id=' + id);
+}
 
-	function edit(id) {
-		newTab('分类品牌编辑', '${ctx}/shop/admin/brands-show/brand-list.do?tag_id=' + id);
-	}
 </script>
 <#include '/admin/footer.html' >

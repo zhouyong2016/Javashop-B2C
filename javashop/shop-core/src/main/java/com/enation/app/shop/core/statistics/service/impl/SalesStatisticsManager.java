@@ -294,7 +294,7 @@ public class SalesStatisticsManager  implements ISalesStatisticsManager {
 		String condition_sql = createSql(1, year,month);
 		String sql =  "select count(0) as t_num,SUM(need_pay_money) as t_money, case "+ condition_sql +" as month  from es_order o where 1=1";
 		
-		if( status!=null  && status.intValue()!=99 ){
+		if( status!=null && status.intValue()!=99 ){
 			sql += " and o.status="+status;
 		}
 		
@@ -443,4 +443,25 @@ public class SalesStatisticsManager  implements ISalesStatisticsManager {
         return maxDate;  
     }
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.statistics.service.ISalesStatisticsManager#getPaid(int, int, java.util.Map)
+	 */
+	@Override
+	public Double getPaid(int year, int month, Map parames) {
+		String  date = year+"-"+month;
+		long start = DateUtil.getDateline(date+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+		long end = DateUtil.getDateline(date+"-31 23:59:59", "yyyy-MM-dd HH:mm:ss");
+		
+		String sql = "select SUM(o.need_pay_money) as receivables from es_order o where create_time >=? and  create_time <=? "
+				+ " and pay_status="+OrderStatus.PAY_YES
+				+ " and status!="+OrderStatus.ORDER_CANCELLATION
+				+ " and status!="+OrderStatus.ORDER_MAINTENANCE +" ";
+		Map map = this.daoSupport.queryForMap(sql, start,end);
+		Double paid = 0.0;
+		if(map!=null){
+			paid = StringUtil.toDouble(map.get("receivables"), false);
+		}
+		return paid;
+	}
 }

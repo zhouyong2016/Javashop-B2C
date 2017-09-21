@@ -25,6 +25,7 @@
 	</div>
 </div>
 <script>
+    //按商品发放优惠券
 	$(function() {
 
 		$("#sendForGoodsBtn").click(function() {
@@ -34,15 +35,13 @@
 				dataType : "json",
 				success : function(res) {
 					if (res.result == 1) {
-						parent.SelectTable("优惠券列表");
-						parent.refreshCurrentTab();
-						alert("成功发放[" + res.count + "]个红包");
+						$.Loading.success("成功发放[" + res.count + "]个红包");
 					} else {
-						alert(res.message);
+						$.Loading.error(res.message);
 					}
 				},
 				error : function() {
-					alert("红包发放失败");
+					$.Loading.error("红包发放失败");
 				}
 			});
 		});

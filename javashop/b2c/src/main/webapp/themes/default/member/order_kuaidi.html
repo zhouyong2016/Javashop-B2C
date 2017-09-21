@@ -1,0 +1,13 @@
+<div >
+	<ul>
+	 <#if kuaidiResult?exists>
+         <#if kuaidiResult.message=='ok'>
+	         <#list kuaidiResult.data as kd>
+	       	  	<li style="color: red">${kd.time}:&nbsp;&nbsp;&nbsp;&nbsp;${kd.context}</li>
+	         </#list>
+	         <#else>
+	         <li style="color: red">${kuaidiResult.message}</li>
+        </#if> 
+      </#if>
+      </ul>
+</div>

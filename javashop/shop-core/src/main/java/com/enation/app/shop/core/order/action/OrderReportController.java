@@ -15,21 +15,29 @@ import net.sf.json.JSONArray;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.OrderGift;
 import com.enation.app.shop.core.order.model.PayCfg;
+import com.enation.app.shop.core.order.model.PaymentLog;
 import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.model.SellBack;
+import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.app.shop.core.order.service.IOrderGiftManager;
 import com.enation.app.shop.core.order.service.IOrderManager;
 import com.enation.app.shop.core.order.service.IOrderMetaManager;
 import com.enation.app.shop.core.order.service.IOrderReportManager;
+import com.enation.app.shop.core.order.service.IPaymentLogManager;
 import com.enation.app.shop.core.order.service.IPaymentManager;
 import com.enation.app.shop.core.order.service.IRefundManager;
 import com.enation.app.shop.core.order.service.ISellBackManager;
 import com.enation.app.shop.core.order.service.OrderStatus;
+import com.enation.app.shop.front.tag.member.MemberWaitCommontListTag;
+import com.enation.eop.resource.model.AdminUser;
+import com.enation.eop.sdk.context.UserConext;
 import com.enation.framework.action.GridController;
 import com.enation.framework.action.GridJsonResult;
 import com.enation.framework.action.JsonResult;
+import com.enation.framework.context.spring.SpringContextHolder;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
 import com.enation.framework.util.JsonResultUtil;
+import com.google.zxing.Result;
 
 /**
  * 
@@ -46,29 +54,31 @@ import com.enation.framework.util.JsonResultUtil;
 @Controller
 @RequestMapping("/shop/admin/order-report")
 public class OrderReportController extends GridController {
-	
+
 	@Autowired
 	private IOrderReportManager orderReportManager;
-	
+
 	@Autowired
 	private IOrderMetaManager orderMetaManager;
-	
+
 	@Autowired
 	private ISellBackManager sellBackManager;
-	
+
 	@Autowired
 	private IOrderManager orderManager;
-	
+
 	@Autowired
 	private IPaymentManager paymentManager;
-	
+
 	@Autowired
 	private IRefundManager refundManager;
-	
+
 	/** 订单赠品管理 add_by DMRain 2016-7-22 */
 	@Autowired
 	private IOrderGiftManager orderGiftManager;
-	
+
+	@Autowired
+	private IPaymentLogManager  paymentLogManager;
 	/**
 	 * 付款单列表
 	 * @param statusMap 订单状态,Map
@@ -80,20 +90,20 @@ public class OrderReportController extends GridController {
 	 */
 	@RequestMapping("/payment-list")
 	public ModelAndView paymentList(){
-		
+
 		ModelAndView view=getGridModelAndView();
-		
-		
+
+
 		List payStatusList = OrderStatus.getPayStatus();
-			
-		
+
+
 		List<PayCfg> payTypeList = paymentManager.list();
-		
+
 		view.addObject("payStatusList", payStatusList);
 		view.addObject("payTypeList", payTypeList);
-		
+
 		view.addObject("payStatus_Json", JSONArray.fromObject(payStatusList).toString() );
-		
+
 		view.setViewName("/shop/admin/orderReport/payment_list");
 		return view;
 	}
@@ -122,8 +132,8 @@ public class OrderReportController extends GridController {
 		orderMap.put("payment_id", payment_id);
 		return JsonResultUtil.getGridJson(orderReportManager.listPayment(orderMap,this.getPage(), this.getPageSize(), order));
 	}
-	
-	
+
+
 	/**
 	 * 发货单列表
 	 * @return
@@ -132,7 +142,7 @@ public class OrderReportController extends GridController {
 	public String shippingList(){
 		return "/shop/admin/orderReport/shipping_list";
 	}
-	
+
 	/**
 	 * 发货单列表JSON
 	 * @param order 排序
@@ -143,7 +153,7 @@ public class OrderReportController extends GridController {
 	public GridJsonResult shippingListJson(String order){
 		return JsonResultUtil.getGridJson(orderReportManager.listShipping(this.getPage(), this.getPageSize(), order));
 	}
-	
+
 	/**
 	 * 退货单列表
 	 * @return
@@ -156,7 +166,7 @@ public class OrderReportController extends GridController {
 		view.addObject("status", status);
 		return view;
 	}
-	
+
 	/**
 	 * 退货单列表JSON
 	 * @param state
@@ -167,15 +177,33 @@ public class OrderReportController extends GridController {
 	public GridJsonResult returnedListJson(String state,String type){
 		return JsonResultUtil.getGridJson(orderReportManager.listReturned(this.getPage(), this.getPageSize(), state,type));
 	}
-	
+
+	/**
+	 * 原支付方式退款失败后，手动退款
+	 * @param id	退款单id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/manual-refund")
+	public JsonResult manualRefund(Integer id){
+		try {
+			AdminUser adminUser = UserConext.getCurrentAdminUser();
+			this.refundManager.manualRefundStatus(id, adminUser.getUsername());
+			return JsonResultUtil.getSuccessJson("手动退款成功");
+		} catch (Exception e) {
+			return JsonResultUtil.getErrorJson("手动退款失败");
+		}
+	}
+
+
 	/**
 	 * 退货入库
 	 * @return
 	 */
 	public ModelAndView returned(Integer sid){
-		
+
 		ModelAndView view=new ModelAndView();
-		
+
 		SellBack sellBackList = this.sellBackManager.get(sid);//退货详细
 		Order ret_order = orderManager.get(sellBackList.getOrdersn());//订单详细
 		List goodsList = this.sellBackManager.getGoodsList(sid);//退货商品列表
@@ -195,7 +223,7 @@ public class OrderReportController extends GridController {
 	 */
 	@RequestMapping(value="/refund-list")
 	public ModelAndView refundList(){
-		
+
 		ModelAndView view=this.getGridModelAndView();
 		String state=ThreadContextHolder.getHttpRequest().getParameter("state");//订单状态
 		if(state == null && state == ""){
@@ -205,7 +233,7 @@ public class OrderReportController extends GridController {
 		view.setViewName("/shop/admin/orderReport/refund_list");
 		return view;
 	}
-	
+
 	/**
 	 * 退款单JSON列表
 	 * @return
@@ -215,7 +243,7 @@ public class OrderReportController extends GridController {
 	public GridJsonResult refundListJson(String state){
 		return JsonResultUtil.getGridJson(refundManager.refundList(state,this.getPage(), this.getPageSize()));
 	}
-	
+
 	/**
 	 * 退款单详细
 	 * @param id 退款单id
@@ -226,10 +254,10 @@ public class OrderReportController extends GridController {
 		ModelAndView view=new ModelAndView();
 		Refund refund = this.refundManager.getRefund(id);
 		List goodsList = this.sellBackManager.getGoodsList(refund.getSellback_id());// 退货商品列表
-		
+
 		//以下代码是在退款单中加入订单赠品信息 add_by DMRain 2016-7-22
 		Integer sellback_id = refund.getSellback_id();
-		
+
 		//判断申请售后是否为空，为空则为取消已付款订单退款
 		if(sellback_id!=null){
 			SellBack sellBackList = this.sellBackManager.get(sellback_id);
@@ -239,17 +267,18 @@ public class OrderReportController extends GridController {
 			}
 			view.addObject("gift", gift);
 			//refund中需要过去退货单处增加的金额
-			refund.setRefund_money(sellBackList.getAlltotal_pay());
+			//TODO 自营店退款金额不为空的修改，我修改以后测过没有bug，如果以后有我疏漏的没测到，可以将此处注释去掉，就会恢复到原来，可以有更好的办法修改我这个bug
+		//	refund.setRefund_money(sellBackList.getAlltotal_pay());
 		}
-		
-		
-		
+
+
+
 		view.addObject("refund", refund);
 		view.addObject("goodsList", goodsList);
 		view.setViewName("/shop/admin/orderReport/refund_detail");
 		return view;
 	}
-	
+
 	/**
 	 * 修改退款单状态
 	 * @param id 退款单Id
@@ -258,13 +287,14 @@ public class OrderReportController extends GridController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/edit-refund")
-	public JsonResult editRefund(Integer id,Integer status,Double refund_money){
+	public JsonResult editRefund(Integer id,Integer status,Double refund_money,String a){
 		try {
-			refundManager.editRefund(id, status,refund_money);
-			return JsonResultUtil.getSuccessJson("修改状态成功");
+			AdminUser adminUser = UserConext.getCurrentAdminUser();
+			String result=refundManager.editRefund(id, status,refund_money,adminUser.getUsername());
+			return JsonResultUtil.getObjectMessageJson(result, "修改状态成功");
 		} catch (Exception e) {
 			return JsonResultUtil.getErrorJson("修改状态失败");
 		}
-		
 	}
+
 }

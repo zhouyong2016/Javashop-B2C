@@ -1,53 +1,65 @@
 <#include '/admin/header.html' >
 
-	
-<div class="main">
+	<style type="text/css">
+		.updatetr tr{
+          float: left;
+          line-height: 47px;
+		}
+		.table tbody{
+			float: right;
+		}
+		tr td{
+			padding-right: 25px;
+			 white-space:nowrap;
+		}
+	</style>
+<div class="admin-main" >
+	<script type="text/javascript" src="${ctx}/statics/e_tools/js/jquery.goodsCatsSelect.js"></script>
 	<form id="priceForm" >
+	<div class="table_control">
 	<div class="shadowBoxWhite whiteBox">
-		<table cellpadding="6" width="100%">
+		<table cellpadding="6" width="100%" class="updatetr" >
 			<tr>
-				<th class="title" colspan="4">高级搜索</th>
-			</tr>
-			<tr>
-				<td width="80px" align="right">
+				<td width="100px" align="right" style="padding-top: 3px;">
 					商品分类:
 				</td>
-				<td width="200px">
-					<select id="catId"
-						class="easyui-combotree combo" name="cat_id"
-						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
-						style="width: 200px;">
-					</select>
+				<td width="200px" >
+					<input type="text" id="cat_name" value="" style="width: 200px;height: 25px" />
+					<input type="hidden" id="cat_id" name="cat_id" value="" />
 				</td>
-				<td width="80px">
-					<select id="cycle_type" name="cycle_type" >
+				<td width="100px">
+					按订单周期：
+				</td>
+				<td width="90px" >
+					<select id="cycle_type" name="cycle_type" style="height: 30px">
 						<option value="1">按照月统计</option>
 						<option value="0">按照年统计</option>
 					</select>
 				</td>
-				<td width="70" >
-					<select id="year">
+				<td width="70px" >
+					<select id="year" style="height: 30px">
 					</select>
 				</td>
 				<td width="70px" >
-					<select id="month">
+					<select id="month" style="height: 30px;">
 					</select>
 				</td>
-				<td width="200" style="text-align: center;">
-					<a id="search_data" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				<td width="200px" style="text-align: center;height: 30px">
+						<a id="search_statis"  href="javascript:void(0);" onclick="search_statis()"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
 				</td>
 				<td>
 				</td>
 			</tr>
 		</table>
 	</div>
+	</div>
 	<div class="clear height10"></div>
-
+	<div id="main" style="height:400px;"></div>
 	<div class="shadowBoxWhite whiteBox" >
 		<table>
 			<tr> 
 				<td width="200px;">
-					<input type="button" class="button" value="设置价格区间" onclick="$('#dlg').dialog('open')" style="width: 120px;height: 30px;left: 100px;" >
+					<input type="button" class="button" value="设置价格区间" id="dlg" style="width: 120px;height: 30px;left: 100px;cursor: pointer;" >
 				</td>
 			</tr>
 		</table>
@@ -62,32 +74,21 @@
 		</table>
 	</div>
 	
-	<div id="dlg" class="easyui-dialog" title="设置价格区间" closed="true" style="width:400px;height:230px;padding:10px" buttons="#dlg-buttons" >
+	<div   title="设置价格区间" closed="true" style="width:400px;height:230px;padding:10px" buttons="#dlg-buttons" >
 		<ul>
-			<li>第一组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="0" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="100">元</li>
-			<li>第二组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="101" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="1000">元</li>
-			<li>第三组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="1001" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="10000">元</li>
-			<li>第四组:<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="minPrice" value="10001" >元~<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="maxPrice" value="50000">元</li>
+			<li><input class="minPrice_1" style="width: 80px;" type="hidden" name="minPrice" value="0" ><input class="maxPrice_1" style="width: 80px;" type="hidden" name="maxPrice" value="100"></li>
+			<li><input class="minPrice_2" style="width: 80px;" type="hidden" name="minPrice" value="101" ><input class="maxPrice_2" style="width: 80px;" type="hidden" name="maxPrice" value="1000"></li>
+			<li><input class="minPrice_3" style="width: 80px;" type="hidden" name="minPrice" value="1001" ><input class="maxPrice_3" style="width: 80px;" type="hidden" name="maxPrice" value="10000"></li>
+			<li><input class="minPrice_4" style="width: 80px;" type="hidden" name="minPrice" value="10001" ><input class="maxPrice_4" style="width: 80px;" type="hidden" name="maxPrice" value="50000"></li>
 		</ul>
-	</div>
-	
-	<!--创建 Button-->
-	<div id="dlg-buttons">
-	    <table cellpadding="0" cellspacing="0" style="width: 100%">
-	        <tr>
-	            <td style="text-align: right">
-	                <a href="#" class="easyui-linkbutton"  onclick="savePrice()" >保存</a> 
-	                <a href="#" class="easyui-linkbutton"  onclick="javascript:$('#dlg').dialog('close')" >关闭</a>
-	            </td>
-	        </tr>
-	    </table>
 	</div>
 	</form>
 </div>
 
 
 <script type="text/javascript">
-	var sale_money;	
+	var myChart = echarts.init(document.getElementById('main'));
+
 	$(function() {
 		
 		savePrice();
@@ -114,9 +115,7 @@
 			}
 		}
 		
-		$("#search_data").click(function() {
-			loadData();
-		});
+		
 		$("#cycle_type").change(function(){
 			if($(this).val()==1){
 				$("#month").show();
@@ -124,42 +123,106 @@
 				$("#month").hide();
 			}
 		});
+		//修改价格区间
+		
+		$("#dlg").click(function(){
+		   	 layer.open({
+		            title:"价格区间",//标题
+		            maxmin :true,//右上角可否放大缩小
+		            type:2,//弹框的类型
+		            shade: [0.3, '#000'],//黑色背景
+		            shadeClose:false,//黑色背景是否可以点击关闭
+		            content:"${ctx}/shop/admin/goodsStatis/get_price_range_html.do",//内容的URL
+		            area:['500px','320px'],//弹框大小
+		            scrollbar: false,//是否允许浏览器出现滚动条
+		            btn: ['确定', '取消'],
+		            yes: function(index, layero){
+		            	var minPrice_1 = layero.find("iframe").contents().find(".minPrice_1").val();
+		            	var minPrice_2 = layero.find("iframe").contents().find(".minPrice_2").val();
+		            	var minPrice_3 = layero.find("iframe").contents().find(".minPrice_3").val();
+		            	var minPrice_4 = layero.find("iframe").contents().find(".minPrice_4").val();
+		            	var maxPrice_1 = layero.find("iframe").contents().find(".maxPrice_1").val();
+		            	var maxPrice_2 = layero.find("iframe").contents().find(".maxPrice_2").val();
+		           		var maxPrice_3 = layero.find("iframe").contents().find(".maxPrice_3").val();
+		           		var maxPrice_4 = layero.find("iframe").contents().find(".maxPrice_4").val();
+		           		$(".minPrice_1").val(minPrice_1);
+		           		$(".minPrice_2").val(minPrice_2);
+		           		$(".minPrice_3").val(minPrice_3);
+		           		$(".minPrice_4").val(minPrice_4);
+		           		$(".maxPrice_1").val(maxPrice_1);
+		           		$(".maxPrice_2").val(maxPrice_2);
+		           		$(".maxPrice_3").val(maxPrice_3);
+		           		$(".maxPrice_4").val(maxPrice_4);
+		           		search_statis();
+		                layer.close(index); //如果设定了yes回调，需进行手工关闭
+		            },
+		           btn2: function(index, layero){
+ 
+		               //return false 开启该代码可禁止点击该按钮关闭
+		           }
+		      });
+		});
+		//分类选择
+		 $('#cat_name').goodsCatsSelect({	
+	            callback: function (cat) {
+	               var cat_id = cat.cat_id;
+	               var cat_name = cat.string;
+	               $("#cat_name").val(cat_name);
+	               $("#cat_id").val(cat_id);
+	            }
+	      });
+		
 	});
 	
+	
+	function search_statis(){
+		loadData();
+		savePrice();
+	}
+	
 	// 生成图表
-	function moneyHighcharts(obj){
-		sale_money = new Highcharts.Chart({
-	        chart: {
-	            type: 'line',
-	            renderTo: 'container'
-	        },
-	        title: {
-	            text: '价格销量分布'
-	        },
-	        xAxis: {
-	            categories: [obj[0],obj[1],obj[2],obj[3]]
-	        },
-	        yAxis: {
-	            title: {
-	                text: '销量'
-	            }
-	        },
-	        plotOptions: {
-	            line: {
-	                dataLabels: {
-	                    enabled: true
-	                },
-	                enableMouseTracking: false
-	            }
-	        },
-	        credits: {  
-	            enabled: false 	// remove high chart logo hyper-link  
-	        },
-	        series: [{
-	        	name: "价格销量",
-	        	data: [7.0, 6.9, 9.5, 14.5] 
-	        }]
-	    });
+	function moneyCharts(obj){
+    var option = {
+        title: {
+        	x: 'center',
+            text: '价格销量分布'
+        },
+        tooltip: {},
+        legend: {
+            data:['销量']
+        },
+        toolbox: {
+	        show : true,
+	        feature : {
+	            mark : {show: true},
+	            magicType : {show: true, type: ['line', 'bar']},
+	            restore : {show: true},
+	            saveAsImage : {show: true}
+	        }
+	    },
+        xAxis: {
+            data: [obj[0],obj[1],obj[2],obj[3]]
+        },
+        yAxis: {},
+        series: [{
+            name: '价格销量',
+            type: 'line',
+            data: [5, 20, 36, 10],
+            itemStyle: {
+                normal: {
+                    color:'#7cb5ec',
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c}'
+                    }
+                }
+            }
+        }]
+    };
+
+    /** 使用刚指定的配置项和数据显示图表。*/
+    myChart.setOption(option);
 	}
 	
 	function savePrice(){
@@ -169,7 +232,7 @@
 			var maxp = $(this).parent().find("input[name='maxPrice']").val();
 			xprice[index] = ""+minp+"元~"+maxp+"元";
 		});
-		moneyHighcharts(xprice);
+		moneyCharts(xprice);
 		loadData();
 	}
 	
@@ -197,15 +260,22 @@
 			month+=1;
 		}
 		
-		var catId = $("input[name='cat_id']").val();
-		
+		var cat_id = $("input[name='cat_id']").val();
+		var nums= new Array();
 		var options = {
-				url : "${ctx}/shop/admin/goodsStatis/get-price-sales-json.do?year="+year+"&month="+month+"&minprice="+min_price+"&maxprice="+max_price,
+				url : "${ctx}/shop/admin/goodsStatis/get-price-sales-json.do?cat_id="+cat_id+"&year="+year+"&month="+month+"&minprice="+min_price+"&maxprice="+max_price,
 				type : "post",
 				dataType : 'json',
 				success : function(data) {
 					if (data.result == 1) {
-						sale_money.series[0].setData(data.data);
+						for(var i=0;i<data.data.length;i++){
+				        	   nums[i]=data.data[i];
+				            }
+						myChart.setOption({
+				           	series: [{
+				                   data: nums
+				               }]
+				           });
 					} else {
 						alert(json.message);
 					}
@@ -213,7 +283,6 @@
 			};
 		$("#priceForm").ajaxSubmit(options);
 	}
-	
 
 </script>
 

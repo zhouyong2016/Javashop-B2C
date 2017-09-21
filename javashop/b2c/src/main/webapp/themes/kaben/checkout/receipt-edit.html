@@ -1,0 +1,51 @@
+<#assign receiptDetailTag = newTag("receiptDetailTag") />
+<#assign receiptDetail = receiptDetailTag('{"id":"${id}"}') />
+<div class="form_wrap">
+	<div class="addr_hide_wp">
+		<form id="member_addr" class="validate" action="" method="post">
+			<input type="hidden" id="recid" value="${receiptDetail.id}">
+			<input type="hidden" id="content" value="${receiptDetail.content}">
+			<input type="hidden" id="is_default" value="${receiptDetail.is_default}">
+			<div class="ckt-control">
+					<div class="addr_input_wp">
+						<span>默认发票</span> 
+						<label>
+							<input type="radio" value="0" name="is_default"> 否
+						 </label> 
+						<label>
+							<input type="radio" value="1" name="is_default"> 是 
+						</label>
+					</div>
+					<div class="rece_input_wp">
+					<span>发票抬头</span> 
+						<label>
+							<input type="text" value="${receiptDetail.title}" name="title">
+						</label>
+					</div>
+					<div class="rece_input_wp">
+					<span>默认发票</span>
+						<label>
+							<input type="radio" value="办公用品" name="content"> 办公用品
+						</label>
+						<label>
+							<input type="radio" value="劳保用品" name="content"> 劳保用品
+						</label>
+						<label>
+							<input type="radio" value="耗材" name="content"> 耗材
+						</label>
+					</div>
+					<div class="btns_info btn-div">
+						<a href="javascript: void(0);" class="add-btn" style="display: block; text-align: center;background:#da4f49;width:130px;border:0px none;padding:0px;margin:0px;color:#fff;font-size:12px;height:35px;line-height:35px;">保存发票</a>
+					</div>
+					</div>
+		</form>
+	</div>
+</div>
+<script> 
+$(function () {
+	var conval = $("#content").val();
+	var defval = $("#is_default").val();
+	$("input[name='content'][value='"+conval+"']").attr("checked",true);
+	$("input[name='is_default'][value='"+defval+"']").attr("checked",true);
+})
+</script>

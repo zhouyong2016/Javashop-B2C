@@ -48,6 +48,12 @@ public interface IDataCatManager {
 	 * @return
 	 */
 	public List<DataCat> listAllChildren(Integer parentid);
+	/**
+	 * 根据名称获取分类
+	 * @param name
+	 * @return
+	 */
+	public Integer getDataCat(String name);
 	
 	/**
 	 * 读取某个分类下的指定层级的所有子类

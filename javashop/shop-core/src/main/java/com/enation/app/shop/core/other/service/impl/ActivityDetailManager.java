@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enation.app.shop.core.other.model.ActivityDetail;
+import com.enation.app.shop.core.other.model.SecondHalfActivityDetail;
+import com.enation.app.shop.core.other.model.SingleReductionActivityDetail;
 import com.enation.app.shop.core.other.service.IActivityDetailManager;
 import com.enation.framework.database.IDaoSupport;
 import com.enation.framework.util.StringUtil;
@@ -69,7 +71,10 @@ public class ActivityDetailManager implements IActivityDetailManager{
 		List list = this.daoSupport.queryForList(sql, activity_id);
 		return list;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityDetailManager#listActivityDetail(java.lang.Integer)
+	 */
 	@Override
 	public List listActivityDetail(Integer activity_id) {
 		String sql = "select * from es_activity_detail where activity_id = ?";
@@ -86,6 +91,54 @@ public class ActivityDetailManager implements IActivityDetailManager{
 		List detailList=new ArrayList();
 		detailList.add(detailMap);
 		return detailList;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityDetailManager#add(com.enation.app.shop.core.other.model.SingleReductionActivityDetail)
+	 */
+	@Override
+	public void add(SingleReductionActivityDetail detail) {
+		this.daoSupport.insert("es_single_reduction_activity_detail", detail);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityDetailManager#add(com.enation.app.shop.core.other.model.SecondHalfActivityDetail)
+	 */
+	@Override
+	public void add(SecondHalfActivityDetail detail) {
+		this.daoSupport.insert("es_second_half_activity_detail", detail);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityDetailManager#edit(com.enation.app.shop.core.other.model.SingleReductionActivityDetail)
+	 */
+	@Override
+	public void edit(SingleReductionActivityDetail detail) {
+		this.daoSupport.update("es_single_reduction_activity_detail", detail, "detail_id="+detail.getDetail_id());
+		
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.enation.app.shop.core.other.service.IActivityDetailManager#edit(com.enation.app.shop.core.other.model.SecondHalfActivityDetail)
+	 */
+	@Override
+	public void edit(SecondHalfActivityDetail detail) {
+		this.daoSupport.update("es_second_half_activity_detail", detail, "detail_id="+detail.getDetail_id());
+		
+	}
+
+	@Override
+	public List listSingleReductionDetail(Integer activity_id) {
+		String sql = "select * from es_single_reduction_activity_detail where activity_id = ?";
+		List list = this.daoSupport.queryForList(sql, activity_id);
+		return list;
+	}
+
+	@Override
+	public List listSecondHalfDetail(Integer activity_id) {
+		String sql = "select * from es_second_half_activity_detail where activity_id = ?";
+		List list = this.daoSupport.queryForList(sql, activity_id);
+		return list;
 	}
 	
 

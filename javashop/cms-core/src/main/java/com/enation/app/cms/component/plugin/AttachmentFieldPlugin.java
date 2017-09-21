@@ -50,12 +50,11 @@ public class AttachmentFieldPlugin extends AbstractFieldPlugin {
 			if (value != null) {
 				String[] values = StringUtils.split(value.toString(), ",");
 				if (values.length != 2) {
-					data.put("name", "");
-					data.put("path", "");
-				}else{
+					data.put("name", "error");
+					data.put("path", "error");
+				}
 				data.put("name", values[0]);
 				data.put("path", values[1]);
-				}
 			}
 			
 			
@@ -91,8 +90,8 @@ public class AttachmentFieldPlugin extends AbstractFieldPlugin {
 			
 			String[] values = StringUtils.split(value.toString(), ",");
 			if (values.length != 2) {
-				attr.put("name", "");
-				attr.put("path", "");
+				attr.put("name", "error");
+				attr.put("path", "error");
 			} else {
 				attr.put("name", values[0]);
 				attr.put("path", values[1]);

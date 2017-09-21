@@ -105,6 +105,9 @@ public class RoleController extends GridController {
 			if(num >0){
 				return JsonResultUtil.getErrorJson("角色名称重复,添加失败");
 			}
+			if(acts==null || acts.length==0){
+				return JsonResultUtil.getErrorJson("权限必选一个或多个");
+			}
 			role.setRolename(role.getRolename().replace(" ", ""));
 			//添加角色
 			this.roleManager.add(role, acts);

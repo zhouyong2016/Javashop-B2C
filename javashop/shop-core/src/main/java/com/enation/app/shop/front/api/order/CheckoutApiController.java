@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.enation.app.shop.core.order.model.DlyType;
@@ -104,8 +105,8 @@ public class CheckoutApiController {
 	 * @return
 	 */
 	@ResponseBody  
-	@RequestMapping(value="/set-receipt", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonResult setReceipt(Integer receiptType,String receiptContent,String receiptTitle,Integer is_have){
+	@RequestMapping(value="/set-receipt", produces = MediaType.APPLICATION_JSON_VALUE , method = RequestMethod.GET)
+	public JsonResult setReceipt(Integer receiptType,String receiptContent,String receiptTitle,Integer is_have,String receiptDuty){
 		
 		try {
 			
@@ -119,6 +120,7 @@ public class CheckoutApiController {
 			receiptMap.put("receiptType", receiptType);
 			receiptMap.put("receiptContent", receiptContent);
 			receiptMap.put("receiptTitle", receiptTitle);
+			receiptMap.put("receiptDuty", receiptDuty);
 			session.setAttribute("checkoutReceiptSession", receiptMap);
 			
 			return JsonResultUtil.getSuccessJson("保存成功");

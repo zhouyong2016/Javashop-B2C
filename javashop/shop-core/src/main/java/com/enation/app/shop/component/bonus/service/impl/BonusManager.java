@@ -204,7 +204,7 @@ public class BonusManager  implements IBonusManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Page list(int page, int pageSize, int typeid) {
-		String sql="select mb.*,bt.use_start_date,bt.use_end_date from es_member_bonus mb inner join  es_bonus_type bt  on bt.type_id= mb.bonus_type_id where bonus_type_id=? order by bonus_id asc";
+		String sql="select mb.*,bt.use_start_date,bt.use_end_date,bt.send_type from es_member_bonus mb inner join  es_bonus_type bt  on bt.type_id= mb.bonus_type_id where bonus_type_id=? order by bonus_id asc";
 		Page webPage = daoSupport.queryForPage(sql, page,pageSize,typeid);
 		return webPage;
 	}

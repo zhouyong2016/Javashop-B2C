@@ -1,74 +1,191 @@
 <#include '/admin/header.html' >
 
-<div class="main">
-	<div class="clear height10"></div>
-	<div style="display: block;"
-		class="input shadowBoxWhite wf100 whiteBox">
-		<div class="floor_adv"></div>
-	</div>
-	<div class="buttonWrap">
-			<a href="javascript:;" id="adv" class="easyui-linkbutton">确定</a>
+<div class="admin-main">
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">选择广告</li>
+			<li>已选广告</li>
+		</ul>
+		<!-- 批量选择按钮 -->
+		<div class="layui-tab-content" style="min-height: 100px;">
+			<!-- 选择广告列表 -->
+			<div class="layui-tab-item layui-show">
+			 	<a class="layui-btn  layui-btn-primary layui-btn-small batchChoice" style="margin:10px 20px">批量选择</a>
+				<table id="advdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+					<thead>
+						<tr>
+							<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-all'></th>
+							<th>广告名称</th>
+							<th>所属广告位</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			
+			<!-- 已选广告 -->
+			<div class="layui-tab-item">
+				<a class="layui-btn  layui-btn-primary layui-btn-small batchCancelled" style="margin:10px 20px">批量取消</a>
+				<form action="">
+					<input type="hidden" name="floor_id" value="${floor_id}">
+					<input type="hidden" name="keyword" value="">
+					<input type="hidden" name="position" value="${index}">
+					
+					<table class="layui-table" id="opt-Adv">
+						<thead>
+							<tr>
+								<th><input type='checkbox'  class='btn-checkall fly-checkbox' id='selected-oll'></th>
+								<th>广告名称</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</form>
+			</div>
+			
+			<div style="text-align: center;">
+				<a class="layui-btn layui-btn-normal" id="adv">保存</a>
+			</div>
+			
+		</div>
 	</div>
 </div>
-<script type="text/javascript" src="${ctx}/floor/admin/edit/jquery.advSelector.js" > </script>
-<script type="text/javascript">
+
+
+<script>
+	//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+	layui.use('element', function() {
+		var element = layui.element();
+	});
 	
-		$(function(){
-			//创建商品选择器
-			var container=$(".floor_adv");
-			var options={
-					advid_name:'adv_ids',
-					selected_data_url:'${ctx}/core/admin/templateshow/get-selected-adv.do?floor_id='+${floor_id}+"&position='${index}'"
-			
-			};
-			container.advSelector(options);
-			
-			$("#adv").click(function() {
-				
-				//判断linkbutton是否已禁用，如果禁用则跳过
-			 	var disabled=  $(this).hasClass("l-btn-disabled");
-				if( !disabled ){
-						var adv_ids = [];
-						$("input[name='adv_ids']").each(function(i, o){
-							adv_ids[i] = $(o).val();
-						});
-						if(adv_ids.length==0){
-							$.Loading.error("请添加广告");
-							return;
-						}
-						$("#adv").linkbutton("disable");
-						$.Loading.show("正在保存请稍候..");
-						$.ajax({
-							url : "${ctx}/core/admin/template/save-adv.do?ajax=yes" ,
-							type : "POST",
-							dataType : "json",
-							data:{
-								"floor_id":${floor_id},
-								"adv_ids":adv_ids,
-								"position":"${index}",
-								"keyword":container.find(".keyword").val()
-							},
-							success : function(result) {
-								
-								if (result.result == 1) {
-									$.Loading.success(result.message);
-									parent.SelectTable("模板编辑");
-									parent.refreshCurrentTab();
-									parent.CloseTabByTitle("修改广告图片");
-									//刷新tab
-									
-								}else{
-									$("#adv").linkbutton("enable");
-									$.Loading.error(result.message);
-								}
-							},
-							error : function(e) {
-								$.Loading.error("出错了,请重试");
-								$("#adv").linkbutton("enable");
-							}
-						});
-					}
-				});
+	var table;
+	$(function(){
+		
+		 table= $('#advdata').DataTable({
+			"language": {
+		        "url": "${staticserver}/media/zh_CN.txt"
+		    },
+		    "processing": true,
+		    "serverSide": true,
+		    "ordering": false,
+		    "searching": false,
+		    "lengthChange": false,
+		    ajax: {
+		        //指定数据源
+		        type:"post",
+		        url: '${ctx}/core/admin/adv/list-json.do?acid=${acid!''}',
+		    },
+		    columns: [ //定义列
+	            {"data": function (obj) {
+	                return '<input type="checkbox" name="aid" class="fly-checkbox" value=' + obj.aid + '>';
+	            		}},
+		        {data: "aname"},
+		        {data: "cname"},
+		        {data: function(obj) {
+		        	return "<a class='layui-btn layui-btn-small _aa' name='aid' data-aname=" + obj.aname +" data-aid=" + obj.aid + " onclick='optAdv(this,\""+obj.aname+"\","+obj.aid+")'>选择此广告</a>"; 		//获取值:data["brand_id"]
+		       	}}
+		     ]
 		});
+		 
+		//加载已选广告
+		$.ajax({
+			url : "${ctx}/core/admin/templateshow/get-selected-adv.do?floor_id=${floor_id}&position=${index}" ,
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.each( result, function(index, content){
+					$("<tr><td><input type='checkbox' name='selectedaid' class='fly-checkbox'></td><td>"+content.aname+"</td><td><a class='layui-btn layui-btn-small layui-btn-danger' onclick='cancel(this)'>取消此广告</a> <input type='hidden' name='adv_ids' value='"+content.aid+"'></td></tr>").appendTo($("#opt-Adv tbody"));
+				})
+			}
+		})
+		 
+		 $("#adv").click(function() {
+			//判断linkbutton是否已禁用，如果禁用则跳过
+		 	var disabled=  $(this).hasClass("layui-btn-disabled");
+			if( !disabled ){
+					var adv_ids = [];
+					$("input[name='adv_ids']").each(function(i, o){
+						adv_ids[i] = $(o).val();
+					});
+					if(adv_ids.length==0){
+						$.Loading.error("请添加广告");
+						return;
+					}
+					$("#adv").addClass("layui-btn-disabled");
+					$.Loading.show("正在保存请稍候..");
+					$.ajax({
+						url : "${ctx}/core/admin/template/save-adv.do?ajax=yes" ,
+						type : "POST",
+						dataType : "json",
+						data:{
+							"floor_id":"${floor_id}",
+							"adv_ids":adv_ids,
+							"position":"${index}",
+							"keyword":""
+						},
+						success : function(result) {
+							
+							if (result.result == 1) {
+								$.Loading.success(result.message);
+							}else{
+								$("#adv").removeClass("layui-btn-disabled");
+								$.Loading.error(result.message);
+							}
+						},
+						error : function(e) {
+							$.Loading.error("出错了,请重试");
+							$("#adv").removeClass("layui-btn-disabled");
+						}
+					});
+				}
+			});
+	});
+	
+	//选择此广告
+	function optAdv(which,aname,aid){
+		$(which).addClass("layui-btn-disabled");
+		$("<tr><td><input type='checkbox' name='selectedaid' class='fly-checkbox'></td><td>"+aname+"</td><td><a class='layui-btn layui-btn-small layui-btn-danger' onclick='cancel(this)'>取消此广告</a> <input type='hidden' name='adv_ids' value='"+aid+"'></td></tr>").appendTo($("#opt-Adv tbody"));
+	}
+	/* 点击批量选择按钮 */
+	 $(".batchChoice").click(function(){
+		 var checkArry = $("#advdata input[name=aid]:checked")
+         for (var i = 0; i < checkArry.length; i++) { 
+            	 optAdv($(checkArry[i]).closest('tr').find('a'),$(checkArry[i]).closest('tr').find('a').attr("data-aname"),$(checkArry[i]).closest('tr').find('a').attr("data-aid"))
+         }
+			
+	}) 
+	
+	/* 点击批量取消按钮 */
+	  	 $(".batchCancelled").click(function(){
+		 var checkArry = $("#opt-Adv input[name=selectedaid]:checked")
+         for (var i = 0; i < checkArry.length; i++) { 
+        	cancel($(checkArry[i]).closest('tr').find('a'));
+         }
+			
+	})
+	
+	 //已选广告列表里点击全选让其复选框选中
+	$("#selected-oll").click(function(){
+		var removecheck =$("#selected-oll").is(":checked");
+		if(removecheck == true){
+			$("input[name=selectedaid]").prop('checked',true);
+		}
+		if(removecheck == false){
+			$("input[name=selectedaid]").prop('checked',false);
+		}
+	})
+	
+	
+	
+	//取消已选
+	function cancel(obj){
+		$(obj).parent().parent().remove();
+		console.log(obj)
+	}
+	
 </script>
+
 <#include '/admin/footer.html' >

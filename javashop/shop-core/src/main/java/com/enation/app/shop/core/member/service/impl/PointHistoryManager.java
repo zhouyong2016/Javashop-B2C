@@ -120,22 +120,5 @@ public class PointHistoryManager implements IPointHistoryManager {
 				member.getMember_id());
 		return webpage;
 	}
-	@Override
-	public Long getPoint(int member_id) {
-		Member member = UserConext.getCurrentMember();
-		Long result = this.daoSupport.queryForLong(
-				"select SUM(point) from es_point_history where member_id = ?  and point_type='0'",
-				member.getMember_id());
-				return result;
-	}
-
-	@Override
-	public Long getMp(int member_id) {
-		Member member = UserConext.getCurrentMember();
-		Long result = this.daoSupport.queryForLong(
-				"select SUM(mp) from es_point_history where member_id = ?  and point_type='1'",
-				member.getMember_id());
-				return result;
-	}
 
 }

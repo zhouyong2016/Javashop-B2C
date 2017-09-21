@@ -105,8 +105,12 @@ public class LogiController extends GridController {
 			Logi logi = new Logi();
 			logi.setCode(code);
 			logi.setName(name);
-			Logi logi2=logiManager.getLogiByCode(code);
-			if(logi2!=null){
+			Logi logicode = logiManager.getLogiByCode(code);
+			Logi loginame = logiManager.getLogiByName(name);
+			if(loginame != null){
+				return JsonResultUtil.getErrorJson("快递公司名称不能相同");
+			}
+			if(logicode != null){
 				return JsonResultUtil.getErrorJson("快递公司代码不能相同");
 			}else{
 				logiManager.saveAdd(logi);
@@ -128,18 +132,25 @@ public class LogiController extends GridController {
 	@ResponseBody
 	@RequestMapping(value="/save-edit")
 	public JsonResult saveEdit(String code,String name,Integer cid){
-
 		try {
 			Logi logi = new Logi();
 			logi.setId(cid);
 			logi.setCode(code);
 			logi.setName(name);
-			this.logiManager.saveEdit(logi);
-			return JsonResultUtil.getSuccessJson("修改成功");
+			Logi logicode = logiManager.getLogiByCode(code);
+			Logi loginame = logiManager.getLogiByName(name);
+			if(loginame != null && loginame.getId() != cid){
+				return JsonResultUtil.getErrorJson("快递公司名称不能相同");
+			}
+			if(logicode != null && logicode.getId() != cid){
+				return JsonResultUtil.getErrorJson("快递公司代码不能相同");
+			}else{
+				logiManager.saveEdit(logi);
+				return JsonResultUtil.getSuccessJson("修改成功");
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("物流公司修改失败", e);
-			return JsonResultUtil.getErrorJson("物流公司修改失败");			
+			return JsonResultUtil.getErrorJson("快递公司修改失败");			
 		}
 	}
 

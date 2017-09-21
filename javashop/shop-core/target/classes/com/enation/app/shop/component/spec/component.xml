@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="商品规格组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+ 		<plugin name="商品规格插件" id="goodsSpecPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+ 		<plugin name="商品规格库存插件" id="goodsSpecStorePlugin">
+			<bundle id="goodsStorePluginBundle"></bundle>
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品规格购物车插件" id="goodsSpecCartPlugin">
+			<bundle id="cartPluginBundle"></bundle>
+		</plugin>
+		<plugin name="商品规格订单插件" id="goodsSpecOrderPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+		<plugin name="规格数据导出插件" id="specDataExportPlugin">
+			<bundle id="dataExportPluginBundle"></bundle>
+		</plugin>			
+		
+	</plugins>
+	<widgets>
+		<widget id="goods_spec" name="商品规格挂件"></widget>	 
+	</widgets>
+</component>

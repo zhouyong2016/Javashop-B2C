@@ -148,18 +148,25 @@ public class CommentsController extends GridController {
 	@ResponseBody
 	@RequestMapping(value="/add")
 	public JsonResult add(String reply,int commentId) {
-		if (StringUtil.isEmpty(reply)) {
-			return JsonResultUtil.getErrorJson("回复不能为空！");
+		
+		try {
+			if (StringUtil.isEmpty(reply)) {
+				return JsonResultUtil.getErrorJson("回复不能为空！");
+			}
+			MemberComment dbMemberComment = memberCommentManager.get(commentId);
+			if (dbMemberComment == null) {
+				return JsonResultUtil.getErrorJson("此评论或咨询不存在！");
+			}
+			dbMemberComment.setReply(reply);
+			dbMemberComment.setReplystatus(1);
+			dbMemberComment.setReplytime(DateUtil.getDateline());
+			memberCommentManager.update(dbMemberComment);
+			return JsonResultUtil.getSuccessJson("回复成功");
+		} catch (Exception e) {
+			//e.printStackTrace();
+			return JsonResultUtil.getErrorJson("出现错误");
 		}
-		MemberComment dbMemberComment = memberCommentManager.get(commentId);
-		if (dbMemberComment == null) {
-			return JsonResultUtil.getErrorJson("此评论或咨询不存在！");
-		}
-		dbMemberComment.setReply(reply);
-		dbMemberComment.setReplystatus(1);
-		dbMemberComment.setReplytime(DateUtil.getDateline());
-		memberCommentManager.update(dbMemberComment);
-		return JsonResultUtil.getSuccessJson("回复成功");
+		
 	}
 	/**
 	 * 删除

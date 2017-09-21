@@ -1,5 +1,74 @@
-
-<SCRIPT LANGUAGE="JavaScript">function  contains(obj_sel,option){
+<#include '/admin/sonheader.html' >
+<div class="easyui-panel" style="border-style: none;">
+    <script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.form-3.51.js"></script>
+    <link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/plugins/layui/css/modules/layer/default/layer.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/version3/css/layerform.css"/>
+	<form method="post" name="theForm1" id="typebrandFrom" class="validate">
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<td width="19%" height="77" align="left">
+					<select name="brandlist" id="brand_sel" multiple="true" style="width: 200px; height: 200px; border: 1px solid #000000">
+						<#list brandlist as brand>
+						<option value="${brand.brand_id }">${brand.name }</option>
+						</#list>
+				</select>
+				<td width="13%" align="center"><input name="submit"
+					type="button" class="button" value="  ->  "
+					onclick="javascript:rightMove();" /> <br /> <input name="submit"
+					type="button" class="button" value="  <-  "
+					onclick="javascript:leftMove();" /> <br /> <input name="submit"
+					type="button" class="button" value="  重置  "
+					onclick="javascript:clean();" /></td>
+				<td width="68%" height="77" align="left">
+				<select class="easyui-validatebox" name="chhoose_brands" id="choose_sel" multiple="true"
+					style="width: 200px; height: 200px; border: 1px solid #000000">
+						<#list goodsType.brandList as brand>
+						<option value="${brand.brand_id }" selected="true">${brand.name }</option>
+						</#list>
+				</select>
+				<div id="inputs" style="display: none;"></div></td>
+			</tr>
+		</table>
+		 <input class="easyui-validatebox" type="hidden" name="typeId" value="${goodsType.type_id}">
+        <div class="layui-layer-btn" style="padding:8px 12px;">
+            <a class="layui-layer-btn0" type="submit">保存</a>
+            <a class="layui-layer-btn1">取消</a>
+        </div>
+	</form>
+ <script type="text/javascript">
+ var index = parent.layer.getFrameIndex(window.name);
+  $('.layui-layer-btn1').on('click', function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index)
+        });
+  //保存关联品牌修改
+  $('.layui-layer-btn0').on('click', function () {
+      var options = $("select[name='chhoose_brands']").find('option');
+      var inputs = '';
+      for(var i = 0; i < options.length; i++){
+          inputs += '<input type="hidden" name="chhoose_brands" value="'+ options[i].value +'" />'
+      }
+      $("#choose_sel").attr("name","");
+      $('#inputs').html(inputs);
+      $('#typebrandFrom').ajaxSubmit({
+          url: '${ctx}/shop/admin/type/save-brand.do',
+          type: 'POST',
+          success: function (res) {
+              if(res.result === 1){
+            	  parent.$.Loading.success("保存成功");
+                  parent.layer.close(index); //再执行关闭     
+              }else {
+                  alert(res.message);
+              }
+          },
+          error: function () {
+              alert('出现错误，请稍候重试！');
+          }
+      })
+  });
+ </script>
+ <SCRIPT LANGUAGE="JavaScript">function  contains(obj_sel,option){
 	var options = obj_sel.options;
 	for(var i=0;i<options.length;i++){
 		if(options[i].value == option.value){
@@ -10,7 +79,7 @@
 	return false;
 }
 
-
+//移动
 function rightMove(){
 
 	var brand_sel = document.getElementById("brand_sel");
@@ -28,7 +97,7 @@ function rightMove(){
 		}
 	}
 }
-
+//移动
 function leftMove(){
 	$("#choose_sel>option").each(function(){
 		var option= $(this);
@@ -37,7 +106,7 @@ function leftMove(){
 		}
 	});
 }
-
+//还原
 function clean(){
 	$("#choose_sel>option").each(function(){
 		 $(this).remove();
@@ -50,32 +119,4 @@ function selectChoose(){
 	return true;
 }
 </SCRIPT>
-<div class="easyui-panel" style="border-style: none;">
-	<form method="post" name="theForm1" id="typebrandFrom" class="validate">
-		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-			<tr>
-				<td width="19%" height="77" align="left">
-					<select name="brandlist" id="brand_sel" multiple="true" style="width: 200px; height: 200px; border: 1px solid #000000">
-						<#list brandlist as brand>
-						<option value="${brand.brand_id }">${brand.name }</option>
-						</#list>
-				</select>
-				<td width="13%" align="center"><input name="submit"
-					type="button" class="button" value="  ->  "
-					onclick="javascript:rightMove();" /> <br /> <input name="submit"
-					type="button" class="button" value="  <-  "
-					onclick="javascript:leftMove();" /> <br /> <input name="submit"
-					type="button" class="button" value="  重置  "
-					onclick="javascript:clean();" /></td>
-				<td width="68%" height="77" align="left"><select class="easyui-validatebox"
-					name="chhoose_brands" id="choose_sel" multiple="true"
-					style="width: 200px; height: 200px; border: 1px solid #000000">
-						<#list goodsType.brandList as brand>
-						<option value="${brand.brand_id }" selected="true">${brand.name }</option>
-						</#list>
-				</select></td>
-			</tr>
-		</table>
-		<input class="easyui-validatebox" type="hidden" name="typeId" value="${goodsType.type_id}">
-	</form>
-</div>
+ </div>

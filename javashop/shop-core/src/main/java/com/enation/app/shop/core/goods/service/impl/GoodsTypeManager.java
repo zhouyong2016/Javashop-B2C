@@ -34,10 +34,10 @@ import com.enation.framework.util.StringUtil;
 @Service("goodsTypeManager")
 public class GoodsTypeManager  implements IGoodsTypeManager {
 	private static final Log loger = LogFactory.getLog(GoodsTypeManager.class  );
-	
+
 	@Autowired
 	private IDaoSupport  daoSupport;
- 
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#listAll()
@@ -46,32 +46,31 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	public List listAll() {
 		String sql   = "select * from es_goods_type where disabled=0";
 		List typeList = this.daoSupport.queryForList(sql,GoodsType.class);
-		
+
 		return typeList;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#pageType(java.lang.String, int, int, java.util.Map)
 	 */
 	@Override
 	public Page pageType(String order, int page, int pageSize,Map params) {
-		
+
 		String keyword = (String) params.get("keyword");		
 		order = order == null ? " type_id desc" : order;
-		
+
 		String sql  = "select * from es_goods_type where disabled = 0";
-		
+
 		if(!StringUtil.isEmpty(keyword)){
 			sql += " and name like '%"+keyword+"%'";
 		}
 		sql += " order by" + order;
-		
 		Page webpage = this.daoSupport.queryForPage(sql, page, pageSize);
 		return webpage;
 	}
-	
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#pageTrashType(java.lang.String, int, int)
@@ -79,18 +78,18 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	@Override
 	public Page pageTrashType(String order,int page,int pageSize){
 		order  = order==null?" type_id desc":order;
-		
+
 		String sql  = "select * from es_goods_type where disabled=1";
 		sql+="  order by ";
 		sql+=order;
-		
+
 		Page webpage = this.daoSupport.queryForPage(sql, page, pageSize);
 		return webpage;
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#get(java.lang.Integer)
@@ -111,7 +110,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		type.setSpecList(this.getSpecListByTypeId(type_id));
 		return type;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#getById(int)
@@ -122,7 +121,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		return this.daoSupport.queryForObject(sql, GoodsType.class, typeid);
 	}
 
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#getBrandListByTypeId(int)
@@ -134,7 +133,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		List list = this.daoSupport.queryForList(sql,type_id);
 		return list;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#listByTypeId(java.lang.Integer)
@@ -142,9 +141,9 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	@Override
 	public List listByTypeId(Integer typeid) {
 		String sql ="select b.* from es_type_brand tb inner join es_brand b  on    b.brand_id = tb.brand_id where tb.type_id=? and b.disabled=0";
-		
+
 		List list =	this.daoSupport.queryForList(sql,  typeid);
-	 
+
 		return list;
 	}
 
@@ -157,7 +156,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		GoodsTypeDTO type = this.get(type_id);
 		if(type.getHave_prop()==0) return new ArrayList<Attribute>();
 		return type.getPropList();
-	 
+
 	}
 
 	/*
@@ -195,7 +194,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		JSONArray jsonarray = JSONArray.fromObject(list);
 		return jsonarray.toString();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#save(com.enation.app.shop.core.goods.model.GoodsType)
@@ -221,22 +220,22 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 				type.setParams(null);
 			}
 			this.daoSupport.update(typeTableName, type, "type_id="+ type_id);
-//			if(type.getJoin_brand()==0){
-//				String sql ="delete from es_type_brand where type_id = ?";
-//				this.daoSupport.execute(sql,type_id);
-//			}
+			//			if(type.getJoin_brand()==0){
+			//				String sql ="delete from es_type_brand where type_id = ?";
+			//				this.daoSupport.execute(sql,type_id);
+			//			}
 		}else{ //新增
 			daoSupport.insert(typeTableName, type);
 			type_id  = this.daoSupport.getLastId(typeTableName);
 			if(loger.isDebugEnabled()){
 				loger.debug("增加商品类型成功 , id is " + type_id);
 			}
-			
+
 		}
-		
+
 		return type_id;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#saveTypeBrand(com.enation.app.shop.core.goods.model.GoodsType)
@@ -257,7 +256,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 			}
 		}	
 		return type_id;
-		
+
 	}
 
 	/*
@@ -277,12 +276,12 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 				map.put("type_id", type_id);
 				map.put("spec_id", spec_id);
 				daoSupport.insert("es_type_spec", map);
-				
+
 			}
 		}
 		return type_id;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#delete(java.lang.Integer[])
@@ -290,9 +289,9 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	@Override
 	@com.enation.framework.annotation.Log(type=LogType.GOODS,detail="将商品类型放入回收站中")
 	public int delete(Integer[] type_ids) {
-		
+
 		if(type_ids==null) return 1;
-		
+
 		String ids = "";
 		for (int i = 0; i < type_ids.length; i++) {
 			if(i!=0)
@@ -301,22 +300,22 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		}
 		String sql  ="select count(0) from es_goods where type_id in ("+ids+")";
 		int count = this.daoSupport.queryForInt(sql);
-		
-		 sql="select count(0) from es_goods_cat where type_id in ("+ids+")";
-		 int catcout=this.daoSupport.queryForInt(sql);
+
+		sql="select count(0) from es_goods_cat where type_id in ("+ids+")";
+		int catcout=this.daoSupport.queryForInt(sql);
 		if(catcout>0){
 			return 0;
 		} 
-		
+
 		if(count==0){
 			sql  = "update  es_goods_type set disabled=1  where type_id in ("+ids+")";
 			this.daoSupport.execute(sql) ;
 			return 1;
 		}
 		return 0;
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#clean(java.lang.Integer[])
@@ -334,12 +333,12 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		}
 		String sql  ="delete from es_goods_type where type_id in("+ids+")";
 		this.daoSupport.execute(sql);
-		
+
 		sql="delete from es_type_brand where type_id in("+ids+")";
 		this.daoSupport.execute(sql);
 	}
-		
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.enation.app.shop.core.goods.service.IGoodsTypeManager#revert(java.lang.Integer[])
@@ -347,7 +346,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	@Override
 	@com.enation.framework.annotation.Log(type=LogType.GOODS,detail="将商品类型还原")
 	public void revert(Integer[] type_ids){
-		
+
 		if(type_ids==null) return ;
 		String ids = "";
 		for (int i = 0; i < type_ids.length; i++) {
@@ -365,14 +364,19 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	 */
 	@Override
 	public boolean checkname(String name, Integer typeid) {
-		if(name!=null)name=name.trim();
+		if(name!=null){
+			name=name.trim();
+		}
 		String sql  ="select count(0) from es_goods_type where name=? and type_id!=? and disabled=0";
-		if(typeid==null) typeid= 0;
+		if(typeid==null){
+			typeid= 0;
+		}
 		int count = this.daoSupport.queryForInt(sql, name,typeid);
-		if(count>0)
+		if(count>0){
 			return true;
-		else
+		}else{
 			return false;
+		}
 	}
 
 	/**
@@ -386,15 +390,15 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	private List<Attribute> toAttrList(String[] propnames, int[] proptypes,
 			String[] options,String[] unit, int[] required,String[] datatype) {
 		List<Attribute> attrList = new ArrayList<Attribute>();
-		
+
 		if(propnames!=null && proptypes!= null && options!= null){
 			for (int i = 0; i < propnames.length; i++) {
-	
+
 				Attribute attribute = new Attribute();
 				String name = propnames[i];
 				String option = options[i];
 				int type = proptypes[i];
-				
+
 				attribute.setName(name);
 				attribute.setOptions(option);
 				attribute.setType(type);
@@ -402,7 +406,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 				attribute.setRequired(required[i]);
 				attribute.setUnit(unit[i]);
 				attrList.add(attribute);
-				
+
 			}
 		}
 		return attrList;
@@ -493,7 +497,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 
 		return r;
 	}
-	
+
 	/**
 	 * 查询类型是否已经被类别关联
 	 * @param type_ids
@@ -503,12 +507,12 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		String sql="select count(0) from goods_cat where type_id in";
 		return false;
 	}
-	
+
 	private List getSpecListByTypeId(int type_id) {
 		String sql ="select s.spec_name spec_name ,s.spec_id spec_id, 0 as num from es_type_spec ts inner join es_specification s  on s.spec_id = ts.spec_id where ts.type_id=?";
 		return this.daoSupport.queryForList(sql,type_id);
 	}
-	
+
 	/**
 	 * 将一个json字串转为list
 	 * @param props
@@ -521,10 +525,10 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 		JSONArray jsonArray = JSONArray.fromObject(props);
 		List<Attribute> list = (List) JSONArray.toCollection(jsonArray,
 				Attribute.class);
-		
+
 		return list;
 	}
-	
+
 	/**
 	 * 读取某个类型的参数定义
 	 * 
@@ -532,7 +536,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 	 * @return
 	 */
 	private String getParamsByTypeId(int type_id) {
-		
+
 		String sql ="select * from es_goods_type where disabled=0 and have_parm=1 and type_id="+type_id;
 		List list = this.daoSupport.queryForList(sql);
 		String props = 	"";
@@ -540,7 +544,7 @@ public class GoodsTypeManager  implements IGoodsTypeManager {
 			Map map = (Map) list.get(0);
 			props = (String) map.get("params");
 		}
- 
+
 		return props;
 	}
 }

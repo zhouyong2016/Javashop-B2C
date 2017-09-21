@@ -195,6 +195,21 @@ public class Order extends DynamicField implements java.io.Serializable,PayEnabl
 	
 	private Integer is_comment; //1：订单有商品需要评论
 	
+	
+	
+	/**
+	 * 增加发票字段
+	 */
+	/** 是否需要发票 */
+	private Integer receipt; // 1 需要 2 不需要
+	/** 发票抬头 */
+	private String receipt_title;
+	/** 发票类型 */
+	private Integer receipt_type;  // 1 个人 2 单位
+	/** 发票税号 */
+	private String receipt_duty;
+	/** 发票内容 */
+	private String receipt_content;
 	/**
 	 * 获取订单积分
 	 */
@@ -934,9 +949,64 @@ public class Order extends DynamicField implements java.io.Serializable,PayEnabl
 	public void setIs_comment(Integer is_comment) {
 		this.is_comment = is_comment;
 	}
-
-
 	
 	
+	public String getReceipt_title() {
+		return receipt_title;
+	}
+
+
+
+	public void setReceipt_title(String receipt_title) {
+		this.receipt_title = receipt_title;
+	}
+
+
+
+	public String getReceipt_content() {
+		return receipt_content;
+	}
+
+
+
+	public void setReceipt_content(String receipt_content) {
+		this.receipt_content = receipt_content;
+	}
+
+
+	public String getReceipt_duty() {
+		return receipt_duty;
+	}
+
+
+
+	public void setReceipt_duty(String receipt_duty) {
+		this.receipt_duty = receipt_duty;
+	}
+
+
+
+	public Integer getReceipt_type() {
+		return receipt_type;
+	}
+
+
+
+	public void setReceipt_type(Integer receipt_type) {
+		this.receipt_type = receipt_type;
+	}
+
+
+
+	public Integer getReceipt() {
+		return receipt;
+	}
+
+
+
+	public void setReceipt(Integer receipt) {
+		this.receipt = receipt;
+	}
+
 	
 }

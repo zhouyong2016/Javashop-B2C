@@ -1,17 +1,66 @@
-<div class="easyui-panel" style="border-style:none;" >
-	<div style="padding: 10px 0 10px 60px">
-		<form id="editTagForm" method="post" class="validate" >
-		<input type="hidden" name="tag_id" value="${tag.tag_id }"/>
-			<table>
-				<tr>
-					<td>标签名称</td>
-					<td><input class="easyui-validatebox input_text" type="text" name="tag_name" id="name" maxlength="30" data-options="required:true"  dataType="string"   value="${tag.tag_name}" isrequired="true"/>
-					</td>
-				</tr>
-				
-			</table>
-		</form>
-	</div>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-input{
+    width: 80%;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="editTagForm" class="layui-form layui-form-pane" action="">
+	<input type="hidden" name="tag_id" value="${tag.tag_id }"/>
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">标签名称</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="tag_name" id="name" value="${tag.tag_name}" maxlength="30" lay-verify="tag_name"  autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 96%;height: 30px; background:rgba(230,230,230,0.8)"> 
+	  			<a class="layui-layer-btn0" type="submit" style="margin: 0px 0px 0px 100px;" lay-submit="" lay-filter="edittag">保存</a>
+	  			<a class="layui-layer-btn1" style="margin: 0px 100px 0px 0px;">取消</a>
+  			</div>
+  	</form>
 </div>
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    form.verify({
+    	tag_name: function(value){
+        	if($.trim(value)==""){
+          		return '请输入标签名称';
+        	}
+      	}
+    });
+    //取消
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    //监听提交
+    form.on('submit(edittag)', function(data){
+    	var options = {
+    			url: ctx+"/shop/admin/tag/save-edit.do",
+    			type: "post",
+    			dataType: "json",
+    			success:function(result){
+    				if(result.result==1){
+    					parent.$.Loading.success(result.message);
+    					parent.layer.close(index);
+    					parent.table.ajax.reload();
+    				}
+    				if(result.result==0){
+    					parent.$.Loading.error(result.message);
+    				}
+    			}
+    	};
+   		$("#editTagForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>
 	
 

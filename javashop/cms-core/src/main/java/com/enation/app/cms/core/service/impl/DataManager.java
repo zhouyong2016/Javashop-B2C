@@ -64,8 +64,6 @@ public class DataManager implements IDataManager {
 	@Autowired
 	private IDataCatManager dataCatManager;
 
-	
-
 	/* (non-Javadoc)
 	 * @see com.enation.app.cms.core.service.IDataManager#add(java.lang.Integer, java.lang.Integer)
 	 */
@@ -163,13 +161,8 @@ public class DataManager implements IDataManager {
 		sort = StringUtil.isEmpty(sort) ? "0" : sort;
 		article.put("cat_id", catid);
 		article.put("sort", sort);
-
-		// if("2".equals(EopSetting.DBTYPE)){
 		article.put("lastmodified", DateUtil.getDateline());
-		// }else{
-		// article.put("lastmodified", DateUtil.toString( new Date() ,
-		// "yyyy-MM-dd HH:mm:ss "));
-		// }
+		
 		this.daoSupport.update("es_" + dataModel.getEnglish_name(), article, "id=" + articleid);
 		this.articlePluginBundle.onSave(article, dataModel, IDataSaveEvent.DATASAVE_EDIT);
 	}
@@ -382,11 +375,7 @@ public class DataManager implements IDataManager {
 				if (plugin != null) {
 					if (plugin instanceof IFieldValueShowEvent) {
 						value = ((IFieldValueShowEvent) plugin).onShow(field, value);
-						//如果是附件的插件，将数据全put，因为附件value为数组
-						if(plugin.getClass().getSimpleName().equals("AttachmentFieldPlugin")){
-						data.putAll((Map) value);
-						}else{
-						data.put(name, value);}
+						data.put(name, value);
 					}
 				}
 			}
@@ -909,10 +898,8 @@ public class DataManager implements IDataManager {
 		if (!StringUtil.isEmpty(term)) {
 			sql.append(term);
 		}
-
-		 
-
-		if (!StringUtil.isEmpty(orders)) {
+		//这个非空验证后改过
+		if (!StringUtil.isEmpty(orders)&&orders!=null) {
 			sql.append(" order by " + orders);
 		} else {
 			sql.append(" order by sort desc, add_time desc");
@@ -944,6 +931,7 @@ public class DataManager implements IDataManager {
 				data.put("sys_lock", rs.getInt("sys_lock"));
 				data.put("site_code", rs.getInt("site_code"));
 				data.put("page_title", rs.getString("PAGE_TITLE"));
+				//data.put("title", rs.getString("title"));
 
 				// 经测试，有严重性能问题，暂时注释
 				// DataCat cat =

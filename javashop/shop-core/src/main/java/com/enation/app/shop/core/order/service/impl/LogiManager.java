@@ -100,5 +100,11 @@ public class LogiManager implements ILogiManager{
 		return a;
 	}
 
-	
+	@Override
+	public Logi getLogiByName(String name) {
+		// TODO Auto-generated method stub
+		String sql  = "select * from es_logi_company where name=?";
+		Logi a =  this.daoSupport.queryForObject(sql, Logi.class, name);
+		return a;
+	}
 }

@@ -1,31 +1,175 @@
 <#include '/admin/header.html' >
-<style>
-	.tree-file{background:none;}
-	.tree-folder{background:none;}
-	.tree-folder-open{background:none;}
+<style type="text/css">
+
+.receiptsInputText{
+    width: 35px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+   	text-align:center;
+   	
+}
+
 </style>
-<script type="text/javascript" src="${ctx}/floor/admin/js/floor.js"></script>
-<div class="main">
-	<!-- 主体 -->
-	<div class='buttonArea'>
-		<span id="add_floor_button" style="float: left; display: block"> 
-		<a href="javascript:void(0)" class="button blueButton" >添加楼层</a>
-		</span>
-		<span id="save_sort_button" style="float: left; display: block"> 
-		<a href="javascript:void(0)" class="button" >保存排序</a>
-		</span>
-	</div>
-	<form action="" id="floorform">
-		<table id="pcfloordata">
-		</table>
-	</form>
-	<div id="divdia" style="display: none;"></div>
-	<div class="clear height10"></div>
-	<div id="floor_input" ></div>
+<script type="text/javascript" src="${ctx}/floor/admin/js/newfloor.js"></script>
+<div class="admin-main">
+    <div>
+    	<!-- 提示区 -->
+        <div class="page_explain">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+       </div>
+       <!-- 按钮区 -->
+       <div class="table_control">
+          <div class="table_opera">
+               <button type="button" id="add_floor_button" title="添加楼层" class="layui-btn layui-btn-primary layui-btn-small"><i class="layui-icon">&#xe608;</i></button>
+               <button type="button" id="save_sort_button"  title="保存排序" class="layui-btn layui-btn-primary layui-btn-small" onclick="updateSort()"><i class="layui-icon">&#xe618;</i></button>
+          </div>
+       </div>
+    </div>
+    <!-- 表格区 -->
+    <form action="" id="floorform">
+		<table id="pcfloordata" class="layui-table site-table table-hover">
+        	<thead>
+        	<tr>
+            <th>ID</th>
+            <th>名称</th>
+         	<th>排序</th>
+            <th>是否显示</th>
+            <th>编辑</th>	
+            <th>删除</th>
+            <th>模板编辑</th>
+        	</tr>
+        	</thead>
+   		 </table>
+    </form>
 </div>
 
-<#include '/admin/footer.html' >
-<script type="text/javascript" >
+<!-- js操作区域 -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#pcfloordata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        dataType : 'json',
+	        url: ctx+'/core/admin/floor/get-list-by-parentid-json.do?parentid=0&pageid='+pageid,
+	    },
+	    columns: [ //定义列
+	        {data: null,"render": function(obj) {
+	  	    	 return '<input type="hidden" name="floor_ids" value="'+obj.id+'" ><span>'+obj.id+'</span>';		
+	  	    }},     
+	        {data: "title"},
+	        {data: null,"render": function(obj) {
+ 	        	return '<input type="text" name="floor_sorts"  class="receiptsInputText" value="'+obj.sort+'" id="sorts">';		
+ 	       	}},
+	        {data: null,"render": function(obj) {
+           	 var val = "";
+           	 if(obj.is_display == 0){
+           		 val = '<p id="subjectstatus'+obj.id+'" style="display:inline;margin:0px 10px">已显示</p>'
+        			+'<input class="stop button layui-btn layui-btn-danger layui-btn-small" type="button" value="停用" floorid="'+obj.id+'" id=subjectimg'+obj.id+' onclick="changeshow('+obj.id+',this)" showvalue="0" changevalue="1" >';
+           		}else if(obj.is_display == 1){
+           			val = '<p id="subjectstatus'+obj.id+'" style="display:inline;margin:0px 10px">未显示</p>'
+           			+'<input class="start button layui-btn layui-btn-normal layui-btn-small" type="button" value="启用" floorid="'+obj.id+'" id=subjectimg'+obj.id+' onclick="changeshow('+obj.id+',this)" showvalue="1" changevalue="0" >';
+           		}
+           	 return val;
+	 	       	}},
+	       	{data: null,"render": function(obj) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal _aa' onclick='editFloor("+obj.id+")' >编辑</a>";		
+	       	}},
+	       	{data: null,"render": function(obj) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-danger' onclick='del("+obj.id+")' >删除</a>";		
+	       	}},
+	       	{data: null,"render": function(obj) {
+	        	return "<a class='layui-btn layui-btn-small layui-btn-normal' onclick='newTab(\""+obj.title+"编辑\",\"${ctx}/core/admin/floor/edit-template.do?floor_id="+obj.id+"&page_id=${pageid}\");' >模板编辑</a>";		
+	       	}}
+	     ]
+	});
+});
+
 var ctx="${ctx}";
 var pageid=${pageid};
+
+//显示.停用的状态切换
+function changeshow(id,obj){
+	$.ajax({
+		url:ctx+"/core/admin/floor/save-display.do?id=" + id+"&is_display="+$(obj).attr("changevalue"),
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				$.Loading.success(result.message);
+				parent.refreshCurrent();
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+}
+
+//编辑楼层
+function editFloor(floorid){
+	 layer.open({
+         title:"编辑楼层",//标题
+         maxmin :true,//右上角可否放大缩小
+         offset: '100px',//弹框位置
+         type:2,//弹框的类型
+         shade: [0.3, '#000'],//黑色背景
+         shadeClose:false,//黑色背景是否可以点击关闭
+         content:"${ctx}/core/admin/floor/edit.do?floorid="+floorid,//内容的URL
+         area:['726px','363px'],//弹框大小
+         scrollbar: false,//是否允许浏览器出现滚动条
+     });
+}
+function updateSort(){
+	var t=$("#sorts").val();
+	if(t==undefined){
+		alert("目前该页面没有数据！");
+		return;
+	};
+	
+	var z= /^[0-9]*$/;
+	if(!z.test(t)&&t!=undefined){
+	   $.Loading.error("请输入数字！");
+	   return;
+	};
+	var options = {
+			url :ctx+"/core/admin/floor/save-sort.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {				
+			 	if(result.result==1){
+			 		$.Loading.success(result.message);
+			 		location.reload();
+			 	}else{
+			 		alert(result.message);
+			 	}
+			},
+			error : function(e) {
+				$.Loading.hide();
+				alert("出错啦:(");
+				}
+		};
+
+	$("#floorform").ajaxSubmit(options);
+}
+
 </script>
+<#include '/admin/footer.html' >

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="发票组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="发票插件" id="receiptPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>		
+		<plugin name="订单详细页发票信息显示插件" id="orderDetailReceiptPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>		
+		
+	</plugins>
+</component>

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.PayEnable;
+import com.enation.app.shop.core.order.model.PaymentLog;
+import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.plugin.payment.AbstractPaymentPlugin;
 import com.enation.app.shop.core.order.plugin.payment.IPaymentEvent;
 import com.enation.framework.context.webcontext.ThreadContextHolder;
@@ -89,6 +91,12 @@ public class AbcpayPlugin extends AbstractPaymentPlugin implements IPaymentEvent
 	@Override
 	public String getName() {
 		return "中国农业银行网上支付";
+	}
+
+	@Override
+	public String onRefund(PayEnable order, Refund refund, PaymentLog paymentLog) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

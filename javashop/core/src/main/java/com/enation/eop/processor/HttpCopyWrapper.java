@@ -62,19 +62,22 @@ public class HttpCopyWrapper implements HttpServletRequest {
 		this.session = request.getSession();
 		
 		Enumeration<String> paramNames =  request.getParameterNames();
-		while( paramNames.hasMoreElements()){
-			String name = paramNames.nextElement();
-			String value = request.getParameter(name);
-			params.put(name,value);
+		if(paramNames!=null){
+			while( paramNames.hasMoreElements()){
+				String name = paramNames.nextElement();
+				String value = request.getParameter(name);
+				params.put(name,value);
+			}
 		}
 		
 		Enumeration<String> attrNames =  request.getAttributeNames();
-		while( attrNames.hasMoreElements()){
-			String name = attrNames.nextElement();
-			Object value = request.getAttribute(name);
-			attributes.put(name,value);
+		if(attrNames!=null){
+			while( attrNames.hasMoreElements()){
+				String name = attrNames.nextElement();
+				Object value = request.getAttribute(name);
+				attributes.put(name,value);
+			}
 		}
-		
 	}
 
 

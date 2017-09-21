@@ -1,0 +1,121 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/default/css/help.css" type="text/css" />
+ <#assign dataSearchTag=newTag("dataSearchTag") />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div id="help2_wh">
+			<ul>
+				<li class="help_img"><a href="help-21-7.html">
+				<@image src="${ctx}/themes/default/images/bzzx.jpg" alt="帮助中心图标" /></a></li>
+				<li class="help_li1"><span>关于网站</span></li>
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":21}') />
+				<#list webPage.result as article>
+				<li><span id="" class="help_spans "> <a
+						href="help-${article.cat_id}-${article.id}.html">${article.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>新手上路</span></li> 
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":17}') />
+				<#list webPage.result as articlea>
+				<li><span id="" class="help_spans "> <a
+						href="help-17-${articlea.id}.html">${articlea.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>购物指南</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":18}') />
+				<#list webPage.result as articleb>
+				<li><span id="" class="help_spans "> <a
+						href="help-18-${articleb.id}.html">${articleb.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>支付方式</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":19}') />
+				<#list webPage.result as articlec>
+				<li><span id="" class="help_spans "> <a
+						href="help-19-${articlec.id}.html">${articlec.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>购物条款</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":20}') />
+				<#list webPage.result as articled>
+				<li><span id="" class="help_spans "> <a
+						href="help-20-${articled.id}.html">${articled.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>配送方式</span></li> 
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":22}') />
+				<#list webPage.result as articlef>
+				<li><span id="" class="help_spans "> <a
+						href="help-22-${articlef.id}.html">${articlef.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>服务</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":23}') />
+				<#list webPage.result as articlee>
+				<li><span id="" class="help_spans "> <a
+						href="help-23-${articlee.id}.html">${articlee.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>优惠活动</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":24}') />
+				<#list webPage.result as articleg>
+				<li><span id="" class="help_spans "> <a
+						href="help-24-${articleg.id}.html">${articleg.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul>
+				<li class="help2_li2"><@image style="float:left;"
+					src="${ctx}/themes/default/images/help_line_bj.jpg" /></li>
+				<li class="help_li1"><span>我的订单</span></li>  
+				<!-- 调用CMS数据搜索标签，并传递所在模型ID参数 -->
+				<#assign webPage = dataSearchTag('{"modelid":2,"catid":25}') />
+				<#list webPage.result as articleh>
+				<li><span id="" class="help_spans "> <a
+						href="help-25-${articleh.id}.html">${articleh.title!''}</a>
+				</span></li> </#list>
+			</ul>
+			<ul class="help2_ul6"></ul>
+		</div>
+		<div class="client">
+			<#assign dataDetailTag=newTag("dataDetailTag")>
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<#assign
+			dataDetail=dataDetailTag()>
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			${dataDetail.content!''}
+
+		</div>
+
+	</div>
+</div>
+<#include 'common/footer.html' />

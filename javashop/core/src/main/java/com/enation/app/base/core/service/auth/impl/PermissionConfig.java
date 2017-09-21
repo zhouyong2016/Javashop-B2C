@@ -24,7 +24,6 @@ public  class PermissionConfig {
 			int finance = StringUtil.toInt(props.getProperty("auth.finance"), true);
 			int customer_service = StringUtil.toInt(props.getProperty("auth.customer_service"), true);
 			int depot_ship = StringUtil.toInt(props.getProperty("auth.depot_ship"), true);
-			int inspector = StringUtil.toInt(props.getProperty("auth.inspector"), true);
 	
 			authMap.put("super_admin", super_admin); //超级管理员
 			authMap.put("goods", goods); //商品管理权限
@@ -32,7 +31,6 @@ public  class PermissionConfig {
 			authMap.put("depot_admin", depot_admin); //库管
 			authMap.put("finance", finance);//财务
 			authMap.put("customer_service", customer_service); //客服权限
-			authMap.put("supplier", inspector); //供应商权限
 			
 		}catch(Exception e){
 			e.printStackTrace();

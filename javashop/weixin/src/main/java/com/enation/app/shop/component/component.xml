@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="微信支付组件" version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+	 
+		<plugin name="微信支付插件" id="weixinPayPlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="微信支付状态查询插件" id="weixinRefundPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		
+		<plugin name="微信绑定插件" id="weixinBindPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		
+	</plugins>
+
+
+</component>

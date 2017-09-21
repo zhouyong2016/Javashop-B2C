@@ -60,8 +60,8 @@ public class GoodsSelectController extends GridController{
 	@RequestMapping(value="/list-json")
 	public String listJson() {
 		List catList = goodsCatManager.listAllChildren(0);
-		String s = JSONArray.fromObject(catList).toString();
-		return  s.replace("name", "text").replace("cat_id", "id");
+		//String s = JSONArray.fromObject(catList).toString();
+		return  JSONArray.fromObject(catList).toString();
 	}
 	/**
 	 * 获取商品列表

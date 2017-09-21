@@ -62,8 +62,7 @@ var Param={
 			this.initInputHtml();
 			
 			//添加一个组
-			$("#paramAddBtn").click(function(){
-				self.addGroupInput();});
+			$("#paramAddBtn").click(function(){self.addGroupInput();});
 			
 			//删除组
 			$("tr.group .delete").click(function(){

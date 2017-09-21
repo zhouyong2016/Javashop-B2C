@@ -1,0 +1,17 @@
+<!--商品列表-->
+<div class="list_wrapper">
+	<ul class="inner_box">
+		<#list webpage.result as goods>
+			<li>
+				<a href="goods-${goods.goods_id}.html"><img alt="${goods.name}" src="${goods.thumbnail!''}" /></a>
+				<h2><a href="goods-${goods.goods_id}.html" title="${goods.name}">${goods.name}</a></h2>
+				<div>
+					<p>市场价：<strike>${goods.mktprice?string.currency}</strike></p>
+					<h3>商城价：<span>${goods.price?string.currency}</span></h3>
+				</div>
+			</li>
+		</#list>
+	</ul>
+</div>
+<@pager pageno="${webpage.currentPageNo}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" /> 
+<!--商品列表结束-->

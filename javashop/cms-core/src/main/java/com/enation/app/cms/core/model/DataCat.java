@@ -96,7 +96,7 @@ public class DataCat implements Serializable{
 
 	@NotDbField
 	public boolean getHasChildren() {
-		hasChildren = this.children==null|| this.children.isEmpty() ?false:true;
+		//hasChildren = this.children==null|| this.children.isEmpty() ?false:true;
 		return hasChildren;
 	}
 

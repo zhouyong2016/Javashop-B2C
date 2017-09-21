@@ -1,31 +1,223 @@
 <#include '/admin/header.html' >
-<div class="main">
-	<div class="index_nav">欢迎您登录管理后台</div>
+<link rel="stylesheet" type="text/css" href="${ctx}/core/admin/css/index.css" />
+<script type="text/javascript" src="${ctx}/core/admin/js/jquery.SuperSlide.2.1.1.js"></script>
+<style type="text/css">
+#memberdata_info,#memberdata_paginate{
+	display: none;
+}
+#goodsdata_info,#goodsdata_paginate{
+	display: none;
+}
+</style>
+<div class="admin-main">
 	
-	<div id="template" class="indexitem">
-		<div class="title"><h3></h3></div>
-		<div class="body"></div>
+	  <div class=" box box-a">
+	  	<h1>新增商品</h1>
+		<table id="goodsdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+		    <thead>
+		    <tr>
+		        <th width="70px">商品图片</th>
+		        <th width="100px">商品编号</th>
+		        <th width="230px">商品名</th>
+		        <th>销售价</th>
+		    </tr>
+		    </thead>
+		</table>
+	  </div>
+	  <div class="box box-b" style="text-align: center;">
+  			<h2 style="text-align: left;">销售收入统计</h2>
+  			<div class="tubiao1">
+  				<div id="container" style="height:240px">
+  				</div>
+  			</div>
+  			<ul class="ulliy" style="clear: both;text-align: -moz-left;">
+				<li>
+					收款金额
+					<span class="receivables">0.0</span>
+				</li>
+				<li>
+					退款金额
+					<span class="refund">0.0</span>
+				</li>
+				<li>
+					实收
+					<span class="paid">0.0</span>
+				</li>
+  			</ul>
+  			<a class="layui-btn layui-btn-radius layui-btn-primary anniu" style="color: white;" >销售详细统计</a>
+	  </div>	
+	  <div class=" box box-c">
+	       <h1>新增会员</h1>
+			<table id="memberdata" class="layui-table site-table table-hover" width="100%" lay-skin="line" >
+			   <thead>
+			   <tr>
+			       <th>昵称</th>
+			       <th>手机号</th>
+			       <th>email</th>
+			       <th>注册时间</th>
+			   </tr>
+			   </thead>
+			</table>
+	  </div>
+	<div class="box box-d" style="text-align: center;">
+		<p>商品统计</p>
+		<button class="anniu-one" type="button" style="color: white;cursor: pointer;" >热卖商品排行</button>
+		<button class="anniu-two" type="button" style="color: white;cursor: pointer;" >商品销售明细</button>
+		<button class="anniu-three" type="button" style="color: white;cursor: pointer;" >商品收藏明细</button>
 	</div>
-	
-	<!-- 首页项  -->
-	<div id="index_box">
-	    <div id="item1" class="item"></div>
-	    <div id="item2" class="item"></div>
-	    <div id="item3" class="item" style="clear:both"></div>
-	    <div id="item4" class="item"></div>
-	    <div id="item5" class="item"></div>
-	    <div id="item6" class="item"></div>
-	</div>
-	<div style="clear:both"></div>
+
 </div>
-<!-- 易族公告 -->
-<!-- 暂时为OEM客户关闭
-<div id="en_notice">
-<h3>易族公告</h3>
-<iframe src="http://www.enationsoft.com/notice.html" frameborder=0 width='100%' height="200px"></iframe>
-</div>
--->
+
+<!-- 引入的superslide插件js -->
+<script type="text/javascript">
+jQuery(".picScroll-left").slide({mainCell:".bd>ul",autoPage:true,effect:"left",autoPlay:false,vis:4,trigger:"click",scroll:1});
+</script>
+
 <script>
+
+
+$(function(){
+	
+	//新增商品
+	$('#memberdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "autoWidth": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    "pageLength":5,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/member/member-list-json.do',
+	    },
+	    columns: [ //定义列
+           	{data: "uname"},
+   	        {data: "mobile"},
+   	      	{data: "email"},
+   	      	{data: null,"render":function(data,type,row){
+ 	        	return getFormatDateByLong(data.regtime, "yyyy-MM-dd hh:mm:ss");
+        	}},
+	     ]
+	});
+	 
+	//新增商品列表
+	$('#goodsdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    "pageLength":5,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/goods/list-json.do?market_enable=${market_enable!''}',
+	    },
+	    columns: [ //定义列
+            {data: function (obj) {
+                return '<a href="${ctx}/goods-'+obj.goods_id+'.html" target="_blank"><img alt="" style="height: 60px;" src="'+convertToUrl(obj.thumbnail)+'"></a>';
+            }},	
+	        {data: "sn"},
+	        {data: function (obj) {
+                return '<a href="${ctx}/goods-'+obj.goods_id+'.html" target="_blank">'+obj.name+'</a>';
+            }},
+	        {data: function (obj) {
+                return '￥'+obj.price;
+            }}
+	     ]
+	});
+	
+	var currentYear = new Date().getFullYear();
+	var historyYear = currentYear-10;
+	
+	var currentmonth = new Date().getMonth();
+	currentmonth+=1;
+	
+	$.ajax({
+	       type: "post",
+	       url: "${ctx}/shop/admin/salesStatis/sale-income-totle-json.do?year="+currentYear+"&month="+currentmonth,
+	       dataType: "json",
+	       success: function(data){
+	    	
+	    	$(".receivables").html("￥"+data.data.receivables);
+	    	$(".refund").html("￥"+data.data.refund);
+	    	$(".paid").html("￥"+data.data.paid);
+	    	
+	    	
+			//销售收入统计图
+	    	var myChart = echarts.init(document.getElementById('container'));
+	    	var option = {
+					title : {
+						x : 'center',
+						text: currentYear+'年'+currentmonth+'月销售收入占比'
+					},
+					tooltip : {
+					    trigger: 'item'
+					},
+					legend: {
+				        orient : 'vertical',
+				        x : 'center'
+				    },
+				    toolbox: {
+				        show : true,
+				        feature : {
+				        	saveAsImage : {
+				        		show : true
+				        	}
+				        }
+				    },
+				    calculable : true,
+				    color : ['#02DF82', '#D3A4FF', '#66B3FF'],
+				    series : [
+				    	{
+				    		name : '销售占比',
+				    		type : 'pie',
+				    		radius : '50%',
+				            center: ['50%', '60%'],
+				    		data: [
+						    	{value : data.data.receivables, name : '收款金额'},
+						    	{value : data.data.refund, name : '退款金额'},
+						    	{value : data.data.paid, name : '实收金额'}
+						    ]
+				    	}          
+				    ] 
+			};
+	    	myChart.setOption(option);
+			
+	       }
+	});
+	
+	//销售详细统计按钮
+	$(".anniu").click(function(){
+		newTab("销售收入统计","${ctx}/shop/admin/salesStatis/sale-income.do");
+	})
+	
+	//热卖商品按钮
+	$(".anniu-one").click(function(){
+		newTab("热卖商品统计","${ctx}/shop/admin/goodsStatis/hot-goods.do?statis_type=1");
+	})
+	
+	//商品销售详细按钮
+	$(".anniu-two").click(function(){
+		newTab("商品销售明细","${ctx}/shop/admin/goodsStatis/goods-sales-detail.do");
+	})
+	
+	//商品收藏明细按钮
+	$(".anniu-three").click(function(){
+		newTab("商品收藏统计","${ctx}/shop/admin/goodsStatis/goods-collect.do");
+	})
+	
+});
+
+
 function addItem(title,itemurl,sort){
 	$.ajax({
 		url:itemurl,
@@ -54,11 +246,16 @@ function createItem(item_html,title,sort){
 	});
 }
 
-$(function(){
-	<#list itemList as item>
-		addItem('${item.title}','${ctx}${item.url}',${item.sort});
-	</#list>
-});
-</script>
+$(".bd ul li").click(function(){
+	$(this).css({"background-image":"linear-gradient(to left bottom, rgb(16,139,255), rgba(136,99,255,0.9))","color":"white"}).siblings("li").css({"background-image":"none","color":"#585A60"});
+})
+    
 
+
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa630f96b6a9dd549675d26373853f7f1' type='text/javascript'%3E%3C/script%3E"));
+  // 鼠标移入出现按钮
+
+
+</script>
 <#include '/admin/footer.html' >

@@ -44,7 +44,7 @@ public class SystemSetting {
 	public static final String setting_key="system"; 
 	
 	//后台菜单列表
-	public static final String menuListKey="menuListKey"; 
+	public static final String menuListKey="menuListKey";
 	
 	//系统缓存设置
 	public static String cache="ehCache";	

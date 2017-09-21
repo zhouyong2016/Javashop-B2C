@@ -140,7 +140,7 @@ public class TemplateShowController {
 	 */
 	@ResponseBody
 	@RequestMapping("get-selected-brand")
-	public GridJsonResult getSelectedBrand(Integer floor_id){
+	public String getSelectedBrand(Integer floor_id){
 		Floor floor=this.floorManager.getFloorById(floor_id);
 		String brand_ids=floor.getBrand_ids();
 		Map<String,Object> brand_id_map=new HashMap<String, Object>();
@@ -148,7 +148,7 @@ public class TemplateShowController {
 			brand_id_map=JsonUtil.toMap(brand_ids);
 		}
 		List brandList=this.floorManager.getBrandListByBrandIds(brand_id_map);
-		return JsonResultUtil.getGridJson(brandList);
+		return JSONArray.fromObject(brandList).toString();
 	}
 	
 	/**
@@ -158,7 +158,7 @@ public class TemplateShowController {
 	 */
 	@ResponseBody
 	@RequestMapping("get-selected-adv")
-	public GridJsonResult getSelectedAdv(Integer floor_id,String position){
+	public String getSelectedAdv(Integer floor_id,String position){
 		Floor floor=this.floorManager.getFloorById(floor_id);
 		String adv_ids=floor.getAdv_ids();
 		Map<String,Object> adv_id_map=new HashMap<String, Object>();
@@ -167,9 +167,9 @@ public class TemplateShowController {
 		}
 		Map<String,Object> adv_id_map2=(Map<String,Object>)adv_id_map.get(position);
 		if(adv_id_map2==null||adv_id_map2.size()==0){
-			return JsonResultUtil.getGridJson(new ArrayList());
+			return "";
 		}
 		List advList=this.floorManager.getAdvListByAids(adv_id_map2);
-		return JsonResultUtil.getGridJson(advList);
+		return JSONArray.fromObject(advList).toString();
 	}
 }

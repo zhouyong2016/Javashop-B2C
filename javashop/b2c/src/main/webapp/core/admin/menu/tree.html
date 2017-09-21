@@ -1,8 +1,6 @@
 <#include '/admin/header.html' />
 <link href="${ctx}/statics/js/common/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${ctx}/statics/js/common/jquery.ztree.core-3.5.min.js"></script>
-<script type="text/javascript" src="${ctx}/statics/js/common/jquery.ztree.exedit-3.5.min.js"></script>
-<script type="text/javascript" src="${ctx}/core/admin/js/Menu.js"></script>
+<script type="text/javascript" src="${ctx}/statics/js/common/jquery.ztree.exedit.js"></script>
 <style>
 <!--
 
@@ -19,30 +17,220 @@
 
 -->
 </style>
-		<div class="toolbar" >
-		
-				<div style="width: 100%; float: left; height: 25px;">
-					<ul>
-						<li><a href="javascript:;" id="add-menu-btn">添加菜单</a>
-						</li>
-					</ul>
-				</div> 
-				
-			</div>
-				
-<div class="box ztree_wrapper">
-	<div class="ztree" id="menutree">
-		
+<div class="admin-main">
+	<div class="layui-form-item toolbar" style="width: 50%">
+	    <div class="layui-input-block" style="width: 20px">
+	      <a class="layui-btn  layui-btn-small" id="add-menu-btn" style="display:inline-block;margin-top:3px;" >添加菜单</a>
+	    </div>
+  	</div>
+
+	<div class="box ztree_wrapper">
+		<div class="ztree" id="menutree">
+			
+		</div>
+	</div>
+	<div id="detail_wraper" class="box">
+		<div style="display:block;width:300px;margin:150px auto;color:red">
+	  		点击菜单进行修改操作，点击添加按钮添加新菜单。<br>
+	  		拖拽菜单可移动菜单（改变排序和父菜单）
+		</div>   
 	</div>
 </div>
-<div id="detail_wraper" class="box">
 
-	<div style="display:block;width:300px;margin:150px auto;color:red">
-  		点击菜单进行修改操作，点击添加按钮添加新菜单。<br>
-  		拖拽菜单可移动菜单（改变排序和父菜单）
-	</div>   
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+  //监听提交
+    form.on('submit(saveAddBtn)', function(data){
+    	saveAdd()
+    });
+  //监听提交
+    form.on('submit(saveEditBtn)', function(data){
+    	saveEdit();
+    });
+     
+});
+
+var currimg;
+var this_img;
+
+function saveAdd(){
+	/*if( !$("form").checkall() ){
+		return ;
+	}*/
+	var name = $("#name").val();
+	if(name == ''){
+		alert("菜单名称不能为空！");
+		return;
+	}
 	
-</div>
+	var options = {
+			url :"${ctx}/core/admin/menu/save-add.do",
+			type : "POST",
+			success : function(result) {	
+			 	if(result.result==1){
+			 		alert("保存成功");
+			 		$("#menuid").attr("disabled",false).val( result.data );
+					$("#saveAddBtn").unbind().bind("click",function(){
+						saveEdit();
+					});
+					location.reload();
+			 	}else{
+			 		alert(result.message);
+			 	}
+			},
+			error : function(e) {
+				alert("出错啦:(");
+			}
+	};
+	$("#addForm").ajaxSubmit(options);	
 
+}
+
+function saveEdit(){
+//	if( !$("form").checkall() ){
+//		return ;
+//	}
+
+	var options = {
+			url :"${ctx}/core/admin/menu/save-edit.do",
+			type : "POST",
+			dataType:'json',
+			success : function(result) {	
+				 
+			 	if(result.result==1){
+			 		alert("保存成功");
+			 		location.reload();
+			 	}else{
+			 		alert(result.message);
+			 	}
+			 	
+			},
+			error : function(e) {
+				alert("出错啦:(");
+			}
+		};
+		$("#editForm").ajaxSubmit(options);
+}
+
+
+function setSrc(path){
+	this_img.attr("src",path);
+	$("#menu_icon").val(path);
+	this_img.prev(".icon").val(path);
+}
+
+function deleteMenu(id){
+	$.ajax({
+		url:'${ctx}/core/admin/menu/delete.do?id='+id,
+		type:'post',
+		dataType:'json',
+		success:function(result){
+			 
+		 	if(result.result==1){
+		 		alert("删除成功");
+		 		window.location.reload()
+		 	}else{	
+		 		alert(result.message);
+		 	}			
+		},
+		error:function(){
+			alert("出错啦:(");
+		}
+	});
+}
+
+
+function beforeRemove(treeId, treeNode) {
+	if ((treeNode.children == undefined)) {
+		return confirm("确认删除菜单 " + treeNode.name + " 吗？");
+	} else {
+		alert("不能删除有子菜单的选项！");
+		return false;
+	}
+}
+
+function onRemove(e, treeId, treeNode) {
+	deleteMenu(treeNode.menuid);
+}
+
+
+function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy){
+	var node  = treeNodes[0];
+	// alert(moveType+"  "+ node.parentTId +"　　" +targetNode.parentTId);
+	moveNode(node.menuid,targetNode.menuid,moveType);
+}
+
+
+function moveNode(menuid,target_menu_id,moveType){
+	$.ajax({
+		url:'${ctx}/core/admin/menu/move.do?id='+menuid+"&targetid="+target_menu_id+"&movetype="+moveType,
+		type:'post',
+		dataType:'json',
+		success:function(result){
+			 
+		 	if(result.result==1){
+		 		alert("菜单移动成功");
+		 	}else{
+		 		alert(result.message);
+		 	}		
+		},
+		error:function(){
+			alert("出错啦:(");
+		}
+	});	
+	
+}
+
+$(function(){
+	
+	var setting = {
+			view: {
+				showIcon: showIconForTree
+			},
+			async: {
+				enable: true,
+				url:"${ctx}/core/admin/menu/json.do",
+				autoParam:["menuid"]
+			},
+			callback: {
+				onClick: onClick,
+				beforeRemove: beforeRemove,
+				onRemove: onRemove,
+				onDrop:onDrop,	
+			},
+			edit:{
+				drag:{
+					isCopy:false
+				},
+				enable:true,
+				showRenameBtn:false
+			}
+		};	
+	
+	$.fn.zTree.init($(".ztree"), setting);
+ 
+	$("#add-menu-btn").click(function(){
+		$("#detail_wraper").load("${ctx}/core/admin/menu/add.do?parentid=0",function(){			
+			layui.form().render();
+		});
+	});
+});
+function showIconForTree(treeId, treeNode) {
+	return !treeNode.isParent;
+};
+function onClick(event, treeId, treeNode, clickFlag){
+	$("#detail_wraper").load("${ctx}/core/admin/menu/edit.do?id="+treeNode.menuid+"&"+new Date().getTime(),function(){
+		layui.form().render();
+	});
+}
+
+</script>
 
 <#include '/admin/footer.html' />

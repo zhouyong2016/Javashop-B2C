@@ -1,0 +1,68 @@
+<div class="form_wrap">
+	<div class="rece_hide_wp">
+		<form id="member_rece" class="validate" action="" method="post">
+			<div class="ckt-control">
+				<div class="rece_input_wp">
+					<span>默认发票</span>
+						<label>
+							<input type="radio" value="0" name="is_default" checked="checked"> 否
+						</label> 
+						<label>
+							<input type="radio" value="1" name="is_default"> 是
+						</label>
+					</div>
+					<div class="rece_input_wp">
+					<span>发票抬头</span> 
+						<label>
+							<input type="text" value="" name="title" placeholder="请在这里输入发票抬头">
+						</label>
+					</div>
+					<div class="rece_input_wp">
+					<span>发票类型</span>
+						<label>
+							<input type="radio" value="办公用品" name="content" checked="checked"> 办公用品
+						</label>
+						<label>
+							<input type="radio" value="劳保用品" name="content"> 劳保用品
+						</label>
+						<label>
+							<input type="radio" value="耗材" name="content"> 耗材
+						</label>
+					</div>
+				<div class="btns_info btn-div">
+					<input class="btn_save green-btn" type="button" id="btnSubmit" value="保存发票"/>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(function(){
+	/*添加用户发票js*/
+	$("#btnSubmit").on('click', function(){
+		
+		var titleval = $("input[name='title']").val();
+		if(titleval == ""){
+			alert("发票抬头不能为空");
+			return false;
+			}
+		$("#member_rece").ajaxSubmit({
+			type :"POST",
+			url :"${ctx}/api/shop/member-receipt/add.do",
+			dataType : 'json',
+			success : function(data) {
+				if(data.result==1){
+					$.message.success(data.message, function () {
+						location.href = "receipt.html"
+						})
+						}else{
+							$.message.error(data.message);
+							}
+				},
+				error : function(e) {
+					$.message.error("出现错误 ，请重试");
+					}
+				})
+		});
+})
+</script>

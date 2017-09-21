@@ -54,9 +54,6 @@ public class ComponentManager implements IComponentManager {
 				if (logger.isDebugEnabled()) {
 					logger.debug("load component["	+ componentView.getName() + "] start ");
 				}
-				
-				
-				
 				try {
 					componentView.setInstall_state(0); // 默认为未安装状态
 					componentView.setEnable_state(0); // 默认为未启用					

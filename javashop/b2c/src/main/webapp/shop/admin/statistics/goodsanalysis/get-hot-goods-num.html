@@ -7,18 +7,11 @@
 <div id="goods_num_statistics">
 	
 </div>
+<div id="main_num" style="height:500px;top: 30px;  margin: 0px 0px 100px 0px;"></div>
 <div class="tableDiv">
 	<!-- dataGrid -->
-	<table id="numdata" class="easyui-datagrid" 
-		data-options="pageList: [50],pageSize:50,fitColumns:'true',queryParams:{'complete':'${complete!''}'}" 
-		 width="width" sortName="order_id" sortOrder="desc">
-		<thead>
-			<tr>
-				<th data-options="field:'order_id',checkbox:true,width:100"></th>
-				<th data-options="field:'oiname',width:150" >名称</th>
-				<th data-options="field:'t_num',width:100" >下单量</th>
-			</tr>
-		</thead>
+	<table id="numdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+		
 	</table>
 	
 </div> 
@@ -28,6 +21,7 @@ var num_chart;
 $(function() {
 	
 	getGoodsNum();
+	
 	
 	var type = $("#cycle_type").val();
 	
@@ -59,7 +53,7 @@ $(function() {
  * @param endDate 结束时间
  */
 function getGoodsNum(){
-	
+	var numChart = echarts.init(document.getElementById('main_num'));
 	var param = getParam();
 	year=param[0];
 	month=param[1];
@@ -84,13 +78,22 @@ function getGoodsNum(){
 				}
 				
 				// 1.获取到统计图相关配置
-				
-				moneyHighcharts(goods_num_statistics,num_chart,"下单量",data.data.highchartsjson)
-				// 3.初始化datagrid
-				$("#numdata").datagrid();
-				
-				// 4.将数据绑定到datagrid  
-				$("#numdata").datagrid('loadData', data.data.gridjson); 
+				moneyCharts(numChart,"下单量",data.data.chartsjson)
+				//3.加载表格数据
+				$('#numdata').dataTable({
+					"language": {
+				        "url": staticserver+"/media/zh_CN.txt"
+				    },
+				    "destroy": true,
+				    "ordering": false,
+				    "searching": false,
+				    "lengthChange": false,
+			        "data": data.data.gridjson.data,
+			        "columns": [		      
+			            {data: "oiname","title": "名称"},
+			            {data: "t_num","title": "下单量"},		         
+			        ]
+			    });
 			} else {
 				alert("调用action出错：" + data.message);
 			} 

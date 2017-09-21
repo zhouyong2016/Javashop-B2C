@@ -187,6 +187,5 @@ public interface ICartManager {
 	 * @return 货物总数
 	 */
 	public Integer countItemTotalNum(String sessionid);
-
 	
 }

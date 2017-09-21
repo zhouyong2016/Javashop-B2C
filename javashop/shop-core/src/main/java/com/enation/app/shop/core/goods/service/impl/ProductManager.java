@@ -203,6 +203,7 @@ public class ProductManager implements IProductManager {
 			value.setSpec_value(map.get("spec_value").toString());
 			value.setSpec_value_id(Integer.valueOf( map.get("spec_value_id").toString() ));
 			String spec_img  = (String)map.get("spec_image");
+			value.setSpec_type(Integer.parseInt(map.get("spec_type").toString()) );
 			
 			//将本地中径替换为静态资源服务器地址
 			if( spec_img!=null ){
@@ -245,7 +246,6 @@ public class ProductManager implements IProductManager {
 		}
 		
 		for(Product pro:prolist){
-			
 			if(member!=null){
 				Double price  = pro.getPrice();
 				if(memPriceList!=null && memPriceList.size()>0)
@@ -392,27 +392,6 @@ public class ProductManager implements IProductManager {
 		List list = this.daoSupport.queryForList(sql);
 		return list;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.enation.app.shop.core.goods.service.IProductManager#getSnIsExist(java.lang.String, java.lang.Integer, java.lang.Integer)
-	 */
-	@Override
-	public int getSnIsExist(String sn,Integer goodsid,Integer storeid) {
-		String sql ="select p.sn from es_product p left join es_goods g ON p.goods_id = g.goods_id  where p.sn=? ";
-		if(goodsid!=null){
-			sql+=" and g.goods_id!="+goodsid;
-		}
-		if(EopSetting.PRODUCT.equals("b2b2c")){
-			sql+=" and g.store_id=?";
-		}
-		List list = this.daoSupport.queryForList(sql, sn,storeid);
-		if(list.isEmpty()){
-			return 0;
-		}
-		return 1;
-	}
-	
 	/**
 	 * 由productList的id生成,号隔开的字串
 	 * @param productList

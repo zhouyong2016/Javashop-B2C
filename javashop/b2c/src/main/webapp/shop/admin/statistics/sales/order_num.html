@@ -1,11 +1,36 @@
 <#include '/admin/header.html' >
+<style>
+	table{
+		line-height:47px;
+	}
+	td input{
+		height: 25px;
+	}
+	tr td{
+		padding-right: 25px;
+		white-space:nowrap;
+	}
+	.tab li{
+		border-bottom: 1px solid #ccc;
+        margin-right: 0px;
+        padding: 0px 10px;
+	}
+	
+	.chart{height:400px;}
 
-<div class="main">
+label.legend{display:inline-block;font-weight: normal;margin-right: 5px;font-size: 12px;cursor: pointer;}
+label.legend.disabled{color: #d3d3d3 !important;}
+label.legend.disabled .label{background-color: #d3d3d3 !important;}
+label.legend .label{width: 12px;height: 8px;margin-right: 5px;vertical-align: middle;margin-bottom: 2px;}
+label.legend .label:empty{display: inline-block;}
+</style>
+<div class="admin-main">
+  <div class="table_control">
 	<div style="display: block;" class="searchAdvanced">
 		<input id="Advanced" name="Advanced" type="hidden" value="0" />
 		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="80px" align="right">按订单状态：</td>
+			<tr style="float: right;line-height: 47px;">
+				<td width="100px" align="right" style="padding-left:15px;">按订单状态：</td>
 				<td width="200px">
 					<select id="status" >
 						<option value="99">---所有---</option> 
@@ -20,41 +45,47 @@
 						</#if>
 					</select>
 				</td>
-				<td width="80">
+				<td width="13%">
 					按订单周期：
 				</td>
-				<td width="70" >
-					<select id="cycle_type"  onchange="statistics_mode(this.value)" >
+				<td width="10%" class="layui-form-item" >
+				<div class="layui-input-block" >
+					<select id="cycle_type"  onchange="statistics_mode(this.value)" lay-verify="required">
 						<option value="1" <#if cycle_type==1 >selected="selected"  </#if> >按照月统计</option>
 						<option value="0" <#if cycle_type==0 >selected="selected"  </#if> >按照年统计</option>
 					</select>
+				</div>	
 				</td>
-				<td width="70" >
+				<td width="10%" >
 					<select id="year">
 					</select>
 				</td>
-				<td width="70" >
+				<td width="10%" >
 					<select id="month" <#if cycle_type==0 > style="display: none;" </#if>  >
 					</select>
 				</td>
-				<td width="200" style="text-align: center;">
-					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				<td width="13%" style="text-align: center;">
+						<a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
 				</td>
 				<td></td>
 			</tr>
 		</table>
 	</div>
+	</div>
 	<div class="clear height10"></div>
 	
 	<div class="input">
 		<div style="display: block;" class="goods_input">
-			<div class="contentTab">
-				<ul class="tab">
-					<li tabid="1" >下单金额</li> 
-					<li tabid="2" class="contentTabS" >下单量</li> 
-				</ul>
+			<div class="outcont" style="width: 100%">
+				<div class="contentTab">
+					<ul class="tab" style="width:1200px;height:40px;">
+						<li tabid="1" style="width:5%;" >下单金额</li> 
+						<li tabid="2" class="contentTabS" style="width:5%;">下单量</li> 
+						<div style="width:65%;height:47px;float:left;border-bottom:1px solid #ccc;"></div>
+					</ul>
+				</div>
+				
 			</div>
-			
 			<div class="shadowBoxWhite wf100 whiteBox">
 				<div class="text">
 					<div class="tab-page">
@@ -62,7 +93,7 @@
 							<table class="form-table" style="width: 100%;">
 								<tr>
 									<td>
-										<div id="container" style="width:95%;min-width: 310px; height: 300px; margin: 0 auto"></div>
+										<div id="divCharts" style="width:95%;margin:50px auto;">
 									</td>
 								</tr>
 							</table>
@@ -76,18 +107,15 @@
 	<div class="clear height10"></div>
 	
 	<div class="shadowBoxWhite tableDiv">
-		<table class="easyui-datagrid" 
-			data-options="url:'${ctx}/shop/admin/order/list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
-			pagination="true" width="width" id="orderdata" sortName="order_id" sortOrder="desc">
+		<table class="layui-table site-table table-hover" id="orderdata">
 			<thead>
 				<tr>
-					<th data-options="field:'order_id',checkbox:true,width:100"></th>
-					<th data-options="field:'sn',width:150" >订单号</th>
-					<th data-options="field:'create_time',width:100,sortable:'true'" formatter="formatDate"  >下单日期</th>
-					<th data-options="field:'need_pay_money',width:100,sortable:'true'" >订单总额</th>
-					<th data-options="field:'paymoney',width:100,sortable:'true'" >实付金额</th>
-					<th data-options="field:'uname',width:100">会员</th>
-					<th data-options="field:'status',width:100,sortable:'true'" formatter="forStruts" >订单状态</th>
+					<th>订单号</th>
+					<th>下单日期</th>
+					<th>订单总额</th>
+					<th>实付金额</th>
+					<th>会员</th>
+					<th>订单状态</th>
 				</tr>
 			</thead>
 		</table>
@@ -97,9 +125,28 @@
 
 
 <script type="text/javascript">
-var last_type=null;
 
+var divCharts = $('#divCharts');
+var divChart = $('<div class="chart"></div>').appendTo(divCharts);
+var analyticChart = echarts.init(divChart.get(0));
+
+
+var last_type=null;
+var option;
+var myChart;
 $(function() {
+	
+
+
+//tab选项卡按钮样式
+	
+ 	$(".tab li").eq(0).css({"border-bottom":"white","border-left":"1px solid #ccc","border-top":"1px solid #ccc","border-right":"1px solid #ccc"})
+		$(".tab li").click(function(){
+			$this=$(this);
+			$this.css({"border-bottom":"white","border-left":"1px solid #ccc","border-top":"1px solid #ccc","border-right":"1px solid #ccc"}).siblings("li").css({"border-top":"white","border-bottom":"1px solid #ccc","border-right":"white","border-left":"white"})
+		})
+
+
 	
 	//填充下拉框年月的值
 	var currentYear = new Date().getFullYear();
@@ -144,7 +191,45 @@ $(function() {
 		
 	});
 	
+
 	$("input[type=text]").attr("autocomplete", "off");
+	
+	table = $('#orderdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "autoWidth": true,
+	    "serverSide": true,
+	    "initComplete": function(settings, json) {
+	    	 $(".dataTables_paginate").on("click", "a", function() {
+	    		 if($('#goodsdata_processing')[0].style.display=="block"){
+					  $(".dataTables_paginate li").addClass("disabled");
+				  }  
+	         });   
+		 },
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/order/list-json.do',
+	    },
+
+	    columns: [ //定义列 
+	        {data: "sn"},
+	        {data: null,"render": function(data, type, row) {
+	        	return  formatDate(data.create_time,row,type);
+	       	}},
+	        {data: "need_pay_money"},
+	        {data: "paymoney"},
+	        {data: "uname"},
+	        {data: null,"render": function(data, type, row) {
+	        	return  forStruts(data.status,row,type);
+	       	}}
+	     ]
+	});  
 	
 	$("#search_statis").click(function(){
 		saleNum();
@@ -187,17 +272,17 @@ function searchOrder(){
 	var start_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-01 00:00:00";
 	var end_time = $("#year :selected").val()+"-"+$("#month :selected").val()+"-31 23:59:59";
 	
-	if(cycle_type!=1){
-		start_time=null;
-		end_time=null
+	if (cycle_type == 0) {
+		start_time = $("#year").val()+"-01-01 00:00:00";
+		end_time = $("#year").val()+"-12-31 23:59:59";
+	}else if(cycle_type!=1){
+		start_time = null;
+		end_time = null;
 	}
-	
-	$("#orderdata").datagrid('load', {
-		 start_time:start_time,
-		 end_time:end_time,
-		 status:status,
-		 page:1
-    }); 
+	var param = "status="+status+"&cycle_type="+cycle_type+"&start_time="+start_time+"&end_time="+end_time;
+	var url = table.ajax.url("${ctx}/shop/admin/order/list-json.do?"+param);
+	url.load();
+
 }
 
 // 格式化时间
@@ -218,52 +303,6 @@ function statistics_mode(mode_value){
 		$("#month").hide();
 	}
 }
-
-// 生成图表
-function numHighcharts(obj){
-	sale_num = new Highcharts.Chart({
-        chart: {
-            type: 'line',
-            renderTo: 'container'
-        },
-        title: {
-            text: '订单销售量统计（'+obj+")"
-        },
-        xAxis: {
-            categories: []
-        },
-        yAxis: {
-            title: {
-                text: '数量 (件)'
-            },
-            labels:{
-            	formatter: function () {
-                    return this.value + '(件)';
-                }
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: false
-            }
-        },
-        credits: {  
-            enabled: false // remove high chart logo hyper-link  
-        }, 
-        series: [{
-            name: "本"+obj,
-            pointStart: 1
-        }, {
-            name: "上"+obj,
-            pointStart: 1
-        }]
-    });
-}
-
-
 function saleNum(status,cycle_type,year,month){
 	
 	var year = $("#year :selected").val();
@@ -278,16 +317,24 @@ function saleNum(status,cycle_type,year,month){
 	
 	if(cycle_type!=last_type){
 		if(cycle_type==1){					//判断按哪个周期显示数据
-			numHighcharts('月');					
+			numEcharts('月');					
 		}else{
-			numHighcharts('年');
+			numEcharts('年');
 		}
 		last_type = cycle_type;
 	}
 	
 	jQuery.getJSON("${ctx}/shop/admin/salesStatis/get-sale-num-json.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {
-		sale_num.series[0].setData(data.message); 
-	});
+		var categories = [];
+		for(var i in data.message) {
+			categories.push(parseInt(i) + 1);
+		}
+		option.xAxis[0].data =  categories
+		option.series[0].data = data.message;
+ 
+        analyticChart.setOption(option);
+		})
+	
 	
 	if(cycle_type==1){	
 		if(month==1){
@@ -299,10 +346,17 @@ function saleNum(status,cycle_type,year,month){
 	}else{
 		year = year-1;
 	}
-	
 	jQuery.getJSON("${ctx}/shop/admin/salesStatis/get-sale-num-json.do",{order_status:status,cycle_type:cycle_type,year:year,month:month}, function(data) {  
-		sale_num.series[1].setData(data.message); 
+		var categories = [];
+		for(var i in data.message) {
+			categories.push(parseInt(i) + 1);
+		}
+		option.xAxis[1].data =  categories
+		option.series[1].data = data.message;
+ 
+        analyticChart.setOption(option);
 	});
+	
 }
 
 //跳转下单金额
@@ -319,6 +373,94 @@ function saleMoney(){
 	var cycle_type = $("#cycle_type :selected").val();
 	
 	location.href = "${ctx}/shop/admin/salesStatis/order-statis.do?order_statis_type=1&year="+year+"&month="+month+"&cycle_type="+cycle_type+"&order_status="+status;
+
+}
+
+function numEcharts(obj){
+	
+
+option = {
+			
+		    title : {
+		    	x:'center',
+		        text: '订单销售量统计（'+obj+")"
+		    },
+		    tooltip : {
+		        trigger: 'axis'
+		    },
+		    legend: {
+					x:'center',y:'bottom',
+		        data:['本'+obj,'上'+obj]
+		    },
+		    toolbox: {
+		        show : true,
+		        feature : {
+		            mark : {show: true},
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+			grid:{
+				y2: 80
+			},
+		    xAxis : [
+		        {
+		        	boundaryGap: true,
+		            type : 'category',
+		            data : []
+		        },
+		        {
+		        	boundaryGap: true,
+		            type : 'category',
+		            data : []
+		        }
+	],
+		    yAxis : [
+		        {
+		        	boundaryGap: true,
+		        	name:'数量（件）',
+		        	type: 'value',
+			    	axisLabel : {
+		            formatter: '{value} (件)'
+		        },
+		        }
+		    ],
+		    series : [
+		        {
+		            name:'本'+obj,
+		            type:'line',
+		            data:[],
+		            markLine : {
+		                data : [
+		                    {type : 'average', name: '平均值'}
+		                ]
+		            }
+		        },
+		        {
+		            name:'上'+obj,
+		            type:'line',
+		            data:[],
+		            markLine : {
+		                data : [
+		                    {type: 'average', name: '平均值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	
+	
+	analyticChart.setOption(option);
+
+
+	//restore
+	analyticChart.on('restore', function(param){
+	    divLegends.children('.legend').each(function(i, labelLegend){
+	        $(labelLegend).removeClass('disabled');
+	    });
+	});
 
 }
 

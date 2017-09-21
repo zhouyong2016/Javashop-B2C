@@ -47,5 +47,6 @@ public class MemberLevelPointHistoryPlugin extends AutoRegisterPlugin implements
 		freeMarkerPaser.setPageName("history");		
 		return freeMarkerPaser.proessPageContent();
 	}
+
 	
 }

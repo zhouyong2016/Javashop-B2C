@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.enation.app.shop.core.decorate.service.ISettingManager;
 import com.enation.framework.database.IDaoSupport;
 
+
 /**
  * 获取系统设置相对应参数设置
  * @author liao

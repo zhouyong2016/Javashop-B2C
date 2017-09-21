@@ -1,0 +1,106 @@
+<#-- 创建会员评论标签 -->
+<#assign memberIsCommentTag= newTag("memberIsCommentTag")>
+<#assign isComment = memberIsCommentTag("{'goods_id':${goods.goods_id}}") >	
+<div id="discuss_form_wrapper">
+	<form action="#" method="post" id="discussForm">
+		<div class="discuss_issue">
+			<div class="di_left">
+				<!-- 仿照多点的好评、中评、差评 -->
+				<h2 class="goods_comment_grade">
+					<b>评分：</b>
+					<label>
+						<input type="radio" checked="checked" value="3" name="grade" style="width:auto;">
+						<i class="score_fine"></i>
+						<span>（好评）</span>
+					</label>
+					<label>
+						<input type="radio" value="2" name="grade" style="width:auto;">
+						<i class="score_middle"></i>
+						<span>（中评）</span>
+					</label>
+					<label>
+						<input type="radio" value="1" name="grade" style="width:auto;">
+						<i class="score_no"></i>
+						<span>（差评）</span>
+					</label>
+				</h2>
+				<!--  评分制度暂时取消
+				<h2>
+					<b>给该商品打分：</b> 
+					<span class="grade"> 
+						<span><a href="javascript:;" class="selected">1</a></span> 
+						<span><a href="javascript:;" class="selected">2</a></span> 
+						<span><a href="javascript:;" class="selected">3</a></span> 
+						<span><a href="javascript:;" class="selected">4</a></span> 
+						<span><a href="javascript:;" class="selected">5</a></span> 
+						<input type="hidden" name="grade" id="grade_input" value="5">
+					</span> 
+					<span class="value_wrapper">
+						您的评分：
+						<span style="font-weight: bold; font-size: 14px; color: #a90000;" id="gradevalue">5</span>分
+					</span>
+				</h2>
+				 -->
+				<h2>为该商品评论</h2>
+				<textarea name="content" id="discuss_content">请在此处输入您的评论</textarea>
+				<input type="file" name="file">
+				<p>[宽度小于600像素，文件小于200K，支持jpg、gif]</p>
+				<input type="hidden" name="goods_id" value="${goods.goods_id}" />
+				<input type="hidden" name="commenttype" value="1" />
+				<div class="btn">
+					<a href="javascript:;" class="blue_btn" id="discussBtn">发表评论</a>
+				</div>
+			</div>
+			<div class="di_right">
+				<h2>评论规则</h2>
+				<ul>
+					<li>1、成功订购本商品的会员即可发表对该商品的评论</li>
+					<li>2、本商品的首次评论可额外获得50个积分</li>
+					<li>3、针对本商品成功发表文字评论可获得10个积分</li>
+					<li>4、针对本商品成功发表图片评论可获得30个积分。</li>
+				</ul>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function(){	
+	$("#discuss_content").focus(function(){
+		if(this.value=="请在此处输入您的评论"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="请在此处输入您的评论";
+		}
+	});
+	
+	$("#discussBtn").click(function(){
+		<#if !isComment.isLogin >
+			alert("请您先登录，然后再进行评论！");
+			return;
+		<#else>
+			<#if !isComment.isBuy>
+				alert("您只有购买该商品后才能进行评论！");
+				return;
+			<#else>
+				<#if isComment.isCommented>
+					alert("对不起，您已经评论过此商品！");
+					return;
+				<#else>
+					var cval = $('#discuss_content').val();
+					if(cval == '' ||cval=='请在此处输入您的评论' ){
+						alert("请输入您的评论内容！");
+						return;
+					}
+					else if(cval.length>1000){
+						alert("请您输入1000字以内的评论");
+						return;
+					}
+					CommentForm.formSubmit($(this),$("#discussForm"));
+				</#if>
+			</#if>
+		</#if>
+	});
+});
+</script>

@@ -43,6 +43,12 @@ public class ActivityDetail {
 	
 	/** 优惠券ID */
 	private Integer bonus_id;
+	
+	/** 打折-打几折 */
+	private Double  discount_value;
+	
+	/** 是否包含满打折 0：不包含，1包含，默认为0 */
+	private Integer is_discount;
 
 	public Integer getDetail_id() {
 		return detail_id;
@@ -142,4 +148,21 @@ public class ActivityDetail {
 		this.bonus_id = bonus_id;
 	}
 
+	public Double getDiscount_value() {
+		return discount_value;
+	}
+
+	public void setDiscount_value(Double discount_value) {
+		this.discount_value = discount_value;
+	}
+
+	public Integer getIs_discount() {
+		return is_discount;
+	}
+
+	public void setIs_discount(Integer is_discount) {
+		this.is_discount = is_discount;
+	}
+	
+	
 }

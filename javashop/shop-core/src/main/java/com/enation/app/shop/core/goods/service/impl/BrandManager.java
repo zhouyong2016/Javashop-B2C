@@ -372,7 +372,7 @@ public class BrandManager  implements IBrandManager {
 		String keyword = (String) brandMap.get("keyword");
 		
 		String sql = "select * from es_brand where disabled=0";
-		if(keyword!=null&&!StringUtil.isEmpty(keyword)){
+		if(keyword!=null && !StringUtil.isEmpty(keyword)){
 			sql+=" and name like '%"+keyword+"%'";
 		}
 		sql+=" order by brand_id desc";

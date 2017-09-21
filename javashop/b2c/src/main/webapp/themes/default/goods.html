@@ -1,0 +1,249 @@
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag() >
+
+<#if  goods.page_title?? && goods.page_title!="">
+	<#assign  title="${goods.page_title}" />
+	<#else>
+	<#assign  title="${goods.name}" />
+</#if>
+
+<#if goods.meta_keywords??>
+	<#assign  keywords="${goods.meta_keywords}" />
+</#if>
+
+<#if goods.meta_description??>
+	<#assign  description="${goods.meta_description}" />
+</#if>
+
+<#include 'common/header.html' />
+<script>
+	var ctx="${ctx}";
+</script>
+<link rel="stylesheet" href="${ctx}/themes/default/css/goods.css" type="text/css" />
+
+<script src="${ctx}/themes/default/js/magiczoom.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jcarousellite_1.0.1.min.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/favorite.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/jquery.numinput.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/Goods.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/Comment.js" type="text/javascript"></script>
+<script src="${ctx}/themes/default/js/spec.js" type="text/javascript"></script>
+
+
+<#-- 创建商品相册标签 -->
+<#assign goodsGalleryTag= newTag("goodsGalleryTag")>
+<#-- 调用标签获取商品相册信息 -->
+<#assign galleryList= goodsGalleryTag()!'' >
+
+<#-- 创建商品属性标签 -->
+<#assign goodsAttributeListTag= newTag("goodsAttributeListTag")>
+<#-- 调用标签获取商品属性信息 -->
+<#assign attrList= goodsAttributeListTag("'goodsid':${goods.goods_id!''}")!'' >
+
+<#-- 创建商品参数标签 -->
+<#assign goodsParametersTag= newTag("goodsParametersTag")>
+<#-- 调用标签获取商品参数信息 -->
+<#assign goodsPara= goodsParametersTag("'goodsid':${goods.goods_id!''}")!'' >
+
+<#-- 获得商品参数的参数组 -->
+<#if goodsPara.hasParam==true>
+	<#assign para = goodsPara.paramList>
+</#if>
+
+<#-- 创建会员vip价格标签 -->
+<#assign vipPriceTag= newTag("goodsVipPriceTag") >
+<#-- 调用会员vip价格信息 -->
+<#assign vipPrice = vipPriceTag() >
+<#-- 创建会员是否登录标签 -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag") >
+<#-- 调用会员是否登录信息 -->
+<#assign isLogin = memberIsLoginTag() >
+<!-- 创建当前位置标签 -->
+<#assign goodsNav= newTag("goodsNavTag")>
+<!-- 获取当前位置结果 -->
+<#assign goodscat = goodsNav()!'' >
+ 
+	<!--正文-->
+	<div id="goods_detail_wrapper">
+		<!--商品列表-->
+		<div class="good_list">
+			<!--商品列表左侧-->
+			<div class="gl_left">				
+				<div class="nav">
+					<span class="float b">您的当前位置：</span><span class="nav_title">${goodscat.navHtml}</span>
+				</div>				
+				<!--商品信息-->
+					<#include 'detail/goods_detail.html' />
+				<div class="rer_intro">
+					<h2>商品介绍</h2>
+				</div>
+					<!-- 商品属性 -->
+					<#include 'detail/goods_props.html' />
+				<div class="rer_detail">
+					<h2></h2>
+					<h3>产品描述：</h3>
+					<p>${goods.intro!''}</p>
+				</div>
+				<#-- 创建商品评论数量标签 -->
+				<#assign commontGradenNumTag= newTag("commontGradenNumTag")>
+				<#assign gradenNum= commontGradenNumTag("'goods_id':${goods.goods_id!''}")!'' >
+				<div id="comment_tab">
+					<ul>
+						<li class="selected discuss">商品评价11111</li>
+						<li class="ask">商品咨询</li>
+						<li class="record">成交记录</li>
+					</ul>
+				</div>
+				<!--商品评论-->
+				<div id="discuss_wrapper">
+					<div class="grade_tab">
+						<ul>
+							<li class="height_grade selected" rel="4">全部(${gradenNum.allCommentNum!0})</li>
+							<li class="height_grade" rel="3">好评(${gradenNum.gradeHigh!0})</li>
+							<li class="middel_grade" rel="2">中评(${gradenNum.gradeTwo!0})</li>
+							<li class="low_geade" rel="1">差评(${gradenNum.gradeLow!0})</li>
+						</ul>
+					</div>
+					<div id="discuss_wrapper_list">
+						<!-- 评论列表 -->
+					</div>
+					<!--发表评论-->				
+					<#include 'detail/discuss_form.html'/>
+				</div>
+				<!--商品咨询-->
+				<div id="ask_wrapper" style="display:none">
+					<div class="ask_question">
+						<h4>对该商品有任何疑问，您都可在此提问，我们会在最短的时间内给您回复</h4>
+						<div class="btn"><a href="#askForm" class="blue_btn">我要咨询</a></div>					
+					</div>				
+					<div id="ask_wrapper_list">		
+						<!--商品咨询列表-->
+					</div>
+					<!--商品咨询表单-->				
+					<#include 'detail/ask_form.html'/>
+				</div>
+				<!-- 成交记录 -->
+				<div id="record_wrapper" style="display:none">
+				</div>
+			</div>
+			<!--商品列表左侧结束-->
+			<!--商品列表右侧推荐商品-->
+			<div class="gl_right">
+				<div class="goods_list_box">
+					<div class="commend">
+						<h1><span></span>推荐商品</h1>	
+						<#-- 创建商品列表标签 -->
+						<#assign goodsListTag= newTag("goodsListTag") >
+						<#-- 调用商品列表 -->
+						<#assign goodsList=goodsListTag("'tagid':'3','goodsnum':'10'")>   <!-- 由于后台不能编辑，所以商品暂缺， -->
+						<ul>
+							<#list goodsList as goods>
+							<li>
+								<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@image src="${goods.thumbnail!''}" alt="${goods.name}"/>
+									<div class="q_intro">
+										<div><h2 style="height:40px;line-height:20px;"><@substring title="${goods.name}" length="28" dot="..." /></h2></div>
+										<p>售价：<span>${goods.price!''}</span></p>
+									</div>
+								</a>
+							</li>
+							</#list>
+						</ul>
+					</div>
+					<div class="hot">
+						<h1><span></span>热卖排行榜</h1>
+						<#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'10'")>   <!-- 由于后台不能编辑，所以商品暂缺， -->
+						<ul>
+							<#list goodsList as goods>
+							<li>
+								<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@image src="${goods.thumbnail!''}" alt="${goods.name}" />
+									<div class="q_intro">
+										<div><h2>${goods.name}</h2></div>
+										<p>售价：<span>${goods.price!''}</span></p>
+									</div>
+								</a>
+							</li>
+							</#list>
+						</ul>
+					</div>
+					<div class="gl_adv">
+					<a href="register.html"><@image src="${ctx}/themes/default/images/huiyuan.jpg"  alt="商品列表右侧下部广告图片" /></a>
+					</div>
+				</div>
+			</div>
+			<!--商品列表右侧推荐商品结束-->
+		</div>
+		<!--商品列表结束-->
+	</div>
+
+<script type="text/javascript">
+	$(function(){
+		Spec.init(${goods.goods_id});
+		loadRecord_wrapper(1);
+		loadDiscuss_wrapper_list(1);
+		loadAsk_wrapper_list(1);
+		
+		$(".record").click(function(){
+			$("#discuss_wrapper").hide();
+			$("#ask_wrapper").hide();
+			$("#record_wrapper").show();
+			$("#comment_tab li").removeClass("selected");
+			$(this).addClass("selected");
+		});
+		
+	});	
+	
+	//评论切换
+	$(".grade_tab ul li").click(function(){
+		var gradeNum = $(this).attr("rel");
+		if(gradeNum == 4){
+			loadDiscuss_wrapper_list(1);
+		}else{
+			loadDiscuss_grade_list(1,gradeNum);
+		}
+		
+		$(".grade_tab ul li").removeClass("selected");
+		$(this).addClass("selected");
+	})
+	
+	function loadRecord_wrapper(page){
+		$("#record_wrapper").load("detail/record_list.html?goods_id="+${goods.goods_id}+"&page="+page,function(){
+			$("#record_wrapper .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadRecord_wrapper(pageno);
+			});
+		});	
+	}
+	
+	//商品评论
+	function loadDiscuss_wrapper_list(page){
+		$("#discuss_wrapper_list").load("detail/discuss_list.html?goods_id="+${goods.goods_id}+"&page="+page,function(){
+			$("#discuss_wrapper_list .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadDiscuss_wrapper_list(pageno);
+			});
+		});	
+	}
+	
+	//商品评论分级
+	function loadDiscuss_grade_list(page,grade){
+		$("#discuss_wrapper_list").load("detail/grade_list.html?goods_id="+${goods.goods_id}+"&page="+page+"&grade="+grade,function(){
+			$("#discuss_wrapper_list .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadDiscuss_wrapper_list(pageno);
+			});
+		});	
+	}
+
+	
+	function loadAsk_wrapper_list(page){
+		$("#ask_wrapper_list").load("detail/ask_list.html?goods_id="+${goods.goods_id}+"&page="+page,function(){
+			$("#ask_wrapper_list .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadAsk_wrapper_list(pageno);
+			});
+		});	
+	}
+</script>
+<#include 'common/footer.html'/>

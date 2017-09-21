@@ -52,6 +52,15 @@ public interface IGoodsManager {
 	public void add(Goods goods);
 	
 	/**
+	 * 修改商品草稿箱
+	 * @param goods
+	 * @throws RuntimeException 商品货号重复
+	 * @author linkai 2017-2-24 添加注释
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void editdraft(Goods goods);
+	
+	/**
 	 * 添加商品商品草稿箱
 	 * @param goods 商品
 	 * @throws RuntimeException 商品货号重复
@@ -67,17 +76,6 @@ public interface IGoodsManager {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void edit(Goods goods);
-	
-
-	/**
-	 * 修改商品草稿箱
-	 * @param goods
-	 * @throws RuntimeException 商品货号重复
-	 * @author linkai 2017-2-24 添加注释
-	 */
-	@Transactional(propagation = Propagation.REQUIRED)
-	public void editdraft(Goods goods);
-
 
 	/**
 	 * 商品搜索

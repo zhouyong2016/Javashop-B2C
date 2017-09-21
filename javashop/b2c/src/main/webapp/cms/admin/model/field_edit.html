@@ -1,53 +1,121 @@
-<form method="post"   id="fieldinfoForm"  >
-	   <input type="hidden" name="model_id"  value="${modelid!''}"/>
-		  <input type="hidden" name="field_id" value="${dataField.field_id }">
-	   <table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-	     <tr>
-	       <th><label class="text">提示文字：</label></th>
-	       <td><input type="text" name="china_name" value="${dataField.china_name}" maxlength="50" id="china_name" class="easyui-validatebox input_text" data-options="required:true" dataType="string" isrequired="true" /></td>
-	      </tr>
-	     <tr>
-	       	<th><label class="text">字段名：</label></th>
-	       	<td>
-	       		<input type="text" name="english_name" value="${dataField.english_name}" maxlength="22" id="english_name" class="easyui-validatebox input_text" 
-	       			data-options="required:true"  style="ime-mode: disabled;"  isrequired="true"/><br/>
-	       		 	<span style="color: red;font-size: 12px;">提示：请输入符合规范的字段名，避免与数据库中的关键字冲突！例如：order、and、if等。</span>
-	       	</td>
-	      </tr>
-	     <tr>
-	       <th><label class="text">展现形式：</label></th>
-	       <td>
-		       <select name="show_form" id="show_form">
-		       <#list fieldPluginList as plugin>
-		       		<#if plugin.type=='field'>
-	       				<option haveSelectValue=${plugin.haveSelectValue } <#if plugin.id == dataField.show_form >selected="true"</#if> value="${plugin.id }">${plugin.name }</option>
-					</#if>
-				</#list>
-		       </select>
-		   </td>		   
-	      </tr>	     
-	     
-	     <tr id="saveValueTr">
-	       <th>	<label class="text">可选值(,号隔开)：</label></th>
-	       <td>
-	       		<textarea style="width:250px" name="save_value" id="save_value">${dataField.save_value!''}</textarea>
-		  </td>
-	      </tr>	
-	     <tr>
-	       <th>	<label class="text">排序：</label></th>
-	       <td>	<input type="text" name="taxis" style="width:50px" id="taxis" maxlength="9" value="${dataField.taxis!'0'}"  class="input_text easyui-numberbox"   isrequired="true"  dataType="int"/></td>
-	      </tr>	      
-	     <tr>
-	       <th><label class="text">列表显示：</label></th>
-	       <td> 
-	      		<input type="radio" value="1" id="is_show1"  name="is_show" <#if dataField.is_show==1>checked</#if> >是&nbsp;&nbsp;<input type="radio" id="is_show0"  value="0"  name="is_show" <#if dataField.is_show==0>checked</#if>>否
-	       </td>
-	      </tr>
-	       <tr>
-	       <th><label class="text">是否验证：</label></th>
-	       <td> 
-	       		<input type="radio" value="1" id="is_validate1"  name="is_validate" <#if dataField.is_validate==1>checked</#if>>是&nbsp;&nbsp;<input type="radio" id="is_validate0"  value="0"  name="is_validate" <#if dataField.is_validate==0>checked</#if>>否
-	       </td>
-	      </tr>	 
-	   </table>
-</form>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-unselect{
+    width:50%;
+  }
+  .layui-select-title input{
+    width:100%;
+  }
+  .layui-form-radio{
+    width:50px;
+  }
+   .layui-form-pane .layui-form-label{
+ 	width:145px;
+ }
+ .layui-form-pane .layui-input-block{
+    margin-left:145px;
+ }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="fieldinfoForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data" style="padding-top:10px">
+		<input type="hidden" name="model_id"  value="${modelid!''}"/>
+		<input type="hidden" name="field_id" value="${dataField.field_id }">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">提示文字：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="china_name" id="china_name" value="${dataField.china_name}" maxlength="50" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">字段名：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="english_name" id="english_name" value="${dataField.english_name}" maxlength="22" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    			<span style="color: red;font-size: 12px;">提示：请输入符合规范的字段名，避免与数据库中的关键字冲突！例如：order、and、if等。</span>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">展现形式：</label>
+    		<div class="layui-input-block">
+      			<select name="show_form" id="show_form">
+		       		<#list fieldPluginList as plugin>
+		       			<#if plugin.type=='field'>
+	       					<option haveSelectValue=${plugin.haveSelectValue } <#if plugin.id == dataField.show_form >selected="true"</#if> value="${plugin.id }">${plugin.name }</option>
+						</#if>
+					</#list>
+		       	</select>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">可选值(,号隔开)：</label>
+    		<div class="layui-input-block">
+      			<textarea style="width:50%" name="save_value" id="save_value" class="layui-textarea">${dataField.save_value!''}</textarea>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">排序：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="taxis" id="taxis" value="${dataField.taxis!'0'}"  style="width:150px" maxlength="9" dataType="int" lay-verify="number" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">列表显示：</label>
+   	 		<div class="layui-input-block">
+      			<input type="radio"  value="1" id="is_show1"  name="is_show" title="是" <#if dataField.is_show==1>checked</#if>>
+      			<input type="radio"  value="0" id="is_show0"  name="is_show" title="否" <#if dataField.is_show==0>checked</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">是否验证：</label>
+   	 		<div class="layui-input-block">
+      			<input type="radio"  value="1" id="is_validate1"  name="is_validate" title="是" <#if dataField.is_validate==1>checked</#if>>
+      			<input type="radio"  value="0" id="is_validate0"  name="is_validate" title="否" <#if dataField.is_validate==0>checked</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a style="margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_model">保存</a>
+  			<button class="layui-btn layui-btn-primary layui-btn-small" type="reset">还原</button>
+  		</div>
+  	</form>
+</div>
+<script type="text/javascript">
+var table;
+var index = parent.layer.getFrameIndex(window.name);
+//layui调用
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form(),
+        layer = layui.layer,
+        layedit = layui.layedit,
+        laydate = layui.laydate;
+    //修改字段
+    form.on('submit(save_model)', function(data){
+    	var options = {
+   			url:ctx+"/cms/admin/field/save-edit.do", 
+   			type:"post",
+   			dataType:"json",
+   			success:function(result){
+   				if(result.result==1){					
+   					parent.$.Loading.success("修改成功！！")
+   					parent.layer.close(index); //再执行关闭   
+   					parent.table.ajax.url("${ctx}/cms/admin/model/file-list-json.do?modelid=${modelid!''}").load();
+	
+   				}
+   				if(result.result==0){
+   					parent.$.Loading.error(result.message);
+   				}
+   			},
+    	};
+   		$("#fieldinfoForm").ajaxSubmit(options);
+       return false;
+    });   
+    
+    
+});
+</script>

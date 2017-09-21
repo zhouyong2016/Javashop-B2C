@@ -1,0 +1,105 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div  class="admin-main">
+   <div>
+         <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>1.</li>
+                <li><span>·</span>2。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+            </div>
+        </div>
+    </div>
+    
+     <!--表格区域  -->
+   <form id="contentForm">
+    <table id="contentdata" class="layui-table site-table table-hover" width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>会员名称</th>
+            <th>订单编号</th>
+            <th>发票金额</th>
+            <th>发票类别</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+    </table>
+    <!--传值等操作(暂时)  -->
+    <div id="addBrand" ></div>
+   </form>
+</div>
+
+<!--js区域  -->
+<script>
+var table;
+$(function(){
+	
+	table = $('#contentdata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/receipt/history-list-json.do',
+	    },
+	    columns: [ //定义列
+	       	{data: function(data, type, row) {
+	        	if(data.create_time==null){
+	        		return " ";
+	        	}else{
+	        		return  getFormatDateByLong(data.create_time, "yyyy-MM-dd");
+	        	}
+	       	}},
+	        {data: "uname"},
+	        {data: "sn"},
+	        {data: "paymoney"},
+	    	{data: function(data, type, row) {
+	        	if(data.receipt_type==1){
+	        		return "个人";
+	        	}else if(data.receipt_type==2){
+	        		return "单位";
+	        	}else{
+	        		return " ";
+	        	}
+	       	}},
+	        {data: null,"render": function(obj) {
+	        	return "<a class='layui-btn layui-btn-small _aa' name='ch ange_btn' onclick='view("+obj["order_id"]+")' >查看</a>";
+	       	}}
+	        
+	     ]
+	});
+	
+});
+
+//修改
+function view(order_id){
+	layer.open({
+        title:"查看历史发票详细",//标题
+        maxmin :true,//右上角可否放大缩小
+        offset: '100px',//弹框位置
+        type:2,//弹框的类型
+        shade: [0.3, '#000'],//黑色背景
+        shadeClose:false,//黑色背景是否可以点击关闭
+        content:ctx+"/shop/admin/receipt/view-history.do?order_id="+order_id,//内容的URL
+        area:['700px','500px'],//弹框大小
+        scrollbar: false,//是否允许浏览器出现滚动条
+    });
+}
+
+
+</script>
+<#include '/admin/footer.html' >

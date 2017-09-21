@@ -1,44 +1,89 @@
-<div class="easyui-panel" style="border-style: none;">
-	<div style="padding: 10px 0 10px 60px">
-		<form id="editForm" method="post" class="validate">
-			<table>
-				<tr>
-					<th align="right">类型名称：</th>
-					<td>
-						<input class="easyui-validatebox input_text" type="text" value="${goodsType.name!''}" name="name" maxlength="20" data-options="required:true"></input>
-					</td>
-					
-				</tr>
-				<tr>
-					<th align="right">此类型下商品是否拥有属性</th>
-					<td>
-						<input type="radio" name="have_prop" value="1" <#if goodsType.have_prop==1>checked</#if> /> 是&nbsp;&nbsp; 
-						<input type="radio" name="have_prop" value="0" <#if goodsType.have_prop==0>checked</#if> /> 否
-					</td>
-				</tr>
-				<tr>
-					<th align="right">此类型下商品是否拥有参数</th>
-					<td>
-						<input type="radio" name="have_parm" value="1" <#if goodsType.have_parm==1>checked</#if> /> 是&nbsp;&nbsp; 
-						<input type="radio" name="have_parm" value="0" <#if goodsType.have_parm==0>checked</#if> /> 否
-					</td>
-				</tr>
-				<tr>
-					<th align="right">此类型是否关联品牌</th>
-					<td>
-						<input type="radio" name="join_brand" value="1" <#if goodsType.join_brand==1>checked</#if> /> 是&nbsp;&nbsp; 
-						<input type="radio" name="join_brand" value="0" <#if goodsType.join_brand==0>checked</#if> /> 否
-					</td>
-				</tr>
-				<tr>
-					<th align="right">此类型是否关联规格</th>
-					<td>
-						<input type="radio" name="join_spec" value="1" <#if goodsType.join_spec==1>checked</#if> /> 是&nbsp;&nbsp;
-						<input type="radio" name="join_spec" value="0" <#if goodsType.join_spec==0>checked</#if> /> 否
-					</td>
-				</tr>
-			</table>
-			<input type="hidden" name="type_id" value="${goodsType.type_id}">
-		</form>
-	</div>
+<#include '/admin/sonheader.html' >
+<style>
+.layui-form-pane .layui-form-label{
+width:35%;
+}
+.layui-input{
+  width: 77%
+}
+</style>
+<div class="main">
+	<form id="editForm" class="layui-form layui-form-pane" action="">
+	<input type="hidden" value="${goodsType.type_id!'0'}" name="type_id">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">类型名称</label>
+    		<div class="layui-input-block">
+      			<input type="text" class="layui-input layui-form-danger" id="goodsname" name="name" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input" value="${goodsType.name!''}">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">此类型下商品是否拥有属性</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="have_prop" value="1" title="是" <#if goodsType.have_prop==1>checked="checked"</#if>>
+      			<input type="radio" name="have_prop" value="0" title="否" <#if goodsType.have_prop==0>checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">此类型下商品是否拥有参数</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="have_parm" value="1" title="是" <#if goodsType.have_parm==1>checked="checked"</#if>>
+      			<input type="radio" name="have_parm" value="0" title="否" <#if goodsType.have_parm==0>checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">此类型是否关联品牌</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="join_brand" value="1" title="是" <#if goodsType.join_brand==1>checked="checked"</#if>>
+      			<input type="radio" name="join_brand" value="0" title="否" <#if goodsType.join_brand==0>checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">此类型是否关联规格</label>
+    		<div class="layui-input-block">
+      			<input type="radio" name="join_spec" value="1" title="是" <#if goodsType.join_spec==1>checked="checked"</#if>>
+      			<input type="radio" name="join_spec" value="0" title="否" <#if goodsType.join_spec==0>checked="checked"</#if>>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 96%;height: 50px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="savetype">保存</a>
+  		</div>
+  	</form>
 </div>
+<script>
+var index = parent.layer.getFrameIndex(window.name);
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+      form.render(); //更新全部
+    
+    //监听提交
+    form.on('submit(savetype)', function(data){
+    	var options = {
+   			url:ctx+"/shop/admin/type/checkname.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success("保存成功");
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/shop/admin/type/list-json.do").load();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#editForm").ajaxSubmit(options);
+       return false;
+    });
+});
+</script>
+

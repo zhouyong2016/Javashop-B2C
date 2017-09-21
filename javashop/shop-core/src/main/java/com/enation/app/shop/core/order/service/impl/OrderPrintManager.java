@@ -1,12 +1,7 @@
 package com.enation.app.shop.core.order.service.impl;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map; 
 import java.util.regex.Matcher;
@@ -19,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.sf.json.JSONArray;
 
-import com.enation.app.shop.ShopApp;
-import com.enation.app.shop.core.goods.model.Product;
 import com.enation.app.shop.core.goods.service.IDepotManager;
 import com.enation.app.shop.core.goods.service.IGoodsStoreManager;
 import com.enation.app.shop.core.member.model.MemberAddress;
@@ -86,7 +79,7 @@ public class OrderPrintManager implements IOrderPrintManager {
 	@Override
 	public String getExpressScript(Integer[] orderid) {
 		
-			String sql="select * from es_order where order_id in ("+StringUtil.arrayToString(orderid, ",")+")";
+			String sql="select * from es_order where order_id in("+StringUtil.arrayToString(orderid, ",")+")";
 			List<Order> orderList  = this.daoSupport.queryForList(sql, Order.class);
 			
 			StringBuffer str = new StringBuffer();
@@ -95,22 +88,13 @@ public class OrderPrintManager implements IOrderPrintManager {
 			String app_apth = StringUtil.getRootPath();
 
 			for (Order order : orderList) {
-				Map map=this.transBean2Map(order);
 				if(disdlycenter()){
 					return "请选择默认发货点";
-				}
-				if(!code.equals(order.getShipping_type())&&size!=0){
+				}else if(!code.equals(order.getShipping_type())&&size!=0){
 					return "快递单选择配送方式不同";
-				}
-				if(this.getDlyType(order.getShipping_type()).equals("null")){
-					if("b2b2c".equals(EopSetting.PRODUCT)){
-						if(map.get("order_id").toString().equals("1")){
-							return "请添加配送方式";
-						}
-					}
-					
-				}
-				if(order.getPay_status() == 2){
+				}else if(this.getDlyType(order.getShipping_type()).equals("null")){
+					return "请添加配送方式";
+				}else if(order.getPay_status() == 2){
 					if(!FileUtil.exist(app_apth+"/shop/admin/printtpl/express/"+this.getcode(order.getLogi_name())+".html")){
 						return "没有此快递单模板请添加";
 					}else{
@@ -479,29 +463,5 @@ public class OrderPrintManager implements IOrderPrintManager {
 		return result;
 	}
 	
-	// Bean --> Map 1: 利用Introspector和PropertyDescriptor 将Bean --> Map
-    private Map<String, Object> transBean2Map(Object obj) {
 
-        if (obj == null) {
-            return null;
-        }
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
-            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-            for (PropertyDescriptor property : propertyDescriptors) {
-                String key = property.getName();
-                // 过滤class属性
-                if (!key.equals("class")) {
-                    // 得到property对应的getter方法
-                    Method getter = property.getReadMethod();
-                    Object value = getter.invoke(obj);
-                    map.put(key, value);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
 }

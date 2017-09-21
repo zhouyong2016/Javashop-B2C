@@ -14,6 +14,7 @@ import com.enation.app.shop.core.goods.model.Depot;
 import com.enation.app.shop.core.goods.service.IDepotManager;
 import com.enation.app.shop.core.order.model.Order;
 import com.enation.app.shop.core.order.model.OrderGift;
+import com.enation.app.shop.core.order.model.PayCfg;
 import com.enation.app.shop.core.order.model.Refund;
 import com.enation.app.shop.core.order.model.SellBackGoodsList;
 import com.enation.app.shop.core.order.model.SellBack;
@@ -82,7 +83,7 @@ public class SellBackController extends GridController {
 		List orderItem = orderManager.getOrderItem(orderId);
 		List depotlist = depotManager.list();// 仓库列表
 		List paymentList = paymentManager.list(); // 支付方式列表
-		
+
 		OrderGift gift = new OrderGift();
 
 		//如果订单中的赠品id不为0 add_by DMRain 2016-7-25
@@ -90,8 +91,17 @@ public class SellBackController extends GridController {
 			gift = this.orderGiftManager.getOrderGift(orderinfo.getGift_id(), orderId);
 			gift.setGift_img(StaticResourcesUtil.convertToUrl(gift.getGift_img()));
 		}
+		/** 获取支付方式配置信息 */
+		PayCfg payCfg = null;
+		if(orderinfo != null ){
+			payCfg = this.paymentManager.get(orderinfo.getPayment_type());
+			if (payCfg == null) {
+				payCfg = new PayCfg();
+				payCfg.setIs_retrace(0);
+			}
+		}
 		modelAndView.addObject("gift", gift);
-		
+		modelAndView.addObject("payCfg", payCfg);
 		modelAndView.addObject("orderinfo", orderinfo);
 		modelAndView.addObject("orderItem", orderItem);
 		modelAndView.addObject("depotlist", depotlist);
@@ -150,7 +160,7 @@ public class SellBackController extends GridController {
 			 * @author Kanon 
 			 */
 			sellBack.setType(2);
-			
+
 			/**
 			 * 循环页面中选中的商品，形成退货明细:goodsList
 			 */
@@ -227,8 +237,17 @@ public class SellBackController extends GridController {
 			if (sellBackList.getGift_id() != null) {
 				gift = this.orderGiftManager.getOrderGift(sellBackList.getGift_id(), sellBackList.getOrderid());
 			}
+			/** 获取支付方式配置信息 */
+			PayCfg payCfg = null;
+			if(orderinfo != null ){
+				payCfg = this.paymentManager.get(orderinfo.getPayment_type());
+				if (payCfg == null) {
+					payCfg = new PayCfg();
+					payCfg.setIs_retrace(0);
+				}
+			}
 			modelAndView.addObject("gift", gift);
-
+			modelAndView.addObject("payCfg", payCfg);
 			modelAndView.addObject("orderinfo", orderinfo);
 			modelAndView.addObject("goodsList", goodsList);
 			modelAndView.addObject("sellBackList", sellBackList);
@@ -294,7 +313,7 @@ public class SellBackController extends GridController {
 			List goodsList = this.sellBackManager.getGoodsList(id);// 退货商品列表
 			List logList = this.sellBackManager.sellBackLogList(id);// 退货操作日志
 			List doptList = this.depotManager.list();  //仓库列表
-			
+
 			String depot_name = null;
 			/**
 			 * 仓库信息
@@ -352,7 +371,10 @@ public class SellBackController extends GridController {
 			sellback.setWarehouse_remark(sellBackList.getWarehouse_remark());
 			// 循环将商品入库
 			for (int i = 0; i < goodsId.length; i++) {
-				sellBackManager.inStorage(depotid, id, goodsId[i],storageNum[i], productId[i],itemId[i]);
+				if(storageNum[i]!=0){
+					sellBackManager.inStorage(depotid, id, goodsId[i],storageNum[i], productId[i],itemId[i]);
+				}
+
 			}
 
 			//如果退货单信息中的赠品id不为空 add_by DMRain 2016-7-19
@@ -362,10 +384,10 @@ public class SellBackController extends GridController {
 
 			sellback.setWarehouse_remark(sellBackList.getWarehouse_remark());
 			this.sellBackManager.apply(sellback);
-			
+
 			//记录售后申请日志
 			this.sellBackManager.saveLog(sellback.getId(),SellBackStatus.valueOf(sellback.getTradestatus()).getName());
-			
+
 			//记录订单日志
 			orderManager.addLog(sellback.getOrderid(), "订单商品入库");  
 			return JsonResultUtil.getSuccessJson("操作成功！");
@@ -430,7 +452,7 @@ public class SellBackController extends GridController {
 		ModelAndView modelAndView = new ModelAndView();
 		Order orderinfo = orderManager.get(orderId);// 订单详细
 		List orderItem = orderManager.getOrderItem(orderId);
-		
+
 		OrderGift gift = new OrderGift();
 
 		//如果订单中的赠品id不为0 add_by DMRain 2016-7-25
@@ -438,8 +460,17 @@ public class SellBackController extends GridController {
 			gift = this.orderGiftManager.getOrderGift(orderinfo.getGift_id(), orderId);
 			gift.setGift_img(StaticResourcesUtil.convertToUrl(gift.getGift_img()));
 		}
+		/** 获取支付方式配置信息 */
+		PayCfg payCfg = null;
+		if(orderinfo != null ){
+			payCfg = this.paymentManager.get(orderinfo.getPayment_type());
+			if (payCfg == null) {
+				payCfg = new PayCfg();
+				payCfg.setIs_retrace(0);
+			}
+		}
 		modelAndView.addObject("gift", gift);
-		
+		modelAndView.addObject("payCfg", payCfg);
 		modelAndView.addObject("orderinfo", orderinfo);
 		modelAndView.addObject("orderItem", orderItem);
 
@@ -465,7 +496,6 @@ public class SellBackController extends GridController {
 			sellBack.setTradestatus(0);
 			sellBack.setRegtime(DateUtil.getDateline());
 			sellBack.setType(1);
-			sellBack.setRefund_way(order.getPayment_name());
 			sellBackManager.addSellBack(sellBack);
 			return JsonResultUtil.getSuccessJson("退款申请创建成功");
 		} catch (Exception e) {

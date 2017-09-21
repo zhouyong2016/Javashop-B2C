@@ -217,12 +217,12 @@ public class GoodsStatisticsController extends GridController{
 
 		Map<String,Object> jsonMap=new HashMap<String,Object>();
 		jsonMap.put("gridjson", gridJson);
-		jsonMap.put("highchartsjson", money_list);
+		jsonMap.put("chartsjson", money_list);
 		return JsonResultUtil.getObjectJson(jsonMap);
 	}
 
 	/**
-	 * 获取热卖商品数量的grid-json和highcharts-json
+	 * 获取热卖商品数量的grid-json和echarts-json
 	 * @param cycle_type
 	 * @param year
 	 * @param month
@@ -256,12 +256,12 @@ public class GoodsStatisticsController extends GridController{
 			money_map.put("y", map.get("t_num"));
 			num_list.add(money_map);
 		}
-		jsonMap.put("highchartsjson", num_list);
+		jsonMap.put("chartsjson", num_list);
 
 		return JsonResultUtil.getObjectJson(jsonMap);
 	}
 	/**
-	 * 获取热卖商品金额的grid-json和highcharts-json
+	 * 获取热卖商品金额的grid-json和echarts-json
 	 * @param cycle_type
 	 * @param year
 	 * @param month
@@ -466,5 +466,14 @@ public class GoodsStatisticsController extends GridController{
 		a.roll(Calendar.DATE, -1);  
 		int maxDate = a.get(Calendar.DATE);  
 		return maxDate;  
+	}
+	
+	/**
+	 * 跳转至修改价格区间页面
+	 * @return
+	 */
+	@RequestMapping(value="/get_price_range_html")
+	public String priceRange() {
+		return "/shop/admin/statistics/goodsanalysis/price_range";
 	}
 }

@@ -1,36 +1,41 @@
 <#include '/admin/header.html' >
-<div class="main">
+<style type="text/css">
+	#search_statis{
+		margin-top:-3px!important ;
+	}
+	.tab li{
+		border-bottom: 1px solid #ccc;
+        margin-right: 0px;
+        padding: 0px 10px;
+	}
+</style>
+<div class="admin-main">
 	<!-- 搜索框 -->
-	<div style="display: block;" class="searchAdvanced">
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="80">
-					按订单周期：
-				</td>
-				<td width="70" >
-					<select id="cycle_type">
-						<!-- <option value="0">--请选择--</option> -->
-						<option value="1">按照月统计</option>
-						<option value="2">按照年统计</option>
-					</select>
-				</td>
-				<td width="70" >
-					<select id="year">
-						<option value="0">--全年--</option>
-					</select>
-				</td>
-				<td width="70" >
-					<select id="month">
-						<!-- <option value="0">--请选择--</option> -->
-					</select>
-				</td>
-				
-				<td width="200" style="text-align: center;float: right">
-					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
-				</td>
-				<td></td>
-		</table>
-	</div>
+	<div>
+        <!--提示区域  -->
+       <!--  <div class="page_explain">
+            <ul>
+                <li>111</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div> -->
+        <!--按钮操作  -->
+        <div class="table_control">
+            <!-- <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="提示" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div> -->
+           <!--搜索区域  -->
+            <div class="table_search table_search_update" >
+            	<select id="year" >
+					<option value="0">--全年--</option>
+				</select>
+				<select id="month">
+				</select>
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-small" id="search_statis"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+    </div>
 	<div class="clear height10"></div>
 	
 	<!-- 主体 -->
@@ -40,41 +45,42 @@
 			<!-- 用户记录当前的tabId -->
 			<input type="hidden" id="now_tab_hid" value="1" />
 			
-			
 			<!-- tab页标题 -->
-			<div class="contentTab">
-				<ul class="tab">
-					
+		<div class="outcont" style="width: 100%">
+		  	<div class="contentTab" style="float: left;width:100%">
+				<ul class="tab" style="width:1200px;height:40px;">
 					<li class="contentTabS" tabid="1"> 下单量 </li>
 					<li tabid="2"> 下单商品数量 </li>
 					<li tabid="3"> 下单金额 </li>
+					<div style="width:58%;height:47px;float:left;border-bottom:1px solid #ccc;"></div>	
 				</ul>
 			</div>
-			
+		
+		</div>
 			<!-- tab页内容 -->
 			<div class="shadowBoxWhite wf100 whiteBox">
 				<div class="text">
 					<div class="tab-page">
-						
 						<!-- 注意  div中不能有数据  这个用来判断是否加载了数据！！！！！！！！！ -->
 						<div class="tab-panel" h_url="${ctx}/shop/admin/memberStatistics/order-num-statistics-html.do" tabid="1"></div>
-
 						<div class="tab-panel" style="display:none;" h_url="${ctx}/shop/admin/memberStatistics/goods-num-statistics-html.do" tabid="2"></div>
-						
 						<div class="tab-panel" style="display:none;" h_url="${ctx}/shop/admin/memberStatistics/order-price-statistics-html.do" tabid="3"></div>
-						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>	
-	<div class="clear height10"></div>
 </div>
 
 <script type="text/javascript">
-
 $(function(){
-	
+	  //tab选项卡按钮样式
+	  $(".tab li").eq(0).css({"border-bottom":"white","border-left":"1px solid #ccc","border-top":"1px solid #ccc","border-right":"1px solid #ccc"})
+		$(".tab li").click(function(){
+			$this=$(this);
+			$this.css({"border-bottom":"white","border-left":"1px solid #ccc","border-top":"1px solid #ccc","border-right":"1px solid #ccc"}).siblings("li").css({"border-top":"white","border-bottom":"1px solid #ccc","border-right":"white","border-left":"white"})
+		})
+
 	//初始化下拉菜单中的时间
 	var currentYear = new Date().getFullYear();
 	var historyYear = currentYear-10;
@@ -83,7 +89,6 @@ $(function(){
 	
 	//for循环得到年数
 	for(var i=0;i<20;i++){
-		
 		//选中当前年
 		if(currentYear==historyYear){
 			$("#year").append("<option value='"+historyYear+"' selected >"+historyYear+"年</option>" );
@@ -156,24 +161,18 @@ function getDateWhere(){
 	
 	//如果是按照年来筛选订单的
 	if(c_type == 2) {
-		
 		var year = $("#year").val();
-		
 		if(year == 0) {
 			var dateWhere = [];
 			dateWhere[0] = "";
 			dateWhere[1] = "";
 			return dateWhere;
 		}
-		
 		startDate = year + "-01-01 0:0:00";
 		endDate = year + "-12-31 23:59:59";
-		
 	} else {
-		
 		var year = parseInt($("#year").val());
 		var month = parseInt($("#month").val());
-
 		if(year == 0) {
 			alert("请选择年份");
 			return;
@@ -182,11 +181,9 @@ function getDateWhere(){
 			alert("请选择月份");
 			return;
 		}
-		
 		//得到一个月最后一天
 		var lastDate = new Date(year, month, 0);
 		var lastDay = lastDate.getDate();
-		
 		startDate = year + "-" + month + "-01 0:0:00";
 		endDate = year + "-" + month + "-" + lastDay + " 23:59:59";
 	}
@@ -266,44 +263,76 @@ function loadTab(tabId){
  * @param id	html 初始化div的id
  * @param conf	相关配置
  */
-function initHistogram(id,conf){
-
-	var options = {
-			credits: {
-	             //text: 'Javashop',
-	             //href: 'http://www.javamall.com.cn'
-				enabled:false
-	        },
-			chart : {
-				type : 'column'
-			},
-			title : {
-				text : conf.title
-			},
-			xAxis : {
-				categories : conf.categories
-			},
-			yAxis : {
-				min : 0,
-				title : {
-					text : conf.yDesc
-				}
-			},
-			plotOptions: {
-	            column: {
-	                
-	                dataLabels: {
-	                    enabled: true,
-	                    style: {
-	                        fontWeight: 'bold'
-	                    }
+ function initHistogram(conf){
+		var myChart = echarts.init(document.getElementById('order_num_statistics'));
+		var options = {
+				color: ['#3398DB'],
+				title: {				//图表上方标题
+					x : 'center',
+	                text: conf.title
+	            },
+	            tooltip : {
+	                trigger: 'item',			//触发类型
+	                formatter : function(params){   //鼠标放到图表上触发提示的内容
+	                	var dataname = conf.name[params.dataIndex].name;
+	                	return dataname + '<br/>' +params.seriesName + ':' + params.value;
 	                }
-	            }
-	        },
-			series : conf.series
-		};
-	$("#" + id).highcharts(options);
-};
+	 
+	            },
+	            toolbox: {   //图形右边工具栏
+			        show : true,
+			        feature : {
+			            magicType : {show: true, type: ['line', 'bar']},
+			            restore : {show: true},
+			            saveAsImage : {show: true}
+			        }
+			    },
+	            legend : {
+	            	bottom : '10',
+	            	data : ['下单量']
+	            },
+	            xAxis : [			//x坐标
+	                     {
+	                         type : 'category',				//坐标轴类型
+	                         data : conf.categories,
+	                         min : 0,
+	                         nameLocation : 'middle',
+	         				 nameGap : '30',
+	         				 nameTextStyle : {
+	         					fontWeight : 'bold'
+	         				 }
+	                     }
+	                 ],
+	            yAxis : [					//y坐标
+	                     {
+	                         type : 'value',
+	                       	 name : '订单量（个）',
+	                       	 nameLocation : 'middle',
+	                       	 nameGap : '30'
+	                     }
+	                 ],
+	            series : [				//显示图表类型
+	                      {
+	                         name: '下单量',
+	                         type: 'bar',
+	                         data: conf.data,
+	                         itemStyle: {
+	                             normal: {
+	                                 label: {			//柱状图形上的文本标签
+	                                     show: true,
+	                                     position: 'top',
+	                                 }
+	                             }
+	                         }   
+	                    }
+				]
+			};
+		myChart.setOption(options);
+	}
+
+layui.use('form', function(){
+  var form = layui.form();
+});
 </script>
 
 <#include '/admin/footer.html' >

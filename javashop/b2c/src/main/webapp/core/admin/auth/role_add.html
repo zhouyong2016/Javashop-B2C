@@ -1,45 +1,75 @@
-<script type="text/javascript" src="${ctx}/core/admin/js/Auth.js"></script>
-<script type="text/javascript" src="${ctx}/core/admin/js/jquery.checktree.js"></script>
-<div class="easyui-panel" style="border-style:none;" >
-			<form method="post"  class="validate" id="addroleForm" >
-				<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-		     		<tr>
-		       			<th><label class="text">角色名称：</label></th>
-		       			<td><input class="easyui-validatebox input_text" type="text" maxlength="12" name="rolename" id="rolename" maxlength="60" data-options="required:true"  dataType="string" isrequired="true" /></td>
-		      		</tr>
-		     		<tr>
-		      			<th><label class="text">描述：</label></th>
-		       			<td> 
-		    	  			<textarea name="rolememo" style="width:300px;height:150px;" id="rolememo" class="input_text" onblur="checkLength()" onkeydown="checkLength()"></textarea>
-		       			</td>
-		      		</tr>
-				</table>
-		   		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
-		   			<tr>
-		      			<th><label class="text">权限选择：</label></th>
-		      			<td>
-							<div id="actbox">
-									<ul>
-										<#list authList as act>
-											<li id="li_${act.actid }"><input type="checkbox" name="acts" value="${act.actid }" /><span>${act.name }</span>
-											</li>
-										</#list>
-									</ul>
-							</div>
-			  			</td>
-		     		</tr>
-				</table>
-			
-		</form>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-input,.layui-textarea{
+    width:100%;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addroleForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">角色名称：</label>
+    		<div class="layui-input-block">
+      			<input type="text" name="rolename" id="rolename" maxlength="60" dataType="string" lay-verify="required" autocomplete="off" class="layui-input">
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">描述：</label>
+    		<div class="layui-input-block">
+      			<textarea name="rolememo" id="rolememo" onblur="checkLength()" onkeydown="checkLength()" placeholder="请输入内容" class="layui-textarea"></textarea>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item" id="roletr">
+    		<label class="layui-form-label">权限选择：</label>
+    		<div class="layui-input-block" id="actbox">
+      			<ul>
+					<#list authList as act>
+					<li id="li_${act.actid }">
+						<input type="checkbox" name="acts" value="${act.actid }" /><span>${act.name }</span>
+					</li>
+					</#list>
+				</ul>
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 97%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a style="margin: 0px" class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_role">保存</a>
+  			<button class="layui-btn layui-btn-primary layui-btn-small" type="reset">还原</button>
+  		</div>
+  	</form>
 </div>
 <script>
- 
-
+var index = parent.layer.getFrameIndex(window.name);
 function checkLength(){
 	if($("#rolememo").val().length>100){
 		$("#rolememo").val($("#rolememo").val().substring(0,100));
 	}
 }
-
-
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form(),
+    layedit = layui.layedit,
+    laydate = layui.laydate;
+    
+	form.on('submit(save_role)', function(data){
+    	var options = {
+   			url:ctx+"/core/admin/role/save-add.do?",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					parent.$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/core/admin/role/list-json.do").load();
+   				}else{
+   					parent.$.Loading.error(data.message);
+   				}
+   			}
+   		};
+   		$("#addroleForm").ajaxSubmit(options);
+       return false;
+    });
+   
+});
 </script>

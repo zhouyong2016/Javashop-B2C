@@ -8,7 +8,7 @@ OrderStatus.ORDER_PAY=2;		// 已支付
 OrderStatus.ORDER_SHIP = 3; 	// 已发货
 OrderStatus.ORDER_ROG = 4; 		// 已收货
 OrderStatus.ORDER_COMPLETE =5;	// 已完成
-OrderStatus.ORDER_CANCELLATION = 6; // 订单取消（货到付款审核未通过、新建订单取消、订单发货前取消）
+OrderStatus.ORDER_CANCELLATION =6; // 订单取消（货到付款审核未通过、新建订单取消、订单发货前取消）
 OrderStatus.ORDER_MAINTENANCE =7;	// 交易成功已申请退货申请
 
 
@@ -52,92 +52,72 @@ var OrderDetail = {
 		// 付款事件绑定 确认付款
 		$("#pay").unbind("click");
 		$("#pay").bind("click",function() {
-					var disabled=  $("#pay").hasClass("l-btn-disabled");
-					if( !disabled ){
-					 	$("#orderinfo").show();
-					　　	$('#orderinfo').dialog({
-					　　		title: '付款',	
-					　　		width: 750,
-					　　		closed: false,
-					　　		cache: false,
-					　　		href: ctx+'/shop/admin/payment/show-pay-dialog.do?orderId='+ self.orderid, 	
-					　　		modal: true,
-					　　		buttons: [{		
-					　　			 text:'保存',
-					　　			 handler:function(){
-					　　				 var savebtn = $(this);
-					　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-					　　				 if(!disabled){
-				　　				 			self.pay(self.orderid,savebtn);
-				　　				 		}
-					　　			 }
-					　　			 },{
-					　　			 text:'取消',
-					　　			 handler:function(){
-					　　				$('#orderinfo').dialog('close');
-					　　			 }
-					　　		}]
-					　　	});
-					}
-				});
+			var disabled=  $("#pay").hasClass("layui-btn-disabled");
+			if( !disabled ){
+			 	layer.open({
+		    		title : "确认付款",//标题
+		            maxmin :false,//右上角可否放大缩小
+		            offset: '50px',
+		            type:2,//弹框的类型
+		            shade: [0.3, '#000'],//黑色背景
+		            shadeClose:false,//黑色背景是否可以点击关闭
+		            content:ctx+"/shop/admin/payment/show-pay-dialog.do?orderId="+ self.orderid,//内容的URL
+		            area:['700px','430px'],//弹框大小
+		            scrollbar: true//是否允许浏览器出现滚动条
+		        });
+			}
+		});
 		
 
 		// 退货事件绑定
 		$("#returned").unbind("click");
 		$("#returned").bind("click",function() {
-			var disabled=  $("#returned").hasClass("l-btn-disabled");
+			var disabled=  $("#returned").hasClass("layui-btn-disabled");
 			if( !disabled ){
-			$("#return").show();
-		　　	$('#return').dialog({
-		　　		title: '售后申请',			// 对话框的标题
-		　　		width: 550,
-		　　		closed: false,
-		　　		cache: false,
-		　　		modal: true,
-		　　		buttons: [{					
-		　　			 text:'退货',
-		　　			 iconCls:'icon-ok',
-		　　			 handler:function(){
-		　　				 newTab("申请售后","../shop/admin/sell-back/add-sellback.do?orderId="+ self.orderid);
-		　　			}
-	　　			 },{
-	　　			 text:'退款',
-	　　			 handler:function(){
-	　　				newTab("申请售后","../shop/admin/sell-back/add-refund.do?orderId="+ self.orderid);
-	　　			 }
-		　　		}]
-		　　	});
-		　　	}
+				layer.open({
+					  content: '售后申请'
+					  ,btn: ['退货', '退款']
+					  ,yes: function(index, layero){
+						  //按钮【按钮一】的回调
+						  		 layer.close(index);
+				　　				 newTab("申请售后","../shop/admin/sell-back/add-sellback.do?orderId="+ self.orderid);
+				　　				 
+				　　		}
+					  ,btn2: function(index, layero){
+						  //按钮【按钮二】的回调
+						  		parent.layer.close(index);
+				　　				newTab("申请售后","../shop/admin/sell-back/add-refund.do?orderId="+ self.orderid);
+					  }
+					})
+			}
 		});
+		
 
 		// 收货事件绑定
 		$("#rog").unbind("click");
 		$("#rog").bind("click",function() {
-			var disabled=  $("#rog").hasClass("l-btn-disabled");
+			var disabled = $("#rog").hasClass("layui-btn-disabled");
 			if( !disabled ){
-					if (confirm("确认顾客已收到货了吗")) {
-						$.Loading.show("正在保存请稍候");
-						$("#rog").linkbutton("disable");
-						$.ajax({url : ctx+"/shop/admin/order/rog-confirm.do?orderId="+self.orderid,
-							dataType : "json",
-							success : function(res) {
-								if (res.result == 1) {
-									$.Loading.success(res.message);
-									location.reload();
-								} else {
-									$.Loading.error(res.message);
-								}
+				layer.confirm('确认顾客已收到货了吗?', {icon: 3, title:'提示'}, function(index){
+					$.ajax({url : ctx+"/shop/admin/order/rog-confirm.do?orderId="+self.orderid,
+						dataType : "json",
+						success : function(res) {
+							if (res.result == 1) {
+								layer.closeAll();
+								location.reload();
+							} else {
+								//$.Loading.error(res.message);
 							}
-
-						});
-					}
+						}
+					});
+				});
 			}
-			});
+		});
 
 		// 完成事件绑定
 		$("#complete").unbind("click");
 		$("#complete").bind("click", function() {
-			var disabled=  $("#complete").hasClass("l-btn-disabled");
+			var disabled=  $("#complete").hasClass("layui-btn-disabled");
 			if(!disabled){
 				if (confirm("完成 操作会使该订单归档且不允许再做任何操作，确定要执行吗？")) {
 					$.Loading.show("正在保存请稍候");
@@ -149,34 +129,51 @@ var OrderDetail = {
 		// 作废事件绑定
 		$("#cancel").unbind("click");
 		$("#cancel").bind("click",function() {
-			var disabled=  $("#cancel").hasClass("l-btn-disabled");
+			var disabled=  $("#cancel").hasClass("layui-btn-disabled");
 			if(!disabled){
 				if (confirm("作废操作会使该订单归档且不允许再做任何操作，确定要执行吗？")) {
-					$("#cancelorder").show();
-				　　	$('#cancelorder').dialog({
-				　　		title: '作废',	
-				　　		width:630,
-				　　		closed: false,
-				　　		modal: true,
-				　　		buttons: [{		
-				　　			 text:'保存',
-				　　			 handler:function(){
-				　　				 var savebtn = $(this);
-				　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-				　　				 if(!disabled){
-					　　				var reason=$("select[name='reason'] option:selected").text();
-					　　				self.cancel(self.orderid,reason,savebtn);
-				　　				 }
-				　　			 }
-				　　		}]
-			　　		});
+//					$("#cancelorder").show();
+//				　　	$('#cancelorder').dialog({
+//				　　		title: '作废',	
+//				　　		width:630,
+//				　　		closed: false,
+//				　　		modal: true,
+//				　　		buttons: [{		
+//				　　			 text:'保存',
+//				　　			 handler:function(){
+//				　　				 var savebtn = $(this);
+//				　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+//				　　				 if(!disabled){
+//					　　				var reason=$("select[name='reason'] option:selected").text();
+//					　　				self.cancel(self.orderid,reason,savebtn);
+//				　　				 }
+//				　　			 }
+//				　　		}]
+//			　　		});
+					layer.open({
+						 title:'取消订单'
+						,type:1
+						,content: $('#cancelorder') 
+						  ,btn: ['确定', '取消']
+						  ,yes: function(index, layero){
+							  var savebtn = $(this);
+							  var disabled=savebtn.hasClass("layui-btn-disabled");
+							  if(!disabled){
+								  var reason=$("#cancelorder").find("option:selected").text();
+								  self.cancel(self.orderid,reason);
+								  layer.close(index); //如果设定了yes回调，需进行手工关闭
+							  }
+						  },btn2: function(index, layero){
+						   layer.closeAll();//取消
+						  }
+						});
 				}
 			}
 		});
 		// 确认订单绑定
 		$("#confirmorder").unbind("click");
 		$("#confirmorder").bind("click", function() {
-			var disabled=  $("#confirmorder").hasClass("l-btn-disabled");
+			var disabled=  $("#confirmorder").hasClass("layui-btn-disabled");
 			if(!disabled){
 				if (confirm("确认要确认此订单吗？")) {
 					self.confirmOrder(self.orderid);
@@ -186,51 +183,36 @@ var OrderDetail = {
 		 // 保存， 发货
 		$("#ship").unbind("click");
 		$("#ship").bind("click",function() {
-					var disabled=  $("#ship").hasClass("l-btn-disabled");
-					if( !disabled ){
-						if($("input[name='expressNo']").val()!=""){
-							if(confirm("确认发货？快递公司："+$("#logi").find("option:selected").text()+"  快递单号："+$("input[name='expressNo']").val())){
-								self.ship(self.orderid);
-							}
-						}else{
-					 	$("#orderinfo").show();
-					　　	$('#orderinfo').dialog({
-					　　		title: '发货',	
-					　　		width: 450,
-					　　		closed: false,
-					　　		cache: false,
-					　　		href: ctx+'/shop/admin/order/ship-into.do?orderId='+ self.orderid, 	
-					　　		modal: true,
-					　　		buttons: [{		
-					　　			 text:'保存',
-					　　			 handler:function(){
-					　　				 var savebtn = $(this);
-					　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-					　　				 if(!disabled){
-				　　				 			self.saveShipNo(self.orderid,savebtn);
-				　　				 		}
-					　　			 }
-					　　			 },{
-					　　			 text:'发货',
-					　　			 handler: function(){
-					　　				var savebtn = $(this);
-					　　				var disabled=savebtn.hasClass("l-btn-disabled");
-					　			    if(!disabled){
-									if($("input[name='express']").val()==""){
-										alert("请填写快递单号！");
-										return false;
-									}else if($("input[name='express']").val()!=""){ 
-										$('#expressVal').val($('#express').val())
-									if(confirm("确认发货？快递公司："+$("#logi").find("option:selected").text()+"  快递单号："+$("#express").val())){
-										self.saveShipNoInto(self.orderid,savebtn);
-									}}
-								}
-							}
-					　　		}]
-					　　	
-					　　	})};
+			var disabled=  $("#ship").hasClass("layui-btn-disabled");
+			if( !disabled ){
+				var ecpressNo = $("input[name='expressNo']").val()
+				if(ecpressNo != ""){
+					if(confirm("确认发货？快递公司："+$("#logi").find("option:selected").text()+"  快递单号："+ecpressNo)){
+						self.saveShipNoInto(self.orderid,ecpressNo);
 					}
-				});
+			}else{
+			
+				layer.prompt({
+					  offset: '50px',
+					  title: '请输入【'+$("#logi").find("option:selected").text()+'】快递单号',
+					  btn: ['发货', '取消'], // 可以无限个按钮
+				  	  btn2: function(value, index, elem){
+				  		layer.closeAll();//取消
+				  	  }}, function(value, index, elem){//发货
+				  		if(value==""){
+							alert("请填写快递单号！");
+							return false;
+						}else if(value!=""){ 
+							$('#expressVal').val(value)
+							layer.confirm('确定发货?', {icon: 3, title:'提示'}, function(index){
+								self.saveShipNoInto(self.orderid,value);
+							});
+						}
+			  	  });
+			 	
+			}}
+			
+		});
 			
 		this.initBtnStatus();
 	},
@@ -242,8 +224,8 @@ var OrderDetail = {
 		
 		// 货到付款审核订单
 		if(this.isCod && (this.orderStatus == OrderStatus.ORDER_NOT_PAY)){
-			$("#confirmorder").removeClass("l-btn-disabled"); 
-			$("#cancel").removeClass("l-btn-disabled");
+			$("#confirmorder").removeClass("layui-btn-disabled"); 
+			$("#cancel").removeClass("layui-btn-disabled");
 		}
 		
 		// 支付按钮
@@ -252,9 +234,9 @@ var OrderDetail = {
 			|| (!this.isCod && this.payStatus == OrderStatus.PAY_PARTIAL_PAYED)// 非货到付款，部分付款时，按钮可用
 			|| (this.isCod && (this.orderStatus == OrderStatus.ORDER_ROG) && (this.payStatus== OrderStatus.PAY_NO)) // 货到付款的，完成后付款按钮可用
 		){
-			$("#pay").removeClass("l-btn-disabled"); 
+			$("#pay").removeClass("layui-btn-disabled"); 
 			if(!this.isCod){
-				$("#cancel").removeClass("l-btn-disabled"); 
+				$("#cancel").removeClass("layui-btn-disabled"); 
 			}
 		}
 		
@@ -263,62 +245,59 @@ var OrderDetail = {
 			(!this.isCod && (this.shipStatus == OrderStatus.SHIP_NO && this.orderStatus==OrderStatus.ORDER_PAY) )
 			|| (this.isCod && (this.shipStatus == OrderStatus.SHIP_NO && this.orderStatus==OrderStatus.ORDER_CONFIRM) )
 			){
-			$("#ship").removeClass("l-btn-disabled");
+			$("#ship").removeClass("layui-btn-disabled");
 			// $("#cancel").removeClass("l-btn-disabled");
 		}
 		
 		// 收货按钮
 		if (this.shipStatus == OrderStatus.SHIP_YES && this.orderStatus==OrderStatus.ORDER_SHIP) {
-			$("#rog").removeClass("l-btn-disabled"); 
+			$("#rog").removeClass("layui-btn-disabled"); 
 		}
 		
 		// 订单退货
 		if(this.orderStatus==OrderStatus.ORDER_COMPLETE){
-			$("#returned").removeClass("l-btn-disabled"); 
+			$("#returned").removeClass("layui-btn-disabled"); 
 		}
 		// 订单状态为作废，则禁用所有钮
 		if (this.orderStatus == OrderStatus.ORDER_CANCELLATION||this.orderStatus == OrderStatus.ORDER_MAINTENANCE) {
-			$("#nextForm .easyui-linkbutton").addClass("l-btn-disabled");
+			//$("#nextForm .easyui-linkbutton").addClass("layui-btn layui-btn-radius layui-btn-disabled");
+			$("#cancel").addClass("layui-btn layui-btn-radius layui-btn-disabled");
+			$("#pay").addClass("layui-btn layui-btn-radius layui-btn-disabled");
+			
+			
+			
 		}
 		
 		// 如果当前订单已经申请取消订单了，在还未审核通过期间，禁用所有按钮 add_by DMRain 2016-8-31
 		if (this.isCancel == 1) {
-			$("#nextForm .easyui-linkbutton").addClass("l-btn-disabled");
+			$("#nextForm .easyui-linkbutton").addClass("layui-btn-disabled");
 		}
 	},
 
 	/**
 	 * 直接发货
 	 */
-    saveShipNoInto : function(orderId,savebtn) {
+    saveShipNoInto : function(orderId,value) {
 		var logi_id=$("#logi").val();
-		var express=$("#express").val();
+		var express = value;
 		var logi_name=$("#logi").find("option:selected").text();
 		var self = this;
-	 	var formflag= $("#intoForm").form().form('validate');
-	 	if(formflag){
-	 		$.Loading.show("正在发货，请稍候...");
-	 		savebtn.linkbutton("disable");
-			var options = {
-				url :  ctx+'/shop/admin/order-print/save-ship-no.do',
-				data:{'order_id':orderId,'expressno':express,'logi_id':logi_id,'logi_name':logi_name},
-				type : "post",
-				dataType : "json",
-				success : function(responseText) {
-					if (responseText.result == 1) {
-						$('#expressVal').val($('#express').val())
-						self.ship(self.orderid);
-					}
-					if (responseText.result == 0) {
-						savebtn.linkbutton("enable");
-					}
-				},
-				error : function() {
-					savebtn.linkbutton("enable");
+		$.ajax({
+			url :  ctx+'/shop/admin/order-print/save-ship-no.do',
+			data:{'order_id':orderId,'expressno':express,'logi_id':logi_id,'logi_name':logi_name},
+			type : "post",
+			dataType : "json",
+			success : function(responseText) {
+				if (responseText.result == 1) {
+					$('#expressVal').val($('#express').val())
+					self.ship(self.orderid);
+					layer.closeAll();
 				}
-			};
-			$('#intoForm').ajaxSubmit(options);
-	 	}
+			},
+			error : function() {
+				savebtn.linkbutton("enable");
+			}
+		});
 	},
 	
 	
@@ -362,37 +341,30 @@ var OrderDetail = {
 	/**
 	 * 支付
 	 */
-	pay : function(orderId,savebtn) {
+	pay : function(_form,savebtn) {
 		var self = this;
-	 	var formflag= $("#order_form").form().form('validate');
-	 	if(formflag){
-	 		$.Loading.show("正在处理付款，请稍候...");
-	 		savebtn.linkbutton("disable");
-			var options = {
-				url :  ctx+'/shop/admin/payment/pay.do',
-				type : "post",
-				dataType : "json",
-				success : function(responseText) {
+	 	if(true){
+			 var options = {
+				 	url :  ctx+'/shop/admin/payment/pay.do',
+				 	type : "POST",
+				 	dataType : 'json',
+				 	success : function(result) {
 					if (responseText.result == 1) {
-						$.Loading.success(responseText.message);
-						self.refresh(responseText);
+						layer.close(index);
+						location.reload();
 					}
 					if (responseText.result == 0) {
-						$.Loading.error(responseText.message);
-						savebtn.linkbutton("enable");
+						alert(responseText.message);
 					}
-				},
-				error : function() {
-					$.Loading.error("出错了:(");
-					savebtn.linkbutton("enable");
+				},error : function() {
+					
 				}
 			};
-			$('#order_form').ajaxSubmit(options);
+			_form.ajaxSubmit(options);
 	 	}
 	},
 
 	refresh : function(responseText) {
-
 		location.reload();
 	},
 	
@@ -467,12 +439,13 @@ var OrderDetail = {
 	/**
 	 * 作废
 	 */
-	cancel : function(orderId, canel_reason,savebtn) {
+	cancel : function(orderId, canel_reason) {
 		var self = this;
 		$.Loading.show("正在保存请稍候..");
-		savebtn.linkbutton("disable");
+		//savebtn.linkbutton("disable");
 		$.ajax({
-			url : ctx+'/shop/admin/order/cancel.do?orderId=' + orderId+ "&cancel_reason=" + canel_reason,
+			url : ctx+'/shop/admin/order/cancel.do?orderId=' + orderId,
+			data:{'cancel_reason':canel_reason},
 			dataType : "json",
 			success : function(responseText) {
 				if (responseText.result == 1) {
@@ -481,12 +454,12 @@ var OrderDetail = {
 				}
 				if (responseText.result == 0) {
 					$.Loading.error(responseText.message);
-					savebtn.linkbutton("enable");
+					//savebtn.linkbutton("enable");
 				}
 			},
 			error : function() {
 				$.Loading.error("出错了:(");
-				savabtn.linkbutton("enable");
+				//savabtn.linkbutton("enable");
 			}
 		});
 	},
@@ -497,26 +470,22 @@ var OrderDetail = {
 	
 	ship:function(orderId){
 		var self=this;
-		$.Loading.show("正在处理发货...");
-		$("#ship").linkbutton("disable");
+		//$.Loading.show("正在处理发货...");
 		$.ajax({
 			url :  ctx+'/shop/admin/order-print/ship.do?order_id='+orderId,
 			dataType : "json",
 			cache:false,
 			success : function(responseText) {
 				if (responseText.result == 1) {
-					$.Loading.success(responseText.message);
+					layer.msg(responseText.message, {icon: 6}); 
 					self.refresh(responseText);
 				}
 				if (responseText.result == 0) {
-					alert(responseText.message);
-					$.Loading.hide();
-					$("#ship").linkbutton("enable");
+					layer.msg(responseText.message, {icon: 5}); 
 				}
 			},
 			error : function() {
-				$.Loading.error("出错了:(");
-				$("#ship").linkbutton("enable");
+				layer.msg("出错了", {icon: 5}); 
 			}
 		});
 	},
@@ -531,7 +500,6 @@ var OrderDetail = {
 	confirmOrder : function(orderId) {
 		var self = this;
 		$.Loading.show("正在保存请稍候");
-		$("#confirmorder").linkbutton("disable");
 		$.ajax({
 			url :  ctx+'/shop/admin/order/confirm-order.do?orderId='+ orderId,
 			dataType : "json",
@@ -542,17 +510,50 @@ var OrderDetail = {
 				}
 				if (responseText.result == 0) {
 					$.Loading.error(responseText.message);
-					$("#confirmorder").linkbutton("enable");
 				}
 			},
 			error : function() {
 				$.Loading.error("出错了:(");
-				$("#confirmorder").linkbutton("enable");
 			}
 		});
-	}
-
+	} 
+ 
 };
+
+
+/**
+ * 绑定按钮
+ */
+layui.use('form', function() {
+	var form = layui.form();
+
+	//取消按钮
+	$(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+	//确认付款按钮提交
+	form.on('submit(payBtn)', function(data) {
+		var options = {
+			 	url :  ctx+'/shop/admin/payment/pay.do',
+			 	type : "POST",
+			 	dataType : 'json',
+			 	success : function(result) {
+				if (result.result == 1) {
+					layer.msg('保存成功', {icon: 6});
+					parent.layer.close(index);
+					parent.location.reload();
+				}
+				if (result.result == 0) {
+					layer.msg(result.message, {icon: 5});
+				}
+			},error : function() {
+				layer.msg('出现错误，请稍后重试', {icon: 5});
+			}
+		};
+		$("#payform").ajaxSubmit(options);
+		return false;
+	});
+});
 
 function isdigit(s) {
 	var r, re;

@@ -124,55 +124,6 @@ public class GoodsManager  implements IGoodsManager {
 			}
 		}
 	}
-	
-
-	/**
-	 * 添加商品商品草稿箱
-	 * @param goods 商品
-	 * @throws RuntimeException 商品货号重复
-	 * @author linkai 2017-2-24 添加注释
-	 * 
-	 */
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	@Log(type=LogType.GOODS,detail="添加了一个商品名为${goods.name}的商品")
-	public void adddraft(Goods goods) {
-		try {
-			//将po对象中有属性和值转换成map 
-			Map goodsMap = po2Map(goods);
-			
-			//商品状态 是否可用
-			goodsMap.put("disabled", 0);
-			
-			//商品创建事件
-			goodsMap.put("create_time", DateUtil.getDateline());
-			
-			//商品浏览次数
-			goodsMap.put("view_count", 0);
-			
-			//商品购买数量
-			goodsMap.put("buy_count", 0);
-			
-			//商品最后更新时间
-			goodsMap.put("last_modify", DateUtil.getDateline());
-			
-			//商品库存
-			goodsMap.put("store", 0);
-			
-			//添加商品
-			this.daoSupport.insert("es_goods", goodsMap);
-			
-			//获取添加商品的商品ID
-			Integer goods_id = this.daoSupport.getLastId("es_goods");
-			goods.setGoods_id(goods_id);
-			goodsMap.put("goods_id", goods_id);
-		} catch (RuntimeException e) {
-			if (e instanceof SnDuplicateException) {
-				throw e;
-			}
-		}
-               
-	}
 
 
 	/*
@@ -205,38 +156,6 @@ public class GoodsManager  implements IGoodsManager {
 			//标记商品被修改，会从新计算商品价格
 			cartManager.changeProduct(goods.getGoods_id());
 			
-		} catch (RuntimeException e) {
-			if (e instanceof SnDuplicateException) {
-				throw e;
-			}
-		}
-	}
-	/**
-	 * 修改商品商品草稿箱
-	 * @param goods 商品
-	 * @throws RuntimeException 商品货号重复
-	 * @author linkai 2017-2-24 添加注释
-	 * 
-	 */
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	@Log(type=LogType.GOODS,detail="修改商品名为${goods.name}的商品信息")
-	public void editdraft(Goods goods) {
-		goods.setLast_modify(DateUtil.getDateline()); //添加商品更新时间
-		Logger logger = Logger.getLogger(getClass());
-		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("开始保存商品数据...");
-			}
-			Map goodsMap = this.po2Map(goods);
-			
-			this.daoSupport.update("es_goods", goodsMap,
-					"goods_id=" + goods.getGoods_id());
-			if (logger.isDebugEnabled()) {
-				logger.debug("保存商品数据完成.");
-			}
-			//标记商品被修改，会从新计算商品价格
-			cartManager.changeProduct(goods.getGoods_id());
 		} catch (RuntimeException e) {
 			if (e instanceof SnDuplicateException) {
 				throw e;
@@ -815,10 +734,6 @@ public class GoodsManager  implements IGoodsManager {
 	@Override
 	public List searchGoods(Map goodsMap) {
 		String sql = creatTempSql(goodsMap, null);
-		Integer market_enable = (Integer) goodsMap.get("market_enable");
-		if(market_enable==null){
-			sql+=" and market_enable=1";
-		}
 		return this.daoSupport.queryForList(sql,Goods.class);
 	}
 	
@@ -1088,5 +1003,85 @@ public class GoodsManager  implements IGoodsManager {
 		return daoSupport.queryForInt(sql, storeId);
 	}
 
-	
+
+	/**
+	 * 修改商品商品草稿箱
+	 * @param goods 商品
+	 * @throws RuntimeException 商品货号重复
+	 * @author linkai 2017-2-24 添加注释
+	 * 
+	 */
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Log(type=LogType.GOODS,detail="修改商品名为${goods.name}的商品信息")
+	public void editdraft(Goods goods) {
+		goods.setLast_modify(DateUtil.getDateline()); //添加商品更新时间
+		Logger logger = Logger.getLogger(getClass());
+		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("开始保存商品数据...");
+			}
+			Map goodsMap = this.po2Map(goods);
+			
+			this.daoSupport.update("es_goods", goodsMap,
+					"goods_id=" + goods.getGoods_id());
+			if (logger.isDebugEnabled()) {
+				logger.debug("保存商品数据完成.");
+			}
+			//标记商品被修改，会从新计算商品价格
+			cartManager.changeProduct(goods.getGoods_id());
+		} catch (RuntimeException e) {
+			if (e instanceof SnDuplicateException) {
+				throw e;
+			}
+		}
+	}
+
+	/**
+	 * 添加商品商品草稿箱
+	 * @param goods 商品
+	 * @throws RuntimeException 商品货号重复
+	 * @author linkai 2017-2-24 添加注释
+	 * 
+	 */
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Log(type=LogType.GOODS,detail="添加了一个商品名为${goods.name}的商品")
+	public void adddraft(Goods goods) {
+		try {
+			//将po对象中有属性和值转换成map 
+			Map goodsMap = po2Map(goods);
+			
+			//商品状态 是否可用
+			goodsMap.put("disabled", 0);
+			
+			//商品创建事件
+			goodsMap.put("create_time", DateUtil.getDateline());
+			
+			//商品浏览次数
+			goodsMap.put("view_count", 0);
+			
+			//商品购买数量
+			goodsMap.put("buy_count", 0);
+			
+			//商品最后更新时间
+			goodsMap.put("last_modify", DateUtil.getDateline());
+			
+			//商品库存
+			goodsMap.put("store", 0);
+			
+			//添加商品
+			this.daoSupport.insert("es_goods", goodsMap);
+			
+			//获取添加商品的商品ID
+			Integer goods_id = this.daoSupport.getLastId("es_goods");
+			goods.setGoods_id(goods_id);
+			goodsMap.put("goods_id", goods_id);
+		} catch (RuntimeException e) {
+			if (e instanceof SnDuplicateException) {
+				throw e;
+			}
+		}
+               
+	}
 }

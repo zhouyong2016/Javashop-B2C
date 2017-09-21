@@ -1,76 +1,55 @@
 
-<div id="container_goods"></div>
+<div id="container_goods" style="height: 300px; margin: 0px 0px 50px 0px; top: 30px;"></div>
  
 <script type="text/javascript"> 
 
 $(function () {
-
-	var transform = "";
-
+	var myChart = echarts.init(document.getElementById('container_goods'));
 	
-	
-	sale_money= new Highcharts.Chart({                                           
-        chart: {
-        	renderTo:'container_goods',
-            type: 'bar'                                                    
-        },                                                                 
-        title: {
-			text: '行业下单商品数统计'                    
-        },                                                                  
-        xAxis: {                                                           
-            categories: [${tree}],
-            title: {                                                       
-                text: null                                                 
-            }                                                              
-        },                                                                 
-        yAxis: {                                                           
-            min: 0,                                                        
-            title: {                                                       
-                text: '单位 (件)',                             
-                align: 'high'
-            },                                                             
-            labels: {                                                      
-                overflow: 'justify'                                        
-            }
-        },
-        tooltip: {                                                         
-            valueSuffix: ' 件'                                       
-        },                                                                 
-        plotOptions: {                                                     
-            bar: {                                                         
-                dataLabels: {                                              
-                    enabled: true                                          
-                }                                                          
-            }                                                              
-        },                                                                 
-        legend: {                                                          
-            layout: 'vertical',                                            
-            align: 'right',                                                
-            verticalAlign: 'top',                                          
-            x: -40,                                                        
-            y: 100,                                                        
-            floating: true,                                                
-            borderWidth: 1,                                                
-            backgroundColor: '#FFFFFF',                                    
-            shadow: true                                                   
-        },                                                                 
-        credits: {
-            enabled: false
-        }, 
-        series: [{
-			name: '${date}',
-			data: [${data}]
-        }]
-    });
-		 
-	$(".highcharts-button").each(function(){
-		if(transform==""){
-			
-			transform=$(this).attr("transform"); 
-			
-		}
-		$(this).attr("transform",transform); 
-	    
-	});
+	sale_money= {                                           
+			color: ['#3398DB'],                                                                 
+	        title: {						//标题
+	        	x : 'center',
+				text: '行业下单商品数统计'                    
+	        },  
+	        toolbox: {   //图形右边工具栏
+		        show : true,
+		        feature : {
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+	        xAxis: {					//x坐标
+	        	type : 'value',
+	            name : '单位（件）'                                             
+	        },                                                                 
+	        yAxis: {                    //y坐标                                       
+	        	type :　'category',
+	            data : [${tree}],
+	            min : 0
+	        },
+	        tooltip: {                                          
+	        	trigger: 'item',		//触发类型
+	        	formatter : function(params){		//鼠标放到图表的提示信息               
+	        		var str = [${tree}];
+	        		var categoryname = [];
+	        		for(i=0; i< str.length;i++){
+	        			var dataname = {
+	        					name : str[i]
+	        			};
+	        			categoryname.push(dataname);
+	        		}
+	        		var hint = categoryname[params.dataIndex].name;
+	        		return hint + '<br/>' + params.seriesName + ": " + params.value + "件";
+	        	}
+	        },                                                                                  
+	        series: [{			//图表图形
+				name: '${date}',
+				data: [${data}],
+				type : 'bar'
+	        }]     
+	    };
+		myChart.setOption(sale_money);
 });
 </script> 

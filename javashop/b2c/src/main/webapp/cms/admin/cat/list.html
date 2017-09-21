@@ -1,237 +1,231 @@
-<#include '/admin/header.html' >
-<script type="text/javascript" src="${ctx}/cms/admin/js/cat.js"></script>
-<div id="catinfo" style="display: none;"></div>
-<form id="catForm" >
-	<div class="main">
-	 	<div class="buttonArea">
-			<a href="javascript:void(0)" class="button blueButton"
-				data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
-		</div>
-		<table class="easyui-treegrid" id="catdata"
-			data-options="url:'${ctx}/cms/admin/cat/list-json.do',fitColumns:'true',idField: 'cat_id',treeField: 'name'">
-			<thead>
-				<tr>
-					<th data-options="field:'cat_id',width:80">ID</th>
-					<th data-options="field:'name',width:200">名称</th>
-					<th data-options="field:'cat_order',width:100">排序</th>
-					<th data-options="field:'add',width:25" formatter="formatAdd">添加子</th>
-					<th data-options="field:'edit',width:25" formatter="formatEdit">编辑</th>
-					<th data-options="field:'delete',width:25" formatter="formatDelete">删除</th>
-					<th data-options="field:'action',width:100" formatter="formatCat">文章列表</th>
-					<th data-options="field:'addaction',width:100"
-						formatter="formaterAddArt">添加文章</th>
-				</tr>
-			</thead>
-		</table>
-	</div>
-</form>
-<script>
-var flag=false;
-var app_path = "";
-$(function(){
-	Cat.init();
-});
+ <#include '/admin/header.html' >
+<link rel="stylesheet" href="../css/list.css" />
+<link rel="stylesheet" href="../css/demo.css" />
+<link rel="stylesheet" href="../css/metroStyle/metroStyle.css" />
+<style>
+div.zTreeDemoBackground {
+	width: 100% !important;
+}
 
-function formatAdd(value, row, index) {
-	var val = "<a href='javascript:void(0);' onclick='appendChildren(" + row.cat_id+ ",1)'><img class='add' src='${ctx}/cms/admin/images/transparent.gif'></a>";
-	return val;
+.admin-main {
+	min-width: 860px;
 }
-function formatEdit(value, row, index) {
-	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+ row.cat_id + ")' ></a>";
-	return val;
-}
-function formatDelete(value, row, index) {
-	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.cat_id+ ')"><img catid="'+row.cat_id+'" src="${ctx}/cms/admin/images/transparent.gif"></a>';
-	return val;
-}
-function formatCat(value,row,index){
-	var val="<a href='#' onclick=\"newTab('文章列表','${ctx}/cms/admin/data/list.do?catid="+row.cat_id+"')\">文章列表</a>";
-	return val;
-}
-function formaterAddArt(value,row,index){
-	var val="<a href='#' onclick=\"newTab('添加文章','${ctx}/cms/admin/data/add.do?catid="+row.cat_id+"')\">添加文章</a>";
-	return val;
-}
-function append(){
-	 $("#catinfo").show();
-	　　	$('#catinfo').dialog({
-	　　		title: '添加文章',			
-	　　		width: 800,
-	  		height:500,
-	  		top:20,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/cms/admin/cat/add.do', 	 
-	　　		modal: true,
-	　　		onLoad : function() {
-	　　			if(flag){
-					UE.getEditor('editor').destroy();
-				}
-				var ue = UE.getEditor('editor', {
-				    zIndex: 99999
-				});
-				flag = true;
-			},
-	　　		buttons: [{				
-	　　			 text:'保存',
-	　　			 handler:function(){
-	　　				 var savebtn = $(this);
-	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-	　　				 if($("#model_id").val()==0){
-	　　					 disabled=true;
-	　　					 $.Loading.error("请选择文章模型!");
-	　　				 }
-	　　				 if(!disabled){
-	　　				 	 catinfoForm("add",savebtn);
-	　　				 }
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				$('#catinfoForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
-}
-function edit(cat_id){
-	 $("#catinfo").show();
-	　　	$('#catinfo').dialog({
-	　　		title: '修改文章',			
-	　　		width: 800,
-	  		height:500,
-	　　		top:20,
-	　　		closed: false,
-	　　		cache: false,
-	　　		href: '${ctx}/cms/admin/cat/edit.do?cat_id='+cat_id, 	 
-	　　		modal: true,
-	　　		onLoad : function() {
-	　　			if(flag){
-					UE.getEditor('editor').destroy();
-				}
-				var ue = UE.getEditor('editor', {
-				    zIndex: 99999
-				});
-				flag = true;
-			},
-	　　		buttons: [{				
-	　　			 text:'保存',
-	　　			 handler:function(){
-	　　				 var editbtn = $(this);
-	　　				 var disabled=editbtn.hasClass("l-btn-disabled");
-	　　				 if(!disabled){
-		　　				 $.Loading.show("正在保存请稍候...");
-		　　				 editbtn.linkbutton("disable");	
-	　　				 	 catinfoForm("edit",editbtn);
-	　　				 }
-	　　			 }
-	　　			 },{
-	　　			 text:'还原',
-	　　			 handler:function(){
-	　　				$('#catinfoForm')[0].reset() ;
-	　　			 }
-	　　		}]
-	　　	});
-}
-function catinfoForm(val,savebtn){
-	var caturl="";
-	if(val=="edit"){caturl="${ctx}/cms/admin/cat/save-edit.do?ajax=yes"}
-	if(val=="add"){caturl="${ctx}/cms/admin/cat/save-add.do?ajax=yes"}
-	
-	var formflag= $("#catinfoForm").form().form('validate');
-	if(formflag){
-		$.Loading.show("正在保存请稍候...");
-		savebtn.linkbutton("disable");	
-		var options = {
-				url : caturl,
-				type : "POST",
-				dataType : "json",
-				success : function(result) {
-					if(result.result==1){
-						$("#catinfo").dialog('close');
-						$.Loading.success(result.message);
-						$('#catdata').treegrid('reload');
-					}else{
-						$.Loading.error(result.message);		
-					}
-					savebtn.linkbutton("enable");
-			 	},
-			 	error : function(e) {
-			 		$.Loading.error('出现错误，请重试');
-			 		savebtn.linkbutton("enable");
-				}
-			};
-		$('#catinfoForm').ajaxSubmit(options);	
-	}else{
-		$.Loading.hide();
-		savebtn.linkbutton("enable");
-	}
-}
-function appendChildren(cat_id){
-	$("#catinfo").show();
-　　	$('#catinfo').dialog({
-　　		title: '添加文章',			
-　　		width: 800,
-  		height:500,
-　　		top:20,
-　　		closed: false,
-　　		cache: false,
-　　		href: '${ctx}/cms/admin/cat/add.do?cat_id='+cat_id, 	 
-　　		modal: true,
-　　		onLoad : function() {
-　　			if(flag){
-				UE.getEditor('editor').destroy();
-			}
-			var ue = UE.getEditor('editor', {
-			    zIndex: 99999
-			});
-			flag = true;
+</style>
+<div class="admin-main">
+	<div class="paperbox" style="width: 20%; white-space: nowrap;">
+		<div class="paperbox-s">
+			<span>文章分类</span> <a style="margin-right: 2%; margin-top: 2%;"
+				class="layui-btn  layui-btn-small" id="management">管理分类</a>
+		</div>
+		<!-- //插件 -->
+		<div class="node">
+			<div class="zTreeDemoBackground left">
+				<ul id="treeDemo" class="ztree"></ul>
+			</div>
+		</div>
+	</div>
+	<!-- 右侧 -->
+
+	<div class="article" style="white-space: nowrap;">
+		<div class="classification">
+			<span> <a id="fenlei">分类名称</a>-文章列表
+			</span> <span style="display: inline-block; width: 50%;"> <a
+				class="layui-btn  layui-btn-small" id="add-article"
+				style="margin-top: -4px;">添加文章</a> <input type="text" name="keyword"
+				placeholder="请输入标题" autocomplete="off" class="layui-input keyword">
+				<button class="layui-btn-primary layui-btn layui-btn-small"
+					style="margin-top: -2px;" id="search">
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</span>
+		</div>
+		<!-- 表格-->
+		<div class="list-form">
+			<table id="modeldata" class="layui-table site-table table-hover"
+				width="100%" lay-skin="line">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>页面标题</th>
+						<th>排序</th>
+						<th>添加时间</th>
+						<th>修改</th>
+						<th>删除</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var cur_cat_id = 0;
+
+	var setting = {
+		view : {
+			showIcon : showIconForTree
 		},
-　　		buttons: [{				
-　　			 text:'保存',
-　　			 handler:function(){
-　　				 var savebtn = $(this);
-　　				 var disabled=savebtn.hasClass("l-btn-disabled");
-　　				 if($("#model_id").val()==0){
-　　					 disabled=true;
-　　					 $.Loading.error("请选择文章模型!");
-　　				 }
-　　				 if(!disabled){
-　　				 	 catinfoForm("add",savebtn);
-　　				 }
-　　			 }
-　　			 },{
-　　			 text:'还原',
-　　			 handler:function(){
-　　				$('#catinfoForm')[0].reset() ;
-　　			 }
-　　		}]
-　　	});
-	
-}
-function del(cat_id){
-	if(!confirm("确认要删除文章吗？")){	
-		return ;
+		async : {
+			enable : true,
+			url : "${ctx}/cms/admin/cat/show-cat-tree.do",
+			autoParam : [ "cat_id" ]
+		},
+		callback : {
+			onClick : zTreeOnClick
+		}
+	};
+
+	function filter(treeId, parentNode, childNodes) {
+		if (!childNodes)
+			return null;
+		for (var i = 0, l = childNodes.length; i < l; i++) {
+			childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+		}
+		return childNodes;
 	}
-	$.Loading.show("正在删除请稍候..");
-	var options = {
-			url : "${ctx}/cms/admin/cat/delete.do?ajax=yes&cat_id="+cat_id,
+
+	function showIconForTree(treeId, treeNode) {
+		return !treeNode.isParent;
+	};
+
+	//点击ztree单个节点事件
+	function zTreeOnClick(event, treeId, treeNode) {
+		var name = treeNode.name;
+		$("#fenlei").html(name);
+		loadData(treeNode.cat_id);
+		cur_cat_id = treeNode.cat_id;
+
+	};
+	//管理分类的点击事件
+	$("#management").click(function() {
+		layer.open({
+			title : "管理分类",//标题
+			maxmin : true,//右上角可否放大缩小
+			type : 2,//弹框的类型
+			shade : [ 0.3, '#000' ],//黑色背景
+			shadeClose : false,//黑色背景是否可以点击关闭
+			content : "${ctx}/cms/admin/data/manage-cat.do",//内容的URL
+			area : [ '700px', '500px' ],//弹框大小
+			scrollbar : false,//是否允许浏览器出现滚动条
+		});
+	});
+
+	//获取表格内容的js区域
+	var table;
+	$(function() {
+
+		$.fn.zTree.init($("#treeDemo"), setting);
+
+		table = $('#modeldata')
+				.DataTable(
+						{
+							"language" : {
+								"url" : "${staticserver}/media/zh_CN.txt"
+							},
+							"processing" : true,
+							"serverSide" : true,
+							"ordering" : false,
+							"searching" : false,
+							"lengthChange" : false,
+							ajax : {
+								//指定数据源
+								type : "post",
+								url : '${ctx}/cms/admin/data/list-json.do',
+							},
+							columns : [ //定义列
+									{
+										data : "id"
+									},
+									{
+										data : "page_title"
+									},
+									{
+										data : "sort"
+									},
+									{
+										data : null,
+										"render" : function(obj) {
+											if (obj.add_time == null) {
+												return "";
+											} else {
+												return getFormatDateByLong(
+														obj.add_time,
+														"yyyy-MM-dd");
+											}
+										}
+									},
+									{
+										data : null,
+										"render" : function(data, type, row) {
+											return "<a class='layui-btn layui-btn-small layui-btn-normal' name='change_btn' onclick=\"newTab('修改','${ctx}/cms/admin/data/edit.do?dataid="
+													+ data["id"]
+													+ "&catid="
+													+ data["cat_id"]
+													+ "')\")>编辑</a>";
+										}
+									},
+									{
+										data : null,
+										"render" : function(data, type, row) {
+											return "<a class='layui-btn layui-btn-small layui-btn-danger' name='change_btn' onclick='del("
+													+ row.id
+													+ ")'><img catid='"+row.id+"' src='${ctx}/cms/admin/images/transparent.gif'>删除</a>"
+										}
+									} ]
+						});
+
+		//添加文章的点击事件
+		$("#add-article").click(function() {
+			if (cur_cat_id == 0) {
+				cur_cat_id = 1;
+			}
+			newTab("添加文章", "${ctx}/cms/admin/data/add.do?catid=" + cur_cat_id);
+		});
+
+		//搜索按钮的点击事件
+		$("#search").click(function() {
+			if (cur_cat_id == 0) {
+				cur_cat_id = 1;
+			}
+			loadData(cur_cat_id);
+		})
+
+	})
+
+	//加载文章数据
+	function loadData(catId) {
+		var keyword = $(".keyword").val();
+		var param = "catid=" + catId + "&searchText=" + keyword;
+		var url = table.ajax.url("${ctx}/cms/admin/data/list-json.do?" + param);
+		url.load();
+	}
+
+	//删除
+	function del(id) {
+		var catid = $('#catid').val();
+
+		if (!confirm("确认要删除吗？")) {
+			return;
+		}
+		var options = {
+			url : "${ctx}/cms/admin/data/delete.do?ajax=yes&dataid=" + id
+					+ "&catid=" + catid,
 			type : "POST",
 			dataType : 'json',
 			success : function(result) {
-				if(result.result==1){
+				if (result.result == 1) {
 					$.Loading.success(result.message);
-					$('#catdata').treegrid('reload');
-				}else{
+					table.ajax
+							.url(
+									ctx + "/cms/admin/data/list-json.do?catid="
+											+ catid).load();
+				}
+				if (result.result == 0) {
 					$.Loading.error(result.message);
 				}
-			},
-			error : function(e) {
-				$.Loading.error("出现错误 ，请重试");
 			}
-	};
-	$('#catForm').ajaxSubmit(options);	
-}
-
-
+		};
+		$('#dataForm').ajaxSubmit(options);
+	}
 </script>
+
 <#include '/admin/footer.html' >

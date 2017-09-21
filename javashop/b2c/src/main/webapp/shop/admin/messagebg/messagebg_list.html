@@ -1,54 +1,103 @@
 <#include '/admin/header.html' >
-<div id="loading"></div>
-<div class="main">
-	<div class='buttonArea'>
-		<a href="javascript:void(0)" class="button" onclick="newTab('发送消息','${ctx}/shop/admin/message/add.do')">发送消息</a>
-	</div>
-	<div class="clear height10"></div>
-	<div class="shadowBoxWhite tableDiv">
-		<form id="messageform">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/shop/admin/message/list-json.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
-				pagination="true" id="messagedata">
-				<thead>
-					<tr>
-						<th data-options="field:'title',width:150" formatter="formatTitle">标题</th>
-						<th data-options="field:'content',width:200" formatter="formatContent">消息内容</th>
-						<th data-options="field:'sendtype',width:200" formatter="formatSendType">发送类型</th>
-						<th data-options="field:'sendtime',width:300" formatter="formatDateline">发送时间</th>
-<!-- 						<th data-options="field:'adminid',width:300" >发送人</th> -->
-					</tr>
-				</thead>
-			</table>
-		</form>
-	</div>
-	<div id="divdia"></div>
-</div>
-<script type="text/javascript">
-	function formatSendType(value, row, index) {
-		var val;
-		if (value == 0) {
-			val = "全站";
-		} else {
-			val = "指定会员";
-		}
-		return val;
-	}
+<style>
+#messagedata tbody tr td:nth-child(2){
+       white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 300px;
+    display: block;
+} 
+.layui-table tr{
+border-bottom:1px solid #ccc;
+}
+.layui-table[lay-skin=line] td, .layui-table[lay-skin=line] th{
+border:none;
+}
 
-	function formatContent(value, row, index) {
-		var val=value;
-		if(value.length>20){
-			val=value.substring(0,20)+"......";
-		}
-		return "<div title='"+value+"'>"+val+"</div>";
-	}
+</style>
+
+<div  class="admin-main">
+   <div>
+        <!--提示区域  -->
+        <div class="page_explain">
+            <h2>操作提示</h2>
+            <ul>
+                <li><span>·</span>该列表可以发送站内消息，发送方式有，全站发送，和指定会员发送两种方式。</li>
+                <li><span>·</span>全站发送：则会通知到每一个站内会员。 </li>
+                <li><span>·</span>指定会员发送：需要手动来添加，或者搜索到该会员，进行发送消息。</li>
+            </ul>
+        </div>
+        <!--按钮操作  -->
+        <div class="table_control">
+            <div class="table_opera">
+                <button type="button" class="layui-btn layui-btn-primary " title="发送消息" onclick='newTab("发送消息","${ctx}/shop/admin/message/add.do");'>
+                  <i class="icon iconfont icon-community_light"></i></button>
+                <button type="button" class="layui-btn layui-btn-primary " title="说明" id="explain"><i class="icon iconfont icon-tishi1"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!--表格区域  -->
+   <form id="messageform"> 
+     <table id="messagedata" class="layui-table site-table table-hover " width="100%" lay-skin="line">
+        <thead>
+          <tr>
+            <th width="150px">标题</th>
+            <th width="300px">消息内容</th>
+            <th width="200px">发送类型</th>
+            <th width="200px">发送时间</th>
+          </tr>
+        </thead>
+
+     </table>
+     <!--传值等操作  -->
+    <div id="addBrand" ></div>
+   </form>
+</div>
+
+<!--js区域  -->
+<script>
+$(function(){
 	
-	function formatTitle(value, row, index) {
-		return value;
+	var table = $('#messagedata').DataTable({
+		"language": {
+	        "url": "${staticserver}/media/zh_CN.txt"
+	    },
+	    "processing": true,
+	    "serverSide": true,
+	    "ordering": false,
+	    "searching": false,
+	    "lengthChange": false,
+	    ajax: {
+	        //指定数据源
+	        type:"post",
+	        url: '${ctx}/shop/admin/message/list-json.do',
+	    },
+	    columns: [ //定义列
+	        {data: "title"},
+	        {data: "content"},
+	        {data: null,"render":function(data,row,index){
+	        	return formatSendType(data.sendtype,row,index)
+	        }},
+	        {data: null,"render": function(data, type, row) {
+	        	if(data.sendtime==null){
+	        		return " ";
+	        	}else{
+	        		return getFormatDateByLong(data.sendtime, "yyyy-MM-dd hh:mm:ss");
+	        	}
+	       	}}
+	     ]
+	});
+});
+//发送类型
+function formatSendType(value, row, index) {
+	var val;
+	if (value == 0) {
+		val = "全站";
+	} else {
+		val = "指定会员";
 	}
-	
-	function formatDateline(value, row, index) {
-		return getFormatDateByLong(row.sendtime, "yyyy-MM-dd hh:mm:ss");
-	}
+	return val;
+}
 </script>
 <#include '/admin/footer.html' >

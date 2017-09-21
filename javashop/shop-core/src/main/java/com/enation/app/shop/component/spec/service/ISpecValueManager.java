@@ -44,5 +44,23 @@ public interface ISpecValueManager {
 	 */
 	public Map get(Integer value_id);
 	
+	/**
+	 * 检查添加的规格是否存在
+	 * @param specValue 规格值
+	 * @return
+	 */
+	public int checkSpecValue(String specValue,String specImage);
 	
+	/**
+	 * 修改规格商品，修改规格删除之前添加的新规格
+	 * @param goodsId
+	 */
+	public void delInherentSpec(Integer goodsId);
+	
+	/**
+	 * 根据规格类型ID跟规格值查询
+	 * @param specId
+	 * @param spec_value
+	 */
+	public int selSpecValAndId(int specId,String spec_value,String image);
 }

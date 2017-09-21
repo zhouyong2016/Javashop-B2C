@@ -47,7 +47,7 @@ public class ReceiptPlugin extends AutoRegisterPlugin implements
 			String invoice_content = request.getParameter("receiptContent");
 			if(!StringUtil.isEmpty(invoice_content)){
 				Receipt receipt= new Receipt();
-				receipt.setOrder_id(order.getOrder_id());
+//				receipt.setOrder_id(order.getOrder_id());
 				receipt.setTitle(invoice_title);
 				receipt.setContent(invoice_content);
 				this.receiptManager.add(receipt);
@@ -58,7 +58,7 @@ public class ReceiptPlugin extends AutoRegisterPlugin implements
 			String invoice_content = request.getParameter("receiptContent");
 			if(!StringUtil.isEmpty(invoice_title) && !StringUtil.isEmpty(invoice_content)){
 				Receipt invoice= new Receipt();
-				invoice.setOrder_id(order.getOrder_id());
+//				invoice.setOrder_id(order.getOrder_id());
 				invoice.setTitle(invoice_title);
 				invoice.setContent(invoice_content);
 				this.receiptManager.add(invoice);

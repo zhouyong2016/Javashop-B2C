@@ -1,19 +1,71 @@
-<div class="easyui-panel" style="border-style:none;" >
-		<form id="addDepotForm" method="post" class="validate" >
-			<table>
-				<tr>
-					<td>仓库名称</td>
-					<td><input class="easyui-validatebox input_text " type="text" name="name" id="name" data-options="required:true" maxlength="13" dataType="string" isrequired="true"/>
-					</td>
-				</tr>
-				<tr>
-					<td>是否为默认仓库</td>
-					<td>
-					<input class="easyui-validatebox" type="checkbox" id="is_default"  data-options="required:false"/>
-					<input type="hidden" id="choose"name="choose" /> </td>
-				</tr>
-			</table>
-		</form>
+<#include '/admin/sonheader.html' >
+<style>
+  .layui-form-item label{
+    width:140px!important;
+  }
+  .layui-form-checkbox{
+    margin-top:4px!important;
+  }
+</style>
+<div class="main">
+    <!--表单区域  -->
+	<form id="addDepotForm" class="layui-form layui-form-pane" action="" enctype="multipart/form-data">
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">仓库名称</label>
+    		<div class="layui-input-block">
+      			<input type="text"  name="name" id="name" maxlength="13" lay-verify="required" autocomplete="off" style="width: 89%" class="layui-input" >
+    		</div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+    		<label class="layui-form-label">是否为默认仓库</label>
+    		<div class="layui-input-block">
+      			<input type="checkbox"  id="is_default"  lay-verify="" autocomplete="off" class="layui-input">
+      			<input type="hidden" id="choose"name="choose" />
+    		</div>
+  		</div>
+  		
+  		<div class="layui-layer-btn layui-layer-btn-" style="padding:8px 12px;z-index:1000;position: fixed;left: 1px;width: 96%;height: 40px; background:rgba(230,230,230,0.8)"> 
+  			<a class="layui-layer-btn0" type="submit" lay-submit="" lay-filter="save_depot">保存</a>
+  			<a type="reset" class="layui-layer-btn1">取消</a>
+  		</div>
+  	</form>
 </div>
-	
+<script type="text/javascript">	
+var index = parent.layer.getFrameIndex(window.name);
 
+layui.use(['form', 'layedit', 'laydate'], function(){
+    var form = layui.form()
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+    
+    $(".layui-layer-btn1").click(function(){
+    	parent.layer.close(index);
+    });
+    
+    form.on('submit(save_depot)', function(data){
+    	var check = $(".layui-unselect").hasClass("layui-form-checked");
+    	if(check == true){
+    		$("#choose").val(1);
+    	}else{
+    		$("#choose").val(0);
+    	}
+    	var options = {
+   			url:ctx+"/shop/admin/depot/save-add.do",
+   			type:"post",
+   			dataType:"json",
+   			success:function(data){
+   				if(data.result==1){	
+   					$.Loading.success(data.message);
+   					parent.layer.close(index); //再执行关闭        
+   					parent.table.ajax.url(ctx+"/shop/admin/depot/list-json.do").load();
+   				}
+   			}
+   		};
+   		$("#addDepotForm").ajaxSubmit(options);
+       return false;
+    });
+    
+});
+</script>

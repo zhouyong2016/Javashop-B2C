@@ -5,8 +5,6 @@
 <link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="${ctx}/themes/default/js/jquery-1.8.3.min.js"></script>
-<script src="${ctx}/themes/default/js/highcharts/highcharts.js"></script>
-<script src="${ctx}/themes/default/js/highcharts/modules/exporting.js"></script>
 
 </style>
 <div class="main">
@@ -36,30 +34,10 @@
 		</div>
 		
 	</div>	
-	
-	<!-- <div class="shadowBoxWhite whiteBox">
-		<table cellpadding="5" width="100%">
-			<tr>
-				<th class="title" colspan="4">下单金额统计</th>
-			</tr>
-			<tr>
-				<th width="100px"><div id="container" style="min-width: 310px; height: 300px; margin: 0 auto"></div></th>
-			</tr>
-		</table>
-	</div> -->
-	
-	<!-- <div class="shadowBoxWhite whiteBox" >
-		<table cellpadding="5" width="100%">
-			<tr>
-				<th class="title" colspan="4">订单统计明细列表</th>
-			</tr>
-			<tr>
-				<th width="100px">地区费用设置</th>
-			</tr>
-		</table>
-	</div> -->
+
 	
 </div>
+
 
 
 <script type="text/javascript">
@@ -79,63 +57,5 @@
 </script>
 
 
-<!-- 
-<script type="text/javascript">
-$(function () {
-	
-	   var data=[17.0, 16.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6];
-		
-	   var ref = new Highcharts.Chart({
-	        chart: {
-	            type: 'line',
-	            renderTo: 'container'
-	        },
-	        title: {
-	            text: '标题'
-	        },
-	        subtitle: {
-	            text: '副标题'
-	        },
-	        xAxis: {
-	            categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        },
-	        yAxis: {
-	            title: {
-	                text: '温度 (°C)'
-	            },
-	            labels:{
-	            	formatter: function () {
-	                    return this.value + 'k';
-	                }
-	            }
-	        },
-	        plotOptions: {
-	            line: {
-	                dataLabels: {
-	                    enabled: true
-	                },
-	                enableMouseTracking: false
-	            }
-	        },
-	        series: [{
-	            name: '今天',
-	            data: data
-	        }, {
-	            name: '昨天',
-	            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-	        }]
-	    });
-	    
-
-		$("#ref").click(function(){
-			/* jQuery.getJSON('http://localhost:8080/JQueryPIC/ajax', null, function(data) {  
-	                  //为图表设置值  
-				chart.series[0].setData(data);  
-			}); */
-			var data=[17.0, 16.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6];
-			ref.series[0].setData(data); 
-		})
-	});
-</script> -->
 
 <#include '/admin/footer.html' >

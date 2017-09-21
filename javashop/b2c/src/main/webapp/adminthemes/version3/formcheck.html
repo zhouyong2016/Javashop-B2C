@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>表单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+</head>
+
+<body>
+<div style="margin: 15px;">
+    <blockquote class="layui-elem-quote">
+     对于表单来说,我们创立一个form表单一般都会对其加一些验证条件开进行提交前验证,而layui集成了一些验证方式,它的验证非常简单,
+     只需要更改 lay-verify=""的值即可,如 lay-verify="title"即是验证标题;
+    </blockquote>
+    <h1><strong>更多验证条件</strong></h1><button  class="layui-btn layui-btn-small layui-btn-normal" type="button" onclick="jsCopy('content' )">复制代码</button>
+     <pre class="layui-code"  lay-title=" " lay-height="" lay-skin="" lay-encode="true" id="content" >
+lay-verify="required" //验证必填项
+lay-verify="phone" //验证手机
+lay-verify="email" //验证邮箱
+lay-verify="number" //验证数字
+lay-verify="date" //验证日期
+lay-verify="url" //验证链接
+lay-verify="identity" //验证身份证
+lay-verify="pass" //验证密码
+lay-verify="IsInteger" //验证整数
+lay-verify="IsNotEmpty" //验证不能为空
+lay-verify="IsNumber" //验证数字
+lay-verify="IsIntegerNotNagtive" //验证非负整数
+lay-verify="IsIntegerPositive" //验证正整数
+lay-verify="IsDecimal" //验证小数
+lay-verify="IsEnglishCharacter" //验证只包含英文字母
+lay-verify="IsIntegerAndEnglishCharacter" //验证只包含英文字母和数字
+lay-verify="IsChineseCharacter" //验证只包含汉字
+lay-verify="IsZipCode" //验证邮政编码
+     </pre>
+    <ul>
+
+    </ul>
+</div>
+
+<script type="text/javascript">
+    function jsCopy(id){
+        const range = document.createRange();
+        range.selectNode(document.getElementById(id));
+
+        const selection = window.getSelection();
+        if(selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+
+        document.execCommand('copy');
+    }
+</script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script src="js/form.js"></script>
+</body>
+
+</html>

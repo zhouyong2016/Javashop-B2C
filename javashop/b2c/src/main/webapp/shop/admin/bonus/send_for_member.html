@@ -1,38 +1,71 @@
 <#include '/admin/header.html' >
+<style type="text/css">
+	.grade{
+    font-size: 18px;
+    display: inline-block;
+    width: 200px;
+    height: 40px;
+    margin-left: 20px;
+    margin-top: 20px;
+    font-weight: normal;
+	}
+	.user{
+    font-size: 18px;
+    margin-left: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: normal;
+	}
+	#sendForLvBtn{
+    width: 118px;
+    height: 30ps;
+    height: 30px;
+    line-height: 30px;
+    margin: -50px 0px 0px 265px;
+	}
+	#searchBtn{
+	    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    margin: -48px 0px 0px 280px;
+    }
+</style>
+<div  class="admin-main">
 <div class="main">
 	<div class="shadowBoxWhite  whiteBox">
 		<form method="post" id="sendLvForm" class="validate">
 			<table width="100%">
 				<tr>
-					<th class="title" colspan="4">按用户等级发放红包</th>
+					<th class="title grade" colspan="4">按用户等级发放红包</th>
 					<input type="hidden" name="typeid" value="${typeid}" />
 				</tr>
-				<tr>
-					<th style="text-align: right;width: 6%">用户等级：</th>
-					<td style="width: 200px;"><select name="lvid"> <#list lvList as lv>
+				<tr style="margin-left: 54px;display: inline-block;width: 631px;">
+					<th style="text-align: right;width: 20%;    font-weight: 200;">用户等级：</th>
+					<td style="width: 200px;"><select name="lvid" style="height:30px;"> <#list lvList as lv>
 							<option value="${lv.lv_id}">${lv.name}</option> </#list>
 					</select>
 					</td>
-					<th width="150px" ><a class="easyui-linkbutton"
-						id="sendForLvBtn">确定发送红包</a></th>
-					<td width="40%"></td>
 				</tr>
 			</table>
 		</form>
+					<th width="150px" >
+						<button class="layui-btn layui-btn layui-btn-primary" id="sendForLvBtn" style="font-weight: 100;width: 130px;">确定发送红包
+						</button>
+					</th>
 	</div>
 	<br />
 	<div class="shadowBoxWhite  whiteBox">
 		<table width="100%">
 			<tr>
-				<th class="title" colspan="8">按用户发放红包</th>
+				<th class="title user" colspan="8">按用户发放红包</th>
 			</tr>
-			<tr>
+			<tr style="margin-left: 54px;display: inline-block;margin-bottom: 20px;">
 				<td colspan="3">
 					<form method="post" id="searchMemberForm" class="validate">
-						关键字：<input type="text" id="keyword" style="width: 200px"
+						关键字：<input type="text" id="keyword" style="width: 200px;height:25px;"
 							name="keyword" class="input_text" />
-							 <a class="easyui-linkbutton" id="searchBtn">搜索</a>
 					</form>
+					<button class="layui-btn layui-btn layui-btn-primary" id="searchBtn" style="width: 85px;">搜索</button>
 				</td>
 			</tr>
 
@@ -42,15 +75,15 @@
 						<input type="hidden" name="typeid" value="${typeid}" />
 						<table width="100%" >
 							<tr>
-								<th width="200px" align="center">会员列表</th>
-								<th width="60px" align="center">操作</th>
-								<th width="200px" align="center">给下列用户发送红包</th>
+								<th width="200px" align="center" style="text-align: center;margin-left: 140px;display: inline-block;">会员列表</th>
+								<th width="160px" align="center" style="text-align: center;">操作</th>
+								<th width="400px" align="center" style="display: inline-block;margin-left: 67px;">给下列用户发送红包</th>
 								<th width="200px"></th>
 								<th width="200px"></th>
 							</tr>
 
 							<tr>
-								<td><select id="memberlist" size="15" style="width: 260px"
+								<td><select id="memberlist" size="15" style="width: 260px;margin-left: 112px;"
 									multiple="multiple">
 								</select></td>
 								<td align="center">
@@ -67,73 +100,69 @@
 									</select>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="4" align="center">
-								<br>
-									<a class="easyui-linkbutton submitBtn"  id="sendForMemberBtn" >确定发送红包</a>
-								</td>
-							</tr>
+							
 						</table>
 					</form>
-				</td>
-			</tr>
+								
+									<button class="layui-btn layui-btn layui-btn-primary"  id="sendForMemberBtn" style=" width: 115px; margin-left:355px;margin-top:20px;">确定发送红包</button>
+							
 		</table>
 	</div>
-
+	</div>
 	<script>
+	
+	   //根据会员等级发放优惠券
 		$(function() {
 			$("#sendForLvBtn").click(function() {
 				$("#sendLvForm").ajaxSubmit({
 					url : "${ctx}/shop/admin/bonus/send-for-member-lv.do?ajax=yes",
 					dataType : "json",
-					success : function(res) {
-						if (res.result == 1) {
-							parent.SelectTable("优惠券列表");
-							parent.refreshCurrentTab();
-							$.Loading.successMessage("成功发放[" + res.data.count + "]个红包",3000);
+					success : function(data) {
+						if (data.result == 1) {
+							$.Loading.success("成功发放[" + data.data.count + "]个红包");
+							newTab("优惠券列表","${ctx}/shop/admin/bonus-type/list.do");
 						} else {
-							$.Loading.errorMessage(res.message,3000);
+							$.Loading.error(data.message);
 						}
 					},
 					error : function() {
-						$.Loading.errorMessage("红包发放失败",3000);
+						$.Loading.error("红包发放失败");
 					}
 				});
 			});
-
+			
+			//根据会员发放优惠券
 			$("#sendForMemberBtn").click(function() {
-				
 				//判断是否添加了领取优惠券的会员 add by DMRain 2016-5-16
 				if ($("#memberids option").length == 0) {
-					$.Loading.errorMessage("还未添加发放优惠券的用户",3000);
+					$.Loading.error("还未添加发放优惠券的用户",3000);
 					return false;
 				}
-				
 				$("#memberids option").attr("selected", true);
-
 				$("#sendMemberForm").ajaxSubmit({
 					url : "${ctx}/shop/admin/bonus/send-for-member.do",
 					dataType : "json",
 					success : function(res) {
 						if (res.result == 1) {
-							parent.SelectTable("优惠券列表");
-							parent.refreshCurrentTab();
-							$.Loading.successMessage("成功发放[" + res.data.count + "]个红包",3000);
+							$.Loading.success("成功发放[" + res.data.count + "]个红包",3000);
+							newTab("优惠券列表","${ctx}/shop/admin/bonus-type/list.do");
 						} else {
-							$.Loading.errorMessage(res.message,3000);
+							$.Loading.error(res.message,3000);
 						}
 					},
 					error : function() {
-						$.Loading.errorMessage("红包发放失败",3000);
+						$.Loading.error("红包发放失败",3000);
 					}
 				});
 			});
-
+			
+            //搜索会员
 			$("#searchBtn").click(function() {
 				if ($("#keyword").val() == "") {
-					$.Loading.errorMessage("请输入关键字",3000);
+					alert("请输入关键字");
 					return false;
 				}
+				
 				$("#searchMemberForm").ajaxSubmit({
 					url : "${ctx}/api/shop/member/search.do",
 					dataType : "json",
@@ -152,17 +181,18 @@
 												+ "]</option>");
 								}
 							}
-
+							
 						} else {
-							$.Loading.errorMessage(res.message,3000);
+							$.Loading.error(res.message,3000);
 						}
 					},
 					error : function() {
-						$.Loading.errorMessage("会员搜索失败",3000);
+						$.Loading.error("会员搜索失败",3000);
 					}
 				});
 			});
-
+            
+            //添加会员
 			$("#addUserBtn").click(function() {
 				$("#memberlist option:selected").each(function(i, v) {
 					var $this = $(this);
@@ -174,21 +204,19 @@
 							return;
 						}
 					});
-
 					if (!exist) {
 						$(this).clone().appendTo($("#memberids"))
 					}
-
 				});
 			});
-
+            
+            //删除会员
 			$("#delUserBtn").click(function() {
 				$("#memberids option:selected").each(function(i, v) {
 					$(this).remove();
 
 				});
 			});
-
 		});
 	</script>
-	<#include '/admin/footer.html' >
+<#include '/admin/footer.html' >

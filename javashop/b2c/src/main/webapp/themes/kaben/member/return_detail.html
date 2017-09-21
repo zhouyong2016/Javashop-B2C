@@ -22,6 +22,11 @@
 						审核拒绝
 					<#elseif sellBack.tradestatus  == 6>
 						已退款
+					
+					<#elseif sellBack.tradestatus  == 7>
+						退款中
+					<#elseif sellBack.tradestatus  == 8>
+						退款失败
 					</#if>
 				<#elseif sellBack.type==2>
 					<#if sellBack.tradestatus  == 0>
@@ -38,14 +43,22 @@
 						部分入库
 					<#elseif sellBack.tradestatus  == 6>
 						已退款
+					<#elseif sellBack.tradestatus  == 7>
+						退款中
+					<#elseif sellBack.tradestatus  == 8>
+						退款失败
 					</#if>
 				</#if>
 			</i>
 		</h2>
 		<h2>
 			<span>退款方式:${sellBack.refund_way}<em>|</em></span>
+		<#if sellBack.refund_way?contains("原支付方式")>
+			<span>申请退款金额:${sellBack.apply_alltotal}<em>|</em></span>
+		<#else>
 			<span>退款账号:${sellBack.return_account!''}<em>|</em></span>
 			<span>申请退款金额:${sellBack.apply_alltotal}<em>|</em></span>
+		</#if>
 		</h2>
 		<h2>
 			<span>
@@ -69,14 +82,7 @@
 				
 			</#if>
 			
-			<span >
-				收货状态：
-				<#if sellBack.ship_status == '0'>
-					未收货
-				<#elseif sellBack.ship_status == '1'>
-					已收货
-				</#if>
-			</span>
+			
 		</h2>
 		<div class="return-detail-list">
 			<#if (goodsList?size>0)>

@@ -1,0 +1,39 @@
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>		
+<!-- 调用商品列表标签，并传递商品列表所在catid及循环次数 -->		
+<#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'15'")>
+<div class="shop_cargo">
+	<div class="sc_left"><a href="javascript:;"></a></div>
+	<div class="sc_middle">
+		<ul>
+			<#list goodsList as goods>
+			<li>
+				<a href="goods-${goods.goods_id}.html" ><@image src="${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+				<h1><a href="goods-${goods.goods_id}.html" title="${goods.name}">${goods.name}</a></h1>
+				<p>售价：<span>${goods.price?string.currency}</span></p>
+				
+			</li>
+			</#list>
+		</ul>
+	</div>
+	<div class="sc_right"><a href="javascript:;"></a></div>
+<script>
+$(function(){
+	var lm = 0;
+	var lc = $(".sc_middle>ul>li").length;
+		$(".sc_middle>ul").css("width", lc*187+"px");
+		$(".sc_right>a").click(function(){
+			if(lm>((lc-5)*187)*-1){
+				lm = lm - 187;
+				$(".sc_middle>ul").css("margin-left", lm + "px");
+			}
+		});
+		$(".sc_left>a").click(function(){
+			if(lm<0){
+				lm = lm + 187;
+				$(".sc_middle>ul").css("margin-left", lm + "px");
+			}
+		});
+});
+</script>
+</div>

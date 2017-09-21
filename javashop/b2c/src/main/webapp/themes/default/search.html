@@ -1,0 +1,147 @@
+<#include 'common/header.html' />
+<#-- 创建选择器标签 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+
+<#-- 获取选择器 -->
+<#assign goodsSelector = searchSelectorTag() >
+
+
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":15}') >
+
+<#assign selected_prop= goodsSelector.selected_prop >
+<#assign selected_cat= goodsSelector.selected_cat >
+<#assign selected_brand= goodsSelector.selected_brand >
+<#assign selected_price= goodsSelector.selected_price![] >
+
+
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brandList= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+<style>
+<!--
+.other{
+background: none repeat scroll 0 0 #fff;
+    border: 1px solid #000;
+    position: absolute;
+    width: 200px;
+    display:none;
+}
+.selected{
+background: none repeat scroll 0 0 red;
+}
+.swrap li{   float: left;
+    margin-left: 20px;}
+    
+.swrap h1{ display: block;
+    float: left;
+    width: 100%; font-size:18px}
+-->
+</style>
+<script type="text/javascript">
+<!--
+$(function(){
+	$(".cat").hover(
+	
+		function(){
+			$(this).find(".other").show();
+		},
+		function(){
+			$(this).find(".other").hide();
+		}
+	);
+});
+//-->
+</script>
+
+<div class="swrap" >
+<h1>已经选择分类：</h1>
+<li>
+<#list selected_cat as selector >
+	<span class="cat">
+	&gt;<a href="${selector.url!''}" >${selector.name}</a>
+	
+ 
+	<div class="other">
+		<#list  selector.otherOptions as  other >
+			<a href="${other.url!''}" >${other.name}</a>|
+		</#list>
+	</div>
+	 </span>
+</#list>
+</li>
+
+<h1>已经选择品牌：</h1>
+
+<#list selected_brand as selector >
+	<li><a href="${selector.url!''}" >${selector.name}</a></li>
+</#list>
+
+<#if 	selected_price?? >		
+<h1>已经选择价格：</h1>
+
+<#list selected_price as selector >
+	<li><a href="${selector.url!''}" >${selector.name}</a></li>
+</#list>
+
+</#if>
+
+			
+<h1>已经选择属性：</h1>
+
+<#list selected_prop as selector >
+	<li><a href="${selector.url!''}" >${selector.name}:${selector.value}</a></li>
+</#list>
+				 
+ 
+<h1 style="margin-top:30px;border:1px solid red">分类</h1>
+
+<#list catList as selector >
+	<li><a href="${selector.url!''}" >${selector.name}</a></li>
+</#list>
+
+<h1 >品牌</h1>
+
+<#list brandList as selector >
+	<li><a href="${selector.url!''}" >${selector.name}</a></li>
+</#list>
+<h1 >价格</h1>
+
+<#list priceList as selector >
+	<li><a href="${selector.url!''}" >${selector.name}</a></li>
+</#list>
+
+<h1>属性</h1>		
+<#list propMap?keys as propname>
+ 
+					<li>
+						<h2>${propname}：</h2>
+						<ul>
+							<#list propMap[propname] as selector >
+								<li><a href="${selector.url!''}" >${selector.name}</a></li>
+							</#list>
+						</ul>
+					</li> 
+ 				
+</#list> 
+				
+<h1>排序：</h1>		
+<#list sortList as selector >
+	<li><a href="${selector.url!''}" <#if selector.isSelected>class="selected ${selector.value}"</#if> >${selector.name}</a></li>
+</#list>
+		
+		<h1>商品列表</h1>		
+<div class="list_wrapper">
+	<ul class="inner_box">
+		<#list webpage.result as goods>
+			<li style="width:150px"><@image   src="${goods.thumbnail!''}" />${goods.name}-${goods.price!''}-buynum:${goods.buy_count}-grade:${goods.grade}</li>
+		</#list>
+	</ul>
+</div>
+
+</div>
+<#include 'common/footer.html' />

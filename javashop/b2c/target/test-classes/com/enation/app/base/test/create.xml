@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>	
+	<action>
+		<command>create</command>
+		<table>es_my_test</table>
+		<field><name>id</name><type>int</type><size>8</size><primary_key>yes</primary_key><primary_key>yes</primary_key><not_null>yes</not_null></field>
+		<field><name>field1</name><type>int</type><size>8</size></field>
+		<field><name>field2</name><type>varchar</type><size>255</size><not_null>yes</not_null></field>
+		<field><name>field3</name><type>decimal</type><size>20,2</size></field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_my_test2</table>
+		<field><name>field1</name><type>int</type><size>8</size></field>
+		<field><name>field2</name><type>varchar</type><size>255</size><not_null>yes</not_null></field>
+		<field><name>field3</name><type>decimal</type><size>20,2</size></field>
+	</action>	
+</dbsolution>

@@ -231,9 +231,9 @@ public class StringUtil {
 	 */
 
 	public static boolean isEmpty(String str) {
-		if (str == null || "".equals(str))
+		if (str == null || "".equals(str.trim()) || str.equals("undefined")){
 			return true;
-
+		}
 		String pattern = "\\S";
 		Pattern p = Pattern.compile(pattern, 2 | Pattern.DOTALL);
 		Matcher m = p.matcher(str);
@@ -988,5 +988,15 @@ public class StringUtil {
 		aThrowable.printStackTrace(printWriter); return result.toString(); 
 	
 	}
+	 /**
+     * 判断判断字符串是否为数字
+     * @param str 传入的字符串  
+     * @return 是整数返回true,否则返回false  
+     */  
+     public static boolean isNumber(String str) { 
+       Pattern patternInteger = Pattern.compile("^[-\\+]?[\\d]*$");		//是否是整数
+       Pattern patternDouble = Pattern.compile("^[-\\+]?[.\\d]*$");  	//是否是小数
+       return patternInteger.matcher(str).matches() || patternDouble.matcher(str).matches();    
+     }  
 	
 }

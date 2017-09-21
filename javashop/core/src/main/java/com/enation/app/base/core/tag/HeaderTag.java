@@ -32,6 +32,7 @@ public class HeaderTag extends BaseFreeMarkerTag {
 		siteHeader.put("keywords", site.getKeywords());
 		siteHeader.put("description", site.getDescript());
 		siteHeader.put("ctx",ctx);
+		siteHeader.put("sitename", site.getSitename());
 		return siteHeader;
 	}
 

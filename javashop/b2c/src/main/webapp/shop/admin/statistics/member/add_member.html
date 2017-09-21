@@ -1,41 +1,48 @@
 <#include '/admin/header.html' >
-
+<style>
+	tr td{
+		padding-right: 5px;
+	}
+</style>
 
 <script src="${ctx}/shop/admin/statistics/member/js/add_member_num.js" type="text/javascript" ></script>
 <style>
 	.datagrid-sort-asc .datagrid-sort-icon{display:none}
 </style>
-<div class="main">
+<div class="admin-main">
 	<!-- 搜索框 -->
+	<div class="table_control">
 	<div style="display: block;" class="searchAdvanced">
-		<table width="98%" border="0" cellspacing="0" cellpadding="8">
-			<tr>
-				<td width="80">
+		<table width="98%" border="0" cellspacing="0" cellpadding="8" >
+			<tr style="float: right;">
+				<td width="95">
 					按订单周期：
 				</td>
-				<td width="70" >
-					<select id="cycle_type">
+				<td width="117" >
+				
+					<select id="cycle_type" style="height: 30px" >
 						<!-- <option value="0">--请选择--</option> -->
 						<option value="1">按照月统计</option>
 						<option value="2">按照年统计</option>
 					</select>
+				
 				</td>
-				<td width="70" >
-					<select id="year">
-						
+				<td width="90" >
+					<select id="year" style="height: 30px" lay-ignore>
 					</select>
 				</td>
-				<td width="70" >
-					<select id="month">
-						<!-- <option value="0">--请选择--</option> -->
+				<td width="90" >
+					<select id="month" style="height: 30px;" lay-ignore>
 					</select>
 				</td>
 				
-				<td width="200" style="text-align: center;float: right">
-					<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a>
+				<td width="130" style="text-align: center;line-height: 47px;">
+				<!-- 	<a id="search_statis" class="button blueButton"  href="javascript:void(0);">开始搜索</a> -->
+					<a id="search_statis"  href="javascript:void(0);"	class="layui-btn layui-btn-normal layui-btn-small">开始搜索</a>
 				</td>
 				<td></td>
 		</table>
+	</div>
 	</div>
 	<div class="clear height10"></div>
 	
@@ -44,18 +51,18 @@
 		<div style="display: block;" class="goods_input">
 		
 		<!-- 统计图div -->
-		<div id="order_num_statistics">
+		<div id="order_num_statistics" style="height: 350px; margin: 0px 0px 50px 0px;">
 			
 		</div>
 		<div class="tableDiv">
 			<!-- dataGrid -->
-			<table id="order_num_dg" class="easyui-datagrid"  data-options="pagination:false,rownumbers:true, fitColumns:'true',sortName:'membertime'" >
+			<table id="order_num_dg" class="layui-table site-table table-hover"  >
 				<thead>
 					<tr>
-						<th data-options="field:'membertime',width:150" >日期/月</th>
-						<th data-options="field:'member_num',width:150" >本月/年</th>
-						<th data-options="field:'last_member_num',width:150" >上月/年</th>
-						<th data-options="field:'member_an',width:150" >同比</th>
+						<th>日期/月</th>
+						<th>本月/年</th>
+						<th>上月/年</th>
+						<th>同比</th>
 					</tr>
 				</thead>
 				
@@ -95,6 +102,28 @@ for(var i=1;i<=12;i++){
 		$("#month").append("<option value='"+i+"' >"+i+"月</option>" );
 	}
 }
+
+/**
+ * 会员增加数量统计
+ * 
+ * @author whj
+ * @version v1.0,2015-09-28
+ * @since v4.0
+ */
+
+
+var addMenber={
+		addMenberJson:function(){
+		getOrderNum();
+	}
+}
+
+
+$(function() {
+	
+	//$("#month").hide();
+	
+});
 
 /**
  * 获取日期条件
@@ -214,7 +243,164 @@ function getLastDateWhere(){
 }
 
 
+/**
+ * 获取json数据完成线装图
+ * @param startDate 开始时间
+ * @param endDate 结束时间
+ */
+function getOrderNum(){
 
+	var dateWhere = getDateWhere();
+	var lastDateWhere = getLastDateWhere();
+	// ajax配置
+	var options = {
+		url : ctx + "/shop/admin/memberStatistics/get-add-member-num.do",
+		data : {'start_date' : dateWhere[0], 'end_date' : dateWhere[1], 'lastStart_date' : lastDateWhere[0], 'lastEnd_date' : lastDateWhere[1],'type': dateWhere[2]},
+		type : "post",
+		dataType:"json",
+		success:function(data){
+			
+			//如果获得正确的数据
+			if (data.result == 1) {
+				if(data.data.list && data.data.list.length < 1) {
+					 //alert("当前条件下没有统计数据");
+				}
+				// 1.获取到统计图相关配置
+				var conf = getOrderNumConfig(data.data.list);
+				
+				// 2.初始化统计图
+				initHistogram(conf);
+				//计算数据
+				var allList = calculateData(data);
+				//3.加载表格数据
+				$('#order_num_dg').dataTable({
+					"language": {
+				        "url": staticserver+"/media/zh_CN.txt"
+				    },
+				    "destroy": true,
+				    "ordering": false,
+				    "searching": false,
+				    "lengthChange": false,
+			        "data": allList,
+			        "columns": [
+			            {data: "membertime","title": "日期/月"},
+			            {data: "member_num","title": "本月/年"},
+			            {data: "last_member_num","title": "上月/年"},
+			            {data: "member_an","title": "同比"}
+			        ]
+			    });
+
+			} else {
+				alert("调用action出错：" + data.message);
+			} 
+		},
+		error:function(){
+			alert("系统错误，请稍候再试");
+		}
+	};
+	$.ajax(options);
+}
+
+//计算数据
+function calculateData(data) {
+	//计算上月数量
+	var allList = [];
+	var nowList = data.data.list;
+	var lastList = data.data.lastList;
+	for (var l = 0; l < lastList.length; l++) {
+		//上月日期
+		var lastDay = lastList[l].membertime;
+		
+		var result = false;
+		
+		for(var i = 0; i < nowList.length; i++) {
+			
+			var nowDay = nowList[i].membertime;
+			
+			if (nowDay == lastDay) {
+				result = true;
+				break;
+			}
+		}
+		
+		if (!result) {
+			var temp = {"membertime":lastDay,"membernum":0,"last_member_num":lastList[l].last_member_num};
+			nowList.push(temp);
+		}
+	}
+	
+	//计算当月会员数量，当本月有数量，而上月无数量，则，上个月添加0
+	
+	for(var i = 0; i < nowList.length; i++) {
+		//当月数量
+		var memberNum = nowList[i].membernum;
+		 //当月日期
+		var day = nowList[i].membertime;
+		//数组
+		var tempData = {member_num:memberNum,membertime:day};
+		tempData["last_member_num"] = 0;
+		tempData["member_an"] = "0.00%";
+		for(var j = 0; j < lastList.length; j++) {
+			//上月时间
+			var lastDay = lastList[j].membertime;
+			
+			if (day == lastDay) {
+				var lastMemberNum = lastList[j].membernum;
+				tempData["last_member_num"] = lastMemberNum;
+				if(parseInt(memberNum) == 0){
+					memberNum=parseInt(lastMemberNum);
+				}
+				
+				//计算同比率
+			//	var memberAn = parseInt(memberNum)/parseInt(lastMemberNum);
+				var memberAn = (parseInt(memberNum)-parseInt(lastMemberNum))/parseInt(lastMemberNum);
+				//1.先转换成4位小数
+			//	memberAn = memberAn.toFixed(4);
+			//	memberAn = memberAn.slice(2,4)+'.'+memberAn.slice(4,6)+'%';
+				memberAn = memberAn.toFixed(2)+"%";
+				//2.增加字段
+				tempData["member_an"] = memberAn;
+			}
+		}
+		allList.push(tempData);
+	}
+	//按membertime排序
+	allList.sort(getSortFun('asc', 'membertime'));
+	return allList;
+}
+//排序
+function getSortFun(order, sortBy) {
+    var ordAlpah = (order == 'asc') ? '>' : '<';
+    var sortFun = new Function('a', 'b', 'return a.' + sortBy + ordAlpah + 'b.' + sortBy + '?1:-1');
+    return sortFun;
+}
+/**
+ * 根据服务返回的数据 生成统计图所需要的配置
+ * @param json 数据
+ * @returns json格式的配置
+ */
+ function getOrderNumConfig(json){
+		var conf = {};			//配置
+		var categories = []; //X轴 时间
+		var data = [];	// Y轴 增加数量
+		//alert(JSON.stringify(json));
+		// 遍历生成 data,categories
+		for(var i in json) {
+			var member = json[i];
+			//添加到数组
+			categories.push(member.membertime + "");
+			data.push(member.membernum);
+		}
+		var conf = {
+				title : "新增会员数量",		//统计图标题
+												//X 轴数据 [数组]
+				categories : categories,				
+		            							//Y轴数据 [数组]
+			    data: data					
+
+			};
+		return conf;
+	}
 
 
 /**
@@ -222,30 +408,54 @@ function getLastDateWhere(){
  * @param id	html 初始化div的id
  * @param conf	相关配置
  */
-function initHistogram(id,conf){
-	
+function initHistogram(conf){
+	var myChart = echarts.init(document.getElementById('order_num_statistics'));
 	var options = {
-			credits: {
-	             //text: 'Javashop',
-	             //href: 'http://www.javamall.com.cn'
-				enabled:false
-	        },
-			
-	        title : {
+			color: ['#3398DB'],
+	        title : {						//图表上方标题
+	        	x : 'center',
 				text : conf.title
 			},
-			xAxis : {
-				categories : conf.categories
+			tooltip : {				
+			    trigger: 'axis'   //触发类型
 			},
-			yAxis : {
-				min : 0,
-				title : {
-					text : conf.yDesc
+			toolbox: {   //图形右边工具栏
+		        show : true,
+		        feature : {
+		            magicType : {show: true, type: ['line', 'bar']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+            legend : {				//图表下方的标记
+            	bottom : '10',
+            	data : ['新增会员数量']
+            },
+			xAxis : {				//x坐标
+				type : 'category',   //坐标轴类型
+				data : conf.categories,
+				nameLocation : 'middle',
+				nameGap : '30',
+				nameTextStyle : {
+					fontWeight : 'bold'
 				}
 			},
-			series : conf.series
+			yAxis : {				//y坐标
+				min : 0,
+				name : '新增会员数量',
+				type : 'value',
+				nameLocation : 'middle',
+				nameGap : '30'
+			},
+			series : [				//显示图表类型
+				{
+					name : '新增会员数量',
+					type : 'line',
+					data : conf.data
+				}          
+			]
 		};
-	$("#" + id).highcharts(options);
+	myChart.setOption(options);
 };
 
 //搜索点击事件
@@ -256,6 +466,9 @@ $("#search_statis").click(function(){
 	var lastDateWhere = getLastDateWhere();
 	addMenber.addMenberJson();
 
+});
+layui.use('form', function(){
+  var form = layui.form();
 });
 </script>
 <#include '/admin/footer.html' >

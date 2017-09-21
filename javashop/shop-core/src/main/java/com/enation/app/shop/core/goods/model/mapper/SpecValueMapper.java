@@ -21,6 +21,9 @@ public class SpecValueMapper implements RowMapper {
 		specValue.setSpec_id(rs.getInt("spec_id"));
 		String spec_img = rs.getString("spec_image");
 		if( spec_img!=null ){
+			specValue.setImage(spec_img);
+		}
+		if( spec_img!=null ){
 			spec_img  =StaticResourcesUtil.convertToUrl(spec_img);
 		}
 		specValue.setSpec_image(spec_img);

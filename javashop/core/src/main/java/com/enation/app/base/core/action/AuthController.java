@@ -90,7 +90,7 @@ public class AuthController extends GridController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/save-edit")
-	public JsonResult saveEdit(String name,int authid,int choose,String menuids){
+	public JsonResult saveEdit(String name,Integer authid,Integer choose,String menuids){
 		try{
 			com.enation.app.base.core.model.AuthAction act = new com.enation.app.base.core.model.AuthAction();
 			act.setName(name.replace(" ", ""));
