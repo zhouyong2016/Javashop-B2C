@@ -15,6 +15,10 @@
 <#assign orderChildItemListTag = newTag("orderItemListTag")>
 <#--调用“订单货物列表”标签，并传递参数-->
 <#assign orderItemList = orderChildItemListTag("{'orderid':${order_id}}")>
+<!--创建“获取退款方式”标签-->
+<#assign refundWayTag = newTag("refundWayTag")>
+<!--调用“获取退款方式”标签，并传递参数-->
+<#assign refundWayTag = refundWayTag()>
 
 <link rel="stylesheet" type="text/css" href="themes/wap/css/member.css" />
 <div class="header-tools">
@@ -31,10 +35,6 @@
 		<div class="return_detail">
 		<input type="hidden" name="orderid" value="${order_id}" />
 		<input type = "hidden" id = "packDetailJson" name = "packDetailJson" />
-		<h2>是否已收货</h2>
-			<input type="radio" value="0" name="ship_status"/>未收货
-			<input type="radio" value="1" name="ship_status"  checked="checked"/>已收货
-					
 		<h2>请选择要退货的商品</h2>
 		<table class="return-goods-list">
 			<#list orderItemList as item>	
@@ -43,7 +43,7 @@
 					<#if item.state==0 >
 					<div class="c-list">
 						<label class="store-goods-ch">
-							<input type="checkbox" style="display:none;" class="need_sync input-box" name="goodsId" value="${item.goods_id}" autocomplete="off"/>
+							<input type="checkbox" style="display:none;" class="need_sync input-box" name="goodsId" value="${item.goods_id}" goods_id="${item.goods_id}" payNum="${item.num}" autocomplete="off"/>
 						</label>
 						<span style="display:none">
 							<input type="checkbox" class="need_sync" goods_id="${item.goods_id}" name="item_id" value="${item.item_id}" autocomplete="off"/> 
@@ -86,17 +86,28 @@
 			<option value="空包裹">空包裹</option>
 			<option value="其他">其他</option>
 		</select>
-		<h4>请选择退款方式</h4>
-		<select name="refund_way"> 
-			<option value="0">-- 请选择退款方式 --</option>
-			<#list paymentList as payment  >
-				<#if payment.type!="cod">
-					<option value="${payment.name}"> ${payment.name} </option>
-				</#if>
-			</#list>
-		</select>
-		<h4>请选择退款账户</h4>
+		<h4>退款方式</h4>
+		
+		<input type="hidden" value="${refundWayTag!''}" class="refund_way"/>
+		<#if refundWayTag == 1>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原支付方式退款
+			<input type = "hidden" name="refund_way" id="original_way" value = "原支付方式退款">
+		<#else>
+		
+		<div id="refund_other">
+			<select name="refund_way" id="refund_way"> 
+				<option value="0">-- 请选择退款方式 --</option>
+				<#list paymentList as payment  >
+					<#if payment.type!="cod">
+						<option value="${payment.name}"> ${payment.name} </option>
+					</#if>
+				</#list>
+			</select>
+			<h4>请填写退款账户</h4>
 			<input type="text" name="return_account" class="return-way-name" maxlength="30"/>
+			
+		</div>
+		</#if>
 		<h4>请填写退款金额</h4>
 			<input type="text" name="apply_alltotal" class="return-way-name" value="${orderDetail.paymoney}" dataType="float" id="price" isrequired="true" maxlength="15"/>
 			<input type="hidden"  id="payprice" value="${orderDetail.paymoney!''}"/>
@@ -124,6 +135,9 @@ $(".store-goods-ch").click(function(){
 
 $(function(){
 	
+	//获取退款方式
+	var retund_way=$(".refund_way").val();
+	
 	$("input[name='goodsId']").click(function(){
 		var checked = this.checked;
 		var goodsid  = $(this).val();
@@ -137,7 +151,6 @@ $(function(){
 	});
 	
 	$("#btnSubmit").click(function(){
-		
 		if($("input[name='goodsId']").filter(":checked").length==0){
 			alert("请选择要退货的商品");
 			return false;
@@ -190,15 +203,24 @@ $(function(){
 			return false;
 			
 		}
-		if($("select[name='refund_way']").val()=="0"){
-			alert("请选择支付方式");
-			return false;
-			
+		if(retund_way != 1){
+			if($("select[name='refund_way']").val()=="0"){
+				alert("请选择退款方式");
+				return false;
+				
+			}
+			if($("input[name='return_account']").val()==""){
+				alert("请填写退款账号");
+				$("#btnSubmit").removeAttr("disabled");
+				return false;
+			}
 		}
-		if($("input[name='return_account']").val()==""){
-			alert("请填写退款账号");
-			$("#btnSubmit").removeAttr("disabled");
-			return false;
+		if(retund_way == 1){
+			if($("input[name='apply_alltotal']").val() == 0){
+				alert('退款金额不能为0');
+				$("#btnSubmit").removeAttr("disabled");
+				return false;
+			}
 		}
 		
 		if(Number($("input[name='apply_alltotal']").val()) > Number($("#payprice").val())){
@@ -206,17 +228,30 @@ $(function(){
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
+		if(isNaN($("input[name='apply_alltotal']").val())){
+			alert("退款金额必须是浮点型数字，例如1.00");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		if($("input[name='apply_alltotal']").val() == ""){
+			alert('退款金额不能为空');
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
 		
+		if($("input[name='apply_alltotal']").val() < 0){
+			alert('退款金额不能为负');
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
 		if(status==0){
 			if($("#ship_status0").val()==0){
 				alert("请选择退款原因");
 				return false;
 			}
+
 		}else if($('input[name="ship_status"]:checked').val()==null){
 			alert("请选择是否收货");
-			return false;
-		}else if($("input[name='apply_alltotal']").val() < 0){
-			alert('退款金额不能为负');
 			return false;
 		}
 		

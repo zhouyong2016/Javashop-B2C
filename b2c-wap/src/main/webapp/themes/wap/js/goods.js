@@ -61,7 +61,7 @@ var goodsjs = {
 		//		var inventory = parseInt($(this).attr("inventory")); //库存
 				if(spec==1){
 					var specLi = parseInt($(".spec_item ul").length);
-					var specLiSelected = parseInt($(".spec_item li .selected").length);
+					var specLiSelected = parseInt($(".same-spec-li .selected").length);
 					if(specLi != specLiSelected){
 						alert("请选择规格");
 						show.close_cover();       //增加遮罩。来阻止在提交ajax时进行其他操作。
@@ -112,7 +112,7 @@ var goodsjs = {
 				if(spec==1){
 					
 					var specLi = parseInt($(".spec_item ul").length);
-					var specLiSelected = parseInt($(".spec_item li .selected").length);
+					var specLiSelected = parseInt($(".same-spec-li .selected").length);
 					if(specLi != specLiSelected){
 						alert("请选择规格");
 						show.close_cover();       //增加遮罩。来阻止在提交ajax时进行其他操作。

@@ -4,6 +4,74 @@ body {
     font-size: 14px;
 }
 
+/* 用合作网站账号登录 */
+.oauth-wrapper{
+	margin-top: 15px;
+}
+
+.oauth-wrapper .title-wrapper{
+	position: relative;
+	border-bottom: 1px solid #CCC;
+	width: 80%;
+	overflow: visible;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.oauth-wrapper .title {
+    position: absolute;    
+    top: -10px;  
+    +top: -21px;
+    left: 50%;
+    margin-left: -75px;
+    width: 150px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+   	background: #DCDCDC;
+}
+
+.oauth-wrapper .oauth {
+    padding-left: 38%;
+    float: left;
+}
+
+.oauth-link {
+    float: left;
+    margin-right: 20px;
+    width: 18px;
+    height: 18px;
+    background:url(../images/login_icon.png) no-repeat;
+    
+}
+
+.oauth-qq{
+	background-position: 0 -19px;
+}
+
+.oauth-qq:hover{
+	background-position: 0 -37px;
+}
+
+.oauth-weixin {    
+    background-position: 0 -163px;
+}
+
+.oauth-weixin:hover {    
+    background-position: 0 -91px;
+}
+
+.oauth-weibo {
+    background-position: 0px -109px;
+}
+
+.oauth-weibo:hover {
+    background-position: 0px -73px;
+}
+
+/***************************************/
+
 .login-tab {
     display: flex;
     justify-content: space-between;
@@ -217,5 +285,22 @@ body {
     display:block;
     margin:0.5rem 0 0 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

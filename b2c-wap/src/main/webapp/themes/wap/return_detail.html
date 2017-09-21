@@ -37,6 +37,10 @@
                         审核拒绝
                     <#elseif sellBack.tradestatus  == 6>
                         已退款
+                     <#elseif sellBack.tradestatus  == 7>
+                           退款中
+                      <#elseif sellBack.tradestatus  == 8>
+                          退款失败
                     </#if>
 			    </span>
             <#else/>
@@ -54,6 +58,10 @@
                         部分入库
                     <#elseif sellBack.tradestatus  == 6>
                         已退款
+                    <#elseif sellBack.tradestatus  == 7>
+                           退款中
+                      <#elseif sellBack.tradestatus  == 8>
+                          退款失败
                     </#if>
 			    </span>
             </#if>

@@ -1,0 +1,38 @@
+<#assign  title="支付成功页面" />
+<#include 'common/header.html'/>
+<#assign paymentWapResultTag = newTag("paymentResultTag") />
+<#assign paymentResult = paymentWapResultTag() />	
+<link rel="stylesheet" type="text/css" href="themes/wap/css/checkout.css" />
+<div class="order-success-box">
+	<div class="header-tools checkout-title">
+		<div class="common-title">
+			支付结果
+		</div>
+	</div>
+	
+	<div class="order-success-box-word">
+		<#if paymentResult.result==1>
+			<img src="themes/wap/images/zfcg.png" alt="计算单生成" />
+		<#else>
+			<img src="themes/wap/images/ku.png" alt="计算单生成" />
+		</#if>
+		<#if paymentResult.result==1>
+			<h1 class="order-pay-result-tittle">恭喜,支付已成功!</h1>
+			<p class="order-pay-result-sn">订单号：<span>${paymentResult.ordersn!''}</span></p>
+			<div class="order-success-box-tools"> 
+				<a href="${ctx}/index.html" class="go_order">返回首页</a>
+				<a href="orderlist.html">查看订单状态</a>
+			</div>	
+		<#else>
+			<h1>非常抱歉，您本次支付未成功</h>
+			<p class="order-pay-result-sn">失败是因为：<span>${paymentResult.error!''}</span></p>
+			<div class="order-success-box-tools">
+				<a href="${ctx}/index.html"  class="go_order">返回首页</a>
+				<a href="orderlist.html" >查看订单状态</a>
+			</div>
+		</#if>
+	</div>
+</div>	
+
+<#include 'common/float_footer.html'/>
+<#include 'common/footer.html'/>

@@ -26,8 +26,7 @@
                                 <span class="def-address-icon">默认</span>
                             </#if>
                             ${(address.province)!''} ${address.city!''} ${address.region!''} ${address.town!''} ${address.addr!''}
-                           
-                            <#if (address.shipAddressName)!=''>
+                            <#if address.shipAddressName?exists>
                                 <span class="alias-address">${address.shipAddressName}</span>
                             </#if>
                         </div>

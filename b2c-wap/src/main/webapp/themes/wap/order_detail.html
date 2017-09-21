@@ -88,8 +88,14 @@
 			<p class="detail_same_h1"><em>收货人：</em><span>${orderDetail.ship_name!''}/${orderDetail.ship_mobile!''}</span></p>
 			<p class="detail_same_address"><em>收货地址：</em><span>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}</span></p>
 			<p class="detail_same_h1"><em>付款方式：</em><span>${orderDetail.payment_name!''}</span></p>
-			<p class="detail_same_other"><em>发票抬头：</em><span>${orderreceipt.title!'无'}</span></p>
-			<p class="detail_same_other"><em>发票内容：</em><span>${orderreceipt.content!'无'}</span></p>
+			<#if orderDetail.receipt_type ??>
+				<p class="detail_same_other"><em>发票类型：</em><span><#if orderDetail.receipt_type==1>个人<#else>单位</#if></span></p>
+			<#else>
+				<p class="detail_same_other"><em>发票类型：</em><span>无</span></p>
+        	</#if>
+        	<p class="detail_same_other"><em>发票抬头：</em><span >${orderDetail.receipt_title!'无'}</span></p>
+        	<p class="detail_same_other"><em>发票内容：</em><span>${orderDetail.receipt_content!'无'}</span></p>
+       		<p class="detail_same_other"><em>发票税号：</em><span>${orderDetail.receipt_duty!'无'}</span></p>
 		</div>
 		<div class="order-detail-other">
 			<p class="detail_same_other"><em>商品总价：</em><span>${orderDetail.goods_amount?string.currency}</span></p>

@@ -1,0 +1,102 @@
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/login.css" />
+<#assign connectUserTag = newTag("connectUserTag") >
+<#assign connectUser= connectUserTag()>
+
+<div id="navigator">
+	<div id="nav-left" style="width:10%;"><div class="item dark"></div></div>
+	<div id="nav-middle" style="width:80%;overflow:hidden;">${connectUser.nickName}<span style="font-size:0.7rem;float:right;line-height:2.8rem">只差一步即可完成登录</span></div>
+	<div id="nav-right" style="width:10%;">
+		<div class="item"></div>
+	</div>
+</div>
+<div class="login-tab" style="line-height:44px;padding:0 0 0 5%;width:95%;margin:0.3rem 0 0 0;">
+	已有账号?直接绑定
+</div>
+<div class="login-form">
+<form action="" method="post" id="login_form">
+	<div class="ordinary-form show">
+	     <div class="inner-form">
+	         <div class="item ordinary" id="ordinary">
+	             <div class="inner-item">
+	                 <i></i>
+	                 <input type="text" tabindex="1"  name="username"  id="login_username" placeholder="请输入会员名称"/>
+	             </div>
+	         </div>
+	         <div class="item password">
+	             <div class="inner-item">
+	                 <i></i>
+	                <input type="password" vtype="password" tabindex="2"  name="password" id="login_password" placeholder="请输入密码"/>
+	                 <div class="operate"></div>
+	             </div>
+	         </div>
+	         <div class="item validcode">
+	             <div class="inner-item">
+	                 <i></i>
+	                 <input type="text" tabindex="3" name="validcode"  size="3"  class="m_small" id="validcode" placeholder="请输入验证码"/>
+	                 <img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" id="LoginimgVerifyCode" class="validcode-img"  >
+	             </div>
+	         </div>
+	     </div>
+ 	</div>
+</form>
+</div>
+<div class="login">
+    <button type="button" class="login-btn" id="loginBtn">立即绑定</button>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	$("#LoginimgVerifyCode").click(function(){
+		$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+
+	//点击登录
+	$("#loginBtn").click(function(){
+
+		if($(".input-ordinary").val()==""){
+			alert("请输入账号！");
+			return false;
+		}
+		if($(".password-ordinary").val()==""){
+			alert("请输入密码！");
+			return false;
+		}
+		if($("#validcode-ordinary").val()==""){
+			alert("请输入验证码！");
+			return false;
+		}
+
+		var options = {
+			url : "${ctx}/connect/login.do" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					alert('恭喜您，登录并绑定账号成功！');
+					var forward='${ctx}/member.html'; //默认是会员中心
+					<#if forward?? >
+					forward='${forward}';
+					</#if>
+					location.href =forward;
+				}else{
+					alert(result.message);
+					$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+					//$.Loading.hide();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+				$("#LoginimgVerifyCode").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+				//$.Loading.hide();
+			}
+		};
+
+		//$.Loading.show("正在提交您的信息，请稍候...");
+		$('#login_form').ajaxSubmit(options);
+	});
+
+});
+
+</script>
+<#include 'common/footer.html'/>

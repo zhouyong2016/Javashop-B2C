@@ -50,4 +50,32 @@
             success: function () {}
         });
     });
+    var _map_ = {
+			//支付宝方式退款
+			'alipayDirectPlugin': 1,
+			'alipayWapPlugin': 1,
+			'alipayMobilePlugin': 1,
+			//微信方式退款
+			'weixinPayPlugin': 1,
+			'wechatMobilePlugin': 1,
+			//中国银联退款
+			'unPay': 1,
+			/**中国农业银行网上支付*/
+			"abcpayPlugin": 0,
+			/**快钱人民币支付*/
+			"billPlugin": 0,
+			/**银联在线支付*/
+			"chinaPay": 0,
+			/**货到付款*/
+			"cod": 0,
+			/**线下支付*/
+			"offline": 0,
+			/**paypal支付插件*/
+			"paypalPaymentPlugin": 0,
+			/**财付通即时到账接口*/
+			"tenpayDirectPlugin": 0,
+		}
+	function getRefund(key){
+			return _map_[key]
+	}
 </script>

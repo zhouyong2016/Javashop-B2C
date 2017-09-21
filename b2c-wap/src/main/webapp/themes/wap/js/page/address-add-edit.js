@@ -80,9 +80,8 @@ $(function () {
                         return false
                     },
                     no : function () {
-                        $('.alias-input').removeAttr();
+                        $('.alias-input').removeAttr('name');
                         saveForm(_this);
-                        
                     }
                 })
             }else {
@@ -102,7 +101,7 @@ $(function () {
             success: function (res) {
                 module.layerLoading.close(function () {
                     if(res.result == 1){
-                        isCheckout ? history.back() : backToAddressList();
+                        isCheckout ? backToAddressList() : history.back();
                     }else {
                         module.message.error(res.message);
                         _this[0].disabled = false;

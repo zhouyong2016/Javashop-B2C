@@ -4,9 +4,7 @@
 <#if  !memberInfo.member_id?? || memberInfo.member_id==0 >
 	<#stop "not login">
 </#if>
-
 <#include 'common/header.html'>
-
 <!-- 获取会员订单列表标签 -->
 <#assign memberOrderListTag = newTag("memberOrderListTag")>
 <#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")>

@@ -1048,3 +1048,30 @@ body {
     text-align: center;
     border-radius: 5px;
 }
+
+
+
+
+
+/******发票新增样式*******/
+.receipt-word{width:100%;position:relative;}
+.receipt-word input{
+	width: 90%;
+    height: 26px;
+    background: #f0f2f5;
+    border: none;
+    outline: none;
+    padding: 2px 5%;
+    margin:8px 0 0 0;
+}
+.receipt-word-list{width:100%;overflow:hidden;position:absolute;left:0;top:38px;background:#f0f2f5;z-index:99;display:none;}
+.receipt-word-list ul li{
+	width: 90%;
+    height: 26px;
+    background: #f0f2f5;
+    border: none;
+    outline: none;
+    padding: 2px 5%;
+    border-top: 1px solid #e0e0e0;
+}
+

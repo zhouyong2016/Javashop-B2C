@@ -232,7 +232,7 @@ $(function () {
                 __();
             })
             $('#validcode-mobile').on('input propertychange', function () {
-                __validcode = ($(this).val().length >= 4);//测试环境下发送的验证码为4位数 -lyh
+                __validcode = ($(this).val().length == 6);
                 __()
             })
             function __() {

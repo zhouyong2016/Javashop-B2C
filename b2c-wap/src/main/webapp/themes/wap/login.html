@@ -68,7 +68,16 @@
 
 <div class="login">
     <button type="button" class="login-btn" id="login-btn">立即登录</button>
-     <a href="${ctx}/findpasswordByEmail.html" class="found_password">找回密码</a>
+    <a href="${ctx}/findpasswordByEmail.html" class="found_password">找回密码</a>
+</div>
+
+<div class="oauth-wrapper">
+	<h3 class="title-wrapper"><span class="title">用合作网站账号登录</span></h3>
+	<div class="oauth cf">
+		 <a class="oauth-link oauth-qq" href="${ctx}/connect.do?type=1" target="_blank"></a>
+		 <a class="oauth-link oauth-weibo" href="${ctx}/connect.do?type=2" target="_blank"></a>
+		 <a class="oauth-link oauth-weixin" href="${ctx}/connect.do?type=3" target="_blank"></a>
+	</div>
 </div>
 
 <div id="demo"></div>

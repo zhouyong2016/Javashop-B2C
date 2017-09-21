@@ -75,31 +75,17 @@
 </div>
 <script>
 	$(function(){
-		function parseUrl(){
-            var url=location.href;
-            var i=url.indexOf('?');
-            if(i==-1)return;
-            var querystr=url.substr(i+1);
-            var arr1=querystr.split('&');
-            var arr2=new Object();
-            for  (i in arr1){
-                var ta=arr1[i].split('=');
-                arr2[ta[0]]=ta[1];
-            }
-            return arr2;
-        }
-     var v = parseUrl();//解析所有参数
-     var cat_id=v['cat'];//获取cat_id
-
-       //滚动加载
+		
+		
+		//滚动加载
 		function loaata(){ 
 		    totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
 
 		    if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
 		    { 
 				$(".loadimg").show();
-		    	$.get("${ctx}/goods_list_page.html?cat="+cat_id+"&page="+page, function(data){
-		    		$(data).appendTo(".goodslist");
+		    	$.get("${ctx}/goods_list_page.html?page="+page, function(data){
+		    		$(data).appendTo(".list");
 		    		});
 		    	$(".loadimg").hide();
 		    	page++;
@@ -110,15 +96,14 @@
 		var prevTop = 0,
    		currTop = 0;
 		
-		var page =2;
+		var page =1;
 		$(window).scroll( function() {
 			
 			 currTop = $(window).scrollTop();  //滚动值
 			//判断是否是向下滚动
 			if(currTop > prevTop){
-				var totalnum = $(".goods-list-num").attr("rel");  //获得商品总数
-				var num=totalnum-(page-1)*10;   //获得剩余的商品总数
-				if(num > 0){
+				var num = $(".goods-list-num").attr("rel");  //获得商品总数
+				if(num > 10){
 					$(".go-top").fadeIn(500);
 					loaata();
 				}
