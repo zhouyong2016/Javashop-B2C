@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import com.enation.framework.taglib.BaseFreeMarkerTag;
 import com.enation.framework.util.JsonUtil;
 import com.enation.framework.util.StringUtil;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import freemarker.template.TemplateModelException;
 
 
