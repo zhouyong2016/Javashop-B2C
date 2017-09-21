@@ -77,20 +77,8 @@
 		<module>shop-core</module>
 		<module>b2c</module>
 		<module>cms-core</module>
-
-
-
-
-
-
-
-		
-		<module>goodsIndex-b2c</module>
-		<module>groupbuy</module>
-		<module>page_creator</module>
 		<module>weixin</module>
 		<module>zt-sms</module>
-		<module>exchange-b2c</module>
 	</modules>
 	<build>
 		<pluginManagement>
