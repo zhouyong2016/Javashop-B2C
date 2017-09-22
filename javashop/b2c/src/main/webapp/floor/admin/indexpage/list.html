@@ -139,17 +139,31 @@ function editFloor(floorid){
      });
 }
 function updateSort(){
-	var t=$("#sorts").val();
-	if(t==undefined){
-		alert("目前该页面没有数据！");
-		return;
-	};
+	var result = true;
+	var msg = "";
+	var z = /^[0-9]*$/;
 	
-	var z= /^[0-9]*$/;
-	if(!z.test(t)&&t!=undefined){
-	   $.Loading.error("请输入数字！");
-	   return;
-	};
+	$("input[name='floor_sorts']").each(function(){
+		var val = $(this).val();
+		if ($.trim(val) == "") {
+			result = false;
+			msg = "排序值不能为空";
+			return false;
+		}
+		
+		if(!z.test(val)){
+			result = false;
+			msg = "排序值只允许输入数字";
+			return false;
+		};
+		
+	});
+	
+	if (!result) {
+		alert(msg);
+		return false;
+	}
+	
 	var options = {
 			url :ctx+"/core/admin/floor/save-sort.do",
 			type : "POST",
