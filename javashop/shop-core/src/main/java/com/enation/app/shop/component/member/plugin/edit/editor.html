@@ -85,28 +85,29 @@ regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.Region
 			</div>
 		</div>
 		</#if>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">地区</label>
-		<div class="layui-input-block" id="selectAddress">
-			<script type="text/javascript">
-      			<#if member.province_id ??>
+		
+		<div class="layui-inline">
+			<label class="layui-form-label">地区</label>
+			<div class="layui-input-block" id="selectAddress">
+				<script type="text/javascript">
+	      			<#if member.province_id ??>
+					$(function() {
+						$('#selectAddress').addressSelect({
+							deData:[   
+						           ${member.province_id!''},
+	                               ${member.city_id!''},
+	                               ${member.region_id!''},
+	                               ${member.town_id!''}
+					         ]
+						});
+					})
+			<#else>
 				$(function() {
-					$('#selectAddress').addressSelect({
-						deData:[   
-					           ${member.province_id!''},
-                               ${member.city_id!''},
-                               ${member.region_id!''},
-                               ${member.town_id!''}
-				         ]
-					});
+					$('#selectAddress').addressSelect();
 				})
-		<#else>
-			$(function() {
-				$('#selectAddress').addressSelect();
-			})
-		</#if>
-				</script>
+			</#if>
+					</script>
+			</div>
 		</div>
 	</div>
 	<div class="layui-form-item">

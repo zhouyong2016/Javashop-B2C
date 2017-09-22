@@ -560,7 +560,7 @@
 		+ 'min-width: 20%;'
 		+ 'height: 26px;'
         + 'font-size: 12px;'
-		+ 'z-index: 1000;}'
+		+ 'z-index: 1;}'
 		+ '.app-address i {'
 		+ 'font-style: normal;}'
 		+ '.app-address-title {'
