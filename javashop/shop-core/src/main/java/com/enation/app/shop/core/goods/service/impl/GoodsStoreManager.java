@@ -301,6 +301,8 @@ public class GoodsStoreManager  implements IGoodsStoreManager {
 		}
 		if(sort!=null && order!=null ){
 			sql.append("order by "+sort+" "+order);
+		} else {
+			sql.append("order by g.create_time desc");
 		}
 		
 		Page webPage = this.daoSupport.queryForPage(sql.toString(), page, pageSize);
