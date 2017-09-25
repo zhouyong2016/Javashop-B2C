@@ -113,8 +113,11 @@
 	   			dataType:"json",
 	   			success:function(data){
 	   				if(data.result==1){	
+	   					$.Loading.success(data.message);
 	   					parent.layer.close(index); //再执行关闭        
 	   					parent.table.ajax.url(ctx+"/b2b2c/admin/self-store-goods-stock/self-list-goods-warning-store-json.do").load();
+	   				}else{
+	   					$.Loading.error(data.message)
 	   				}
 	   			}
 	   		};
