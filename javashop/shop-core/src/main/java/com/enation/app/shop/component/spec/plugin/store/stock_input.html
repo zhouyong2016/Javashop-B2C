@@ -94,10 +94,11 @@
 	   			dataType:"json",
 	   			success:function(data){
 	   				if(data.result==1){	
+	   					$.Loading.success(data.message);
 	   					parent.layer.close(index); //再执行关闭        
 	   					parent.table.ajax.url(ctx+"/shop/admin/goods-store/list-goods-store-json.do").load();
 	   				}else{
-	   					alert(data.message);
+	   					$.Loading.success(data.message);
 	   				}
 	   			}
 	   		};
