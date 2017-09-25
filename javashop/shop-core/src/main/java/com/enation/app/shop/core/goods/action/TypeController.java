@@ -279,6 +279,11 @@ public class TypeController extends GridController {
 				for (int i = 0; i < name.length; i++) {
 					Attribute attribute = new Attribute();
 					attribute.setName(name[i]);
+					
+					//判断类型不能为空
+					if (StringUtil.isEmpty(type[i])) {
+						return JsonResultUtil.getErrorJson("类型不能为空");
+					}
 					attribute.setType(Integer.parseInt(type[i]+"") );
 					attribute.setOptions(options[i].replace("，", ","));
 					attribute.setUnit(unit[i]);
