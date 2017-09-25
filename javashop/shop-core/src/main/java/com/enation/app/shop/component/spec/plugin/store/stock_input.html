@@ -98,7 +98,7 @@
 	   					parent.layer.close(index); //再执行关闭        
 	   					parent.table.ajax.url(ctx+"/shop/admin/goods-store/list-goods-store-json.do").load();
 	   				}else{
-	   					$.Loading.success(data.message);
+	   					$.Loading.error(data.message);
 	   				}
 	   			}
 	   		};
