@@ -191,9 +191,10 @@ public class MemberController extends GridController {
 	public JsonResult deletelv(Integer[] lv_id) {
 		try {
 			this.memberLvManager.delete(lv_id);
-			return JsonResultUtil.getSuccessJson("会员等级修改成功");
+			return JsonResultUtil.getSuccessJson("会员等级删除成功");
 		} catch (RuntimeException e) {
-			return JsonResultUtil.getErrorJson("删除失败：" + e.getMessage());
+			logger.error("会员等级删除失败：", e);
+			return JsonResultUtil.getErrorJson("会员等级删除失败");
 		}
 	}
 
