@@ -90,8 +90,11 @@ form.on('submit(savegadc)', function(data){
    			dataType:"json",
    			success:function(data){
    				if(data.result==1){	
+   					$.Loading.success(data.message);
    					parent.layer.close(index); //再执行关闭        
    					parent.table.ajax.url(ctx+"/core/admin/adColumn/list-json.do").load();
+   				} else {
+   					$.Loading.error(data.message);
    				}
    			}
    		};
