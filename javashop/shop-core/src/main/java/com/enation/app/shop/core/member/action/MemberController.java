@@ -390,6 +390,11 @@ public class MemberController extends GridController {
 					if (StringUtil.isEmpty(member.getMobile())
 							||this.memberManager.checkMobileExceptSelf(member.getMobile(),member.getMember_id()) == 0) {
 						try {
+							//如果会员固定电话不为空并且格式不正确
+							if (!StringUtil.isEmpty(member.getTel()) && !this.isTel(member.getTel())) {
+								return JsonResultUtil.getErrorJson("固定电话格式不正确");
+							}
+							
 							member.setBirthday(birth);
 							Member mb = this.memberManager.get(member.getMember_id());
 							if (!StringUtil.isEmpty(member.getPassword())) {
@@ -498,6 +503,10 @@ public class MemberController extends GridController {
 				return JsonResultUtil.getErrorJson("邮箱已存在");
 			}
 
+			//如果会员固定电话不为空并且格式不正确
+			if (!StringUtil.isEmpty(member.getTel()) && !this.isTel(member.getTel())) {
+				return JsonResultUtil.getErrorJson("固定电话格式不正确");
+			}
 
 			// 检查手机号码是否存在
 			if ((!StringUtil.isEmpty(member.getMobile()))&&this.memberManager.checkMobile(member.getMobile()) == 1) {
@@ -656,4 +665,27 @@ public class MemberController extends GridController {
 		// return this.memberManager.getMemberByEmail(email)==null?true:false;
 		return this.memberManager.checkemailInEdit(email, member_id);
 	}
+	
+	/** 
+	  * 固定电话号码验证 
+	  * @author	duanmingyu
+	  * @date	2017-9-26
+	  * @param  str 
+	  * @return 验证通过返回true 
+	  */  
+	 private boolean isTel(final String str) {  
+	     Pattern p1 = null, p2 = null;  
+	     Matcher m = null;  
+	     boolean b = false;  
+	     p1 = Pattern.compile("^[0][1-9]{2,3}-[0-9]{5,10}$");  // 验证带区号的  
+	     p2 = Pattern.compile("^[1-9]{1}[0-9]{5,8}$");         // 验证没有区号的  
+	     if (str.length() > 9) {  
+	        m = p1.matcher(str);  
+	        b = m.matches();  
+	     } else {  
+	         m = p2.matcher(str);  
+	        b = m.matches();  
+	     }  
+	     return b;  
+	 }
 }

@@ -41,7 +41,7 @@
      	<div class="layui-form-item">
     		<label class="layui-form-label">昵称：</label>
     		<div class="layui-input-block">
-      			<input type="text" name="name" maxlength="20"  lay-verify="required"  autocomplete="off" class="layui-input">
+      			<input type="text" name="name" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
     		</div>
      	</div>
   		
@@ -49,7 +49,6 @@
     		<label class="layui-form-label">性别</label>
     		<div class="layui-input-block">
       			<select name="sex" lay-filter="">
-        			<option value=""></option>
         			<option value="1" selected="selected">男</option>
         			<option value="0">女</option>
       			</select>
@@ -80,7 +79,7 @@
   		<div class="layui-form-item">
       		<label class="layui-form-label">移动电话</label>
       		<div class="layui-input-block">
-        		<input type="tel" id="name"  name="mobile" maxlength="11" " autocomplete="off" class="layui-input">
+        		<input type="tel" id="name"  name="mobile" maxlength="11" lay-verify="required|phone" autocomplete="off" class="layui-input">
     		</div>
   		</div>
   		
@@ -121,7 +120,7 @@
   		<div class="layui-form-item">
     		<label class="layui-form-label">地址：</label>
     		<div class="layui-input-block">
-      			<input type="text" name="address" maxlength="58" autocomplete="off" class="layui-input">
+      			<input type="text" name="address" maxlength="58" lay-verify="required" autocomplete="off" class="layui-input">
     		</div>
      	</div>
      	

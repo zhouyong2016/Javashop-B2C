@@ -30,15 +30,15 @@ regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.Region
 		<div class="layui-inline">
 			<label class="layui-form-label">昵称：</label>
 			<div class="layui-input-inline">
-				<input type="text" name="name" value="${(member.name)!''}"
-					minlength="6" maxlength="18" class="layui-input" placeholder="" lay-verify="required"  autocomplete="off">
+				<input type="text" name="name" value="${(member.name)!''}" lay-verify="required"
+					minlength="6" maxlength="18" class="layui-input" placeholder="" autocomplete="off">
 			</div>
 		</div>
 		<div class="layui-inline">
 			<label class="layui-form-label">固定电话：</label>
 			<div class="layui-input-inline">
 				<input type="text" name="tel" value="${(member.tel)!''}"
-					minlength="6" maxlength="18" class="layui-input" placeholder="" lay-verify="required|number" autocomplete="off">
+					minlength="6" maxlength="18" class="layui-input" placeholder="" autocomplete="off">
 			</div>
 		</div>
 		<div class="layui-inline">
@@ -52,7 +52,7 @@ regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.Region
 			<label class="layui-form-label">邮编：</label>
 			<div class="layui-input-inline">
 				<input type="text" name="zip" value="${(member.zip)!''}"
-					minlength="6" maxlength="18" class="layui-input" placeholder="" lay-verify="required|number" autocomplete="off">
+					minlength="6" maxlength="18" class="layui-input" placeholder="" autocomplete="off">
 			</div>
 		</div>
 		<div class="layui-inline">
@@ -113,7 +113,7 @@ regionSelectDirective="com.enation.app.shop.front.tag.goods.other.regions.Region
 	<div class="layui-form-item">
 		<label class="layui-form-label">详细地址：</label>
 		<div class="layui-input-block">
-			<input type="text" name="address" value="${(member.address)!''}"
+			<input type="text" name="address" value="${(member.address)!''}" lay-verify="required"
 				minlength="6" maxlength="180" class="layui-input" placeholder="">
 		</div>
 	</div>
@@ -154,7 +154,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
        					$.Loading.success(data.message);
        					newTab("会员列表","${ctx}/shop/admin/member/member-list.do");
        				}if(data.result==0){
-       					$.Loading.success(data.message);
+       					$.Loading.error(data.message);
        				}
        			}
        		};
