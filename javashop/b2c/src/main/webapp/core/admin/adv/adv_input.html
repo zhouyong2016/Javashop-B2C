@@ -108,8 +108,11 @@ layui.use(['form', 'layedit', 'laydate'], function(){
    			success:function(data){
    				debugger;
    				if(data.result==1){	
+   					$.Loading.success(data.message);
    					parent.layer.close(index); //再执行关闭        
    					parent.table.ajax.url(ctx+"/core/admin/adv/list-json.do?acid=${acid!''}").load();
+   				} else {
+   					$.Loading.error(data.message);
    				}
    			}
    		};
