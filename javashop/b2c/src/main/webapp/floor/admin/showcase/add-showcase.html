@@ -144,6 +144,7 @@
 				success : function(result) {
 					if (result.result == 1) {
 						$.Loading.success(result.message);
+						closeCurrent();
 					}
 					if (result.result == 0) {
 						$.Loading.error(result.message);
