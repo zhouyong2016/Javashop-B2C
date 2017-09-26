@@ -73,6 +73,8 @@ layui.use(['form', 'layedit', 'laydate'], function(){
    					parent.$.Loading.success(data.message);
    					parent.layer.close(index); //再执行关闭        
    					parent.table.ajax.url(ctx+"/shop/admin/member/list-lv-json.do").load();
+   				} else {
+   					parent.$.Loading.error(data.message);
    				}
    			}
    		};

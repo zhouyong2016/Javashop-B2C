@@ -151,9 +151,14 @@ public class MemberController extends GridController {
 	@ResponseBody
 	@RequestMapping(value = "/save-add-lv")
 	public JsonResult saveAddLv(MemberLv lv) {
-
-		memberLvManager.add(lv);
-		return JsonResultUtil.getSuccessJson("会员等级添加成功");
+		try {
+			memberLvManager.add(lv);
+			return JsonResultUtil.getSuccessJson("会员等级添加成功");
+		} catch (Exception e) {
+			logger.error("会员等级添加失败：", e);
+			return JsonResultUtil.getErrorJson("会员等级添加失败");
+		}
+		
 	}
 
 	/**
@@ -170,7 +175,8 @@ public class MemberController extends GridController {
 			memberLvManager.edit(lv);
 			return JsonResultUtil.getSuccessJson("会员等级修改成功");
 		} catch (Exception e) {
-			return JsonResultUtil.getErrorJson("非法参数");
+			logger.error("会员等级修改失败：", e);
+			return JsonResultUtil.getErrorJson("会员等级修改失败");
 		}
 	}
 

@@ -82,9 +82,12 @@ layui.use(['form', 'layedit', 'laydate'], function(){
    			  $('.save').attr("disabled", true);		       	
    			}, 
    			success:function(data){
-   				if(data.result==1){	  					
+   				if(data.result==1){	
+   					$.Loading.success(data.message);
    					parent.layer.close(index); //再执行关闭        
    					parent.table.ajax.url(ctx+"/shop/admin/member/list-lv-json.do").load();
+   				} else {
+   					$.Loading.error(data.message);
    				}
    			}
    		};
