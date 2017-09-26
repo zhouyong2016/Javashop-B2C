@@ -89,10 +89,18 @@ layui.use(['form', 'layedit', 'laydate'], function(){
    					parent.table.ajax.url(ctx+"/core/admin/floor/get-list-by-parentid-json.do?parentid=0&pageid=${pageid}").load();
    				}else{
    					$.Loading.error(data.message);
+   					$("#save").on("click");//点击后取消click事件
+   					$("#save").attr("type","submit");//点击后更改属性防止多次点击多次提交
+   					$("#save").attr("lay-filter","save");
+   					$("#save").removeClass("layui-btn-disabled"); 
    				}
    			},
    			error : function(e) {
    				$.Loading.error("出现错误 ，请重试");
+   				$("#save").on("click");//点击后取消click事件
+				$("#save").attr("type","submit");//点击后更改属性防止多次点击多次提交
+				$("#save").attr("lay-filter","save");
+				$("#save").removeClass("layui-btn-disabled"); 
    			}
    		};
    		$("#addFoorForm").ajaxSubmit(options);
