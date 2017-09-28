@@ -83,7 +83,7 @@ function openImgeDlg(fun) {
         offset: ['150px', '100px'],
 	    btn: ['确定'],
 	    yes: function(index, layero){
-	    	var upForm = layero.find("iframe").contents().find(".uploadForm");
+	    	var upForm = layero.find("iframe").contents().find("#uploadForm");
 	    	var options ={
 					url:"${ctx}/eop/upload/upload-file.do?ajax=1",
 					dataType:"json",
